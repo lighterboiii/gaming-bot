@@ -11,7 +11,7 @@
   border-radius: 20px;
 
   &__textWrapper {
-    @include flex(column, flex-start, flex-start, 16px);
+    @include flex(column, flex-start, center, 16px);
 
   }
 
@@ -23,6 +23,7 @@
     color: $main-color;
     font-size: 18px;
     font-weight: 700;
+    text-align: left;
   }
 
   &__secondaryText {
