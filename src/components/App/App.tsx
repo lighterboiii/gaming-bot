@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Balance from '../../pages/Balance/Balance';
+import CreateRoom from '../../pages/CreateRoom/CreateRoom';
+import Main from '../../pages/Main/Main';
+import Rooms from '../../pages/Rooms/Rooms';
+import Shop from '../../pages/Shop/Shop';
+import styles from './App.module.css';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles.app}>
+      <Routes>
+        <Route path='/' element={<Main />} />
+        <Route path='/rooms' element={<Rooms />} />
+        <Route path='/create-room' element={<CreateRoom />} />
+        <Route path='/shop' element={<Shop />} />
+        <Route path='/user-balance' element={<Balance />} />
+      </Routes>
     </div>
   );
 }
