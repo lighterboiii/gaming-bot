@@ -4,11 +4,11 @@
 .userInfo {
   @include position(relative);
   @include indents(0, 0 0 16px 0);
-  @include size(100%, 64px);
+  @include size(100%, 80px);
   @include flex(row, space-between, center, 10px);
 
   &__content {
-    @include flex(row, space-between, center, 12px);
+    @include flex(row, space-between, center, 16px);
   }
   
   &__textElements { 

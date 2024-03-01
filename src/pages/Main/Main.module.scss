@@ -3,17 +3,18 @@
 
 .main {
   @include indents(10px, 0);
-  @include flex(column, flex-start, center, 12px);
+  @include flex(column, baseline, center, 20px);
   @include size(100%, 100%);
   background-color: $black-color;
 
   &__title {
-    @include indents(10px 10px 0, 0);
+    @include indents(20px 0, 0);
+    @include size(100%, 10vh);
     color: $main-color;
   }
 
   &__content {
-    @include flex(column, center, unset, 12px);
+    @include flex(column, center, unset, 20px);
     @include size(100%, auto);
   }
 
@@ -28,24 +29,25 @@
   }
 }
 
-// .bigBtn {
-//   @include indents(10px, 0);
-//   @include size(50%, 100%);
-//   @include position(relative);
-//   @include button-style-reset();
-//   background-color: $secondary-color;
-//   border-radius: 20px;
+.temporaryButtonStyle {
+  @include position(relative);
+  @include size(100%, 160px);
+  @include indents(10px, 0);
+  @include flex(row, center, center);
+  border: 1px $main-color solid;
+  border-radius: 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
 
-//   &__text {
-//     @include indents(10px, 0);
-//     @include size(60%, auto);
-//     color: $main-color;
-//     font-size: 18px;
-//     font-weight: 700;
-//     text-align: left;
-//   }
+  &__text {
+    font-size: 36px;
+    font-weight: 700;
+    color: $black-color;
+    text-align: center;
+    text-transform: uppercase;
+  }
 
-//   &__buttonContainer {
-//     @include position(absolute, $right: 16px, $bottom: 16px);
-//   }
-// }
+  &__chevronContainer {
+    @include position(absolute, $right: 16px, $bottom: 16px);
+  }
+}
