@@ -6,12 +6,10 @@ import CreateRoom from '../../pages/CreateRoom/CreateRoom';
 import Main from '../../pages/Main/Main';
 import Rooms from '../../pages/Rooms/Rooms';
 import Shop from '../../pages/Shop/Shop';
-import Header from '../Header/Header';
 
 const App: FC = () => {
   return (
     <div className={styles.app}>
-      <Header />
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/rooms' element={<Rooms />} />

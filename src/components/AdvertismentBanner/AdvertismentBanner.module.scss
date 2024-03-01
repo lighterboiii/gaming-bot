@@ -1,0 +1,23 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.banner {
+  @include position(relative);
+  @include min-size(unset, 140px);
+  @include indents(10px, 0);
+  @include flex(row, space-between, center);
+  border: 1px $main-color solid;
+  border-radius: 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  flex-grow: 1;
+
+  &__sliderButton {
+    @include button-style-reset();
+    align-self: flex-end;
+  }
+
+  &__text {
+    color: $main-color;
+  }
+}
