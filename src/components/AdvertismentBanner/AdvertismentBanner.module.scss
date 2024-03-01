@@ -20,4 +20,22 @@
   &__text {
     color: $main-color;
   }
+
+  &__indicators {
+    @include flex(row, $gap: 2px);
+    @include position(absolute, $bottom: 10px, $left: 50%);
+    transform: translate(-50%);
+  }
+
+  &__indicator {
+    @include indents();
+    @include size(6px, 6px);
+    border: none;
+    border-radius: 100%;
+    background-color: $main-color;
+  }
+}
+
+.activeIndicator {
+  background-color: $secondary-color;
 }
