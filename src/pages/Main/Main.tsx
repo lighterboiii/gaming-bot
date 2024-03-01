@@ -4,6 +4,7 @@ import CircleButton from "../../components/ui/CircleButton/CircleButton";
 import UserInfo from "../../components/UserInformation/UserInformation";
 import AdvertismentBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
+import BigButton from "../../components/ui/BigButton/BigButton";
 
 const Main: FC = () => {
   return (
@@ -14,24 +15,28 @@ const Main: FC = () => {
         <AdvertismentBanner />
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
+            {/* Заменить to ссылки */}
             <SmallButton
-              to="/"
+              to="/balance"
               text="Создать комнату"
               secondaryText="Для игры с другими людьми"
               chevronPosition="right"
             />
+            {/* Заменить to ссылки */}
             <SmallButton
-              to="/"
+              to="/balance"
               text="Таблица лидеров"
               secondaryText="Лучшие из лучших"
               chevronPosition="right"
               isWhiteBackground
             />
           </div>
-          <button type="button">
-            Открытые комнаты с играми
-            <CircleButton />
-          </button>
+          {/* Заменить to ссылки */}
+          <BigButton
+            to="/balance"
+            text="Открытые комнаты с играми"
+            chevronPosition="right"
+          />
         </div>
       </div>
       <button type="button">Магазин</button>

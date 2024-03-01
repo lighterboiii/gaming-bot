@@ -8,7 +8,7 @@
   @include flex(row, space-between, center, 10px);
 
   &__content {
-    @include flex(row, space-between, center, 16px);
+    @include flex(row, space-between, center, 12px);
   }
   
   &__textElements { 

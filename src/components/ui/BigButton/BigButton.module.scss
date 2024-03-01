@@ -1,0 +1,33 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.button {
+  @include indents(10px, 0);
+  @include size(50%, 100%);
+  @include position(relative);
+  @include button-style-reset();
+  background-color: $secondary-color;
+  border-radius: 20px;
+  text-decoration: none;
+
+  &__text {
+    @include indents(10px, 0);
+    @include size(60%, auto);
+    color: $main-color;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  &__buttonContainer {
+    @include position(absolute, $right: 16px, $bottom: 16px);
+  }
+}
+
+.whiteButton {
+  background-color: $main-color;
+}
+
+.pinkButton {
+  background-color: $secondary-color;
+}

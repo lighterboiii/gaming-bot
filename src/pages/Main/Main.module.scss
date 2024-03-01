@@ -3,7 +3,7 @@
 
 .main {
   @include indents(10px, 0);
-  @include flex(column, flex-start, center, 16px);
+  @include flex(column, flex-start, center, 12px);
   @include size(100%, 100%);
   background-color: $black-color;
 
@@ -13,17 +13,39 @@
   }
 
   &__content {
-    @include flex(column, center, unset, 16px);
+    @include flex(column, center, unset, 12px);
     @include size(100%, auto);
   }
 
   &__centralButtonsContainer {
-    @include flex(row, space-between, center, 16px);
+    @include flex(row, space-between, center, 12px);
     @include size(100%, unset);
   }
 
   &__smallButtonsContainer {
     @include size(50%, 100%);
-    @include flex(column, space-between, unset, 16px);
+    @include flex(column, space-between, unset, 12px);
   }
 }
+
+// .bigBtn {
+//   @include indents(10px, 0);
+//   @include size(50%, 100%);
+//   @include position(relative);
+//   @include button-style-reset();
+//   background-color: $secondary-color;
+//   border-radius: 20px;
+
+//   &__text {
+//     @include indents(10px, 0);
+//     @include size(60%, auto);
+//     color: $main-color;
+//     font-size: 18px;
+//     font-weight: 700;
+//     text-align: left;
+//   }
+
+//   &__buttonContainer {
+//     @include position(absolute, $right: 16px, $bottom: 16px);
+//   }
+// }

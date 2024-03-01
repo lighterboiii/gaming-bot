@@ -20,7 +20,8 @@ const UserInfo: FC = () => {
       </div>
       <div className={styles.userInfo__linkContainer}>
         <div className={styles.userInfo__link} >
-          <Link to='/' className={styles.userInfo__tgLink}>Сообщество <br></br> GoWIN <br></br>🌐</Link>
+          {/* Заменить to ссылки */}
+          <Link to='/balance' className={styles.userInfo__tgLink}>Сообщество <br></br> GoWIN <br></br>🌐</Link>
         </div>
         <p className={styles.userInfo__smallText}>Будем на связи 👆</p>
       </div>
