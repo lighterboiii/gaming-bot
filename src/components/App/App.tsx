@@ -3,7 +3,7 @@ import CreateRoom from '../../pages/CreateRoom/CreateRoom';
 import Main from '../../pages/Main/Main';
 import Rooms from '../../pages/Rooms/Rooms';
 import Shop from '../../pages/Shop/Shop';
-import styles from './App.module.css';
+import styles from './App.module.scss';
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
