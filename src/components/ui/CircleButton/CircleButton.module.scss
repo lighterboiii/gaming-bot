@@ -1,0 +1,6 @@
+@use '../../../stylesheets/mixins' as *;
+
+.button {
+  @include size(40px, 40px);
+  @include flex(row, center, center);
+}

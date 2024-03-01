@@ -1,0 +1,12 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.header {
+  @include indents();
+  @include size(100%, 10vh);
+  @include flex(column, center, center);
+
+  &__title {
+    color: $main-color;
+  }
+}

@@ -1,14 +1,17 @@
+import { Routes, Route } from 'react-router-dom';
+import { FC } from 'react';
+import styles from './App.module.scss';
 import Balance from '../../pages/Balance/Balance';
 import CreateRoom from '../../pages/CreateRoom/CreateRoom';
 import Main from '../../pages/Main/Main';
 import Rooms from '../../pages/Rooms/Rooms';
 import Shop from '../../pages/Shop/Shop';
-import styles from './App.module.scss';
-import { Routes, Route } from 'react-router-dom';
+import Header from '../Header/Header';
 
-function App() {
+const App: FC = () => {
   return (
     <div className={styles.app}>
+      <Header />
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/rooms' element={<Rooms />} />

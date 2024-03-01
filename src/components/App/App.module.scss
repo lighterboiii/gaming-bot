@@ -1,3 +1,12 @@
+@use '../../stylesheets/mixins' as *;
+
+* {
+  box-sizing: border-box;
+}
+
 .app {
+  background-color: black;
+  @include indents();
+  @include size(100%, 100vh);
   text-align: center;
 }

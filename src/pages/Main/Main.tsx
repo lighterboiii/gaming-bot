@@ -1,18 +1,27 @@
 import { FC } from "react"
+import styles from './Main.module.scss';
+import CircleButton from "../../components/ui/CircleButton/CircleButton";
+import UserInfo from "../../components/UserInformation/UserInformation";
 
 const Main: FC = () => {
-  return <div>Кнопка Баланс. На которой написано сколько какой у тебя валюты. При нажатии показывает страницу Баланс.
-  Кнопка Открытые комнаты с играми. Открывает страницу Открытые комнаты с играми.
-  Кнопка Создать комнату. Открывает страницу Создать комнату.
-  Кнопка магазин. Открывает страницу Магазин.
-  Кнопка Наше сообщество - присоединись. Открывает в телеграм страницу телеграм канала.
-  И можно сделать динамическую кнопку, которая как баннер будет меняться. Иногда там предложения о покупке скинов, иногда там совет какой нибудь и тп.
-  
-Кнопка Таблица лидеров
-Инвентарь
-
-
-   </div>
+  return (
+    <div className={styles.main}>
+      <div className={styles.main__header}>
+        <UserInfo />
+      </div>
+      <div className={styles.main__content}>
+        <button>Advertisment banner</button>
+        <div className={styles.main__centralButtonsContainer}>
+          <button type="button">Открытые комнаты с играми</button>
+          <div className={styles.main__smallButtonsContainer}>
+            <button type="button">Создать комнату</button>
+            <button type="button">Список лидеров <CircleButton /></button>
+          </div>
+        </div>
+      </div>
+      <button type="button">Магазин</button>
+    </div>
+  )
 }
 
 export default Main;

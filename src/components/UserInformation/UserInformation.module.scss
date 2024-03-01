@@ -1,0 +1,43 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.userInfo {
+  @include indents(0 10px, 0);
+  @include size(100%, 64px);
+  @include flex(row, space-between, center, 10px);
+
+  &__content {
+    @include flex(row, space-between, center, 16px);
+  }
+  
+  &__textElements { 
+    @include flex(column, center, flex-start, 4px);
+  }
+  
+  &__userAvatar {
+    @include size(60px, 60px);
+  }
+  
+  &__text {
+    @include indents();
+    color: $main-color;
+    font-weight: 600;
+  }
+  
+  &__balanceLink {
+    @include size(30px, 52px);
+    @include flex(row, center, center);
+    border-radius: 40px;
+    background-color: $main-color;
+  }
+
+  &__tgLink {
+    @include indents(4px, 0);
+    @include max-size(unset, 62px);
+    text-decoration: none;
+    color: $black-color;
+    background-color: $main-color;
+    border-radius: 15px;
+    font-size: 14px;
+  }
+}
