@@ -2,7 +2,8 @@
 @use '../../stylesheets/variables' as *;
 
 .userInfo {
-  @include indents(0 10px, 0);
+  @include position(relative);
+  @include indents(0 10px, 0 0 16px 0);
   @include size(100%, 64px);
   @include flex(row, space-between, center, 10px);
 
@@ -25,19 +26,37 @@
   }
   
   &__balanceLink {
-    @include size(30px, 52px);
+    @include size(30px, 56px);
     @include flex(row, center, center);
     border-radius: 40px;
     background-color: $main-color;
   }
 
-  &__tgLink {
-    @include indents(4px, 0);
-    @include max-size(unset, 62px);
-    text-decoration: none;
-    color: $black-color;
+  &__linkContainer {
+    @include position(relative);
+    @include flex(column, flex-start, center, 4px);
+  }
+
+  &__link {
+    @include indents(4px 10px, 0);
+    @include max-size(unset, 56px);
+    @include flex(column, center, center);
     background-color: $main-color;
     border-radius: 15px;
+  }
+
+  &__tgLink {
+    text-decoration: none;
+    color: $black-color;
     font-size: 14px;
+  }
+
+  &__smallText {
+    @include indents();
+    @include size(100%, unset);
+    @include position(absolute, $bottom: -18px, $left: 50%);
+    transform: translate(-50%);
+    color: $main-color;
+    font-size: 10px;
   }
 }

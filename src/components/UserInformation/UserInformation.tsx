@@ -18,8 +18,13 @@ const UserInfo: FC = () => {
           <ChevronIcon position="right" color="#FF0080" width={20} height={20} />
         </Link>
       </div>
-      <Link to='/' className={styles.userInfo__tgLink}>Сообщество <br></br> GoWIN <br></br>🌐</Link>
-    </div>
+      <div className={styles.userInfo__linkContainer}>
+        <div className={styles.userInfo__link} >
+          <Link to='/' className={styles.userInfo__tgLink}>Сообщество <br></br> GoWIN <br></br>🌐</Link>
+        </div>
+        <p className={styles.userInfo__smallText}>Будем на связи 👆</p>
+      </div>
+    </div >
   )
 }
 
