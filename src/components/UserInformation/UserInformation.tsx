@@ -10,8 +10,8 @@ const UserInfo: FC = () => {
         <img src="https://i.pravatar.cc" alt="user_avatar" className={styles.userInfo__userAvatar} />
         <div className={styles.userInfo__textElements}>
           <p className={styles.userInfo__text}>Максим</p>
-          <p className={styles.userInfo__text}>15.3</p>
-          <p className={styles.userInfo__text}>1262.1</p>
+          <p className={styles.userInfo__text}>15.3 💵</p>
+          <p className={styles.userInfo__text}>1262.1 🔰</p>
         </div>
         {/* Ссылку ниже можно переделать в отдельный UI компонент */}
         <Link to='/balance' className={styles.userInfo__balanceLink}>

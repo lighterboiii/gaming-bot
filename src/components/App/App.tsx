@@ -15,7 +15,7 @@ const App: FC = () => {
         <Route path='/rooms' element={<Rooms />} />
         <Route path='/create-room' element={<CreateRoom />} />
         <Route path='/shop' element={<Shop />} />
-        <Route path='/user-balance' element={<Balance />} />
+        <Route path='/balance' element={<Balance />} />
       </Routes>
     </div>
   );

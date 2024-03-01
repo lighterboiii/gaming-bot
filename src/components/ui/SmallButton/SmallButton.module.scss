@@ -1,0 +1,51 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.button {
+  @include position(relative);
+  @include indents(16px, 0);
+  @include flex(column, center, flex-start);
+  @include min-size(unset, 60px);
+  @include size(100%, 100%);
+  text-decoration: none;
+  border-radius: 20px;
+
+  &__textWrapper {
+    @include flex(column, flex-start, flex-start, 20px);
+
+  }
+
+  &__text, &__secondaryText {
+    @include indents();
+  }
+
+  &__text {
+    color: $main-color;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  &__secondaryText {
+    color: $black-color;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: left;
+  }
+
+  &__chevronWrapper {
+    @include position(absolute, $right: 16px, $bottom: 16px);
+  }
+
+}
+
+.whiteButton {
+  background-color: $main-color;
+}
+
+.pinkButton {
+  background-color: $secondary-color;
+}
+
+.secondaryTextColor {
+  color: $secondary-color;
+}
