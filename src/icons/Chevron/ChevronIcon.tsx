@@ -10,13 +10,12 @@ export interface IChevronIcon {
 
 const ChevronIcon: FC<IChevronIcon> = ({
   color,
-  position,
+  position = "right",
   width = 16,
   height = 16,
   strokeWidth = 2,
 }) => (
   <svg
-    // transform={position || 'rotate(90deg)'}
     width={width}
     height={height}
     viewBox="0 0 16 16"
@@ -30,7 +29,6 @@ const ChevronIcon: FC<IChevronIcon> = ({
       'rotate(0)'
     }
   >
-    {/* <polygon points="0,0 30,0 15,20" transform={position || 'rotate(90)'} /> */}
     <path
       d="M12.6667 6.28027L8.00001 10.9469L3.33334 6.28027"
       stroke={color || '#FFF'}

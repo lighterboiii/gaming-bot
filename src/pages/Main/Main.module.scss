@@ -5,7 +5,6 @@
   @include indents(10px, 0);
   @include flex(column, baseline, center, 10px);
   @include size(100%, 100%);
-  background-color: $black-color;
 
   &__title {
     @include indents(10px 0, 0);
