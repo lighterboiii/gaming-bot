@@ -1,0 +1,42 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.leader {
+  @include size(100%, 60px);
+  @include indents(0 16px, 0);
+  @include flex(row, space-between, center);
+
+  &__container {
+    @include flex(row, flex-start, center, 16px);
+  }
+
+  &__avatar {
+    @include size(40px, 40px);
+    border-radius: $radius-round;
+  }
+
+  &__text {
+    @include indents();
+    @include size(90px, unset);
+    text-align: left;
+    color: $main-color;
+    font-weight: 900;
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  &__number {
+    color: $main-color;
+    font-weight: 900;
+    font-size: 28px;
+    font-style: italic;
+  }
+
+  &__gainWrapper {
+    @include flex(row, flex-start, center, 16px);
+  }
+}
+
+.darkBackground {
+  background-color: $tetriary-color;
+}

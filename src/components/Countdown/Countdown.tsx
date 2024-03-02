@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import styles from './Countdown.module.scss';
 
 const Countdown = () => {
-  const [time, setTime] = useState({ days: 7, hours: 0, minutes: 0 });
+  const randomDays = Math.floor(Math.random() * 7) + 1;
+  const [time, setTime] = useState({ days: randomDays, hours: 0, minutes: 0 });
 
   useEffect(() => {
     const interval = setInterval(() => {

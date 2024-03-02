@@ -3,8 +3,8 @@
 
 .leaderBoard {
   @include size(100%, 100vh);
-  @include flex(column, space-between, center);
-  @include indents(16px, 0);
+  @include flex(column, space-between, center, 20px);
+  @include indents(16px 0 0 0, 0);
   background-color: $secondary-color;
 
   &__header {
@@ -29,12 +29,29 @@
 
   &__leader {
     @include size(100%, 30vh);
-    @include flex(column, flex-end, center, 20px);
+    @include flex(column, space-around, center, 20px);
   }
 
   &__leaderInfo {
-    @include size(70%, 80px);
+    @include size(70%, auto);
     @include flex(row, space-between, center, 20px);
+  }
+
+  &__avatarContainer {
+    @include indents();
+    @include position(relative);
+  }
+
+  &__label {
+    @include position(absolute, $right: -70px, $bottom: -20px);
+    @include indents(8px 12px, 0);
+    background-color: $main-color;
+    border-radius: $radius-15;
+    color: $tetriary-color;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 24px;
+    transform: rotate(-15deg);
   }
 
   &__leaderAvatar {
@@ -54,6 +71,9 @@
   }
 
   &__board {
+    // @include flex(column, $gap: 10px);
+    @include size(100%, auto);
     flex-grow: 1;
+    overflow: scroll;
   }
 }
