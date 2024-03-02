@@ -13,6 +13,7 @@ const LeaderBoard: FC = () => {
   const [me, setMe] = useState(true); // дальше заменить на логику проверки лидера и юзера по айди
   const userUrl = user.photo_url;
   console.log(userUrl);
+  console.log(user);
   return (
     <div className={styles.leaderBoard}>
       <div className={styles.leaderBoard__header}>
