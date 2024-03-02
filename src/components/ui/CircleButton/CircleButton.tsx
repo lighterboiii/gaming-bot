@@ -3,7 +3,7 @@ import styles from './CircleButton.module.scss';
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 
 interface IProps {
-  chevronPosition?: string;
+  chevronPosition: string;
   width?: number;
   height?: number;
   color?: string;
@@ -18,7 +18,7 @@ const CircleButton: FC<IProps> = ({
 
   return (
     <div className={styles.button}>
-      <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />
+      <ChevronIcon position="right" color={color} width={width} height={height} />
     </div>
   )
 }
