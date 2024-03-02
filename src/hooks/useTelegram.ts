@@ -11,6 +11,7 @@ function useTelegram() {
         tg,
         user: tg.initDataUnsafe?.user,
         queryId: tg.initDataUnsafe?.query_id,
+        userPhoto: tg.initDataUnsafe?.photo_url,
     }
 };
 
