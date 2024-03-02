@@ -3,12 +3,12 @@
 
 .main {
   @include indents(10px, 0);
-  @include flex(column, baseline, center, 10px);
+  @include flex(column, space-between, center, 10px);
   @include size(100%, 100%);
 
   &__title {
     @include indents(10px 0, 0);
-    @include size(100%, 10vh);
+    // @include size(100%, 10vh);
     color: $main-color;
   }
 
@@ -19,13 +19,12 @@
 
   &__centralButtonsContainer {
     @include flex(row, space-between, center, 12px);
-    @include size(100%, unset);
-    @include max-size(100%, 190px);
+    @include size(100%, 190px);
   }
 
   &__smallButtonsContainer {
-    @include size(50%, 100%);
-    @include flex(column, space-between, unset, 12px);
+    @include size(50%, 190px);
+    @include flex(column, space-between, space-between, 12px);
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 export interface IChevronIcon {
   color?: string;
@@ -26,7 +26,7 @@ const ChevronIcon: FC<IChevronIcon> = ({
       (position === 'up' && 'rotate(180)') ||
       (position === 'right' && 'rotate(-90)') ||
       (position === 'down' && 'rotate(0)') ||
-      'rotate(0)'
+      'rotate(-90)'
     }
   >
     <path

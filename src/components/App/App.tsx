@@ -1,13 +1,20 @@
 import { Routes, Route } from 'react-router-dom';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import styles from './App.module.scss';
 import Balance from '../../pages/Balance/Balance';
 import CreateRoom from '../../pages/CreateRoom/CreateRoom';
 import Main from '../../pages/Main/Main';
 import Rooms from '../../pages/Rooms/Rooms';
 import Shop from '../../pages/Shop/Shop';
+import useTelegram from '../../hooks/useTelegram';
 
 const App: FC = () => {
+  const { tg } = useTelegram();
+  useEffect(() => {
+    tg.ready();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+  
   return (
     <div className={styles.app}>
       <Routes>

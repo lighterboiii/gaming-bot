@@ -4,7 +4,7 @@
 .userInfo {
   @include position(relative);
   @include indents(0, 0 0 16px 0);
-  @include size(100%, 68px);
+  @include size(100%, unset);
   @include flex(row, space-between, center, 10px);
 
   &__content {

@@ -1,15 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './UserInformation.module.scss';
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { Link } from "react-router-dom";
+import useTelegram from "../../hooks/useTelegram";
 
 const UserInfo: FC = () => {
+  const { tg, user } = useTelegram();
+  
   return (
     <div className={styles.userInfo}>
       <div className={styles.userInfo__content}>
-        <img src="https://i.pravatar.cc" alt="user_avatar" className={styles.userInfo__userAvatar} />
+        <img src={user ? user?.photo_url : "https://i.pravatar.cc"} alt="user_avatar" className={styles.userInfo__userAvatar} />
         <div className={styles.userInfo__textElements}>
-          <p className={styles.userInfo__text}>Максим</p>
+          <p className={styles.userInfo__text}>{user ? user?.first_name : 'Максим'}</p>
           <p className={styles.userInfo__text}>15.3 💵</p>
           <p className={styles.userInfo__text}>1262.1 🔰</p>
         </div>

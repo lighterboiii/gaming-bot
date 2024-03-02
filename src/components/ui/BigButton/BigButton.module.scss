@@ -3,7 +3,7 @@
 
 .button {
   @include indents(10px, 0);
-  @include size(50%, 100%);
+  @include size(50%, 190px);
   @include position(relative);
   @include button-style-reset();
   background-color: $secondary-color;
