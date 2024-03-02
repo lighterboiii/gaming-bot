@@ -11,7 +11,8 @@ const LeaderBoard: FC = () => {
   const { user } = useTelegram();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [me, setMe] = useState(true); // дальше заменить на логику проверки лидера и юзера по айди
-
+  const userUrl = user.photo_url;
+  console.log(userUrl);
   return (
     <div className={styles.leaderBoard}>
       <div className={styles.leaderBoard__header}>

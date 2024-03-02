@@ -56,6 +56,7 @@
 
   &__leaderAvatar {
     @include max-size(140px, 140px);
+    @include size(100%, 100%);
   }
 
   &__leaderText {
