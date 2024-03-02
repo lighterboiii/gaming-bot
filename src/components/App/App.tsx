@@ -11,13 +11,12 @@ import useTelegram from '../../hooks/useTelegram';
 const App: FC = () => {
   const { tg } = useTelegram();
   useEffect(() => {
-    tg.ready(() => {
-      tg.expand();
-  });
-  tg.enableClosingConfirmation();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-  
+    tg.ready()
+    tg.expand();
+    tg.enableClosingConfirmation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div className={styles.app}>
       <Routes>
