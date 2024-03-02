@@ -11,7 +11,7 @@ const UserInfo: FC = () => {
   return (
     <div className={styles.userInfo}>
       <div className={styles.userInfo__content}>
-        <img src={user ? user?.photo_url : "https://i.pravatar.cc"} alt="user_avatar" className={styles.userInfo__userAvatar} />
+        <img src={user ? `${user?.photo_url}` : "https://i.pravatar.cc"} alt="user_avatar" className={styles.userInfo__userAvatar} />
         <div className={styles.userInfo__textElements}>
           <p className={styles.userInfo__text}>{user ? user?.first_name : 'Максим'}</p>
           <p className={styles.userInfo__text}>15.3 💵</p>

@@ -7,6 +7,7 @@ import Main from '../../pages/Main/Main';
 import Rooms from '../../pages/Rooms/Rooms';
 import Shop from '../../pages/Shop/Shop';
 import useTelegram from '../../hooks/useTelegram';
+import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 
 const App: FC = () => {
   const { tg } = useTelegram();
@@ -25,6 +26,7 @@ const App: FC = () => {
         <Route path='/create-room' element={<CreateRoom />} />
         <Route path='/shop' element={<Shop />} />
         <Route path='/balance' element={<Balance />} />
+        <Route path='/leaderboard' element={<LeaderBoard />} />
       </Routes>
     </div>
   );

@@ -4,7 +4,7 @@ import UserInfo from "../../components/UserInformation/UserInformation";
 import AdvertismentBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import BigButton from "../../components/ui/BigButton/BigButton";
-import ShopLink from "../../components/ui/ShopLink/ShopLink";
+import ShopLink from "../../components/ShopLink/ShopLink";
 
 const Main: FC = () => {
   return (
@@ -24,7 +24,7 @@ const Main: FC = () => {
             />
             {/* Заменить to ссылки */}
             <SmallButton
-              to="/balance"
+              to="/leaderboard"
               text="Таблица лидеров"
               secondaryText="Лучшие из лучших"
               chevronPosition="right"
@@ -40,12 +40,6 @@ const Main: FC = () => {
         </div>
       </div>
       <ShopLink />
-      {/* <button type="button" className={styles.temporaryButtonStyle}>
-        <p className={styles.temporaryButtonStyle__text}>Магазин</p>
-        <div className={styles.temporaryButtonStyle__chevronContainer}>
-          <ChevronIcon color="#FF0080" width={24} height={24} position="right" />
-        </div>
-      </button> */}
     </div>
   )
 }

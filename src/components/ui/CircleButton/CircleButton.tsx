@@ -18,7 +18,7 @@ const CircleButton: FC<IProps> = ({
 
   return (
     <div className={styles.button}>
-      <ChevronIcon position="right" color={color} width={width} height={height} />
+      <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />
     </div>
   )
 }

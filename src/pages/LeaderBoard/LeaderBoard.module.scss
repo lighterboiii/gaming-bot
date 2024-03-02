@@ -1,0 +1,59 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.leaderBoard {
+  @include size(100%, 100vh);
+  @include flex(column, space-between, center);
+  @include indents(16px, 0);
+  background-color: $secondary-color;
+
+  &__header {
+    @include position(relative);
+    @include size(100%, 10vh);
+    @include flex(row, center, center);
+  }
+
+  &__chevron {
+    @include button-style-reset();
+    @include position(absolute, $top: 50%, $left: 16px);
+    transform: translateY(-50%);
+  }
+
+  &__heading {
+    @include indents();
+    color: $main-color;
+    font-weight: 900;
+    font-size: 40px;
+    font-style: italic;
+  }
+
+  &__leader {
+    @include size(100%, 30vh);
+    @include flex(column, flex-end, center, 20px);
+  }
+
+  &__leaderInfo {
+    @include size(70%, 80px);
+    @include flex(row, space-between, center, 20px);
+  }
+
+  &__leaderAvatar {
+    @include size(140px, 140px);
+  }
+
+  &__leaderText {
+    @include indents();
+    color: $main-color;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 24px;
+  }
+
+  &__jew {
+    font-style: normal;
+  }
+
+  &__board {
+    flex-grow: 1;
+  }
+}

@@ -1,10 +1,13 @@
 import { FC } from "react";
 import styles from './ShopLink.module.scss';
 import { Link } from "react-router-dom";
-import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
-import Countdown from "../../Countdown/Countdown";
+import ChevronIcon from "../../icons/Chevron/ChevronIcon";
+import Countdown from "../Countdown/Countdown";
+import useTelegram from "../../hooks/useTelegram";
 
 const ShopLink: FC = () => {
+  const { user } = useTelegram();
+
   return (
     <Link to='/balance' className={styles.shopLink}>
       <div className={styles.shopLink__left}>
@@ -17,7 +20,7 @@ const ShopLink: FC = () => {
       </div>
       <div className={styles.shopLink__right}>
         <div className={styles.shopLink__avatarContainer}>
-          <img src="https://i.pravatar.cc" alt="user_avatar" className={styles.shopLink__avatar} />
+          <img src={user ? `${user?.photo_url}` : "https://i.pravatar.cc"}alt="user_avatar" className={styles.shopLink__avatar} />
         </div>
       </div>
       <div className={styles.shopLink__chevron}>
