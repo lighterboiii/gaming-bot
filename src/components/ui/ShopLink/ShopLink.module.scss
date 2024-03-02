@@ -40,7 +40,7 @@
   &__right {
     @include indents();
     @include size(35%, 100%);
-    @include flex(row, center, center);
+    @include flex(row, flex-start, center);
   }
 
   &__avatarContainer {
