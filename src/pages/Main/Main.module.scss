@@ -7,8 +7,9 @@
   @include size(100%, 100%);
 
   &__title {
+    @include flex($align-items: center, $justify-content: center);
     @include indents(10px 0, 0);
-    // @include size(100%, 10vh);
+    @include size(100%, 10vh);
     color: $main-color;
   }
 
@@ -25,28 +26,5 @@
   &__smallButtonsContainer {
     @include size(50%, 190px);
     @include flex(column, space-between, space-between, 12px);
-  }
-}
-
-.temporaryButtonStyle {
-  @include position(relative);
-  @include size(100%, 140px);
-  @include indents(10px, 0);
-  @include flex(row, center, center);
-  border: 1px $main-color solid;
-  border-radius: 20px;
-  background-size: cover;
-  background-repeat: no-repeat;
-
-  &__text {
-    font-size: 36px;
-    font-weight: 700;
-    color: $black-color;
-    text-align: center;
-    text-transform: uppercase;
-  }
-
-  &__chevronContainer {
-    @include position(absolute, $right: 16px, $bottom: 16px);
   }
 }

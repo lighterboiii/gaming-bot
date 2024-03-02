@@ -28,7 +28,7 @@
   &__balanceLink {
     @include size(30px, 56px);
     @include flex(row, center, center);
-    border-radius: 40px;
+    border-radius: $radius-40;
     background-color: $main-color;
   }
 
@@ -42,7 +42,7 @@
     @include max-size(unset, 56px);
     @include flex(column, center, center);
     background-color: $main-color;
-    border-radius: 15px;
+    border-radius: $radius-15;
   }
 
   &__tgLink {

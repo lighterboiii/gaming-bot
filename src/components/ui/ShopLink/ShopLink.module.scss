@@ -1,0 +1,57 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.shopLink {
+  @include position(relative);
+  @include indents(16px, 0);
+  @include size(100%, 140px);
+  @include flex(row, space-between, center, 16px);
+  border: 1px $main-color solid;
+  border-radius: $radius-15;
+  text-decoration: none;
+  background-color: $main-color;
+
+  &__left {
+    @include flex(column, space-between, flex-start);
+    @include size(60%, 100%);
+  }
+
+  &__text {
+    @include indents();
+    font-size: 16px;
+    font-weight: 700;
+    text-align: left;
+    color: $secondary-color;
+  }
+
+  &__update {
+    @include indents(16px, 0);
+    border-radius: $radius-15;
+    background-color: $black-color;
+    color: $main-color;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  &__right {
+    @include indents();
+    @include size(40%, 100%);
+    @include flex(row, center, center);
+  }
+
+  &__avatarContainer {
+    // @include indents(24px, 0);
+    @include size(100px, 100px);
+    @include flex($align-items: center, $justify-content: center);
+    border-radius: $radius-round;
+    background-color: #ffd54f;
+  }
+
+  &__avatar {
+    @include size(60px, 60px);
+  }
+
+  &__chevron {
+    @include position(absolute, $bottom: 16px, $right: 16px);
+  }
+}

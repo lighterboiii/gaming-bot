@@ -13,7 +13,7 @@ const CircleButton: FC<IProps> = ({
   chevronPosition = "right",
   width = 24,
   height = 24,
-  color = "#FF0080"
+  color = "#f01151"
 }) => {
 
   return (

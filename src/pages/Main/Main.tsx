@@ -4,7 +4,7 @@ import UserInfo from "../../components/UserInformation/UserInformation";
 import AdvertismentBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import BigButton from "../../components/ui/BigButton/BigButton";
-import ChevronIcon from "../../icons/Chevron/ChevronIcon";
+import ShopLink from "../../components/ui/ShopLink/ShopLink";
 
 const Main: FC = () => {
   return (
@@ -39,12 +39,13 @@ const Main: FC = () => {
           />
         </div>
       </div>
-      <button type="button" className={styles.temporaryButtonStyle}>
+      <ShopLink />
+      {/* <button type="button" className={styles.temporaryButtonStyle}>
         <p className={styles.temporaryButtonStyle__text}>Магазин</p>
         <div className={styles.temporaryButtonStyle__chevronContainer}>
           <ChevronIcon color="#FF0080" width={24} height={24} position="right" />
         </div>
-      </button>
+      </button> */}
     </div>
   )
 }

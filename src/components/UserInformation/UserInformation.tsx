@@ -19,7 +19,7 @@ const UserInfo: FC = () => {
         </div>
         {/* Ссылку ниже можно переделать в отдельный UI компонент */}
         <Link to='/balance' className={styles.userInfo__balanceLink}>
-          <ChevronIcon position="right" color="#FF0080" width={20} height={20} />
+          <ChevronIcon position="right" color="#f01151" width={20} height={20} />
         </Link>
       </div>
       <div className={styles.userInfo__linkContainer}>

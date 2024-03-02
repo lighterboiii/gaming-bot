@@ -7,7 +7,7 @@
   @include position(relative);
   @include button-style-reset();
   background-color: $secondary-color;
-  border-radius: 20px;
+  border-radius: $radius-20;
   text-decoration: none;
 
   &__text {

@@ -7,7 +7,7 @@
   @include flex(column, center, flex-start);
   @include min-size(100%, auto);
   text-decoration: none;
-  border-radius: 20px;
+  border-radius: $radius-15;
 
   &__textWrapper {
     @include flex(column, space-between, flex-start, 16px);
