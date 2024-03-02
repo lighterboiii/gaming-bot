@@ -55,7 +55,7 @@
   }
 
   &__leaderAvatar {
-    @include size(140px, 140px);
+    @include max-size(140px, 140px);
   }
 
   &__leaderText {
