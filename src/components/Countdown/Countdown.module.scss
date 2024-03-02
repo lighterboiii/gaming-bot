@@ -1,0 +1,10 @@
+@use '../../stylesheets/mixins' as *;
+
+.countdown {
+  @include indents();
+  @include size(100%, auto);
+
+  &__time {
+    @include indents();
+  }
+}

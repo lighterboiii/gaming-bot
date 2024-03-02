@@ -13,7 +13,7 @@
 
   &__left {
     @include flex(column, space-between, flex-start);
-    @include size(60%, 100%);
+    @include size(65%, 100%);
   }
 
   &__text {
@@ -28,6 +28,10 @@
     @include indents(16px, 0);
     border-radius: $radius-15;
     background-color: $black-color;
+  }
+
+  &__updateText {
+    @include indents();
     color: $main-color;
     font-weight: 700;
     text-align: left;
@@ -35,12 +39,11 @@
 
   &__right {
     @include indents();
-    @include size(40%, 100%);
+    @include size(35%, 100%);
     @include flex(row, center, center);
   }
 
   &__avatarContainer {
-    // @include indents(24px, 0);
     @include size(100px, 100px);
     @include flex($align-items: center, $justify-content: center);
     border-radius: $radius-round;
