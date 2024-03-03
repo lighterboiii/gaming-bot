@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import styles from './App.module.scss';
 import Balance from '../../pages/Balance/Balance';
 import CreateRoom from '../../pages/CreateRoom/CreateRoom';
