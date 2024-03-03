@@ -15,25 +15,25 @@ const ChevronLeft: FC<IChevronIcon> = ({
   height = 16,
   strokeWidth = 2,
 }) => {
-  let rotation: string;
+  // let rotation: string;
 
-  switch (position) {
-    case 'left':
-      rotation = 'rotate(90)';
-      break;
-    case 'up':
-      rotation = 'rotate(180)';
-      break;
-    case 'right':
-      rotation = 'rotate(-90)';
-      break;
-    case 'down':
-      rotation = 'rotate(0)';
-      break;
-    default:
-      rotation = 'rotate(-90)';
-      break;
-  }
+  // switch (position) {
+  //   case 'left':
+  //     rotation = 'rotate(90)';
+  //     break;
+  //   case 'up':
+  //     rotation = 'rotate(180)';
+  //     break;
+  //   case 'right':
+  //     rotation = 'rotate(-90)';
+  //     break;
+  //   case 'down':
+  //     rotation = 'rotate(0)';
+  //     break;
+  //   default:
+  //     rotation = 'rotate(-90)';
+  //     break;
+  // }
 
   return (
       <svg
