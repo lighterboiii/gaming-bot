@@ -1,6 +1,5 @@
 import { FC } from "react";
 import styles from './Balance.module.scss';
-import { useNavigate } from "react-router-dom";
 
 const Balance: FC = () => {
 
