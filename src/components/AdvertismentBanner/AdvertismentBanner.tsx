@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import styles from './AdvertismentBanner.module.scss';
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { bannersData } from "../../utils/mockData";
-import ChevronLeft from "../../icons/Chevron/ChevronLeft";
 
 // выше - заглушки для тестирования работы, заменить
 const AdvertismentBanner: FC = () => {
@@ -18,7 +17,8 @@ const AdvertismentBanner: FC = () => {
         className={styles.banner__sliderButton}
         onClick={() => goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length)}
       >
-        <ChevronLeft
+        <ChevronIcon
+          position="left"
           width={24}
           height={24}
         />
