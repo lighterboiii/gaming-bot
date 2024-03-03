@@ -23,7 +23,7 @@ const SmallButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, c
       </div>
       <div className={styles.button__chevronWrapper}>
         <ChevronIcon 
-        position="right" 
+        position={chevronPosition}
         width={24} 
         height={24} 
         color={isWhiteBackground ? '#FF0080' : '#FFF'}

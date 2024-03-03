@@ -16,6 +16,12 @@ export const bannersData = [
 export const leadersData = [
   {
     img: "https://i.pravatar.cc",
+    id: 1,
+    username: 'Максим',
+    gain: "+ 💎 900",
+  },
+  {
+    img: "https://i.pravatar.cc",
     id: 2,
     username: 'lighterboii',
     gain: "+ 💎 430",

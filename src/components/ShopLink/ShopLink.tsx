@@ -14,13 +14,13 @@ const ShopLink: FC = () => {
         <p className={styles.shopLink__text}>Магазин</p>
         <div className={styles.shopLink__update}>
           <p className={styles.shopLink__updateText}>
-            Обновление магазина через: <Countdown />
+           Обновление магазина через: <Countdown />
           </p>
         </div>
       </div>
       <div className={styles.shopLink__right}>
         <div className={styles.shopLink__avatarContainer}>
-          <img src={user ? `${user?.photo_url}` : "https://i.pravatar.cc"}alt="user_avatar" className={styles.shopLink__avatar} />
+          <img src={user ? `${user?.photo_url}` : "https://i.pravatar.cc"} alt="user_avatar" className={styles.shopLink__avatar} />
         </div>
       </div>
       <div className={styles.shopLink__chevron}>

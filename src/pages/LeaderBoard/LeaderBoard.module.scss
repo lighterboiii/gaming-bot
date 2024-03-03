@@ -6,6 +6,7 @@
   @include flex(column, space-between, center, 20px);
   @include indents(16px 0 0 0, 0);
   background-color: $secondary-color;
+  z-index: 3;
 
   &__header {
     @include position(relative);
@@ -55,6 +56,9 @@
   }
 
   &__leaderAvatar {
+    // @include position(absolute, $top: 50%, $left: 50%);
+    // transform: translate(-50%, -50%);
+    // z-index: 1;
     @include max-size(140px, 140px);
     @include size(100%, 100%);
   }
@@ -72,9 +76,16 @@
   }
 
   &__board {
-    // @include flex(column, $gap: 10px);
     @include size(100%, auto);
     flex-grow: 1;
     overflow: scroll;
+    z-index: 3;
   }
+
+  // &__skin {
+  //   @include position(relative);
+  //   @include size(224px, 224px);
+  //   display: inline-block;
+  //   z-index: 2;
+  // }
 }

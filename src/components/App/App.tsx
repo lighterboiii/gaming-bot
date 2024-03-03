@@ -11,6 +11,7 @@ import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 
 const App: FC = () => {
   const { tg } = useTelegram();
+
   useEffect(() => {
     tg.ready()
     tg.expand();

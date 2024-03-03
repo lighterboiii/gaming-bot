@@ -38,8 +38,8 @@
   }
 
   &__link {
-    @include indents(4px 10px, 0);
-    @include max-size(unset, 56px);
+    @include indents(6px 10px, 0);
+    @include min-size(unset, 56px);
     @include flex(column, center, center);
     background-color: $main-color;
     border-radius: $radius-15;

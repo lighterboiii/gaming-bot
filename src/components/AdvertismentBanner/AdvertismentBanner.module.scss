@@ -11,6 +11,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   flex-grow: 1;
+  text-decoration: none;
 
   &__sliderButton {
     @include button-style-reset();
