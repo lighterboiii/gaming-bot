@@ -11,6 +11,8 @@
     @include indents(10px 0, 0);
     @include size(100%, 10vh);
     color: $main-color;
+    font-weight: 900;
+    font-size: 56px;
   }
 
   &__content {

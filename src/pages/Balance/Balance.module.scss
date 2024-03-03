@@ -7,10 +7,15 @@
   @include size(100%, auto);
 
   &__content {
-    @include indents(40px 16px, 0);
+    @include indents(16px, 0);
+    @include size(100%, 50%);
     @include flex(column, flex-start, flex-start, 20px);
-    border-radius: 0 0 $radius-15 $radius-15;
+    border-radius: $radius-15;
     background-color: $secondary-color;
+  }
+
+  &__chevron {
+    @include button-style-reset();
   }
 
   &__amount {
