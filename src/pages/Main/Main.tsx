@@ -33,7 +33,7 @@ const Main: FC = () => {
           </div>
           {/* Заменить to ссылки */}
           <BigButton
-            to="/balance"
+            to="/rooms"
             text="Открытые комнаты с играми"
             chevronPosition="right"
           />

@@ -1,6 +1,51 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
 .balance {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include indents();
+  @include flex(column, center, center, 20px);
+  @include size(100%, auto);
+
+  &__content {
+    @include indents(40px 16px, 0);
+    @include flex(column, flex-start, flex-start, 20px);
+    border-radius: 0 0 $radius-15 $radius-15;
+    background-color: $secondary-color;
+  }
+
+  &__amount {
+    @include indents(16px, 0);
+    @include size(100%, 140px);
+    @include flex(column, center, flex-start, 20px);
+    border: 1px $main-color solid;
+    border-radius: $radius-12;
+  }
+
+  &__h3 {
+    @include indents();
+    font-weight: 900;
+    color: $main-color;
+    font-size: 40px;
+    text-align: left;
+  }
+
+  &__h4 {
+    @include indents();
+    font-weight: 900;
+    color: $main-color;
+    font-size: 36px;
+  }
+
+  &__text {
+    @include indents();
+    color: $main-color;
+    text-align: left;
+  }
+
+  &__history {
+    @include indents(20px, 0);
+    @include size(100%, 100%);
+    @include flex(column, center, center, 20px);
+    background-color: $black-color;
+  }
 }

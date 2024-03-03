@@ -4,6 +4,7 @@ import styles from './UserInformation.module.scss';
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { Link } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
+import { roomsUrl } from "../../utils/routes";
 
 const UserInfo: FC = () => {
   const { tg, user } = useTelegram();
@@ -25,7 +26,7 @@ const UserInfo: FC = () => {
       <div className={styles.userInfo__linkContainer}>
         <div className={styles.userInfo__link} >
           {/* Заменить to ссылки */}
-          <Link to='/balance' className={styles.userInfo__tgLink}>Сообщество <br></br> GoWIN <br></br>🌐</Link>
+          <Link to={roomsUrl} className={styles.userInfo__tgLink}>Сообщество <br></br> GoWIN <br></br>🌐</Link>
         </div>
         <p className={styles.userInfo__smallText}>Будем на связи 👆</p>
       </div>

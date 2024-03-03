@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import Countdown from "../Countdown/Countdown";
 import useTelegram from "../../hooks/useTelegram";
+import { roomsUrl } from "../../utils/routes";
 
 const ShopLink: FC = () => {
   const { user } = useTelegram();
 
   return (
-    <Link to='/balance' className={styles.shopLink}>
+    <Link to={roomsUrl} className={styles.shopLink}>
       <div className={styles.shopLink__left}>
         <p className={styles.shopLink__text}>Магазин</p>
         <div className={styles.shopLink__update}>

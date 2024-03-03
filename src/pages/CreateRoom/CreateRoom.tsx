@@ -4,7 +4,7 @@ import styles from './CreateRoom.module.scss';
 import { useNavigate } from "react-router-dom";
 import CircleButton from "../../components/ui/CircleButton/CircleButton";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
-import { balanceUrl } from "../../utils/routes";
+import { roomsUrl } from "../../utils/routes";
 
 const CreateRoom: FC = () => {
   const navigate = useNavigate();
@@ -54,8 +54,8 @@ const CreateRoom: FC = () => {
           </label>
         </div>
         <div className={styles.create__buttons}>
-          <SmallButton to={balanceUrl} text="Создать комнату" secondaryText="И начать играть" isWhiteBackground />
-          <SmallButton to={balanceUrl} text="Найти открытую комнату" secondaryText="Для игры с другими" />
+          <SmallButton to={roomsUrl} text="Создать комнату" secondaryText="И начать играть" isWhiteBackground />
+          <SmallButton to={roomsUrl} text="Найти открытую комнату" secondaryText="Для игры с другими" />
         </div>
       </div>
     </div>
