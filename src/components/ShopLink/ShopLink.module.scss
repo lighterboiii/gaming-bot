@@ -5,7 +5,7 @@
   @include position(relative);
   @include indents(16px, 0);
   @include size(100%, 140px);
-  @include flex(row, space-between, center, 16px);
+  @include flex(row, space-between, center, 12px);
   border: 1px $main-color solid;
   border-radius: $radius-15;
   text-decoration: none;
@@ -25,7 +25,7 @@
   }
 
   &__update {
-    @include indents(16px, 0);
+    @include indents(12px, 0);
     border-radius: $radius-15;
     background-color: $black-color;
   }

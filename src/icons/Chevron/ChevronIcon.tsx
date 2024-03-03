@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import styles from './ChevronIcon.module.scss';
 
 export interface IChevronIcon {
   color?: string;
@@ -37,14 +38,14 @@ const ChevronIcon: FC<IChevronIcon> = ({
   }
 
   return (
-    <div style={{ transform: rotation, padding: 0, margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ transform: rotation }} className={styles.div}>
       <svg
         width={width}
         height={height}
         viewBox="0 0 16 16"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        // transform={rotation}
+      // transform={rotation}
       >
         <path
           d="M12.6667 6.28027L8.00001 10.9469L3.33334 6.28027"
