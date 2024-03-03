@@ -4,7 +4,6 @@ import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { bannersData } from "../../utils/mockData";
 import { Link } from "react-router-dom";
 
-// выше - заглушки для тестирования работы, заменить
 const AdvertismentBanner: FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -13,7 +12,7 @@ const AdvertismentBanner: FC = () => {
   };
 
   return (
-    <Link to='/balance' className={styles.banner} style={{ backgroundImage: bannersData[currentIndex].backgroundImage }}>
+    <div className={styles.banner} style={{ backgroundImage: bannersData[currentIndex].backgroundImage }}>
       <button
         className={styles.banner__sliderButton}
         onClick={() => goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length)}
@@ -24,7 +23,9 @@ const AdvertismentBanner: FC = () => {
           height={24}
         />
       </button>
-      <p className={styles.banner__text}>{bannersData[currentIndex].text}</p>
+      <Link to={bannersData[currentIndex].link} className={styles.banner__link}>
+        <p className={styles.banner__text}>{bannersData[currentIndex].text}</p>
+      </Link>
       <button
         className={styles.banner__sliderButton}
         onClick={() => goToSlide((currentIndex + 1) % bannersData.length)}
@@ -44,7 +45,7 @@ const AdvertismentBanner: FC = () => {
           />
         ))}
       </div>
-    </Link>
+    </div>
   )
 }
 

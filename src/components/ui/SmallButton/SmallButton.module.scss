@@ -5,9 +5,10 @@
   @include position(relative);
   @include indents(16px, 0);
   @include flex(column, center, flex-start);
-  @include min-size(100%, auto);
+  @include min-size(179px, auto);
+  @include size(100%, 100%);
   text-decoration: none;
-  border-radius: $radius-15;
+  border-radius: $radius-12;
 
   &__textWrapper {
     @include flex(column, space-between, flex-start, 16px);

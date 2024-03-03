@@ -1,0 +1,67 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.create {
+  @include size(100%, 100vh);
+  @include indents(20px 10px 0, 0);
+  @include flex(column, flex-start, center, 20px);
+
+  &__header {
+    @include position(relative);
+    @include size(100%, 10vh);
+    @include flex(row, center, center);
+  }
+
+  &__chevron {
+    @include button-style-reset();
+    @include position(absolute, $top: 50%, $left: 16px);
+    transform: translateY(-50%);
+  }
+
+  &__content {
+    @include size(100%, 50vh);
+    @include flex(column, space-between, center, 16px);
+  }
+
+  &__heading {
+    @include indents();
+    @include size(70%, unset);
+    color: $main-color;
+    font-weight: 900;
+    font-size: 40px;
+    font-style: italic;
+  }
+
+  &__bets {
+    @include size(100%, 100%);
+    @include flex(column, center, flex-start, 16px);
+  }
+
+  &__buttons {
+    @include indents(0, 0 0 40px 0);
+    @include size(100%, auto);
+    @include flex(row, space-between, center, 8px);
+  }
+
+  &__label {
+    @include indents(12px 24px, 0);
+    @include size(100%, auto);
+    @include flex(row, space-between, center, 8px);
+    border: 1px $main-color solid;
+    border-radius: $radius-12;
+  }
+
+  &__input {
+    @include indents(8px, 0);
+    @include size(90px, 40px);
+    border: none;
+    border-radius: $radius-12;
+    background: $main-color;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  &__text {
+    color: $main-color;
+  }
+}

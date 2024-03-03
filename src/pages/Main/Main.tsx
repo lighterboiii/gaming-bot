@@ -17,7 +17,7 @@ const Main: FC = () => {
           <div className={styles.main__smallButtonsContainer}>
             {/* Заменить to ссылки */}
             <SmallButton
-              to="/balance"
+              to="/create-room"
               text="Создать комнату"
               secondaryText="Для игры с другими людьми"
               chevronPosition="right"

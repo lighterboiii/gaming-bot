@@ -7,11 +7,15 @@
   @include size(100%, 140px);
   @include flex(row, space-between, center);
   border: 1px $main-color solid;
-  border-radius: $radius-15;
+  border-radius: $radius-12;
   background-size: cover;
   background-repeat: no-repeat;
   flex-grow: 1;
-  text-decoration: none;
+
+  &__link {
+    @include size(100%, auto);
+    text-decoration: none;
+  }
 
   &__sliderButton {
     @include button-style-reset();
@@ -19,6 +23,7 @@
   }
 
   &__text {
+    @include indents(30px, 0);
     color: $main-color;
   }
 

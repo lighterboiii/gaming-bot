@@ -8,6 +8,7 @@ import Rooms from '../../pages/Rooms/Rooms';
 import Shop from '../../pages/Shop/Shop';
 import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
+import { balanceUrl, createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
 
 const App: FC = () => {
   const { tg } = useTelegram();
@@ -22,12 +23,12 @@ const App: FC = () => {
   return (
     <div className={styles.app}>
       <Routes>
-        <Route path='/' element={<Main />} />
-        <Route path='/rooms' element={<Rooms />} />
-        <Route path='/create-room' element={<CreateRoom />} />
-        <Route path='/shop' element={<Shop />} />
-        <Route path='/balance' element={<Balance />} />
-        <Route path='/leaderboard' element={<LeaderBoard />} />
+        <Route path={indexUrl} element={<Main />} />
+        <Route path={roomsUrl} element={<Rooms />} />
+        <Route path={createRoomUrl} element={<CreateRoom />} />
+        <Route path={shopUrl} element={<Shop />} />
+        <Route path={balanceUrl} element={<Balance />} />
+        <Route path={leaderboardUrl} element={<LeaderBoard />} />
       </Routes>
     </div>
   );
