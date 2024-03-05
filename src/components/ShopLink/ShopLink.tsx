@@ -8,6 +8,7 @@ import { roomsUrl } from "../../utils/routes";
 import UserAvatar from "../UserAvatar/UserAvatar";
 
 const ShopLink: FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user } = useTelegram();
 
   return (
