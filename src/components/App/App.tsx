@@ -9,6 +9,7 @@ import Shop from '../../pages/Shop/Shop';
 import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { balanceUrl, createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
+import { getData } from '../../api/api';
 
 const App: FC = () => {
   const { tg } = useTelegram();
@@ -19,6 +20,10 @@ const App: FC = () => {
     tg.enableClosingConfirmation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className={styles.app}>

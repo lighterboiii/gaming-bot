@@ -25,7 +25,7 @@ const LeaderBoard: FC = () => {
       </div>
       <div className={styles.leaderBoard__leader}>
         <div className={styles.leaderBoard__avatarContainer}>
-          {/* <img src={skin} className={styles.leaderBoard__skin} alt="skin" /> */}
+          <img src={skin} className={styles.leaderBoard__skin} alt="skin" />
           <img
             src={user ? `${user?.photo_url}` : "https://i.pravatar.cc"}
             alt="leader_avatar"
