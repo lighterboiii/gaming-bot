@@ -1,0 +1,26 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.userAvatar {
+  @include indents();
+  @include position(relative);
+  @include flex(row, center, center);
+  @include size(100%, 100%);
+
+  &__avatarBackground {
+    @include position(absolute, $top: 0, $left: -10%);
+    @include size(100%, 100%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 2;
+  }
+  
+  &__userAvatar {
+    @include size(100%, 100%);
+    @include position(absolute, $top: 0, $left: -10%);
+    z-index: 1;
+    mask-composite: exclude;
+    mask-size: cover;
+  }
+
+}

@@ -44,14 +44,16 @@
   }
 
   &__avatarContainer {
+    @include position(relative);
     @include size(100px, 100px);
-    @include flex($align-items: center, $justify-content: center);
     border-radius: $radius-round;
     background-color: #ffd54f;
   }
 
-  &__avatar {
-    @include size(60px, 60px);
+  &__avatarWrapper {
+    @include position(absolute, $top: 50%, $left: 58%);
+    @include size(80px, 80px);
+    transform: translate(-50%, -50%);
   }
 
   &__chevron {

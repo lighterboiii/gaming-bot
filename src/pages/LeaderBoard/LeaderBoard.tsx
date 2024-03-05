@@ -7,6 +7,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { leadersData } from "../../utils/mockData";
 import Leader from "../../components/Leader/Leader";
 import skin from '../../skins/11.png';
+import UserAvatar from "../../components/UserAvatar/UserAvatar";
 
 const LeaderBoard: FC = () => {
   const navigate = useNavigate();
@@ -25,12 +26,7 @@ const LeaderBoard: FC = () => {
       </div>
       <div className={styles.leaderBoard__leader}>
         <div className={styles.leaderBoard__avatarContainer}>
-          <img src={skin} className={styles.leaderBoard__skin} alt="skin" />
-          <img
-            src={user ? `${user?.photo_url}` : "https://i.pravatar.cc"}
-            alt="leader_avatar"
-            className={styles.leaderBoard__leaderAvatar}
-          />
+          <UserAvatar />
           <p className={styles.leaderBoard__label}>Это вы!</p>
         </div>
         <div className={styles.leaderBoard__leaderInfo}>

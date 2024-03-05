@@ -40,11 +40,12 @@
 
   &__avatarContainer {
     @include indents();
+    @include size(180px, 180px);
     @include position(relative);
   }
 
   &__label {
-    @include position(absolute, $right: -70px, $bottom: -20px);
+    @include position(absolute, $right: -10%, $bottom: -5%);
     @include indents(8px 12px, 0);
     background-color: $main-color;
     border-radius: $radius-15;
@@ -53,14 +54,7 @@
     font-weight: 900;
     font-size: 24px;
     transform: rotate(-15deg);
-  }
-
-  &__leaderAvatar {
-    // @include position(absolute, $top: 50%, $left: 50%);
-    // transform: translate(-50%, -50%);
-    // z-index: 1;
-    @include max-size(140px, 140px);
-    @include size(100%, 100%);
+    z-index: 3;
   }
 
   &__leaderText {
@@ -81,11 +75,4 @@
     overflow: scroll;
     z-index: 3;
   }
-
-  // &__skin {
-  //   @include position(relative);
-  //   @include size(224px, 224px);
-  //   display: inline-block;
-  //   z-index: 2;
-  // }
 }
