@@ -8,7 +8,7 @@
   @include size(100%, 100%);
 
   &__avatarBackground {
-    @include position(absolute, $top: 0, $left: -10%);
+    @include position(absolute, $top: 0, $left: 0);
     @include size(100%, 100%);
     background-size: cover;
     background-repeat: no-repeat;
@@ -17,7 +17,7 @@
   
   &__userAvatar {
     @include size(100%, 100%);
-    @include position(absolute, $top: 0, $left: -10%);
+    @include position(absolute, $top: 0, $left: 0);
     z-index: 1;
     mask-composite: exclude;
     mask-size: cover;

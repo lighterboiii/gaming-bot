@@ -29,7 +29,7 @@
   }
 
   &__leader {
-    @include size(100%, 30vh);
+    @include size(100%, auto);
     @include flex(column, space-around, center, 20px);
   }
 
