@@ -5,14 +5,11 @@ import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { Link } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { roomsUrl } from "../../utils/routes";
-import { getRandomSkinAndMask } from "../../utils/getRandomSkin";
-import avatar from '../../images/griffin.jpeg';
 import UserAvatar from "../UserAvatar/UserAvatar";
 
 const UserInfo: FC = () => {
   const { tg, user } = useTelegram();
-  const { skin, mask } = getRandomSkinAndMask();
-  console.log(skin, mask);
+
   // перенести всю логику аватарок в отдельный компонент UserAvatar
   return (
     <div className={styles.userInfo}>

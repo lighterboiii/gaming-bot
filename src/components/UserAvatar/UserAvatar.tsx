@@ -3,9 +3,10 @@ import { FC } from "react";
 import { getRandomSkinAndMask } from "../../utils/getRandomSkin";
 import styles from './UserAvatar.module.scss';
 import avatar from '../../images/griffin.jpeg';
+import useTelegram from "../../hooks/useTelegram";
 
 const UserAvatar: FC = () => {
-  // const { tg, user } = useTelegram();
+  const { tg, user } = useTelegram();
   const { skin, mask } = getRandomSkinAndMask();
 
   return (
@@ -14,7 +15,7 @@ const UserAvatar: FC = () => {
         <div className={styles.userAvatar}>
           <div className={styles.userAvatar__avatarBackground} style={{ backgroundImage: `url(${skin})` }}></div>
           <img
-            src={avatar}
+            src={user.photo_url}
             alt="user_avatar"
             className={styles.userAvatar__userAvatar}
             style={{ maskImage: `url(${mask})` }}

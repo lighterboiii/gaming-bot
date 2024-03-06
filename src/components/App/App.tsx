@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './App.module.scss';
 import Balance from '../../pages/Balance/Balance';
 import CreateRoom from '../../pages/CreateRoom/CreateRoom';
@@ -10,9 +10,11 @@ import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { balanceUrl, createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { getData } from '../../api/api';
+import { UserData } from '../../utils/types';
 
 const App: FC = () => {
   const { tg } = useTelegram();
+  const [data, setData] = useState<UserData | null>(null);
 
   useEffect(() => {
     tg.ready()
@@ -20,9 +22,17 @@ const App: FC = () => {
     tg.enableClosingConfirmation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
+  console.log(data?.info);
   useEffect(() => {
-    getData();
+    const fetchData = async () => {
+      try {
+        const info = await getData();
+        setData(info);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
   }, []);
 
   return (
