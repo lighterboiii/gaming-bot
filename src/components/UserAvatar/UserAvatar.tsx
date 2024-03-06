@@ -15,7 +15,7 @@ const UserAvatar: FC = () => {
         <div className={styles.userAvatar}>
           <div className={styles.userAvatar__avatarBackground} style={{ backgroundImage: `url(${skin})` }}></div>
           <img
-            src={user?.photo_url}
+            src={user ? user?.photo_url : avatar}
             alt="user_avatar"
             className={styles.userAvatar__userAvatar}
             style={{ maskImage: `url(${mask})` }}
