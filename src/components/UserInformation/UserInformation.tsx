@@ -7,7 +7,6 @@ import useTelegram from "../../hooks/useTelegram";
 import { roomsUrl } from "../../utils/routes";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import { UserData } from "../../utils/types";
-import { getData } from "../../api/api";
 
 const UserInfo: FC = () => {
   const { tg, user } = useTelegram();
