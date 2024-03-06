@@ -11,19 +11,19 @@ import { getData } from "../../api/api";
 
 const UserInfo: FC = () => {
   const { tg, user } = useTelegram();
-  const [data, setData] = useState<UserData | null>(null);
+  // const [data, setData] = useState<UserData | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const info = await getData();
-        setData(info);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const info = await getData();
+  //       setData(info);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
   
   // перенести всю логику аватарок в отдельный компонент UserAvatar
   return (

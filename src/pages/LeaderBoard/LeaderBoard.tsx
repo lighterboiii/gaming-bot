@@ -30,7 +30,7 @@ const LeaderBoard: FC = () => {
           <p className={styles.leaderBoard__label}>Это вы!</p>
         </div>
         <div className={styles.leaderBoard__leaderInfo}>
-          <p className={styles.leaderBoard__leaderText}>{leaderUser?.username}</p>
+          <p className={styles.leaderBoard__leaderText}>{user ? user?.username : 'Максим'}</p>
           <p className={styles.leaderBoard__leaderText}>
             {leaderUser?.gain}</p>
         </div>
