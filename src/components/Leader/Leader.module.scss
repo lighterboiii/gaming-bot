@@ -10,9 +10,28 @@
     @include flex(row, flex-start, center, 16px);
   }
 
+  &__avatarWrapper {
+    @include indents();
+    @include position(relative);
+    @include size(60px, 60px);
+    @include flex(row, center, center);
+  }
+
+  &__avatarBackground {
+    @include position(absolute, $top: 0, $left: 0);
+    @include size(100%, 100%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 2;
+  }
+
   &__avatar {
-    @include size(40px, 40px);
-    border-radius: $radius-round;
+    @include size(100%, 100%);
+    @include position(absolute, $top: 0, $left: 0);
+    // border-radius: $radius-round;
+    z-index: 1;
+    mask-composite: exclude;
+    mask-size: cover;
   }
 
   &__text {
@@ -26,6 +45,7 @@
   }
 
   &__number {
+    @include indents();
     color: $main-color;
     font-weight: 900;
     font-size: 28px;

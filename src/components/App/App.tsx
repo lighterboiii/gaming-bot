@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Routes, Route } from 'react-router-dom';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import styles from './App.module.scss';
 import Balance from '../../pages/Balance/Balance';
 import CreateRoom from '../../pages/CreateRoom/CreateRoom';
@@ -14,20 +14,17 @@ import { balanceUrl, createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl 
 import { UserData } from '../../utils/types';
 import { getReq } from '../../api/api';
 import { getUserInfoUri } from '../../api/requestData';
-import { useAppDispatch, useAppSelector } from '../../services/reduxHooks';
+import { useAppDispatch } from '../../services/reduxHooks';
 import { setUserData } from '../../services/userSlice';
 
 const App: FC = () => {
   const { tg } = useTelegram();
   const dispatch = useAppDispatch();
-  const userData = useAppSelector(store => store.user.userData);
-  console.log(userData);
 
   useEffect(() => {
     tg.ready()
     tg.expand();
     tg.enableClosingConfirmation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

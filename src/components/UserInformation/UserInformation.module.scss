@@ -9,7 +9,7 @@
 
   &__content {
     @include size(auto, 70px);
-    @include flex(row, flex-start, center);
+    @include flex(row, flex-start, center, 6px);
     flex: 1;
   }
 
@@ -28,6 +28,14 @@
     @include indents();
     color: $main-color;
     font-weight: 600;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  &__communityText {
+    @include indents();
+    color: $black-color;
+    font-weight: 400;
     font-size: 14px;
     line-height: 1;
   }
@@ -54,6 +62,7 @@
   }
 
   &__tgLink {
+    @include flex(column, center, center, 4px);
     text-decoration: none;
     color: $black-color;
     font-size: 14px;

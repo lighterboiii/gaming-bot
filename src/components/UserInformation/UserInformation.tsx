@@ -6,10 +6,12 @@ import { Link } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { roomsUrl } from "../../utils/routes";
 import UserAvatar from "../UserAvatar/UserAvatar";
+import { useAppSelector } from "../../services/reduxHooks";
 
 const UserInfo: FC = () => {
   const { tg, user } = useTelegram();
-  
+  const userData = useAppSelector(store => store.user.userData);
+
   return (
     <div className={styles.userInfo}>
       <div className={styles.userInfo__content}>
@@ -17,9 +19,9 @@ const UserInfo: FC = () => {
           <UserAvatar />
         </div>
         <div className={styles.userInfo__textElements}>
-          <p className={styles.userInfo__text}>{user ? user?.first_name : 'Максим'}</p>
-          <p className={styles.userInfo__text}>15.3 💵</p>
-          <p className={styles.userInfo__text}>1262.1 🔰</p>
+          <p className={styles.userInfo__text}>{user ? user?.first_name : (userData?.info?.publicname || 'Максим')}</p>
+          <p className={styles.userInfo__text}>{userData ? `${userData?.info.coins}` : '50'} 💵</p>
+          <p className={styles.userInfo__text}>{userData ? `${userData?.info.tokens}` : '119'}🔰</p>
         </div>
         {/* Ссылку ниже можно переделать в отдельный UI компонент */}
         <Link to='/balance' className={styles.userInfo__balanceLink}>
@@ -29,7 +31,10 @@ const UserInfo: FC = () => {
       <div className={styles.userInfo__linkContainer}>
         <div className={styles.userInfo__link} >
           {/* Заменить to ссылки */}
-          <Link to={roomsUrl} className={styles.userInfo__tgLink}>Сообщество <br></br> GoWIN <br></br>🌐</Link>
+          <Link to={roomsUrl} className={styles.userInfo__tgLink}>
+            <p className={styles.userInfo__communityText}>Сообщество</p>
+            <p className={styles.userInfo__communityText}>GoWIN <br />🌐</p>
+          </Link>
         </div>
         <p className={styles.userInfo__smallText}>Будем на связи 👆</p>
       </div>

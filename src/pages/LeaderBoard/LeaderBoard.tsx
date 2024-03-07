@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useState } from "react";
+import { FC } from "react";
 import styles from './LeaderBoard.module.scss';
 import CircleButton from "../../components/ui/CircleButton/CircleButton";
 import { useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { leadersData } from "../../utils/mockData";
 import Leader from "../../components/Leader/Leader";
-import skin from '../../skins/11.png';
 import UserAvatar from "../../components/UserAvatar/UserAvatar";
 
 const LeaderBoard: FC = () => {
