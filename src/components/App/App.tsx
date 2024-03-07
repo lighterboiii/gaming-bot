@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Routes, Route } from 'react-router-dom';
 import { FC, useEffect, useState } from 'react';
@@ -13,10 +14,14 @@ import { balanceUrl, createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl 
 import { UserData } from '../../utils/types';
 import { getReq } from '../../api/api';
 import { getUserInfoUri } from '../../api/requestData';
+import { useAppDispatch, useAppSelector } from '../../services/reduxHooks';
+import { setUserData } from '../../services/userSlice';
 
 const App: FC = () => {
   const { tg } = useTelegram();
-  const [data, setData] = useState<UserData | null>(null);
+  const dispatch = useAppDispatch();
+  const userData = useAppSelector(store => store.user.userData);
+  console.log(userData);
 
   useEffect(() => {
     tg.ready()
@@ -24,12 +29,12 @@ const App: FC = () => {
     tg.enableClosingConfirmation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log(data?.info);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri });
-        setData(userDataResponse);
+        dispatch(setUserData(userDataResponse));
       } catch (error) {
         console.error('Ошибка в получении данных пользователя:' + error);
       }
