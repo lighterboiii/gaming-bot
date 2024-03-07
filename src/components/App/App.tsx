@@ -10,7 +10,6 @@ import Shop from '../../pages/Shop/Shop';
 import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { balanceUrl, createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
-import { getUserData } from '../../api/old-api';
 import { UserData } from '../../utils/types';
 import { getReq } from '../../api/api';
 import { getUserInfoUri } from '../../api/requestData';
@@ -32,7 +31,7 @@ const App: FC = () => {
         const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri });
         setData(userDataResponse);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Ошибка в получении данных пользователя:' + error);
       }
     };
 

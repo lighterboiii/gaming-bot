@@ -33,8 +33,15 @@ import mask15 from '../skins/16_mask.png'
 const skins = [skin, skin2, skin3, skin4, skin5, skin6, skin8, skin9, skin10, skin11, skin12, skin13, skin14, skin15, skin16]; 
 const masks = [mask, mask2, mask3, mask4, mask5, mask6, mask7, mask8, mask9, mask10, mask11, mask12, mask13, mask14, mask15];
 
-export const getRandomSkinAndMask = () => {
+const getRandomSkinAndMask = () => {
   const randomIndex = Math.floor(Math.random() * skins.length);
   return { skin: skins[randomIndex], mask: masks[randomIndex] };
 };
 
+export const getSkinAndMaskByIndex = (index: number) => {
+  if (index >= 0 && index < skins.length) {
+    return { skin: skins[index], mask: masks[index] };
+  } else {
+    return getRandomSkinAndMask();
+  }
+};

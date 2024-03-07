@@ -1,30 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import styles from './UserInformation.module.scss';
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { Link } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { roomsUrl } from "../../utils/routes";
 import UserAvatar from "../UserAvatar/UserAvatar";
-import { UserData } from "../../utils/types";
 
 const UserInfo: FC = () => {
   const { tg, user } = useTelegram();
-  // const [data, setData] = useState<UserData | null>(null);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const info = await getData();
-  //       setData(info);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
   
-  // перенести всю логику аватарок в отдельный компонент UserAvatar
   return (
     <div className={styles.userInfo}>
       <div className={styles.userInfo__content}>

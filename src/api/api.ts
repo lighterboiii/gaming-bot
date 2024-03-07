@@ -1,3 +1,5 @@
+import { token } from "./requestData";
+
 /* eslint-disable import/no-anonymous-default-export */
 type TOptions = {
   headers?: { authorization?: string, 'Content-Type': string };
@@ -17,6 +19,7 @@ const BASE_URL = 'https://8da8-46-29-234-97.ngrok-free.app/';
 
 const BASE_PARAMS = {
   headers: {
+    'Authorization': token,
     'Content-Type': 'application/json;charset=utf-8',
     'ngrok-skip-browser-warning': 'true', // на время разработки для обхода ошибок cors
   }
