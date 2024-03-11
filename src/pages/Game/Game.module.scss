@@ -1,0 +1,9 @@
+@use '../../stylesheets/mixins' as *;
+
+.game {
+  @include flex(column, center, center, 10px);
+
+  &__heading {
+    color: #FFF;
+  }
+}

@@ -30,12 +30,12 @@ const CreateRoom: FC = () => {
       await putReq({ uri: setTokensValueUri, userId: userId, data: newCoins, endpoint: 'newtokens=' });
       dispatch(setCoinsValue(Number(newCoins)));
     } catch (error) {
-      console.error('Ошибка при обновлении количества коинов:', error);
+      console.error('Ошибка при обновлении количества токенов:', error);
     }
   };
 
-  const handleSetCoins = () => {
-    dispatch(updateCoins(userId, String(betAmount))); // Вызов функции updateCoins с новым значением 10
+  const handleSetTokens = () => {
+    dispatch(updateCoins(userId, String(betAmount)));
   };
 
   return (
@@ -71,11 +71,11 @@ const CreateRoom: FC = () => {
               <option value="🔰">🔰</option>
             </select>
           </label>
-          <button onClick={handleSetCoins}>Set Coins Value</button>
+          <button onClick={handleSetTokens}>Set Tokens Value</button>
           <p style={{ color: '#FFF' }}>{userCoins}</p>
         </div>
         <div className={styles.create__buttons}>
-          <SmallButton to={roomsUrl} text="Создать комнату" secondaryText="И начать играть" isWhiteBackground />
+          <SmallButton to={'/game'} text="Создать комнату" secondaryText="И начать играть" isWhiteBackground />
           <SmallButton to={roomsUrl} text="Найти открытую комнату" secondaryText="Для игры с другими" />
         </div>
       </div>

@@ -16,6 +16,7 @@ import { getReq } from '../../api/api';
 import { getUserInfoUri, getUserPhotoUri, userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
 import { setUserData, setUserPhoto } from '../../services/userSlice';
+import Game from '../../pages/Game/Game';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -54,6 +55,7 @@ const App: FC = () => {
         <Route path={shopUrl} element={<Shop />} />
         <Route path={balanceUrl} element={<Balance />} />
         <Route path={leaderboardUrl} element={<LeaderBoard />} />
+        <Route path='/game' element={<Game />} />
       </Routes>
     </div>
   );
