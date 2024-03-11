@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
-import { getRandomSkinAndMask, getSkinAndMaskByIndex } from "../../utils/getSkinAndMask";
+import { getSkinAndMaskByIndex } from "../../utils/getSkinAndMask";
 import styles from './UserAvatar.module.scss';
 import avatar from '../../images/griffin.jpeg';
 import { useAppSelector } from "../../services/reduxHooks";
-import gifmask from '../../skins/1_gif_mask.gif';
-import gifskin from '../../skins/1_gif_skin.gif';
+import gifmask from '../../images/1_gif_mask.gif'
+import gifskin from '../../images/1_gif_skin.gif';
 
 const UserAvatar: FC = () => {
   const [userSkin, setSkin] = useState<any>(null);
   const [userMask, setMask] = useState<any>(null);
-  const { skin, mask } = getRandomSkinAndMask();
+
   const userData = useAppSelector(store => store.user.userData);
 
   useEffect(() => {
@@ -26,14 +26,13 @@ const UserAvatar: FC = () => {
       <div className={styles.userAvatar}>
         <div
           className={styles.userAvatar__avatarBackground}
-          // style={{ backgroundImage: `url(${userData?.info ? userSkin : skin})` }}></div>
-          style={{ backgroundImage: `url(${gifskin})` }}></div>
+          style={{ backgroundImage: `url(${userData?.info ? userSkin : gifskin})` }}></div>
+
         <img
           src={avatar}
           alt="user_avatar"
           className={styles.userAvatar__userAvatar}
-          // style={{ maskImage: `url(${userData?.info ? userMask : mask})` }}
-          style={{ maskImage: `url(${gifmask})` }}
+          style={{ maskImage: `url(${userData?.info ? userMask : gifmask})` }}
         />
       </div>
     </>

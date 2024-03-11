@@ -13,9 +13,9 @@ import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { balanceUrl, createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { UserData } from '../../utils/types';
 import { getReq } from '../../api/api';
-import { getUserInfoUri, userId, userIdQuery } from '../../api/requestData';
+import { getUserInfoUri, getUserPhotoUri, userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setUserData } from '../../services/userSlice';
+import { setUserData, setUserPhoto } from '../../services/userSlice';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -31,7 +31,11 @@ const App: FC = () => {
     const fetchUserData = async () => {
       try {
         const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
+        // const userPhotoResponse = await getReq<any>({ uri: getUserPhotoUri, userId: userId });
         dispatch(setUserData(userDataResponse));
+        // console.log(userPhotoResponse.info);
+        // dispatch(setUserPhoto(userPhotoResponse.info));
+
       } catch (error) {
         console.error('Ошибка в получении данных пользователя:' + error);
       }

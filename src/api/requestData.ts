@@ -4,4 +4,5 @@ export const userId = '116496831';
 export const userIdQuery = `?user_id=${userId}`;
 
 export const getUserInfoUri = `getuserinfo?user_id=`;
+export const getUserPhotoUri = `getuserpic?user_id=`;
 export const setTokensValueUri = `settokensnewvalue${userIdQuery}`;

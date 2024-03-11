@@ -19,9 +19,9 @@ const UserInfo: FC = () => {
           <UserAvatar />
         </div>
         <div className={styles.userInfo__textElements}>
-          <p className={styles.userInfo__text}>{user ? user?.first_name : (userData?.info?.publicname || 'Максим')}</p>
-          <p className={styles.userInfo__text}>{userData ? `${userData?.info.coins}` : '50'} 💵</p>
-          <p className={styles.userInfo__text}>{userData ? `${userData?.info.tokens}` : '119'}🔰</p>
+          <p className={styles.userInfo__text}>{userData ? userData?.info?.publicname : 'Максим'}</p>
+          <p className={styles.userInfo__text}>{userData ? `${userData?.info.coins}` : '10'} 💵</p>
+          <p className={styles.userInfo__text}>{userData ? `${userData?.info.tokens}` : '20'}🔰</p>
         </div>
         {/* Ссылку ниже можно переделать в отдельный UI компонент */}
         <Link to='/balance' className={styles.userInfo__balanceLink}>
