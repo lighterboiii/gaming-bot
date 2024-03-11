@@ -4,7 +4,7 @@ import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { bannersData } from "../../utils/mockData";
 import { Link } from "react-router-dom";
 
-const AdvertismentBanner: FC = () => {
+const AdvertisementBanner: FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToSlide = (index: number) => {
@@ -49,4 +49,4 @@ const AdvertismentBanner: FC = () => {
   )
 }
 
-export default AdvertismentBanner;
+export default AdvertisementBanner;

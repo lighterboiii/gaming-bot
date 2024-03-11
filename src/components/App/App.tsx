@@ -13,24 +13,24 @@ import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { balanceUrl, createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { UserData } from '../../utils/types';
 import { getReq } from '../../api/api';
-import { getUserInfoUri } from '../../api/requestData';
+import { getUserInfoUri, userId, userIdQuery } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
 import { setUserData } from '../../services/userSlice';
 
 const App: FC = () => {
-  const { tg } = useTelegram();
+  const { tg, user } = useTelegram();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     tg.ready()
     tg.expand();
     tg.enableClosingConfirmation();
-  }, [])
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri });
+        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
         dispatch(setUserData(userDataResponse));
       } catch (error) {
         console.error('Ошибка в получении данных пользователя:' + error);

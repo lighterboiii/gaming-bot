@@ -1,7 +1,7 @@
 import { FC } from "react"
 import styles from './Main.module.scss';
 import UserInfo from "../../components/UserInformation/UserInformation";
-import AdvertismentBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
+import AdvertisementBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import BigButton from "../../components/ui/BigButton/BigButton";
 import ShopLink from "../../components/ShopLink/ShopLink";
@@ -12,7 +12,7 @@ const Main: FC = () => {
       <h1 className={styles.main__title}>GOWIN</h1>
       <UserInfo />
       <div className={styles.main__content}>
-        <AdvertismentBanner />
+        <AdvertisementBanner />
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
             {/* Заменить to ссылки */}

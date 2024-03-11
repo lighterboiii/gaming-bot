@@ -9,28 +9,28 @@ type TOptions = {
 
 type TRequest = {
   uri: string;
+  userId: string;
   data?: any;
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
-  proxyUrl?: string; // на время разработки для обхода ошибок cors
 };
 
 const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-const BASE_URL = 'https://8da8-46-29-234-97.ngrok-free.app/';
+const BASE_URL = 'https://a3de-46-29-234-97.ngrok-free.app/';
 
 const BASE_PARAMS = {
   headers: {
-    'Authorization': token,
+    'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json;charset=utf-8',
     'ngrok-skip-browser-warning': 'true', // на время разработки для обхода ошибок cors
   }
 };
 
-function getRequestParams({ uri, method, data }: TRequest) {
+function getRequestParams({ uri, userId, method, data }: TRequest) {
   const params: TOptions = {
     ...BASE_PARAMS,
     method
   };
-  const path = `${PROXY_URL}${BASE_URL}${uri}`;
+  const path = `${BASE_URL}${uri}${userId}`;
   if (data) {
     params.body = JSON.stringify(data);
   }
