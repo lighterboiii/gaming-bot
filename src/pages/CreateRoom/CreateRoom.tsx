@@ -8,7 +8,7 @@ import { roomsUrl } from "../../utils/routes";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { setCoinsValue } from "../../services/userSlice";
 import { putReq } from "../../api/api";
-import { setTokensValueUri, userId } from "../../api/requestData";
+import { newTokensValue, setTokensValueUri, userId } from "../../api/requestData";
 
 const CreateRoom: FC = () => {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const CreateRoom: FC = () => {
 
   const updateCoins = (userId: string, newCoins: string) => async (dispatch: any) => {
     try {
-      await putReq({ uri: setTokensValueUri, userId: userId, data: newCoins, endpoint: 'newtokens=' });
+      await putReq({ uri: setTokensValueUri, userId: userId, endpoint: newTokensValue, data: newCoins });
       dispatch(setCoinsValue(Number(newCoins)));
     } catch (error) {
       console.error('Ошибка при обновлении количества токенов:', error);
