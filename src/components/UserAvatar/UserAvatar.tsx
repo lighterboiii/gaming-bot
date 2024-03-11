@@ -18,6 +18,9 @@ const UserAvatar: FC = () => {
       const { skin: selectedSkin, mask: selectedMask } = getSkinAndMaskByIndex(userData.info.active_skin);
       setSkin(selectedSkin);
       setMask(selectedMask);
+    } else {
+      setSkin('');
+      setMask('');
     }
   }, [userData]);
 
@@ -26,13 +29,13 @@ const UserAvatar: FC = () => {
       <div className={styles.userAvatar}>
         <div
           className={styles.userAvatar__avatarBackground}
-          style={{ backgroundImage: `url(${userData?.info ? userSkin : gifskin})` }}></div>
+          style={{ backgroundImage: `url(${userData && userSkin})` }}></div>
 
         <img
           src={avatar}
           alt="user_avatar"
           className={styles.userAvatar__userAvatar}
-          style={{ maskImage: `url(${userData?.info ? userMask : gifmask})` }}
+          style={{ maskImage: `url(${userData && userMask})` }}
         />
       </div>
     </>

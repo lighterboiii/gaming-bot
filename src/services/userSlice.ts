@@ -24,9 +24,14 @@ const userSlice = createSlice({
     clearUserData: (state) => {
       state.userData = null;
     },
+    setCoinsValue: (state, action: PayloadAction<number>) => {
+      if (state.userData) {
+        state.userData.info.coins += action.payload;
+      }
+    },
   }
 });
 
-export const { setUserData, clearUserData, setUserPhoto } = userSlice.actions;
+export const { setUserData, clearUserData, setUserPhoto, setCoinsValue } = userSlice.actions;
 
 export default userSlice.reducer;

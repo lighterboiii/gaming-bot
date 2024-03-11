@@ -5,4 +5,6 @@ export const userIdQuery = `?user_id=${userId}`;
 
 export const getUserInfoUri = `getuserinfo?user_id=`;
 export const getUserPhotoUri = `getuserpic?user_id=`;
-export const setTokensValueUri = `settokensnewvalue${userIdQuery}`;
+export const setTokensValueUri = `settokensnewvalue?user_id=`;
+
+export const newTokensValue = `newtokens='`;

@@ -5,11 +5,17 @@ import { useNavigate } from "react-router-dom";
 import CircleButton from "../../components/ui/CircleButton/CircleButton";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import { roomsUrl } from "../../utils/routes";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { setCoinsValue } from "../../services/userSlice";
+import { putReq } from "../../api/api";
+import { setTokensValueUri, userId } from "../../api/requestData";
 
 const CreateRoom: FC = () => {
   const navigate = useNavigate();
   const [betAmount, setBetAmount] = useState(0.1);
   const [currency, setCurrency] = useState('💵');
+  const userCoins = useAppSelector(store => store.user.userData?.info.coins);
+  const dispatch = useAppDispatch();
 
   const handleCreateRoom = () => {
     // Логика для создания комнаты
@@ -17,6 +23,19 @@ const CreateRoom: FC = () => {
 
   const handleFindRoom = () => {
     // Логика для поиска открытой комнаты
+  };
+
+  const updateCoins = (userId: string, newCoins: string) => async (dispatch: any) => {
+    try {
+      await putReq({ uri: setTokensValueUri, userId: userId, data: newCoins, endpoint: 'newtokens=' });
+      dispatch(setCoinsValue(Number(newCoins)));
+    } catch (error) {
+      console.error('Ошибка при обновлении количества коинов:', error);
+    }
+  };
+
+  const handleSetCoins = () => {
+    dispatch(updateCoins(userId, String(betAmount))); // Вызов функции updateCoins с новым значением 10
   };
 
   return (
@@ -52,6 +71,8 @@ const CreateRoom: FC = () => {
               <option value="🔰">🔰</option>
             </select>
           </label>
+          <button onClick={handleSetCoins}>Set Coins Value</button>
+          <p style={{ color: '#FFF' }}>{userCoins}</p>
         </div>
         <div className={styles.create__buttons}>
           <SmallButton to={roomsUrl} text="Создать комнату" secondaryText="И начать играть" isWhiteBackground />

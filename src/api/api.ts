@@ -12,7 +12,8 @@ type TRequest = {
   uri: string;
   userId: string;
   data?: any;
-  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+  endpoint?: string;
+  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 };
 
 const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
@@ -26,15 +27,15 @@ const BASE_PARAMS = {
   }
 };
 
-function getRequestParams({ uri, userId, method, data }: TRequest) {
+function getRequestParams({ uri, userId, method, data, endpoint }: TRequest) {
   const params: TOptions = {
     ...BASE_PARAMS,
     method
   };
-  const path = `${BASE_URL}${uri}${userId}`;
-  if (data) {
-    params.body = JSON.stringify(data);
-  }
+  const path = `${BASE_URL}${uri}${userId}${endpoint ? `&${endpoint}` : ''}${data ? data : ''}`;
+  // if (data) {
+  //   params.body = JSON.stringify(data);
+  // }
   return { path, params };
 };
 /**
@@ -69,8 +70,8 @@ export function postReq<T>(options: TRequest) {
   return request<T>(path, params);
 };
 
-export function patchReq<T>(options: TRequest) {
-  const { path, params } = getRequestParams({ ...options, method: 'PATCH' });
+export function putReq<T>(options: TRequest) {
+  const { path, params } = getRequestParams({ ...options, method: 'PUT' });
   return request<T>(path, params);
 };
 
@@ -80,5 +81,5 @@ export function deleteReq<T>(options: TRequest) {
 };
 
 export default {
-  getReq, postReq, patchReq, deleteReq
+  getReq, postReq, putReq, deleteReq
 };

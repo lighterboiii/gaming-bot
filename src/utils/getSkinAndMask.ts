@@ -40,7 +40,7 @@ export const getRandomSkinAndMask = () => {
 
 export const getSkinAndMaskByIndex = (index: number) => {
   if (index >= 0 && index < skins.length) {
-    return { skin: skins[index - 1], mask: masks[index - 1] };
+    return { skin: skins[index], mask: masks[index] };
   } else {
     return getRandomSkinAndMask();
   }
