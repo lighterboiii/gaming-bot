@@ -21,8 +21,8 @@ export const setCoinWinsUri = 'setcoinwins?user_id=';
 export const setTokenLosesUri = 'settokenloses?user_id=';
 export const setCoinLosesUri = 'setcoinloses?user_id=';
 
-export const newTokensValue = `&newtokens='`;
-export const newCoinsValue = `&newcoins='`;
+export const newTokensValue = '&newtokens=';
+export const newCoinsValue = '&newcoins=';
 export const roomIdValue = '&room_id=';
 export const collectiblesValue = '&collectibles=';
 export const activeSkinValue = '&active_skin=';
