@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { token } from "./requestData";
 
 /* eslint-disable import/no-anonymous-default-export */
