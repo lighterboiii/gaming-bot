@@ -4,8 +4,10 @@ import { getSkinAndMaskByIndex } from "../../utils/getSkinAndMask";
 import styles from './UserAvatar.module.scss';
 import avatar from '../../images/griffin.jpeg';
 import { useAppSelector } from "../../services/reduxHooks";
-import gifmask from '../../images/1_gif_mask.gif'
-import gifskin from '../../images/1_gif_skin.gif';
+// import gifmask from '../../images/1_gif_mask.gif'
+// import gifskin from '../../images/1_gif_skin.gif';
+// import maskin from '../../images/3_mask.png';
+// import maskskin from '../../images/3.png';
 
 const UserAvatar: FC = () => {
   const [userSkin, setSkin] = useState<any>(null);

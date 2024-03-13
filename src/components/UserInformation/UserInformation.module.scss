@@ -3,12 +3,12 @@
 
 .userInfo {
   @include position(relative);
-  @include indents(0, 0 0 16px 0);
+  @include indents();
   @include size(100%, unset);
   @include flex(row, space-between, center, 10px);
 
   &__content {
-    @include size(auto, 70px);
+    @include size(130px, 130px);
     @include flex(row, flex-start, center, 6px);
     flex: 1;
   }
@@ -21,13 +21,22 @@
   &__avatarContainer {
     @include indents();
     @include position(relative);
-    @include size(100px, 100px);
+    @include size(130px, 130px);
+  }
+
+  &__info {
+    @include size(auto, 100px);
+    @include flex(column, space-between, flex-start);
+  }
+
+  &__money {
+    @include flex(column, space-between, flex-start, 6px);
   }
 
   &__text {
     @include indents();
     color: $main-color;
-    font-weight: 600;
+    font-weight: 900;
     font-size: 14px;
     line-height: 1;
   }
@@ -41,24 +50,27 @@
   }
 
   &__balanceLink {
-    @include size(30px, 90%);
+    @include indents(4px 8px, 0);
+    @include size(85px, auto);
     @include flex(row, center, center);
     border-radius: $radius-40;
-    background-color: $main-color;
-    margin-left: 6px;
+    background-color: $black-color;
+    text-decoration: none;
+    text-align: center;
+    color: $main-color;
+    font-size: 12px;
   }
 
   &__linkContainer {
-    @include position(relative);
-    @include flex(column, flex-start, center, 4px);
+    @include size(unset, 100px);
+    @include flex(column, center, center, 10px);
+    margin-right: 4px;
   }
 
-  &__link {
+  &__links {
     @include indents(6px 10px, 0);
     @include min-size(120px, 56px);
     @include flex(column, center, center);
-    background-color: $main-color;
-    border-radius: $radius-15;
   }
 
   &__tgLink {
@@ -66,14 +78,5 @@
     text-decoration: none;
     color: $black-color;
     font-size: 14px;
-  }
-
-  &__smallText {
-    @include indents();
-    @include size(100%, unset);
-    @include position(absolute, $bottom: -18px, $left: 50%);
-    transform: translate(-50%);
-    color: $main-color;
-    font-size: 10px;
   }
 }

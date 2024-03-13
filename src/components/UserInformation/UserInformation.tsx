@@ -7,6 +7,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { roomsUrl } from "../../utils/routes";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import { useAppSelector } from "../../services/reduxHooks";
+import CircleButton from "../ui/CircleButton/CircleButton";
 
 const UserInfo: FC = () => {
   const { tg, user } = useTelegram();
@@ -18,25 +19,26 @@ const UserInfo: FC = () => {
         <div className={styles.userInfo__avatarContainer}>
           <UserAvatar />
         </div>
-        <div className={styles.userInfo__textElements}>
-          <p className={styles.userInfo__text}>{userData ? userData?.info?.publicname : 'Максим'}</p>
-          <p className={styles.userInfo__text}>{userData ? `${userData?.info.coins}` : '10'} 💵</p>
-          <p className={styles.userInfo__text}>{userData ? `${userData?.info.tokens}` : '20'}🔰</p>
-        </div>
-        {/* Ссылку ниже можно переделать в отдельный UI компонент */}
-        <Link to='/balance' className={styles.userInfo__balanceLink}>
-          <ChevronIcon position="right" color="#f01151" width={20} height={20} />
-        </Link>
-      </div>
-      <div className={styles.userInfo__linkContainer}>
-        <div className={styles.userInfo__link} >
-          {/* Заменить to ссылки */}
-          <Link to={roomsUrl} className={styles.userInfo__tgLink}>
-            <p className={styles.userInfo__communityText}>Сообщество</p>
-            <p className={styles.userInfo__communityText}>GoWIN <br />🌐</p>
+        <div className={styles.userInfo__info}>
+          <div className={styles.userInfo__textElements}>
+            <p className={styles.userInfo__text}>{userData ? userData?.info?.publicname : 'Максим'}</p>
+            <div className={styles.userInfo__money}>
+              <p className={styles.userInfo__text}>💵 {userData ? `${userData?.info.coins}` : '10'}</p>
+              <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.info.tokens}` : '20'}</p>
+            </div>
+          </div>
+          <Link to='/balance' className={styles.userInfo__balanceLink}>
+            Баланс
           </Link>
         </div>
-        <p className={styles.userInfo__smallText}>Будем на связи 👆</p>
+      </div>
+      <div className={styles.userInfo__linkContainer}>
+        <Link to={roomsUrl} className={styles.userInfo__tgLink}>
+          <CircleButton chevronPosition="down" shadow />
+        </Link>
+        <Link to={roomsUrl} className={styles.userInfo__tgLink}>
+          <CircleButton chevronPosition="right" shadow />
+        </Link>
       </div>
     </div >
   )

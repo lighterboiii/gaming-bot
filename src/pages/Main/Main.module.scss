@@ -5,6 +5,7 @@
   @include indents(10px, 0);
   @include flex(column, space-between, center, 10px);
   @include size(100%, 100%);
+  background-color: $secondary-color;
 
   &__title {
     @include flex($align-items: center, $justify-content: center);
