@@ -3,12 +3,14 @@ import styles from './CircleButton.module.scss';
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 
 interface IProps {
-  chevronPosition: string;
+  chevronPosition?: string;
   width?: number;
   height?: number;
   color?: string;
   shadow?: boolean;
   isWhiteBackground?: boolean;
+  chevron?: boolean;
+  community?: boolean;
 }
 
 const CircleButton: FC<IProps> = ({
@@ -17,7 +19,9 @@ const CircleButton: FC<IProps> = ({
   height = 24,
   color = "#f01151",
   shadow = false,
-  isWhiteBackground
+  isWhiteBackground,
+  chevron,
+  community,
 }) => {
 
   return (
@@ -26,7 +30,8 @@ const CircleButton: FC<IProps> = ({
     style={shadow ? { boxShadow: '3px 2px 5px 1px rgba(0, 0, 0, 0.5)' } : undefined}
     
     >
-      <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />
+      {chevron && <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />}
+      {/* {community && <img src={CommunityPng} alt="community" />} */}
     </div>
   )
 }

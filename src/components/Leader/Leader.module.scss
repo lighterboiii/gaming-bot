@@ -2,19 +2,23 @@
 @use '../../stylesheets/variables' as *;
 
 .leader {
-  @include size(100%, 60px);
+  @include position(relative);
+  @include size(90%, 40px);
   @include indents(0 16px, 0);
-  @include flex(row, space-between, center);
+  @include flex(row, flex-end, center);
+  background-color: $tetriary-color;
 
   &__container {
-    @include flex(row, flex-start, center, 16px);
+    @include size(90%, 40px);
+    @include flex(row, space-between, center, 16px);
   }
 
   &__avatarWrapper {
     @include indents();
-    @include position(relative);
-    @include size(60px, 60px);
+    @include position(absolute, $top: -30%, $left: -5%);
+    @include size(54px, 54px);
     @include flex(row, center, center);
+    z-index: 5;
   }
 
   &__avatarBackground {
@@ -28,7 +32,6 @@
   &__avatar {
     @include size(100%, 100%);
     @include position(absolute, $top: 0, $left: 0);
-    // border-radius: $radius-round;
     z-index: 1;
     mask-composite: exclude;
     mask-size: cover;
@@ -47,8 +50,8 @@
   &__number {
     @include indents();
     color: $main-color;
-    font-weight: 900;
-    font-size: 28px;
+    font-weight: 700;
+    font-size: 18px;
     font-style: italic;
   }
 
@@ -57,6 +60,12 @@
   }
 }
 
-.darkBackground {
-  background-color: $tetriary-color;
+.roundedBorders {
+  border-top-left-radius: $radius-15;
+  border-top-right-radius: $radius-15;
+}
+
+.lowRoundedBorders {
+  border-bottom-left-radius: $radius-15;
+  border-bottom-right-radius: $radius-15;
 }

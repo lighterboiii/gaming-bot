@@ -19,9 +19,9 @@ const LeaderBoard: FC = () => {
     <div className={styles.leaderBoard}>
       <div className={styles.leaderBoard__header}>
         <button onClick={() => navigate(-1)} className={styles.leaderBoard__chevron}>
-          <CircleButton chevronPosition="left" />
+          <CircleButton chevronPosition="left" color="#FFF" />
         </button>
-        <h2 className={styles.leaderBoard__heading}>Лидер <br></br> недели</h2>
+        <h2 className={styles.leaderBoard__heading}>Таблица <br/> лидеров</h2>
       </div>
       <div className={styles.leaderBoard__leader}>
         <div className={styles.leaderBoard__avatarContainer}>
@@ -35,8 +35,8 @@ const LeaderBoard: FC = () => {
         </div>
       </div>
       <div className={styles.leaderBoard__board}>
-        {leadersData.filter(leader => leader.id !== 1).map((leader: any) =>
-          <Leader leader={leader} key={leader.id} />
+        {leadersData.filter(leader => leader.id !== 1).map((leader: any, index: number) =>
+          <Leader leader={leader} key={leader.id} index={index} length={leadersData.length} />
         )
         }
       </div>

@@ -33,16 +33,16 @@ const UserInfo: FC<iProps> = ({ toggleOverlay }) => {
             </div>
           </div>
           <Link to='/balance' className={styles.userInfo__balanceLink}>
-            Баланс
+            баланс
           </Link>
         </div>
       </div>
       <div className={styles.userInfo__linkContainer}>
         <button className={styles.userInfo__button} onClick={toggleOverlay}>
-          <CircleButton chevronPosition="down" shadow isWhiteBackground />
+          <CircleButton chevronPosition="down" shadow isWhiteBackground chevron />
         </button>
         <Link to={roomsUrl} className={styles.userInfo__tgLink}>
-          <CircleButton chevronPosition="right" shadow isWhiteBackground />
+          <CircleButton chevronPosition="right" shadow isWhiteBackground chevron />
         </Link>
       </div>
     </div >

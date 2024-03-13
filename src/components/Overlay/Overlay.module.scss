@@ -18,5 +18,5 @@
 
 .overlay.active {
   @include size(unset, calc(100% - 30vh));
-  z-index: 12;
+  z-index: 666;
 }

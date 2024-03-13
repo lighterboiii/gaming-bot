@@ -33,18 +33,24 @@
   }
 
   &__centralButtonsContainer {
-    @include flex(row, space-between, center, 12px);
-    @include size(100%, 190px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    @include size(100%, auto);
   }
 
   &__smallButtonsContainer {
     @include size(50%, 190px);
     @include flex(column, space-between, space-between, 12px);
   }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .hidden {
-  @include size(100%, 30vh);
+  @include size(100%, 0);
   overflow: hidden;
   transition: height 1s ease;
 }

@@ -30,8 +30,8 @@ const App: FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
-        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
+        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
+        // const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
         // const userPhotoResponse = await getReq<any>({ uri: getUserPhotoUri, userId: userId });
         dispatch(setUserData(userDataResponse));
         // console.log(userPhotoResponse.info);
