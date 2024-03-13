@@ -15,6 +15,7 @@ const Main: FC = () => {
   const [contentBlocked, setContentBlocked] = useState(false);
 
   const toggleOverlay = () => {
+    window.scrollTo(0, 0);
     setShowOverlay(!showOverlay);
     setContentBlocked(!contentBlocked);
   };

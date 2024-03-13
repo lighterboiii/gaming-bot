@@ -9,6 +9,7 @@ body {
   ::-webkit-scrollbar {
     display: none;
 }
+background-color: #d51845;
 }
 
 code {
