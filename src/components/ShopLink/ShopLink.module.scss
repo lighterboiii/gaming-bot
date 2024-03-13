@@ -4,9 +4,8 @@
 .shopLink {
   @include position(relative);
   @include indents(16px, 0);
-  @include size(100%, 120px);
+  @include size(100%, 140px);
   @include flex(row, space-between, center, 12px);
-  border: 1px $main-color solid;
   border-radius: $radius-15;
   text-decoration: none;
   background-color: $black-color;

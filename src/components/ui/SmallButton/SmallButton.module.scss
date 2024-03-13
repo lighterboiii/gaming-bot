@@ -6,7 +6,7 @@
   @include indents(16px, 0);
   @include flex(column, center, flex-start);
   @include min-size(179px, 74px);
-  @include size(100%, 74px);
+  @include size(100%, 100%);
   text-decoration: none;
   border-radius: $radius-12;
 

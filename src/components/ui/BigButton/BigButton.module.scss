@@ -4,7 +4,7 @@
 .button {
   @include position(relative);
   @include indents(10px, 0);
-  @include size(50%, 165px);
+  @include size(50%, 190px);
   @include button-style-reset();
   background-color: $secondary-color;
   border-radius: $radius-12;
