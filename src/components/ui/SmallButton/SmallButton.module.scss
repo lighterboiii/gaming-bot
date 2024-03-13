@@ -5,7 +5,7 @@
   @include position(relative);
   @include indents(16px, 0);
   @include flex(column, center, flex-start);
-  @include min-size(179px, 74px);
+  @include min-size(unset, 74px);
   @include size(100%, 100%);
   text-decoration: none;
   border-radius: $radius-12;
@@ -21,7 +21,7 @@
 
   &__text {
     color: $mustard-color;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     text-align: left;
   }
@@ -29,12 +29,12 @@
   &__secondaryText {
     color: $main-color;
     font-size: 12px;
-    font-weight: 400;
+    font-weight: 200;
     text-align: left;
   }
 
   &__chevronWrapper {
-    @include position(absolute, $right: 16px, $bottom: 10px);
+    @include position(absolute, $right: 10px, $bottom: 10px);
   }
 
 }

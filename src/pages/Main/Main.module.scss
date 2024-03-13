@@ -28,20 +28,20 @@
   }
 
   &__content {
-    @include flex(column, center, unset, 10px);
+    @include flex(column, center, unset, 16px);
     @include size(100%, 80%);
   }
 
   &__centralButtonsContainer {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 16px;
     @include size(100%, auto);
   }
 
   &__smallButtonsContainer {
-    @include size(50%, 190px);
-    @include flex(column, space-between, space-between, 12px);
+    @include size(100%, 190px);
+    @include flex(column, space-between, space-between, 16px);
   }
 
   &::-webkit-scrollbar {

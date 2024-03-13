@@ -39,10 +39,10 @@ const UserInfo: FC<iProps> = ({ toggleOverlay }) => {
       </div>
       <div className={styles.userInfo__linkContainer}>
         <button className={styles.userInfo__button} onClick={toggleOverlay}>
-          <CircleButton chevronPosition="down" shadow isWhiteBackground chevron />
+          <CircleButton chevronPosition="down" shadow isWhiteBackground chevron width={20} height={20} />
         </button>
         <Link to={roomsUrl} className={styles.userInfo__tgLink}>
-          <CircleButton chevronPosition="right" shadow isWhiteBackground chevron />
+          <CircleButton chevronPosition="right" shadow isWhiteBackground chevron width={20} height={20} />
         </Link>
       </div>
     </div >

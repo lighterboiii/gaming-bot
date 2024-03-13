@@ -41,8 +41,8 @@
   }
 
   &__char {
-    @include size(132%, auto);
-    @include position(absolute, $left: 50%, $top: 50%);
+    @include size(135%, auto);
+    @include position(absolute, $left: 49%, $top: 50%);
     transform: translate(-50%, -50%);
   }
 

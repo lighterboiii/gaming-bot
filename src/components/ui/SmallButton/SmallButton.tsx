@@ -17,7 +17,7 @@ const SmallButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, c
     <Link
       to={to}
       className={`${styles.button} ${isWhiteBackground ? styles.whiteButton : styles.blackButton}`}
-      style={shadow ? { boxShadow: '3px 2px 1.5px 1px rgba(0, 0, 0, 0.5)' } : undefined}
+      style={shadow ? { boxShadow: '2px 2px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
     >
       <div className={styles.button__textWrapper}>
         <p
@@ -34,8 +34,8 @@ const SmallButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, c
       <div className={styles.button__chevronWrapper}>
         <ChevronIcon
           position={chevronPosition}
-          width={24}
-          height={24}
+          width={16}
+          height={16}
           color={isWhiteBackground ? '#FF0080' : '#ffdb50'}
         />
       </div>

@@ -13,24 +13,25 @@
   &__text {
     @include indents();
     @include size(60%, auto);
-    @include position(absolute, $left: 16px, $top: 16px);
+    @include position(absolute, $left: 12px, $top: 12px);
     color: $secondary-color;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     text-align: left;
   }
 
   &__secondaryText {
     @include indents();
-    @include position(absolute, $left: 16px, $bottom: 16px);
-    @include size(58%, auto);
+    @include position(absolute, $left: 12px, $bottom: 12px);
+    @include size(60%, auto);
     color: $black-color;
     text-align: left;
     font-size: 12px;
+    font-weight: 200;
   }
 
   &__buttonContainer {
-    @include position(absolute, $right: 16px, $bottom: 16px);
+    @include position(absolute, $right: 12px, $bottom: 12px);
   }
 }
 

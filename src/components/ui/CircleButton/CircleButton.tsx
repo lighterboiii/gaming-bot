@@ -27,7 +27,7 @@ const CircleButton: FC<IProps> = ({
   return (
     <div 
     className={`${styles.button} ${isWhiteBackground ? styles.whiteButton : styles.pinkButton}`} 
-    style={shadow ? { boxShadow: '3px 2px 5px 1px rgba(0, 0, 0, 0.5)' } : undefined}
+    style={shadow ? { boxShadow: '2px 1px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
     
     >
       {chevron && <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />}

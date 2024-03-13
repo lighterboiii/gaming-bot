@@ -18,12 +18,12 @@ const BigButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, che
     <Link
       to={to}
       className={`${styles.button} ${isWhiteBackground ? styles.whiteButton : styles.blackButton}`}
-      style={shadow ? { boxShadow: '3px 2px 1.5px 1px rgba(0, 0, 0, 0.5)' } : undefined}
+      style={shadow ? { boxShadow: '2px 2px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
     >
       <p className={styles.button__text}>{text}</p>
       <p className={styles.button__secondaryText}>{secondaryText}</p>
       <div className={styles.button__buttonContainer}>
-        <CircleButton chevronPosition={chevronPosition} color={circleIconColor} chevron />
+        <CircleButton chevronPosition={chevronPosition} color={circleIconColor} chevron width={20} height={20} />
       </div>
     </Link>
   )
