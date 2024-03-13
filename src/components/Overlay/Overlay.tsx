@@ -9,7 +9,7 @@ interface IProps {
 
 const Overlay: FC<IProps> = ({ show, onClose, children }) => {
   return (
-    <div className={`${styles.overlay} ${show ? styles.active : ''}`} onClick={onClose}>
+    <div className={`${styles.overlay} ${show ? styles.active : ''}`}>
       <div className={styles.overlay__children}>
         {children}
       </div>

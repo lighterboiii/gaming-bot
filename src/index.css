@@ -5,11 +5,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: black;
+  height: var(--tg-viewport-height);
   ::-webkit-scrollbar {
     display: none;
 }
-background-color: #d51845;
 }
 
 code {
