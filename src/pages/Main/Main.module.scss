@@ -8,7 +8,7 @@
   background-color: $secondary-color;
 
   &__header {
-    @include size(100%, 25vh);
+    @include size(100%, 30vh);
     @include flex(column, center, center);
   }
 

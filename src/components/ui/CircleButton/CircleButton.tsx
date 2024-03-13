@@ -1,6 +1,7 @@
 import { FC } from "react";
 import styles from './CircleButton.module.scss';
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
+import CommunityIcon from "../../../icons/Community/CommunityIcon";
 
 interface IProps {
   chevronPosition?: string;
@@ -31,7 +32,7 @@ const CircleButton: FC<IProps> = ({
     
     >
       {chevron && <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />}
-      {/* {community && <img src={CommunityPng} alt="community" />} */}
+      {community && <CommunityIcon />}
     </div>
   )
 }

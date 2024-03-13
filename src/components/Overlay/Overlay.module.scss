@@ -6,10 +6,9 @@
   @include flex(column, flex-start, center);
   @include position(fixed, $bottom: 0, $left: 0);
   @include size(100%, 0);
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: $secondary-color;
   overflow: hidden;
   transition: height 1s ease;
-  background-color: $secondary-color;
 
   &__children {
     @include size(calc(100% - 32px), 100%);
@@ -17,6 +16,6 @@
 }
 
 .overlay.active {
-  @include size(unset, calc(100% - 25vh));
+  @include size(unset, calc(100% - 30vh));
   z-index: 666;
 }
