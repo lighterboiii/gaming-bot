@@ -8,19 +8,24 @@ import BigButton from "../../components/ui/BigButton/BigButton";
 import ShopLink from "../../components/ShopLink/ShopLink";
 import Overlay from "../../components/Overlay/Overlay";
 import Balance from "../../components/Balance/Balance";
+import gowinLogo from '../../images/gowin.png';
 
 const Main: FC = () => {
   const [showOverlay, setShowOverlay] = useState(false);
+  const [contentBlocked, setContentBlocked] = useState(false);
 
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
+    setContentBlocked(!contentBlocked);
   };
 
   return (
     <div className={styles.main}>
-      <h1 className={styles.main__title}>GOWIN</h1>
-      <UserInfo toggleOverlay={toggleOverlay} />
-      <div className={styles.main__content}>
+      <div className={styles.main__header}>
+        <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
+        <UserInfo toggleOverlay={toggleOverlay} />
+      </div>
+      <div className={`${styles.main__content} ${contentBlocked ? styles.hidden : ''}`}>
         <AdvertisementBanner />
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>

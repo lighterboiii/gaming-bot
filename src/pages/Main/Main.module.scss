@@ -2,7 +2,7 @@
 @use '../../stylesheets/variables' as *;
 
 .main {
-  @include indents(10px 16px, 0);
+  @include indents(0 16px 10px, 0);
   @include flex(column, space-between, center, 10px);
   @include size(100%, 100%);
   background-color: $secondary-color;
@@ -10,15 +10,26 @@
   &__title {
     @include flex($align-items: center, $justify-content: center);
     @include indents();
-    @include size(100%, 10vh);
+    @include size(100%, auto);
     color: $main-color;
     font-weight: 900;
     font-size: 56px;
   }
-  
+
+  &__header {
+    @include indents(16px 0 0, 0);
+    @include size(100%, 30vh);
+    @include flex(column, center, center);
+    box-sizing: border-box;
+  }
+
+  &__logo {
+    @include size(110px, 26px);
+  }
+
   &__content {
     @include flex(column, center, unset, 10px);
-    @include size(100%, auto);
+    @include size(100%, 80%);
   }
 
   &__centralButtonsContainer {
@@ -30,4 +41,10 @@
     @include size(50%, 190px);
     @include flex(column, space-between, space-between, 12px);
   }
+}
+
+.hidden {
+  @include size(100%, 30vh);
+  overflow: hidden;
+  transition: height 1s ease;
 }

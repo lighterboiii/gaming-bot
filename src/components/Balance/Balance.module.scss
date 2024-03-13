@@ -20,7 +20,7 @@
   }
 
   &__amount {
-    @include indents(16px, 0);
+    @include indents(0 16px, 0);
     @include size(100%, 140px);
     @include flex(column, center, flex-start, 20px);
     border: 1px $main-color solid;
@@ -28,7 +28,7 @@
   }
 
   &__h3 {
-      @include indents(16px, 0);
+    @include indents(16px, 0);
     font-weight: 900;
     color: $main-color;
     font-size: 16px;
