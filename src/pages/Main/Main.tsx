@@ -21,6 +21,8 @@ const Main: FC = () => {
               text="Создать комнату"
               secondaryText="Для игры с другими людьми"
               chevronPosition="right"
+              isWhiteBackground
+              shadow
             />
             {/* Заменить to ссылки */}
             <SmallButton
@@ -28,14 +30,17 @@ const Main: FC = () => {
               text="Таблица лидеров"
               secondaryText="Лучшие из лучших"
               chevronPosition="right"
-              isWhiteBackground
             />
           </div>
           {/* Заменить to ссылки */}
           <BigButton
             to="/rooms"
-            text="Открытые комнаты с играми"
+            text="Найти игру"
+            secondaryText="Открытые комнаты с играми"
             chevronPosition="right"
+            isWhiteBackground
+            circleIconColor="#FFF"
+            shadow
           />
         </div>
       </div>

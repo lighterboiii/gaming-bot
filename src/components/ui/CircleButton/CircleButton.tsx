@@ -8,6 +8,7 @@ interface IProps {
   height?: number;
   color?: string;
   shadow?: boolean;
+  isWhiteBackground?: boolean;
 }
 
 const CircleButton: FC<IProps> = ({
@@ -16,10 +17,15 @@ const CircleButton: FC<IProps> = ({
   height = 24,
   color = "#f01151",
   shadow = false,
+  isWhiteBackground
 }) => {
 
   return (
-    <div className={styles.button} style={shadow ? { boxShadow: '3px 2px 5px 1px rgba(0, 0, 0, 0.5)' } : undefined}>
+    <div 
+    className={`${styles.button} ${isWhiteBackground ? styles.whiteButton : styles.pinkButton}`} 
+    style={shadow ? { boxShadow: '3px 2px 5px 1px rgba(0, 0, 0, 0.5)' } : undefined}
+    
+    >
       <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />
     </div>
   )

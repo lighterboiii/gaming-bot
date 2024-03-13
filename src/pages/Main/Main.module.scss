@@ -2,14 +2,14 @@
 @use '../../stylesheets/variables' as *;
 
 .main {
-  @include indents(10px, 0);
+  @include indents(10px 16px, 0);
   @include flex(column, space-between, center, 10px);
   @include size(100%, 100%);
   background-color: $secondary-color;
 
   &__title {
     @include flex($align-items: center, $justify-content: center);
-    @include indents(10px 0, 0);
+    @include indents();
     @include size(100%, 10vh);
     color: $main-color;
     font-weight: 900;
@@ -23,11 +23,11 @@
 
   &__centralButtonsContainer {
     @include flex(row, space-between, center, 12px);
-    @include size(100%, 190px);
+    @include size(100%, 165px);
   }
 
   &__smallButtonsContainer {
-    @include size(50%, 190px);
+    @include size(50%, 165px);
     @include flex(column, space-between, space-between, 12px);
   }
 }

@@ -5,8 +5,8 @@
   @include position(relative);
   @include indents(16px, 0);
   @include flex(column, center, flex-start);
-  @include min-size(179px, auto);
-  @include size(100%, 100%);
+  @include min-size(179px, 74px);
+  @include size(100%, 74px);
   text-decoration: none;
   border-radius: $radius-12;
 
@@ -20,14 +20,14 @@
   }
 
   &__text {
-    color: $main-color;
+    color: $mustard-color;
     font-size: 16px;
     font-weight: 700;
     text-align: left;
   }
 
   &__secondaryText {
-    color: $black-color;
+    color: $main-color;
     font-size: 12px;
     font-weight: 400;
     text-align: left;
@@ -43,10 +43,14 @@
   background-color: $main-color;
 }
 
-.pinkButton {
-  background-color: $secondary-color;
+.blackButton {
+  background-color: $black-color;
 }
 
 .secondaryTextColor {
   color: $secondary-color;
+}
+
+.secondaryAlternativeTextColor {
+  color: $black-color;
 }

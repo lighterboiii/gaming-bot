@@ -2,21 +2,31 @@
 @use '../../../stylesheets/variables' as *;
 
 .button {
-  @include indents(10px, 0);
-  @include size(50%, 190px);
   @include position(relative);
+  @include indents(10px, 0);
+  @include size(50%, 165px);
   @include button-style-reset();
   background-color: $secondary-color;
   border-radius: $radius-12;
   text-decoration: none;
 
   &__text {
-    @include indents(10px, 0);
+    @include indents();
     @include size(60%, auto);
-    color: $main-color;
+    @include position(absolute, $left: 16px, $top: 16px);
+    color: $secondary-color;
     font-size: 18px;
     font-weight: 700;
     text-align: left;
+  }
+
+  &__secondaryText {
+    @include indents();
+    @include position(absolute, $left: 16px, $bottom: 16px);
+    @include size(58%, auto);
+    color: $black-color;
+    text-align: left;
+    font-size: 12px;
   }
 
   &__buttonContainer {
@@ -28,6 +38,6 @@
   background-color: $main-color;
 }
 
-.pinkButton {
-  background-color: $secondary-color;
+.blackButton {
+  background-color: $black-color;
 }

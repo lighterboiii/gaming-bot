@@ -4,16 +4,25 @@
 .shopLink {
   @include position(relative);
   @include indents(16px, 0);
-  @include size(100%, 140px);
+  @include size(100%, 120px);
   @include flex(row, space-between, center, 12px);
   border: 1px $main-color solid;
   border-radius: $radius-15;
   text-decoration: none;
-  background-color: $main-color;
+  background-color: $black-color;
 
-  &__left {
+  &__content {
     @include flex(column, space-between, flex-start);
-    @include size(65%, 100%);
+    @include size(100%, auto);
+  }
+
+  &__title {
+    @include indents();
+    color: $main-color;
+    text-transform: uppercase;
+    font-size: 64px;
+    font-weight: 900;
+    font-style: italic;
   }
 
   &__text {
@@ -21,31 +30,33 @@
     font-size: 16px;
     font-weight: 700;
     text-align: left;
-    color: $secondary-color;
-  }
-
-  &__update {
-    @include indents(12px, 0);
-    border-radius: $radius-15;
-    background-color: $black-color;
-  }
-
-  &__updateText {
-    @include indents();
     color: $main-color;
-    font-weight: 700;
-    text-align: left;
   }
 
-  &__right {
-    @include indents();
-    @include size(35%, 100%);
-    @include flex(row, flex-start, center);
-  }
+  // &__update {
+  //   @include indents(12px, 0);
+  //   border-radius: $radius-15;
+  //   background-color: $black-color;
+  // }
+
+  // &__updateText {
+  //   @include indents();
+  //   color: $main-color;
+  //   font-weight: 700;
+  //   text-align: left;
+  // }
+
+  // &__right {
+  //   @include position(absolute, $bottom: 16px, $right: 16px);
+  //   @include indents();
+  //   @include size(35%, 100%);
+  //   @include flex(row, flex-start, center);
+  // }
 
   &__avatarContainer {
+    @include position(absolute, $bottom: 16px, $right: 16px);
     @include position(relative);
-    @include size(100px, 100px);
+    @include size(64px, 64px);
     border-radius: $radius-round;
     background-color: #ffd54f;
   }

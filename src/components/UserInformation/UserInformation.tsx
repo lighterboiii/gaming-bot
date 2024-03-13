@@ -34,10 +34,10 @@ const UserInfo: FC = () => {
       </div>
       <div className={styles.userInfo__linkContainer}>
         <Link to={roomsUrl} className={styles.userInfo__tgLink}>
-          <CircleButton chevronPosition="down" shadow />
+          <CircleButton chevronPosition="down" shadow isWhiteBackground />
         </Link>
         <Link to={roomsUrl} className={styles.userInfo__tgLink}>
-          <CircleButton chevronPosition="right" shadow />
+          <CircleButton chevronPosition="right" shadow isWhiteBackground />
         </Link>
       </div>
     </div >

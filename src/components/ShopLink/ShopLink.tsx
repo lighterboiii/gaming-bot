@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './ShopLink.module.scss';
 import { Link } from "react-router-dom";
@@ -13,24 +14,25 @@ const ShopLink: FC = () => {
 
   return (
     <Link to={roomsUrl} className={styles.shopLink}>
-      <div className={styles.shopLink__left}>
-        <p className={styles.shopLink__text}>Магазин</p>
-        <div className={styles.shopLink__update}>
+      <div className={styles.shopLink__content}>
+        <p className={styles.shopLink__text}>GOWIN</p>
+        <h2 className={styles.shopLink__title}>Магазин</h2>
+        {/* <div className={styles.shopLink__update}>
           <p className={styles.shopLink__updateText}>
             Обновление магазина через: <Countdown />
           </p>
-        </div>
+        </div> */}
       </div>
-      <div className={styles.shopLink__right}>
+      {/* <div className={styles.shopLink__right}>
         <div className={styles.shopLink__avatarContainer}>
           <div className={styles.shopLink__avatarWrapper}>
             <UserAvatar />
           </div>
         </div>
-      </div>
+      </div> */}
       <div className={styles.shopLink__chevron}>
         <ChevronIcon
-          color="#f01151"
+          color="#FFF"
           width={24}
           height={24}
         />
