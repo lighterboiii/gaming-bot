@@ -22,7 +22,8 @@ const App: FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    tg.ready()
+    tg.ready();
+    tg.setHeaderColor('#d51845');
     tg.expand();
     tg.enableClosingConfirmation();
   }, []);

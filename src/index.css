@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: var(--tg-viewport-height);
+  background-color: #d51845;
   ::-webkit-scrollbar {
     display: none;
 }
