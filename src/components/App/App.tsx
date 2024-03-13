@@ -3,7 +3,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { FC, useEffect } from 'react';
 import styles from './App.module.scss';
-import Balance from '../../pages/Balance/Balance';
 import CreateRoom from '../../pages/CreateRoom/CreateRoom';
 import Main from '../../pages/Main/Main';
 import Rooms from '../../pages/Rooms/Rooms';
@@ -53,7 +52,6 @@ const App: FC = () => {
         <Route path={roomsUrl} element={<Rooms />} />
         <Route path={createRoomUrl} element={<CreateRoom />} />
         <Route path={shopUrl} element={<Shop />} />
-        <Route path={balanceUrl} element={<Balance />} />
         <Route path={leaderboardUrl} element={<LeaderBoard />} />
         <Route path='/game' element={<Game />} />
       </Routes>

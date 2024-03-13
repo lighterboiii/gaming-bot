@@ -79,4 +79,8 @@
     color: $black-color;
     font-size: 14px;
   }
+
+  &__button {
+    @include button-style-reset();
+  }
 }

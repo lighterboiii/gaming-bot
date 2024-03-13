@@ -1,21 +1,29 @@
-import { FC } from "react"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { FC, useState } from "react"
 import styles from './Main.module.scss';
 import UserInfo from "../../components/UserInformation/UserInformation";
 import AdvertisementBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import BigButton from "../../components/ui/BigButton/BigButton";
 import ShopLink from "../../components/ShopLink/ShopLink";
+import Overlay from "../../components/Overlay/Overlay";
+import Balance from "../../components/Balance/Balance";
 
 const Main: FC = () => {
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  const toggleOverlay = () => {
+    setShowOverlay(!showOverlay);
+  };
+
   return (
     <div className={styles.main}>
       <h1 className={styles.main__title}>GOWIN</h1>
-      <UserInfo />
+      <UserInfo toggleOverlay={toggleOverlay} />
       <div className={styles.main__content}>
         <AdvertisementBanner />
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
-            {/* Заменить to ссылки */}
             <SmallButton
               to="/create-room"
               text="Создать комнату"
@@ -24,7 +32,6 @@ const Main: FC = () => {
               isWhiteBackground
               shadow
             />
-            {/* Заменить to ссылки */}
             <SmallButton
               to="/leaderboard"
               text="Таблица лидеров"
@@ -32,7 +39,6 @@ const Main: FC = () => {
               chevronPosition="right"
             />
           </div>
-          {/* Заменить to ссылки */}
           <BigButton
             to="/rooms"
             text="Найти игру"
@@ -43,8 +49,9 @@ const Main: FC = () => {
             shadow
           />
         </div>
+        <ShopLink />
       </div>
-      <ShopLink />
+      <Overlay children={<Balance />} show={showOverlay} onClose={toggleOverlay} />
     </div>
   )
 }

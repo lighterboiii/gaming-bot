@@ -9,7 +9,12 @@ import UserAvatar from "../UserAvatar/UserAvatar";
 import { useAppSelector } from "../../services/reduxHooks";
 import CircleButton from "../ui/CircleButton/CircleButton";
 
-const UserInfo: FC = () => {
+interface iProps {
+  toggleOverlay: () => void;
+}
+
+const UserInfo: FC<iProps> = ({ toggleOverlay }) => {
+
   const { tg, user } = useTelegram();
   const userData = useAppSelector(store => store.user.userData);
 
@@ -33,9 +38,9 @@ const UserInfo: FC = () => {
         </div>
       </div>
       <div className={styles.userInfo__linkContainer}>
-        <Link to={roomsUrl} className={styles.userInfo__tgLink}>
+        <button className={styles.userInfo__button} onClick={toggleOverlay}>
           <CircleButton chevronPosition="down" shadow isWhiteBackground />
-        </Link>
+        </button>
         <Link to={roomsUrl} className={styles.userInfo__tgLink}>
           <CircleButton chevronPosition="right" shadow isWhiteBackground />
         </Link>

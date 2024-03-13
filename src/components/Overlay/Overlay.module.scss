@@ -1,0 +1,22 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+
+.overlay {
+  @include flex(column, flex-start, center);
+  @include position(fixed, $bottom: 0, $left: 0);
+  @include size(100%, 0);
+  background-color: rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  transition: height 1s ease;
+  background-color: $secondary-color;
+
+  &__children {
+    @include size(calc(100% - 32px), 100%);
+  }
+}
+
+.overlay.active {
+  @include size(unset, calc(100vh - 32%));
+  z-index: 12;
+}

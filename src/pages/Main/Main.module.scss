@@ -15,7 +15,7 @@
     font-weight: 900;
     font-size: 56px;
   }
-
+  
   &__content {
     @include flex(column, center, unset, 10px);
     @include size(100%, auto);
