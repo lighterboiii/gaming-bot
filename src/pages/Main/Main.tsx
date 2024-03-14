@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react"
 import styles from './Main.module.scss';
-import UserInfo from "../../components/UserInformation/UserInformation";
+import MainUserInfo from "../../components/MainUserInfo/MainUserInfo";
 import AdvertisementBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import BigButton from "../../components/ui/BigButton/BigButton";
@@ -24,7 +24,7 @@ const Main: FC = () => {
     <div className={styles.main}>
       <div className={styles.main__header}>
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
-        <UserInfo toggleOverlay={toggleOverlay} />
+        <MainUserInfo toggleOverlay={toggleOverlay} />
       </div>
       <div className={`${styles.main__content} ${contentBlocked ? styles.hidden : ''}`}>
         <AdvertisementBanner />

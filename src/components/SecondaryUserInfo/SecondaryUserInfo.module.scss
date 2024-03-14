@@ -1,0 +1,47 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.user {
+  @include indents(20px 0, 0);
+  @include size(100%, unset);
+  @include flex(row, flex-end, center, 10px);
+
+  &__avatarContainer {
+    @include indents();
+    @include position(absolute, $top: -20%, $left: -25%);
+    @include size(130px, 130px);
+  }
+
+  &__userInfo {
+    @include position(relative);
+    @include size(260px, 115px);
+    @include flex(column, center, flex-end);
+    background-color: $main-color;
+    border-radius: $radius-10;
+  }
+
+  &__textElements {
+    @include size(80%, auto);
+    @include flex(column, space-between, center, 10px);
+  }
+
+  &__money {
+    @include flex(row, center, center, 10px);
+  }
+
+  &__name {
+    @include indents();
+    color: $black-color;
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  &__text {
+    @include indents();
+    color: $black-color;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1;
+  }
+}

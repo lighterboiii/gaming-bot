@@ -1,0 +1,32 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.shop {
+  @include indents(16px, 0);
+  @include size(100%, auto);
+  @include flex(column, center, center);
+  flex: 1;
+
+  &__header {
+    @include size(100%, 30vh);
+    @include flex(column, center, center);
+  }
+
+  &__title {
+    @include indents();
+    color: $main-color;
+    text-transform: uppercase;
+    font-size: 40px;
+    font-weight: 900;
+    font-style: italic;
+  }
+
+  &__buttons {
+    @include size(100%, auto);
+    @include flex(row, space-between, flex-end);
+  }
+
+  &__leftButtonsContainer {
+    @include flex(column, center, flex-start);
+  }
+}

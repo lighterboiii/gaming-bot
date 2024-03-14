@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
-import styles from './UserInformation.module.scss';
+import styles from './MainUserInfo.module.scss';
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { Link } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
@@ -8,12 +8,13 @@ import { roomsUrl } from "../../utils/routes";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import { useAppSelector } from "../../services/reduxHooks";
 import CircleButton from "../ui/CircleButton/CircleButton";
+import Button from "../ui/Button/Button";
 
 interface iProps {
   toggleOverlay: () => void;
 }
 
-const UserInfo: FC<iProps> = ({ toggleOverlay }) => {
+const MainUserInfo: FC<iProps> = ({ toggleOverlay }) => {
 
   const { tg, user } = useTelegram();
   const userData = useAppSelector(store => store.user.userData);
@@ -32,7 +33,7 @@ const UserInfo: FC<iProps> = ({ toggleOverlay }) => {
               <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.info.tokens}` : '20'}</p>
             </div>
           </div>
-          <Link to='/balance' className={styles.userInfo__balanceLink}>
+          <Link to='/' className={styles.userInfo__balanceLink}>
             баланс
           </Link>
         </div>
@@ -49,4 +50,4 @@ const UserInfo: FC<iProps> = ({ toggleOverlay }) => {
   )
 }
 
-export default UserInfo;
+export default MainUserInfo;

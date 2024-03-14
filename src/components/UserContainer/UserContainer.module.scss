@@ -38,6 +38,7 @@
 
   &__text {
     @include indents();
+    @include ellipsis();
     @include size(90px, unset);
     text-align: left;
     color: $main-color;
