@@ -49,13 +49,13 @@
     line-height: 1;
   }
 
-  &__balanceLink {
-    @include indents(4px 8px, 0);
+  &__balance {
+    @include button-style-reset();
     @include size(85px, auto);
     @include flex(row, center, center);
+    @include indents(4px 8px, 0);
     border-radius: $radius-40;
     background-color: $black-color;
-    text-decoration: none;
     text-align: center;
     color: $main-color;
     font-size: 12px;

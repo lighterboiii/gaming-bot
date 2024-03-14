@@ -1,15 +1,30 @@
 @use '../../stylesheets/mixins' as *;
 @use '../../stylesheets/variables' as *;
 
+@mixin buttonStyle {
+  @include button-style-reset();
+  @include size(106px, 22px);
+  border-radius: 40px;
+  color: $main-color;
+  text-transform: lowercase;
+  font-weight: 700;
+  font-size: 12px;
+
+  &:focus {
+    background-color: $mustard-color;
+    color: $black-color;
+  }
+}
+
 .shop {
   @include indents(16px, 0);
   @include size(100%, auto);
-  @include flex(column, center, center);
+  @include flex(column, center, center, 16px);
   flex: 1;
 
   &__header {
     @include size(100%, 30vh);
-    @include flex(column, center, center);
+    @include flex(column, space-between, center);
   }
 
   &__title {
@@ -27,6 +42,17 @@
   }
 
   &__leftButtonsContainer {
-    @include flex(column, center, flex-start);
+    @include flex(column, center, flex-start, 4px);
+  }
+
+  &__button {
+    @include buttonStyle();
+    background-color: $black-color;
+  }
+
+  &__buttonWhite {
+    @include buttonStyle();
+    background-color: $main-color;
+    color: $black-color;
   }
 }

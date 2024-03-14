@@ -15,7 +15,7 @@ const UserInfo: FC = () => {
             <p className={styles.user__text}>💵 500</p>
             <p className={styles.user__text}>🔰 250</p>
           </div>
-          <button>баланс</button>
+          <button type="button" className={styles.user__balance}>баланс</button>
         </div>
       </div>
     </div>

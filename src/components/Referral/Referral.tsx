@@ -12,7 +12,7 @@ const Referral: FC = () => {
         Приглашай друзей и получай процент с каждой игры
       </h3>
       <div className={styles.referral__buttonWrapper}>
-        <Button text="Пригласить" />
+        <Button text="Пригласить" handleClick={() => {}} />
       </div>
       <div className={styles.referral__amount}>
         <p className={styles.referral__text}>Заработано за всё время:
