@@ -1,18 +1,22 @@
 import { FC } from "react";
-import styles from './Leader.module.scss';
+import styles from './UserContainer.module.scss';
 import { getRandomSkinAndMask } from "../../utils/getSkinAndMask";
 
 interface IProps {
   leader: any;
   index: number;
   length: number;
+  darkBackground?: boolean;
 }
 
-const Leader: FC<IProps> = ({ leader, index, length }) => {
+const UserContainer: FC<IProps> = ({ leader, index, length, darkBackground = false }) => {
   const { skin, mask } = getRandomSkinAndMask();
   console.log(length);
   return (
-    <div className={`${styles.leader} ${index === 0 ? styles.roundedBorders : ''} ${index === length - 2 ? styles.lowRoundedBorders : ''}`}>
+    <div 
+    className={`${styles.leader} ${index === 0 ? styles.roundedBorders : ''} ${index === length - 2 ? styles.lowRoundedBorders : ''}`}
+    style={{ backgroundColor: darkBackground ? '#ac1a44' : '#d51845' }}
+    >
       <div className={styles.leader__avatarWrapper}>
         <div className={styles.leader__avatarBackground} style={{ backgroundImage: `url(${skin})` }}></div>
         <img className={styles.leader__avatar} src={leader.img} alt="leader_avatar" style={{ maskImage: `url(${mask})` }} />
@@ -28,4 +32,4 @@ const Leader: FC<IProps> = ({ leader, index, length }) => {
   )
 };
 
-export default Leader;
+export default UserContainer;

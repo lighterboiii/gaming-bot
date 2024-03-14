@@ -5,7 +5,7 @@ import CircleButton from "../../components/ui/CircleButton/CircleButton";
 import { useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { leadersData } from "../../utils/mockData";
-import Leader from "../../components/Leader/Leader";
+import UserContainer from "../../components/UserContainer/UserContainer";
 import UserAvatar from "../../components/UserAvatar/UserAvatar";
 
 const LeaderBoard: FC = () => {
@@ -36,7 +36,7 @@ const LeaderBoard: FC = () => {
       </div>
       <div className={styles.leaderBoard__board}>
         {leadersData.filter(leader => leader.id !== 1).map((leader: any, index: number) =>
-          <Leader leader={leader} key={leader.id} index={index} length={leadersData.length} />
+          <UserContainer leader={leader} key={leader.id} index={index} length={leadersData.length} darkBackground />
         )
         }
       </div>

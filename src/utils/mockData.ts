@@ -1,3 +1,4 @@
+// advertisement banner data
 export const bannersData = [
   {
     backgroundImage: 'url("https://img.freepik.com/free-photo/young-brunette-in-white-casual-sweater-isolated-on-purple-wall_343596-5603.jpg?w=1800&t=st=1709298098~exp=1709298698~hmac=fd4726320de1ce15ec0366de16a30e5f18fb2d7528571c3583de3b008cc3f267")',
@@ -15,7 +16,7 @@ export const bannersData = [
     link: '/rooms'
   },
 ];
-
+// mock-leaders for leaderboard component
 export const leadersData = [
   {
     img: "https://i.pravatar.cc",
@@ -70,5 +71,44 @@ export const leadersData = [
     id: 9,
     username: 'BabuSHKA',
     gain: "+ 💵 100.1",
+  },
+]
+// mock data for referrals user 
+export const referrals = [
+  {
+    img: "https://i.pravatar.cc",
+    id: 1,
+    username: 'Travis Scott',
+    gain: "+ 💵 9",
+  },
+  {
+    img: "https://i.pravatar.cc",
+    id: 2,
+    username: 'hello_world',
+    gain: "+ 💵 7",
+  },
+  {
+    img: "https://i.pravatar.cc",
+    id: 3,
+    username: 'Kanye West',
+    gain: "+ 💵 6.5",
+  },
+  {
+    img: "https://i.pravatar.cc",
+    id: 4,
+    username: 'future',
+    gain: "+ 💵 4",
+  },
+  {
+    img: "https://i.pravatar.cc",
+    id: 5,
+    username: 'Ozzy Osbourne',
+    gain: "+ 💵 4",
+  },
+  {
+    img: "https://i.pravatar.cc",
+    id: 6,
+    username: 'Garrett Reynolds',
+    gain: "+ 💵 4",
   },
 ]

@@ -7,7 +7,7 @@ import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import BigButton from "../../components/ui/BigButton/BigButton";
 import ShopLink from "../../components/ShopLink/ShopLink";
 import Overlay from "../../components/Overlay/Overlay";
-import Balance from "../../components/Balance/Balance";
+import Referral from "../../components/Referral/Referral";
 import gowinLogo from '../../images/gowin.png';
 
 const Main: FC = () => {
@@ -57,7 +57,7 @@ const Main: FC = () => {
         </div>
         <ShopLink />
       </div>
-      <Overlay children={<Balance />} show={showOverlay} onClose={toggleOverlay} />
+      <Overlay children={<Referral />} show={showOverlay} onClose={toggleOverlay} />
     </div>
   )
 }

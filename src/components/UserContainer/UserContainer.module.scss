@@ -6,7 +6,6 @@
   @include size(90%, 40px);
   @include indents(0 16px, 0);
   @include flex(row, flex-end, center);
-  background-color: $tetriary-color;
 
   &__container {
     @include size(90%, 40px);

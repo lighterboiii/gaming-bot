@@ -1,0 +1,65 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.referral {
+  @include indents();
+  @include flex(column, flex-start, center, 20px);
+  @include size(100%, 100%);
+  background-color: $tetriary-color;
+  border-top-left-radius: $radius-15;
+  border-top-right-radius: $radius-15;
+
+  &__content {
+    @include indents();
+    @include size(100%, 140px);
+    background-color: $tetriary-color;
+  }
+
+  &__buttonWrapper {
+    @include indents(0 16px, 0);
+    @include min-size(100%, 40px);
+  }
+
+  &__amount {
+    @include min-size(100%, 40px);
+    @include flex(column, center, center);
+    background-color: $black-color;
+  }
+
+  &__weekly {
+    @include size(90%, auto);
+    @include flex(column, center, center);
+  }
+
+  &__text {
+    @include size(calc(100% - 32px), unset);
+    @include indents();
+    @include flex(row, space-between, center);
+    font-weight: 500;
+    font-size: 16px;
+    color: $main-color;
+  }
+
+  &__sumSpan {
+    color: $mustard-color;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  &__h3 {
+    @include indents(26px 26px 0, 0);
+    font-weight: 700;
+    color: $main-color;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  &__board {
+    padding-top: 16px;
+    @include flex(column, space-between, center, 16px);
+    @include size(100%, auto);
+    flex-grow: 1;
+    overflow: scroll;
+    z-index: 3;
+  }
+}
