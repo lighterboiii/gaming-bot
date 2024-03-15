@@ -42,7 +42,7 @@ const CreateRoom: FC = () => {
     <div className={styles.create}>
       <div className={styles.create__header}>
         <button onClick={() => navigate(-1)} className={styles.create__chevron}>
-          <CircleButton chevronPosition="left" color="#d51845" isWhiteBackground chevron />
+          <CircleButton chevronPosition="left" color="#d51845" isWhiteBackground iconType="chevron" />
         </button>
         <h2 className={styles.create__heading}>Создать комнату</h2>
       </div>

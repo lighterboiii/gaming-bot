@@ -10,9 +10,10 @@ import CircleButton from "../ui/CircleButton/CircleButton";
 
 interface iProps {
   toggleOverlay: () => void;
+  isOverlayOpen?: boolean;
 }
 
-const MainUserInfo: FC<iProps> = ({ toggleOverlay }) => {
+const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
   const userData = useAppSelector(store => store.user.userData);
 
   return (
@@ -36,10 +37,25 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay }) => {
       </div>
       <div className={styles.userInfo__linkContainer}>
         <button className={styles.userInfo__button} onClick={toggleOverlay}>
-          <CircleButton chevronPosition="down" shadow isWhiteBackground community width={20} height={20} />
+          <CircleButton 
+          chevronPosition="down" 
+          shadow 
+          isWhiteBackground 
+          iconType={isOverlayOpen ? "cross" : "community"}
+          width={20} 
+          height={20} 
+          color="#d51845"
+          />
         </button>
         <Link to={roomsUrl} className={styles.userInfo__tgLink}>
-          <CircleButton chevronPosition="right" shadow isWhiteBackground chevron width={20} height={20} />
+          <CircleButton 
+          chevronPosition="right" 
+          shadow 
+          isWhiteBackground 
+          iconType="chevron" 
+          width={20} 
+          height={20} 
+          />
         </Link>
       </div>
     </div >

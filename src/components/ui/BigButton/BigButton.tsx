@@ -23,7 +23,13 @@ const BigButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, che
       <p className={styles.button__text}>{text}</p>
       <p className={styles.button__secondaryText}>{secondaryText}</p>
       <div className={styles.button__buttonContainer}>
-        <CircleButton chevronPosition={chevronPosition} color={circleIconColor} chevron width={20} height={20} />
+        <CircleButton 
+        chevronPosition={chevronPosition} 
+        color={circleIconColor} 
+        iconType="chevron" 
+        width={20} 
+        height={20} 
+        />
       </div>
     </Link>
   )

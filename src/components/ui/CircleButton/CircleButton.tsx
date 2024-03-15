@@ -2,6 +2,7 @@ import { FC } from "react";
 import styles from './CircleButton.module.scss';
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import CommunityIcon from "../../../icons/Community/CommunityIcon";
+import CrossIcon from "../../../icons/Cross/Cross";
 
 interface IProps {
   chevronPosition?: string;
@@ -10,19 +11,17 @@ interface IProps {
   color?: string;
   shadow?: boolean;
   isWhiteBackground?: boolean;
-  chevron?: boolean;
-  community?: boolean;
+  iconType: 'community' | 'chevron' | 'cross';
 }
 
 const CircleButton: FC<IProps> = ({
   chevronPosition = "right",
-  width = 24,
-  height = 24,
+  width = 20,
+  height = 20,
   color = "#d51845",
   shadow = false,
   isWhiteBackground,
-  chevron,
-  community,
+  iconType,
 }) => {
 
   return (
@@ -31,8 +30,10 @@ const CircleButton: FC<IProps> = ({
     style={shadow ? { boxShadow: '2px 1px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
     
     >
-      {chevron && <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />}
-      {community && <CommunityIcon />}
+      {iconType === 'chevron' && <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />}
+      {iconType === 'community' && <CommunityIcon />}
+      {iconType === 'cross' && <CrossIcon color={color} />}
+      {}
     </div>
   )
 }

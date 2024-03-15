@@ -24,7 +24,7 @@ const Main: FC = () => {
     <div className={styles.main}>
       <div className={styles.main__header}>
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
-        <MainUserInfo toggleOverlay={toggleOverlay} />
+        <MainUserInfo toggleOverlay={toggleOverlay} isOverlayOpen={showOverlay} />
       </div>
       <div className={`${styles.main__content} ${contentBlocked ? styles.hidden : ''}`}>
         <AdvertisementBanner />

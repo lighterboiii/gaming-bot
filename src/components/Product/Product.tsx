@@ -2,6 +2,7 @@ import { FC } from "react";
 import styles from './Product.module.scss';
 import UserAvatar from "../UserAvatar/UserAvatar";
 import Button from "../ui/Button/Button";
+import CrossIcon from "../../icons/Cross/Cross";
 
 interface ProductProps {
   item: any;
@@ -24,7 +25,7 @@ const Product: FC<ProductProps> = ({ item, onClose }) => {
         onClick={onClose}
         className={styles.product__closeButton}
       >
-        &times;
+       <CrossIcon width={20} height={20} />
       </button>
     </div>
   );

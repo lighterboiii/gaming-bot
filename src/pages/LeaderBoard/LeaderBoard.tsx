@@ -19,7 +19,7 @@ const LeaderBoard: FC = () => {
     <div className={styles.leaderBoard}>
       <div className={styles.leaderBoard__header}>
         <button onClick={() => navigate(-1)} className={styles.leaderBoard__chevron}>
-          <CircleButton chevronPosition="left" color="#d51845" isWhiteBackground chevron />
+          <CircleButton chevronPosition="left" color="#d51845" isWhiteBackground iconType="chevron" />
         </button>
         <h2 className={styles.leaderBoard__heading}>Таблица <br/> лидеров</h2>
       </div>

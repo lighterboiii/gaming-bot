@@ -58,7 +58,12 @@ const Shop: FC = () => {
   return (
     <div className={styles.shop}>
       <div style={{ position: 'absolute', top: '6px', left: '16px' }} onClick={() => navigate(-1)}>
-        <CircleButton chevronPosition="left" color="#d51845" isWhiteBackground chevron />
+        <CircleButton 
+        chevronPosition="left" 
+        color="#d51845" 
+        isWhiteBackground 
+        iconType="chevron" 
+        />
       </div>
       <div className={styles.shop__header}>
         <h2 className={styles.shop__title}>Магазин</h2>
