@@ -2,7 +2,7 @@
 @use '../../stylesheets/variables' as *;
 
 .item {
-  @include min-size(105px, 105px);
+  @include min-size(100px, 100px);
   background: $tertiary-color;
   border-radius: $radius-10;
   aspect-ratio: 1;

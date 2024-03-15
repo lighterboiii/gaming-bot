@@ -9,15 +9,10 @@
   text-transform: lowercase;
   font-weight: 700;
   font-size: 12px;
-
-  &:hover {
-    background-color: $mustard-color;
-    color: $black-color;
-  }
 }
 
 .shop {
-  @include indents(16px, 0);
+  @include indents(0 16px 10px, 0);
   @include size(100%, auto);
   @include flex(column, center, center, 16px);
   flex: 1;
@@ -39,6 +34,7 @@
   &__buttons {
     @include size(100%, auto);
     @include flex(row, space-between, flex-end);
+    margin-top: 10px;
   }
 
   &__goods {
@@ -62,6 +58,11 @@
   &__button {
     @include buttonStyle();
     background-color: $black-color;
+    
+    &.activeButton {
+      background-color: $mustard-color;
+      color: $black-color;
+    }
   }
 
   &__buttonWhite {
