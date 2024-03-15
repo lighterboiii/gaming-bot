@@ -45,12 +45,12 @@
   &__goods {
     @include indents();
     @include size(100%, 56vh);
-    // @include max-size(100%, calc(100vh - 40vh - 3 * 16px));
+    @include max-size(100%, calc(100vh - 40vh - 3 * 16px));
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(auto-fill, 1fr);
-    align-items: start;
+    // grid-template-rows: repeat(auto-fill, 1fr);
+    align-content: start;
     overflow-y: auto;
   }
 

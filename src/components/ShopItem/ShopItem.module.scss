@@ -2,7 +2,7 @@
 @use '../../stylesheets/variables' as *;
 
 .item {
-  @include max-size(136px, 136px);
+  @include max-size(116px, 116px);
   @include size(100%, 100%);
   background: $tertiary-color;
   border-radius: $radius-10;
