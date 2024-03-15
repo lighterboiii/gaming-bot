@@ -1,0 +1,41 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.product {
+  @include indents(0, 16px 0 0 0);
+  @include flex(column, flex-start, center);
+  @include size(100%, 100%);
+  background-color: $tertiary-color;
+  border-top-left-radius: $radius-15;
+  border-top-right-radius: $radius-15;
+
+  &__avatarContainer {
+    @include indents();
+    @include position(relative);
+    @include size(160px, 160px);
+  }
+
+  &__info {
+    @include size(100%, auto);
+    @include flex(column, center, center);
+  }
+
+  &__type {
+    color: $main-color;
+    font-weight: 700;
+    font-size: 18px;
+    text-transform: lowercase;
+  }
+
+  &__buttonWrapper {
+    @include size(100%, 42px);
+    @include max-size(312px, auto);
+  }
+
+  &__closeButton {
+    @include button-style-reset();
+    @include size(56px, 56px);
+    border-radius: 40px;
+    background-color: $black-color;
+  }
+}

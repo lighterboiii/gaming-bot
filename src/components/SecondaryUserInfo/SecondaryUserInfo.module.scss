@@ -2,8 +2,8 @@
 @use '../../stylesheets/variables' as *;
 
 .user {
-  @include indents(20px 0 0, 0);
-  @include size(100%, unset);
+  @include indents();
+  @include size(100%, auto);
   @include flex(row, flex-end, center, 10px);
 
   &__avatarContainer {
@@ -14,7 +14,8 @@
 
   &__userInfo {
     @include position(relative);
-    @include size(260px, 115px);
+    @include indents(20px, 0);
+    @include size(260px, auto);
     @include flex(column, center, flex-end);
     background-color: $main-color;
     border-radius: $radius-10;

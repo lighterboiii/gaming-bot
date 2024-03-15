@@ -3,30 +3,34 @@
 
 @mixin buttonStyle {
   @include button-style-reset();
-  @include size(106px, 22px);
+  @include size(106px, 24px);
   border-radius: 40px;
   color: $main-color;
   text-transform: lowercase;
   font-weight: 700;
   font-size: 12px;
+  box-sizing: border-box
 }
 
 .shop {
   @include indents(0 16px 10px, 0);
-  @include size(100%, auto);
+  @include size(100%, 100%);
   @include flex(column, center, center, 16px);
-  flex: 1;
 
   &__header {
     @include size(100%, 30vh);
-    @include flex(column, space-between, center);
+    @include flex(column, center, center);
+  }
+
+  &__content {
+    @include flex(column, center, center, 16px);
   }
 
   &__title {
-    @include indents();
+    @include indents(0 0 3% 0, 0);
     color: $main-color;
     text-transform: uppercase;
-    font-size: 40px;
+    font-size: 32px;
     font-weight: 900;
     font-style: italic;
   }
@@ -34,7 +38,6 @@
   &__buttons {
     @include size(100%, auto);
     @include flex(row, space-between, flex-end);
-    margin-top: 10px;
   }
 
   &__goods {
@@ -47,7 +50,6 @@
     gap: 10px;
     align-items: start;
     justify-content: center;
-    flex-grow: 1;
     overflow-y: auto;
   }
 
@@ -70,4 +72,10 @@
     background-color: $main-color;
     color: $black-color;
   }
+}
+
+.hidden {
+  @include size(100%, 0);
+  overflow: hidden;
+  transition: height 1s ease;
 }

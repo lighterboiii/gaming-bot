@@ -27,7 +27,7 @@
   }
 
   &__weekly {
-    @include size(90%, auto);
+    @include size(100%, auto);
     @include flex(column, center, center);
   }
 

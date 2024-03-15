@@ -5,11 +5,12 @@ import UserAvatar from "../UserAvatar/UserAvatar";
 interface IProps {
   item: any;
   index: number;
+  onClick: () => void;
 }
 
-const ShopItem: FC<IProps> = ({ item, index }) => {
+const ShopItem: FC<IProps> = ({ item, index, onClick }) => {
   return (
-    <div className={styles.item}>
+    <div className={styles.item} onClick={onClick}>
       <div className={styles.item__avatarContainer}>
         <UserAvatar skin={item.skin} />
       </div>

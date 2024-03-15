@@ -2,7 +2,7 @@
 @use '../../stylesheets/variables' as *;
 
 .leaderBoard {
-  @include size(100%, 100vh);
+  @include size(100%, 100%);
   @include flex(column, space-between, center, 20px);
   @include indents(16px 0 0 0, 0);
   background-color: $secondary-color;
@@ -16,7 +16,7 @@
 
   &__chevron {
     @include button-style-reset();
-    @include position(absolute, $top: 50%, $left: 16px);
+    @include position(absolute, $top: 10px, $left: 16px);
     transform: translateY(-50%);
   }
 
@@ -70,11 +70,9 @@
   }
 
   &__board {
-    padding-top: 16px;
+    @include indents(16px, 0);
     @include flex(column, space-between, center, 16px);
-    @include size(100%, auto);
-    flex-grow: 1;
-    overflow: scroll;
-    z-index: 3;
+    @include size(100%, calc(100vh - 40vh - 3 * 16px));
+    overflow-y: auto;
   }
 }

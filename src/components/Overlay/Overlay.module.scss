@@ -4,18 +4,21 @@
 
 .overlay {
   @include flex(column, flex-start, center);
-  @include position(fixed, $bottom: 0, $left: 0);
-  @include size(100%, 0);
-  background-color: $secondary-color;
+  @include position(fixed, $bottom: 0, $left: 50%);
+  transform: translate(-50%);
+  @include size(calc(100% - 32px), 0);
+  background-color: $tertiary-color;
   overflow: hidden;
   transition: height 1s ease;
+  border-top-left-radius: $radius-15;
+  border-top-right-radius: $radius-15;
 
   &__children {
-    @include size(calc(100% - 32px), 100%);
+    @include size(100%, 100%);
   }
 }
 
 .overlay.active {
-  @include size(unset, calc(100% - 30vh));
+  @include size(calc(100% - 32px), calc(100% - 30vh));
   z-index: 666;
 }

@@ -35,8 +35,6 @@ const App: FC = () => {
         const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
         // const userPhotoResponse = await getReq<any>({ uri: getUserPhotoUri, userId: userId });
         dispatch(setUserData(userDataResponse));
-        // console.log(userPhotoResponse.info);
-        // dispatch(setUserPhoto(userPhotoResponse.info));
 
       } catch (error) {
         console.error('Ошибка в получении данных пользователя:' + error);
@@ -54,7 +52,7 @@ const App: FC = () => {
         <Route path={createRoomUrl} element={<CreateRoom />} />
         <Route path={shopUrl} element={<Shop />} />
         <Route path={leaderboardUrl} element={<LeaderBoard />} />
-        <Route path='/game' element={<Game />} />
+        {/* <Route path='/game' element={<Game />} /> */}
       </Routes>
     </div>
   );
