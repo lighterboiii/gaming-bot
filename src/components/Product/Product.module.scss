@@ -35,12 +35,14 @@
 
   &__closeButton {
     @include button-style-reset();
+    @include indents();
     @include flex(row, center, center);
     @include size(40px, 40px);
     border-radius: 40px;
     background-color: $black-color;
     color: $main-color;
-    font-size: 36px;
+    font-size: 30px;
     font-weight: 900;
+    text-align: center;
   }
 }
