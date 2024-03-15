@@ -3,7 +3,7 @@
 
 .product {
   @include indents(0, 16px 0 0 0);
-  @include flex(column, flex-start, center);
+  @include flex(column, flex-start, center, 20px);
   @include size(100%, 100%);
   background-color: $tertiary-color;
   border-top-left-radius: $radius-15;
@@ -17,10 +17,11 @@
 
   &__info {
     @include size(100%, auto);
-    @include flex(column, center, center);
+    @include flex(column, center, center, 16px);
   }
 
   &__type {
+    @include indents();
     color: $main-color;
     font-weight: 700;
     font-size: 18px;
@@ -34,8 +35,11 @@
 
   &__closeButton {
     @include button-style-reset();
-    @include size(56px, 56px);
+    @include size(40px, 40px);
     border-radius: 40px;
     background-color: $black-color;
+    color: $main-color;
+    font-size: 36px;
+    font-weight: 900;
   }
 }

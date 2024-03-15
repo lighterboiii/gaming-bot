@@ -3,12 +3,12 @@ import { FC, useEffect, useState } from "react";
 import styles from './Shop.module.scss';
 import UserInfo from "../../components/SecondaryUserInfo/SecondaryUserInfo";
 import CircleButton from "../../components/ui/CircleButton/CircleButton";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { shopItems, userSkinsForSale } from "../../utils/mockData";
 import ShopItem from "../../components/ShopItem/ShopItem";
 import { useAppSelector } from "../../services/reduxHooks";
 import Overlay from "../../components/Overlay/Overlay";
-import ProductPage from "../../components/Product/Product";
+import Product from '../../components/Product/Product';
 
 const Shop: FC = () => {
   const navigate = useNavigate();
@@ -19,7 +19,6 @@ const Shop: FC = () => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const toggleOverlay = () => {
-    // window.scrollTo(0, 0);
     setShowOverlay(!showOverlay);
     setContentBlocked(!contentBlocked);
   };
@@ -53,8 +52,7 @@ const Shop: FC = () => {
 
   const handleShowItemDetails = (item: any) => {
     setSelectedItem(item);
-    setShowOverlay(!showOverlay);
-    setContentBlocked(!contentBlocked);
+    toggleOverlay();
   };
 
   return (
@@ -95,9 +93,7 @@ const Shop: FC = () => {
           )}
         </div>
       </div>
-      {selectedItem && (
-        <Overlay show={showOverlay} children={<ProductPage item={selectedItem} onClose={toggleOverlay} />} />
-      )}
+      <Overlay show={showOverlay} children={<Product item={selectedItem} onClose={toggleOverlay} />} />
     </div>
   )
 }

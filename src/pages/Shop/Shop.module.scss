@@ -24,6 +24,8 @@
 
   &__content {
     @include flex(column, center, center, 16px);
+    @include size(100%, 100%);
+    z-index: 3;
   }
 
   &__title {
@@ -43,18 +45,17 @@
   &__goods {
     @include indents();
     @include size(100%, auto);
-    @include max-size(unset, calc(100vh - 40vh - 3 * 16px));
+    @include max-size(100%, calc(100vh - 40vh - 3 * 16px));
     display: grid;
+    gap: 16px;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(auto, 1fr);
-    gap: 10px;
     align-items: start;
-    justify-content: center;
     overflow-y: auto;
   }
 
   &__leftButtonsContainer {
-    @include flex(column, center, flex-start, 4px);
+    @include flex(column, center, flex-start, 8px);
   }
 
   &__button {
