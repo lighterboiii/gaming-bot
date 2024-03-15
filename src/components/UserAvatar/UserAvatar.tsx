@@ -6,38 +6,47 @@ import avatar from '../../images/griffin.jpeg';
 import { useAppSelector } from "../../services/reduxHooks";
 // import gifmask from '../../images/1_gif_mask.gif'
 // import gifskin from '../../images/1_gif_skin.gif';
-// import maskin from '../../images/3_mask.png';
-// import maskskin from '../../images/3.png';
+import maskin from '../../images/3_mask.png';
+import maskskin from '../../images/3.png';
 
-const UserAvatar: FC = () => {
+interface IProps {
+  // если передан пропс skin, то отрисовка будет происходит именно этого скина, если нет, то скин подтягивается из userData
+  skin?: any;
+}
+
+const UserAvatar: FC<IProps> = ({ skin }) => {
   const [userSkin, setSkin] = useState<any>(null);
   const [userMask, setMask] = useState<any>(null);
 
   const userData = useAppSelector(store => store.user.userData);
 
   useEffect(() => {
-    if (userData && userData.info.active_skin !== undefined) {
+    if (skin !== undefined) {
+      const { skin: selectedSkin, mask: selectedMask } = getSkinAndMaskByIndex(skin);
+      setSkin(selectedSkin);
+      setMask(selectedMask);
+    } else if (userData && userData.info.active_skin !== undefined) {
       const { skin: selectedSkin, mask: selectedMask } = getSkinAndMaskByIndex(userData.info.active_skin);
       setSkin(selectedSkin);
       setMask(selectedMask);
     } else {
-      setSkin('');
-      setMask('');
+      setSkin(maskskin);
+      setMask(maskin);
     }
-  }, [userData]);
+  }, [userData, skin]);
 
   return (
     <>
       <div className={styles.userAvatar}>
         <div
           className={styles.userAvatar__avatarBackground}
-          style={{ backgroundImage: `url(${userData && userSkin})` }}></div>
+          style={{ backgroundImage: `url(${userSkin})` }}></div>
 
         <img
           src={avatar}
           alt="user_avatar"
           className={styles.userAvatar__userAvatar}
-          style={{ maskImage: `url(${userData && userMask})` }}
+          style={{ maskImage: `url(${userMask})` }}
         />
       </div>
     </>

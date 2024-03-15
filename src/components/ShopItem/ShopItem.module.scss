@@ -1,0 +1,18 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.item {
+  @include min-size(105px, 105px);
+  background: $tertiary-color;
+  border-radius: $radius-10;
+  display: flex;
+  
+  justify-content: center;
+  align-items: center;
+
+  &__avatarContainer {
+    @include indents();
+    @include position(relative);
+    @include size(90px, 90px);
+  }
+}
