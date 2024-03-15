@@ -44,9 +44,10 @@
   &__goods {
     @include indents();
     @include size(100%, auto);
-    @include max-size(unset, 50vh);
+    @include max-size(unset, calc(100vh - 40vh - 3 * 16px));
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(auto, 1fr);
     gap: 10px;
     align-items: start;
     justify-content: center;

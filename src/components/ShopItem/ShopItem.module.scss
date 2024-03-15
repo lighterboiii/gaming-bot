@@ -5,8 +5,8 @@
   @include min-size(105px, 105px);
   background: $tertiary-color;
   border-radius: $radius-10;
+  aspect-ratio: 1;
   display: flex;
-  
   justify-content: center;
   align-items: center;
 
