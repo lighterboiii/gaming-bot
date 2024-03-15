@@ -10,7 +10,7 @@
   font-weight: 700;
   font-size: 12px;
 
-  &:focus {
+  &:hover {
     background-color: $mustard-color;
     color: $black-color;
   }
@@ -43,13 +43,14 @@
 
   &__goods {
     @include indents();
-    @include size(100%, 100%);
+    @include size(100%, 336px);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     background-color: inherit;
     align-items: center;
     flex-grow: 1;
+    overflow: scroll
   }
 
   &__leftButtonsContainer {

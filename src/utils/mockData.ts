@@ -186,6 +186,46 @@ export const shopItems = [
     price: '99',
     isOwned: false,
   },
+  {
+    id: 9,
+    userAvatar: "https://i.pravatar.cc",
+    skin: 11,
+    skinType: 'skin',
+    price: '99',
+    isOwned: false,
+  },
+  {
+    id: 9,
+    userAvatar: "https://i.pravatar.cc",
+    skin: 12,
+    skinType: 'skin',
+    price: '99',
+    isOwned: false,
+  },
+  {
+    id: 9,
+    userAvatar: "https://i.pravatar.cc",
+    skin: 13,
+    skinType: 'skin',
+    price: '99',
+    isOwned: false,
+  },
+  {
+    id: 9,
+    userAvatar: "https://i.pravatar.cc",
+    skin: 14,
+    skinType: 'skin',
+    price: '99',
+    isOwned: false,
+  },
+  {
+    id: 9,
+    userAvatar: "https://i.pravatar.cc",
+    skin: 15,
+    skinType: 'skin',
+    price: '99',
+    isOwned: true,
+  },
 ];
 // mock data for user skin shop 
 export const userSkinsForSale = [
