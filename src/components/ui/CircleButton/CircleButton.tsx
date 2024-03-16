@@ -3,6 +3,7 @@ import styles from './CircleButton.module.scss';
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import RefIcon from "../../../icons/Referral/ReferralIcon";
 import CrossIcon from "../../../icons/Cross/Cross";
+import com from '../../../images/community_icon_tiny.png';
 
 interface IProps {
   chevronPosition?: string;
@@ -33,7 +34,7 @@ const CircleButton: FC<IProps> = ({
       {iconType === 'chevron' && <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />}
       {iconType === 'ref' && <RefIcon />}
       {iconType === 'cross' && <CrossIcon color={color} />}
-      {}
+      {iconType === 'community' && <img src={com} alt="icon" style={{ width: '20px', height: '20px' }} /> }
     </div>
   )
 }

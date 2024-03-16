@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from './CreateRoom.module.scss';
 import { useNavigate } from "react-router-dom";
 import CircleButton from "../../components/ui/CircleButton/CircleButton";
@@ -9,13 +10,25 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { setCoinsValue } from "../../services/userSlice";
 import { putReq } from "../../api/api";
 import { newTokensValue, setTokensValueUri, userId } from "../../api/requestData";
+import useTelegram from "../../hooks/useTelegram";
 
 const CreateRoom: FC = () => {
+  const { tg } = useTelegram();
   const navigate = useNavigate();
   const [betAmount, setBetAmount] = useState(0.1);
   const [currency, setCurrency] = useState('💵');
-  const userCoins = useAppSelector(store => store.user.userData?.info.coins);
+
   const dispatch = useAppDispatch();
+  const userCoins = useAppSelector(store => store.user.userData?.info.coins);
+
+  useEffect(() => {
+      tg.BackButton.show().onClick(() => {
+        navigate(-1);
+      });
+      return () => {
+        tg.BackButton.hide();
+      }
+  }, []);
 
   const handleCreateRoom = () => {
     // Логика для создания комнаты

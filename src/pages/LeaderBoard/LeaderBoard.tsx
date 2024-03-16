@@ -14,11 +14,13 @@ const LeaderBoard: FC = () => {
   const { user, tg } = useTelegram();
 
   useEffect(() => {
-    tg.BackButton.show();
-    return () => {
-      tg.BackButton.hide();
-    }
-  }, [])
+      tg.BackButton.show().onClick(() => {
+        navigate(-1);
+      });
+      return () => {
+        tg.BackButton.hide();
+      }
+  }, []);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const leaderUser = leadersData.find(user => user.id === 1);
   const isUserLeader = user?.id === leaderUser; // будет использоваться для отрисовки информации о лидере, если это конкретный пользователь
@@ -26,9 +28,9 @@ const LeaderBoard: FC = () => {
   return (
     <div className={styles.leaderBoard}>
       <div className={styles.leaderBoard__header}>
-        <button onClick={() => navigate(-1)} className={styles.leaderBoard__chevron}>
+        {/* <button onClick={() => navigate(-1)} className={styles.leaderBoard__chevron}>
           <CircleButton chevronPosition="left" color="#d51845" isWhiteBackground iconType="chevron" />
-        </button>
+        </button> */}
         <h2 className={styles.leaderBoard__heading}>Таблица <br/> лидеров</h2>
       </div>
       <div className={styles.leaderBoard__leader}>

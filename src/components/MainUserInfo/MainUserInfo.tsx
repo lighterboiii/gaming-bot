@@ -14,6 +14,7 @@ interface iProps {
 }
 
 const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
+  const { tg } = useTelegram();
   const userData = useAppSelector(store => store.user.userData);
 
   return (
@@ -30,7 +31,7 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
               <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.info.tokens}` : '20'}</p>
             </div>
           </div>
-          <button type="button" className={styles.userInfo__balance}>
+          <button type="button" className={styles.userInfo__balance} onClick={() => {tg.close()}}>
             баланс
           </button>
         </div>
@@ -50,7 +51,7 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
           <CircleButton 
           shadow 
           isWhiteBackground 
-          iconType="chevron" 
+          iconType="community" 
           width={20} 
           height={20} 
           />

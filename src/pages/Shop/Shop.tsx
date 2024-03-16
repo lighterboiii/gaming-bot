@@ -30,12 +30,14 @@ const Shop: FC = () => {
 
   useEffect(() => {
     setActiveButton('Магазин');
-      tg.BackButton.show();
+      tg.BackButton.show().onClick(() => {
+        navigate(-1);
+      });
       return () => {
         tg.BackButton.hide();
       }
   }, []);
-  console.log(tg.BackButton);
+
   const handleShowCollectibles = () => {
     if (userSkins.length > 0) {
       const filteredItems = shopItems.filter((item: any) => userSkins.includes(item.id));
@@ -63,14 +65,14 @@ const Shop: FC = () => {
 
   return (
     <div className={styles.shop}>
-      <div style={{ position: 'absolute', top: '6px', left: '16px' }} onClick={() => navigate(-1)}>
+      {/* <div style={{ position: 'absolute', top: '6px', left: '16px' }} onClick={() => navigate(-1)}>
         <CircleButton 
         chevronPosition="left" 
         color="#d51845" 
         isWhiteBackground 
         iconType="chevron" 
         />
-      </div>
+      </div> */}
       <div className={styles.shop__header}>
         <h2 className={styles.shop__title}>Магазин</h2>
         <UserInfo />

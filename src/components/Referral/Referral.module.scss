@@ -55,8 +55,8 @@
   }
 
   &__board {
-    padding-top: 16px;
-    @include flex(column, space-between, center, 16px);
+    @include indents(16px 16px 0, 0);
+    @include flex(column, space-between, flex-end, 16px);
     @include size(100%, auto);
     flex-grow: 1;
     overflow: scroll;
