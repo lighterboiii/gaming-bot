@@ -16,6 +16,7 @@ import { getUserInfoUri, getUserPhotoUri, userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
 import { setUserData, setUserPhoto } from '../../services/userSlice';
 import Game from '../../pages/Game/Game';
+import Loader from '../Loader/Loader';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -49,7 +50,7 @@ const App: FC = () => {
 
   return (
     <div className={styles.app}>
-      {loading ?  <div>Загрузка...</div> : (
+      {loading ?  <Loader /> : (
       <Routes>
       <Route path={indexUrl} element={<Main />} />
       <Route path={roomsUrl} element={<Rooms />} />

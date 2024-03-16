@@ -57,7 +57,7 @@ const Main: FC = () => {
         </div>
         <ShopLink />
       </div>
-      <Overlay children={<Referral />} show={showOverlay} />
+      <Overlay children={<Referral />} show={showOverlay} onClose={toggleOverlay} />
     </div>
   )
 }

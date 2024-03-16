@@ -10,8 +10,7 @@
   border-radius: $radius-12;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
-  flex-grow: 1;
+  background-position: left;
 
   &__link {
     @include size(100%, auto);

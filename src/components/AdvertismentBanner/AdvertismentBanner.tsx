@@ -24,7 +24,7 @@ const AdvertisementBanner: FC = () => {
         />
       </button>
       <Link to={bannersData[currentIndex].link} className={styles.banner__link}>
-        <p className={styles.banner__text}>{bannersData[currentIndex].text}</p>
+        {/* <p className={styles.banner__text}>{bannersData[currentIndex].text}</p> */}
       </Link>
       <button
         className={styles.banner__sliderButton}
