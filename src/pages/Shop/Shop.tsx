@@ -3,7 +3,6 @@
 import { FC, useEffect, useState } from "react";
 import styles from './Shop.module.scss';
 import UserInfo from "../../components/SecondaryUserInfo/SecondaryUserInfo";
-import CircleButton from "../../components/ui/CircleButton/CircleButton";
 import { useNavigate } from "react-router-dom";
 import { shopItems, userSkinsForSale } from "../../utils/mockData";
 import ShopItem from "../../components/ShopItem/ShopItem";
@@ -18,24 +17,22 @@ const Shop: FC = () => {
   const [goods, setGoods] = useState(shopItems);
   const [activeButton, setActiveButton] = useState('Магазин');
   const [showOverlay, setShowOverlay] = useState(false);
-  const [contentBlocked, setContentBlocked] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
-    setContentBlocked(!contentBlocked);
   };
   // const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
   const userSkins = [1, 2, 5];
 
   useEffect(() => {
     setActiveButton('Магазин');
-      tg.BackButton.show().onClick(() => {
-        navigate(-1);
-      });
-      return () => {
-        tg.BackButton.hide();
-      }
+    tg.BackButton.show().onClick(() => {
+      navigate(-1);
+    });
+    return () => {
+      tg.BackButton.hide();
+    }
   }, []);
 
   const handleShowCollectibles = () => {
@@ -65,19 +62,11 @@ const Shop: FC = () => {
 
   return (
     <div className={styles.shop}>
-      {/* <div style={{ position: 'absolute', top: '6px', left: '16px' }} onClick={() => navigate(-1)}>
-        <CircleButton 
-        chevronPosition="left" 
-        color="#d51845" 
-        isWhiteBackground 
-        iconType="chevron" 
-        />
-      </div> */}
       <div className={styles.shop__header}>
         <h2 className={styles.shop__title}>Магазин</h2>
         <UserInfo />
       </div>
-      <div className={`${styles.shop__content} ${contentBlocked ? styles.hidden : ''}`}>
+      <div className={styles.shop__content}>
         <div className={styles.shop__buttons}>
           <div className={styles.shop__leftButtonsContainer}>
             <button
@@ -106,7 +95,14 @@ const Shop: FC = () => {
           )}
         </div>
       </div>
-      <Overlay show={showOverlay} children={<Product item={selectedItem} onClose={toggleOverlay} />} />
+      <Overlay
+        show={showOverlay}
+        children={
+          <Product
+            item={selectedItem}
+            onClose={toggleOverlay}
+          />}
+      />
     </div>
   )
 }

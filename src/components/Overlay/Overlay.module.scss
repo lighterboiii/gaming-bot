@@ -12,6 +12,7 @@
   transition: height 1s ease;
   border-top-left-radius: $radius-15;
   border-top-right-radius: $radius-15;
+  z-index: 666;
 
   &__children {
     @include size(100%, 100%);
