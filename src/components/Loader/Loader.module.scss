@@ -1,0 +1,8 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.loader {
+  @include size(100%, 100vh);
+  @include flex(column, center, center);
+  color: $main-color;
+}

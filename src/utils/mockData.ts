@@ -148,7 +148,7 @@ export const shopItems = [
     skin: 4,
     skinType: 'emoji',
     price: '114',
-    isOwned: false,
+    isOwned: true,
   },
   {
     id: 5,
@@ -228,7 +228,7 @@ export const shopItems = [
     skin: 15,
     skinType: 'skin',
     price: '99',
-    isOwned: true,
+    isOwned: false,
   },
 ];
 // mock data for user skin shop 

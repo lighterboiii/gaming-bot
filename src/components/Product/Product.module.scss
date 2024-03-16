@@ -33,6 +33,11 @@
     @include max-size(312px, auto);
   }
 
+  &__buttons {
+    @include size(100%, auto);
+    @include flex(column, center, center, 8px);
+  }
+
   &__closeButton {
     @include button-style-reset();
     @include indents();

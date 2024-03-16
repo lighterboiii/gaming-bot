@@ -23,8 +23,8 @@ const Shop: FC = () => {
     setShowOverlay(!showOverlay);
   };
   // const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
-  const userSkins = [1, 2, 5];
-
+  const userSkins = shopItems.filter((item: any) => item.isOwned === true);
+  console.log(userSkins);
   useEffect(() => {
     setActiveButton('Магазин');
     tg.BackButton.show().onClick(() => {
@@ -36,9 +36,9 @@ const Shop: FC = () => {
   }, []);
 
   const handleShowCollectibles = () => {
-    if (userSkins.length > 0) {
-      const filteredItems = shopItems.filter((item: any) => userSkins.includes(item.id));
-      setGoods(filteredItems);
+    if (userSkins) {
+      // const filteredItems = shopItems.filter((item: any) => item.isOwned === true);
+      setGoods(userSkins);
     } else {
       setGoods(shopItems);
     }
@@ -97,10 +97,12 @@ const Shop: FC = () => {
       </div>
       <Overlay
         show={showOverlay}
+        onClose={toggleOverlay}
         children={
           <Product
             item={selectedItem}
             onClose={toggleOverlay}
+            activeButton={activeButton}
           />}
       />
     </div>

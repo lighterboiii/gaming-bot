@@ -1,7 +1,6 @@
 @use '../../stylesheets/mixins' as *;
 @use '../../stylesheets/variables' as *;
 
-
 .overlay {
   @include flex(column, flex-start, center);
   @include position(fixed, $bottom: 0, $left: 50%);
