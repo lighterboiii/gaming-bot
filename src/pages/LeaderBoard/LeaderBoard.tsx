@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import styles from './LeaderBoard.module.scss';
 import CircleButton from "../../components/ui/CircleButton/CircleButton";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +11,14 @@ import UserAvatar from "../../components/UserAvatar/UserAvatar";
 
 const LeaderBoard: FC = () => {
   const navigate = useNavigate();
-  const { user } = useTelegram();
+  const { user, tg } = useTelegram();
+
+  useEffect(() => {
+    tg.BackButton.show();
+    return () => {
+      tg.BackButton.hide();
+    }
+  }, [])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const leaderUser = leadersData.find(user => user.id === 1);
   const isUserLeader = user?.id === leaderUser; // будет использоваться для отрисовки информации о лидере, если это конкретный пользователь

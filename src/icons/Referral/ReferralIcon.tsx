@@ -1,5 +1,4 @@
 import { FC } from 'react';
-// import styles from './ChevronIcon.module.scss';
 
 export interface ICommunityIcon {
   color?: string;
@@ -9,7 +8,7 @@ export interface ICommunityIcon {
   strokeWidth?: number;
 }
 
-const CommunityIcon: FC<ICommunityIcon> = ({
+const RefIcon: FC<ICommunityIcon> = ({
   color = '#F50941',
   width = 20,
   height = 20,
@@ -39,4 +38,4 @@ const CommunityIcon: FC<ICommunityIcon> = ({
   );
 };
 
-export default CommunityIcon;
+export default RefIcon;

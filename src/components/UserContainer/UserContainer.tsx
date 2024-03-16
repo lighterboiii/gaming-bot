@@ -11,7 +11,7 @@ interface IProps {
 
 const UserContainer: FC<IProps> = ({ leader, index, length, darkBackground = false }) => {
   const { skin, mask } = getRandomSkinAndMask();
-  console.log(length);
+
   return (
     <div 
     className={`${styles.leader} ${index === 0 ? styles.roundedBorders : ''} ${index === length - 2 ? styles.lowRoundedBorders : ''}`}

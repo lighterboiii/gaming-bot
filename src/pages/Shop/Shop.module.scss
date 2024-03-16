@@ -19,7 +19,7 @@
 
   &__header {
     @include size(100%, 30vh);
-    @include flex(column, center, center);
+    @include flex(column, flex-start, center);
   }
 
   &__content {
@@ -29,7 +29,7 @@
   }
 
   &__title {
-    @include indents(0 0 3% 0, 0);
+    @include indents(0 0 16px 0, 0);
     color: $main-color;
     text-transform: uppercase;
     font-size: 32px;
@@ -49,7 +49,6 @@
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(3, 1fr);
-    // grid-template-rows: repeat(auto-fill, 1fr);
     align-content: start;
     overflow-y: auto;
   }

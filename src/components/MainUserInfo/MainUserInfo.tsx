@@ -38,10 +38,9 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
       <div className={styles.userInfo__linkContainer}>
         <button className={styles.userInfo__button} onClick={toggleOverlay}>
           <CircleButton 
-          chevronPosition="down" 
           shadow 
           isWhiteBackground 
-          iconType={isOverlayOpen ? "cross" : "community"}
+          iconType={isOverlayOpen ? "cross" : "ref"}
           width={20} 
           height={20} 
           color="#d51845"
@@ -49,7 +48,6 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
         </button>
         <Link to={roomsUrl} className={styles.userInfo__tgLink}>
           <CircleButton 
-          chevronPosition="right" 
           shadow 
           isWhiteBackground 
           iconType="chevron" 

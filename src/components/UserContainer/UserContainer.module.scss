@@ -3,19 +3,19 @@
 
 .leader {
   @include position(relative);
-  @include size(95%, 40px);
+  @include size(95%, 60px);
   @include indents(0 16px, 0);
   @include flex(row, flex-end, center);
 
   &__container {
-    @include size(90%, 40px);
+    @include size(90%, 48px);
     @include flex(row, space-between, center, 16px);
   }
 
   &__avatarWrapper {
     @include indents();
-    @include position(absolute, $top: -30%, $left: -5%);
-    @include size(54px, 54px);
+    @include position(absolute, $top: -40%, $left: -7%);
+    @include size(64px, 64px);
     @include flex(row, center, center);
     z-index: 5;
   }

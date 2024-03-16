@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styles from './CircleButton.module.scss';
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
-import CommunityIcon from "../../../icons/Community/CommunityIcon";
+import RefIcon from "../../../icons/Referral/ReferralIcon";
 import CrossIcon from "../../../icons/Cross/Cross";
 
 interface IProps {
@@ -11,7 +11,7 @@ interface IProps {
   color?: string;
   shadow?: boolean;
   isWhiteBackground?: boolean;
-  iconType: 'community' | 'chevron' | 'cross';
+  iconType: 'community' | 'chevron' | 'cross' | 'ref';
 }
 
 const CircleButton: FC<IProps> = ({
@@ -31,7 +31,7 @@ const CircleButton: FC<IProps> = ({
     
     >
       {iconType === 'chevron' && <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />}
-      {iconType === 'community' && <CommunityIcon />}
+      {iconType === 'ref' && <RefIcon />}
       {iconType === 'cross' && <CrossIcon color={color} />}
       {}
     </div>

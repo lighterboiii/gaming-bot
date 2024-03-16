@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import styles from './Shop.module.scss';
@@ -9,9 +10,11 @@ import ShopItem from "../../components/ShopItem/ShopItem";
 import { useAppSelector } from "../../services/reduxHooks";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Product/Product';
+import useTelegram from "../../hooks/useTelegram";
 
 const Shop: FC = () => {
   const navigate = useNavigate();
+  const { tg } = useTelegram();
   const [goods, setGoods] = useState(shopItems);
   const [activeButton, setActiveButton] = useState('Магазин');
   const [showOverlay, setShowOverlay] = useState(false);
@@ -27,9 +30,12 @@ const Shop: FC = () => {
 
   useEffect(() => {
     setActiveButton('Магазин');
+      tg.BackButton.show();
+      return () => {
+        tg.BackButton.hide();
+      }
   }, []);
-
-
+  console.log(tg.BackButton);
   const handleShowCollectibles = () => {
     if (userSkins.length > 0) {
       const filteredItems = shopItems.filter((item: any) => userSkins.includes(item.id));

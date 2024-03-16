@@ -30,7 +30,7 @@
 
   &__leader {
     @include size(100%, auto);
-    @include flex(column, space-around, center, 20px);
+    @include flex(column, center, center, 20px);
   }
 
   &__leaderInfo {
@@ -71,7 +71,7 @@
 
   &__board {
     @include indents(16px, 0);
-    @include flex(column, space-between, center, 16px);
+    @include flex(column, space-between, flex-end, 16px);
     @include size(100%, calc(100vh - 40vh - 3 * 16px));
     overflow-y: auto;
   }
