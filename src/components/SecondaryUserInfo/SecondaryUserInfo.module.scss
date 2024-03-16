@@ -2,7 +2,7 @@
 @use '../../stylesheets/variables' as *;
 
 .user {
-  @include indents();
+  @include indents(0, 0 60px 0 0);
   @include size(100%, auto);
   @include flex(row, flex-end, center, 10px);
 

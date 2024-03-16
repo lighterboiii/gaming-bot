@@ -18,8 +18,13 @@
   @include flex(column, center, center, 16px);
 
   &__header {
-    @include size(100%, 30vh);
-    @include flex(column, flex-start, center);
+    @include size(100%, 20vh);
+    @include flex(column, space-around, center);
+
+    @media screen and (max-height: 690px) {
+      @include flex(column, flex-start, center);
+      @include size(100%, 30vh);
+    }
   }
 
   &__content {
@@ -29,12 +34,16 @@
   }
 
   &__title {
-    @include indents(0 0 16px 0, 0);
+    @include indents(0, 0);
     color: $main-color;
     text-transform: uppercase;
     font-size: 32px;
     font-weight: 900;
     font-style: italic;
+
+    @media screen and (max-height: 690px) {
+      margin-bottom: 10px;
+    }
   }
 
   &__buttons {

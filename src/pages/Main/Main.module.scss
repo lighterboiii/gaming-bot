@@ -7,9 +7,14 @@
   @include size(100%, 100%);
   background-color: $secondary-color;
 
+
   &__header {
-    @include size(100%, 30vh);
+    @include size(100%, 20vh);
     @include flex(column, center, center);
+
+    @media screen and (max-height: 690px) {
+      @include size(100%, 30vh);
+    }
   }
 
   &__logo {
