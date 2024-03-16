@@ -22,7 +22,7 @@ const Overlay: FC<IProps> = ({ show, children, onClose }) => {
     };
 
     const handleSwipe = () => {
-      if (touchStartY - touchEndY > 50 && onClose) {
+      if (touchStartY - touchEndY > 20 && onClose) {
         onClose();
       }
     };

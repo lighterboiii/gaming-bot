@@ -66,7 +66,7 @@ const Shop: FC = () => {
         <h2 className={styles.shop__title}>Магазин</h2>
         <UserInfo />
       </div>
-      <div className={styles.shop__content}>
+      <div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
         <div className={styles.shop__buttons}>
           <div className={styles.shop__leftButtonsContainer}>
             <button
