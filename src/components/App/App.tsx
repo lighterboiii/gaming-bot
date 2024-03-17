@@ -60,8 +60,8 @@ const App: FC = () => {
       <Route path={createRoomUrl} element={<CreateRoom />} />
       <Route path={shopUrl} element={<Shop />} />
       <Route path={leaderboardUrl} element={<LeaderBoard />} />
-      <Route path='*' element={<NotFoundPage />} />
       {/* <Route path='/game' element={<Game />} /> */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
     )
     }

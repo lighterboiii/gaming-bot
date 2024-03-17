@@ -54,9 +54,6 @@ const CreateRoom: FC = () => {
   return (
     <div className={styles.create}>
       <div className={styles.create__header}>
-        <button onClick={() => navigate(-1)} className={styles.create__chevron}>
-          <CircleButton chevronPosition="left" color="#d51845" isWhiteBackground iconType="chevron" />
-        </button>
         <h2 className={styles.create__heading}>Создать комнату</h2>
       </div>
       <div className={styles.create__content}>
@@ -89,7 +86,7 @@ const CreateRoom: FC = () => {
         </div>
         <div className={styles.create__buttons}>
           <SmallButton to={'/game'} text="Создать комнату" secondaryText="И начать играть" isWhiteBackground />
-          <SmallButton to={roomsUrl} text="Найти открытую комнату" secondaryText="Для игры с другими" />
+          <SmallButton to={'/games'} text="Найти открытую комнату" secondaryText="Для игры с другими" />
         </div>
       </div>
     </div>

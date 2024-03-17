@@ -7,17 +7,17 @@ export const bannersData = [
   {
     backgroundImage: `url(${banner1})`,
     // text: 'Зови друзей! + 500!',
-    link: '/rooms'
+    link: '/ad'
   },
   {
     backgroundImage: `url(${banner2})`,
     // text: 'Привет, корешок',
-    link: '/rooms'
+    link: '/nfg'
   },
   {
     backgroundImage: `url(${banner3})`,
     // text: 'Это слайдер номер 3, проверяем',
-    link: '/rooms'
+    link: '/404'
   },
 ];
 // mock-leaders for leaderboard component

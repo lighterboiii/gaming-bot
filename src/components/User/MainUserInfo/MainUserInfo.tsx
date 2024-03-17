@@ -47,7 +47,7 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
           color="#d51845"
           />
         </button>
-        <Link to={roomsUrl} className={styles.userInfo__tgLink}>
+        <Link to={'/go'} className={styles.userInfo__tgLink}>
           <CircleButton 
           shadow 
           isWhiteBackground 
