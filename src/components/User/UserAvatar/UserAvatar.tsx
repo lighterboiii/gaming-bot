@@ -21,22 +21,8 @@ interface IProps {
 const UserAvatar: FC<IProps> = ({ skin }) => {
   const [userSkin, setSkin] = useState<any>(null);
   const [userMask, setMask] = useState<any>(null);
-  const { tg, user } = useTelegram();
+  const userAvatar = useAppSelector(store => store.user.userData?.info.photo);
   const userData = useAppSelector(store => store.user.userData);
-  // const [photo, setPhoto] = useState<any>(null);
-
-  // useEffect(() => {
-  //   const fetchUserAvatar = async () => {
-  //     try {
-  //       const userPhotoUrl = await getReq<any>({ uri: getUserAvatarUri, userId: userId });
-  //       console.log(userPhotoUrl);
-  //       setPhoto(userPhotoUrl);
-  //     } catch (error) {
-  //       console.log('Ошибка' + error)
-  //     }
-  //   }
-  //   fetchUserAvatar();
-  // }, []);
 
   useEffect(() => {
     if (skin !== undefined) {
@@ -61,7 +47,7 @@ const UserAvatar: FC<IProps> = ({ skin }) => {
           style={{ backgroundImage: `url(${userSkin})` }}></div>
 
         <img
-          src={avatar}
+          src={userAvatar ? userAvatar : avatar}
           alt="user_avatar"
           className={styles.userAvatar__userAvatar}
           style={{ maskImage: `url(${userMask})` }}

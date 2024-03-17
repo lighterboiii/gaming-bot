@@ -12,9 +12,9 @@ import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { UserData } from '../../utils/types';
 import { getReq } from '../../api/api';
-import { getUserInfoUri, userId } from '../../api/requestData';
+import { getUserInfoUri, userId, getUserAvatarUri } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setUserData } from '../../services/userSlice';
+import { setUserData, setUserPhoto } from '../../services/userSlice';
 import Game from '../../pages/Game/Game';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
@@ -36,10 +36,12 @@ const App: FC = () => {
     setLoading(true);
     const fetchUserData = async () => {
       try {
-        // const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
-        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
-        // const userPhotoResponse = await getReq<any>({ uri: getUserPhotoUri, userId: userId });
+        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
+        const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: user?.id });
+        // const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
+        // const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: userId });
         dispatch(setUserData(userDataResponse));
+        dispatch(setUserPhoto(userPhotoResponse.info));
         setLoading(false);
       } catch (error) {
         console.error('Ошибка в получении данных пользователя:' + error);
@@ -51,7 +53,7 @@ const App: FC = () => {
 
   return (
     <div className={styles.app}>
-      {/* {loading ?  <Loader /> : ( */}
+      {loading ?  <Loader /> : (
       <Routes>
       <Route path={indexUrl} element={<Main />} />
       <Route path={roomsUrl} element={<OpenedRooms />} />
@@ -61,8 +63,8 @@ const App: FC = () => {
       <Route path='*' element={<NotFoundPage />} />
       {/* <Route path='/game' element={<Game />} /> */}
     </Routes>
-      {/* )
-} */}
+    )
+    }
     </div>
   );
 }
