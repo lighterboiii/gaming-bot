@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styles from './UserContainer.module.scss';
-import { getRandomSkinAndMask } from "../../utils/getSkinAndMask";
+import { getRandomSkinAndMask } from "../../../utils/getSkinAndMask";
 
 interface IProps {
   leader: any;

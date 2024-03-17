@@ -282,3 +282,41 @@ export const userSkinsForSale = [
     isOwned: false,
   },
 ];
+// fake existing rooms data
+export const openedRooms = [
+  {
+    id: 1,
+    gameType: 'rps',
+    creator: 'lighterboii',
+    users: 1,
+    bet: 1.2
+  },
+  {
+    id: 2,
+    gameType: 'rps',
+    creator: 'hellboy',
+    users: 1,
+    bet: 0.7
+  },
+  {
+    id: 3,
+    gameType: 'rps',
+    creator: 'moneyChaser',
+    users: 1,
+    bet: 0.95
+  },
+  {
+    id: 4,
+    gameType: 'rps',
+    creator: 'go_fuck_yourself',
+    users: 1,
+    bet: 1.5
+  },
+  {
+    id: 5,
+    gameType: 'rps',
+    creator: '9/11',
+    users: 1,
+    bet: 0.22
+  },
+];

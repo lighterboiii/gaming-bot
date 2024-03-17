@@ -2,11 +2,11 @@
 import { FC } from "react";
 import styles from './MainUserInfo.module.scss';
 import { Link } from "react-router-dom";
-import useTelegram from "../../hooks/useTelegram";
-import { roomsUrl } from "../../utils/routes";
+import useTelegram from "../../../hooks/useTelegram";
+import { roomsUrl } from "../../../utils/routes";
 import UserAvatar from "../UserAvatar/UserAvatar";
-import { useAppSelector } from "../../services/reduxHooks";
-import CircleButton from "../ui/CircleButton/CircleButton";
+import { useAppSelector } from "../../../services/reduxHooks";
+import CircleButton from "../../ui/CircleButton/CircleButton";
 
 interface iProps {
   toggleOverlay: () => void;

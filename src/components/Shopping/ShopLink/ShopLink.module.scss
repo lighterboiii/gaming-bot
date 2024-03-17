@@ -1,5 +1,5 @@
-@use '../../stylesheets/mixins' as *;
-@use '../../stylesheets/variables' as *;
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
 
 .shopLink {
   @include position(relative);
@@ -9,7 +9,7 @@
   border-radius: $radius-15;
   text-decoration: none;
   overflow: hidden;
-  background: url('../../images/Shop_small_bg.png');
+  background: url('../../../images/Shop_small_bg.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

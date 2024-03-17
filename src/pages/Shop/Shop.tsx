@@ -2,13 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import styles from './Shop.module.scss';
-import UserInfo from "../../components/SecondaryUserInfo/SecondaryUserInfo";
+import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
 import { useNavigate } from "react-router-dom";
 import { shopItems, userSkinsForSale } from "../../utils/mockData";
-import ShopItem from "../../components/ShopItem/ShopItem";
+import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import { useAppSelector } from "../../services/reduxHooks";
 import Overlay from "../../components/Overlay/Overlay";
-import Product from '../../components/Product/Product';
+import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
 
 const Shop: FC = () => {

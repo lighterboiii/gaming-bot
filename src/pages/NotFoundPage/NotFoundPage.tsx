@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect } from "react";
-import styles from './Rooms.module.scss';
+import styles from './NotFoundPage.module.scss';
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import useTelegram from "../../hooks/useTelegram";
 import { useNavigate } from "react-router-dom";
 
-const Rooms: FC = () => {
+const NotFoundPage: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   
@@ -27,4 +27,4 @@ const Rooms: FC = () => {
   )
 }
 
-export default Rooms;
+export default NotFoundPage;

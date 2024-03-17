@@ -17,7 +17,7 @@ type TRequest = {
 };
 
 const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-const BASE_URL = 'https://a3de-46-29-234-97.ngrok-free.app/';
+const BASE_URL = ' https://196b-46-29-234-97.ngrok-free.app/';
 
 const BASE_PARAMS = {
   headers: {

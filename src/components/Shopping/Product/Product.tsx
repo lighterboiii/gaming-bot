@@ -1,8 +1,8 @@
 import { FC } from "react";
 import styles from './Product.module.scss';
-import UserAvatar from "../UserAvatar/UserAvatar";
-import Button from "../ui/Button/Button";
-import CrossIcon from "../../icons/Cross/Cross";
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
+import Button from "../../ui/Button/Button";
+import CrossIcon from "../../../icons/Cross/Cross";
 
 interface ProductProps {
   item: any;
@@ -11,8 +11,8 @@ interface ProductProps {
 }
 
 const Product: FC<ProductProps> = ({ item, onClose, activeButton }) => {
-  console.log(item);
-  console.log(activeButton);
+ 
+  
   return (
     <div className={styles.product}>
       <div className={styles.product__avatarContainer}>
@@ -43,6 +43,6 @@ const Product: FC<ProductProps> = ({ item, onClose, activeButton }) => {
       </button>
     </div>
   );
-}
+};
 
 export default Product;

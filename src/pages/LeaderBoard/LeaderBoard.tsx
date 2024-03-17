@@ -6,8 +6,8 @@ import CircleButton from "../../components/ui/CircleButton/CircleButton";
 import { useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { leadersData } from "../../utils/mockData";
-import UserContainer from "../../components/UserContainer/UserContainer";
-import UserAvatar from "../../components/UserAvatar/UserAvatar";
+import UserContainer from "../../components/User/UserContainer/UserContainer";
+import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 
 const LeaderBoard: FC = () => {
   const navigate = useNavigate();

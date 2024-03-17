@@ -1,0 +1,26 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.rooms {
+  @include indents(0 16px 10px, 0);
+  @include size(100%, 100%);
+  @include flex(column, center, center, 16px);
+  background-color: $secondary-color;
+  z-index: 3;
+
+  &__header {
+    @include position(relative);
+    @include size(100%, 20vh);
+    @include flex(row, center, center);
+  }
+
+  &__heading {
+    @include size(50%, auto);
+    @include indents();
+    color: $main-color;
+    font-weight: 900;
+    font-size: 40px;
+    font-style: italic;
+    line-height: 1;
+  }
+}

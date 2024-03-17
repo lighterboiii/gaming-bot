@@ -5,18 +5,19 @@ import { FC, useEffect, useState } from 'react';
 import styles from './App.module.scss';
 import CreateRoom from '../../pages/CreateRoom/CreateRoom';
 import Main from '../../pages/Main/Main';
-import Rooms from '../../pages/Rooms/Rooms';
+import NotFoundPage from '../../pages/NotFoundPage/NotFoundPage';
 import Shop from '../../pages/Shop/Shop';
 import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { UserData } from '../../utils/types';
 import { getReq } from '../../api/api';
-import { getUserInfoUri, getUserPhotoUri, userId } from '../../api/requestData';
+import { getUserInfoUri, userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setUserData, setUserPhoto } from '../../services/userSlice';
+import { setUserData } from '../../services/userSlice';
 import Game from '../../pages/Game/Game';
 import Loader from '../Loader/Loader';
+import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -50,17 +51,18 @@ const App: FC = () => {
 
   return (
     <div className={styles.app}>
-      {loading ?  <Loader /> : (
+      {/* {loading ?  <Loader /> : ( */}
       <Routes>
       <Route path={indexUrl} element={<Main />} />
-      <Route path={roomsUrl} element={<Rooms />} />
+      <Route path={roomsUrl} element={<OpenedRooms />} />
       <Route path={createRoomUrl} element={<CreateRoom />} />
       <Route path={shopUrl} element={<Shop />} />
       <Route path={leaderboardUrl} element={<LeaderBoard />} />
+      <Route path='*' element={<NotFoundPage />} />
       {/* <Route path='/game' element={<Game />} /> */}
     </Routes>
-      )
-}
+      {/* )
+} */}
     </div>
   );
 }

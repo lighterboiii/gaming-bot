@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styles from './SecondaryUserInfo.module.scss';
 import UserAvatar from "../UserAvatar/UserAvatar";
-import useTelegram from "../../hooks/useTelegram";
+import useTelegram from "../../../hooks/useTelegram";
 
 const UserInfo: FC = () => {
   const { tg } = useTelegram();

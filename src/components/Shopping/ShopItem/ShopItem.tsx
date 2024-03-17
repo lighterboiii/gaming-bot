@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styles from './ShopItem.module.scss';
-import UserAvatar from "../UserAvatar/UserAvatar";
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 interface IProps {
   item: any;

@@ -3,7 +3,7 @@ import { FC } from "react";
 import styles from './Referral.module.scss';
 import Button from "../ui/Button/Button";
 import { referrals } from "../../utils/mockData";
-import Leader from "../UserContainer/UserContainer";
+import Leader from "../User/UserContainer/UserContainer";
 
 const Referral: FC = () => {
   return (
@@ -30,7 +30,7 @@ const Referral: FC = () => {
       </div>
       <div className={styles.referral__board}>
         {referrals.map((ref: any, index: number) => (
-          <Leader leader={ref} index={index} length={referrals.length + 1} />
+          <Leader leader={ref} index={index} length={referrals.length + 1} key={index} />
         ))}
       </div>
     </div>

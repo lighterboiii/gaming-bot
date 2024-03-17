@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react"
 import styles from './Main.module.scss';
-import MainUserInfo from "../../components/MainUserInfo/MainUserInfo";
+import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
 import AdvertisementBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import BigButton from "../../components/ui/BigButton/BigButton";
-import ShopLink from "../../components/ShopLink/ShopLink";
+import ShopLink from "../../components/Shopping/ShopLink/ShopLink";
 import Overlay from "../../components/Overlay/Overlay";
 import Referral from "../../components/Referral/Referral";
 import gowinLogo from '../../images/gowin.png';
