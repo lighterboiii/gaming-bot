@@ -24,7 +24,7 @@ const Shop: FC = () => {
   };
   // const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
   const userSkins = shopItems.filter((item: any) => item.isOwned === true);
-  console.log(userSkins);
+
   useEffect(() => {
     setActiveButton('Магазин');
     tg.BackButton.show().onClick(() => {

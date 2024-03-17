@@ -1,7 +1,22 @@
-import { FC } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { FC, useEffect } from "react";
 import styles from './OpenedRooms.module.scss';
+import useTelegram from "../../hooks/useTelegram";
+import { useNavigate } from "react-router-dom";
 
 const OpenedRooms: FC = () => {
+  const { tg } = useTelegram();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    tg.BackButton.show().onClick(() => {
+      navigate(-1);
+    });
+    return () => {
+      tg.BackButton.hide();
+    }
+  }, []);
+
   return (
     <div className={styles.rooms}>
       <h2 className={styles.rooms__heading}>Найти игру</h2>
