@@ -2,9 +2,12 @@ import { FC } from "react";
 import styles from './SecondaryUserInfo.module.scss';
 import UserAvatar from "../UserAvatar/UserAvatar";
 import useTelegram from "../../../hooks/useTelegram";
+import { useAppSelector } from "../../../services/reduxHooks";
 
 const UserInfo: FC = () => {
   const { tg } = useTelegram();
+  const userData = useAppSelector(store => store.user.userData);
+
   return (
     <div className={styles.user}>
       <div className={styles.user__userInfo}>
@@ -12,10 +15,10 @@ const UserInfo: FC = () => {
           <UserAvatar />
         </div>
         <div className={styles.user__textElements}>
-          <p className={styles.user__name}>Максим</p>
+          <p className={styles.user__name}>{userData ? userData?.info?.publicname : 'Максим'}</p>
           <div className={styles.user__money}>
-            <p className={styles.user__text}>💵 500</p>
-            <p className={styles.user__text}>🔰 250</p>
+            <p className={styles.user__text}>💵 {userData ? `${userData?.info.coins}` : '0'}</p>
+            <p className={styles.user__text}>🔰 {userData ? `${userData?.info.tokens}` : '0'}</p>
           </div>
           <button type="button" className={styles.user__balance} onClick={() => {tg.close()}}>баланс</button>
         </div>

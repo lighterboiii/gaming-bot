@@ -48,8 +48,8 @@ const UserAvatar: FC<IProps> = ({ skin }) => {
       setSkin(selectedSkin);
       setMask(selectedMask);
     } else {
-      setSkin(maskskin);
-      setMask(maskin);
+      setSkin('');
+      setMask('');
     }
   }, [userData, skin]);
 

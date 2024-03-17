@@ -6,13 +6,6 @@
   @include size(100%, 100%);
   @include flex(column, center, center, 16px);
   background-color: $secondary-color;
-  z-index: 3;
-
-  &__header {
-    @include position(relative);
-    @include size(100%, 20vh);
-    @include flex(row, center, center);
-  }
 
   &__heading {
     @include size(50%, auto);
@@ -22,5 +15,22 @@
     font-size: 40px;
     font-style: italic;
     line-height: 1;
+  }
+
+  &__content {
+    @include size(100%, 100%);
+  }
+
+  &__select {
+    position: relative;
+    @include size(100%, 28px);
+    @include indents(6px, 0);
+    border: none;
+    background-color: $black-color;
+    border-radius: $radius-40;
+
+    &:checked {
+      color: #FFF;
+    }
   }
 }

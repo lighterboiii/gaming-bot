@@ -27,8 +27,8 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
           <div className={styles.userInfo__textElements}>
             <p className={styles.userInfo__text}>{userData ? userData?.info?.publicname : 'Максим'}</p>
             <div className={styles.userInfo__money}>
-              <p className={styles.userInfo__text}>💵 {userData ? `${userData?.info.coins}` : '10'}</p>
-              <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.info.tokens}` : '20'}</p>
+              <p className={styles.userInfo__text}>💵 {userData ? `${userData?.info.coins}` : '0'}</p>
+              <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.info.tokens}` : '0'}</p>
             </div>
           </div>
           <button type="button" className={styles.userInfo__balance} onClick={() => {tg.close()}}>
