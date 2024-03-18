@@ -23,7 +23,7 @@ const Shop: FC = () => {
   const shopData = useAppSelector(store => store.shop.products?.shop);
   const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
 
-  const [goods, setGoods] = useState([]);
+  const [goods, setGoods] = useState(shopItems);
   const [activeButton, setActiveButton] = useState('Магазин');
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -33,10 +33,10 @@ const Shop: FC = () => {
     setShowOverlay(!showOverlay);
   };
 
-  useEffect(() => {
-    setGoods(shopData);
-  }, [shopData])
-  console.log(shopData);
+  // useEffect(() => {
+  //   setGoods(shopData);
+  // }, [shopData])
+
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {

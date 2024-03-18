@@ -14,6 +14,7 @@ interface IProps {
 }
 
 const GameCard: FC<IProps> = ({ game, imagePosition, users, extraClass }) => {
+  
   const gameCardClassNames = classNames(
     styles.game,
     extraClass
