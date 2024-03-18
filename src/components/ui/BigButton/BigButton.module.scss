@@ -2,10 +2,11 @@
 @use '../../../stylesheets/variables' as *;
 
 .button {
+  @include button-style-reset();
   @include position(relative);
   @include indents(10px, 0);
-  @include size(100%, 190px);
-  @include button-style-reset();
+  @include max-size(100%, 190px);
+  @include size(100%, 100%);
   background-color: $secondary-color;
   border-radius: $radius-12;
   text-decoration: none;

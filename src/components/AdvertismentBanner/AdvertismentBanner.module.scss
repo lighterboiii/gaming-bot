@@ -4,7 +4,8 @@
 .banner {
   @include position(relative);
   @include indents(16px, 0);
-  @include size(100%, 140px);
+  @include max-size(100%, 140px);
+  @include min-size(100%, 98px);
   @include flex(row, space-between, center);
   border: 1px $main-color solid;
   border-radius: $radius-12;

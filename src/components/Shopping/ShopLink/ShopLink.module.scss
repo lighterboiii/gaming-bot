@@ -4,7 +4,8 @@
 .shopLink {
   @include position(relative);
   @include indents(16px, 0);
-  @include size(100%, 140px);
+  @include max-size(100%, 140px);
+  @include min-size(100%, 98px);
   @include flex(row, space-between, center, 12px);
   border-radius: $radius-15;
   text-decoration: none;
@@ -41,8 +42,8 @@
   }
 
   &__char {
-    @include size(135%, auto);
-    @include position(absolute, $left: 49%, $top: 50%);
+    @include size(100%, 100%);
+    @include position(absolute, $left: 50%, $top: 50%);
     transform: translate(-50%, -50%);
   }
 
