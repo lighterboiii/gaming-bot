@@ -3,6 +3,8 @@ import { FC, useEffect } from "react";
 import styles from './OpenedRooms.module.scss';
 import useTelegram from "../../hooks/useTelegram";
 import { useNavigate } from "react-router-dom";
+import { openedRooms } from "../../utils/mockData";
+import Room from "../../components/Game/Room/Room";
 
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
@@ -26,7 +28,9 @@ const OpenedRooms: FC = () => {
           <option value="type">по типу игры</option>
         </select>
         <div className={styles.rooms__roomList}>
-          <p>Комната 1</p>
+          {openedRooms.map((room: any) => (
+            <Room room={room} />
+          ))}
         </div>
       </div>
     </div>

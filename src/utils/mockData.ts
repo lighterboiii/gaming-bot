@@ -286,37 +286,58 @@ export const userSkinsForSale = [
 export const openedRooms = [
   {
     id: 1,
-    gameType: 'rps',
+    gameType: 'Камень/ножницы/бумага',
     creator: 'lighterboii',
     users: 1,
     bet: 1.2
   },
   {
     id: 2,
-    gameType: 'rps',
+    gameType: 'Камень/ножницы/бумага',
     creator: 'hellboy',
     users: 1,
     bet: 0.7
   },
   {
     id: 3,
-    gameType: 'rps',
+    gameType: 'Камень/ножницы/бумага',
     creator: 'moneyChaser',
     users: 1,
     bet: 0.95
   },
   {
     id: 4,
-    gameType: 'rps',
+    gameType: 'Камень/ножницы/бумага',
     creator: 'go_fuck_yourself',
     users: 1,
     bet: 1.5
   },
   {
     id: 5,
-    gameType: 'rps',
+    gameType: 'Камень/ножницы/бумага',
     creator: '9/11',
     users: 1,
-    bet: 0.22
+    bet: 6
+  },
+  {
+    id: 6,
+    gameType: 'Камень,ножницы,бумага',
+    creator: 'vyacheslav',
+    users: 2,
+    bet: 5.2
+  },
+  {
+    id: 7,
+    gameType: 'Камень/ножницы/бумага',
+    creator: 'eminem',
+    users: 1,
+    bet: 2.5
+  },
+  {
+    id: 8,
+    gameType: 'Камень/ножницы/бумага',
+    creator: '9/11',
+    users: 1,
+    bet: 14
   },
 ];

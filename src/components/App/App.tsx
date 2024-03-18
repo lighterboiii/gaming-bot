@@ -36,10 +36,10 @@ const App: FC = () => {
     setLoading(true);
     const fetchUserData = async () => {
       try {
-        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
-        const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: user?.id });
-        // const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
-        // const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: userId });
+        // const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
+        // const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: user?.id });
+        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
+        const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: userId });
         dispatch(setUserData(userDataResponse));
         dispatch(setUserPhoto(userPhotoResponse.info));
         setLoading(false);
@@ -53,7 +53,7 @@ const App: FC = () => {
 
   return (
     <div className={styles.app}>
-      {loading ?  <Loader /> : (
+      {/* {loading ?  <Loader /> : ( */}
       <Routes>
       <Route path={indexUrl} element={<Main />} />
       <Route path={roomsUrl} element={<OpenedRooms />} />
@@ -63,8 +63,7 @@ const App: FC = () => {
       {/* <Route path='/game' element={<Game />} /> */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
-    )
-    }
+    {/* )} */}
     </div>
   );
 }

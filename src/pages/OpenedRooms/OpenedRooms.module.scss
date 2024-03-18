@@ -4,7 +4,7 @@
 .rooms {
   @include indents(0 16px 10px, 0);
   @include size(100%, 100%);
-  @include flex(column, center, center, 16px);
+  @include flex(column, center, center, 20px);
   background-color: $secondary-color;
 
   &__heading {
@@ -19,6 +19,7 @@
 
   &__content {
     @include size(100%, 100%);
+    @include flex(column, flex-start, center, 20px);
   }
 
   &__select {
@@ -26,11 +27,18 @@
     @include size(100%, 28px);
     @include indents(6px, 0);
     border: none;
-    background-color: $black-color;
+    // background-color: $black-color;
     border-radius: $radius-40;
 
     &:checked {
       color: #FFF;
     }
+  }
+
+  &__roomList {
+    @include size(100%, auto);
+    @include max-size(100%, calc(var(--tg-viewport-height) - 30vh));
+    @include flex(column, flex-start, center, 8px);
+    overflow-y: scroll;
   }
 }

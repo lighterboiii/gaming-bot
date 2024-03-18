@@ -1,0 +1,39 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.room {
+  @include indents(8px 16px, 0);
+  @include flex(row, space-between, center, 8px);
+  @include size(100%, 100%);
+  @include min-size(100%, 70px);
+  @include position(relative);
+  background-color: $tertiary-color;
+  border-radius: $radius-10;
+
+  &__image {
+    @include size(28px, auto);
+    @include position(absolute, $top: 50%, $left: -4%);
+    transform: translateY(-50%);
+  }
+
+  &__number {
+    @include indents();
+    @include min-size(15%, auto);
+    @include ellipsis();
+    color: $main-color;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  &__text {
+    @include indents();
+    @include size(35%, auto);
+    color: $main-color;
+    text-align: center;
+    font-weight: 700;
+
+    &:nth-child(3) {
+      @include ellipsis();
+    }
+  }
+}
