@@ -16,8 +16,7 @@ type TRequest = {
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 };
 
-const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-const BASE_URL = 'https://dd47-46-29-234-97.ngrok-free.app/';
+const BASE_URL = 'https://gamebottggw.ngrok.app/';
 
 const BASE_PARAMS = {
   headers: {

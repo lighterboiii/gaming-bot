@@ -5,6 +5,7 @@ import CircleButton from '../../ui/CircleButton/CircleButton';
 import game1 from '../../../images/main_hand_1_tiny.png';
 import game2 from '../../../images/gameSec.png';
 import { Link } from 'react-router-dom';
+import ManIcon from '../../../icons/Man/Man';
 
 interface IProps {
   game: any;
@@ -34,7 +35,7 @@ const GameCard: FC<IProps> = ({ game, imagePosition, users, extraClass }) => {
         className={imagePosition === 'left' ? styles.game__image : styles.game__imageRight}
       />
       <div className={styles.game__info}>
-        <p className={styles.game__players}>{game.users}</p>
+        <p className={styles.game__players}><ManIcon /> {game.users}</p>
         <CircleButton chevronPosition="right" iconType="chevron" isWhiteBackground />
       </div>
     </Link>

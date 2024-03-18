@@ -23,7 +23,7 @@ const Shop: FC = () => {
   const shopData = useAppSelector(store => store.shop.products?.shop);
   const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
 
-  const [goods, setGoods] = useState(shopItems);
+  const [goods, setGoods] = useState([]);
   const [activeButton, setActiveButton] = useState('Магазин');
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -33,11 +33,12 @@ const Shop: FC = () => {
     setShowOverlay(!showOverlay);
   };
 
-  // useEffect(() => {
-  //   setGoods(shopData);
-  // }, [shopData])
+  useEffect(() => {
+    setGoods(shopData);
+  }, [shopData])
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setLoading(true);
     const fetchData = async () => {
       try {
@@ -82,7 +83,7 @@ const Shop: FC = () => {
   };
 
   const handleShowFlea = () => {
-    setGoods([]);
+    // setGoods(userSkinsForSale);
     setActiveButton('Лавка');
   };
 

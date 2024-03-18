@@ -25,7 +25,7 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
         </div>
         <div className={styles.userInfo__info}>
           <div className={styles.userInfo__textElements}>
-            <p className={styles.userInfo__text}>{userData ? userData?.info?.publicname : 'Максим'}</p>
+            <p className={styles.userInfo__text}>{userData && userData?.info?.publicname}</p>
             <div className={styles.userInfo__money}>
               <p className={styles.userInfo__text}>💵 {userData ? `${userData?.info.coins}` : '0'}</p>
               <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.info.tokens}` : '0'}</p>

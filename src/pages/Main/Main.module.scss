@@ -23,7 +23,11 @@
 
   &__content {
     @include flex(column, center, unset, 16px);
-    @include size(100%, 100%);
+    @include size(100%, calc(var(--tg-viewport-height) - 10vh));
+
+    @media screen and (max-height: 690px) {
+      @include size(100%, calc(var(--tg-viewport-height) - 20vh));
+    }
   }
 
   &__centralButtonsContainer {
