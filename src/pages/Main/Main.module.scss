@@ -23,10 +23,10 @@
 
   &__content {
     @include flex(column, center, unset, 16px);
-    @include size(100%, calc(var(--tg-viewport-height) - 10vh));
+    @include size(100%, calc(var(--tg-viewport-height) - 20vh));
 
     @media screen and (max-height: 690px) {
-      @include size(100%, calc(var(--tg-viewport-height) - 20vh));
+      @include size(100%, calc(var(--tg-viewport-height) - 30vh));
     }
   }
 
