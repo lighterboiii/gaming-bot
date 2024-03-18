@@ -4,14 +4,18 @@
 .banner {
   @include position(relative);
   @include indents(16px, 0);
+  // @include min-size(100%, 140px);
   @include size(100%, 140px);
-  @include max-size(100%, 168px);
   @include flex(row, space-between, center);
   border: 1px $main-color solid;
   border-radius: $radius-12;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: left;
+
+  @media screen and (min-height: 768px) and (max-height: 1024px) {
+    @include size(100%, 164px);
+  }
 
   &__link {
     @include size(100%, 50%);

@@ -14,6 +14,10 @@
   background-size: cover;
   background-repeat: no-repeat;
 
+  @media screen and (min-height: 768px) and (max-height: 1024px) {
+    @include size(100%, 164px);
+  }
+
   &__content {
     @include flex(column, space-between, flex-start);
     @include size(100%, 100%);
@@ -41,7 +45,7 @@
   }
 
   &__char {
-    @include size(135%, auto);
+    @include size(138%, auto);
     @include position(absolute, $left: 48%, $top: 49%);
     transform: translate(-50%, -50%);
   }
