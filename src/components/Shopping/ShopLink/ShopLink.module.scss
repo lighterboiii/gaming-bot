@@ -4,8 +4,7 @@
 .shopLink {
   @include position(relative);
   @include indents(16px, 0);
-  @include max-size(100%, 140px);
-  @include min-size(100%, 98px);
+  @include size(100%, 140px);
   @include flex(row, space-between, center, 12px);
   border-radius: $radius-15;
   text-decoration: none;
@@ -42,46 +41,8 @@
   }
 
   &__char {
-    @include size(100%, 100%);
-    @include position(absolute, $left: 50%, $top: 50%);
+    @include size(135%, auto);
+    @include position(absolute, $left: 48%, $top: 49%);
     transform: translate(-50%, -50%);
   }
-
-  // &__update {
-  //   @include indents(12px, 0);
-  //   border-radius: $radius-15;
-  //   background-color: $black-color;
-  // }
-
-  // &__updateText {
-  //   @include indents();
-  //   color: $main-color;
-  //   font-weight: 700;
-  //   text-align: left;
-  // }
-
-  // &__right {
-  //   @include position(absolute, $bottom: 16px, $right: 16px);
-  //   @include indents();
-  //   @include size(35%, 100%);
-  //   @include flex(row, flex-start, center);
-  // }
-
-  // &__avatarContainer {
-  //   @include position(absolute, $bottom: 16px, $right: 16px);
-  //   @include position(relative);
-  //   @include size(64px, 64px);
-  //   border-radius: $radius-round;
-  //   background-color: #ffd54f;
-  // }
-
-  // &__avatarWrapper {
-  //   @include position(absolute, $top: 50%, $left: 50%);
-  //   @include size(80px, 80px);
-  //   transform: translate(-50%, -50%);
-  // }
-
-  // &__chevron {
-  //   @include position(absolute, $bottom: 16px, $right: 16px);
-  // }
 }
