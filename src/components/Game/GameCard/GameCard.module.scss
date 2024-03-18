@@ -1,0 +1,8 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.game {
+  @include size(194px, 194px);
+  border-radius: $radius-10;
+  background-color: $tertiary-color;
+}

@@ -341,3 +341,16 @@ export const openedRooms = [
     bet: 14
   },
 ];
+// gameData 
+export const games = [
+  {
+    id: 1,
+    name: 'Цу-е-фа',
+    users: 2,
+  },
+  {
+    id: 2,
+    name: 'Кто ближе',
+    users: 2-10.
+  }
+]

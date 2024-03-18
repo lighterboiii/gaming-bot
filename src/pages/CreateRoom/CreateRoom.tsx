@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
@@ -11,6 +12,8 @@ import { setCoinsValue } from "../../services/userSlice";
 import { putReq } from "../../api/api";
 import { newTokensValue, setTokensValueUri, userId } from "../../api/requestData";
 import useTelegram from "../../hooks/useTelegram";
+import { games } from "../../utils/mockData";
+import GameCard from "../../components/Game/GameCard/GameCard";
 
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
@@ -22,12 +25,12 @@ const CreateRoom: FC = () => {
   const userCoins = useAppSelector(store => store.user.userData?.info.coins);
 
   useEffect(() => {
-      tg.BackButton.show().onClick(() => {
-        navigate(-1);
-      });
-      return () => {
-        tg.BackButton.hide();
-      }
+    tg.BackButton.show().onClick(() => {
+      navigate(-1);
+    });
+    return () => {
+      tg.BackButton.hide();
+    }
   }, []);
 
   const handleCreateRoom = () => {
@@ -56,6 +59,23 @@ const CreateRoom: FC = () => {
       <div className={styles.create__header}>
         <h2 className={styles.create__heading}>Создать комнату</h2>
       </div>
+      <div className={styles.create__content}>
+        {games.map((game: any) => (
+          <GameCard
+            game={game}
+            imagePosition={game.id === 1 ? 'left' : 'right'}
+            users={game.users}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
+export default CreateRoom;
+
+{/* 
       <div className={styles.create__content}>
         <div className={styles.create__bets}>
           <label className={styles.create__label}>
@@ -88,10 +108,4 @@ const CreateRoom: FC = () => {
           <SmallButton to={'/game'} text="Создать комнату" secondaryText="И начать играть" isWhiteBackground />
           <SmallButton to={'/games'} text="Найти открытую комнату" secondaryText="Для игры с другими" />
         </div>
-      </div>
-    </div>
-  );
-};
-
-
-export default CreateRoom;
+      </div> */}
