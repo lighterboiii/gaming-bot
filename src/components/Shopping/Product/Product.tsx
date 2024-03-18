@@ -11,12 +11,11 @@ interface ProductProps {
 }
 
 const Product: FC<ProductProps> = ({ item, onClose, activeButton }) => {
- 
-  
+
   return (
     <div className={styles.product}>
       <div className={styles.product__avatarContainer}>
-        <UserAvatar skin={item?.skin} />
+        <UserAvatar item={item?.skin} />
       </div>
       <div className={styles.product__info}>
         <p className={styles.product__type}>Тип: {item?.skinType === 'skin' ? 'скин' : 'эмодзи'}</p>

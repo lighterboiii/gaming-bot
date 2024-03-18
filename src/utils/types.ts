@@ -22,5 +22,6 @@ export interface UserData {
     tokenwins: number;
     wins: number;
     photo: string;
-  };
+  },
+  bonus: string;
 }

@@ -6,26 +6,45 @@ import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo"
 import { useNavigate } from "react-router-dom";
 import { shopItems, userSkinsForSale } from "../../utils/mockData";
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
-import { useAppSelector } from "../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
+import { getReq } from "../../api/api";
+import { getDailyBonusUri, getShopAvailableUri, userId } from "../../api/requestData";
+import { setShopData } from "../../services/shopSlice";
 
 const Shop: FC = () => {
-  const navigate = useNavigate();
   const { tg } = useTelegram();
-  const [goods, setGoods] = useState(shopItems);
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+  const shopData = useAppSelector(store => store.shop.products?.shop);
+  const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
+
+  const [goods, setGoods] = useState(shopData);
   const [activeButton, setActiveButton] = useState('Магазин');
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
-  // const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
-  const userSkins = shopItems.filter((item: any) => item.isOwned === true);
 
   useEffect(() => {
+    setLoading(true);
+    const fetchData = async () => {
+      try {
+        const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: userId });
+        const shopGoods = await getReq<any>({ uri: getShopAvailableUri, userId: '' });
+        dispatch(setShopData(shopGoods))
+      } catch (error) {
+        console.log(error);
+      };
+      setLoading(false);
+    }
+    fetchData();
     setActiveButton('Магазин');
     tg.BackButton.show().onClick(() => {
       navigate(-1);
@@ -36,22 +55,29 @@ const Shop: FC = () => {
   }, []);
 
   const handleShowCollectibles = () => {
-    if (userSkins) {
-      // const filteredItems = shopItems.filter((item: any) => item.isOwned === true);
-      setGoods(userSkins);
-    } else {
-      setGoods(shopItems);
-    }
+    // if (userSkins) {
+    //   const filteredItems = [];
+    //   userSkins.forEach((userSkinId) => {
+    //     const foundItem = shopData.find((item) => item.id === userSkinId);
+    //     if (foundItem) {
+    //       filteredItems.push(foundItem);
+    //     }
+    //   });
+    //   setGoods(userSkins);
+    // } else {
+    //   setGoods(shopData);
+    // }
+    setGoods([]);
     setActiveButton('Приобретено');
   };
 
   const handleCancelSort = () => {
-    setGoods(shopItems);
+    setGoods(shopData);
     setActiveButton('Магазин');
   };
 
   const handleShowFlea = () => {
-    setGoods(userSkinsForSale);
+    setGoods([]);
     setActiveButton('Лавка');
   };
 
@@ -89,9 +115,17 @@ const Shop: FC = () => {
           </button>
         </div>
         <div className={styles.shop__goods}>
-          {goods.map((item: any, index: number) => (
-            <ShopItem item={item} index={index} onClick={() => handleShowItemDetails(item)} />
-          )
+          {goods?.length > 0 ? (
+            <>
+              {
+                goods.map((item: any, index: number) => (
+                  <ShopItem item={item} index={index} onClick={() => handleShowItemDetails(item)} key={index} />
+                )
+                )
+              }
+            </>
+          ) : (
+            <p>В магазине пока пусто</p>
           )}
         </div>
       </div>

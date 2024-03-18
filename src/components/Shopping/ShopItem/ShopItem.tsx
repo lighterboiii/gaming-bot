@@ -9,10 +9,11 @@ interface IProps {
 }
 
 const ShopItem: FC<IProps> = ({ item, index, onClick }) => {
+  
   return (
     <div className={styles.item} onClick={onClick}>
       <div className={styles.item__avatarContainer}>
-        <UserAvatar skin={item.skin} />
+        <UserAvatar item={item} />
       </div>
     </div>
   )

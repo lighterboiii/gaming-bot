@@ -10,7 +10,7 @@ type TOptions = {
 
 type TRequest = {
   uri: string;
-  userId: string;
+  userId?: string;
   data?: any;
   endpoint?: string;
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
@@ -32,7 +32,7 @@ function getRequestParams({ uri, userId, method, data, endpoint }: TRequest) {
     ...BASE_PARAMS,
     method
   };
-  const path = `${BASE_URL}${uri}${userId}${endpoint ? `${endpoint}` : ''}${data ? data : ''}`;
+  const path = `${BASE_URL}${uri}${userId && `${userId}`}${endpoint ? `${endpoint}` : ''}${data ? data : ''}`;
   // if (data) {
   //   params.body = JSON.stringify(data);
   // }

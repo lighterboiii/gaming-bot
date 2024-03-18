@@ -5,6 +5,8 @@ export const userIdQuery = `?user_id=${userId}`;
 
 export const getUserInfoUri = `getuserinfo?user_id=`;
 export const getUserAvatarUri = `getuserphoto?user_id=`;
+export const getDailyBonusUri = `get_daily_check?user_id=`;
+export const getShopAvailableUri = `get_shop_available`;
 
 export const setTokensValueUri = `settokensnewvalue?user_id=`;
 export const setCoinsValueUri = 'setcoinsnewvalue?user_id=';

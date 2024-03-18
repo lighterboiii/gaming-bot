@@ -21,6 +21,11 @@ const userSlice = createSlice({
         state.userData.info.photo = action.payload
       }
     },
+    setDailyBonus: (state, action: PayloadAction<string>) => {
+      if (state.userData) {
+        state.userData.bonus = action.payload;
+      }
+    },
     clearUserData: (state) => {
       state.userData = null;
     },

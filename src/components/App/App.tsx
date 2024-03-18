@@ -12,12 +12,13 @@ import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { UserData } from '../../utils/types';
 import { getReq } from '../../api/api';
-import { getUserInfoUri, userId, getUserAvatarUri } from '../../api/requestData';
+import { getUserInfoUri, userId, getUserAvatarUri, getDailyBonusUri, getShopAvailableUri } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
 import { setUserData, setUserPhoto } from '../../services/userSlice';
 import Game from '../../pages/Game/Game';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
+import { setShopData } from '../../services/shopSlice';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -40,8 +41,14 @@ const App: FC = () => {
         // const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: user?.id });
         const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
         const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: userId });
+        // const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: userId  });
+        // const shopGoods = await getReq<any>({ uri: getShopAvailableUri, userId: ''});
+        // console.log(shopGoods);
+        // console.log(isDailyBonusActive);
+        // console.log(userPhotoResponse.info)
         dispatch(setUserData(userDataResponse));
-        dispatch(setUserPhoto(userPhotoResponse.info));
+        dispatch(setUserPhoto(userPhotoResponse?.info));
+        // dispatch(setShopData(shopGoods))
         setLoading(false);
       } catch (error) {
         console.error('Ошибка в получении данных пользователя:' + error);
