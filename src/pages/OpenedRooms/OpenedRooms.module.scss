@@ -37,7 +37,7 @@
 
   &__roomList {
     @include size(100%, auto);
-    @include max-size(100%, calc(var(--tg-viewport-height) - 30vh));
+    @include max-size(100%, calc(var(--tg-viewport-height) - 20vh));
     @include flex(column, flex-start, center, 8px);
     overflow-y: scroll;
   }
