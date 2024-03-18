@@ -54,7 +54,7 @@ const App: FC = () => {
 
   return (
     <div className={styles.app}>
-      {/* {loading ?  <Loader /> : ( */}
+      {loading ?  <Loader /> : (
       <Routes>
       <Route path={indexUrl} element={<Main />} />
       <Route path={roomsUrl} element={<OpenedRooms />} />
@@ -64,7 +64,7 @@ const App: FC = () => {
       {/* <Route path='/game' element={<Game />} /> */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
-    {/* )} */}
+    )}
     </div>
   );
 }
