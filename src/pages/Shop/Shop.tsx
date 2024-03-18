@@ -13,6 +13,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { getReq } from "../../api/api";
 import { getDailyBonusUri, getShopAvailableUri, userId } from "../../api/requestData";
 import { setShopData } from "../../services/shopSlice";
+import Loader from "../../components/Loader/Loader";
 
 const Shop: FC = () => {
   const { tg } = useTelegram();
@@ -22,7 +23,7 @@ const Shop: FC = () => {
   const shopData = useAppSelector(store => store.shop.products?.shop);
   const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
 
-  const [goods, setGoods] = useState(shopData);
+  const [goods, setGoods] = useState([]);
   const [activeButton, setActiveButton] = useState('Магазин');
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -32,6 +33,10 @@ const Shop: FC = () => {
     setShowOverlay(!showOverlay);
   };
 
+  useEffect(() => {
+    setGoods(shopData);
+  }, [shopData])
+  console.log(shopData);
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
@@ -83,62 +88,60 @@ const Shop: FC = () => {
 
   const handleShowItemDetails = (item: any) => {
     setSelectedItem(item);
+    console.log(item);
     toggleOverlay();
   };
 
   return (
     <div className={styles.shop}>
-      <div className={styles.shop__header}>
-        <h2 className={styles.shop__title}>Магазин</h2>
-        <UserInfo />
-      </div>
-      <div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
-        <div className={styles.shop__buttons}>
-          <div className={styles.shop__leftButtonsContainer}>
-            <button
-              className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
-              onClick={handleCancelSort}>
-              Магазин
-            </button>
-            <button
-              className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
-              onClick={handleShowFlea}
-            >
-              Лавка
-            </button>
-          </div>
-          <button
-            className={`${styles.shop__button} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
-            onClick={handleShowCollectibles}
-          >
-            Приобретено
-          </button>
-        </div>
-        <div className={styles.shop__goods}>
-          {goods?.length > 0 ? (
-            <>
-              {
-                goods.map((item: any, index: number) => (
-                  <ShopItem item={item} index={index} onClick={() => handleShowItemDetails(item)} key={index} />
-                )
-                )
-              }
-            </>
-          ) : (
-            <p>В магазине пока пусто</p>
-          )}
-        </div>
-      </div>
-      <Overlay
-        show={showOverlay}
-        onClose={toggleOverlay}
-        children={
-          <Product
-            item={selectedItem}
+      {loading ? <Loader /> : (
+        <>
+          <div className={styles.shop__header}>
+            <h2 className={styles.shop__title}>Магазин</h2>
+            <UserInfo />
+          </div><div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
+            <div className={styles.shop__buttons}>
+              <div className={styles.shop__leftButtonsContainer}>
+                <button
+                  className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
+                  onClick={handleCancelSort}>
+                  Магазин
+                </button>
+                <button
+                  className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
+                  onClick={handleShowFlea}
+                >
+                  Лавка
+                </button>
+              </div>
+              <button
+                className={`${styles.shop__button} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
+                onClick={handleShowCollectibles}
+              >
+                Приобретено
+              </button>
+            </div>
+            <div className={styles.shop__goods}>
+              {goods?.length > 0 ? (
+                <>
+                  {goods.map((item: any, index: number) => (
+                    <ShopItem item={item} index={index} onClick={() => handleShowItemDetails(item)} key={index} />
+                  )
+                  )}
+                </>
+              ) : (
+                <div style={{ color: '#FFF' }}>Ничего нет :с</div>
+              )}
+            </div>
+          </div><Overlay
+            show={showOverlay}
             onClose={toggleOverlay}
-            activeButton={activeButton}
-          />}
-      />
+            children={<Product
+              item={selectedItem}
+              onClose={toggleOverlay}
+              activeButton={activeButton} />} />
+        </>
+      )}
     </div>
   )
 }

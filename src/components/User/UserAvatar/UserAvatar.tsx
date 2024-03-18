@@ -21,7 +21,7 @@ const UserAvatar: FC<IProps> = ({ item }) => {
   const [userMask, setMask] = useState<any>(null);
   const userAvatar = useAppSelector(store => store.user.userData?.info.photo);
   const userData = useAppSelector(store => store.user.userData);
-  console.log(item);
+
   useEffect(() => {
     if (item !== undefined) {
       // const { skin: selectedSkin, mask: selectedMask } = getSkinAndMaskByIndex(skin);
@@ -32,8 +32,8 @@ const UserAvatar: FC<IProps> = ({ item }) => {
       setSkin(selectedSkin);
       setMask(selectedMask);
     } else {
-      setSkin('');
-      setMask('');
+      // setSkin(maskskin);
+      // setMask(maskin);
     }
   }, [userData, item]);
 

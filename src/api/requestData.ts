@@ -8,6 +8,10 @@ export const getUserAvatarUri = `getuserphoto?user_id=`;
 export const getDailyBonusUri = `get_daily_check?user_id=`;
 export const getShopAvailableUri = `get_shop_available`;
 
+export const buyShopItemUri = `shop_buy_item?user_id=`;
+export const itemIdValue = '&item_id=';
+export const itemCount = '&count=1';
+
 export const setTokensValueUri = `settokensnewvalue?user_id=`;
 export const setCoinsValueUri = 'setcoinsnewvalue?user_id=';
 export const setRoomIdValueUri = 'setroomidvalue?user_id=';

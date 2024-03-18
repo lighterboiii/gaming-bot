@@ -60,11 +60,16 @@ const CreateRoom: FC = () => {
         <h2 className={styles.create__heading}>Создать комнату</h2>
       </div>
       <div className={styles.create__content}>
-        {games.map((game: any) => (
+        {games.map((game: any, index: number) => (
           <GameCard
             game={game}
+            key={game.id}
             imagePosition={game.id === 1 ? 'left' : 'right'}
             users={game.users}
+            extraClass={`${styles['create__game-card']} ${
+              index % 2 === 0 ? styles['create__game-card--even'] : styles['create__game-card--odd']
+            }`}
+    
           />
         ))}
       </div>

@@ -17,13 +17,13 @@ type TRequest = {
 };
 
 const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-const BASE_URL = ' https://196b-46-29-234-97.ngrok-free.app/';
+const BASE_URL = 'https://dd47-46-29-234-97.ngrok-free.app/';
 
 const BASE_PARAMS = {
   headers: {
     'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json;charset=utf-8',
-    'ngrok-skip-browser-warning': 'true', // на время разработки для обхода ошибок cors
+    'ngrok-skip-browser-warning': 'true',
   }
 };
 

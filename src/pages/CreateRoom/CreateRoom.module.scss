@@ -19,9 +19,20 @@
   }
 
   &__content {
-    // @include size(100%, 50vh);
-    @include flex(column, space-between, center, 16px);
+    @include size(100%, auto);
+    @include flex(column, space-between, flex-end, 16px);
   }
+
+  &__game-card {
+    &:nth-child(odd) {
+      align-self: flex-end;
+    }
+  
+    &:nth-child(even) {
+      align-self: flex-start;
+    }
+  }
+
 
   &__heading {
     @include indents();

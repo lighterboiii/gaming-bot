@@ -2,7 +2,45 @@
 @use '../../../stylesheets/variables' as *;
 
 .game {
+  @include position(relative);
+  @include indents(16px, 0);
   @include size(194px, 194px);
   border-radius: $radius-10;
   background-color: $tertiary-color;
+  text-decoration: none;
+  color: $main-color;
+
+  &__info {
+    @include position(absolute, $left: 16px, $bottom: 16px, $right: 16px);
+    @include flex(row, space-between, center);
+  }
+
+  &__name {
+    @include indents();
+    color: $main-color;
+    font-weight: 900;
+  }
+
+  &__players {
+    @include indents();
+    color: $main-color;
+    font-weight: 900;
+  }
+
+  &__image, &__imageRight {
+    @include indents();
+    @include max-size(148px, auto);
+  }
+
+  &__image {
+    @include position(absolute, $top: 40%, $left: -50%);
+    transform: translateY(-50%);
+    rotate: 30deg;
+  }
+
+  &__imageRight {
+    @include position(absolute, $top: 40%, $right: -30%);
+    transform: translateY(-50%);
+    rotate: -15deg;
+  }
 }
