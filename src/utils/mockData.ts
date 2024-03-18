@@ -321,7 +321,7 @@ export const openedRooms = [
   },
   {
     id: 6,
-    gameType: 'Камень,ножницы,бумага',
+    gameType: 'Камень/ножницы/бумага',
     creator: 'vyacheslav',
     users: 2,
     bet: 5.2

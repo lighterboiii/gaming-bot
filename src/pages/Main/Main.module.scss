@@ -23,7 +23,7 @@
 
   &__content {
     @include flex(column, center, unset, 16px);
-    @include size(100%, 80%);
+    @include size(100%, 100%);
   }
 
   &__centralButtonsContainer {
