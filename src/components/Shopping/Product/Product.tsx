@@ -6,14 +6,16 @@ import Button from "../../ui/Button/Button";
 import CrossIcon from "../../../icons/Cross/Cross";
 import { putReq } from "../../../api/api";
 import { buyShopItemUri, userId } from "../../../api/requestData";
+import { useAppDispatch } from "../../../services/reduxHooks";
 
 interface ProductProps {
   item: any;
   onClose: () => void;
-  activeButton: string; // временно для вёрстки
+  isCollectible?: any;
 }
 
-const Product: FC<ProductProps> = ({ item, onClose, activeButton }) => {
+const Product: FC<ProductProps> = ({ item, onClose, isCollectible = true }) => {
+  const dispatch = useAppDispatch();
   console.log(item);
   const handleBuyItem = async (item: any) => {
     try {
@@ -31,7 +33,7 @@ const Product: FC<ProductProps> = ({ item, onClose, activeButton }) => {
       </div>
       <div className={styles.product__info}>
         <p className={styles.product__type}>Тип: {item?.item_type}</p>
-        {(activeButton === 'Приобретено' && item?.isOwned === true) ? (
+        {isCollectible ? (
           <div className={styles.product__buttons}>
             <div className={styles.product__buttonWrapper}>
               <Button text="Использовать" handleClick={() => { }} />
@@ -42,7 +44,7 @@ const Product: FC<ProductProps> = ({ item, onClose, activeButton }) => {
           </div>) : (
 
           <div className={styles.product__buttonWrapper}>
-            <Button text={`💵 ${item?.item_price_coins}`} handleClick={() => { }} isWhiteBackground />
+            <Button text={`💵 ${item?.item_price_coins}`} handleClick={() => handleBuyItem(item)} isWhiteBackground />
           </div>
         )}
       </div>

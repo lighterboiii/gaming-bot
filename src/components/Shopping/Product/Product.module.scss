@@ -2,7 +2,7 @@
 @use '../../../stylesheets/variables' as *;
 
 .product {
-  @include indents(0, 16px 0 0 0);
+  @include indents();
   @include flex(column, flex-start, center, 20px);
   @include size(100%, 100%);
   background-color: $tertiary-color;

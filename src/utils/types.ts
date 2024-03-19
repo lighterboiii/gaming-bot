@@ -24,4 +24,15 @@ export interface UserData {
     photo: string;
   },
   bonus: string;
+};
+
+export interface ItemData {
+  isCollectible?: boolean;
+  item_count: number;
+  item_id: string;
+  item_mask: string;
+  item_pic: string;
+  item_price_coins: number;
+  item_price_tokens: number;
+  item_type: string;
 }

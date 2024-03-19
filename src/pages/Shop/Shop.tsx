@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 import styles from './Shop.module.scss';
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
 import { useNavigate } from "react-router-dom";
-import { shopItems, userSkinsForSale } from "../../utils/mockData";
+import { userSkinsForSale } from "../../utils/mockData";
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import Overlay from "../../components/Overlay/Overlay";
@@ -14,19 +14,19 @@ import { getReq } from "../../api/api";
 import { getDailyBonusUri, getShopAvailableUri, userId } from "../../api/requestData";
 import { setShopData } from "../../services/shopSlice";
 import Loader from "../../components/Loader/Loader";
+import { ItemData } from "../../utils/types";
 
 const Shop: FC = () => {
-  const { tg } = useTelegram();
+  const { tg, user } = useTelegram();
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
   const shopData = useAppSelector(store => store.shop.products?.shop);
   const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
-
-  const [goods, setGoods] = useState<any>([]);
+  const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState('Магазин');
   const [showOverlay, setShowOverlay] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
   const [loading, setLoading] = useState(false);
 
   const toggleOverlay = () => {
@@ -34,7 +34,12 @@ const Shop: FC = () => {
   };
 
   useEffect(() => {
-    setGoods(shopData);
+    const shopDataWithCollectible = shopData.map((item: any) => ({
+      ...item,
+      isCollectible: userSkins?.includes(item.item_id),
+    }));
+
+    setGoods(shopDataWithCollectible);
   }, [shopData])
 
   useEffect(() => {
@@ -60,7 +65,8 @@ const Shop: FC = () => {
   }, []);
 
   const handleShowCollectibles = () => {
-    setGoods([]);
+    const collectibles = shopData.filter((item: ItemData) => userSkins?.includes(item.item_id));
+    setGoods(collectibles);
     setActiveButton('Приобретено');
   };
 
@@ -74,7 +80,7 @@ const Shop: FC = () => {
     setActiveButton('Лавка');
   };
 
-  const handleShowItemDetails = (item: any) => {
+  const handleShowItemDetails = (item: ItemData) => {
     setSelectedItem(item);
     console.log(item);
     toggleOverlay();
@@ -112,8 +118,12 @@ const Shop: FC = () => {
             <div className={styles.shop__goods}>
               {goods?.length > 0 ? (
                 <>
-                  {goods.map((item: any, index: number) => (
-                    <ShopItem item={item} index={index} onClick={() => handleShowItemDetails(item)} key={index} />
+                  {goods.map((item: ItemData, index: number) => (
+                    <ShopItem 
+                    item={item} 
+                    index={index} 
+                    onClick={() => handleShowItemDetails(item)} key={index} 
+                    />
                   )
                   )}
                 </>
@@ -127,7 +137,9 @@ const Shop: FC = () => {
             children={<Product
               item={selectedItem}
               onClose={toggleOverlay}
-              activeButton={activeButton} />} />
+              isCollectible={selectedItem?.isCollectible}
+            />}
+          />
         </>
       )}
     </div>
