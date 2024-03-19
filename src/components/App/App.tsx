@@ -28,6 +28,7 @@ const App: FC = () => {
     tg.ready();
     tg.setHeaderColor('#d51845');
     tg.expand();
+    tg.isExpanded(true);
     tg.enableClosingConfirmation();
     window.scrollTo(0, 0);
   }, []);
