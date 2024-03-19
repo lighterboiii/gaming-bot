@@ -41,19 +41,6 @@ const CreateRoom: FC = () => {
     // Логика для поиска открытой комнаты
   };
 
-  const updateCoins = (userId: string, newCoins: string) => async (dispatch: any) => {
-    try {
-      await putReq({ uri: setTokensValueUri, userId: userId, endpoint: newTokensValue, data: newCoins });
-      dispatch(setCoinsValue(Number(newCoins)));
-    } catch (error) {
-      console.error('Ошибка при обновлении количества токенов:', error);
-    }
-  };
-
-  const handleSetTokens = () => {
-    dispatch(updateCoins(userId, String(betAmount)));
-  };
-
   return (
     <div className={styles.create}>
       <div className={styles.create__header}>
