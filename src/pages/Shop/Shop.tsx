@@ -22,40 +22,39 @@ const Shop: FC = () => {
 
   const dispatch = useAppDispatch();
   const shopData = useAppSelector(store => store.shop.products?.shop);
-  const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
+  const collectibles = useAppSelector(store => store.user.userData?.info.collectibles);
 
   const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState('Магазин');
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
   const [loading, setLoading] = useState(false);
+  // сделать бонус
   const [dailyBonus, setDailyBonus] = useState<any>()
-
-  console.log(dailyBonus);
+  // console.log(dailyBonus);
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
-
+// при изменении данных
   useEffect(() => {
-    if (activeButton === "Магазин") {
-      const shopDataWithCollectible = shopData?.map((item: any) => ({
-        ...item,
-        isCollectible: userSkins?.includes(item.item_id),
-      }));
-
-      setGoods(shopDataWithCollectible);
-    } else if (activeButton === "Приобретено") {
-      const collectibles = shopData.filter((item: ItemData) => userSkins?.includes(item.item_id));
-      const mySkins = collectibles?.map((item: any) => ({
-        ...item,
-        isCollectible: userSkins?.includes(item.item_id)
-      }))
-      setGoods(mySkins);
-    } else if (activeButton === "Лавка") {
-      setGoods(userSkinsForSale);
+    switch (activeButton) {
+      case "Магазин": {
+        const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
+          ...item,
+          isCollectible: collectibles?.includes(item.item_id),
+        }));
+        setGoods(shopDataWithCollectible);
+        break;
+      }
+      case "Лавка": {
+        setGoods(userSkinsForSale);
+        break;
+      }
+      default:
+        break;
     }
-  }, [shopData, userSkins, activeButton])
-
+  }, [shopData, collectibles, activeButton]);
+  // при монтировании компонента
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
@@ -79,10 +78,17 @@ const Shop: FC = () => {
       tg.BackButton.hide();
     }
   }, []);
-
+// открыть страничку с данными скина
   const handleShowItemDetails = (item: ItemData) => {
     setSelectedItem(item);
     toggleOverlay();
+  };
+// обработчик клика по кнопке "приобретено"
+  const handleClickInventory = () => {
+    setActiveButton("Приобретено");
+    const collectibleIds = collectibles?.map(id => Number(id));
+    const inventoryItems = shopData.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
+    setGoods(inventoryItems);
   };
 
   return (
@@ -112,7 +118,7 @@ const Shop: FC = () => {
                   </div>
                   <button
                     className={`${styles.shop__button} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
-                    onClick={() => setActiveButton('Приобретено')}
+                    onClick={handleClickInventory}
                   >
                     Приобретено
                   </button>
@@ -141,56 +147,6 @@ const Shop: FC = () => {
                   isCollectible={selectedItem?.isCollectible} />} />
             </>
           {/* )} */}
-          {/* <div className={styles.shop__header}>
-            <h2 className={styles.shop__title}>Магазин</h2>
-            <UserInfo />
-          </div><div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
-            <div className={styles.shop__buttons}>
-              <div className={styles.shop__leftButtonsContainer}>
-                <button
-                  className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
-                  onClick={() => setActiveButton('Магазин')}>
-                  Магазин
-                </button>
-                <button
-                  className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
-                  onClick={() => setActiveButton('Лавка')}>
-                  Лавка
-                </button>
-              </div>
-              <button
-                className={`${styles.shop__button} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
-                onClick={() => setActiveButton('Приобретено')}
-              >
-                Приобретено
-              </button>
-            </div>
-            <div className={styles.shop__goods}>
-              {goods?.length > 0 ? (
-                <>
-                  {goods.map((item: ItemData, index: number) => (
-                    <ShopItem
-                      item={item}
-                      index={index}
-                      onClick={() => handleShowItemDetails(item)} key={index}
-                    />
-                  )
-                  )}
-                </>
-              ) : (
-                <div style={{ color: '#FFF' }}>Ничего нет :с</div>
-              )}
-            </div>
-          </div>
-          <Overlay
-            show={showOverlay}
-            onClose={toggleOverlay}
-            children={<Product
-              item={selectedItem}
-              onClose={toggleOverlay}
-              isCollectible={selectedItem?.isCollectible}
-            />}
-          /> */}
         </>
       )}
     </div>

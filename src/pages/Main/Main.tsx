@@ -12,12 +12,9 @@ import gowinLogo from '../../images/gowin.png';
 
 const Main: FC = () => {
   const [showOverlay, setShowOverlay] = useState(false);
-  const [contentBlocked, setContentBlocked] = useState(false);
 
   const toggleOverlay = () => {
-    // window.scrollTo(0, 0);
     setShowOverlay(!showOverlay);
-    // setContentBlocked(!contentBlocked);
   };
 
   return (
