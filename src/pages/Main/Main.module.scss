@@ -6,7 +6,7 @@
   @include indents(0 16px 16px, 0);
   @include flex(column, flex-start, center, 16px);
   // @include flex(column, space-between, center);
-  @include size(100%, 100%);
+  @include size(100%, auto);
   // background-color: $secondary-color;
 
 

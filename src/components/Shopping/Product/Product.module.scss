@@ -46,4 +46,12 @@
     border-radius: 40px;
     background-color: $black-color;
   }
+
+  &__notification {
+    @include indents();
+    @include size(100%, 100%);
+    @include flex(column, center, center);
+    color: $main-color;
+    font-weight: 900;
+  }
 }

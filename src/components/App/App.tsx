@@ -36,10 +36,10 @@ const App: FC = () => {
     setLoading(true);
     const fetchUserData = async () => {
       try {
-        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
-        const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: user?.id });
-        // const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
-        // const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: userId });
+        // const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
+        // const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: user?.id });
+        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
+        const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: userId });
         dispatch(setUserData(userDataResponse));
         console.log(userDataResponse.info);
         dispatch(setUserPhoto(userPhotoResponse?.info));

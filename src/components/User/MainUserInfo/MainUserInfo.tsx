@@ -19,6 +19,7 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
 
   const handleClickBalance = () => {
     tg.openTelegramLink('https://t.me/lighterboygamebot');
+    tg.close();
   }
 
   return (

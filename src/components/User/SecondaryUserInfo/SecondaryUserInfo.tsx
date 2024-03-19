@@ -10,6 +10,7 @@ const UserInfo: FC = () => {
 
   const handleClickBalance = () => {
     tg.openTelegramLink('https://t.me/lighterboygamebot');
+    tg.close();
   }
 
   return (
@@ -19,7 +20,7 @@ const UserInfo: FC = () => {
           <UserAvatar />
         </div>
         <div className={styles.user__textElements}>
-          <p className={styles.user__name}>{userData ? userData?.info?.publicname : 'Максим'}</p>
+          <p className={styles.user__name}>{userData && userData?.info?.publicname}</p>
           <div className={styles.user__money}>
             <p className={styles.user__text}>💵 {userData ? `${userData?.info.coins}` : '0'}</p>
             <p className={styles.user__text}>🔰 {userData ? `${userData?.info.tokens}` : '0'}</p>
