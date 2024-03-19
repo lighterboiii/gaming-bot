@@ -60,7 +60,7 @@ const Shop: FC = () => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: userId });
+        const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: user?.id });
         console.log(isDailyBonusActive);
         setDailyBonus(isDailyBonusActive);
         const shopGoods = await getReq<any>({ uri: getShopAvailableUri, userId: '' });

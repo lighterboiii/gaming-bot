@@ -52,11 +52,11 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
 
   return (
     <div className={styles.product}>
-      {/* {messageShown ? (
+      {messageShown ? (
         <div className={styles.product__notification}>
           {message}
         </div>
-      ) : ( */}
+      ) : (
         <>
           <div className={styles.product__avatarContainer}>
             <UserAvatar item={item} />
@@ -86,7 +86,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
             <CrossIcon width={20} height={20} />
           </button>
         </>
-      {/* )} */}
+      )}
     </div>
   );
 };
