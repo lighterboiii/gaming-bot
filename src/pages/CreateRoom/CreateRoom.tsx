@@ -8,7 +8,6 @@ import CircleButton from "../../components/ui/CircleButton/CircleButton";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import { roomsUrl } from "../../utils/routes";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import { setCoinsValue } from "../../services/userSlice";
 import { putReq } from "../../api/api";
 import { newTokensValue, setTokensValueUri, userId } from "../../api/requestData";
 import useTelegram from "../../hooks/useTelegram";

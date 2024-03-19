@@ -8,7 +8,7 @@ import { putReq } from "../../../api/api";
 import { activeSkinValue, buyShopItemUri, setActiveSkinUri, userId } from "../../../api/requestData";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { ItemData } from "../../../utils/types";
-import { setActiveSkin } from "../../../services/userSlice";
+import { setActiveSkin, setCollectibles } from "../../../services/userSlice";
 import useTelegram from "../../../hooks/useTelegram";
 
 interface ProductProps {
@@ -20,19 +20,19 @@ interface ProductProps {
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
+  console.log(isCollectible);
   const handleBuyItem = async (item: ItemData) => {
     try {
-      const newItem = await putReq({ uri: buyShopItemUri, userId: user?.id, endpoint: `&item_id=${item.item_id}&count=${item.item_count}` });
-      console.log(newItem);
+      await putReq({ uri: buyShopItemUri, userId: userId, endpoint: `&item_id=${item.item_id}&count=${item.item_count}` });
+      dispatch(setCollectibles(item?.item_id))
     } catch (error) {
       console.log(error);
     }
   };
-
+  console.log(item);
   const handleSetActiveSkin = async (itemId: number) => {
-    const activeSkin = await putReq({ uri: setActiveSkinUri, userId: user?.id, endpoint: `${activeSkinValue}${itemId}` });
+    await putReq({ uri: setActiveSkinUri, userId: userId, endpoint: `${activeSkinValue}${itemId}` });
     dispatch(setActiveSkin(itemId));
-    console.log(activeSkin);
   };
 
   return (

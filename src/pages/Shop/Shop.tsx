@@ -23,6 +23,7 @@ const Shop: FC = () => {
   const dispatch = useAppDispatch();
   const shopData = useAppSelector(store => store.shop.products?.shop);
   const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
+
   const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState('Магазин');
   const [showOverlay, setShowOverlay] = useState(false);
@@ -34,13 +35,24 @@ const Shop: FC = () => {
   };
 
   useEffect(() => {
-    const shopDataWithCollectible = shopData?.map((item: any) => ({
-      ...item,
-      isCollectible: userSkins?.includes(item.item_id),
-    }));
+    if (activeButton === "Магазин") {
+      const shopDataWithCollectible = shopData?.map((item: any) => ({
+        ...item,
+        isCollectible: userSkins?.includes(item.item_id),
+      }));
 
-    setGoods(shopDataWithCollectible);
-  }, [shopData])
+      setGoods(shopDataWithCollectible);
+    } else if (activeButton === "Приобретено") {
+      const collectibles = shopData.filter((item: ItemData) => userSkins?.includes(item.item_id));
+      const mySkins = collectibles?.map((item: any) => ({
+        ...item,
+        isCollectible: userSkins?.includes(item.item_id)
+      }))
+      setGoods(mySkins);
+    } else if (activeButton === "Лавка") {
+      setGoods(userSkinsForSale);
+    }
+  }, [shopData, userSkins, activeButton])
 
   useEffect(() => {
     setLoading(true);
@@ -64,22 +76,6 @@ const Shop: FC = () => {
     }
   }, []);
 
-  const handleShowCollectibles = () => {
-    const collectibles = shopData.filter((item: ItemData) => userSkins?.includes(item.item_id));
-    setGoods(collectibles);
-    setActiveButton('Приобретено');
-  };
-
-  const handleCancelSort = () => {
-    setGoods(shopData);
-    setActiveButton('Магазин');
-  };
-
-  const handleShowFlea = () => {
-    setGoods(userSkinsForSale);
-    setActiveButton('Лавка');
-  };
-
   const handleShowItemDetails = (item: ItemData) => {
     setSelectedItem(item);
     toggleOverlay();
@@ -97,19 +93,18 @@ const Shop: FC = () => {
               <div className={styles.shop__leftButtonsContainer}>
                 <button
                   className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
-                  onClick={handleCancelSort}>
+                  onClick={() => setActiveButton('Магазин')}>
                   Магазин
                 </button>
                 <button
                   className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
-                  onClick={handleShowFlea}
-                >
+                  onClick={() => setActiveButton('Лавка')}>
                   Лавка
                 </button>
               </div>
               <button
                 className={`${styles.shop__button} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
-                onClick={handleShowCollectibles}
+                onClick={() => setActiveButton('Приобретено')}
               >
                 Приобретено
               </button>
@@ -118,10 +113,10 @@ const Shop: FC = () => {
               {goods?.length > 0 ? (
                 <>
                   {goods.map((item: ItemData, index: number) => (
-                    <ShopItem 
-                    item={item} 
-                    index={index} 
-                    onClick={() => handleShowItemDetails(item)} key={index} 
+                    <ShopItem
+                      item={item}
+                      index={index}
+                      onClick={() => handleShowItemDetails(item)} key={index}
                     />
                   )
                   )}

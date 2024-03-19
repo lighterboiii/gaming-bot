@@ -24,10 +24,11 @@ const UserAvatar: FC<IProps> = ({ item }) => {
     } else if (userData && activeSkin !== undefined) {
       setSkin(`https://gamebottggw.ngrok.app/get_item_image/${activeSkin}`); // костыль
       setMask(`https://gamebottggw.ngrok.app/get_item_image_mask/${activeSkin}`); // костыль
-    } else {
-      setSkin('');
-      setMask('');
-    }
+    } 
+    // else {
+    //   setSkin('');
+    //   setMask('');
+    // }
   }, [userData, item, activeSkin]);
 
   return (
