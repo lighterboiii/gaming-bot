@@ -17,6 +17,11 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.user.userData);
 
+  const handleClickBalance = () => {
+    tg.openTelegramLink('');
+    // tg.close()
+  }
+
   return (
     <div className={styles.userInfo}>
       <div className={styles.userInfo__content}>
@@ -31,7 +36,7 @@ const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
               <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.info.tokens}` : '0'}</p>
             </div>
           </div>
-          <button type="button" className={styles.userInfo__balance} onClick={() => {tg.close()}}>
+          <button type="button" className={styles.userInfo__balance} onClick={handleClickBalance}>
             баланс
           </button>
         </div>

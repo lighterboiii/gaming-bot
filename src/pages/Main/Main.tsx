@@ -17,7 +17,7 @@ const Main: FC = () => {
   const toggleOverlay = () => {
     // window.scrollTo(0, 0);
     setShowOverlay(!showOverlay);
-    setContentBlocked(!contentBlocked);
+    // setContentBlocked(!contentBlocked);
   };
 
   return (
@@ -26,7 +26,7 @@ const Main: FC = () => {
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
         <MainUserInfo toggleOverlay={toggleOverlay} isOverlayOpen={showOverlay} />
       </div>
-      <div className={`${styles.main__content} ${contentBlocked ? styles.hidden : ''}`}>
+      <div className={`${styles.main__content} ${showOverlay ? styles.hidden : ''}`}>
         <AdvertisementBanner />
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>

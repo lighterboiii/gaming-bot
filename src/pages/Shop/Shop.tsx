@@ -38,7 +38,6 @@ const Shop: FC = () => {
   }, [shopData])
 
   useEffect(() => {
-    // window.scrollTo(0, 0);
     setLoading(true);
     const fetchData = async () => {
       try {
