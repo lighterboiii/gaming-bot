@@ -88,8 +88,8 @@
   }
 }
 
-// .hidden {
-//   @include size(100%, 0);
-//   overflow: hidden;
-//   transition: height 1s ease;
-// }
+.hidden {
+  @include size(100%, 0);
+  overflow: hidden;
+  transition: height 1s ease;
+}
