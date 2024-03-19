@@ -8,6 +8,10 @@ const UserInfo: FC = () => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.user.userData);
 
+  const handleClickBalance = () => {
+    tg.openTelegramLink('https://t.me/lighterboygamebot');
+  }
+
   return (
     <div className={styles.user}>
       <div className={styles.user__userInfo}>
@@ -20,7 +24,7 @@ const UserInfo: FC = () => {
             <p className={styles.user__text}>💵 {userData ? `${userData?.info.coins}` : '0'}</p>
             <p className={styles.user__text}>🔰 {userData ? `${userData?.info.tokens}` : '0'}</p>
           </div>
-          <button type="button" className={styles.user__balance} onClick={() => {tg.close()}}>баланс</button>
+          <button type="button" className={styles.user__balance} onClick={handleClickBalance}>баланс</button>
         </div>
       </div>
     </div>

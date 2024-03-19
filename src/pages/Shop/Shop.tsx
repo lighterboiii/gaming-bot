@@ -34,7 +34,7 @@ const Shop: FC = () => {
   };
 
   useEffect(() => {
-    const shopDataWithCollectible = shopData.map((item: any) => ({
+    const shopDataWithCollectible = shopData?.map((item: any) => ({
       ...item,
       isCollectible: userSkins?.includes(item.item_id),
     }));
@@ -82,7 +82,6 @@ const Shop: FC = () => {
 
   const handleShowItemDetails = (item: ItemData) => {
     setSelectedItem(item);
-    console.log(item);
     toggleOverlay();
   };
 
