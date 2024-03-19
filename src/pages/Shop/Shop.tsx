@@ -29,7 +29,9 @@ const Shop: FC = () => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
   const [loading, setLoading] = useState(false);
-  console.log(goods);
+  const [dailyBonus, setDailyBonus] = useState<any>()
+
+  console.log(dailyBonus);
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
@@ -58,7 +60,9 @@ const Shop: FC = () => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        // const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: userId });
+        const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: userId });
+        console.log(isDailyBonusActive);
+        setDailyBonus(isDailyBonusActive);
         const shopGoods = await getReq<any>({ uri: getShopAvailableUri, userId: '' });
         dispatch(setShopData(shopGoods))
       } catch (error) {
@@ -85,7 +89,60 @@ const Shop: FC = () => {
     <div className={styles.shop}>
       {loading ? <Loader /> : (
         <>
-          <div className={styles.shop__header}>
+          {dailyBonus.bonus !== 'no' ? (
+            <div>{dailyBonus}</div>
+          ) : (
+            <>
+              <div className={styles.shop__header}>
+                <h2 className={styles.shop__title}>Магазин</h2>
+                <UserInfo />
+              </div><div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
+                <div className={styles.shop__buttons}>
+                  <div className={styles.shop__leftButtonsContainer}>
+                    <button
+                      className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
+                      onClick={() => setActiveButton('Магазин')}>
+                      Магазин
+                    </button>
+                    <button
+                      className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
+                      onClick={() => setActiveButton('Лавка')}>
+                      Лавка
+                    </button>
+                  </div>
+                  <button
+                    className={`${styles.shop__button} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
+                    onClick={() => setActiveButton('Приобретено')}
+                  >
+                    Приобретено
+                  </button>
+                </div>
+                <div className={styles.shop__goods}>
+                  {goods?.length > 0 ? (
+                    <>
+                      {goods.map((item: ItemData, index: number) => (
+                        <ShopItem
+                          item={item}
+                          index={index}
+                          onClick={() => handleShowItemDetails(item)} key={index} />
+                      )
+                      )}
+                    </>
+                  ) : (
+                    <div style={{ color: '#FFF' }}>Ничего нет :с</div>
+                  )}
+                </div>
+              </div><Overlay
+                show={showOverlay}
+                onClose={toggleOverlay}
+                children={<Product
+                  item={selectedItem}
+                  onClose={toggleOverlay}
+                  isCollectible={selectedItem?.isCollectible} />} />
+            </>
+          )
+          }
+          {/* <div className={styles.shop__header}>
             <h2 className={styles.shop__title}>Магазин</h2>
             <UserInfo />
           </div><div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
@@ -125,7 +182,8 @@ const Shop: FC = () => {
                 <div style={{ color: '#FFF' }}>Ничего нет :с</div>
               )}
             </div>
-          </div><Overlay
+          </div>
+          <Overlay
             show={showOverlay}
             onClose={toggleOverlay}
             children={<Product
@@ -133,7 +191,7 @@ const Shop: FC = () => {
               onClose={toggleOverlay}
               isCollectible={selectedItem?.isCollectible}
             />}
-          />
+          /> */}
         </>
       )}
     </div>
