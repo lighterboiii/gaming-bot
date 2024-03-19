@@ -2,10 +2,10 @@
 @use '../../stylesheets/variables' as *;
 
 .rooms {
-  @include indents(0 16px 10px, 0);
+  @include indents(16px, 0);
+  // @include indents(0 16px 10px, 0);
   @include size(100%, 100%);
-  @include flex(column, center, center, 20px);
-  background-color: $secondary-color;
+  @include flex(column, flex-start, center, 16px);
 
   &__heading {
     @include size(50%, auto);

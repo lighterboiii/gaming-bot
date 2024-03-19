@@ -13,23 +13,27 @@
 }
 
 .shop {
-  @include indents(0 16px 10px, 0);
+  @include indents(16px, 0);
+  // @include indents(0 16px 10px, 0);
   @include size(100%, 100%);
-  @include flex(column, center, center, 16px);
+  @include flex(column, flex-start, center, 16px);
 
   &__header {
-    @include size(100%, 20vh);
-    @include flex(column, space-around, center);
+    // @include size(100%, 20vh);
+    @include size(100%, auto);
+    @include flex(column, center, center);
+    // @include flex(column, space-around, center);
 
-    @media screen and (max-height: 690px) {
-      @include flex(column, flex-start, center);
-      @include size(100%, 30vh);
-    }
+    // @media screen and (max-height: 690px) {
+    //   @include flex(column, flex-start, center);
+    //   @include size(100%, 30vh);
+    // }
   }
 
   &__content {
     @include flex(column, center, center, 16px);
-    @include size(100%, 100%);
+    @include size(100%, auto);
+    // @include size(100%, calc(var(--tg-viewport-stable-height) - 20vh));
     z-index: 3;
   }
 
@@ -84,8 +88,8 @@
   }
 }
 
-.hidden {
-  @include size(100%, 0);
-  overflow: hidden;
-  transition: height 1s ease;
-}
+// .hidden {
+//   @include size(100%, 0);
+//   overflow: hidden;
+//   transition: height 1s ease;
+// }

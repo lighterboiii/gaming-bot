@@ -2,18 +2,21 @@
 @use '../../stylesheets/variables' as *;
 
 .main {
-  @include indents(0 16px 10px, 0);
-  @include flex(column, space-between, center);
+  // @include indents(0 16px 10px, 0);
+  @include indents(16px, 0);
+  @include flex(column, flex-start, center, 16px);
+  // @include flex(column, space-between, center);
   @include size(100%, 100%);
-  background-color: $secondary-color;
+  // background-color: $secondary-color;
 
 
   &__header {
-    @include size(100%, 20vh);
+    // @include size(100%, 20vh);
+    @include size(100%, auto);
     @include flex(column, center, center);
 
     @media screen and (max-height: 690px) {
-      @include size(100%, 30vh);
+      // @include size(100%, 30vh);
     }
   }
 
@@ -23,11 +26,12 @@
 
   &__content {
     @include flex(column, center, unset, 16px);
-    @include size(100%, calc(100% - 20vh));
+    @include size(100%, auto);
+    // @include size(100%, calc(var(--tg-viewport-stable-height) - 20vh));
 
-    @media screen and (max-height: 690px) {
-      @include size(100%, calc(var(--tg-viewport-height) - 30vh));
-    }
+    // @media screen and (max-height: 690px) {
+    //   @include size(100%, calc(var(--tg-viewport-stable-height) - 30vh));
+    // }
   }
 
   &__centralButtonsContainer {
@@ -47,8 +51,8 @@
   }
 }
 
-.hidden {
-  @include size(100%, 0);
-  overflow: hidden;
-  transition: height 1s ease;
-}
+// .hidden {
+//   @include size(100%, 0);
+//   overflow: hidden;
+//   transition: height 1s ease;
+// }
