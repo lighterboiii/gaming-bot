@@ -38,14 +38,14 @@ const Shop: FC = () => {
 // при изменении данных
   useEffect(() => {
     switch (activeButton) {
-      case "Магазин": {
-        const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
-          ...item,
-          isCollectible: collectibles?.includes(item.item_id),
-        }));
-        setGoods(shopDataWithCollectible);
-        break;
-      }
+      // case "Магазин": {
+      //   const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
+      //     ...item,
+      //     isCollectible: collectibles?.includes(item.item_id),
+      //   }));
+      //   setGoods(shopDataWithCollectible);
+      //   break;
+      // }
       case "Лавка": {
         setGoods(userSkinsForSale);
         break;
