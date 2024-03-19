@@ -23,7 +23,7 @@ const Shop: FC = () => {
   const shopData = useAppSelector(store => store.shop.products?.shop);
   const userSkins = useAppSelector(store => store.user.userData?.info.collectibles);
 
-  const [goods, setGoods] = useState([]);
+  const [goods, setGoods] = useState<any>([]);
   const [activeButton, setActiveButton] = useState('Магазин');
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -61,18 +61,6 @@ const Shop: FC = () => {
   }, []);
 
   const handleShowCollectibles = () => {
-    // if (userSkins) {
-    //   const filteredItems = [];
-    //   userSkins.forEach((userSkinId) => {
-    //     const foundItem = shopData.find((item) => item.id === userSkinId);
-    //     if (foundItem) {
-    //       filteredItems.push(foundItem);
-    //     }
-    //   });
-    //   setGoods(userSkins);
-    // } else {
-    //   setGoods(shopData);
-    // }
     setGoods([]);
     setActiveButton('Приобретено');
   };
@@ -83,7 +71,7 @@ const Shop: FC = () => {
   };
 
   const handleShowFlea = () => {
-    // setGoods(userSkinsForSale);
+    setGoods(userSkinsForSale);
     setActiveButton('Лавка');
   };
 
