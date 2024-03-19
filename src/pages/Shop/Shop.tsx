@@ -96,9 +96,10 @@ const Shop: FC = () => {
   };
   const handleClickShop = () => {
     setActiveButton("Магазин");
+    const collectibleIds = collectibles?.map(id => Number(id));
     const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
       ...item,
-      isCollectible: collectibles?.includes(item.item_id),
+      isCollectible: collectibleIds?.includes(item.item_id),
     }));
     setGoods(shopDataWithCollectible);
   };
