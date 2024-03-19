@@ -60,9 +60,9 @@ const Shop: FC = () => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: user?.id });
-        console.log(isDailyBonusActive);
-        setDailyBonus(isDailyBonusActive);
+        // const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: user?.id });
+        // console.log(isDailyBonusActive);
+        // setDailyBonus(isDailyBonusActive);
         const shopGoods = await getReq<any>({ uri: getShopAvailableUri, userId: '' });
         dispatch(setShopData(shopGoods))
       } catch (error) {
@@ -89,9 +89,9 @@ const Shop: FC = () => {
     <div className={styles.shop}>
       {loading ? <Loader /> : (
         <>
-          {dailyBonus.bonus !== 'no' ? (
+          {/* {dailyBonus.bonus !== 'no' ? (
             <div>{dailyBonus}</div>
-          ) : (
+          ) : ( */}
             <>
               <div className={styles.shop__header}>
                 <h2 className={styles.shop__title}>Магазин</h2>
@@ -140,8 +140,7 @@ const Shop: FC = () => {
                   onClose={toggleOverlay}
                   isCollectible={selectedItem?.isCollectible} />} />
             </>
-          )
-          }
+          {/* )} */}
           {/* <div className={styles.shop__header}>
             <h2 className={styles.shop__title}>Магазин</h2>
             <UserInfo />
