@@ -38,14 +38,14 @@ const Shop: FC = () => {
 // при изменении данных
   useEffect(() => {
     switch (activeButton) {
-      case "Магазин": {
-        const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
-          ...item,
-          isCollectible: collectibles?.includes(item.item_id),
-        }));
-        setGoods(shopDataWithCollectible);
-        break;
-      }
+      // case "Магазин": {
+      //   const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
+      //     ...item,
+      //     isCollectible: collectibles?.includes(item.item_id),
+      //   }));
+      //   setGoods(shopDataWithCollectible);
+      //   break;
+      // }
       case "Лавка": {
         setGoods(userSkinsForSale);
         break;
@@ -94,6 +94,14 @@ const Shop: FC = () => {
     }));
     setGoods(inventoryDataWithCollectible);
   };
+  const handleClickShop = () => {
+    setActiveButton("Магазин");
+    const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
+      ...item,
+      isCollectible: collectibles?.includes(item.item_id),
+    }));
+    setGoods(shopDataWithCollectible);
+  };
 
   return (
     <div className={styles.shop}>
@@ -111,7 +119,7 @@ const Shop: FC = () => {
                   <div className={styles.shop__leftButtonsContainer}>
                     <button
                       className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
-                      onClick={() => setActiveButton('Магазин')}>
+                      onClick={handleClickShop}>
                       Магазин
                     </button>
                     <button
