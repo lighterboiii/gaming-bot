@@ -88,7 +88,11 @@ const Shop: FC = () => {
     setActiveButton("Приобретено");
     const collectibleIds = collectibles?.map(id => Number(id));
     const inventoryItems = shopData.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
-    setGoods(inventoryItems);
+    const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
+      ...item,
+      isCollectible: collectibleIds?.includes(item.item_id),
+    }));
+    setGoods(inventoryDataWithCollectible);
   };
 
   return (
