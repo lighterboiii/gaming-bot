@@ -8,7 +8,7 @@ export interface UserData {
     coinloses: number;
     coins: number;
     coinwins: number;
-    collectibles: string;
+    collectibles: number[];
     days_online: number;
     if_ban: number;
     loses: number;
@@ -29,7 +29,7 @@ export interface UserData {
 export interface ItemData {
   isCollectible?: boolean;
   item_count: number;
-  item_id: string;
+  item_id: number;
   item_mask: string;
   item_pic: string;
   item_price_coins: number;

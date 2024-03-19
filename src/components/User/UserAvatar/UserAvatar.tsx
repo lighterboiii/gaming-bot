@@ -21,10 +21,35 @@ const UserAvatar: FC<IProps> = ({ item }) => {
   const [userMask, setMask] = useState<any>(null);
   const userAvatar = useAppSelector(store => store.user.userData?.info.photo);
   const userData = useAppSelector(store => store.user.userData);
+console.log(userData?.info.active_skin);
 
+const getSkinAndMask = async (skinId: number) => {
+  const skin = await getReq({ uri: `get_item_image/${skinId}`, userId: '' });
+  const mask = await getReq({ uri: `get_item_image_mask/${skinId}`, userId: '' });
+  return { skin, mask };
+}
+
+// useEffect(() => {
+//   const fetchSkinAndMask = async () => {
+//     if (item !== undefined) {
+//     } else if (userData && userData.info.active_skin !== undefined) {
+//       try {
+//         const skinAndMask = await getSkinAndMask(userData.info.active_skin);
+//         setSkin(skinAndMask.skin);
+//         setMask(skinAndMask.mask);
+//       } catch (error) {
+//         console.error("Ошибка получения скина", error);
+//       }
+//     } else {
+//       setSkin(11)
+//       setMask(11)
+//     }
+//   };
+
+//   fetchSkinAndMask();
+// }, [userData, item]);
   useEffect(() => {
     if (item !== undefined) {
-      // const { skin: selectedSkin, mask: selectedMask } = getSkinAndMaskByIndex(skin);
       setSkin(item?.item_pic);
       setMask(item?.item_mask);
     } else if (userData && userData.info.active_skin !== undefined) {
@@ -32,8 +57,8 @@ const UserAvatar: FC<IProps> = ({ item }) => {
       setSkin(selectedSkin);
       setMask(selectedMask);
     } else {
-      // setSkin(maskskin);
-      // setMask(maskin);
+      setSkin(maskskin);
+      setMask(maskin);
     }
   }, [userData, item]);
 

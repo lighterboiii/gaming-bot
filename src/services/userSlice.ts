@@ -26,6 +26,12 @@ const userSlice = createSlice({
         state.userData.bonus = action.payload;
       }
     },
+    setActiveSkin: (state, action: PayloadAction<number>) => {
+      console.log(action.payload);
+      if (state.userData) {
+        state.userData.info.active_skin = action.payload;
+      }
+    },
     clearUserData: (state) => {
       state.userData = null;
     },
@@ -37,6 +43,6 @@ const userSlice = createSlice({
   }
 });
 
-export const { setUserData, clearUserData, setUserPhoto, setCoinsValue } = userSlice.actions;
+export const { setUserData, clearUserData, setUserPhoto, setActiveSkin, setCoinsValue } = userSlice.actions;
 
 export default userSlice.reducer;

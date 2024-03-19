@@ -234,7 +234,7 @@ export const shopItems = [
 // mock data for user skin shop 
 export const userSkinsForSale = [
   {
-    item_id: '1',
+    item_id: 1,
     item_count: 10,
     item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/13",
     item_pic: "https://gamebottggw.ngrok.app/get_item_image/13",
@@ -243,7 +243,7 @@ export const userSkinsForSale = [
     item_type: "skin_anim"
   },
   {
-    item_id: '2',
+    item_id: 2,
     item_count: 7,
     item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/13",
     item_pic: "https://gamebottggw.ngrok.app/get_item_image/13",
@@ -252,7 +252,7 @@ export const userSkinsForSale = [
     item_type: "skin_anim"
   },
   {
-    item_id: '3',
+    item_id: 3,
     item_count: 13,
     item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/14",
     item_pic: "https://gamebottggw.ngrok.app/get_item_image/14",

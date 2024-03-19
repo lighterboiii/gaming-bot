@@ -5,26 +5,35 @@ import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
 import CrossIcon from "../../../icons/Cross/Cross";
 import { putReq } from "../../../api/api";
-import { buyShopItemUri, userId } from "../../../api/requestData";
+import { activeSkinValue, buyShopItemUri, setActiveSkinUri, userId } from "../../../api/requestData";
 import { useAppDispatch } from "../../../services/reduxHooks";
+import { ItemData } from "../../../utils/types";
+import { setActiveSkin } from "../../../services/userSlice";
 
 interface ProductProps {
   item: any;
   onClose: () => void;
-  isCollectible?: any;
+  isCollectible?: boolean;
 }
 
-const Product: FC<ProductProps> = ({ item, onClose, isCollectible = true }) => {
+const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const dispatch = useAppDispatch();
-  console.log(item);
-  const handleBuyItem = async (item: any) => {
+
+  const handleBuyItem = async (item: ItemData) => {
     try {
       const newItem = await putReq({ uri: buyShopItemUri, userId: userId, endpoint: `&item_id=${item.item_id}&count=${item.item_count}` });
       console.log(newItem);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+  console.log(item);
+  const handleSetActiveSkin = async (itemId: number) => {
+    const activeSkin = await putReq({ uri: setActiveSkinUri, userId: userId, endpoint: `${activeSkinValue}${itemId}` })
+    // const activeSkin = item.item_id;
+    console.log(activeSkin);
+    // dispatch(setActiveSkin(activeSkin));
+  };
 
   return (
     <div className={styles.product}>
@@ -36,13 +45,16 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible = true }) => {
         {isCollectible ? (
           <div className={styles.product__buttons}>
             <div className={styles.product__buttonWrapper}>
-              <Button text="Использовать" handleClick={() => { }} />
+              <Button
+                text="Использовать"
+                handleClick={() => handleSetActiveSkin(item?.item_id)}
+              />
             </div>
             <div className={styles.product__buttonWrapper}>
               <Button text="Продать" handleClick={() => { }} isWhiteBackground />
             </div>
-          </div>) : (
-
+          </div>
+        ) : (
           <div className={styles.product__buttonWrapper}>
             <Button text={`💵 ${item?.item_price_coins}`} handleClick={() => handleBuyItem(item)} isWhiteBackground />
           </div>
