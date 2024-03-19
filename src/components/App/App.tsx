@@ -27,7 +27,7 @@ const App: FC = () => {
   useEffect(() => {
     tg.ready();
     tg.setHeaderColor('#d51845');
-    tg.expand();
+    // tg.expand();
     tg.isExpanded(true);
     tg.enableClosingConfirmation();
     window.scrollTo(0, 0);
