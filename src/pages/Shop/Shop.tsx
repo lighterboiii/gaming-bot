@@ -38,14 +38,14 @@ const Shop: FC = () => {
 // при изменении данных
   useEffect(() => {
     switch (activeButton) {
-      // case "Магазин": {
-      //   const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
-      //     ...item,
-      //     isCollectible: collectibles?.includes(item.item_id),
-      //   }));
-      //   setGoods(shopDataWithCollectible);
-      //   break;
-      // }
+      case "Магазин": {
+        const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
+          ...item,
+          isCollectible: collectibles?.includes(item.item_id),
+        }));
+        setGoods(shopDataWithCollectible);
+        break;
+      }
       case "Лавка": {
         setGoods(userSkinsForSale);
         break;
@@ -63,7 +63,7 @@ const Shop: FC = () => {
         // console.log(isDailyBonusActive);
         // setDailyBonus(isDailyBonusActive);
         const shopGoods = await getReq<any>({ uri: getShopAvailableUri, userId: '' });
-        dispatch(setShopData(shopGoods))
+        dispatch(setShopData(shopGoods));
       } catch (error) {
         console.log(error);
       };
