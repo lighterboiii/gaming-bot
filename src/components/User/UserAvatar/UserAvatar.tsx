@@ -24,11 +24,10 @@ const UserAvatar: FC<IProps> = ({ item }) => {
     } else if (userData && activeSkin !== undefined) {
       setSkin(`https://gamebottggw.ngrok.app/get_item_image/${activeSkin}`); // костыль
       setMask(`https://gamebottggw.ngrok.app/get_item_image_mask/${activeSkin}`); // костыль
-    } 
-    // else {
-    //   setSkin('');
-    //   setMask('');
-    // }
+    } else {
+      setSkin('');
+      setMask('');
+    }
   }, [userData, item, activeSkin]);
 
   return (
@@ -36,13 +35,15 @@ const UserAvatar: FC<IProps> = ({ item }) => {
       <div className={styles.userAvatar}>
         <div
           className={styles.userAvatar__avatarBackground}
-          style={{ backgroundImage: `url(${userSkin})` }}></div>
+          style={{ backgroundImage: `url(${userSkin})` }}
+        >
+        </div>
 
         <img
           src={userAvatar ? userAvatar : avatar}
           alt="user_avatar"
           className={styles.userAvatar__userAvatar}
-          style={{ maskImage: `url(${userMask})` }}
+        style={{ maskImage: `url(${userMask})` }}
         />
       </div>
     </>
