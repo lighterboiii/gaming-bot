@@ -28,7 +28,7 @@ const Shop: FC = () => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
   const [loading, setLoading] = useState(false);
-
+  console.log(goods);
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
@@ -46,7 +46,7 @@ const Shop: FC = () => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: userId });
+        // const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: userId });
         const shopGoods = await getReq<any>({ uri: getShopAvailableUri, userId: '' });
         dispatch(setShopData(shopGoods))
       } catch (error) {

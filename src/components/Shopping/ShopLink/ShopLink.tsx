@@ -1,16 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './ShopLink.module.scss';
 import { Link } from "react-router-dom";
-import useTelegram from "../../../hooks/useTelegram";
 import { shopUrl } from "../../../utils/routes";
 import gowinLogo from '../../../images/gowin.png';
 import girl from '../../../images/Shop_small_char.png';
 
 const ShopLink: FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { user } = useTelegram();
-
   return (
     <Link to={shopUrl} className={styles.shopLink}>
       <div className={styles.shopLink__content}>

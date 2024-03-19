@@ -18,7 +18,6 @@ interface ProductProps {
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const dispatch = useAppDispatch();
-
   const handleBuyItem = async (item: ItemData) => {
     try {
       const newItem = await putReq({ uri: buyShopItemUri, userId: userId, endpoint: `&item_id=${item.item_id}&count=${item.item_count}` });
@@ -27,12 +26,11 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
       console.log(error);
     }
   };
-  console.log(item);
+
   const handleSetActiveSkin = async (itemId: number) => {
-    const activeSkin = await putReq({ uri: setActiveSkinUri, userId: userId, endpoint: `${activeSkinValue}${itemId}` })
-    // const activeSkin = item.item_id;
+    const activeSkin = await putReq({ uri: setActiveSkinUri, userId: userId, endpoint: `${activeSkinValue}${itemId}` });
+    dispatch(setActiveSkin(itemId));
     console.log(activeSkin);
-    // dispatch(setActiveSkin(activeSkin));
   };
 
   return (
