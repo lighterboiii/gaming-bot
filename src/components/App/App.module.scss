@@ -7,7 +7,7 @@
 
 .app {
   @include indents();
-  @include size(100%, 100%);
+  @include size(100%, var(--tg-viewport-stable-height));
   text-align: center;
   background-color: $secondary-color;
 }
