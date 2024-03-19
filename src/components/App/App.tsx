@@ -25,11 +25,11 @@ const App: FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    tg.ready();
     tg.setHeaderColor('#d51845');
-    // tg.expand();
-    tg.isExpanded(true);
+    tg.expand();
+    tg.setSwipeSettings({swipeToReply: false});
     tg.enableClosingConfirmation();
+    tg.ready();
     window.scrollTo(0, 0);
   }, []);
   
