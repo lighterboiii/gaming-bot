@@ -21,7 +21,7 @@
   &__header {
     // @include size(100%, 20vh);
     @include size(100%, auto);
-    @include flex(column, center, center);
+    @include flex(column, space-between, center, 20px);
     // @include flex(column, space-around, center);
 
     // @media screen and (max-height: 690px) {
@@ -38,7 +38,7 @@
   }
 
   &__title {
-    @include indents(0, 0);
+    @include indents();
     color: $main-color;
     text-transform: uppercase;
     font-size: 32px;
@@ -46,9 +46,9 @@
     font-style: italic;
     line-height: 1;
 
-    @media screen and (max-height: 690px) {
-      margin-bottom: 10px;
-    }
+    // @media screen and (max-height: 690px) {
+    //   margin-bottom: 10px;
+    // }
   }
 
   &__buttons {

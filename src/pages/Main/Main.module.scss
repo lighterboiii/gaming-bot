@@ -54,5 +54,5 @@
 .hidden {
   @include size(100%, 0);
   overflow: hidden;
-  transition: height 1s ease;
+  // transition: height .3s ease-in-out;
 }
