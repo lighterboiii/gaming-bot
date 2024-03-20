@@ -27,7 +27,6 @@ const userSlice = createSlice({
       }
     },
     setActiveSkin: (state, action: PayloadAction<number>) => {
-      console.log(action.payload);
       if (state.userData) {
         state.userData.info.active_skin = action.payload;
       }
