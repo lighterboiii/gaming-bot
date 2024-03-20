@@ -3,7 +3,7 @@
 
 .referral {
   @include indents();
-  @include flex(column, flex-start, center, 20px);
+  @include flex(column, flex-start, center, 16px);
   @include size(100%, 100%);
   background-color: $tertiary-color;
   border-top-left-radius: $radius-15;
@@ -47,7 +47,7 @@
   }
 
   &__h3 {
-    @include indents(26px 26px 0, 0);
+    @include indents(16px 16px 0, 0);
     font-weight: 700;
     color: $main-color;
     font-size: 16px;
@@ -55,11 +55,10 @@
   }
 
   &__board {
-    @include indents(16px 16px 0, 0);
-    @include flex(column, space-between, flex-end, 16px);
+    @include indents(16px 16px 0, 0 20px 0 0);
+    @include flex(column, unset, flex-end, 16px);
     @include size(100%, auto);
-    flex-grow: 1;
-    overflow: scroll;
+    overflow: auto;
     z-index: 3;
   }
 }

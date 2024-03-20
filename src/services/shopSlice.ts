@@ -15,6 +15,7 @@ const shopSlice = createSlice({
     setShopData: (state, action: PayloadAction<any>) => {
       state.products = action.payload;
     },
+    // setDailyBonus: (state, action: <Pa)
   }
 });
 

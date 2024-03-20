@@ -70,7 +70,7 @@
   }
 
   &__board {
-    @include indents(16px, 0);
+    @include indents(16px, 0 20px 0 0);
     @include flex(column, space-between, flex-end, 16px);
     @include size(100%, calc(100vh - 40vh - 3 * 16px));
     overflow-y: auto;

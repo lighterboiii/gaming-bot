@@ -15,6 +15,7 @@ import { getDailyBonusUri, getShopAvailableUri, userId } from "../../api/request
 import { setShopData } from "../../services/shopSlice";
 import Loader from "../../components/Loader/Loader";
 import { ItemData } from "../../utils/types";
+import DailyBonus from "../../components/Shopping/Bonus/Bonus";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
@@ -26,25 +27,32 @@ const Shop: FC = () => {
 
   const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState('Магазин');
+
   const [showOverlay, setShowOverlay] = useState(false);
+  const [showBonusOverlay, setShowBonusOverlay] = useState(false);
+
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
   const [loading, setLoading] = useState(false);
   // сделать бонус
-  const [dailyBonus, setDailyBonus] = useState<any>()
-  // console.log(dailyBonus);
+  const [dailyBonusData, setDailyBonusData] = useState<any>()
+  console.log(dailyBonusData);
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
-// при изменении данных
+  // добавить флаг isCollectible жкаждому товару
+  const handleAddIsCollectible = () => {
+    const collectibleIds = collectibles?.map(id => Number(id));
+    const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
+      ...item,
+      isCollectible: collectibleIds?.includes(item.item_id),
+    }));
+    setGoods(shopDataWithCollectible);
+  }
+  // при изменении данных
   useEffect(() => {
     switch (activeButton) {
       case "Магазин": {
-        const collectibleIds = collectibles?.map(id => Number(id));
-        const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
-          ...item,
-          isCollectible: collectibleIds?.includes(item.item_id),
-        }));
-        setGoods(shopDataWithCollectible);
+        handleAddIsCollectible();
         break;
       }
       case "Лавка": {
@@ -58,19 +66,19 @@ const Shop: FC = () => {
   // при монтировании компонента
   useEffect(() => {
     setLoading(true);
-    const fetchData = async () => {
+    const fetchShopData = async () => {
       try {
-        // const isDailyBonusActive = await getReq<string>({ uri: getDailyBonusUri, userId: user?.id });
-        // console.log(isDailyBonusActive);
-        // setDailyBonus(isDailyBonusActive);
-        const shopGoods = await getReq<any>({ uri: getShopAvailableUri, userId: '' });
+        const isDailyBonusActive = await getReq<any>({ uri: getDailyBonusUri, userId: userId });
+        isDailyBonusActive.bonus === 'no' && setShowBonusOverlay(true);
+        setDailyBonusData(isDailyBonusActive);
+        const shopGoods = await getReq<ItemData[]>({ uri: getShopAvailableUri, userId: '' });
         dispatch(setShopData(shopGoods));
       } catch (error) {
         console.log(error);
       };
       setLoading(false);
     }
-    fetchData();
+    fetchShopData();
     setActiveButton('Магазин');
     tg.BackButton.show().onClick(() => {
       navigate(-1);
@@ -79,12 +87,12 @@ const Shop: FC = () => {
       tg.BackButton.hide();
     }
   }, []);
-// открыть страничку с данными скина
+  // открыть страничку с данными скина
   const handleShowItemDetails = (item: ItemData) => {
     setSelectedItem(item);
     toggleOverlay();
   };
-// обработчик клика по кнопке "приобретено"
+  // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
     setActiveButton("Приобретено");
     const collectibleIds = collectibles?.map(id => Number(id));
@@ -95,72 +103,74 @@ const Shop: FC = () => {
     }));
     setGoods(inventoryDataWithCollectible);
   };
+  // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
     setActiveButton("Магазин");
-    const collectibleIds = collectibles?.map(id => Number(id));
-    const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
-      ...item,
-      isCollectible: collectibleIds?.includes(item.item_id),
-    }));
-    setGoods(shopDataWithCollectible);
+    handleAddIsCollectible();
   };
 
   return (
     <div className={styles.shop}>
       {loading ? <Loader /> : (
         <>
-          {/* {dailyBonus.bonus !== 'no' ? (
-            <div>{dailyBonus}</div>
-          ) : ( */}
-            <>
-              <div className={styles.shop__header}>
-                <h2 className={styles.shop__title}>Магазин</h2>
-                <UserInfo />
-              </div><div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
-                <div className={styles.shop__buttons}>
-                  <div className={styles.shop__leftButtonsContainer}>
-                    <button
-                      className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
-                      onClick={handleClickShop}>
-                      Магазин
-                    </button>
-                    <button
-                      className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
-                      onClick={() => setActiveButton('Лавка')}>
-                      Лавка
-                    </button>
-                  </div>
-                  <button
-                    className={`${styles.shop__button} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
-                    onClick={handleClickInventory}
-                  >
-                    Приобретено
-                  </button>
-                </div>
-                <div className={styles.shop__goods}>
-                  {goods?.length > 0 ? (
-                    <>
-                      {goods.map((item: ItemData, index: number) => (
-                        <ShopItem
-                          item={item}
-                          index={index}
-                          onClick={() => handleShowItemDetails(item)} key={index} />
-                      )
-                      )}
-                    </>
-                  ) : (
-                    <div style={{ color: '#FFF' }}>Ничего нет :с</div>
+          <div className={styles.shop__header}>
+            <h2 className={styles.shop__title}>Магазин</h2>
+            <UserInfo />
+          </div><div className={`${styles.shop__content} ${(showOverlay || showBonusOverlay) ? styles.hidden : ''}`}>
+            <div className={styles.shop__buttons}>
+              <div className={styles.shop__leftButtonsContainer}>
+                <button
+                  className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
+                  onClick={handleClickShop}>
+                  Магазин
+                </button>
+                <button
+                  className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
+                  onClick={() => setActiveButton('Лавка')}>
+                  Лавка
+                </button>
+              </div>
+              <button
+                className={`${styles.shop__button} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
+                onClick={handleClickInventory}
+              >
+                Приобретено
+              </button>
+            </div>
+            <div className={styles.shop__goods}>
+              {goods?.length > 0 ? (
+                <>
+                  {goods.map((item: ItemData, index: number) => (
+                    <ShopItem
+                      item={item}
+                      index={index}
+                      onClick={() => handleShowItemDetails(item)} key={index} />
+                  )
                   )}
-                </div>
-              </div><Overlay
-                show={showOverlay}
+                </>
+              ) : (
+                <div style={{ color: '#FFF' }}>Ничего нет :с</div>
+              )}
+            </div>
+          </div>
+          <Overlay
+            show={showOverlay}
+            onClose={toggleOverlay}
+            children={
+              <Product
+                item={selectedItem}
                 onClose={toggleOverlay}
-                children={<Product
-                  item={selectedItem}
-                  onClose={toggleOverlay}
-                  isCollectible={selectedItem?.isCollectible} />} />
-            </>
-          {/* )} */}
+                isCollectible={selectedItem?.isCollectible}
+              />}
+          />
+          {(dailyBonusData && dailyBonusData?.bonus === 'no') &&
+            <Overlay
+              show={showBonusOverlay}
+              onClose={() => setShowBonusOverlay(!showBonusOverlay)}
+              children={
+                <DailyBonus bonus={dailyBonusData} 
+                />}
+            />}
         </>
       )}
     </div>

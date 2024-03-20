@@ -3,7 +3,7 @@
 
 .leader {
   @include position(relative);
-  @include size(95%, 60px);
+  @include size(90%, 60px);
   @include indents(0 16px, 0);
   @include flex(row, flex-end, center);
 

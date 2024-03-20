@@ -1,0 +1,25 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.bonus {
+  @include indents(16px, 0);
+  @include position(absolute, $bottom: 50%, $left: 0);
+  @include size(100%, auto);
+  transform: translateY(50%);
+  z-index: 4;
+  background-color: $tertiary-color;
+
+  &__button {
+    @include size(100%, 40px);
+  }
+
+  &__title {
+    @include indents();
+    color: $main-color;
+  }
+
+  &__text {
+    @include indents();
+    color: $main-color;
+  }
+}

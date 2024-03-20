@@ -41,7 +41,6 @@ const App: FC = () => {
         const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
         const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: userId });
         dispatch(setUserData(userDataResponse));
-        console.log(userDataResponse.info);
         dispatch(setUserPhoto(userPhotoResponse?.info));
         setLoading(false);
       } catch (error) {
