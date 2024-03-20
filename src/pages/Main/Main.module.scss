@@ -19,10 +19,11 @@
   &__content {
     @include flex(column, center, unset, 16px);
     @include size(100%, auto);
+    opacity: 1;
   }
 
   &__banner {
-    @include max-size(100%, 140px);
+    @include max-size(100%, 90px);
   }
 
   &__centralButtonsContainer {
@@ -43,7 +44,7 @@
 }
 
 .hidden {
-  @include size(100%, 0);
+  opacity: 0;
   overflow: hidden;
-  transition: height .3s ease;
+  transition: opacity .5s ease-in;
 }
