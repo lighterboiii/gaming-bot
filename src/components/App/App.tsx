@@ -18,6 +18,7 @@ import { setUserData, setUserPhoto } from '../../services/userSlice';
 import Game from '../../pages/Game/Game';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
+import { setProductsArchive } from '../../services/shopSlice';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -40,6 +41,8 @@ const App: FC = () => {
         // const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: user?.id });
         const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
         const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: userId });
+        const inventoryData = await getReq<any>({ uri: 'load_collectibles_data', userId: '' });
+        dispatch(setProductsArchive(inventoryData?.collectibles));
         dispatch(setUserData(userDataResponse));
         dispatch(setUserPhoto(userPhotoResponse?.info));
         setLoading(false);

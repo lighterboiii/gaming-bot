@@ -14,7 +14,7 @@ import { getReq } from "../../api/api";
 import { getDailyBonusUri, getShopAvailableUri, userId } from "../../api/requestData";
 import { setShopData } from "../../services/shopSlice";
 import Loader from "../../components/Loader/Loader";
-import { ItemData } from "../../utils/types";
+import { Bonus, ItemData } from "../../utils/types";
 import DailyBonus from "../../components/Shopping/Bonus/Bonus";
 
 const Shop: FC = () => {
@@ -24,18 +24,17 @@ const Shop: FC = () => {
   const dispatch = useAppDispatch();
   const shopData = useAppSelector(store => store.shop.products?.shop);
   const collectibles = useAppSelector(store => store.user.userData?.info.collectibles);
+  const archive = useAppSelector(store => store.shop.archive);
 
   const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState('Магазин');
 
   const [showOverlay, setShowOverlay] = useState(false);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
-
-  const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
   const [loading, setLoading] = useState(false);
-  // сделать бонус
+  const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
   const [dailyBonusData, setDailyBonusData] = useState<any>()
-  console.log(dailyBonusData);
+
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
@@ -86,6 +85,7 @@ const Shop: FC = () => {
       tg.BackButton.hide();
     }
   }, []);
+  // показать окно бонуса или нет
   useEffect(() => {
     dailyBonusData?.bonus !== 'no' ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
   }, [dailyBonusData])
@@ -98,7 +98,7 @@ const Shop: FC = () => {
   const handleClickInventory = () => {
     setActiveButton("Приобретено");
     const collectibleIds = collectibles?.map(id => Number(id));
-    const inventoryItems = shopData.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
+    const inventoryItems = archive.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
     const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
       ...item,
       isCollectible: collectibleIds?.includes(item.item_id),

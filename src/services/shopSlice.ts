@@ -2,10 +2,12 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface ShopState {
   products: any | null;
+  archive: any | null;
 }
 
 const initialState: ShopState = {
   products: null,
+  archive: null,
 }
 
 const shopSlice = createSlice({
@@ -15,10 +17,12 @@ const shopSlice = createSlice({
     setShopData: (state, action: PayloadAction<any>) => {
       state.products = action.payload;
     },
-    // setDailyBonus: (state, action: <Pa)
+    setProductsArchive: (state, action: PayloadAction<any>) => {
+      state.archive = action.payload;
+    }
   }
 });
 
-export const { setShopData } = shopSlice.actions;
+export const { setShopData, setProductsArchive } = shopSlice.actions;
 
 export default shopSlice.reducer;
