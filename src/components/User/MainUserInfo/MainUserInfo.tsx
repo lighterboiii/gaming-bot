@@ -8,12 +8,12 @@ import UserAvatar from "../UserAvatar/UserAvatar";
 import { useAppSelector } from "../../../services/reduxHooks";
 import CircleButton from "../../ui/CircleButton/CircleButton";
 
-interface iProps {
+interface IProps {
   toggleOverlay: () => void;
   isOverlayOpen?: boolean;
 }
 
-const MainUserInfo: FC<iProps> = ({ toggleOverlay, isOverlayOpen }) => {
+const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.user.userData);
 

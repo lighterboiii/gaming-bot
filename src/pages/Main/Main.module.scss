@@ -21,6 +21,10 @@
     @include size(100%, auto);
   }
 
+  &__banner {
+    @include size(100%, 140px);
+  }
+
   &__centralButtonsContainer {
     display: grid;
     grid-template-columns: 1fr 1fr;

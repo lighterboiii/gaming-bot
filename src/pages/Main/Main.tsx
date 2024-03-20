@@ -8,23 +8,36 @@ import BigButton from "../../components/ui/BigButton/BigButton";
 import ShopLink from "../../components/Shopping/ShopLink/ShopLink";
 import Overlay from "../../components/Overlay/Overlay";
 import Referral from "../../components/Referral/Referral";
+import BannerData from "../../components/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
+import { bannersData } from "../../utils/mockData";
 
 const Main: FC = () => {
-  const [showOverlay, setShowOverlay] = useState(false);
+  const [showReferralOverlay, setShowReferralOverlay] = useState(false);
+  const [showBannerOverlay, setShowBannerOverlay] = useState(false);
+  const [currentBanner, setCurrentBanner] = useState(bannersData[0]);
 
+  const handleBannerClick = (bannerData: any) => {
+    setCurrentBanner(bannerData);
+    setShowBannerOverlay(!showBannerOverlay)
+  };
+
+  const overlayActive = (showBannerOverlay || showReferralOverlay);
+  
   const toggleOverlay = () => {
-    setShowOverlay(!showOverlay);
+    setShowReferralOverlay(!showReferralOverlay);
   };
 
   return (
     <div className={styles.main}>
       <div className={styles.main__header}>
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
-        <MainUserInfo toggleOverlay={toggleOverlay} isOverlayOpen={showOverlay} />
+        <MainUserInfo toggleOverlay={toggleOverlay} isOverlayOpen={showReferralOverlay} />
       </div>
-      <div className={`${styles.main__content} ${showOverlay ? styles.hidden : ''}`}>
-        <AdvertisementBanner />
+      <div className={`${styles.main__content} ${overlayActive ? styles.hidden : ''}`}>
+        <div style={{ width: '100%', height: '140px' }} className={styles.main__banner}>
+          <AdvertisementBanner isOverlayOpen={showBannerOverlay} onBannerClick={handleBannerClick} />
+        </div>
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
             <SmallButton
@@ -54,7 +67,20 @@ const Main: FC = () => {
         </div>
         <ShopLink />
       </div>
-      <Overlay children={<Referral />} show={showOverlay} onClose={toggleOverlay} />
+      <Overlay
+        children={<Referral />}
+        show={showReferralOverlay}
+        onClose={toggleOverlay}
+      />
+      <Overlay
+        closeButton
+        children={
+          <BannerData
+          data={currentBanner}
+          />}
+        show={showBannerOverlay}
+        onClose={() => setShowBannerOverlay(!setShowBannerOverlay)}
+      />
     </div>
   )
 }

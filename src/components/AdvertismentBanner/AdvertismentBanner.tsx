@@ -4,11 +4,22 @@ import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { bannersData } from "../../utils/mockData";
 import { Link } from "react-router-dom";
 
-const AdvertisementBanner: FC = () => {
+interface IProps {
+  toggleOverlay?: () => void;
+  isOverlayOpen?: boolean;
+  onBannerClick: (bannerData: any) => void;
+}
+
+const AdvertisementBanner: FC<IProps> = ({ toggleOverlay, isOverlayOpen, onBannerClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
+  };
+
+  const handleBannerClick = () => {
+    const currentBannerData = bannersData[currentIndex];
+    onBannerClick(currentBannerData);
   };
 
   return (
@@ -23,9 +34,9 @@ const AdvertisementBanner: FC = () => {
           height={24}
         />
       </button>
-      <Link to={bannersData[currentIndex].link} className={styles.banner__link}>
+      <div className={styles.banner__link} onClick={handleBannerClick}>
         {/* <p className={styles.banner__text}>{bannersData[currentIndex].text}</p> */}
-      </Link>
+      </div>
       <button
         className={styles.banner__sliderButton}
         onClick={() => goToSlide((currentIndex + 1) % bannersData.length)}

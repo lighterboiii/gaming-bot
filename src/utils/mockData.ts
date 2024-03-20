@@ -1,23 +1,25 @@
 import banner1 from '../images/banner_1.png';
 import banner2 from '../images/banner_2.png';
 import banner3 from '../images/banner_3.png';
-console.log(banner1)
 // advertisement banner data
 export const bannersData = [
   {
     backgroundImage: `url(${banner1})`,
-    // text: 'Зови друзей! + 500!',
-    link: '/ad'
+    text: 'Но «цуефа» точно пришла из Китая и на самом деле это именно «цу-е-фа», через дефис. Означать это должно «пожалуйста, начинайте», что как будто логично для предварения игры.20 авг. 2023 г.',
+    link: '/ad',
+    title: 'Очень рекламное сообщение из баннера, которое очень рекламное'
   },
   {
     backgroundImage: `url(${banner2})`,
-    // text: 'Привет, корешок',
-    link: '/nfg'
+    text: 'Привет, корешок',
+    link: '/nfg',
+    title: 'Это название второго баннера, привет'
   },
   {
     backgroundImage: `url(${banner3})`,
-    // text: 'Это слайдер номер 3, проверяем',
-    link: '/404'
+    text: 'Это слайдер номер 3, проверяем',
+    link: '/404',
+    title: 'Помогите, меня заставляют работать'
   },
 ];
 // mock-leaders for leaderboard component

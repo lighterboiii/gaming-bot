@@ -4,8 +4,9 @@
 .banner {
   @include position(relative);
   @include indents(16px, 0);
-  // @include min-size(100%, 140px);
-  @include size(100%, 140px);
+  @include min-size(100%, 90px);
+  @include max-size(100%, 164px);
+  @include size(100%, 100%);
   @include flex(row, space-between, center);
   border: 1px $main-color solid;
   border-radius: $radius-12;
@@ -23,6 +24,7 @@
   }
 
   &__sliderButton {
+    @include size(auto, 100%);
     @include button-style-reset();
     align-self: flex-end;
   }
