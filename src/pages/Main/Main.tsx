@@ -23,7 +23,7 @@ const Main: FC = () => {
   };
 
   const overlayActive = (showBannerOverlay || showReferralOverlay);
-  
+
   const toggleOverlay = () => {
     setShowReferralOverlay(!showReferralOverlay);
   };
@@ -35,9 +35,9 @@ const Main: FC = () => {
         <MainUserInfo toggleOverlay={toggleOverlay} isOverlayOpen={showReferralOverlay} />
       </div>
       <div className={`${styles.main__content} ${overlayActive ? styles.hidden : ''}`}>
-        <div className={styles.main__banner}>
-          <AdvertisementBanner onBannerClick={handleBannerClick} />
-        </div>
+        {/* <div className={styles.main__banner}> */}
+        <AdvertisementBanner onBannerClick={handleBannerClick} />
+        {/* </div> */}
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
             <SmallButton
@@ -76,7 +76,7 @@ const Main: FC = () => {
         closeButton
         children={
           <BannerData
-          data={currentBanner}
+            data={currentBanner}
           />}
         show={showBannerOverlay}
         onClose={() => setShowBannerOverlay(!setShowBannerOverlay)}

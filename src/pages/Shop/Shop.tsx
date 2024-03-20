@@ -172,7 +172,9 @@ const Shop: FC = () => {
               show={showBonusOverlay}
               onClose={() => setShowBonusOverlay(false)}
               children={
-                <DailyBonus bonus={dailyBonusData}
+                <DailyBonus 
+                bonus={dailyBonusData}
+                closeOverlay={() => setShowBonusOverlay(!showBonusOverlay)}
                 />}
             />}
         </>

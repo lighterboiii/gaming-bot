@@ -13,8 +13,8 @@
   &__info {
     @include size(100%, auto);
     @include flex(column, center, center, 16px);
-    // @include position(absolute, $left: 50%, $bottom: 80px);
-    // transform: translate(-50%);
+    @include position(absolute, $left: 50%, $bottom: 80px);
+    transform: translate(-50%);
   }
 
   &__type {

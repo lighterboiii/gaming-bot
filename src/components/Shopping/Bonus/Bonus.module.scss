@@ -10,9 +10,17 @@
     @include size(100%, 40px);
   }
 
+  &__layout {
+    @include size(100%, calc(100% - 60px));
+    @include indents();
+  }
+
   &__content {
+    @include indents(0 16px, 0);
     @include size(100%, auto);
     @include flex(column, flex-start, center, 16px);
+    @include position(absolute, $left: 50%, $bottom: 50%);
+    transform: translate(-50%, 50%);
   }
 
   &__titleContainer {
@@ -21,7 +29,7 @@
   }
 
   &__title {
-    @include indents();
+    @include indents(16px 16px 0, 0);
     text-transform: uppercase;
     font-weight: 700;
     color: $secondary-color;

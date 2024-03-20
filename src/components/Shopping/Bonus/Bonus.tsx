@@ -9,9 +9,10 @@ import { newTokensValue, setTokensValueUri, userId } from "../../../api/requestD
 
 interface IProps {
   bonus: Bonus;
+  closeOverlay: () => void;
 }
 
-const DailyBonus: FC<IProps> = ({ bonus }) => {
+const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dailyBonus = bonus.bonus;
   console.log(dailyBonus);
   const dispatch = useAppDispatch();
@@ -19,18 +20,18 @@ const DailyBonus: FC<IProps> = ({ bonus }) => {
   const handleGetBonus = async (item: Bonus) => {
     switch (item.bonus.bonus_type) {
       case "tokens":
-        await putReq<any>({ 
-          uri: setTokensValueUri, 
-          endpoint: newTokensValue, 
+        await putReq<any>({
+          uri: setTokensValueUri,
+          endpoint: newTokensValue,
           userId: userId,
           // userId: user?.id
         });
         dispatch(setNewTokensValue(item.bonus.bonus_count));
         break;
       case "exp":
-        await putReq<any>({ 
-          uri: '/add_exp', 
-          endpoint: "/new_exp", 
+        await putReq<any>({
+          uri: '/add_exp',
+          endpoint: "/new_exp",
           userId: userId,
           // userId: user?.id
         });
@@ -40,20 +41,22 @@ const DailyBonus: FC<IProps> = ({ bonus }) => {
         dispatch(setCollectibles(item.bonus.bonus_item_id));
         break
     }
-
+    closeOverlay();
   };
 
   return (
     <div key={dailyBonus.bonus_item_id} className={styles.bonus}>
-      <div className={styles.bonus__titleContainer}>
-        <h2 className={styles.bonus__title}>Ежедневная награда</h2>
-        <p className={styles.bonus__text}>Вернитесь завтра, чтобы получить ещё</p>
-      </div>
-      <div className={styles.bonus__content}>
-        <img src={dailyBonus.bonus_image} alt="bonus_image" className={styles.bonus__image} />
-        <p className={styles.bonus__text}>{dailyBonus.bonus_type}</p>
-        <div className={styles.bonus__button}>
-          <Button handleClick={() => handleGetBonus(bonus)} text="Забрать" />
+      <div className={styles.bonus_layout}>
+        <div className={styles.bonus__titleContainer}>
+          <h2 className={styles.bonus__title}>Ежедневная награда</h2>
+          <p className={styles.bonus__text}>Вернитесь завтра, чтобы получить ещё</p>
+        </div>
+        <div className={styles.bonus__content}>
+          <img src={dailyBonus.bonus_image} alt="bonus_image" className={styles.bonus__image} />
+          <p className={styles.bonus__text}>{dailyBonus.bonus_type}</p>
+          <div className={styles.bonus__button}>
+            <Button handleClick={() => handleGetBonus(bonus)} text="Забрать" />
+          </div>
         </div>
       </div>
     </div>

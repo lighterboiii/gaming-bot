@@ -98,7 +98,7 @@
 }
 /* Миксин для дочернего компонента overlay */
 @mixin children-layout {
-  @include indents(16px 16px 0, 0);
+  @include indents();
   @include flex(column, flex-start, center, 16px);
   @include size(100%, 100%);
   background-color: $tertiary-color;
@@ -111,7 +111,7 @@
   @include indents(16px, 0);
   @include min-size(100%, 90px);
   @include max-size(100%, 140px);
-  @include size(100%, auto);
+  @include size(100%, 100%);
   @include flex(row, space-between, center);
   border-radius: $radius-12;
 }
