@@ -7,6 +7,10 @@
   @include flex(row, center, center);
   @include size(100%, 100%);
 
+  @media screen and (max-width: 379px) {
+    @include max-size(90px, 90px);
+  }
+
   &__avatarBackground {
     @include position(absolute, $top: 0, $left: 0);
     @include size(100%, 100%);
