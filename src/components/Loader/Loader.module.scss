@@ -3,6 +3,13 @@
 
 .loader {
   @include size(100%, 100vh);
-  @include flex(column, center, center);
+  @include flex(column, center, center, 2px);
   color: $main-color;
+
+  &__text {
+    @include indents;
+    color: $main-color;
+    font-style: italic;
+    font-weight: 200;
+  }
 }

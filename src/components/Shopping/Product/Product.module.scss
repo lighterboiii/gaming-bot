@@ -7,7 +7,8 @@
   &__avatarContainer {
     @include indents();
     @include position(relative);
-    @include size(160px, 160px);
+    @include size(156px, 156px);
+    z-index: 5;
   }
 
   &__info {
@@ -15,6 +16,7 @@
     @include flex(column, center, center, 16px);
     @include position(absolute, $left: 50%, $bottom: 80px);
     transform: translate(-50%);
+    z-index: 1;
   }
 
   &__type {
