@@ -28,6 +28,9 @@
     font-size: 14px;
     color: $main-color;
     text-align: center;
+    text-overflow: ellipsis;
+    white-space: wrap;
+    overflow: hidden;
   }
 
   &__button {
