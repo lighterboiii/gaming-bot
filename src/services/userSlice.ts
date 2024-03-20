@@ -40,14 +40,19 @@ const userSlice = createSlice({
     clearUserData: (state) => {
       state.userData = null;
     },
-    setCoinsValue: (state, action: PayloadAction<number>) => {
+    setCoinsValueAfterBuy: (state, action: PayloadAction<number>) => {
       if (state.userData) {
-        state.userData.info.coins += action.payload;
+        state.userData.info.coins = state.userData.info.coins - action.payload;
+      }
+    },
+    setTokensValueAfterBuy: (state, action: PayloadAction<number>) => {
+      if (state.userData) {
+        state.userData.info.tokens = state.userData.info.tokens - action.payload;
       }
     },
   }
 });
 
-export const { setUserData, clearUserData, setUserPhoto, setActiveSkin, setCollectibles } = userSlice.actions;
+export const { setUserData, setCoinsValueAfterBuy, setTokensValueAfterBuy, setUserPhoto, setActiveSkin, setCollectibles } = userSlice.actions;
 
 export default userSlice.reducer;

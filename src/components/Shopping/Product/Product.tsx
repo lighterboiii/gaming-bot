@@ -3,12 +3,11 @@ import { FC, useState } from "react";
 import styles from './Product.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
-import CrossIcon from "../../../icons/Cross/Cross";
 import { putReq } from "../../../api/api";
 import { activeSkinValue, buyShopItemUri, setActiveSkinUri, userId } from "../../../api/requestData";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { ItemData } from "../../../utils/types";
-import { setActiveSkin, setCollectibles } from "../../../services/userSlice";
+import { setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setTokensValueAfterBuy } from "../../../services/userSlice";
 import useTelegram from "../../../hooks/useTelegram";
 
 interface ProductProps {
@@ -26,10 +25,26 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const handleBuyItem = async (item: ItemData) => {
     try {
       // await putReq({ uri: buyShopItemUri, userId: user?.id, endpoint: `&item_id=${item.item_id}&count=${item.item_count}` });
-      await putReq({ uri: buyShopItemUri, userId: userId, endpoint: `&item_id=${item.item_id}&count=${item.item_count}` });
+      const res: any = await putReq({
+        uri: buyShopItemUri,
+        userId: userId,
+        endpoint: `&item_id=${item.item_id}&count=${1}`
+      });
       setMessageShown(true);
-      setMessage("Успешная покупка");
-      dispatch(setCollectibles(item?.item_id));
+      switch (res.message) {
+        case "out":
+          setMessage("Товара нет в наличии");
+          break;
+        case "money":
+          setMessage("Недостаточно средств");
+          break;
+        default:
+          setMessage("Успешная покупка");
+          dispatch(setCollectibles(item.item_id));
+          dispatch(setCoinsValueAfterBuy(item.item_price_coins));
+          dispatch(setTokensValueAfterBuy(item.item_price_tokens));
+      }
+
       setTimeout(async () => {
         await putReq({ uri: setActiveSkinUri, userId: userId, endpoint: `${activeSkinValue}${item.item_id}` });
         dispatch(setActiveSkin(item.item_id));
@@ -47,7 +62,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const handleSetActiveSkin = async (itemId: number) => {
     // await putReq({ uri: setActiveSkinUri, userId: user?.id, endpoint: `${activeSkinValue}${itemId}` });
     const res = await putReq({ uri: setActiveSkinUri, userId: userId, endpoint: `${activeSkinValue}${itemId}` });
-    // dispatch(setCollectibles(item?.item_id));
+    console.log(res);
     dispatch(setActiveSkin(itemId));
     onClose();
   };
