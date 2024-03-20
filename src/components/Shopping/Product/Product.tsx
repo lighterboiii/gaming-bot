@@ -46,7 +46,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
 
   const handleSetActiveSkin = async (itemId: number) => {
     // await putReq({ uri: setActiveSkinUri, userId: user?.id, endpoint: `${activeSkinValue}${itemId}` });
-    await putReq({ uri: setActiveSkinUri, userId: userId, endpoint: `${activeSkinValue}${itemId}` });
+    const res = await putReq({ uri: setActiveSkinUri, userId: userId, endpoint: `${activeSkinValue}${itemId}` });
     // dispatch(setCollectibles(item?.item_id));
     dispatch(setActiveSkin(itemId));
     onClose();

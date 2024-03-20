@@ -43,7 +43,7 @@ const UserAvatar: FC<IProps> = ({ item }) => {
           src={userAvatar ? userAvatar : avatar}
           alt="user_avatar"
           className={styles.userAvatar__userAvatar}
-        style={{ maskImage: `url(${userMask})` }}
+          style={{ maskImage: `url(${userMask})` }}
         />
       </div>
     </>

@@ -15,6 +15,6 @@
   &__avatarContainer {
     @include indents();
     @include position(relative);
-    @include size(90px, 90px);
+    @include size(110px, 110px);
   }
 }

@@ -16,10 +16,11 @@
   }
   
   &__userAvatar {
-    @include size(100%, 100%);
-    @include position(absolute, $top: 0, $left: 0);
+    @include size(65%, 65%);
+    // @include position(absolute, $top: 0, $left: 0);
     z-index: 1;
     mask-composite: exclude;
-    mask-size: cover;
+    mask-size: 160%;
+    mask-position: center;
   }
 }

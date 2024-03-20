@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import styles from './AdvertismentBanner.module.scss';
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { bannersData } from "../../utils/mockData";
-import { Link } from "react-router-dom";
 
 interface IProps {
   toggleOverlay?: () => void;
