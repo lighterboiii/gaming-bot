@@ -13,7 +13,7 @@ export const buyShopItemUri = `shop_buy_item?user_id=`;
 export const itemIdValue = '&item_id=';
 export const itemCount = '&count=1';
 
-export const setCollectiblesUri = 'setcollectibles?user_id=';
+export const setCollectiblesUri = 'add_collectible?user_id=';
 export const setActiveSkinUri = 'setactive_skin?user_id=';
 
 export const collectiblesValue = '&collectibles=';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import { Bonus } from "../../../utils/types";
 import styles from './Bonus.module.scss';
@@ -5,7 +6,7 @@ import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { setCollectibles, setNewCoinsValue, setNewTokensValue } from "../../../services/userSlice";
 import { putReq } from "../../../api/api";
-import { newTokensValue, setTokensValueUri, userId } from "../../../api/requestData";
+import { newTokensValue, setCollectiblesUri, setTokensValueUri, userId } from "../../../api/requestData";
 
 interface IProps {
   bonus: Bonus;
@@ -14,30 +15,34 @@ interface IProps {
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dailyBonus = bonus.bonus;
-  console.log(dailyBonus);
+  // console.log(dailyBonus);
   const dispatch = useAppDispatch();
 
   const handleGetBonus = async (item: Bonus) => {
     switch (item.bonus.bonus_type) {
       case "tokens":
-        await putReq<any>({
-          uri: setTokensValueUri,
-          endpoint: newTokensValue,
-          userId: userId,
-          // userId: user?.id
-        });
-        dispatch(setNewTokensValue(item.bonus.bonus_count));
+        // await putReq<any>({
+        //   uri: setTokensValueUri,
+        //   endpoint: newTokensValue,
+        //   userId: userId,
+        //   // userId: user?.id
+        // });
+        // dispatch(setNewTokensValue(item.bonus.bonus_count));
+        closeOverlay();
         break;
       case "exp":
-        await putReq<any>({
-          uri: '/add_exp',
-          endpoint: "/new_exp",
-          userId: userId,
-          // userId: user?.id
-        });
-        dispatch(setNewCoinsValue(item.bonus.bonus_count));
+        closeOverlay();
+        // await putReq<any>({
+        //   uri: '/add_exp',
+        //   endpoint: "/new_exp",
+        //   userId: userId,
+        //   // userId: user?.id
+        // });
+        // dispatch(setNewCoinsValue(item.bonus.bonus_count));
         break;
       default:
+        const itemId = Number(item.bonus.bonus_item_id);
+        await putReq({ uri: setCollectiblesUri, endpoint: `&add_collectible=${itemId}`, userId: userId });
         dispatch(setCollectibles(item.bonus.bonus_item_id));
         break
     }

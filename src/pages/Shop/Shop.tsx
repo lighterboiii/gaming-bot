@@ -39,9 +39,9 @@ const Shop: FC = () => {
     setShowOverlay(!showOverlay);
   };
   // добавить флаг isCollectible жкаждому товару
-  const handleAddIsCollectible = () => {
+  const handleAddIsCollectible = (data: any) => {
     const collectibleIds = collectibles?.map(id => Number(id));
-    const shopDataWithCollectible = shopData?.map((item: ItemData) => ({
+    const shopDataWithCollectible = data?.map((item: ItemData) => ({
       ...item,
       isCollectible: collectibleIds?.includes(item.item_id),
     }));
@@ -51,7 +51,7 @@ const Shop: FC = () => {
   useEffect(() => {
     switch (activeButton) {
       case "Магазин": {
-        handleAddIsCollectible();
+        handleAddIsCollectible(shopData);
         break;
       }
       case "Лавка": {
@@ -108,7 +108,7 @@ const Shop: FC = () => {
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
     setActiveButton("Магазин");
-    handleAddIsCollectible();
+    handleAddIsCollectible(archive);
   };
 
   return (

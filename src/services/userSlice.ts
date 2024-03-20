@@ -34,7 +34,7 @@ const userSlice = createSlice({
     setCollectibles: (state, action: PayloadAction<number>) => {
       if (state.userData && state.userData.info) {
         const collectibles = [...state.userData.info.collectibles, action.payload];
-        state.userData.info.collectibles = collectibles;
+        state.userData.info.collectibles = [...collectibles];
       }
     },
     clearUserData: (state) => {
