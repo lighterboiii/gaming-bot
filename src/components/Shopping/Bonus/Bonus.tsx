@@ -5,7 +5,7 @@ import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { setCollectibles, setNewCoinsValue, setNewTokensValue } from "../../../services/userSlice";
 import { putReq } from "../../../api/api";
-import { newCoinsValue, newTokensValue, setCoinsValueUri, setTokensValueUri, userId } from "../../../api/requestData";
+import { newTokensValue, setTokensValueUri, userId } from "../../../api/requestData";
 
 interface IProps {
   bonus: Bonus;
@@ -13,6 +13,7 @@ interface IProps {
 
 const DailyBonus: FC<IProps> = ({ bonus }) => {
   const dailyBonus = bonus.bonus;
+  console.log(dailyBonus);
   const dispatch = useAppDispatch();
 
   const handleGetBonus = async (item: Bonus) => {
@@ -26,10 +27,10 @@ const DailyBonus: FC<IProps> = ({ bonus }) => {
         });
         dispatch(setNewTokensValue(item.bonus.bonus_count));
         break;
-      case "coins":
+      case "exp":
         await putReq<any>({ 
-          uri: setCoinsValueUri, 
-          endpoint: newCoinsValue, 
+          uri: '/add_exp', 
+          endpoint: "/new_exp", 
           userId: userId,
           // userId: user?.id
         });

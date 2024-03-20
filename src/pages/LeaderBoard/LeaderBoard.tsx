@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from './LeaderBoard.module.scss';
 import CircleButton from "../../components/ui/CircleButton/CircleButton";
 import { useNavigate } from "react-router-dom";
@@ -8,16 +8,29 @@ import useTelegram from "../../hooks/useTelegram";
 import { leadersData } from "../../utils/mockData";
 import UserContainer from "../../components/User/UserContainer/UserContainer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import { getReq } from "../../api/api";
+import { getLeadersUri } from "../../api/requestData";
 
 const LeaderBoard: FC = () => {
-  const navigate = useNavigate();
   const { user, tg } = useTelegram();
+  const navigate = useNavigate();
+  const [leaderBoard, setLeaderBoard] = useState<any>(null);
 
+  console.log(leaderBoard?.top_users);
   useEffect(() => {
+    const fetchLeadersData = async () => {
+      try {
+        const leaders = await getReq<any>({ uri: getLeadersUri, userId: '' });
+        setLeaderBoard(leaders?.top_users);
+      } catch (error) {
+        console.log(error);
+      }
+    }
     window.scrollTo(0, 0);
     tg.BackButton.show().onClick(() => {
       navigate(-1);
     });
+    fetchLeadersData();
     return () => {
       tg.BackButton.hide();
     }
@@ -29,9 +42,6 @@ const LeaderBoard: FC = () => {
   return (
     <div className={styles.leaderBoard}>
       <div className={styles.leaderBoard__header}>
-        {/* <button onClick={() => navigate(-1)} className={styles.leaderBoard__chevron}>
-          <CircleButton chevronPosition="left" color="#d51845" isWhiteBackground iconType="chevron" />
-        </button> */}
         <h2 className={styles.leaderBoard__heading}>Таблица <br /> лидеров</h2>
       </div>
       <div className={styles.leaderBoard__leader}>
@@ -46,7 +56,7 @@ const LeaderBoard: FC = () => {
         </div>
       </div>
       <div className={styles.leaderBoard__board}>
-        {leadersData.filter(leader => leader.id !== 1).map((leader: any, index: number) =>
+        {leadersData.filter((leader: any) => leader.id !== 1).map((leader: any, index: number) =>
           <UserContainer leader={leader} key={leader.id} index={index} length={leadersData.length} darkBackground />
         )
         }

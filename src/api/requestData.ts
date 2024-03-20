@@ -7,6 +7,7 @@ export const getUserInfoUri = `getuserinfo?user_id=`;
 export const getUserAvatarUri = `getuserphoto?user_id=`;
 export const getDailyBonusUri = `get_daily_check?user_id=`;
 export const getShopAvailableUri = `get_shop_available`;
+export const getLeadersUri = `get_leaderboard_top_users`;
 
 export const buyShopItemUri = `shop_buy_item?user_id=`;
 export const itemIdValue = '&item_id=';

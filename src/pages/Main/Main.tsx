@@ -35,9 +35,9 @@ const Main: FC = () => {
         <MainUserInfo toggleOverlay={toggleOverlay} isOverlayOpen={showReferralOverlay} />
       </div>
       <div className={`${styles.main__content} ${overlayActive ? styles.hidden : ''}`}>
-        {/* <div className={styles.main__banner}> */}
+        <div className={styles.main__banner}>
           <AdvertisementBanner onBannerClick={handleBannerClick} />
-        {/* </div> */}
+        </div>
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
             <SmallButton

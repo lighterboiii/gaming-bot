@@ -19,7 +19,7 @@
 
   &__closeButton {
     @include button-style-reset();
-    @include position(absolute, $left: 50%, $bottom: 24px);
+    @include position(absolute, $left: 50%, $bottom: 16px);
     transform: translate(-50%);
     @include flex(row, center, center);
     @include size(40px, 40px);

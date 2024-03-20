@@ -2,12 +2,7 @@
 @use '../../../stylesheets/variables' as *;
 
 .product {
-  @include indents();
-  @include flex(column, flex-start, center, 20px);
-  @include size(100%, 100%);
-  background-color: $tertiary-color;
-  border-top-left-radius: $radius-15;
-  border-top-right-radius: $radius-15;
+  @include children-layout();
 
   &__avatarContainer {
     @include indents();
@@ -18,8 +13,8 @@
   &__info {
     @include size(100%, auto);
     @include flex(column, center, center, 16px);
-    @include position(absolute, $left: 50%, $bottom: 80px);
-    transform: translate(-50%);
+    // @include position(absolute, $left: 50%, $bottom: 80px);
+    // transform: translate(-50%);
   }
 
   &__type {

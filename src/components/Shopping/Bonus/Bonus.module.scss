@@ -2,17 +2,12 @@
 @use '../../../stylesheets/variables' as *;
 
 .bonus {
-  @include indents(16px, 0);
-  @include position(absolute, $bottom: 50%, $left: 0);
-  @include size(100%, 100%);
-  @include flex(column, flex-start, center, 20px);
-  transform: translateY(50%);
+  @include children-layout();
   background-color: $main-color;
+  justify-content: flex-start;
 
   &__button {
     @include size(100%, 40px);
-    @include position(absolute, $left: 50%, $bottom: 80px);
-    transform: translate(-50%);
   }
 
   &__content {

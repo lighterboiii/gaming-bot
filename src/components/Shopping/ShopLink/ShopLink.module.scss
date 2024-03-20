@@ -2,11 +2,7 @@
 @use '../../../stylesheets/variables' as *;
 
 .shopLink {
-  @include position(relative);
-  @include indents(16px, 0);
-  @include size(100%, 140px);
-  @include flex(row, space-between, center, 12px);
-  border-radius: $radius-15;
+  @include big-link-layout();
   text-decoration: none;
   overflow: hidden;
   background: url('../../../images/Shop_small_bg.png');
@@ -45,7 +41,7 @@
   }
 
   &__char {
-    @include size(138%, auto);
+    @include size(140%, auto);
     @include position(absolute, $left: 48%, $top: 49%);
     transform: translate(-50%, -50%);
   }

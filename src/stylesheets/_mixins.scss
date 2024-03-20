@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 /* Миксины для всего проекта */
 
 /* Flex-блок */
@@ -55,17 +57,12 @@
 }
 
 /* Свойства шрифта и строки */
-@mixin font($font-family, $font-size: inherit, $font-weight: inherit, $color: inherit){
-  font-family: $font-family, sans-serif;
-  font-size: $font-size;
-  font-weight: $font-weight;
-  color: $color;
-};
-
-@mixin line-sizes($line-height: inherit, $letter-spacing: inherit) {
-  line-height: $line-height;
-  letter-spacing: $letter-spacing;
-}
+// @mixin font($font-family, $font-size: inherit, $font-weight: inherit, $color: inherit){
+//   font-family: $font-family, sans-serif;
+//   font-size: $font-size;
+//   font-weight: $font-weight;
+//   color: $color;
+// };
 
 /* Обрезание текста - эллипсис */
 @mixin ellipsis{
@@ -92,27 +89,6 @@
   background: transparent;
 }
 
-/* Миксины для повторяющихся элементов */
-@mixin colored-button($color, $bg-color, $border-color, $border-color-hover) {
-  color: $color;
-  background-color: $bg-color;
-  border-color: $border-color;
-  &:hover {
-    border-color: $border-color-hover;
-  }
-}
-
-/* Сообщение для ошибки в формах авторизации */
-@mixin incorrect-text($text-align) {
-  @include font('PT Sans', vars.$xxxs-font-size, vars.$normal, vars.$error-default);
-  @include line-sizes(vars.$xl-line-height, vars.$m-letter-space);
-  position: absolute;
-  margin: 2px 0 0 0;
-  left: 0;
-  right: 0;
-  text-align: $text-align;
-}
-
 @mixin hide-scroll {
   &::-webkit-scrollbar {
     display: none;
@@ -120,4 +96,22 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
+/* Миксин для дочернего компонента overlay */
+@mixin children-layout {
+  @include indents(16px 16px 0, 0);
+  @include flex(column, flex-start, center, 16px);
+  @include size(100%, 100%);
+  background-color: $tertiary-color;
+  border-top-left-radius: $radius-15;
+  border-top-right-radius: $radius-15;
+}
+/* миксин для стилизации больших кнопок */
+@mixin big-link-layout {
+  @include position(relative);
+  @include indents(16px, 0);
+  @include min-size(100%, 90px);
+  @include max-size(100%, 140px);
+  @include size(100%, auto);
+  @include flex(row, space-between, center);
+  border-radius: $radius-12;
+}

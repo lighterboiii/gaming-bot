@@ -2,24 +2,19 @@
 @use '../../stylesheets/variables' as *;
 
 .banner {
-  @include position(relative);
-  @include indents(16px, 0);
-  @include min-size(100%, 90px);
-  @include max-size(100%, 164px);
-  @include size(100%, 100%);
-  @include flex(row, space-between, center);
+  @include big-link-layout();
   border: 1px $main-color solid;
-  border-radius: $radius-12;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: left;
+  box-sizing: border-box;
 
   @media screen and (min-height: 768px) and (max-height: 1024px) {
     @include size(100%, 164px);
   }
 
   &__link {
-    @include size(100%, 50%);
+    @include size(100%, 100%);
     text-decoration: none;
   }
 

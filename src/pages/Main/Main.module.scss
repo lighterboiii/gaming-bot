@@ -22,7 +22,7 @@
   }
 
   &__banner {
-    @include size(100%, 140px);
+    @include max-size(100%, 140px);
   }
 
   &__centralButtonsContainer {
