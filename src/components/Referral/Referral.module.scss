@@ -35,7 +35,7 @@
     @include size(calc(100% - 32px), unset);
     @include indents();
     @include flex(row, space-between, center);
-    font-weight: 500;
+    font-weight: 400;
     font-size: 16px;
     color: $main-color;
   }

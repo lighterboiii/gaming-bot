@@ -4,22 +4,39 @@
 .bonus {
   @include indents(16px, 0);
   @include position(absolute, $bottom: 50%, $left: 0);
-  @include size(100%, auto);
+  @include size(100%, 100%);
+  @include flex(column, flex-start, center, 20px);
   transform: translateY(50%);
-  z-index: 4;
-  background-color: $tertiary-color;
+  background-color: $main-color;
 
   &__button {
     @include size(100%, 40px);
   }
 
+  &__content {
+    @include size(100%, auto);
+    @include flex(column, flex-start, center, 16px);
+  }
+
+  &__titleContainer {
+    @include size(100%, auto);
+    @include flex(column, center, center, 8px);
+  }
+
   &__title {
     @include indents();
-    color: $main-color;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: $secondary-color;
+  }
+
+  &__image {
+    @include size(130px, 130px);
   }
 
   &__text {
     @include indents();
-    color: $main-color;
+    color: $black-color;
+    font-weight: 200;
   }
 }

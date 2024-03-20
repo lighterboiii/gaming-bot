@@ -69,7 +69,6 @@ const Shop: FC = () => {
     const fetchShopData = async () => {
       try {
         const isDailyBonusActive = await getReq<any>({ uri: getDailyBonusUri, userId: userId });
-        isDailyBonusActive.bonus === 'no' && setShowBonusOverlay(true);
         setDailyBonusData(isDailyBonusActive);
         const shopGoods = await getReq<ItemData[]>({ uri: getShopAvailableUri, userId: '' });
         dispatch(setShopData(shopGoods));
@@ -87,6 +86,9 @@ const Shop: FC = () => {
       tg.BackButton.hide();
     }
   }, []);
+  useEffect(() => {
+    dailyBonusData?.bonus !== 'no' ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
+  }, [dailyBonusData])
   // открыть страничку с данными скина
   const handleShowItemDetails = (item: ItemData) => {
     setSelectedItem(item);
@@ -164,11 +166,11 @@ const Shop: FC = () => {
                 isCollectible={selectedItem?.isCollectible}
               />}
           />
-          {(dailyBonusData && dailyBonusData?.bonus === 'no') &&
+          {dailyBonusData &&
             <Overlay
               closeButton
               show={showBonusOverlay}
-              onClose={() => setShowBonusOverlay(!showBonusOverlay)}
+              onClose={() => setShowBonusOverlay(false)}
               children={
                 <DailyBonus bonus={dailyBonusData}
                 />}
