@@ -3,6 +3,7 @@
 
 .banner {
   @include big-link-layout();
+  @include position(relative);
   border: 1px $main-color solid;
   background-size: cover;
   background-repeat: no-repeat;
@@ -16,6 +17,7 @@
   &__link {
     @include size(100%, 100%);
     text-decoration: none;
+    @include position(absolute, $top: 0, $left: 0);
   }
 
   &__sliderButton {
