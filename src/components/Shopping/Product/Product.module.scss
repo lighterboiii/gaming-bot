@@ -38,15 +38,6 @@
     @include flex(column, center, center, 8px);
   }
 
-  &__closeButton {
-    @include button-style-reset();
-    @include indents();
-    @include flex(row, center, center);
-    @include size(40px, 40px);
-    border-radius: 40px;
-    background-color: $black-color;
-  }
-
   &__notification {
     @include indents();
     @include size(100%, 100%);

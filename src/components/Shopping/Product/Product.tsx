@@ -81,12 +81,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
                 <Button text={`💵 ${item?.item_price_coins}`} handleClick={() => handleBuyItem(item)} isWhiteBackground />
               </div>
             )}
-          </div><button
-            onClick={onClose}
-            className={styles.product__closeButton}
-          >
-            <CrossIcon width={20} height={20} />
-          </button>
+          </div>
         </>
       )}
     </div>

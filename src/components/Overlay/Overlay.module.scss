@@ -16,6 +16,17 @@
   &__children {
     @include size(100%, 100%);
   }
+
+  &__closeButton {
+    @include position(absolute, $left: 50%, $bottom: 16px);
+    transform: translate(-50%);
+    @include button-style-reset();
+    @include indents();
+    @include flex(row, center, center);
+    @include size(40px, 40px);
+    border-radius: 40px;
+    background-color: $black-color;
+  }
 }
 
 .overlay.active {

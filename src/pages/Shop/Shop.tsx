@@ -154,6 +154,7 @@ const Shop: FC = () => {
             </div>
           </div>
           <Overlay
+            closeButton
             show={showOverlay}
             onClose={toggleOverlay}
             children={
@@ -165,10 +166,11 @@ const Shop: FC = () => {
           />
           {(dailyBonusData && dailyBonusData?.bonus === 'no') &&
             <Overlay
+              closeButton
               show={showBonusOverlay}
               onClose={() => setShowBonusOverlay(!showBonusOverlay)}
               children={
-                <DailyBonus bonus={dailyBonusData} 
+                <DailyBonus bonus={dailyBonusData}
                 />}
             />}
         </>
