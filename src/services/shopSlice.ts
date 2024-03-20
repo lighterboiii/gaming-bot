@@ -11,7 +11,7 @@ const initialState: ShopState = {
 }
 
 const shopSlice = createSlice({
-  name: 'user',
+  name: 'shop',
   initialState,
   reducers: {
     setShopData: (state, action: PayloadAction<any>) => {

@@ -4,12 +4,10 @@ import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { bannersData } from "../../utils/mockData";
 
 interface IProps {
-  toggleOverlay?: () => void;
-  isOverlayOpen?: boolean;
   onBannerClick: (bannerData: any) => void;
 }
 
-const AdvertisementBanner: FC<IProps> = ({ toggleOverlay, isOverlayOpen, onBannerClick }) => {
+const AdvertisementBanner: FC<IProps> = ({ onBannerClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToSlide = (index: number) => {

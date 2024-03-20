@@ -15,7 +15,6 @@ import { getReq } from '../../api/api';
 import { getUserInfoUri, userId, getUserAvatarUri } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
 import { setUserData, setUserPhoto } from '../../services/userSlice';
-import Game from '../../pages/Game/Game';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
 import { setProductsArchive } from '../../services/shopSlice';
@@ -32,16 +31,25 @@ const App: FC = () => {
     tg.ready();
     window.scrollTo(0, 0);
   }, []);
-  
+
   useEffect(() => {
     setLoading(true);
     const fetchUserData = async () => {
       try {
-        // const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: user?.id });
-        // const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: user?.id });
-        const userDataResponse = await getReq<UserData>({ uri: getUserInfoUri, userId: userId });
-        const userPhotoResponse = await getReq<any>({ uri: getUserAvatarUri, userId: userId });
-        const inventoryData = await getReq<any>({ uri: 'load_collectibles_data', userId: '' });
+        const userDataResponse = await getReq<UserData>({
+          uri: getUserInfoUri,
+          userId: userId,
+          // userId: user?.id,
+        });
+        const userPhotoResponse = await getReq<any>({
+          uri: getUserAvatarUri,
+          userId: userId,
+          // userId: user?.id,
+        });
+        const inventoryData = await getReq<any>({
+          uri: 'load_collectibles_data',
+          userId: ''
+        });
         dispatch(setProductsArchive(inventoryData?.collectibles));
         dispatch(setUserData(userDataResponse));
         dispatch(setUserPhoto(userPhotoResponse?.info));
@@ -56,17 +64,17 @@ const App: FC = () => {
 
   return (
     <div className={styles.app}>
-      {loading ?  <Loader /> : (
-      <Routes>
-      <Route path={indexUrl} element={<Main />} />
-      <Route path={roomsUrl} element={<OpenedRooms />} />
-      <Route path={createRoomUrl} element={<CreateRoom />} />
-      <Route path={shopUrl} element={<Shop />} />
-      <Route path={leaderboardUrl} element={<LeaderBoard />} />
-      {/* <Route path='/game' element={<Game />} /> */}
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-    )}
+      {loading ? <Loader /> : (
+        <Routes>
+          <Route path={indexUrl} element={<Main />} />
+          <Route path={roomsUrl} element={<OpenedRooms />} />
+          <Route path={createRoomUrl} element={<CreateRoom />} />
+          <Route path={shopUrl} element={<Shop />} />
+          <Route path={leaderboardUrl} element={<LeaderBoard />} />
+          {/* <Route path='/game' element={<Game />} /> */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      )}
     </div>
   );
 }

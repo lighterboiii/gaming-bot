@@ -41,6 +41,7 @@
 
   &__buttons {
     @include size(100%, auto);
+    @include max-size(390px, 100%);
     @include flex(row, space-between, flex-end);
   }
 
@@ -52,6 +53,7 @@
     gap: 16px;
     grid-template-columns: repeat(3, 1fr);
     align-content: start;
+    justify-items: center;
     overflow-y: auto;
   }
 

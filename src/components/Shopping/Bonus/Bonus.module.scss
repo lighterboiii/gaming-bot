@@ -11,6 +11,8 @@
 
   &__button {
     @include size(100%, 40px);
+    @include position(absolute, $left: 50%, $bottom: 80px);
+    transform: translate(-50%);
   }
 
   &__content {

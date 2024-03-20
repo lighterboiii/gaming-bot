@@ -4,11 +4,11 @@ import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 interface IProps {
   item: any;
-  index: number;
+  index?: number;
   onClick: () => void;
 }
 
-const ShopItem: FC<IProps> = ({ item, index, onClick }) => {
+const ShopItem: FC<IProps> = ({ item, onClick }) => {
   
   return (
     <div className={styles.item} onClick={onClick}>

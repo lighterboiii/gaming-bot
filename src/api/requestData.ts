@@ -19,7 +19,7 @@ export const collectiblesValue = '&collectibles=';
 export const activeSkinValue = '&active_skin=';
 
 export const setTokensValueUri = `settokensnewvalue?user_id=`;
-// export const setCoinsValueUri = 'setcoinsnewvalue?user_id=';
+export const setCoinsValueUri = 'setcoinsnewvalue?user_id=';
 // export const setRoomIdValueUri = 'setroomidvalue?user_id=';
 // export const setDaysOnlineUri = 'setdays_online?user_id=';
 // export const setAllGamesUri = 'setall_games_played_count?user_id=';
@@ -32,7 +32,7 @@ export const setTokensValueUri = `settokensnewvalue?user_id=`;
 // export const setCoinLosesUri = 'setcoinloses?user_id=';
 
 export const newTokensValue = '&newtokens=';
-// export const newCoinsValue = '&newcoins=';
+export const newCoinsValue = '&newcoins=';
 // export const roomIdValue = '&room_id=';
 // export const daysOnlineValue = '&days_online=';
 // export const allGamesValues = '&all_games=';

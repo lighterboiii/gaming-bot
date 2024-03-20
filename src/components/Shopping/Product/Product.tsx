@@ -24,10 +24,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
 
   const handleBuyItem = async (item: ItemData) => {
     try {
-      // await putReq({ uri: buyShopItemUri, userId: user?.id, endpoint: `&item_id=${item.item_id}&count=${item.item_count}` });
       const res: any = await putReq({
         uri: buyShopItemUri,
         userId: userId,
+        // userId: user?.id,
         endpoint: `&item_id=${item.item_id}&count=${1}`
       });
       setMessageShown(true);
@@ -46,7 +46,12 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
       }
 
       setTimeout(async () => {
-        await putReq({ uri: setActiveSkinUri, userId: userId, endpoint: `${activeSkinValue}${item.item_id}` });
+        await putReq({ 
+          uri: setActiveSkinUri, 
+          userId: userId, 
+          // userId: user?.id, 
+          endpoint: `${activeSkinValue}${item.item_id}` 
+        });
         dispatch(setActiveSkin(item.item_id));
         onClose();
         setTimeout(() => {
@@ -60,8 +65,11 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   };
 
   const handleSetActiveSkin = async (itemId: number) => {
-    // await putReq({ uri: setActiveSkinUri, userId: user?.id, endpoint: `${activeSkinValue}${itemId}` });
-    const res = await putReq({ uri: setActiveSkinUri, userId: userId, endpoint: `${activeSkinValue}${itemId}` });
+    const res = await putReq({ 
+      uri: setActiveSkinUri, 
+      userId: userId, 
+   // userId: user?.id,
+      endpoint: `${activeSkinValue}${itemId}` });
     console.log(res);
     dispatch(setActiveSkin(itemId));
     onClose();

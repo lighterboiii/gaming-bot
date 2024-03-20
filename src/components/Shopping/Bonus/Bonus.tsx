@@ -3,7 +3,9 @@ import { Bonus } from "../../../utils/types";
 import styles from './Bonus.module.scss';
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
-import { setCollectibles } from "../../../services/userSlice";
+import { setCollectibles, setNewCoinsValue, setNewTokensValue } from "../../../services/userSlice";
+import { putReq } from "../../../api/api";
+import { newCoinsValue, newTokensValue, setCoinsValueUri, setTokensValueUri, userId } from "../../../api/requestData";
 
 interface IProps {
   bonus: Bonus;
@@ -13,10 +15,31 @@ const DailyBonus: FC<IProps> = ({ bonus }) => {
   const dailyBonus = bonus.bonus;
   const dispatch = useAppDispatch();
 
-  const handleGetBonus = (item: any) => {
-    const bonusId = item.bonus_item_id;
-    console.log(bonusId);
-    dispatch(setCollectibles(bonusId));
+  const handleGetBonus = async (item: Bonus) => {
+    switch (item.bonus.bonus_type) {
+      case "tokens":
+        await putReq<any>({ 
+          uri: setTokensValueUri, 
+          endpoint: newTokensValue, 
+          userId: userId,
+          // userId: user?.id
+        });
+        dispatch(setNewTokensValue(item.bonus.bonus_count));
+        break;
+      case "coins":
+        await putReq<any>({ 
+          uri: setCoinsValueUri, 
+          endpoint: newCoinsValue, 
+          userId: userId,
+          // userId: user?.id
+        });
+        dispatch(setNewCoinsValue(item.bonus.bonus_count));
+        break;
+      default:
+        dispatch(setCollectibles(item.bonus.bonus_item_id));
+        break
+    }
+
   };
 
   return (

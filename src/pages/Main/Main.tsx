@@ -36,7 +36,7 @@ const Main: FC = () => {
       </div>
       <div className={`${styles.main__content} ${overlayActive ? styles.hidden : ''}`}>
         {/* <div className={styles.main__banner}> */}
-          <AdvertisementBanner isOverlayOpen={showBannerOverlay} onBannerClick={handleBannerClick} />
+          <AdvertisementBanner onBannerClick={handleBannerClick} />
         {/* </div> */}
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
