@@ -3,7 +3,7 @@
 
 @mixin buttonStyle {
   @include button-style-reset();
-  @include size(142px, 30px);
+  @include size(142px, 24px);
   border-radius: 40px;
   color: $main-color;
   text-transform: lowercase;
@@ -78,7 +78,7 @@
   }
 
   &__inventory {
-    @include size(142px, 59px);
+    @include size(142px, 52px);
     border-radius: $radius-15;
   }
 }

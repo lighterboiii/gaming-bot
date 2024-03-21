@@ -29,10 +29,10 @@
 }
 
 .overlay.active {
-  @include size(calc(100% - 32px), calc(100% - 20vh));
+  @include size(calc(100% - 32px), calc(100% - 25vh));
   z-index: 666;
 
-  @media screen and (max-height: 690px) {
-    @include size(calc(100% - 32px), calc(100% - 30vh));
-  }
+  // @media screen and (max-height: 690px) {
+  //   @include size(calc(100% - 32px), calc(100% - 25vh));
+  // }
 }
