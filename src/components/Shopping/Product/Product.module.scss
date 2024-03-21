@@ -31,12 +31,15 @@
     z-index: 1;
   }
 
+  &__textElements {
+    @include flex(column, center, center, 8px);
+  }
+
   &__type {
     @include indents();
     color: $main-color;
     font-weight: 200;
-    font-size: 18px;
-    text-transform: lowercase;
+    font-size: 16px;
   }
 
   &__buttonWrapper {

@@ -4,7 +4,6 @@ import { FC, useEffect, useState } from "react";
 import styles from './Shop.module.scss';
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
 import { useNavigate } from "react-router-dom";
-import { userSkinsForSale } from "../../utils/mockData";
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import Overlay from "../../components/Overlay/Overlay";
@@ -15,16 +14,17 @@ import { mainAppDataUri, userId } from "../../api/requestData";
 import Loader from "../../components/Loader/Loader";
 import { Bonus, IAppData, ItemData } from "../../utils/types";
 import DailyBonus from "../../components/Shopping/Bonus/Bonus";
-import { setDailyBonus, setShopAvailable } from "../../services/userSlice";
+import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../services/userSlice";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
   const navigate = useNavigate();
-
   const dispatch = useAppDispatch();
+
   const shopData = useAppSelector(store => store.user.products);
   const collectibles = useAppSelector(store => store.user.info?.collectibles);
   const archiveData = useAppSelector(store => store.user.archive);
+  const lavkaAvailable = useAppSelector(store => store.user.lavka);
 
   const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState<string>('Магазин');
@@ -55,9 +55,10 @@ const Shop: FC = () => {
         try {
           const res = await getReq<IAppData>({
             uri: mainAppDataUri,
-            userId: userId,
-            // userId: user?.id,
+            // userId: userId,
+            userId: user?.id,
           });
+          dispatch(setLavkaAvailable(res.lavka_available));
           dispatch(setShopAvailable(res.shop_available));
           dispatch(setDailyBonus(res.daily_bonus));
           setDailyBonusData(res.daily_bonus);
@@ -92,7 +93,7 @@ const Shop: FC = () => {
         break;
       }
       case "Лавка": {
-        setGoods(userSkinsForSale);
+        setGoods(lavkaAvailable);
         break;
       }
       default:

@@ -18,11 +18,13 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   console.log(bonus);
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
+  // универсальная функция для запроссов collectible
   const makeCollectibleRequest = async (itemId: number, itemCount: number) => {
     return await putReq<any>({
       uri: setCollectiblesUri,
       endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-      userId: userId,
+      // userId: userId,
+      userId: user?.id
     });
   };
   // обработчик действия по кнопке "забрать"

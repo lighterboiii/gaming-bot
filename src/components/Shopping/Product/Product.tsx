@@ -22,14 +22,26 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
 
+  const setActiveSkinRequest = async (itemId: number) => {
+    return await putReq({
+      uri: setActiveSkinUri,
+      // userId: userId,
+      userId: user?.id, 
+      endpoint: `${activeSkinValue}${itemId}`
+    });
+  };
+  const buyItemRequest = async (itemId: number, itemCount: number = 1) => {
+    return await putReq({
+      uri: buyShopItemUri,
+      // userId: userId,
+      userId: user?.id,
+      endpoint: `&item_id=${itemId}&count=${itemCount}`
+    });
+  }
+
   const handleBuyItem = async (item: ItemData) => {
     try {
-      const res: any = await putReq({
-        uri: buyShopItemUri,
-        userId: userId,
-        // userId: user?.id,
-        endpoint: `&item_id=${item.item_id}&count=1`
-      });
+      const res: any = await buyItemRequest(item.item_id, 1);
       setMessageShown(true);
       switch (res.message) {
         case "out":
@@ -43,12 +55,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
           dispatch(setCollectibles(item.item_id));
           dispatch(setCoinsValueAfterBuy(item.item_price_coins));
           dispatch(setTokensValueAfterBuy(item.item_price_tokens));
-          await putReq({
-            uri: setActiveSkinUri,
-            userId: userId,
-            // userId: user?.id, 
-            endpoint: `${activeSkinValue}${item.item_id}`
-          });
+          setActiveSkinRequest(item.item_id);
           dispatch(setActiveSkin(item.item_id));
           break;
         default:
@@ -67,12 +74,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   };
 
   const handleSetActiveSkin = async (itemId: number) => {
-    const res = await putReq({
-      uri: setActiveSkinUri,
-      userId: userId,
-      // userId: user?.id,
-      endpoint: `${activeSkinValue}${itemId}`
-    });
+    setActiveSkinRequest(itemId);
     dispatch(setActiveSkin(itemId));
     onClose();
   };
@@ -80,8 +82,8 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const handleSellProduct = async (itemId: number) => {
     const res = await putReq({
       uri: 'add_sell_lavka?user_id=',
-      userId: userId,
-      // userId: user?.id,
+      // userId: userId,
+      userId: user?.id,
       endpoint: `&item_id=${itemId}&price=20`,
     });
     console.log(res);
@@ -98,7 +100,13 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
             <UserAvatar item={item} />
           </div>
           <div className={styles.product__info}>
-            <p className={styles.product__type}>Тип: {item?.item_type}</p>
+            <div className={styles.product__textElements}>
+              <p className={styles.product__type}>Тип: {item?.item_type}</p>
+              {item?.seller_id && <p className={styles.product__type}>
+                Продавец: {item.seller_id}
+              </p>
+              }
+            </div>
             {isCollectible ? (
               <div className={styles.product__buttons}>
                 <div className={styles.product__buttonWrapper}>

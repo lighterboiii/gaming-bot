@@ -6,6 +6,7 @@ interface UserState {
   products: ItemData[] | null;
   archive: ItemData[] | null;
   bonus: Bonus | null;
+  lavka: any | null;
 }
 
 const initialState: UserState = {
@@ -13,6 +14,7 @@ const initialState: UserState = {
   products: null,
   archive: null,
   bonus: null,
+  lavka: null,
 }
 
 const userSlice = createSlice({
@@ -74,14 +76,17 @@ const userSlice = createSlice({
         state.info.user_energy_drinks = action.payload;
       }
     },
-      setShopAvailable: (state, action: PayloadAction<ItemData[]>) => {
-        state.products = action.payload;
-      },
-        setProductsArchive: (state, action: PayloadAction<ItemData[]>) => {
-          state.archive = action.payload;
-        }
+    setShopAvailable: (state, action: PayloadAction<ItemData[]>) => {
+      state.products = action.payload;
+    },
+    setProductsArchive: (state, action: PayloadAction<ItemData[]>) => {
+      state.archive = action.payload;
+    },
+    setLavkaAvailable: (state, action: PayloadAction<any[]>) => {
+      state.lavka = action.payload;
     }
-  });
+  }
+});
 
 export const {
   setUserData,
@@ -94,6 +99,7 @@ export const {
   setShopAvailable,
   setProductsArchive,
   setDailyBonus,
+  setLavkaAvailable,
   setNewExpValue,
   setEnergyDrinksValue,
   // setNewCoinsValue

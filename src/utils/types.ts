@@ -51,9 +51,19 @@ export interface UserPhoto {
   info: string;
 }
 
+export interface LavkaData {
+  item_id: number;
+  item_mask: string;
+  item_pic: string;
+  item_type: string;
+  price: string;
+  seller_id: string;
+}
+
 export interface IAppData {
   collectibles_data: ItemData[];
   daily_bonus: Bonus;
   shop_available: ItemData[];
   user_info: UserInfo;
+  lavka_available: LavkaData[];
 }
