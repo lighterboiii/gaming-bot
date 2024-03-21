@@ -20,7 +20,7 @@
 
   &__header {
     @include size(100%, auto);
-    @include flex(column, space-between, center, 16px);
+    @include flex(column, center, center, 16px);
   }
 
   &__content {
@@ -84,8 +84,7 @@
 }
 
 .hidden {
-  opacity: 0;
   height: 0;
   overflow: hidden;
-  transition: opacity .5s ease-in;
+  transition: height 1s ease-in;
 }

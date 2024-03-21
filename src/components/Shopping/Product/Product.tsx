@@ -26,8 +26,8 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
     try {
       const res: any = await putReq({
         uri: buyShopItemUri,
-        // userId: userId,
-        userId: user?.id,
+        userId: userId,
+        // userId: user?.id,
         endpoint: `&item_id=${item.item_id}&count=1`
       });
       setMessageShown(true);
@@ -48,8 +48,8 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
       setTimeout(async () => {
         await putReq({
           uri: setActiveSkinUri,
-          // userId: userId,
-          userId: user?.id, 
+          userId: userId,
+          // userId: user?.id, 
           endpoint: `${activeSkinValue}${item.item_id}`
         });
         dispatch(setActiveSkin(item.item_id));
