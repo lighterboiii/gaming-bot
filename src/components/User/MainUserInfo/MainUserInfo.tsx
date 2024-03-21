@@ -32,8 +32,14 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
           <div className={styles.userInfo__textElements}>
             <p className={styles.userInfo__text}>{userData && userData?.publicname}</p>
             <div className={styles.userInfo__money}>
-              <p className={styles.userInfo__text}>💵 {userData ? `${userData?.coins}` : '0'}</p>
-              <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.tokens}` : '0'}</p>
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                <p className={styles.userInfo__text}>💵 {userData ? `${userData?.coins}` : '0'}</p>
+                <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.tokens}` : '0'}</p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "center", alignItems: 'center', gap: '8px' }}>
+                <p className={styles.userInfo__text}>🔋 {userData ? `${userData?.user_energy_drinks}` : '0'}</p>
+                <p className={styles.userInfo__text}>🧙‍♂️ {userData ? `${userData?.user_exp}` : '0'}</p>
+              </div>
             </div>
           </div>
           <button type="button" className={styles.userInfo__balance} onClick={handleClickBalance}>
@@ -43,22 +49,22 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
       </div>
       <div className={styles.userInfo__linkContainer}>
         <button className={styles.userInfo__button} onClick={toggleOverlay}>
-          <CircleButton 
-          shadow 
-          isWhiteBackground 
-          iconType={isOverlayOpen ? "cross" : "ref"}
-          width={20} 
-          height={20} 
-          color="#d51845"
+          <CircleButton
+            shadow
+            isWhiteBackground
+            iconType={isOverlayOpen ? "cross" : "ref"}
+            width={20}
+            height={20}
+            color="#d51845"
           />
         </button>
         <Link to={'/go'} className={styles.userInfo__tgLink}>
-          <CircleButton 
-          shadow 
-          isWhiteBackground 
-          iconType="community" 
-          width={20} 
-          height={20} 
+          <CircleButton
+            shadow
+            isWhiteBackground
+            iconType="community"
+            width={20}
+            height={20}
           />
         </Link>
       </div>

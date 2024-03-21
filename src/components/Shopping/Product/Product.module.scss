@@ -4,7 +4,7 @@
 .product {
   @include children-layout();
   @include position(relative);
-  
+
   @media screen and (min-height: 700px) {
     justify-content: center;
   }
@@ -14,12 +14,12 @@
     @include position(relative);
     @include min-size(100px, 100px);
     @include size(auto, auto);
-    @include max-size(220px, 220px);
+    @include max-size(200px, 200px);
     aspect-ratio: 1;
     z-index: 5;
 
     @media screen and (min-height: 700px) {
-      @include max-size(70%, 50%);
+      @include max-size(65%, 65%);
     }
   }
 

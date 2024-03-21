@@ -24,7 +24,7 @@ const Shop: FC = () => {
   const dispatch = useAppDispatch();
   const shopData = useAppSelector(store => store.user.products);
   const collectibles = useAppSelector(store => store.user.info?.collectibles);
-  const archive = useAppSelector(store => store.user.archive);
+  const archiveData = useAppSelector(store => store.user.archive);
 
   const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState<string>('Магазин');
@@ -39,7 +39,7 @@ const Shop: FC = () => {
     setShowOverlay(!showOverlay);
   };
   // добавить флаг isCollectible жкаждому товару
-  const handleAddIsCollectible = (data: any) => {
+  const handleAddIsCollectible = (data: ItemData[]) => {
     const collectibleIds = collectibles?.map(id => Number(id));
     const shopDataWithCollectible = data?.map((item: ItemData) => ({
       ...item,
@@ -51,7 +51,7 @@ const Shop: FC = () => {
   useEffect(() => {
     switch (activeButton) {
       case "Магазин": {
-        handleAddIsCollectible(shopData);
+        shopData && handleAddIsCollectible(shopData);
         break;
       }
       case "Лавка": {
@@ -70,8 +70,8 @@ const Shop: FC = () => {
       try {
         const res = await getReq<IAppData>({
           uri: mainAppDataUri,
-          userId: userId,
-          // userId: user?.id,
+          // userId: userId,
+          userId: user?.id,
         });
         dispatch(setShopAvailable(res.shop_available));
         dispatch(setDailyBonus(res.daily_bonus));
@@ -103,7 +103,7 @@ const Shop: FC = () => {
   const handleClickInventory = () => {
     setActiveButton("Приобретено");
     const collectibleIds = collectibles?.map(id => Number(id));
-    const inventoryItems = archive!.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
+    const inventoryItems = archiveData!.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
     const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
       ...item,
       isCollectible: collectibleIds?.includes(item.item_id),
@@ -113,7 +113,7 @@ const Shop: FC = () => {
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
     setActiveButton("Магазин");
-    handleAddIsCollectible(archive);
+    archiveData && handleAddIsCollectible(archiveData);
   };
 
   return (

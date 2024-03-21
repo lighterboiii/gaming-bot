@@ -30,7 +30,7 @@
   }
 
   &__money {
-    @include flex(column, space-between, flex-start, 6px);
+    @include flex(column, space-between, flex-start, 8px);
   }
 
   &__text {
