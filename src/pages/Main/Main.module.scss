@@ -23,7 +23,6 @@
   &__content {
     @include flex(column, center, unset, 16px);
     @include size(100%, 100%);
-    opacity: 1;
   }
 
   &__banner {

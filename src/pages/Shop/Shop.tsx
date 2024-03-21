@@ -123,7 +123,8 @@ const Shop: FC = () => {
           <div className={styles.shop__header}>
             <h2 className={styles.shop__title}>Магазин</h2>
             <UserInfo />
-          </div><div className={`${styles.shop__content} ${(showOverlay || showBonusOverlay) ? styles.hidden : ''}`}>
+          </div>
+          <div className={`${styles.shop__content} ${(showOverlay || showBonusOverlay) ? styles.hidden : ''}`}>
             <div className={styles.shop__buttons}>
               <div className={styles.shop__leftButtonsContainer}>
                 <button
@@ -137,12 +138,12 @@ const Shop: FC = () => {
                   Лавка
                 </button>
               </div>
-                <button
-                  className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
-                  onClick={handleClickInventory}
-                >
-                  Приобретено
-                </button>
+              <button
+                className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
+                onClick={handleClickInventory}
+              >
+                Приобретено
+              </button>
             </div>
             <div className={styles.shop__goods}>
               {goods?.length > 0 ? (

@@ -20,7 +20,7 @@
 
   &__header {
     @include size(100%, 20vh);
-    @include flex(column, center, center, 8px);
+    @include flex(column, flex-start, center, 8px);
 
     @media screen and (max-height: 690px) {
       @include size(100%, 30vh);
@@ -29,8 +29,7 @@
 
   &__content {
     @include flex(column, center, center, 16px);
-    @include size(100%, auto);
-    opacity: 1;
+    @include size(100%, 100%);
   }
 
   &__title {
@@ -52,7 +51,6 @@
   &__goods {
     @include indents();
     @include size(100%, 100%);
-    // @include max-size(100%, calc(var(--tg-viewport-height) - 20vh));
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(3, 1fr);
