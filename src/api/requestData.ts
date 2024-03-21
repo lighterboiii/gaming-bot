@@ -1,26 +1,29 @@
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoieW91cl91c2VyX2lkIiwiZXhwIjoxNzEyNjk0MDQwfQ.Yj9qWHJZMSl6yg-Xb5tnZeZniCK0FsNwBa1MS4VynxE';
 export const userId = '172359056';
-
+// uri
 export const mainAppDataUri = `get_start_info?user_id=`;
-
-// export const getUserInfoUri = `getuserinfo?user_id=`;
 export const getUserAvatarUri = `getuserphoto?user_id=`;
-// export const getDailyBonusUri = `get_daily_check?user_id=`;
-// export const getShopAvailableUri = `get_shop_available`;
 export const getLeadersUri = `get_leaderboard_top_users`;
-
-export const buyShopItemUri = `shop_buy_item?user_id=`;
-export const itemIdValue = '&item_id=';
-export const itemCount = '&count=1';
-
 export const setCollectiblesUri = 'add_collectible?user_id=';
 export const setActiveSkinUri = 'setactive_skin?user_id=';
-
-export const collectiblesValue = '&collectibles=';
-export const activeSkinValue = '&active_skin=';
-
+export const buyShopItemUri = `shop_buy_item?user_id=`;
 export const setTokensValueUri = `settokensnewvalue?user_id=`;
 export const setCoinsValueUri = 'setcoinsnewvalue?user_id=';
+// links
+export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
+export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
+// endpoints
+export const itemIdValue = '&item_id=';
+export const itemCount = '&count=';
+export const collectiblesValue = '&collectibles=';
+export const activeSkinValue = '&active_skin=';
+export const newTokensValue = '&newtokens=';
+export const newCoinsValue = '&newcoins=';
+
+// export const getUserInfoUri = `getuserinfo?user_id=`;
+// export const getDailyBonusUri = `get_daily_check?user_id=`;
+// export const getShopAvailableUri = `get_shop_available`;
+
 // export const setRoomIdValueUri = 'setroomidvalue?user_id=';
 // export const setDaysOnlineUri = 'setdays_online?user_id=';
 // export const setAllGamesUri = 'setall_games_played_count?user_id=';
@@ -32,8 +35,6 @@ export const setCoinsValueUri = 'setcoinsnewvalue?user_id=';
 // export const setTokenLosesUri = 'settokenloses?user_id=';
 // export const setCoinLosesUri = 'setcoinloses?user_id=';
 
-export const newTokensValue = '&newtokens=';
-export const newCoinsValue = '&newcoins=';
 // export const roomIdValue = '&room_id=';
 // export const daysOnlineValue = '&days_online=';
 // export const allGamesValues = '&all_games=';

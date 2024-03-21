@@ -13,7 +13,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { getReq } from "../../api/api";
 import { mainAppDataUri, userId } from "../../api/requestData";
 import Loader from "../../components/Loader/Loader";
-import { Bonus, ItemData } from "../../utils/types";
+import { Bonus, IAppData, ItemData } from "../../utils/types";
 import DailyBonus from "../../components/Shopping/Bonus/Bonus";
 import { setDailyBonus, setShopAvailable } from "../../services/userSlice";
 
@@ -68,9 +68,10 @@ const Shop: FC = () => {
     shopData && setGoods(shopData);
     const fetchShopData = async () => {
       try {
-        const res = await getReq<any>({
+        const res = await getReq<IAppData>({
           uri: mainAppDataUri,
-          userId: userId,
+          // userId: userId,
+          userId: user?.id,
         });
         dispatch(setShopAvailable(res.shop_available));
         dispatch(setDailyBonus(res.daily_bonus));

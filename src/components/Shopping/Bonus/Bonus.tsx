@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../../services/reduxHooks";
 import { setCollectibles, setNewTokensValue } from "../../../services/userSlice";
 import { putReq } from "../../../api/api";
 import { setCollectiblesUri, userId } from "../../../api/requestData";
+import useTelegram from "../../../hooks/useTelegram";
 
 interface IProps {
   bonus: Bonus;
@@ -15,7 +16,7 @@ interface IProps {
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
-
+  const { user } = useTelegram();
   const handleGetBonus = async (item: Bonus) => {
     const itemId = Number(item.bonus_item_id);
     const itemCount = Number(item.bonus_count);
@@ -24,8 +25,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         const tokens = await putReq<any>({
           uri: setCollectiblesUri,
           endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-          userId: userId,
-          // userId: user?.id
+          // userId: userId,
+          userId: user?.id
         });
         const formattedTokens = Math.floor(tokens.message);
         dispatch(setNewTokensValue(formattedTokens));
@@ -42,11 +43,11 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         closeOverlay();
         break;
       default:
-        const skin = await putReq({
+        await putReq({
           uri: setCollectiblesUri,
           endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-          userId: userId,
-          // userId: user.?id
+          // userId: userId,
+          userId: user?.id
         });
         dispatch(setCollectibles(item.bonus_item_id));
         break

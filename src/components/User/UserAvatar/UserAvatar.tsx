@@ -3,6 +3,7 @@ import styles from './UserAvatar.module.scss';
 import avatar from '../../../images/griffin.jpeg';
 import { useAppSelector } from "../../../services/reduxHooks";
 import { ItemData } from "../../../utils/types";
+import { getImageLink, getImageMaskLink } from "../../../api/requestData";
 
 interface IProps {
   // если передан пропс skin, то отрисовка будет происходит именно этого скина, если нет, то скин подтягивается из userData
@@ -22,8 +23,8 @@ const UserAvatar: FC<IProps> = ({ item }) => {
       setSkin(item?.item_pic);
       setMask(item?.item_mask);
     } else if (userData && activeSkin !== undefined) {
-      setSkin(`https://gamebottggw.ngrok.app/get_item_image/${activeSkin}`); // костыль
-      setMask(`https://gamebottggw.ngrok.app/get_item_image_mask/${activeSkin}`); // костыль
+      setSkin(`${getImageLink}${activeSkin}`);
+      setMask(`${getImageMaskLink}${activeSkin}`);
     } else {
       setSkin('');
       setMask('');
