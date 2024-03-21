@@ -11,7 +11,7 @@ import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
 import { getReq } from "../../api/api";
-import { userId } from "../../api/requestData";
+import { mainAppDataUri, userId } from "../../api/requestData";
 import Loader from "../../components/Loader/Loader";
 import { Bonus, ItemData } from "../../utils/types";
 import DailyBonus from "../../components/Shopping/Bonus/Bonus";
@@ -65,11 +65,11 @@ const Shop: FC = () => {
   // при монтировании компонента
   useEffect(() => {
     setLoading(true);
-    setGoods(shopData);
+    shopData && setGoods(shopData);
     const fetchShopData = async () => {
       try {
         const res = await getReq<any>({
-          uri: 'get_start_info?user_id=',
+          uri: mainAppDataUri,
           userId: userId,
         });
         dispatch(setShopAvailable(res.shop_available));
@@ -102,7 +102,7 @@ const Shop: FC = () => {
   const handleClickInventory = () => {
     setActiveButton("Приобретено");
     const collectibleIds = collectibles?.map(id => Number(id));
-    const inventoryItems = archive.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
+    const inventoryItems = archive!.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
     const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
       ...item,
       isCollectible: collectibleIds?.includes(item.item_id),

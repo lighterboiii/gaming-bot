@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { UserInfo } from "../utils/types";
+import { Bonus, ItemData, UserInfo } from "../utils/types";
 
 interface UserState {
   info: UserInfo | null;
-  products: any | null;
-  archive: any | null;
-  bonus: any | null;
+  products: ItemData[] | null;
+  archive: ItemData[] | null;
+  bonus: Bonus | null;
 }
 
 const initialState: UserState = {
@@ -22,15 +22,12 @@ const userSlice = createSlice({
     setUserData: (state, action: PayloadAction<UserInfo>) => {
       state.info = action.payload;
     },
-    getUserData: (state, action: PayloadAction<any>) => {
-      state.info = action.payload;
-    },
     setUserPhoto: (state, action: PayloadAction<string>) => {
       if (state.info) {
         state.info.photo = action.payload
       }
     },
-    setDailyBonus: (state, action: PayloadAction<string>) => {
+    setDailyBonus: (state, action: PayloadAction<Bonus>) => {
       state.bonus = action.payload;
     },
     setActiveSkin: (state, action: PayloadAction<number>) => {
@@ -67,10 +64,10 @@ const userSlice = createSlice({
         state.info.tokens = action.payload;
       }
     },
-    setShopAvailable: (state, action: PayloadAction<any>) => {
+    setShopAvailable: (state, action: PayloadAction<ItemData[]>) => {
       state.products = action.payload;
     },
-    setProductsArchive: (state, action: PayloadAction<any>) => {
+    setProductsArchive: (state, action: PayloadAction<ItemData[]>) => {
       state.archive = action.payload;
     }
   }
@@ -78,7 +75,6 @@ const userSlice = createSlice({
 
 export const {
   setUserData,
-  getUserData,
   setCoinsValueAfterBuy,
   setTokensValueAfterBuy,
   setUserPhoto,

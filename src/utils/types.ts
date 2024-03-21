@@ -37,12 +37,23 @@ export interface ItemData {
   item_price_coins: number;
   item_price_tokens: number;
   item_type: string;
-};
+}
 
 export interface Bonus {
-    bonus_count: number;
-    bonus_image: string;
-    bonus_item_id: number;
-    bonus_type: string;
-    day: number;
+  bonus_count: number;
+  bonus_image: string;
+  bonus_item_id: number;
+  bonus_type: string;
+  day: number;
+}
+
+export interface UserPhoto {
+  info: string;
+}
+
+export interface IAppData {
+  collectibles_data: ItemData[];
+  daily_bonus: Bonus;
+  shop_available: ItemData[];
+  user_info: UserInfo;
 }

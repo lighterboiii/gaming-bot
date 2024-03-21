@@ -11,12 +11,13 @@ import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { getReq } from '../../api/api';
-import { getUserInfoUri, userId, getUserAvatarUri } from '../../api/requestData';
+import { userId, getUserAvatarUri, mainAppDataUri } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setDailyBonus, setUserData, setUserPhoto } from '../../services/userSlice';
+import { setUserData, setUserPhoto } from '../../services/userSlice';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
-import { setProductsArchive, setShopAvailable } from '../../services/userSlice';
+import { setProductsArchive } from '../../services/userSlice';
+import { IAppData, UserPhoto } from '../../utils/types';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -35,19 +36,17 @@ const App: FC = () => {
     setLoading(true);
     const fetchUserData = async () => {
       try {
-        const res = await getReq<any>({
-          uri: 'get_start_info?user_id=',
+        const res = await getReq<IAppData>({
+          uri: mainAppDataUri,
           userId: userId,
         });
-        const userPhotoResponse = await getReq<any>({
+        const userPhotoResponse = await getReq<UserPhoto>({
           uri: getUserAvatarUri,
           userId: userId,
           // userId: user?.id,
         });
         dispatch(setUserData(res.user_info));
         dispatch(setProductsArchive(res.collectibles_data));
-        // dispatch(setShopAvailable(res.shop_available));
-        // dispatch(setDailyBonus(res.daily_bonus));
         dispatch(setUserPhoto(userPhotoResponse?.info));
         setLoading(false);
       } catch (error) {

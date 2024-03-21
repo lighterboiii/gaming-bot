@@ -14,9 +14,6 @@ interface IProps {
 }
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
-  console.log(bonus);
-  const dailyBonus = bonus;
-  // console.log(dailyBonus);
   const dispatch = useAppDispatch();
 
   const handleGetBonus = async (item: Bonus) => {
@@ -58,19 +55,19 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   };
 
   return (
-    <div key={dailyBonus.bonus_item_id} className={styles.bonus}>
+    <div key={bonus.bonus_item_id} className={styles.bonus}>
       <div className={styles.bonus_layout}>
         <div className={styles.bonus__titleContainer}>
           <h2 className={styles.bonus__title}>Ежедневная награда</h2>
           <p className={styles.bonus__text}>Вернитесь завтра, чтобы получить ещё</p>
         </div>
         <div className={styles.bonus__content}>
-          <img src={dailyBonus.bonus_image} alt="bonus_image" className={styles.bonus__image} />
-          <p className={styles.bonus__text}>{dailyBonus.bonus_type}</p>
+          <img src={bonus.bonus_image} alt="bonus_image" className={styles.bonus__image} />
+          <p className={styles.bonus__text}>{bonus.bonus_type}</p>
           <div className={styles.bonus__button}>
             <Button
               handleClick={() => handleGetBonus(bonus)}
-              text={`${dailyBonus.bonus_type === "tokens" ? `Забрать ${dailyBonus.bonus_count}` : 'Забрать'}`}
+              text={`${bonus.bonus_type === "tokens" ? `Забрать ${bonus.bonus_count}` : 'Забрать'}`}
             />
           </div>
         </div>
