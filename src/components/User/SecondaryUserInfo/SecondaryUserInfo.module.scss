@@ -14,7 +14,7 @@
 
   &__userInfo {
     @include position(relative);
-    @include indents(20px, 0);
+    @include indents(16px, 0);
     @include size(260px, auto);
     @include flex(column, center, flex-end);
     background-color: $main-color;
