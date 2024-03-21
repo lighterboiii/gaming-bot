@@ -85,6 +85,7 @@
 
 .hidden {
   opacity: 0;
+  height: 0;
   overflow: hidden;
   transition: opacity .5s ease-in;
 }
