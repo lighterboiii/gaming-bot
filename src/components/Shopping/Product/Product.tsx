@@ -38,21 +38,23 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
         case "money":
           setMessage("Недостаточно средств");
           break;
-        default:
+        case "ok":
           setMessage("Успешная покупка");
           dispatch(setCollectibles(item.item_id));
           dispatch(setCoinsValueAfterBuy(item.item_price_coins));
           dispatch(setTokensValueAfterBuy(item.item_price_tokens));
+          await putReq({
+            uri: setActiveSkinUri,
+            userId: userId,
+            // userId: user?.id, 
+            endpoint: `${activeSkinValue}${item.item_id}`
+          });
+          dispatch(setActiveSkin(item.item_id));
+          break;
+        default:
+          break;
       }
-
       setTimeout(async () => {
-        await putReq({
-          uri: setActiveSkinUri,
-          userId: userId,
-          // userId: user?.id, 
-          endpoint: `${activeSkinValue}${item.item_id}`
-        });
-        dispatch(setActiveSkin(item.item_id));
         onClose();
         setTimeout(() => {
           setMessage('');

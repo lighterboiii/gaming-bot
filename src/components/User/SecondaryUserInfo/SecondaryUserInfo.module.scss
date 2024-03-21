@@ -5,6 +5,7 @@
   @include indents(0, 0 60px 0 0);
   @include size(100%, auto);
   @include flex(row, flex-end, center, 10px);
+  z-index: 667;
 
   &__avatarContainer {
     @include indents();
@@ -42,7 +43,7 @@
     @include indents();
     color: $black-color;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 1;
   }
 

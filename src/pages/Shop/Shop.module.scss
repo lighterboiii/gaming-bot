@@ -50,7 +50,7 @@
 
   &__goods {
     @include indents();
-    @include size(100%, 100%);
+    @include size(100%, 60vh);
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(3, 1fr);
