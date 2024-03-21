@@ -4,6 +4,7 @@
 .product {
   @include children-layout();
   @include position(relative);
+  justify-content: center;
 
   &__avatarContainer {
     @include indents();
@@ -13,6 +14,10 @@
     @include max-size(220px, 220px);
     aspect-ratio: 1;
     z-index: 5;
+
+    @media screen and (min-height: 700px) {
+      @include max-size(70%, 50%);
+    }
   }
 
   &__info {

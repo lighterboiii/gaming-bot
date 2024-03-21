@@ -46,11 +46,11 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
       }
 
       setTimeout(async () => {
-        await putReq({ 
-          uri: setActiveSkinUri, 
-          userId: userId, 
+        await putReq({
+          uri: setActiveSkinUri,
+          userId: userId,
           // userId: user?.id, 
-          endpoint: `${activeSkinValue}${item.item_id}` 
+          endpoint: `${activeSkinValue}${item.item_id}`
         });
         dispatch(setActiveSkin(item.item_id));
         onClose();
@@ -65,16 +65,25 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   };
 
   const handleSetActiveSkin = async (itemId: number) => {
-    const res = await putReq({ 
-      uri: setActiveSkinUri, 
-      userId: userId, 
-   // userId: user?.id,
-      endpoint: `${activeSkinValue}${itemId}` });
-    console.log(res);
+    const res = await putReq({
+      uri: setActiveSkinUri,
+      userId: userId,
+      // userId: user?.id,
+      endpoint: `${activeSkinValue}${itemId}`
+    });
     dispatch(setActiveSkin(itemId));
     onClose();
   };
 
+  const handleSellProduct = async (itemId: number) => {
+    const res = await putReq({
+      uri: 'add_sell_lavka?user_id=',
+      userId: userId,
+      // userId: user?.id,
+      endpoint: `&item_id=${itemId}&price=20`,
+    });
+    console.log(res);
+  }
   return (
     <div className={styles.product}>
       {messageShown ? (
@@ -96,7 +105,11 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
                     handleClick={() => handleSetActiveSkin(item?.item_id)} />
                 </div>
                 <div className={styles.product__buttonWrapper}>
-                  <Button text="Продать" handleClick={() => { }} isWhiteBackground />
+                  <Button
+                    text="Продать"
+                    handleClick={() => handleSellProduct(item?.item_id)}
+                    isWhiteBackground
+                  />
                 </div>
               </div>
             ) : (
