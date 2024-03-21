@@ -9,7 +9,7 @@
     @include position(relative);
     @include min-size(100px, 100px);
     @include size(auto, auto);
-    @include max-size(240px, 240px);
+    @include max-size(220px, 220px);
     aspect-ratio: 1;
     z-index: 5;
   }
