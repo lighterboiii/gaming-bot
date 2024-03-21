@@ -30,7 +30,7 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
         </div>
         <div className={styles.userInfo__info}>
           <div className={styles.userInfo__textElements}>
-            <p className={styles.userInfo__text}>{userData && userData?.publicname}</p>
+            <p className={styles.userInfo__name}>{userData && userData?.publicname}</p>
             <div className={styles.userInfo__money}>
               <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
                 <p className={styles.userInfo__text}>💵 {userData ? `${userData?.coins}` : '0'}</p>

@@ -33,10 +33,18 @@
     @include flex(column, space-between, flex-start, 8px);
   }
 
-  &__text {
+  &__name {
     @include indents();
     color: $main-color;
     font-weight: 900;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  &__text {
+    @include indents();
+    color: $main-color;
+    font-weight: 400;
     font-size: 12px;
     line-height: 1;
   }

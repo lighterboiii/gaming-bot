@@ -9,7 +9,7 @@
 
   &__header {
     @include size(100%, 20vh);
-    @include flex(column, center, center, 16px);
+    @include flex(column, center, center);
 
     @media screen and (max-height: 690px) {
       @include size(100%, 30vh);
