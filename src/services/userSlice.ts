@@ -1,53 +1,56 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { UserData } from "../utils/types";
+import { UserInfo } from "../utils/types";
 
 interface UserState {
-  userData: UserData | null;
+  info: UserInfo | null;
 }
 
 const initialState: UserState = {
-  userData: null,
+  info: null
 }
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserData: (state, action: PayloadAction<UserData>) => {
-      state.userData = action.payload;
+    setUserData: (state, action: PayloadAction<UserInfo>) => {
+      state.info = action.payload;
+    },
+    getUserData: (state, action: PayloadAction<any>) => {
+      state.info = action.payload;
     },
     setUserPhoto: (state, action: PayloadAction<string>) => {
-      if (state.userData) {
-        state.userData.info.photo = action.payload
+      if (state.info) {
+        state.info.photo = action.payload
       }
     },
     setDailyBonus: (state, action: PayloadAction<string>) => {
-      if (state.userData) {
-        state.userData.bonus = action.payload;
+      if (state.info) {
+        state.info.bonus = action.payload;
       }
     },
     setActiveSkin: (state, action: PayloadAction<number>) => {
-      if (state.userData) {
-        state.userData.info.active_skin = action.payload;
+      if (state.info) {
+        state.info.active_skin = action.payload;
       }
     },
     setCollectibles: (state, action: PayloadAction<number>) => {
-      if (state.userData && state.userData.info) {
-        const collectibles = [...state.userData.info.collectibles, action.payload];
-        state.userData.info.collectibles = [...collectibles];
+      if (state.info) {
+        const collectibles = [...state.info.collectibles, action.payload];
+        state.info.collectibles = [...collectibles];
       }
     },
     clearUserData: (state) => {
-      state.userData = null;
+      state.info = null;
     },
     setCoinsValueAfterBuy: (state, action: PayloadAction<number>) => {
-      if (state.userData) {
-        state.userData.info.coins = state.userData.info.coins - action.payload;
+      if (state.info) {
+        state.info.coins = state.info.coins - action.payload;
       }
     },
     setTokensValueAfterBuy: (state, action: PayloadAction<number>) => {
-      if (state.userData) {
-        state.userData.info.tokens = state.userData.info.tokens - action.payload;
+      if (state.info) {
+        state.info.tokens = state.info.tokens - action.payload;
       }
     },
     // setNewCoinsValue: (state, action: PayloadAction<number>) => {
@@ -56,8 +59,8 @@ const userSlice = createSlice({
     //   }
     // },
     setNewTokensValue: (state, action: PayloadAction<number>) => {
-      if (state.userData) {
-        state.userData.info.tokens = action.payload;
+      if (state.info) {
+        state.info.tokens = action.payload;
       }
     },
   }
@@ -65,6 +68,7 @@ const userSlice = createSlice({
 
 export const {
   setUserData,
+  getUserData,
   setCoinsValueAfterBuy,
   setTokensValueAfterBuy,
   setUserPhoto,

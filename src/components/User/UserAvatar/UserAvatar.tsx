@@ -13,9 +13,9 @@ const UserAvatar: FC<IProps> = ({ item }) => {
   const [userSkin, setSkin] = useState<string | null>(null);
   const [userMask, setMask] = useState<string | null>(null);
 
-  const userAvatar = useAppSelector(store => store.user.userData?.info.photo);
-  const userData = useAppSelector(store => store.user.userData);
-  const activeSkin = useAppSelector(store => store.user.userData?.info.active_skin);
+  const userAvatar = useAppSelector(store => store.user.info?.photo);
+  const userData = useAppSelector(store => store.user.info);
+  const activeSkin = useAppSelector(store => store.user.info?.active_skin);
 
   useEffect(() => {
     if (item !== undefined) {

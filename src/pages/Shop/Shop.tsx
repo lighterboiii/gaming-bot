@@ -23,7 +23,7 @@ const Shop: FC = () => {
 
   const dispatch = useAppDispatch();
   const shopData = useAppSelector(store => store.shop.products?.shop);
-  const collectibles = useAppSelector(store => store.user.userData?.info.collectibles);
+  const collectibles = useAppSelector(store => store.user.info?.collectibles);
   const archive = useAppSelector(store => store.shop.archive);
 
   const [goods, setGoods] = useState<ItemData[]>([]);

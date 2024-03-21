@@ -14,7 +14,7 @@ import { UserData } from '../../utils/types';
 import { getReq } from '../../api/api';
 import { getUserInfoUri, userId, getUserAvatarUri } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setUserData, setUserPhoto } from '../../services/userSlice';
+import { getUserData, setUserData, setUserPhoto } from '../../services/userSlice';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
 import { setProductsArchive } from '../../services/shopSlice';
@@ -33,25 +33,32 @@ const App: FC = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     const fetchUserData = async () => {
       try {
-        const userDataResponse = await getReq<UserData>({
-          uri: getUserInfoUri,
+        // const userDataResponse = await getReq<UserData>({
+        //   uri: getUserInfoUri,
+        //   userId: userId,
+        //   // userId: user?.id,
+        // });
+        const res = await getReq<any>({
+          uri: 'get_start_info?user_id=',
           userId: userId,
-          // userId: user?.id,
-        });
+        })
+        console.log(res.collectibles_data);
+        dispatch(getUserData(res.user_info));
         const userPhotoResponse = await getReq<any>({
           uri: getUserAvatarUri,
           userId: userId,
           // userId: user?.id,
         });
+        console.log(userPhotoResponse);
         const inventoryData = await getReq<any>({
           uri: 'load_collectibles_data',
           userId: ''
         });
-        dispatch(setProductsArchive(inventoryData?.collectibles));
-        dispatch(setUserData(userDataResponse));
+        dispatch(setProductsArchive(res?.collectibles_data));
+        // dispatch(setUserData(res.user_info));
         dispatch(setUserPhoto(userPhotoResponse?.info));
         setLoading(false);
       } catch (error) {

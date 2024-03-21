@@ -15,7 +15,7 @@ interface IProps {
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dailyBonus = bonus.bonus;
-  console.log(dailyBonus);
+  // console.log(dailyBonus);
   const dispatch = useAppDispatch();
 
   const handleGetBonus = async (item: Bonus) => {

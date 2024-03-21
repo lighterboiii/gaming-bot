@@ -6,7 +6,7 @@ import { useAppSelector } from "../../../services/reduxHooks";
 
 const UserInfo: FC = () => {
   const { tg } = useTelegram();
-  const userData = useAppSelector(store => store.user.userData);
+  const userData = useAppSelector(store => store.user.info);
 
   const handleClickBalance = () => {
     tg.openTelegramLink('https://t.me/lighterboygamebot');
@@ -20,10 +20,10 @@ const UserInfo: FC = () => {
           <UserAvatar />
         </div>
         <div className={styles.user__textElements}>
-          <p className={styles.user__name}>{userData && userData?.info?.publicname}</p>
+          <p className={styles.user__name}>{userData && userData?.publicname}</p>
           <div className={styles.user__money}>
-            <p className={styles.user__text}>💵 {userData ? `${userData?.info.coins}` : '0'}</p>
-            <p className={styles.user__text}>🔰 {userData ? `${userData?.info.tokens}` : '0'}</p>
+            <p className={styles.user__text}>💵 {userData ? `${userData?.coins}` : '0'}</p>
+            <p className={styles.user__text}>🔰 {userData ? `${userData?.tokens}` : '0'}</p>
           </div>
           <button type="button" className={styles.user__balance} onClick={handleClickBalance}>баланс</button>
         </div>

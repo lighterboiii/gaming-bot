@@ -15,7 +15,7 @@ interface IProps {
 
 const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
   const { tg } = useTelegram();
-  const userData = useAppSelector(store => store.user.userData);
+  const userData = useAppSelector(store => store.user.info);
 
   const handleClickBalance = () => {
     tg.openTelegramLink('https://t.me/lighterboygamebot');
@@ -30,10 +30,10 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
         </div>
         <div className={styles.userInfo__info}>
           <div className={styles.userInfo__textElements}>
-            <p className={styles.userInfo__text}>{userData && userData?.info?.publicname}</p>
+            <p className={styles.userInfo__text}>{userData && userData?.publicname}</p>
             <div className={styles.userInfo__money}>
-              <p className={styles.userInfo__text}>💵 {userData ? `${userData?.info.coins}` : '0'}</p>
-              <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.info.tokens}` : '0'}</p>
+              <p className={styles.userInfo__text}>💵 {userData ? `${userData?.coins}` : '0'}</p>
+              <p className={styles.userInfo__text}>🔰 {userData ? `${userData?.tokens}` : '0'}</p>
             </div>
           </div>
           <button type="button" className={styles.userInfo__balance} onClick={handleClickBalance}>
