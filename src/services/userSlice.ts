@@ -64,14 +64,24 @@ const userSlice = createSlice({
         state.info.tokens = action.payload;
       }
     },
-    setShopAvailable: (state, action: PayloadAction<ItemData[]>) => {
-      state.products = action.payload;
+    setNewExpValue: (state, action: PayloadAction<number>) => {
+      if (state.info) {
+        state.info.user_exp = action.payload;
+      }
     },
-    setProductsArchive: (state, action: PayloadAction<ItemData[]>) => {
-      state.archive = action.payload;
+    setEnergyDrinksValue: (state, action: PayloadAction<number>) => {
+      if (state.info) {
+        state.info.user_energy_drinks = action.payload;
+      }
+    },
+      setShopAvailable: (state, action: PayloadAction<ItemData[]>) => {
+        state.products = action.payload;
+      },
+        setProductsArchive: (state, action: PayloadAction<ItemData[]>) => {
+          state.archive = action.payload;
+        }
     }
-  }
-});
+  });
 
 export const {
   setUserData,
@@ -83,7 +93,9 @@ export const {
   setNewTokensValue,
   setShopAvailable,
   setProductsArchive,
-  setDailyBonus
+  setDailyBonus,
+  setNewExpValue,
+  setEnergyDrinksValue,
   // setNewCoinsValue
 } = userSlice.actions;
 

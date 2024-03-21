@@ -4,7 +4,7 @@ import { Bonus } from "../../../utils/types";
 import styles from './Bonus.module.scss';
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
-import { setCollectibles, setNewTokensValue } from "../../../services/userSlice";
+import { setCollectibles, setEnergyDrinksValue, setNewExpValue, setNewTokensValue } from "../../../services/userSlice";
 import { putReq } from "../../../api/api";
 import { setCollectiblesUri, userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
@@ -15,43 +15,38 @@ interface IProps {
 }
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
+  console.log(bonus);
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
+  const makeCollectibleRequest = async (itemId: number, itemCount: number) => {
+    return await putReq<any>({
+      uri: setCollectiblesUri,
+      endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
+      userId: userId,
+    });
+  };
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: Bonus) => {
     const itemId = Number(item.bonus_item_id);
     const itemCount = Number(item.bonus_count);
     switch (item.bonus_type) {
       case "tokens":
-        const tokens = await putReq<any>({
-          uri: setCollectiblesUri,
-          endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-          // userId: userId,
-          userId: user?.id
-        });
+        const tokens = await makeCollectibleRequest(itemId, itemCount);
         const formattedTokens = Math.floor(tokens.message);
         dispatch(setNewTokensValue(formattedTokens));
-        closeOverlay();
         break;
-      case "energy_drink" || "exp":
-        // const res = await putReq<any>({
-        //   uri: setCollectiblesUri,
-        //   endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-        //   userId: userId,
-        //   // userId: user?.id
-        // });
-        // console.log(res);
-        closeOverlay();
+      case "energy_drink":
+        const resEnergy = await makeCollectibleRequest(itemId, itemCount);
+        dispatch(setEnergyDrinksValue(resEnergy.message));
         break;
+        case "exp":
+          const resExp = await await makeCollectibleRequest(itemId, itemCount);
+          dispatch(setNewExpValue(resExp.message));
+          break;
       default:
-        await putReq({
-          uri: setCollectiblesUri,
-          endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-          // userId: userId,
-          userId: user?.id
-        });
+        await makeCollectibleRequest(itemId, itemCount);
         dispatch(setCollectibles(item.bonus_item_id));
-        break
+        break;
     }
     closeOverlay();
   };
@@ -69,7 +64,11 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
           <div className={styles.bonus__button}>
             <Button
               handleClick={() => handleGetBonus(bonus)}
-              text={`${bonus.bonus_type === "tokens" ? `Забрать ${bonus.bonus_count}` : 'Забрать'}`}
+              text={
+                `${(bonus.bonus_type === "tokens" || bonus.bonus_type === "exp" || bonus.bonus_type === "energy_drink")
+                  ? `Забрать ${bonus.bonus_count}`
+                  : 'Забрать'}`
+              }
             />
           </div>
         </div>
