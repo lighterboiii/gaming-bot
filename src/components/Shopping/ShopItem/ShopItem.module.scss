@@ -4,17 +4,26 @@
 .item {
   @include max-size(116px, 116px);
   @include size(100%, 100%);
+  @include position(relative);
+  @include flex(column, center, center);
   background: $tertiary-color;
   border-radius: $radius-10;
   aspect-ratio: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
 
   &__avatarContainer {
     @include indents();
     @include position(relative);
-    @include size(100px, 100px);
+    @include size(90px, 90px);
+  }
+
+  &__price {
+    @include indents();
+    @include position(absolute, $left: 50%, $bottom: 0);
+    transform: translate(-50%);
+    color: $main-color;
+    font-weight: 700;
+    font-size: 10px;
+    z-index: 3;
   }
 }

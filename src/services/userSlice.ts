@@ -50,14 +50,14 @@ const userSlice = createSlice({
         state.userData.info.tokens = state.userData.info.tokens - action.payload;
       }
     },
-    setNewCoinsValue: (state, action: PayloadAction<number>) => {
-      if (state.userData) {
-        state.userData.info.coins += action.payload;
-      }
-    },
+    // setNewCoinsValue: (state, action: PayloadAction<number>) => {
+    //   if (state.userData) {
+    //     state.userData.info.coins += action.payload;
+    //   }
+    // },
     setNewTokensValue: (state, action: PayloadAction<number>) => {
       if (state.userData) {
-        state.userData.info.tokens += action.payload;
+        state.userData.info.tokens = action.payload;
       }
     },
   }
@@ -71,7 +71,7 @@ export const {
   setActiveSkin,
   setCollectibles,
   setNewTokensValue,
-  setNewCoinsValue
+  // setNewCoinsValue
 } = userSlice.actions;
 
 export default userSlice.reducer;

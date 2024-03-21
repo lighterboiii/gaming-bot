@@ -3,7 +3,7 @@
 
 @mixin buttonStyle {
   @include button-style-reset();
-  @include size(106px, 24px);
+  @include size(142px, 24px);
   border-radius: 40px;
   color: $main-color;
   text-transform: lowercase;
@@ -40,9 +40,9 @@
   }
 
   &__buttons {
-    @include size(100%, auto);
+    @include size(100%, 100%);
     @include max-size(390px, 100%);
-    @include flex(row, space-between, flex-end);
+    @include flex(row-reverse, space-between, flex-end);
   }
 
   &__goods {
@@ -75,6 +75,11 @@
     @include buttonStyle();
     background-color: $main-color;
     color: $black-color;
+  }
+
+  &__inventory {
+    @include size(142px, 56px);
+    border-radius: $radius-15;
   }
 }
 

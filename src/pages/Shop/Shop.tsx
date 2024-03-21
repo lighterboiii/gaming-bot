@@ -27,7 +27,7 @@ const Shop: FC = () => {
   const archive = useAppSelector(store => store.shop.archive);
 
   const [goods, setGoods] = useState<ItemData[]>([]);
-  const [activeButton, setActiveButton] = useState('Магазин');
+  const [activeButton, setActiveButton] = useState<string>('Магазин');
 
   const [showOverlay, setShowOverlay] = useState(false);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
@@ -132,21 +132,23 @@ const Shop: FC = () => {
                   Лавка
                 </button>
               </div>
-              <button
-                className={`${styles.shop__button} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
-                onClick={handleClickInventory}
-              >
-                Приобретено
-              </button>
+                <button
+                  className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
+                  onClick={handleClickInventory}
+                >
+                  Приобретено
+                </button>
             </div>
             <div className={styles.shop__goods}>
               {goods?.length > 0 ? (
                 <>
                   {goods.map((item: ItemData, index: number) => (
                     <ShopItem
+                      key={index}
                       item={item}
-                      index={index}
-                      onClick={() => handleShowItemDetails(item)} key={index} />
+                      onClick={() => handleShowItemDetails(item)}
+                      activeButton={activeButton}
+                    />
                   )
                   )}
                 </>
@@ -172,9 +174,9 @@ const Shop: FC = () => {
               show={showBonusOverlay}
               onClose={() => setShowBonusOverlay(false)}
               children={
-                <DailyBonus 
-                bonus={dailyBonusData}
-                closeOverlay={() => setShowBonusOverlay(!showBonusOverlay)}
+                <DailyBonus
+                  bonus={dailyBonusData}
+                  closeOverlay={() => setShowBonusOverlay(!showBonusOverlay)}
                 />}
             />}
         </>

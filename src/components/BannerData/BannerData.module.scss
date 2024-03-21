@@ -5,12 +5,16 @@
   @include children-layout();
 
   &__bannerWrapper {
-    @include size(100%, 90px);
+    @include size(100%, 120px);
     @include flex(column, center, center, 10px);
     border-radius: $radius-12;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: left;
+
+    @media screen and (max-height: 680px) {
+      @include size(100%, 90px);
+    }
   }
 
   &__title {
