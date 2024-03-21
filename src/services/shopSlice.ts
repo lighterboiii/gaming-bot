@@ -1,4 +1,5 @@
-// import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 // interface ShopState {
 //   products: any | null;
