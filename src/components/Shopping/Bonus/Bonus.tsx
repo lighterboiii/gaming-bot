@@ -25,8 +25,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         const tokens = await putReq<any>({
           uri: setCollectiblesUri,
           endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-          // userId: userId,
-          userId: user?.id
+          userId: userId,
+          // userId: user?.id
         });
         const formattedTokens = Math.floor(tokens.message);
         dispatch(setNewTokensValue(formattedTokens));
@@ -46,8 +46,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         await putReq({
           uri: setCollectiblesUri,
           endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-          // userId: userId,
-          userId: user?.id
+          userId: userId,
+          // userId: user?.id
         });
         dispatch(setCollectibles(item.bonus_item_id));
         break

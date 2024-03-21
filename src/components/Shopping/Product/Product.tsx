@@ -28,7 +28,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
         uri: buyShopItemUri,
         userId: userId,
         // userId: user?.id,
-        endpoint: `&item_id=${item.item_id}&count=1`
+        endpoint: `&item_id=${item.item_id}&count=$1`
       });
       setMessageShown(true);
       switch (res.message) {

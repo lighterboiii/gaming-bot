@@ -7,15 +7,18 @@
   &__avatarContainer {
     @include indents();
     @include position(relative);
-    @include size(156px, 156px);
+    @include min-size(100px, 100px);
+    @include size(auto, auto);
+    @include max-size(240px, 240px);
+    aspect-ratio: 1;
     z-index: 5;
   }
 
   &__info {
     @include size(100%, auto);
     @include flex(column, center, center, 16px);
-    @include position(absolute, $left: 50%, $bottom: 80px);
-    transform: translate(-50%);
+    // @include position(absolute, $left: 50%, $bottom: 80px);
+    // transform: translate(-50%);
     z-index: 1;
   }
 
