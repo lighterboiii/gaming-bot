@@ -11,20 +11,20 @@ import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
 import { getReq } from "../../api/api";
-import { getDailyBonusUri, getShopAvailableUri, userId } from "../../api/requestData";
-import { setShopData } from "../../services/shopSlice";
+import { userId } from "../../api/requestData";
 import Loader from "../../components/Loader/Loader";
 import { Bonus, ItemData } from "../../utils/types";
 import DailyBonus from "../../components/Shopping/Bonus/Bonus";
+import { setDailyBonus, setShopAvailable } from "../../services/userSlice";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const shopData = useAppSelector(store => store.shop.products?.shop);
+  const shopData = useAppSelector(store => store.user.products);
   const collectibles = useAppSelector(store => store.user.info?.collectibles);
-  const archive = useAppSelector(store => store.shop.archive);
+  const archive = useAppSelector(store => store.user.archive);
 
   const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState<string>('Магазин');
@@ -33,7 +33,7 @@ const Shop: FC = () => {
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
-  const [dailyBonusData, setDailyBonusData] = useState<any>()
+  const [dailyBonusData, setDailyBonusData] = useState<Bonus | null>(null);
 
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
@@ -65,12 +65,16 @@ const Shop: FC = () => {
   // при монтировании компонента
   useEffect(() => {
     setLoading(true);
+    setGoods(shopData);
     const fetchShopData = async () => {
       try {
-        const isDailyBonusActive = await getReq<any>({ uri: getDailyBonusUri, userId: userId });
-        setDailyBonusData(isDailyBonusActive);
-        const shopGoods = await getReq<ItemData[]>({ uri: getShopAvailableUri, userId: '' });
-        dispatch(setShopData(shopGoods));
+        const res = await getReq<any>({
+          uri: 'get_start_info?user_id=',
+          userId: userId,
+        });
+        dispatch(setShopAvailable(res.shop_available));
+        dispatch(setDailyBonus(res.daily_bonus));
+        setDailyBonusData(res.daily_bonus);
       } catch (error) {
         console.log(error);
       };
@@ -87,7 +91,7 @@ const Shop: FC = () => {
   }, []);
   // показать окно бонуса или нет
   useEffect(() => {
-    dailyBonusData?.bonus !== 'no' ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
+    dailyBonusData ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
   }, [dailyBonusData])
   // открыть страничку с данными скина
   const handleShowItemDetails = (item: ItemData) => {

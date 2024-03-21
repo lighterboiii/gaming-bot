@@ -3,10 +3,16 @@ import { UserInfo } from "../utils/types";
 
 interface UserState {
   info: UserInfo | null;
+  products: any | null;
+  archive: any | null;
+  bonus: any | null;
 }
 
 const initialState: UserState = {
-  info: null
+  info: null,
+  products: null,
+  archive: null,
+  bonus: null,
 }
 
 const userSlice = createSlice({
@@ -25,9 +31,7 @@ const userSlice = createSlice({
       }
     },
     setDailyBonus: (state, action: PayloadAction<string>) => {
-      if (state.info) {
-        state.info.bonus = action.payload;
-      }
+      state.bonus = action.payload;
     },
     setActiveSkin: (state, action: PayloadAction<number>) => {
       if (state.info) {
@@ -53,16 +57,22 @@ const userSlice = createSlice({
         state.info.tokens = state.info.tokens - action.payload;
       }
     },
-    // setNewCoinsValue: (state, action: PayloadAction<number>) => {
-    //   if (state.userData) {
-    //     state.userData.info.coins += action.payload;
-    //   }
-    // },
+    setNewCoinsValue: (state, action: PayloadAction<number>) => {
+      if (state.info) {
+        state.info.coins = action.payload;
+      }
+    },
     setNewTokensValue: (state, action: PayloadAction<number>) => {
       if (state.info) {
         state.info.tokens = action.payload;
       }
     },
+    setShopAvailable: (state, action: PayloadAction<any>) => {
+      state.products = action.payload;
+    },
+    setProductsArchive: (state, action: PayloadAction<any>) => {
+      state.archive = action.payload;
+    }
   }
 });
 
@@ -75,6 +85,9 @@ export const {
   setActiveSkin,
   setCollectibles,
   setNewTokensValue,
+  setShopAvailable,
+  setProductsArchive,
+  setDailyBonus
   // setNewCoinsValue
 } = userSlice.actions;
 

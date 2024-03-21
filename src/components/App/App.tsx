@@ -10,14 +10,13 @@ import Shop from '../../pages/Shop/Shop';
 import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
-import { UserData } from '../../utils/types';
 import { getReq } from '../../api/api';
 import { getUserInfoUri, userId, getUserAvatarUri } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { getUserData, setUserData, setUserPhoto } from '../../services/userSlice';
+import { setDailyBonus, setUserData, setUserPhoto } from '../../services/userSlice';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
-import { setProductsArchive } from '../../services/shopSlice';
+import { setProductsArchive, setShopAvailable } from '../../services/userSlice';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -33,32 +32,22 @@ const App: FC = () => {
   }, []);
 
   useEffect(() => {
-    // setLoading(true);
+    setLoading(true);
     const fetchUserData = async () => {
       try {
-        // const userDataResponse = await getReq<UserData>({
-        //   uri: getUserInfoUri,
-        //   userId: userId,
-        //   // userId: user?.id,
-        // });
         const res = await getReq<any>({
           uri: 'get_start_info?user_id=',
           userId: userId,
-        })
-        console.log(res.collectibles_data);
-        dispatch(getUserData(res.user_info));
+        });
         const userPhotoResponse = await getReq<any>({
           uri: getUserAvatarUri,
           userId: userId,
           // userId: user?.id,
         });
-        console.log(userPhotoResponse);
-        const inventoryData = await getReq<any>({
-          uri: 'load_collectibles_data',
-          userId: ''
-        });
-        dispatch(setProductsArchive(res?.collectibles_data));
-        // dispatch(setUserData(res.user_info));
+        dispatch(setUserData(res.user_info));
+        dispatch(setProductsArchive(res.collectibles_data));
+        // dispatch(setShopAvailable(res.shop_available));
+        // dispatch(setDailyBonus(res.daily_bonus));
         dispatch(setUserPhoto(userPhotoResponse?.info));
         setLoading(false);
       } catch (error) {

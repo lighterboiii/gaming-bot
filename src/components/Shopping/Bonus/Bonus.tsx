@@ -14,14 +14,15 @@ interface IProps {
 }
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
-  const dailyBonus = bonus.bonus;
+  console.log(bonus);
+  const dailyBonus = bonus;
   // console.log(dailyBonus);
   const dispatch = useAppDispatch();
 
   const handleGetBonus = async (item: Bonus) => {
-    const itemId = Number(item.bonus.bonus_item_id);
-    const itemCount = Number(item.bonus.bonus_count);
-    switch (item.bonus.bonus_type) {
+    const itemId = Number(item.bonus_item_id);
+    const itemCount = Number(item.bonus_count);
+    switch (item.bonus_type) {
       case "tokens":
         const tokens = await putReq<any>({
           uri: setCollectiblesUri,
@@ -50,8 +51,7 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
           userId: userId,
           // userId: user.?id
         });
-        // console.log(skin);
-        dispatch(setCollectibles(item.bonus.bonus_item_id));
+        dispatch(setCollectibles(item.bonus_item_id));
         break
     }
     closeOverlay();

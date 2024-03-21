@@ -1,31 +1,3 @@
-export interface UserData {
-  info: {
-    lang: string;
-    user_id: number;
-    username: string;
-    active_skin: number;
-    all_games_played_count: number;
-    coinloses: number;
-    coins: number;
-    coinwins: number;
-    collectibles: number[];
-    days_online: number;
-    if_ban: number;
-    loses: number;
-    publicname: string;
-    referrer_all_coins: number;
-    referrer_coins: number;
-    referrer_id: number;
-    tickets: number;
-    tokenloses: number;
-    tokens: number;
-    tokenwins: number;
-    wins: number;
-    photo: string;
-  },
-  bonus: string;
-};
-
 export interface UserInfo {
   active_skin: number;
   all_games_played_count: number;
@@ -53,7 +25,6 @@ export interface UserInfo {
   user_leaderboard_count: number | null;
   username: string;
   wins: number;
-  bonus: string;
   photo: string;
 }
 
@@ -69,11 +40,9 @@ export interface ItemData {
 };
 
 export interface Bonus {
-  bonus: {
     bonus_count: number;
     bonus_image: string;
     bonus_item_id: number;
     bonus_type: string;
     day: number;
-  }
 }
