@@ -17,6 +17,7 @@ interface IProps {
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
+  // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: Bonus) => {
     const itemId = Number(item.bonus_item_id);
     const itemCount = Number(item.bonus_count);
@@ -25,8 +26,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         const tokens = await putReq<any>({
           uri: setCollectiblesUri,
           endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-          userId: userId,
-          // userId: user?.id
+          // userId: userId,
+          userId: user?.id
         });
         const formattedTokens = Math.floor(tokens.message);
         dispatch(setNewTokensValue(formattedTokens));
@@ -46,8 +47,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         await putReq({
           uri: setCollectiblesUri,
           endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-          userId: userId,
-          // userId: user?.id
+          // userId: userId,
+          userId: user?.id
         });
         dispatch(setCollectibles(item.bonus_item_id));
         break

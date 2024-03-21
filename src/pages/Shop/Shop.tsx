@@ -47,6 +47,43 @@ const Shop: FC = () => {
     }));
     setGoods(shopDataWithCollectible);
   }
+    // при монтировании компонента
+    useEffect(() => {
+      setLoading(true);
+      shopData && setGoods(shopData);
+      const fetchShopData = async () => {
+        try {
+          const res = await getReq<IAppData>({
+            uri: mainAppDataUri,
+            // userId: userId,
+            userId: user?.id,
+          });
+          dispatch(setShopAvailable(res.shop_available));
+          dispatch(setDailyBonus(res.daily_bonus));
+          setDailyBonusData(res.daily_bonus);
+        } catch (error) {
+          console.log(error);
+        };
+        setLoading(false);
+      }
+      fetchShopData();
+      setActiveButton('Магазин');
+      tg.BackButton.show().onClick(() => {
+        navigate(-1);
+      });
+      return () => {
+        tg.BackButton.hide();
+      }
+    }, []);
+    // показать окно бонуса или нет
+    useEffect(() => {
+      dailyBonusData ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
+    }, [dailyBonusData])
+    // открыть страничку с данными скина
+    const handleShowItemDetails = (item: ItemData) => {
+      setSelectedItem(item);
+      toggleOverlay();
+    };
   // при изменении данных
   useEffect(() => {
     switch (activeButton) {
@@ -62,43 +99,6 @@ const Shop: FC = () => {
         break;
     }
   }, [shopData, collectibles, activeButton]);
-  // при монтировании компонента
-  useEffect(() => {
-    setLoading(true);
-    shopData && setGoods(shopData);
-    const fetchShopData = async () => {
-      try {
-        const res = await getReq<IAppData>({
-          uri: mainAppDataUri,
-          userId: userId,
-          // userId: user?.id,
-        });
-        dispatch(setShopAvailable(res.shop_available));
-        dispatch(setDailyBonus(res.daily_bonus));
-        setDailyBonusData(res.daily_bonus);
-      } catch (error) {
-        console.log(error);
-      };
-      setLoading(false);
-    }
-    fetchShopData();
-    setActiveButton('Магазин');
-    tg.BackButton.show().onClick(() => {
-      navigate(-1);
-    });
-    return () => {
-      tg.BackButton.hide();
-    }
-  }, []);
-  // показать окно бонуса или нет
-  useEffect(() => {
-    dailyBonusData ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
-  }, [dailyBonusData])
-  // открыть страничку с данными скина
-  const handleShowItemDetails = (item: ItemData) => {
-    setSelectedItem(item);
-    toggleOverlay();
-  };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
     setActiveButton("Приобретено");
