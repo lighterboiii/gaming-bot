@@ -15,7 +15,6 @@ interface IProps {
 }
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
-  console.log(bonus);
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
   // универсальная функция для запроссов collectible

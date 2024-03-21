@@ -20,7 +20,7 @@ const Shop: FC = () => {
   const { tg, user } = useTelegram();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  
   const shopData = useAppSelector(store => store.user.products);
   const collectibles = useAppSelector(store => store.user.info?.collectibles);
   const archiveData = useAppSelector(store => store.user.archive);
@@ -58,6 +58,7 @@ const Shop: FC = () => {
             // userId: userId,
             userId: user?.id,
           });
+          console.log(res);
           dispatch(setLavkaAvailable(res.lavka_available));
           dispatch(setShopAvailable(res.shop_available));
           dispatch(setDailyBonus(res.daily_bonus));

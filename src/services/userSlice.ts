@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Bonus, ItemData, UserInfo } from "../utils/types";
+import { Bonus, ItemData, LavkaData, UserInfo } from "../utils/types";
 
 interface UserState {
   info: UserInfo | null;
@@ -82,11 +82,14 @@ const userSlice = createSlice({
     setProductsArchive: (state, action: PayloadAction<ItemData[]>) => {
       state.archive = action.payload;
     },
-    setLavkaAvailable: (state, action: PayloadAction<any[]>) => {
+    setLavkaAvailable: (state, action: PayloadAction<LavkaData[]>) => {
       state.lavka = action.payload;
-    }
+    },
+    addItemToLavka: (state, action: PayloadAction<LavkaData[]>) => {
+      state.lavka.push(action.payload);
+    },
   }
-});
+})
 
 export const {
   setUserData,
@@ -102,6 +105,7 @@ export const {
   setLavkaAvailable,
   setNewExpValue,
   setEnergyDrinksValue,
+  addItemToLavka
   // setNewCoinsValue
 } = userSlice.actions;
 

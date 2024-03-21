@@ -7,7 +7,7 @@ import { putReq } from "../../../api/api";
 import { activeSkinValue, buyShopItemUri, setActiveSkinUri, userId } from "../../../api/requestData";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { ItemData } from "../../../utils/types";
-import { setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setTokensValueAfterBuy } from "../../../services/userSlice";
+import { addItemToLavka, setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setLavkaAvailable, setTokensValueAfterBuy } from "../../../services/userSlice";
 import useTelegram from "../../../hooks/useTelegram";
 
 interface ProductProps {
@@ -36,6 +36,14 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
       // userId: userId,
       userId: user?.id,
       endpoint: `&item_id=${itemId}&count=${itemCount}`
+    });
+  };
+  const sellLavkaRequest = async (itemId: number) => {
+    return await putReq({
+      uri: 'add_sell_lavka?user_id=',
+      // userId: userId,
+      userId: user?.id,
+      endpoint: `&item_id=${itemId}&price=20`,
     });
   }
 
@@ -80,13 +88,27 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   };
 
   const handleSellProduct = async (itemId: number) => {
-    const res = await putReq({
-      uri: 'add_sell_lavka?user_id=',
-      // userId: userId,
-      userId: user?.id,
-      endpoint: `&item_id=${itemId}&price=20`,
-    });
+    const res: any = await sellLavkaRequest(itemId);
     console.log(res);
+    setMessageShown(true);
+      switch (res.message) {
+        case "already":
+          setMessage("Товар уже на витрине");
+          break;
+        case "ok":
+          setMessage("Размещено в лавке");
+          dispatch(addItemToLavka(item));
+          break;
+        default:
+          break;
+      }
+      setTimeout(async () => {
+        onClose();
+        setTimeout(() => {
+          setMessage('');
+          setMessageShown(false);
+        }, 200)
+      }, 1000)
   }
   return (
     <div className={styles.product}>
@@ -103,7 +125,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
             <div className={styles.product__textElements}>
               <p className={styles.product__type}>Тип: {item?.item_type}</p>
               {item?.seller_id && <p className={styles.product__type}>
-                Продавец: {item.seller_id}
+                Продавец: {item.seller_publicname}
               </p>
               }
             </div>

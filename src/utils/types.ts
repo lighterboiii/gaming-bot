@@ -57,7 +57,7 @@ export interface LavkaData {
   item_pic: string;
   item_type: string;
   price: string;
-  seller_id: string;
+  seller_publicname: string;
 }
 
 export interface IAppData {
