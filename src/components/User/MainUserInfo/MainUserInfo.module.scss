@@ -43,6 +43,7 @@
 
   &__text {
     @include indents();
+    @include ellipsis();
     color: $main-color;
     font-weight: 400;
     font-size: 12px;

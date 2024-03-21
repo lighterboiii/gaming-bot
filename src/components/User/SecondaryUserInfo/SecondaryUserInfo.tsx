@@ -22,10 +22,10 @@ const UserInfo: FC = () => {
         <div className={styles.user__textElements}>
           <p className={styles.user__name}>{userData && userData?.publicname}</p>
           <div className={styles.user__money}>
-            <p className={styles.user__text}>💵 {userData ? `${userData?.coins}` : '0'}</p>
-            <p className={styles.user__text}>🔰 {userData ? `${userData?.tokens}` : '0'}</p>
-            <p className={styles.user__text}>🔋 {userData ? `${userData?.user_energy_drinks}` : '0'}</p>
-            <p className={styles.user__text}>🧙‍♂️ {userData ? `${userData?.user_exp}` : '0'}</p>
+            <p className={styles.user__text}>💵 {userData ? `${Math.ceil(userData?.coins)}` : '0'}</p>
+            <p className={styles.user__text}>🔰 {userData ? `${Math.ceil(userData?.tokens)}` : '0'}</p>
+            <p className={styles.user__text}>🔋 {userData ? `${Math.ceil(userData?.user_energy_drinks)}` : '0'}</p>
+            <p className={styles.user__text}>🧙‍♂️ {userData ? `${Math.ceil(userData?.user_exp)}` : '0'}</p>
           </div>
           <button type="button" className={styles.user__balance} onClick={handleClickBalance}>баланс</button>
         </div>

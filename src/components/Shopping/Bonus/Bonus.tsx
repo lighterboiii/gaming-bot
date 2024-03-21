@@ -22,8 +22,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
     return await putReq<any>({
       uri: setCollectiblesUri,
       endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-      // userId: userId,
-      userId: user?.id
+      userId: userId,
+      //userId: user?.id
     });
   };
   // обработчик действия по кнопке "забрать"

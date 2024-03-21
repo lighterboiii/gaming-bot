@@ -25,24 +25,24 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const setActiveSkinRequest = async (itemId: number) => {
     return await putReq({
       uri: setActiveSkinUri,
-      // userId: userId,
-      userId: user?.id, 
+      userId: userId,
+      // userId: user?.id, 
       endpoint: `${activeSkinValue}${itemId}`
     });
   };
   const buyItemRequest = async (itemId: number, itemCount: number = 1) => {
     return await putReq({
       uri: buyShopItemUri,
-      // userId: userId,
-      userId: user?.id,
+      userId: userId,
+      // userId: user?.id,
       endpoint: `&item_id=${itemId}&count=${itemCount}`
     });
   };
   const sellLavkaRequest = async (itemId: number) => {
     return await putReq({
       uri: 'add_sell_lavka?user_id=',
-      // userId: userId,
-      userId: user?.id,
+      userId: userId,
+      // userId: user?.id,
       endpoint: `&item_id=${itemId}&price=20`,
     });
   }
