@@ -4,7 +4,10 @@
 .product {
   @include children-layout();
   @include position(relative);
-  justify-content: center;
+  
+  @media screen and (min-height: 700px) {
+    justify-content: center;
+  }
 
   &__avatarContainer {
     @include indents();
