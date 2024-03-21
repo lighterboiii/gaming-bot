@@ -3,6 +3,7 @@
 
 .product {
   @include children-layout();
+  @include position(relative);
 
   &__avatarContainer {
     @include indents();
