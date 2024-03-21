@@ -20,12 +20,14 @@ const Main: FC = () => {
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
     setShowBannerOverlay(!showBannerOverlay)
+    setShowReferralOverlay(false);
   };
 
   const overlayActive = (showBannerOverlay || showReferralOverlay);
 
   const toggleOverlay = () => {
     setShowReferralOverlay(!showReferralOverlay);
+    setShowBannerOverlay(false);
   };
 
   return (

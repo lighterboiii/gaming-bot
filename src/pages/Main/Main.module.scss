@@ -8,8 +8,12 @@
 
 
   &__header {
-    @include size(100%, auto);
-    @include flex(column, center, center);
+    @include size(100%, 20vh);
+    @include flex(column, center, center, 16px);
+
+    @media screen and (max-height: 690px) {
+      @include size(100%, 30vh);
+    }
   }
 
   &__logo {
@@ -18,7 +22,7 @@
 
   &__content {
     @include flex(column, center, unset, 16px);
-    @include size(100%, auto);
+    @include size(100%, 100%);
     opacity: 1;
   }
 
@@ -46,5 +50,5 @@
 .hidden {
   height: 0;
   overflow: hidden;
-  transition: height 1s ease-in;
+  transition: height 1s ease;
 }

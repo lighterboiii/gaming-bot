@@ -19,8 +19,12 @@
   @include flex(column, flex-start, center, 16px);
 
   &__header {
-    @include size(100%, auto);
-    @include flex(column, center, center, 16px);
+    @include size(100%, 20vh);
+    @include flex(column, center, center, 8px);
+
+    @media screen and (max-height: 690px) {
+      @include size(100%, 30vh);
+    }
   }
 
   &__content {
@@ -47,8 +51,8 @@
 
   &__goods {
     @include indents();
-    @include size(100%, auto);
-    @include max-size(100%, calc(var(--tg-viewport-height) - 20vh));
+    @include size(100%, 100%);
+    // @include max-size(100%, calc(var(--tg-viewport-height) - 20vh));
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(3, 1fr);
@@ -86,5 +90,5 @@
 .hidden {
   height: 0;
   overflow: hidden;
-  transition: height 1s ease-in;
+  transition: height 1s ease;
 }
