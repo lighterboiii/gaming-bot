@@ -7,6 +7,7 @@ import { roomsUrl } from "../../../utils/routes";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import { useAppSelector } from "../../../services/reduxHooks";
 import CircleButton from "../../ui/CircleButton/CircleButton";
+import { formatNumber } from "../../../utils/additionalFunctions";
 
 interface IProps {
   toggleOverlay: () => void;
@@ -33,12 +34,12 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
             <p className={styles.userInfo__name}>{userData && userData?.publicname}</p>
             <div className={styles.userInfo__money}>
               <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
-                <p className={styles.userInfo__text}>💵 {userData ? `${Math.ceil(userData?.coins)}` : '0'}</p>
-                <p className={styles.userInfo__text}>🔰 {userData ? `${Math.ceil(userData?.tokens)}` : '0'}</p>
+                <p className={styles.userInfo__text}>💵 {userData ? formatNumber(userData?.coins) : '0'}</p>
+                <p className={styles.userInfo__text}>🔰 {userData ? formatNumber(userData?.tokens) : '0'}</p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "center", alignItems: 'center', gap: '8px' }}>
-                <p className={styles.userInfo__text}>🔋 {userData ? `${Math.ceil(userData?.user_energy_drinks)}` : '0'}</p>
-                <p className={styles.userInfo__text}>🧙‍♂️ {userData ? `${Math.ceil(userData?.user_exp)}` : '0'}</p>
+                <p className={styles.userInfo__text}>🔋 {userData ? formatNumber(userData?.user_energy_drinks) : '0'}</p>
+                <p className={styles.userInfo__text}>🧙‍♂️ {userData ? formatNumber(userData?.user_exp) : '0'}</p>
               </div>
             </div>
           </div>
