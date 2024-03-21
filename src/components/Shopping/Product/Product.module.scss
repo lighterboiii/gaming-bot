@@ -5,9 +5,9 @@
   @include children-layout();
   @include position(relative);
 
-  @media screen and (min-height: 690px) {
-    justify-content: center;
-  }
+  // @media screen and (min-height: 690px) {
+  //   justify-content: center;
+  // }
 
   &__avatarContainer {
     @include indents();
