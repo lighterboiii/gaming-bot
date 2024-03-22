@@ -10,6 +10,7 @@ import useTelegram from "../../../hooks/useTelegram";
 import { buyItemRequest, cancelLavkaRequest, sellLavkaRequest, setActiveSkinRequest } from "../../../api/shopApi";
 import { userId } from "../../../api/requestData";
 import { Modal } from "../../Modal/Modal";
+import SellForm from "../SellForm/SellForm";
 
 interface ProductProps {
   item: any;
@@ -65,31 +66,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
     dispatch(setActiveSkin(itemId));
     onClose();
   };
-  // продажа товара в лавку
-  const handleSellToLavka = async (itemId: number, price: number = 5) => {
-    setModalOpen(true);
-    // const res: any = await sellLavkaRequest(itemId, price, userId);
-    // setMessageShown(true);
-    // switch (res.message) {
-    //   case "already":
-    //     setMessage("Товар уже на витрине");
-    //     break;
-    //   case "ok":
-    //     setMessage("Размещено в лавке");
-    //     dispatch(addItemToLavka(item));
-    //     break;
-    //   default:
-    //     break;
-    // }
-    // dispatch(removeCollectible(itemId));
-    // setTimeout(async () => {
-    //   onClose();
-    //   setTimeout(() => {
-    //     setMessage('');
-    //     setMessageShown(false);
-    //   }, 200)
-    // }, 1000)
-  };
+
   // хендлер снятия товара с продажи
   const handleCancelSelling = (itemId: number) => {
     // cancelLavkaRequest(itemId, userId);
@@ -104,6 +81,15 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
       }, 200)
     }, 1000)
   };
+  // закрыть попап с продажей
+  const handleCloseFormModal = () => {
+    setModalOpen(false);
+    setTimeout(() => {
+      onClose();
+      setMessage('');
+      setMessageShown(false);
+    }, 1000);
+  }
   return (
     <div className={styles.product}>
       {messageShown ? (
@@ -134,7 +120,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
                 <div className={styles.product__buttonWrapper}>
                   <Button
                     text="Продать"
-                    handleClick={() => handleSellToLavka(item?.item_id)}
+                    handleClick={() => setModalOpen(true)}
                     isWhiteBackground
                   />
                 </div>
@@ -159,9 +145,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
       )}
       {isModalOpen && (
         <Modal title="Выставить в лавку" closeModal={() => setModalOpen(false)}>
-          <div>
-            Будем продавать или что?
-          </div>
+          <SellForm item={item} setMessage={setMessage} setMessageShown={setMessageShown} onClose={handleCloseFormModal} />
         </Modal>
 
       )}

@@ -1,0 +1,72 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { FC, useState } from "react";
+import styles from './SellForm.module.scss';
+import Button from "../../ui/Button/Button";
+import { sellLavkaRequest } from "../../../api/shopApi";
+import { userId } from "../../../api/requestData";
+import useTelegram from "../../../hooks/useTelegram";
+import { useAppDispatch } from "../../../services/reduxHooks";
+import { LavkaData } from "../../../utils/types";
+import { addItemToLavka, removeCollectible } from "../../../services/appSlice";
+
+interface IProps {
+  item: LavkaData;
+  setMessageShown: (value: boolean) => void;
+  setMessage: (value: string) => void;
+  onClose: () => void; 
+}
+
+const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
+  const { user } = useTelegram();
+  const dispatch = useAppDispatch();
+  const [priceValue, setPriceValue] = useState('')
+  // продажа товара в лавку
+  const handleSellToLavka = async (itemId: number, price: number) => {
+    const res: any = await sellLavkaRequest(itemId, price, userId);
+    setMessageShown(true);
+    switch (res.message) {
+      case "already":
+        setMessage("Товар уже на витрине");
+        break;
+      case "ok":
+        setMessage("Размещено в лавке");
+        dispatch(addItemToLavka(item));
+        break;
+      default:
+        break;
+    }
+    dispatch(removeCollectible(itemId));
+    // setTimeout(async () => {
+      onClose();
+      // setTimeout(() => {
+      //   setMessage('');
+      //   setMessageShown(false);
+      // }, 200)
+    // }, 1000)
+  };
+
+  return (
+    <div className={styles.sellModal}>
+      <form className={styles.form}>
+        <fieldset className={styles.form__fieldset}>
+          <input
+            required
+            type="number"
+            name="price"
+            id="price"
+            value={priceValue}
+            className={styles.form__input}
+            onChange={(e) => setPriceValue(e.target.value)}
+            placeholder="Введите цену"
+          />
+          {/* <input type="number" name="count" id="count" value={''} className={styles.form__input} /> */}
+        </fieldset>
+      </form>
+      <div className={styles.sellModal__button}>
+        <Button text="Продать в лавке" handleClick={() => handleSellToLavka(item.item_id, Number(priceValue))} />
+      </div>
+    </div>
+  )
+};
+
+export default SellForm;

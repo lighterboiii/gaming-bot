@@ -1,0 +1,33 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.sellModal {
+  @include indents();
+  @include min-size(210px, auto);
+  @include size(100%, 100%);
+  @include flex(column, center, center, 16px);
+
+  &__button {
+    @include size(100%, 32px);
+  }
+}
+
+.form {
+  @include size(100%, 100%);
+  @include flex(column, center, center, 10px);
+
+  &__fieldset {
+    @include indents();
+    @include size(100%, auto);
+    border: none;
+  }
+
+  &__input {
+    @include input-style-reset();
+    @include size(100%, auto);
+    @include min-size(100%, 32px);
+    @include indents(6px 12px);
+    border: .5px $black-color solid;
+    border-radius: $radius-10;
+  }
+}
