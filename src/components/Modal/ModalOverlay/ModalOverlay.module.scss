@@ -1,0 +1,9 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.overlay {
+  @include position(fixed, 0, 0, 0, 0);
+  @include flex();
+  background-color: rgba(0, 0, 0, .6);
+  z-index: 666;
+}

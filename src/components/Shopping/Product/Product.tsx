@@ -9,6 +9,7 @@ import { addItemToLavka, removeCollectible, removeItemFromLavka, setActiveSkin, 
 import useTelegram from "../../../hooks/useTelegram";
 import { buyItemRequest, cancelLavkaRequest, sellLavkaRequest, setActiveSkinRequest } from "../../../api/shopApi";
 import { userId } from "../../../api/requestData";
+import { Modal } from "../../Modal/Modal";
 
 interface ProductProps {
   item: any;
@@ -21,9 +22,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
-// для отрисовки интерфейса продажи айтема
+  const [isModalOpen, setModalOpen] = useState(false);
+  // для отрисовки интерфейса продажи айтема
   const isUserSeller = Number(userId) === Number(item?.seller_id);
-// хендлер покупки
+  // хендлер покупки
   const handleBuyItem = async (item: ItemData) => {
     try {
       const res: any = await buyItemRequest(item.item_id, 1, userId);
@@ -57,35 +59,36 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
       console.log(error);
     }
   };
-// хендлер установки скина в актив
+  // хендлер установки скина в актив
   const handleSetActiveSkin = async (itemId: number) => {
     setActiveSkinRequest(itemId, userId);
     dispatch(setActiveSkin(itemId));
     onClose();
   };
-// продажа товара в лавку
+  // продажа товара в лавку
   const handleSellToLavka = async (itemId: number, price: number = 5) => {
-    const res: any = await sellLavkaRequest(itemId, price, userId);
-    setMessageShown(true);
-    switch (res.message) {
-      case "already":
-        setMessage("Товар уже на витрине");
-        break;
-      case "ok":
-        setMessage("Размещено в лавке");
-        dispatch(addItemToLavka(item));
-        break;
-      default:
-        break;
-    }
-    dispatch(removeCollectible(itemId));
-    setTimeout(async () => {
-      onClose();
-      setTimeout(() => {
-        setMessage('');
-        setMessageShown(false);
-      }, 200)
-    }, 1000)
+    setModalOpen(true);
+    // const res: any = await sellLavkaRequest(itemId, price, userId);
+    // setMessageShown(true);
+    // switch (res.message) {
+    //   case "already":
+    //     setMessage("Товар уже на витрине");
+    //     break;
+    //   case "ok":
+    //     setMessage("Размещено в лавке");
+    //     dispatch(addItemToLavka(item));
+    //     break;
+    //   default:
+    //     break;
+    // }
+    // dispatch(removeCollectible(itemId));
+    // setTimeout(async () => {
+    //   onClose();
+    //   setTimeout(() => {
+    //     setMessage('');
+    //     setMessageShown(false);
+    //   }, 200)
+    // }, 1000)
   };
   // хендлер снятия товара с продажи
   const handleCancelSelling = (itemId: number) => {
@@ -153,6 +156,14 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
             )}
           </div>
         </>
+      )}
+      {isModalOpen && (
+        <Modal title="Выставить в лавку" closeModal={() => setModalOpen(false)}>
+          <div>
+            Будем продавать или что?
+          </div>
+        </Modal>
+
       )}
     </div>
   );
