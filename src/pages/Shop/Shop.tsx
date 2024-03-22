@@ -65,10 +65,9 @@ const Shop: FC = () => {
         try {
           const res = await getReq<IAppData>({
             uri: mainAppDataUri,
-            userId: userId,
-            // appuserId: user?.id,
+            // userId: userId,
+            userId: user?.id,
           });
-          console.log(res);
           dispatch(setLavkaAvailable(res.lavka_available));
           dispatch(setShopAvailable(res.shop_available));
           dispatch(setDailyBonus(res.daily_bonus));

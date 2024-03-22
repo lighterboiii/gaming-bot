@@ -5,9 +5,9 @@ import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { ItemData } from "../../../utils/types";
-import { addItemToLavka, removeCollectible, removeItemFromLavka, setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setTokensValueAfterBuy } from "../../../services/appSlice";
+import { removeItemFromLavka, setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setTokensValueAfterBuy } from "../../../services/appSlice";
 import useTelegram from "../../../hooks/useTelegram";
-import { buyItemRequest, cancelLavkaRequest, sellLavkaRequest, setActiveSkinRequest } from "../../../api/shopApi";
+import { buyItemRequest, cancelLavkaRequest, setActiveSkinRequest } from "../../../api/shopApi";
 import { userId } from "../../../api/requestData";
 import { Modal } from "../../Modal/Modal";
 import SellForm from "../SellForm/SellForm";
@@ -29,7 +29,8 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   // хендлер покупки
   const handleBuyItem = async (item: ItemData) => {
     try {
-      const res: any = await buyItemRequest(item.item_id, 1, userId);
+      const res: any = await buyItemRequest(item.item_id, 1, user?.id);
+      // const res: any = await buyItemRequest(item.item_id, 1, userId);
       setMessageShown(true);
       switch (res.message) {
         case "out":
@@ -43,7 +44,8 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
           dispatch(setCollectibles(item.item_id));
           dispatch(setCoinsValueAfterBuy(item.item_price_coins));
           dispatch(setTokensValueAfterBuy(item.item_price_tokens));
-          setActiveSkinRequest(item.item_id, userId);
+          setActiveSkinRequest(item.item_id, user?.id);
+          // setActiveSkinRequest(item.item_id, userId);
           dispatch(setActiveSkin(item.item_id));
           break;
         default:
@@ -62,13 +64,15 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   };
   // хендлер установки скина в актив
   const handleSetActiveSkin = async (itemId: number) => {
-    setActiveSkinRequest(itemId, userId);
+    setActiveSkinRequest(itemId, user?.id);
+    // setActiveSkinRequest(itemId, userId);
     dispatch(setActiveSkin(itemId));
     onClose();
   };
 
   // хендлер снятия товара с продажи
   const handleCancelSelling = (itemId: number) => {
+    cancelLavkaRequest(itemId, user?.id);
     // cancelLavkaRequest(itemId, userId);
     setMessageShown(true);
     setMessage("Товар снят с продажи");
