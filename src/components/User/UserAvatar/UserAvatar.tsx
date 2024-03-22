@@ -29,7 +29,8 @@ const UserAvatar: FC<IProps> = ({ item }) => {
       setSkin('');
       setMask('');
     }
-  }, [userData, item, activeSkin]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSkin, userData]);
 
   return (
     <>

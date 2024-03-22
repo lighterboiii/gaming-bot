@@ -21,7 +21,7 @@ interface ProductProps {
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
@@ -124,7 +124,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         case "ok":
           setMessage("Куплено из лавки!");
           dispatch(setCollectibles(item.item_id));
-          dispatch(setCoinsValueAfterBuy(item.item_price_coins));
+          // dispatch(setCoinsValueAfterBuy(item.item_price_coins));
           dispatch(setTokensValueAfterBuy(item.item_price_tokens));
           // setActiveSkinRequest(item.item_id, user?.id);
           setActiveSkinRequest(item.item_id, userId);

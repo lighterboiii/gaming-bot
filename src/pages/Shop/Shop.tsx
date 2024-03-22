@@ -18,7 +18,7 @@ import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../servic
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -114,7 +114,7 @@ const Shop: FC = () => {
       default:
         break;
     }
-  }, [shopData, collectibles, activeButton, lavkaAvailable, goods]);
+  }, [shopData, collectibles, activeButton, lavkaAvailable]);
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
     setActiveButton("Приобретено");
