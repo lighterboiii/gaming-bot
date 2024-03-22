@@ -18,15 +18,17 @@ interface IProps {
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
   const { user } = useTelegram();
+    const userId = user?.id;
   const dispatch = useAppDispatch();
   
   const [priceValue, setPriceValue] = useState('')
   // продажа товара в лавку
   const handleSellToLavka = async (itemId: number, price: number) => {
-    const res: any = await sellLavkaRequest(itemId, price, user?.id);
+    // const res: any = await sellLavkaRequest(itemId, price, user?.id);
+    const res: any = await sellLavkaRequest(itemId, price, userId);
     const itemWithPrice = {
       ...item,
-      item_price_coins: price
+      item_price_coins: price,
     };
     setMessageShown(true);
     switch (res.message) {

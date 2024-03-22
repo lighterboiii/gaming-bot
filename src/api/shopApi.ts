@@ -27,6 +27,7 @@ export const sellLavkaRequest = async (itemId: number, price: number, userIdValu
   });
 };
 export const buyLavkaRequest = async (item: LavkaData, userIdValue: string) => {
+  console.log(item);
   return await putReq({
     uri: buyLavkaUri,
     userId: userIdValue,

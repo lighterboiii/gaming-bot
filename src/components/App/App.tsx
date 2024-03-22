@@ -21,6 +21,7 @@ import { IAppData, UserPhoto } from '../../utils/types';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
+  const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -38,13 +39,13 @@ const App: FC = () => {
       try {
         const res = await getReq<IAppData>({
           uri: mainAppDataUri,
-          // userId: userId,
-          userId: user?.id
+          userId: userId,
+          // userId: user?.id
         });
         const userPhotoResponse = await getReq<UserPhoto>({
           uri: getUserAvatarUri,
-          // userId: userId,
-          userId: user?.id,
+          userId: userId,
+          // userId: user?.id,
         });
         dispatch(setUserData(res.user_info));
         dispatch(setProductsArchive(res.collectibles_data));

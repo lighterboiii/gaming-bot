@@ -9,7 +9,7 @@ export const setActiveSkinUri = 'setactive_skin?user_id=';
 export const buyShopItemUri = `shop_buy_item?user_id=`;
 export const setTokensValueUri = `settokensnewvalue?user_id=`;
 export const setCoinsValueUri = 'setcoinsnewvalue?user_id=';
-export const buyLavkaUri = `buy_lavka?user_id='`;
+export const buyLavkaUri = `buy_lavka?user_id=`;
 export const sellLavkaUri = `add_sell_lavka?user_id=`;
 // links
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';

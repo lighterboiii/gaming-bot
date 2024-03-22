@@ -18,9 +18,10 @@ import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../servic
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
+  const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  
+
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const archiveData = useAppSelector(store => store.app.archive);
@@ -57,44 +58,44 @@ const Shop: FC = () => {
     }));
     setGoods(shopDataWithCollectible);
   }
-    // при монтировании компонента
-    useEffect(() => {
-      setLoading(true);
-      shopData && setGoods(shopData);
-      const fetchShopData = async () => {
-        try {
-          const res = await getReq<IAppData>({
-            uri: mainAppDataUri,
-            // userId: userId,
-            userId: user?.id,
-          });
-          dispatch(setLavkaAvailable(res.lavka_available));
-          dispatch(setShopAvailable(res.shop_available));
-          dispatch(setDailyBonus(res.daily_bonus));
-          setDailyBonusData(res.daily_bonus);
-        } catch (error) {
-          console.log(error);
-        };
-        setLoading(false);
-      }
-      fetchShopData();
-      setActiveButton('Магазин');
-      tg.BackButton.show().onClick(() => {
-        navigate(-1);
-      });
-      return () => {
-        tg.BackButton.hide();
-      }
-    }, []);
-    // показать окно бонуса или нет
-    useEffect(() => {
-      dailyBonusData ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
-    }, [dailyBonusData])
-    // открыть страничку с данными скина
-    const handleShowItemDetails = (item: ItemData) => {
-      setSelectedItem(item);
-      toggleOverlay();
-    };
+  // при монтировании компонента
+  useEffect(() => {
+    setLoading(true);
+    shopData && setGoods(shopData);
+    const fetchShopData = async () => {
+      try {
+        const res = await getReq<IAppData>({
+          uri: mainAppDataUri,
+          userId: userId,
+          // userId: user?.id,
+        });
+        dispatch(setLavkaAvailable(res.lavka_available));
+        dispatch(setShopAvailable(res.shop_available));
+        dispatch(setDailyBonus(res.daily_bonus));
+        setDailyBonusData(res.daily_bonus);
+      } catch (error) {
+        console.log(error);
+      };
+      setLoading(false);
+    }
+    fetchShopData();
+    setActiveButton('Магазин');
+    tg.BackButton.show().onClick(() => {
+      navigate(-1);
+    });
+    return () => {
+      tg.BackButton.hide();
+    }
+  }, []);
+  // показать окно бонуса или нет
+  useEffect(() => {
+    dailyBonusData ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
+  }, [dailyBonusData])
+  // открыть страничку с данными скина
+  const handleShowItemDetails = (item: ItemData) => {
+    setSelectedItem(item);
+    toggleOverlay();
+  };
   // при изменении данных
   useEffect(() => {
     switch (activeButton) {
@@ -113,7 +114,7 @@ const Shop: FC = () => {
       default:
         break;
     }
-  }, [shopData, collectibles, activeButton, lavkaAvailable]);
+  }, [shopData, collectibles, activeButton, lavkaAvailable, goods]);
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
     setActiveButton("Приобретено");
@@ -124,7 +125,10 @@ const Shop: FC = () => {
     setActiveButton("Магазин");
     archiveData && handleAddIsCollectible(archiveData);
   };
-
+  const handleClickLavka = () => {
+    setActiveButton("Лавка");
+    setGoods(lavkaAvailable);
+  }
   return (
     <div className={styles.shop}>
       {loading ? <Loader /> : (
@@ -143,7 +147,7 @@ const Shop: FC = () => {
                 </button>
                 <button
                   className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
-                  onClick={() => setActiveButton('Лавка')}>
+                  onClick={handleClickLavka}>
                   Лавка
                 </button>
               </div>
@@ -178,6 +182,7 @@ const Shop: FC = () => {
             onClose={toggleOverlay}
             children={
               <Product
+                activeButton={activeButton}
                 item={selectedItem}
                 onClose={toggleOverlay}
                 isCollectible={selectedItem?.isCollectible}
