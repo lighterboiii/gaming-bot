@@ -4,7 +4,7 @@ import { Bonus } from "../../../utils/types";
 import styles from './Bonus.module.scss';
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
-import { setCollectibles, setEnergyDrinksValue, setNewExpValue, setNewTokensValue } from "../../../services/userSlice";
+import { setCollectibles, setEnergyDrinksValue, setNewExpValue, setNewTokensValue } from "../../../services/appSlice";
 import { putReq } from "../../../api/api";
 import { setCollectiblesUri, userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";

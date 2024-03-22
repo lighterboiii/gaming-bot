@@ -14,17 +14,17 @@ import { mainAppDataUri, userId } from "../../api/requestData";
 import Loader from "../../components/Loader/Loader";
 import { Bonus, IAppData, ItemData } from "../../utils/types";
 import DailyBonus from "../../components/Shopping/Bonus/Bonus";
-import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../services/userSlice";
+import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../services/appSlice";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   
-  const shopData = useAppSelector(store => store.user.products);
-  const collectibles = useAppSelector(store => store.user.info?.collectibles);
-  const archiveData = useAppSelector(store => store.user.archive);
-  const lavkaAvailable = useAppSelector(store => store.user.lavka);
+  const shopData = useAppSelector(store => store.app.products);
+  const collectibles = useAppSelector(store => store.app.info?.collectibles);
+  const archiveData = useAppSelector(store => store.app.archive);
+  const lavkaAvailable = useAppSelector(store => store.app.lavka);
 
   const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState<string>('Магазин');
@@ -56,7 +56,7 @@ const Shop: FC = () => {
           const res = await getReq<IAppData>({
             uri: mainAppDataUri,
             userId: userId,
-            // userId: user?.id,
+            // appuserId: user?.id,
           });
           console.log(res);
           dispatch(setLavkaAvailable(res.lavka_available));

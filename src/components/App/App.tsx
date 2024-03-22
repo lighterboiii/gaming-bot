@@ -13,10 +13,10 @@ import { createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../.
 import { getReq } from '../../api/api';
 import { userId, getUserAvatarUri, mainAppDataUri } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setUserData, setUserPhoto } from '../../services/userSlice';
+import { setUserData, setUserPhoto } from '../../services/appSlice';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
-import { setProductsArchive } from '../../services/userSlice';
+import { setProductsArchive } from '../../services/appSlice';
 import { IAppData, UserPhoto } from '../../utils/types';
 
 const App: FC = () => {

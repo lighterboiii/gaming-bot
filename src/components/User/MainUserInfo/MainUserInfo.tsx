@@ -16,7 +16,7 @@ interface IProps {
 
 const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
   const { tg } = useTelegram();
-  const userData = useAppSelector(store => store.user.info);
+  const userData = useAppSelector(store => store.app.info);
 
   const handleClickBalance = () => {
     tg.openTelegramLink('https://t.me/lighterboygamebot');
@@ -38,8 +38,8 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
                 <p className={styles.userInfo__text}>🔰 {userData ? formatNumber(userData?.tokens) : '0'}</p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "center", alignItems: 'center', gap: '8px' }}>
-                <p className={styles.userInfo__text}>🔋 {userData ? formatNumber(userData?.user_energy_drinks) : '0'}</p>
-                <p className={styles.userInfo__text}>🧙‍♂️ {userData ? formatNumber(userData?.user_exp) : '0'}</p>
+                <p className={styles.userInfo__text}>🔋 {userData ? userData?.user_energy_drinks : '0'}</p>
+                <p className={styles.userInfo__text}>🧙‍♂️ {userData ? userData?.user_exp : '0'}</p>
               </div>
             </div>
           </div>

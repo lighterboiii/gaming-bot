@@ -7,7 +7,7 @@ import { formatNumber } from "../../../utils/additionalFunctions";
 
 const UserInfo: FC = () => {
   const { tg } = useTelegram();
-  const userData = useAppSelector(store => store.user.info);
+  const userData = useAppSelector(store => store.app.info);
 
   const handleClickBalance = () => {
     tg.openTelegramLink('https://t.me/lighterboygamebot');
@@ -25,8 +25,8 @@ const UserInfo: FC = () => {
           <div className={styles.user__money}>
             <p className={styles.user__text}>💵 {userData ? formatNumber(userData?.coins) : '0'}</p>
             <p className={styles.user__text}>🔰 {userData ? formatNumber(userData?.tokens) : '0'}</p>
-            <p className={styles.user__text}>🔋 {userData ? formatNumber(userData?.user_energy_drinks) : '0'}</p>
-            <p className={styles.user__text}>🧙‍♂️ {userData ? formatNumber(userData?.user_exp) : '0'}</p>
+            <p className={styles.user__text}>🔋 {userData ? userData?.user_energy_drinks : '0'}</p>
+            <p className={styles.user__text}>🧙‍♂️ {userData ? userData?.user_exp : '0'}</p>
           </div>
           <button type="button" className={styles.user__balance} onClick={handleClickBalance}>баланс</button>
         </div>

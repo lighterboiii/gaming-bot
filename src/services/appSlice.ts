@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Bonus, ItemData, LavkaData, UserInfo } from "../utils/types";
 
-interface UserState {
+interface AppState {
   info: UserInfo | null;
   products: ItemData[] | null;
   archive: ItemData[] | null;
@@ -9,7 +9,7 @@ interface UserState {
   lavka: any | null;
 }
 
-const initialState: UserState = {
+const initialState: AppState = {
   info: null,
   products: null,
   archive: null,
@@ -17,8 +17,8 @@ const initialState: UserState = {
   lavka: null,
 }
 
-const userSlice = createSlice({
-  name: 'user',
+const appSlice = createSlice({
+  name: 'app',
   initialState,
   reducers: {
     setUserData: (state, action: PayloadAction<UserInfo>) => {
@@ -107,6 +107,6 @@ export const {
   setEnergyDrinksValue,
   addItemToLavka
   // setNewCoinsValue
-} = userSlice.actions;
+} = appSlice.actions;
 
-export default userSlice.reducer;
+export default appSlice.reducer;

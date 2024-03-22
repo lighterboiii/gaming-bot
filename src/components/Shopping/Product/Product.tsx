@@ -7,7 +7,7 @@ import { putReq } from "../../../api/api";
 import { activeSkinValue, buyShopItemUri, setActiveSkinUri, userId } from "../../../api/requestData";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { ItemData } from "../../../utils/types";
-import { addItemToLavka, setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setLavkaAvailable, setTokensValueAfterBuy } from "../../../services/userSlice";
+import { addItemToLavka, setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setLavkaAvailable, setTokensValueAfterBuy } from "../../../services/appSlice";
 import useTelegram from "../../../hooks/useTelegram";
 
 interface ProductProps {

@@ -21,7 +21,7 @@ const CreateRoom: FC = () => {
   const [currency, setCurrency] = useState('💵');
 
   const dispatch = useAppDispatch();
-  const userCoins = useAppSelector(store => store.user.info);
+  const userCoins = useAppSelector(store => store.app.info);
 
   useEffect(() => {
     tg.BackButton.show().onClick(() => {
