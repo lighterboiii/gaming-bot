@@ -37,8 +37,13 @@ const Shop: FC = () => {
   const [dailyBonusData, setDailyBonusData] = useState<Bonus | null>(null);
 
   const toggleOverlay = () => {
+    window.scrollTo(0, 0);
     setShowOverlay(!showOverlay);
   };
+  const toggleBonusOverlay = () => {
+    window.scrollTo(0, 0);
+    setShowBonusOverlay(!showBonusOverlay);
+  }
   // функция отрисовки предметов инвентаря
   const handleRenderInventoryData = () => {
     const collectibleIds = collectibles?.map(id => Number(id));
@@ -123,12 +128,13 @@ const Shop: FC = () => {
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
     setActiveButton("Магазин");
-    archiveData && handleAddIsCollectible(archiveData);
+    shopData && handleAddIsCollectible(shopData);
   };
   const handleClickLavka = () => {
     setActiveButton("Лавка");
     setGoods(lavkaAvailable);
-  }
+  };
+
   return (
     <div className={styles.shop}>
       {loading ? <Loader /> : (
@@ -196,13 +202,13 @@ const Shop: FC = () => {
               children={
                 <DailyBonus
                   bonus={dailyBonusData}
-                  closeOverlay={() => setShowBonusOverlay(!showBonusOverlay)}
+                  closeOverlay={toggleBonusOverlay}
                 />}
             />}
         </>
       )}
     </div>
   )
-}
+};
 
 export default Shop;

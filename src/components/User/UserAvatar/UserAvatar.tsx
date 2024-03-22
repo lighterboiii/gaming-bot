@@ -30,7 +30,7 @@ const UserAvatar: FC<IProps> = ({ item }) => {
       setMask('');
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeSkin, userData]);
+  }, [activeSkin, userData, item]);
 
   return (
     <>

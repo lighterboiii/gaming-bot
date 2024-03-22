@@ -45,7 +45,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
           setMessage("Успешная покупка");
           dispatch(setCollectibles(item.item_id));
           dispatch(setCoinsValueAfterBuy(item.item_price_coins));
-          dispatch(setTokensValueAfterBuy(item.item_price_tokens));
+          // dispatch(setTokensValueAfterBuy(item.item_price_tokens));
           // setActiveSkinRequest(item.item_id, user?.id);
           setActiveSkinRequest(item.item_id, userId);
           dispatch(setActiveSkin(item.item_id));
@@ -68,17 +68,15 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   const handleSetActiveSkin = async (itemId: number) => {
     // setActiveSkinRequest(itemId, user?.id);
     try {
-      setActiveSkinRequest(itemId, userId);
+      await setActiveSkinRequest(itemId, userId);
       dispatch(setActiveSkin(itemId));
       onClose();
     } catch (error) {
       console.log(error);
     }
   };
-
   // хендлер снятия товара с продажи
   const handleCancelSelling = async (itemId: number) => {
-    // cancelLavkaRequest(itemId, user?.id); 
     try {
       const res = await cancelLavkaRequest(itemId, userId);
       console.log(res);
@@ -105,7 +103,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
       setMessageShown(false);
     }, 1000);
   };
-
+// хендлер покупки в лавке
   const handleBuyLavkaitem = async (item: LavkaData) => {
     try {
       const res: any = await buyLavkaRequest(item, userId);
@@ -124,8 +122,8 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         case "ok":
           setMessage("Куплено из лавки!");
           dispatch(setCollectibles(item.item_id));
-          // dispatch(setCoinsValueAfterBuy(item.item_price_coins));
-          dispatch(setTokensValueAfterBuy(item.item_price_tokens));
+          dispatch(setCoinsValueAfterBuy(item.item_price_coins));
+          // dispatch(setTokensValueAfterBuy(item.item_price_tokens));
           // setActiveSkinRequest(item.item_id, user?.id);
           setActiveSkinRequest(item.item_id, userId);
           dispatch(setActiveSkin(item.item_id));

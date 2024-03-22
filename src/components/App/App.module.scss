@@ -8,6 +8,7 @@
 .app {
   @include indents();
   @include size(100%, 100vh);
+  @include min-size(100%, 100vh);
   overflow-y: auto;
   text-align: center;
   background-color: $secondary-color;

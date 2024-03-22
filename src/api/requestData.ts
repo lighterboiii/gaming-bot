@@ -11,6 +11,7 @@ export const setTokensValueUri = `settokensnewvalue?user_id=`;
 export const setCoinsValueUri = 'setcoinsnewvalue?user_id=';
 export const buyLavkaUri = `buy_lavka?user_id=`;
 export const sellLavkaUri = `add_sell_lavka?user_id=`;
+export const cancelSellLavka = `cancel_sell_lavka?user_id=`;
 // links
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'

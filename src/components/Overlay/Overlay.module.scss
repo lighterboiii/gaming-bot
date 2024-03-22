@@ -8,7 +8,7 @@
   @include size(calc(100% - 32px), 0);
   // background-color: #FFF;
   overflow: hidden;
-  transition: height 1s ease;
+  transition: height .5s ease;
   border-top-left-radius: $radius-15;
   border-top-right-radius: $radius-15;
   z-index: 666;
@@ -22,7 +22,7 @@
     @include position(absolute, $left: 50%, $bottom: 20px);
     transform: translate(-50%);
     @include flex(row, center, center);
-    @include size(40px, 40px);
+    @include size(30px, 30px);
     border-radius: 40px;
     background-color: $black-color;
   }

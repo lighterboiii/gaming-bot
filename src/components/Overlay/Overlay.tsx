@@ -19,7 +19,7 @@ const Overlay: FC<IProps> = ({ show, children, onClose, closeButton }) => {
         onClick={onClose}
         className={styles.overlay__closeButton}
       >
-        <CrossIcon width={20} height={20} />
+        <CrossIcon width={16} height={16} />
       </button>
 }
     </div>

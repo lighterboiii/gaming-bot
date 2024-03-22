@@ -25,16 +25,22 @@ const Main: FC = () => {
 
   const overlayActive = (showBannerOverlay || showReferralOverlay);
 
-  const toggleOverlay = () => {
+  const toggleRefOverlay = () => {
+    window.scrollTo(0, 0);
     setShowReferralOverlay(!showReferralOverlay);
     setShowBannerOverlay(false);
   };
+  const toggleBannerOverlay = () => {
+    window.scrollTo(0, 0);
+    setShowBannerOverlay(!showBannerOverlay);
+    setShowReferralOverlay(false);
+  }
 
   return (
     <div className={styles.main}>
       <div className={styles.main__header}>
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
-        <MainUserInfo toggleOverlay={toggleOverlay} isOverlayOpen={showReferralOverlay} />
+        <MainUserInfo toggleOverlay={toggleRefOverlay} isOverlayOpen={showReferralOverlay} />
       </div>
       <div className={`${styles.main__content} ${overlayActive ? styles.hidden : ''}`}>
         {/* <div className={styles.main__banner}> */}
@@ -70,9 +76,11 @@ const Main: FC = () => {
         <ShopLink />
       </div>
       <Overlay
-        children={<Referral />}
+        children={
+          <Referral />
+        }
         show={showReferralOverlay}
-        onClose={toggleOverlay}
+        onClose={toggleRefOverlay}
       />
       <Overlay
         closeButton
@@ -81,7 +89,7 @@ const Main: FC = () => {
             data={currentBanner}
           />}
         show={showBannerOverlay}
-        onClose={() => setShowBannerOverlay(!setShowBannerOverlay)}
+        onClose={toggleBannerOverlay}
       />
     </div>
   )
