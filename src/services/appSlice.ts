@@ -94,6 +94,12 @@ const appSlice = createSlice({
     addItemToLavka: (state, action: PayloadAction<LavkaData>) => {
       state.lavka.push(action.payload);
     },
+    removeItemFromLavka: (state, action: PayloadAction<number>) => {
+      if (state.lavka) {
+        const updatedLavka = state.lavka.filter((item: LavkaData) => item.item_id !== action.payload);
+        state.lavka = updatedLavka;
+      }
+    },
   }
 })
 
@@ -112,7 +118,8 @@ export const {
   setLavkaAvailable,
   setNewExpValue,
   setEnergyDrinksValue,
-  addItemToLavka
+  addItemToLavka,
+  removeItemFromLavka
   // setNewCoinsValue
 } = appSlice.actions;
 

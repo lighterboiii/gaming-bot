@@ -5,9 +5,10 @@ import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { ItemData } from "../../../utils/types";
-import { addItemToLavka, removeCollectible, setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setTokensValueAfterBuy } from "../../../services/appSlice";
+import { addItemToLavka, removeCollectible, removeItemFromLavka, setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setTokensValueAfterBuy } from "../../../services/appSlice";
 import useTelegram from "../../../hooks/useTelegram";
-import { buyItemRequest, sellLavkaRequest, setActiveSkinRequest } from "../../../api/shopApi";
+import { buyItemRequest, cancelLavkaRequest, sellLavkaRequest, setActiveSkinRequest } from "../../../api/shopApi";
+import { userId } from "../../../api/requestData";
 
 interface ProductProps {
   item: any;
@@ -20,10 +21,12 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
-
+// для отрисовки интерфейса продажи айтема
+  const isUserSeller = Number(userId) === Number(item?.seller_id);
+// хендлер покупки
   const handleBuyItem = async (item: ItemData) => {
     try {
-      const res: any = await buyItemRequest(item.item_id, 1);
+      const res: any = await buyItemRequest(item.item_id, 1, userId);
       setMessageShown(true);
       switch (res.message) {
         case "out":
@@ -37,7 +40,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
           dispatch(setCollectibles(item.item_id));
           dispatch(setCoinsValueAfterBuy(item.item_price_coins));
           dispatch(setTokensValueAfterBuy(item.item_price_tokens));
-          setActiveSkinRequest(item.item_id);
+          setActiveSkinRequest(item.item_id, userId);
           dispatch(setActiveSkin(item.item_id));
           break;
         default:
@@ -54,16 +57,15 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
       console.log(error);
     }
   };
-
+// хендлер установки скина в актив
   const handleSetActiveSkin = async (itemId: number) => {
-    setActiveSkinRequest(itemId);
+    setActiveSkinRequest(itemId, userId);
     dispatch(setActiveSkin(itemId));
     onClose();
   };
-
+// продажа товара в лавку
   const handleSellToLavka = async (itemId: number, price: number = 5) => {
-    const res: any = await sellLavkaRequest(itemId, price);
-    console.log(res);
+    const res: any = await sellLavkaRequest(itemId, price, userId);
     setMessageShown(true);
     switch (res.message) {
       case "already":
@@ -76,7 +78,6 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
       default:
         break;
     }
-    console.log(itemId);
     dispatch(removeCollectible(itemId));
     setTimeout(async () => {
       onClose();
@@ -85,7 +86,21 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
         setMessageShown(false);
       }, 200)
     }, 1000)
-  }
+  };
+  // хендлер снятия товара с продажи
+  const handleCancelSelling = (itemId: number) => {
+    // cancelLavkaRequest(itemId, userId);
+    setMessageShown(true);
+    setMessage("Товар снят с продажи");
+    dispatch(removeItemFromLavka(itemId));
+    setTimeout(async () => {
+      onClose();
+      setTimeout(() => {
+        setMessage('');
+        setMessageShown(false);
+      }, 200)
+    }, 1000)
+  };
   return (
     <div className={styles.product}>
       {messageShown ? (
@@ -100,9 +115,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
           <div className={styles.product__info}>
             <div className={styles.product__textElements}>
               <p className={styles.product__type}>Тип: {item?.item_type}</p>
-              {item?.seller_id && <p className={styles.product__type}>
-                Продавец: {item.seller_publicname}
-              </p>
+              {item?.seller_publicname &&
+                <p className={styles.product__type}>
+                  Продавец: {item.seller_publicname}
+                </p>
               }
             </div>
             {isCollectible ? (
@@ -116,6 +132,16 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
                   <Button
                     text="Продать"
                     handleClick={() => handleSellToLavka(item?.item_id)}
+                    isWhiteBackground
+                  />
+                </div>
+              </div>
+            ) : isUserSeller ? (
+              <div className={styles.product__buttons}>
+                <div className={styles.product__buttonWrapper}>
+                  <Button
+                    text="Снять с продажи"
+                    handleClick={() => handleCancelSelling(item?.item_id)}
                     isWhiteBackground
                   />
                 </div>

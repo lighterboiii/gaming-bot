@@ -114,7 +114,7 @@ const Shop: FC = () => {
       default:
         break;
     }
-  }, [shopData, collectibles, activeButton]);
+  }, [shopData, collectibles, activeButton, lavkaAvailable]);
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
     setActiveButton("Приобретено");
