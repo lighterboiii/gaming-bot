@@ -13,7 +13,7 @@ interface IProps {
   item: LavkaData;
   setMessageShown: (value: boolean) => void;
   setMessage: (value: string) => void;
-  onClose: () => void; 
+  onClose: () => void;
 }
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
@@ -36,13 +36,7 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
         break;
     }
     dispatch(removeCollectible(itemId));
-    // setTimeout(async () => {
-      onClose();
-      // setTimeout(() => {
-      //   setMessage('');
-      //   setMessageShown(false);
-      // }, 200)
-    // }, 1000)
+    onClose();
   };
 
   return (
@@ -63,7 +57,11 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
         </fieldset>
       </form>
       <div className={styles.sellModal__button}>
-        <Button text="Продать в лавке" handleClick={() => handleSellToLavka(item.item_id, Number(priceValue))} />
+        <Button 
+        text="Продать в лавке" 
+        handleClick={() => handleSellToLavka(item.item_id, Number(priceValue))} 
+        disabled={!priceValue}
+        />
       </div>
     </div>
   )
