@@ -43,6 +43,12 @@ const appSlice = createSlice({
         state.info.collectibles = [...collectibles];
       }
     },
+    removeCollectible: (state, action: PayloadAction<number>) => {
+      if (state.info && state.info.collectibles) {
+        const updatedCollectibles = state.info.collectibles.filter(collectible => collectible !== action.payload);
+        state.info.collectibles = updatedCollectibles;
+      }
+    },
     clearUserData: (state) => {
       state.info = null;
     },
@@ -85,7 +91,7 @@ const appSlice = createSlice({
     setLavkaAvailable: (state, action: PayloadAction<LavkaData[]>) => {
       state.lavka = action.payload;
     },
-    addItemToLavka: (state, action: PayloadAction<LavkaData[]>) => {
+    addItemToLavka: (state, action: PayloadAction<LavkaData>) => {
       state.lavka.push(action.payload);
     },
   }
@@ -98,6 +104,7 @@ export const {
   setUserPhoto,
   setActiveSkin,
   setCollectibles,
+  removeCollectible,
   setNewTokensValue,
   setShopAvailable,
   setProductsArchive,

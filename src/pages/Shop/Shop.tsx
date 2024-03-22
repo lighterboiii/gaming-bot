@@ -38,6 +38,16 @@ const Shop: FC = () => {
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
+  // функция отрисовки предметов инвентаря
+  const handleRenderInventoryData = () => {
+    const collectibleIds = collectibles?.map(id => Number(id));
+    const inventoryItems = archiveData!.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
+    const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
+      ...item,
+      isCollectible: collectibleIds?.includes(item.item_id),
+    }));
+    setGoods(inventoryDataWithCollectible);
+  };
   // добавить флаг isCollectible жкаждому товару
   const handleAddIsCollectible = (data: ItemData[]) => {
     const collectibleIds = collectibles?.map(id => Number(id));
@@ -97,6 +107,10 @@ const Shop: FC = () => {
         setGoods(lavkaAvailable);
         break;
       }
+      case "Приобретено": {
+        handleRenderInventoryData();
+        break;
+      }
       default:
         break;
     }
@@ -104,13 +118,7 @@ const Shop: FC = () => {
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
     setActiveButton("Приобретено");
-    const collectibleIds = collectibles?.map(id => Number(id));
-    const inventoryItems = archiveData!.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
-    const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
-      ...item,
-      isCollectible: collectibleIds?.includes(item.item_id),
-    }));
-    setGoods(inventoryDataWithCollectible);
+    handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {

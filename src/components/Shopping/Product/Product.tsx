@@ -3,12 +3,11 @@ import { FC, useState } from "react";
 import styles from './Product.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
-import { putReq } from "../../../api/api";
-import { activeSkinValue, buyShopItemUri, setActiveSkinUri, userId } from "../../../api/requestData";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { ItemData } from "../../../utils/types";
-import { addItemToLavka, setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setLavkaAvailable, setTokensValueAfterBuy } from "../../../services/appSlice";
+import { addItemToLavka, removeCollectible, setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setTokensValueAfterBuy } from "../../../services/appSlice";
 import useTelegram from "../../../hooks/useTelegram";
+import { buyItemRequest, sellLavkaRequest, setActiveSkinRequest } from "../../../api/shopApi";
 
 interface ProductProps {
   item: any;
@@ -21,31 +20,6 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
-
-  const setActiveSkinRequest = async (itemId: number) => {
-    return await putReq({
-      uri: setActiveSkinUri,
-      userId: userId,
-      // userId: user?.id, 
-      endpoint: `${activeSkinValue}${itemId}`
-    });
-  };
-  const buyItemRequest = async (itemId: number, itemCount: number = 1) => {
-    return await putReq({
-      uri: buyShopItemUri,
-      userId: userId,
-      // userId: user?.id,
-      endpoint: `&item_id=${itemId}&count=${itemCount}`
-    });
-  };
-  const sellLavkaRequest = async (itemId: number) => {
-    return await putReq({
-      uri: 'add_sell_lavka?user_id=',
-      userId: userId,
-      // userId: user?.id,
-      endpoint: `&item_id=${itemId}&price=20`,
-    });
-  }
 
   const handleBuyItem = async (item: ItemData) => {
     try {
@@ -87,28 +61,30 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
     onClose();
   };
 
-  const handleSellProduct = async (itemId: number) => {
-    const res: any = await sellLavkaRequest(itemId);
+  const handleSellToLavka = async (itemId: number, price: number = 5) => {
+    const res: any = await sellLavkaRequest(itemId, price);
     console.log(res);
     setMessageShown(true);
-      switch (res.message) {
-        case "already":
-          setMessage("Товар уже на витрине");
-          break;
-        case "ok":
-          setMessage("Размещено в лавке");
-          dispatch(addItemToLavka(item));
-          break;
-        default:
-          break;
-      }
-      setTimeout(async () => {
-        onClose();
-        setTimeout(() => {
-          setMessage('');
-          setMessageShown(false);
-        }, 200)
-      }, 1000)
+    switch (res.message) {
+      case "already":
+        setMessage("Товар уже на витрине");
+        break;
+      case "ok":
+        setMessage("Размещено в лавке");
+        dispatch(addItemToLavka(item));
+        break;
+      default:
+        break;
+    }
+    console.log(itemId);
+    dispatch(removeCollectible(itemId));
+    setTimeout(async () => {
+      onClose();
+      setTimeout(() => {
+        setMessage('');
+        setMessageShown(false);
+      }, 200)
+    }, 1000)
   }
   return (
     <div className={styles.product}>
@@ -139,7 +115,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible }) => {
                 <div className={styles.product__buttonWrapper}>
                   <Button
                     text="Продать"
-                    handleClick={() => handleSellProduct(item?.item_id)}
+                    handleClick={() => handleSellToLavka(item?.item_id)}
                     isWhiteBackground
                   />
                 </div>
