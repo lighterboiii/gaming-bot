@@ -5,7 +5,7 @@ import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { ItemData, LavkaData } from "../../../utils/types";
-import { removeItemFromLavka, setActiveSkin, setCoinsValueAfterBuy, setCollectibles, setTokensValueAfterBuy } from "../../../services/appSlice";
+import { removeItemFromLavka, setActiveSkin, setCoinsValueAfterBuy, setCollectibles } from "../../../services/appSlice";
 import useTelegram from "../../../hooks/useTelegram";
 import { buyItemRequest, buyLavkaRequest, cancelLavkaRequest, setActiveSkinRequest } from "../../../api/shopApi";
 import { userId } from "../../../api/requestData";
@@ -21,7 +21,7 @@ interface ProductProps {
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
@@ -45,9 +45,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
           setMessage("Успешная покупка");
           dispatch(setCollectibles(item.item_id));
           dispatch(setCoinsValueAfterBuy(item.item_price_coins));
-          // dispatch(setTokensValueAfterBuy(item.item_price_tokens));
-          // setActiveSkinRequest(item.item_id, user?.id);
-          setActiveSkinRequest(item.item_id, userId);
+          await setActiveSkinRequest(item.item_id, userId);
           dispatch(setActiveSkin(item.item_id));
           break;
         default:
@@ -78,8 +76,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   // хендлер снятия товара с продажи
   const handleCancelSelling = async (itemId: number) => {
     try {
-      const res = await cancelLavkaRequest(itemId, userId);
-      console.log(res);
+      await cancelLavkaRequest(itemId, userId);
       setMessageShown(true);
       setMessage("Товар снят с продажи");
       dispatch(removeItemFromLavka(itemId));
@@ -107,7 +104,6 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   const handleBuyLavkaitem = async (item: LavkaData) => {
     try {
       const res: any = await buyLavkaRequest(item, userId);
-      console.log(res);
       setMessageShown(true);
       switch (res.message) {
         case "sold":
@@ -123,9 +119,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
           setMessage("Куплено из лавки!");
           dispatch(setCollectibles(item.item_id));
           dispatch(setCoinsValueAfterBuy(item.item_price_coins));
-          // dispatch(setTokensValueAfterBuy(item.item_price_tokens));
-          // setActiveSkinRequest(item.item_id, user?.id);
-          setActiveSkinRequest(item.item_id, userId);
+          await setActiveSkinRequest(item.item_id, userId);
           dispatch(setActiveSkin(item.item_id));
           break;
         default:
@@ -141,8 +135,8 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
     } catch (error) {
       console.log(error);
     }
-
   };
+
   return (
     <div className={styles.product}>
       {messageShown ? (

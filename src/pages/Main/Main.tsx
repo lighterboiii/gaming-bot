@@ -76,6 +76,9 @@ const Main: FC = () => {
         <ShopLink />
       </div>
       <Overlay
+        buttonColor="#FFF"
+        crossColor="#ac1a44"
+        closeButton
         children={
           <Referral />
         }
@@ -83,6 +86,8 @@ const Main: FC = () => {
         onClose={toggleRefOverlay}
       />
       <Overlay
+        buttonColor="#FFF"
+        crossColor="#ac1a44"
         closeButton
         children={
           <BannerData

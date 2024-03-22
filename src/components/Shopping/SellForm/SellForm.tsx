@@ -18,9 +18,9 @@ interface IProps {
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
   const { user } = useTelegram();
-    // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
-  
+
   const [priceValue, setPriceValue] = useState('')
   // продажа товара в лавку
   const handleSellToLavka = async (itemId: number, price: number) => {
@@ -63,10 +63,10 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
         </fieldset>
       </form>
       <div className={styles.sellModal__button}>
-        <Button 
-        text="Продать в лавке" 
-        handleClick={() => handleSellToLavka(item.item_id, Number(priceValue))} 
-        disabled={!priceValue}
+        <Button
+          text="Продать в лавке"
+          handleClick={() => handleSellToLavka(item.item_id, Number(priceValue))}
+          disabled={!priceValue}
         />
       </div>
     </div>

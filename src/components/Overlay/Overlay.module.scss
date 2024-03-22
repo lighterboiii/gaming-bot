@@ -6,7 +6,6 @@
   @include position(fixed, $bottom: 0, $left: 50%);
   transform: translate(-50%);
   @include size(calc(100% - 32px), 0);
-  // background-color: #FFF;
   overflow: hidden;
   transition: height .5s ease;
   border-top-left-radius: $radius-15;
@@ -19,12 +18,12 @@
 
   &__closeButton {
     @include button-style-reset();
-    @include position(absolute, $left: 50%, $bottom: 20px);
+    @include position(absolute, $right: -8px, $top: 4px);
     transform: translate(-50%);
     @include flex(row, center, center);
-    @include size(30px, 30px);
+    @include size(25px, 25px);
     border-radius: 40px;
-    background-color: $black-color;
+    background-color: $tertiary-color;
   }
 }
 

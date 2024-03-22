@@ -7,21 +7,25 @@ interface IProps {
   children: JSX.Element;
   onClose?: () => void;
   closeButton?: boolean;
+  buttonColor?: string;
+  crossColor?: string;
 }
 
-const Overlay: FC<IProps> = ({ show, children, onClose, closeButton }) => {
+const Overlay: FC<IProps> = ({ show, children, onClose, closeButton, buttonColor = '#ac1a44', crossColor = '#FFF' }) => {
   return (
     <div className={`${styles.overlay} ${show ? styles.active : ''}`}>
       <div className={styles.overlay__children}>
         {children}
       </div>
-      {closeButton && <button
-        onClick={onClose}
-        className={styles.overlay__closeButton}
-      >
-        <CrossIcon width={16} height={16} />
-      </button>
-}
+      {closeButton &&
+        <button
+          onClick={onClose}
+          className={styles.overlay__closeButton}
+          style={{ backgroundColor: buttonColor }}
+        >
+          <CrossIcon width={12} height={12} color={crossColor} />
+        </button>
+      }
     </div>
   );
 };

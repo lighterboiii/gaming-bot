@@ -17,7 +17,7 @@ interface IProps {
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-    // const userId = user?.id;
+  const userId = user?.id;
   // универсальная функция для запроссов collectible
   const makeCollectibleRequest = async (itemId: number, itemCount: number) => {
     return await putReq<any>({
@@ -41,10 +41,10 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         const resEnergy = await makeCollectibleRequest(itemId, itemCount);
         dispatch(setEnergyDrinksValue(resEnergy.message));
         break;
-        case "exp":
-          const resExp = await await makeCollectibleRequest(itemId, itemCount);
-          dispatch(setNewExpValue(resExp.message));
-          break;
+      case "exp":
+        const resExp = await await makeCollectibleRequest(itemId, itemCount);
+        dispatch(setNewExpValue(resExp.message));
+        break;
       default:
         await makeCollectibleRequest(itemId, itemCount);
         dispatch(setCollectibles(item.bonus_item_id));
@@ -55,7 +55,7 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
 
   return (
     <div key={bonus.bonus_item_id} className={styles.bonus}>
-      <div className={styles.bonus_layout}>
+      <div className={styles.bonus__layout}>
         <div className={styles.bonus__titleContainer}>
           <h2 className={styles.bonus__title}>Ежедневная награда</h2>
           <p className={styles.bonus__text}>Вернитесь завтра, чтобы получить ещё</p>

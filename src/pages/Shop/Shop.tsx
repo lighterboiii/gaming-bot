@@ -18,7 +18,7 @@ import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../servic
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -183,6 +183,8 @@ const Shop: FC = () => {
             </div>
           </div>
           <Overlay
+            buttonColor="#FFF"
+            crossColor="#ac1a44"
             closeButton
             show={showOverlay}
             onClose={toggleOverlay}

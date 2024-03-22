@@ -25,6 +25,12 @@
     text-align: center;
   }
 
+  &__content {
+    @include indents(0 16px, 0);
+    @include size(100%, 100%);
+    @include flex(column, center, center, 16px);
+  }
+
   &__text {
     @include size(calc(100% - 32px), unset);
     @include indents();
@@ -40,7 +46,7 @@
   &__button {
     @include indents(0 16px, 0);
     @include size(100%, 40px);
-    @include position(absolute, $left: 50%, $bottom: 80px);
-    transform: translate(-50%);
+    // @include position(absolute, $left: 50%, $bottom: 80px);
+    // transform: translate(-50%);
   }
 }
