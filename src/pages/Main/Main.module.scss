@@ -3,8 +3,8 @@
 
 .main {
   @include indents(8px 16px 16px, 0);
-  @include flex(column, flex-start, center, 16px);
-  @include size(100%, auto);
+  @include flex(column, flex-start, center);
+  @include size(100%, 100%);
 
 
   &__header {
