@@ -38,17 +38,14 @@ const Main: FC = () => {
   const overlayActive = (showBannerOverlay || showReferralOverlay);
 
   const toggleRefOverlay = () => {
-    window.scrollTo(0, 0);
     setShowReferralOverlay(!showReferralOverlay);
     setShowBannerOverlay(false);
   };
   const toggleBannerOverlay = () => {
-    window.scrollTo(0, 0);
     setShowBannerOverlay(!showBannerOverlay);
     setShowReferralOverlay(false);
   };
   const toggleBonusOverlay = () => {
-    window.scrollTo(0, 0);
     setShowBonusOverlay(!showBonusOverlay);
   };
     // показать окно бонуса или нет

@@ -30,9 +30,9 @@
     @include flex(column, center, unset, 16px);
     @include size(100%, 100%);
 
-    // @media screen and (min-height: 691px) {
-    //   margin-top: 20vh;
-    // }
+    @media screen and (min-height: 691px) {
+      margin-top: 20vh;
+    }
   }
 
   &__banner {

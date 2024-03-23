@@ -35,7 +35,6 @@ const Shop: FC = () => {
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
 
   const toggleOverlay = () => {
-    window.scrollTo(0, 0);
     setShowOverlay(!showOverlay);
   };
   // функция отрисовки предметов инвентаря
