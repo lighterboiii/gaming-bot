@@ -8,6 +8,7 @@
 
 
   &__header {
+    @include indents(0 16px, 0);
     @include position(fixed, $top: 0, $left: 50%);
     transform: translate(-50%);
     @include size(100%, 20vh);
@@ -28,6 +29,10 @@
     margin-top: 30vh;
     @include flex(column, center, unset, 16px);
     @include size(100%, 100%);
+
+    @media screen and (min-height: 691px) {
+      margin-top: 20vh;
+    }
   }
 
   &__banner {
