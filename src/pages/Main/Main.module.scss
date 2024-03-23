@@ -8,8 +8,12 @@
 
 
   &__header {
+    @include position(fixed, $top: 0, $left: 50%);
+    transform: translate(-50%);
     @include size(100%, 20vh);
     @include flex(column, center, center);
+    z-index: 8; // d
+    background-color: $secondary-color;
 
     @media screen and (max-height: 690px) {
       @include size(100%, 30vh);
@@ -20,7 +24,8 @@
     @include size(110px, 26px);
   }
 
-  &__content {
+  &__content { // d
+    margin-top: 30vh;
     @include flex(column, center, unset, 16px);
     @include size(100%, 100%);
   }
