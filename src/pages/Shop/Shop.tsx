@@ -18,7 +18,7 @@ import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../servic
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
