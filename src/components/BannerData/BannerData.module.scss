@@ -3,6 +3,7 @@
 
 .banner {
   @include children-layout();
+  justify-content: flex-start;
 
   &__bannerWrapper {
     @include size(100%, 120px);
@@ -17,6 +18,10 @@
     }
   }
 
+  &__header {
+    @include flex(column, center, center, 16px);
+  }
+
   &__title {
     @include indents(16px 16px 0, 0);
     font-weight: 700;
@@ -26,8 +31,7 @@
   }
 
   &__content {
-    @include indents(0 16px, 0);
-    @include size(100%, 100%);
+    @include size(100%, auto);
     @include flex(column, center, center, 16px);
   }
 

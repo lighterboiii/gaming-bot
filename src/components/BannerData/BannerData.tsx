@@ -10,11 +10,13 @@ interface IProps {
 const BannerData: FC<IProps> = ({ data }) => {
   return (
     <div className={styles.banner}>
-      <h3 className={styles.banner__title}>
-        {data.title}
-      </h3>
-      <div className={styles.banner__content}>
+      <div className={styles.banner__header}>
+        <h3 className={styles.banner__title}>
+          {data.title}
+        </h3>
         <div className={styles.banner__bannerWrapper} style={{ backgroundImage: `${data.backgroundImage}` }}></div>
+      </div>
+      <div className={styles.banner__content}>
         <p className={styles.banner__text}>
           {data.text}
         </p>

@@ -18,7 +18,7 @@ import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../servic
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -31,19 +31,13 @@ const Shop: FC = () => {
   const [activeButton, setActiveButton] = useState<string>('Магазин');
 
   const [showOverlay, setShowOverlay] = useState(false);
-  const [showBonusOverlay, setShowBonusOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
-  const [dailyBonusData, setDailyBonusData] = useState<Bonus | null>(null);
 
   const toggleOverlay = () => {
     window.scrollTo(0, 0);
     setShowOverlay(!showOverlay);
   };
-  const toggleBonusOverlay = () => {
-    window.scrollTo(0, 0);
-    setShowBonusOverlay(!showBonusOverlay);
-  }
   // функция отрисовки предметов инвентаря
   const handleRenderInventoryData = () => {
     const collectibleIds = collectibles?.map(id => Number(id));
@@ -77,7 +71,6 @@ const Shop: FC = () => {
         dispatch(setLavkaAvailable(res.lavka_available));
         dispatch(setShopAvailable(res.shop_available));
         dispatch(setDailyBonus(res.daily_bonus));
-        setDailyBonusData(res.daily_bonus);
       } catch (error) {
         console.log(error);
       };
@@ -92,10 +85,6 @@ const Shop: FC = () => {
       tg.BackButton.hide();
     }
   }, []);
-  // показать окно бонуса или нет
-  useEffect(() => {
-    dailyBonusData ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
-  }, [dailyBonusData])
   // открыть страничку с данными скина
   const handleShowItemDetails = (item: ItemData) => {
     setSelectedItem(item);
@@ -143,7 +132,7 @@ const Shop: FC = () => {
             <h2 className={styles.shop__title}>Магазин</h2>
             <UserInfo />
           </div>
-          <div className={`${styles.shop__content} ${(showOverlay || showBonusOverlay) ? styles.hidden : ''}`}>
+          <div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
             <div className={styles.shop__buttons}>
               <div className={styles.shop__leftButtonsContainer}>
                 <button
@@ -196,7 +185,7 @@ const Shop: FC = () => {
                 isCollectible={selectedItem?.isCollectible}
               />}
           />
-          {dailyBonusData &&
+          {/* {dailyBonusData &&
             <Overlay
               closeButton
               show={showBonusOverlay}
@@ -206,7 +195,7 @@ const Shop: FC = () => {
                   bonus={dailyBonusData}
                   closeOverlay={toggleBonusOverlay}
                 />}
-            />}
+            />} */}
         </>
       )}
     </div>
