@@ -24,13 +24,25 @@ const App: FC = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
+  function handleViewportChange(event: any) {
+    if (event.isStateStable && !event.isExpanded) {
+      tg.expand();
+    }
+  }
+  
   useEffect(() => {
     tg.setHeaderColor('#d51845');
     tg.expand();
+    tg.onEvent('viewportChanged', handleViewportChange);
     tg.enableClosingConfirmation();
     tg.ready();
     window.scrollTo(0, 0);
+
+    return(() =>{
+      tg.offEvent('viewportChanged', handleViewportChange);
+    })
   }, []);
+
 
   useEffect(() => {
     setLoading(true);
