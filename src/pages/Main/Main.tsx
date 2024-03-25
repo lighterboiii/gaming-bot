@@ -11,7 +11,7 @@ import Referral from "../../components/Referral/Referral";
 import BannerData from "../../components/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
-import { Bonus, IAppData } from "../../utils/types";
+import { IAppData } from "../../utils/types";
 import DailyBonus from "../../components/Shopping/Bonus/Bonus";
 import { getReq } from "../../api/api";
 import { mainAppDataUri, userId } from "../../api/requestData";
@@ -22,11 +22,11 @@ import useTelegram from "../../hooks/useTelegram";
 const Main: FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [currentBanner, setCurrentBanner] = useState(bannersData[0]);
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
-  const [dailyBonusData, setDailyBonusData] = useState<Bonus | null>(null);
+  const [dailyBonusData, setDailyBonusData] = useState<any | null>(null);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
 
   const handleBannerClick = (bannerData: any) => {
@@ -50,7 +50,7 @@ const Main: FC = () => {
   };
     // показать окно бонуса или нет
     useEffect(() => {
-      dailyBonusData ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
+      (dailyBonusData && dailyBonusData !== 'no') ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
     }, [dailyBonusData]);
 
     useEffect(() => {
@@ -125,7 +125,7 @@ const Main: FC = () => {
         show={showBannerOverlay}
         onClose={toggleBannerOverlay}
       />
-      {dailyBonusData &&
+      {(dailyBonusData && dailyBonusData !== 'no') && 
         <Overlay
           closeButton
           show={showBonusOverlay}

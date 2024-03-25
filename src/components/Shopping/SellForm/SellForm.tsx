@@ -18,7 +18,7 @@ interface IProps {
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
   const { user } = useTelegram();
-    const userId = user?.id;
+  // xconst userId = user?.id;
   const dispatch = useAppDispatch();
   
   const [priceValue, setPriceValue] = useState('')
