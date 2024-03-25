@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './UserContainer.module.scss';
 import useTelegram from "../../../hooks/useTelegram";
+import { userId } from "../../../api/requestData";
 
 interface IProps {
   member: any;
@@ -11,11 +13,13 @@ interface IProps {
 
 const UserContainer: FC<IProps> = ({ member, index, length, darkBackground = false }) => {
   const { user } = useTelegram();
-  // const isUser = user?.id === member?.id;
+  const userId = user?.id;
+  const isUser = userId === member?.user_id;
+
   return (
     <div
       className={`${styles.leader} ${index === 0 ? styles.roundedBorders : ''} ${index === length - 2 ? styles.lowRoundedBorders : ''}`}
-      style={{ backgroundColor: darkBackground ? '#ac1a44' : '#d51845' }}
+      style={{ backgroundColor: isUser ? '#FFF' : (darkBackground ? '#ac1a44' : '#d51845') }}
     >
       <div className={styles.leader__avatarWrapper}>
         <div className={styles.leader__avatarBackground} style={{ backgroundImage: `url(${member.item_pic})` }}></div>
@@ -26,10 +30,22 @@ const UserContainer: FC<IProps> = ({ member, index, length, darkBackground = fal
         />
       </div>
       <div className={styles.leader__container}>
-        <h3 className={styles.leader__number}>{index + 2}</h3>
-        <p className={styles.leader__text}>{member.public_name}</p>
+        <h3 className={styles.leader__number}
+          style={{ color: isUser ? "#d51845" : "" }}
+        >
+          {index + 2}
+        </h3>
+        <p className={styles.leader__text}
+          style={{ color: isUser ? "#d51845" : "" }}
+        >
+          {member.public_name}
+        </p>
         <div className={styles.leader__gainWrapper}>
-          <p className={styles.leader__textCoins}>+💵 {member.coins}</p>
+          <p className={styles.leader__textCoins}
+            style={{ color: isUser ? "#d51845" : "" }}
+          >
+            +💵 {member.coins}
+          </p>
         </div>
       </div>
     </div>

@@ -9,17 +9,15 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
-import { getReq } from "../../api/api";
-import { mainAppDataUri, userId } from "../../api/requestData";
+import { userId } from "../../api/requestData";
 import Loader from "../../components/Loader/Loader";
-import { Bonus, IAppData, ItemData } from "../../utils/types";
-import DailyBonus from "../../components/Bonus/Bonus";
+import { ItemData } from "../../utils/types";
 import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../services/appSlice";
 import { getAppData } from "../../api/mainApi";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
