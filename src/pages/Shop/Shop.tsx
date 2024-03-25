@@ -11,7 +11,7 @@ import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
 import { userId } from "../../api/requestData";
 import Loader from "../../components/Loader/Loader";
-import { ItemData } from "../../utils/types";
+import { ItemData, LavkaData } from "../../utils/types";
 import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../services/appSlice";
 import { getAppData } from "../../api/mainApi";
 
@@ -26,7 +26,7 @@ const Shop: FC = () => {
   const archiveData = useAppSelector(store => store.app.archive);
   const lavkaAvailable = useAppSelector(store => store.app.lavka);
 
-  const [goods, setGoods] = useState<ItemData[]>([]);
+  const [goods, setGoods] = useState<any>([]);
   const [activeButton, setActiveButton] = useState<string>('Магазин');
 
   const [showOverlay, setShowOverlay] = useState(false);
@@ -55,10 +55,6 @@ const Shop: FC = () => {
     }));
     setGoods(shopDataWithCollectible);
   };
-  const handleRenderLavka = () => {
-    const lavkaItems = lavkaAvailable;
-    console.log(lavkaItems);
-  }
   // при монтировании компонента
   useEffect(() => {
     setLoading(true);
@@ -117,9 +113,22 @@ const Shop: FC = () => {
     setActiveButton("Магазин");
     shopData && handleAddIsCollectible(shopData);
   };
+  // отображение данных при клике по "Лавка"
+  const loadLavkaData = async () => {
+    setLoading(true);
+    try {
+      const res = await getAppData(userId);
+      dispatch(setLavkaAvailable(res.lavka_available));
+      setGoods(res.lavka_available);
+    } catch (error) {
+      console.error("Ошибка при загрузке данных для лавки:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleClickLavka = () => {
     setActiveButton("Лавка");
-    setGoods(lavkaAvailable);
+    loadLavkaData();
   };
 
   return (

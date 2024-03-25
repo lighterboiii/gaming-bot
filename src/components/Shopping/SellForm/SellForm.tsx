@@ -48,6 +48,11 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
     onClose();
   };
 
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^\d.]/g, '');
+    setPriceValue(value);
+  };
+
   return (
     <div className={styles.sellModal}>
       <form className={styles.form}>
@@ -59,7 +64,7 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
             id="price"
             value={priceValue}
             className={styles.form__input}
-            onChange={(e) => setPriceValue(e.target.value)}
+            onChange={handlePriceChange}
             placeholder="Введите цену"
           />
           {/* <input type="number" name="count" id="count" value={''} className={styles.form__input} /> */}
@@ -67,7 +72,7 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
       </form>
       <div className={styles.sellModal__button}>
         <Button
-          text="Продать в лавке"
+          text="Продать"
           handleClick={() => handleSellToLavka(item.item_id, Number(priceValue))}
           disabled={!priceValue}
         />
