@@ -36,7 +36,7 @@ const App: FC = () => {
     tg.expand();
   }
 
-  if (!tg.isExpanded()) {
+  if (!tg.isExpanded) {
     tg.onEvent('viewportChanged', handleViewportChange);
     tg.expand();
   };
