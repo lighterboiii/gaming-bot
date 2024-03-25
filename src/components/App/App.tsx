@@ -17,6 +17,7 @@ import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
+import RockPaperScissors from '../Game/GameSettings/GameSettings';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -71,7 +72,6 @@ const App: FC = () => {
           <Route path={createRoomUrl} element={<CreateRoom />} />
           <Route path={shopUrl} element={<Shop />} />
           <Route path={leaderboardUrl} element={<LeaderBoard />} />
-          {/* <Route path='/game' element={<Game />} /> */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       )}

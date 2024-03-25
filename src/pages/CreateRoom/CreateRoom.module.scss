@@ -2,24 +2,23 @@
 @use '../../stylesheets/variables' as *;
 
 .create {
-  @include size(100%, 100vh);
-  @include indents(0 16px 10px, 0);
-  @include flex(column, flex-start, center, 20px);
+  @include size(100%, 100%);
+  @include indents(0 16px 16px, 0);
+  @include flex(column, flex-start, center);
 
   &__header {
-    @include position(relative);
+    @include indents(0 16px, 0);
     @include size(100%, 20vh);
-    @include flex(row, center, flex-start);
-  }
+    @include flex(column, center, center);
+    background-color: $secondary-color;
 
-  &__chevron {
-    @include button-style-reset();
-    @include position(absolute, $top: 50%, $left: 16px);
-    transform: translateY(-50%);
+    @media screen and (max-height: 690px) {
+      @include size(100%, 30vh);
+    }
   }
 
   &__content {
-    @include size(100%, auto);
+    @include size(100%, 100%);
     @include flex(column, space-between, flex-end, 16px);
   }
 
@@ -75,4 +74,10 @@
   &__text {
     color: $main-color;
   }
+}
+
+.hidden {
+  height: 0;
+  overflow: hidden;
+  transition: height .5s ease;
 }

@@ -62,9 +62,7 @@ const Shop: FC = () => {
     const fetchShopData = async () => {
       try {
         const res = await getAppData(userId);
-        dispatch(setLavkaAvailable(res.lavka_available));
         dispatch(setShopAvailable(res.shop_available));
-        dispatch(setDailyBonus(res.daily_bonus));
       } catch (error) {
         console.log(error);
       };

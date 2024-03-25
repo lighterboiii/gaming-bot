@@ -4,7 +4,9 @@
 .game {
   @include position(relative);
   @include indents(16px, 0);
-  @include size(194px, 194px);
+  @include size(100%, 100%);
+  @include max-size(194px, 194px);
+  aspect-ratio: 1;
   border-radius: $radius-10;
   background-color: $tertiary-color;
   text-decoration: none;

@@ -4,24 +4,22 @@
 import { FC, useEffect, useState } from "react";
 import styles from './CreateRoom.module.scss';
 import { useNavigate } from "react-router-dom";
-import CircleButton from "../../components/ui/CircleButton/CircleButton";
-import SmallButton from "../../components/ui/SmallButton/SmallButton";
-import { roomsUrl } from "../../utils/routes";
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import { putReq } from "../../api/api";
-import { newTokensValue, setTokensValueUri, userId } from "../../api/requestData";
+import { userId } from "../../api/requestData";
 import useTelegram from "../../hooks/useTelegram";
 import { games } from "../../utils/mockData";
 import GameCard from "../../components/Game/GameCard/GameCard";
+import Overlay from "../../components/Overlay/Overlay";
+import GameSettings from "../../components/Game/GameSettings/GameSettings";
 
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
-  const [betAmount, setBetAmount] = useState(0.1);
-  const [currency, setCurrency] = useState('💵');
-
-  const dispatch = useAppDispatch();
-  const userCoins = useAppSelector(store => store.app.info);
+  // const [betAmount, setBetAmount] = useState(0.1);
+  // const [currency, setCurrency] = useState('💵');
+  const [gameData, setGameData] = useState(null);
+  const [rpsOverlay, setRpsOverlay] = useState(false);
+  // const dispatch = useAppDispatch();
+  // const userCoins = useAppSelector(store => store.app.info);
 
   useEffect(() => {
     tg.BackButton.show().onClick(() => {
@@ -32,12 +30,9 @@ const CreateRoom: FC = () => {
     }
   }, []);
 
-  const handleCreateRoom = () => {
-    // Логика для создания комнаты
-  };
-
-  const handleFindRoom = () => {
-    // Логика для поиска открытой комнаты
+  const handleGameClick = (game: any) => {
+    setGameData(game);
+    setRpsOverlay(!rpsOverlay)
   };
 
   return (
@@ -45,7 +40,7 @@ const CreateRoom: FC = () => {
       <div className={styles.create__header}>
         <h2 className={styles.create__heading}>Создать комнату</h2>
       </div>
-      <div className={styles.create__content}>
+      <div className={`${styles.create__content} ${rpsOverlay ? styles.hidden : ''}`}>
         {games.map((game: any, index: number) => (
           <GameCard
             game={game}
@@ -55,48 +50,22 @@ const CreateRoom: FC = () => {
             extraClass={`${styles['create__game-card']} ${
               index % 2 === 0 ? styles['create__game-card--even'] : styles['create__game-card--odd']
             }`}
-    
+            handleClickGame={handleGameClick}
           />
         ))}
       </div>
+        <Overlay 
+        closeButton
+        show={rpsOverlay} 
+        onClose={() => setRpsOverlay(false)} 
+        children={
+        <GameSettings
+          data={gameData}
+          />}
+        />
     </div>
   );
 };
 
 
 export default CreateRoom;
-
-{/* 
-      <div className={styles.create__content}>
-        <div className={styles.create__bets}>
-          <label className={styles.create__label}>
-            <p className={styles.create__text}>Введите сумму ставки</p>
-            <input
-              type="number"
-              step="0.1"
-              min="0.1"
-              max="10000"
-              value={betAmount}
-              onChange={(e) => setBetAmount(parseFloat(e.target.value))}
-              className={styles.create__input}
-            />
-          </label>
-          <label className={styles.create__label}>
-            <p className={styles.create__text}>Выберите валюту</p>
-            <select
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              className={styles.create__input}
-            >
-              <option value="💵">💵</option>
-              <option value="🔰">🔰</option>
-            </select>
-          </label>
-          <button onClick={handleSetTokens}>Set Tokens Value</button>
-          <p style={{ color: '#FFF' }}>{userCoins}</p>
-        </div>
-        <div className={styles.create__buttons}>
-          <SmallButton to={'/game'} text="Создать комнату" secondaryText="И начать играть" isWhiteBackground />
-          <SmallButton to={'/games'} text="Найти открытую комнату" secondaryText="Для игры с другими" />
-        </div>
-      </div> */}
