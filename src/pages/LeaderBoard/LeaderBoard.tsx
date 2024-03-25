@@ -7,16 +7,18 @@ import useTelegram from "../../hooks/useTelegram";
 import UserContainer from "../../components/User/UserContainer/UserContainer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import { getTopUsers } from "../../api/mainApi";
+import Loader from "../../components/Loader/Loader";
 
 const LeaderBoard: FC = () => {
   const { user, tg } = useTelegram();
 
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [leaderBoard, setLeaderBoard] = useState<any>(null);
   const [topLeader, setTopLeader] = useState<any>(null);
-
-  console.log(topLeader);
+  const isUserLeader = user?.id === topLeader;
   useEffect(() => {
+    setLoading(true);
     const fetchLeadersData = async () => {
       try {
         const leaders = await getTopUsers();
@@ -26,6 +28,7 @@ const LeaderBoard: FC = () => {
       } catch (error) {
         console.log(error);
       }
+      setLoading(false);
     }
     window.scrollTo(0, 0);
     tg.BackButton.show().onClick(() => {
@@ -37,35 +40,43 @@ const LeaderBoard: FC = () => {
     }
   }, []);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const isUserLeader = user?.id === topLeader; // для отрисовки информации о лидере, если это конкретный пользователь
 
   return (
     <div className={styles.leaderBoard}>
-      <div className={styles.leaderBoard__header}>
-        <h2 className={styles.leaderBoard__heading}>Таблица <br /> лидеров</h2>
-      </div>
-      <div className={styles.leaderBoard__leader}>
-        <div className={styles.leaderBoard__background}>
-          <div className={styles.leaderBoard__avatarContainer}>
-            {topLeader && <UserAvatar avatar={topLeader.avatar} item={topLeader} />}
-            {isUserLeader && <p className={styles.leaderBoard__label}>Это вы!</p>}
-            <div className={styles.leaderBoard__leaderInfo}>
-              <p className={styles.leaderBoard__leaderName}>
-                {topLeader ? topLeader?.public_name : 'GoWinUser'}
-              </p>
-              <p className={styles.leaderBoard__leaderText}>
-                +💵 {topLeader?.coins}
-              </p>
+      {loading ? <Loader /> : (
+        <>
+          <div className={styles.leaderBoard__header}>
+            <h2 className={styles.leaderBoard__heading}>
+              Таблица <br /> лидеров
+            </h2>
+          </div><div className={styles.leaderBoard__leader}>
+            <div className={styles.leaderBoard__background}>
+              <div className={styles.leaderBoard__avatarContainer}>
+                {topLeader && <UserAvatar avatar={topLeader.avatar} item={topLeader} />}
+                {isUserLeader && <p className={styles.leaderBoard__label}>Это вы!</p>}
+                <div className={styles.leaderBoard__leaderInfo}>
+                  <p className={styles.leaderBoard__leaderName}>
+                    {topLeader?.public_name}
+                  </p>
+                  <p className={styles.leaderBoard__leaderText}>
+                    +💵 {topLeader?.coins}
+                  </p>
+                </div>
+              </div>
             </div>
+          </div><div className={styles.leaderBoard__board}>
+            {leaderBoard?.filter((leader: any) => leader.id !== 1).map((leader: any, index: number) =>
+              <UserContainer
+                member={leader}
+                key={leader.id}
+                index={index}
+                length={leaderBoard.length + 1}
+                darkBackground
+              />
+            )}
           </div>
-        </div>
-      </div>
-      <div className={styles.leaderBoard__board}>
-        {leaderBoard?.filter((leader: any) => leader.id !== 1).map((leader: any, index: number) =>
-          <UserContainer member={leader} key={leader.id} index={index} length={leaderBoard.length + 1} darkBackground />
-        )
-        }
-      </div>
+        </>
+      )}
     </div>
   )
 

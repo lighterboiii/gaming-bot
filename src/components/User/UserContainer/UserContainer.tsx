@@ -13,7 +13,7 @@ interface IProps {
 
 const UserContainer: FC<IProps> = ({ member, index, length, darkBackground = false }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const isUser = userId === member?.user_id;
 
   return (
