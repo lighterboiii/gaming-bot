@@ -32,12 +32,8 @@ const App: FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  function handleViewportChange(e: any) {
-    tg.expand();
-  }
 
-  if (tg) {
-    tg.onEvent('viewportChanged', handleViewportChange);
+  if (!tg.isExpanded) {
     tg.expand();
   };
 
