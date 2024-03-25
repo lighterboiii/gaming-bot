@@ -15,6 +15,7 @@ import Loader from "../../components/Loader/Loader";
 import { Bonus, IAppData, ItemData } from "../../utils/types";
 import DailyBonus from "../../components/Shopping/Bonus/Bonus";
 import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../services/appSlice";
+import { getAppData } from "../../api/mainApi";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
@@ -55,6 +56,10 @@ const Shop: FC = () => {
       isCollectible: collectibleIds?.includes(item.item_id),
     }));
     setGoods(shopDataWithCollectible);
+  };
+  const handleRenderLavka = () => {
+    const lavkaItems = lavkaAvailable;
+    console.log(lavkaItems);
   }
   // при монтировании компонента
   useEffect(() => {
@@ -62,11 +67,7 @@ const Shop: FC = () => {
     shopData && setGoods(shopData);
     const fetchShopData = async () => {
       try {
-        const res = await getReq<IAppData>({
-          uri: mainAppDataUri,
-          userId: userId,
-          // userId: user?.id,
-        });
+        const res = await getAppData(userId);
         dispatch(setLavkaAvailable(res.lavka_available));
         dispatch(setShopAvailable(res.shop_available));
         dispatch(setDailyBonus(res.daily_bonus));
@@ -184,17 +185,6 @@ const Shop: FC = () => {
                 isCollectible={selectedItem?.isCollectible}
               />}
           />
-          {/* {dailyBonusData &&
-            <Overlay
-              closeButton
-              show={showBonusOverlay}
-              onClose={() => setShowBonusOverlay(false)}
-              children={
-                <DailyBonus
-                  bonus={dailyBonusData}
-                  closeOverlay={toggleBonusOverlay}
-                />}
-            />} */}
         </>
       )}
     </div>

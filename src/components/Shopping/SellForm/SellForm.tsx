@@ -7,7 +7,7 @@ import { userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { LavkaData } from "../../../utils/types";
-import { addItemToLavka, removeCollectible } from "../../../services/appSlice";
+import { addItemToLavka } from "../../../services/appSlice";
 
 interface IProps {
   item: LavkaData;
@@ -18,13 +18,12 @@ interface IProps {
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
   const { user } = useTelegram();
-  // xconst userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   
   const [priceValue, setPriceValue] = useState('')
   // продажа товара в лавку
   const handleSellToLavka = async (itemId: number, price: number) => {
-    // const res: any = await sellLavkaRequest(itemId, price, user?.id);
     const res: any = await sellLavkaRequest(itemId, price, userId);
     const itemWithPrice = {
       ...item,

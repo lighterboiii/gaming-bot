@@ -11,13 +11,12 @@ import Referral from "../../components/Referral/Referral";
 import BannerData from "../../components/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
-import { IAppData } from "../../utils/types";
 import DailyBonus from "../../components/Shopping/Bonus/Bonus";
-import { getReq } from "../../api/api";
-import { mainAppDataUri, userId } from "../../api/requestData";
+import {userId } from "../../api/requestData";
 import { setDailyBonus } from "../../services/appSlice";
 import { useAppDispatch } from "../../services/reduxHooks";
 import useTelegram from "../../hooks/useTelegram";
+import { getAppData } from "../../api/mainApi";
 
 const Main: FC = () => {
   const dispatch = useAppDispatch();
@@ -54,19 +53,16 @@ const Main: FC = () => {
     }, [dailyBonusData]);
 
     useEffect(() => {
-      const fetchShopData = async () => {
+      const fetchData = async () => {
         try {
-          const res = await getReq<IAppData>({
-            uri: mainAppDataUri,
-            userId: userId,
-          });
+          const res = await getAppData(userId);
           dispatch(setDailyBonus(res.daily_bonus));
           setDailyBonusData(res.daily_bonus);
         } catch (error) {
           console.log(error);
         };
       }
-      fetchShopData();
+      fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 

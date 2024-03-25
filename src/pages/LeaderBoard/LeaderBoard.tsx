@@ -21,7 +21,7 @@ const LeaderBoard: FC = () => {
     const fetchLeadersData = async () => {
       try {
         const leaders = await getReq<any>({ uri: getLeadersUri, userId: '' });
-        setLeaderBoard(leaders?.top_users);
+        setLeaderBoard(leaders);
       } catch (error) {
         console.log(error);
       }
@@ -57,7 +57,7 @@ const LeaderBoard: FC = () => {
       </div>
       <div className={styles.leaderBoard__board}>
         {leadersData.filter((leader: any) => leader.id !== 1).map((leader: any, index: number) =>
-          <UserContainer leader={leader} key={leader.id} index={index} length={leadersData.length} darkBackground />
+          <UserContainer user={leader} key={leader.id} index={index} length={leadersData.length} darkBackground />
         )
         }
       </div>

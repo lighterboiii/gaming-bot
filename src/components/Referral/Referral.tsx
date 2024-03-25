@@ -1,23 +1,47 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from './Referral.module.scss';
 import Button from "../ui/Button/Button";
-import { referrals } from "../../utils/mockData";
-import Leader from "../User/UserContainer/UserContainer";
+import UserContainer from "../User/UserContainer/UserContainer";
+import { userId } from "../../api/requestData";
+import { useNavigate } from "react-router-dom";
+import useTelegram from "../../hooks/useTelegram";
+import { getReq } from "../../api/api";
 
 const Referral: FC = () => {
+  const navigate = useNavigate();
+  const { user, tg } = useTelegram();
+  // const userId = user?.id;
+  const [totalBalance, setTotalBalance] = useState<any>(null);
+  const [refsBoard, setRefsBoard] = useState<any>(null);
+  console.log(totalBalance);
+  console.log(refsBoard);
+  useEffect(() => {
+    const fetchRefsData = async () => {
+      try {
+        const leaders = await getReq<any>({ uri: 'get_refs_info?user_id=', userId: userId });
+        setRefsBoard(leaders.result_data.refs_info);
+        setTotalBalance(leaders.result_data.total_balance);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchRefsData();
+  }, []);
+  
   return (
     <div className={styles.referral}>
       <h3 className={styles.referral__h3}>
         Приглашай друзей и получай процент с каждой игры
       </h3>
       <div className={styles.referral__buttonWrapper}>
-        <Button text="Пригласить" handleClick={() => {}} />
+        <Button text="Пригласить" handleClick={() => navigate('/lesf')} />
       </div>
       <div className={styles.referral__amount}>
         <p className={styles.referral__text}>Заработано за всё время:
           <span className={styles.referral__sumSpan}>
-            + 💵 312$
+            + {totalBalance}$
           </span>
         </p>
       </div>
@@ -29,8 +53,8 @@ const Referral: FC = () => {
         </p>
       </div>
       <div className={styles.referral__board}>
-        {referrals.map((ref: any, index: number) => (
-          <Leader leader={ref} index={index} length={referrals.length + 1} key={index} />
+        {refsBoard?.map((referral: any, index: number) => (
+          <UserContainer user={referral} index={index} length={refsBoard.length + 1} key={index} />
         ))}
       </div>
     </div>

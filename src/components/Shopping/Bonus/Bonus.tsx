@@ -5,9 +5,9 @@ import styles from './Bonus.module.scss';
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { setCollectibles, setEnergyDrinksValue, setNewExpValue, setNewTokensValue } from "../../../services/appSlice";
-import { putReq } from "../../../api/api";
-import { setCollectiblesUri, userId } from "../../../api/requestData";
+import { userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
+import { makeCollectibleRequest } from "../../../api/shopApi";
 
 interface IProps {
   bonus: Bonus;
@@ -18,35 +18,26 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
   // const userId = user?.id;
-  // универсальная функция для запроссов collectible
-  const makeCollectibleRequest = async (itemId: number, itemCount: number) => {
-    return await putReq<any>({
-      uri: setCollectiblesUri,
-      endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
-      userId: userId,
-      // userId: user?.id
-    });
-  };
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: Bonus) => {
     const itemId = Number(item.bonus_item_id);
     const itemCount = Number(item.bonus_count);
     switch (item.bonus_type) {
       case "tokens":
-        const tokens = await makeCollectibleRequest(itemId, itemCount);
+        const tokens = await makeCollectibleRequest(itemId, itemCount, userId);
         const formattedTokens = Math.floor(tokens.message);
         dispatch(setNewTokensValue(formattedTokens));
         break;
       case "energy_drink":
-        const resEnergy = await makeCollectibleRequest(itemId, itemCount);
+        const resEnergy = await makeCollectibleRequest(itemId, itemCount, userId);
         dispatch(setEnergyDrinksValue(resEnergy.message));
         break;
         case "exp":
-          const resExp = await await makeCollectibleRequest(itemId, itemCount);
+          const resExp = await await makeCollectibleRequest(itemId, itemCount, userId);
           dispatch(setNewExpValue(resExp.message));
           break;
       default:
-        await makeCollectibleRequest(itemId, itemCount);
+        await makeCollectibleRequest(itemId, itemCount, userId);
         dispatch(setCollectibles(item.bonus_item_id));
         break;
     }

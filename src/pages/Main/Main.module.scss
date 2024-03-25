@@ -13,7 +13,7 @@
     transform: translate(-50%);
     @include size(100%, 20vh);
     @include flex(column, center, center);
-    z-index: 8; // d
+    z-index: 8;
     background-color: $secondary-color;
 
     @media screen and (max-height: 690px) {

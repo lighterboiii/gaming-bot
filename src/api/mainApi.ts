@@ -1,3 +1,10 @@
-import { userId } from "./requestData";
+import { IAppData } from "../utils/types";
+import { getReq } from "./api";
+import { mainAppDataUri } from "./requestData";
 
-console.log(userId);
+export const getAppData = async (userIdValue: string) => {
+  return await getReq<IAppData>({
+    uri: mainAppDataUri,
+    userId: userIdValue,
+  });
+}

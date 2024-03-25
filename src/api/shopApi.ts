@@ -1,6 +1,6 @@
 import { LavkaData } from "../utils/types";
 import { putReq } from "./api";
-import { activeSkinValue, buyLavkaUri, buyShopItemUri, cancelSellLavka, sellLavkaUri, setActiveSkinUri } from "./requestData";
+import { activeSkinValue, buyLavkaUri, buyShopItemUri, cancelSellLavka, sellLavkaUri, setActiveSkinUri, setCollectiblesUri } from "./requestData";
 // Product
 export const setActiveSkinRequest = async (itemId: number, userIdValue: string) => {
   return await putReq({
@@ -27,7 +27,6 @@ export const sellLavkaRequest = async (itemId: number, price: number, userIdValu
   });
 };
 export const buyLavkaRequest = async (item: LavkaData, userIdValue: string) => {
-  console.log(item);
   return await putReq({
     uri: buyLavkaUri,
     userId: userIdValue,
@@ -36,11 +35,19 @@ export const buyLavkaRequest = async (item: LavkaData, userIdValue: string) => {
   });
 };
 export const cancelLavkaRequest = async (itemId: number, userIdValue: string) => {
-  console.log(itemId)
   return await putReq({
     uri: cancelSellLavka,
     userId: userIdValue,
     endpoint: `&item_id=${itemId}`
     // userId: user?.id,
   })
+};
+// универсальная функция для запроссов collectible
+export const makeCollectibleRequest = async (itemId: number, itemCount: number, userIdValue: string) => {
+  return await putReq<any>({
+    uri: setCollectiblesUri,
+    endpoint: `&add_collectible=${itemId}&count=${itemCount}`,
+    userId: userIdValue,
+    // userId: user?.id
+  });
 };

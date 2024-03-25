@@ -39,7 +39,18 @@
   &__text {
     @include indents();
     @include ellipsis();
-    @include size(90px, unset);
+    @include size(auto, unset);
+    text-align: center;
+    color: $main-color;
+    font-weight: 900;
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  &__textCoins {
+    @include indents();
+    @include ellipsis();
+    @include size(50px, unset);
     text-align: left;
     color: $main-color;
     font-weight: 900;
