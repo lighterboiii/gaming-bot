@@ -22,12 +22,10 @@ const AdvertisementBanner: FC<IProps> = ({ onBannerClick }) => {
   };
 
   const handleSwipeStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    e.preventDefault();
     touchStartX.current = e.touches[0].clientX;
   };
 
   const handleSwipeMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    e.preventDefault();
     if (touchStartX.current === null) return;
 
     const currentX = e.touches[0].clientX;
@@ -53,7 +51,7 @@ const AdvertisementBanner: FC<IProps> = ({ onBannerClick }) => {
       {/* <button
         className={styles.banner__sliderButton}
         onClick={() => goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length)}
-      >
+      > 
         <ChevronIcon
           position="left"
           width={24}

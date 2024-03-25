@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import styles from './Main.module.scss';
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
 import AdvertisementBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
@@ -12,7 +12,7 @@ import BannerData from "../../components/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
 import DailyBonus from "../../components/Bonus/Bonus";
-import {userId } from "../../api/requestData";
+import { userId } from "../../api/requestData";
 import { setDailyBonus } from "../../services/appSlice";
 import { useAppDispatch } from "../../services/reduxHooks";
 import useTelegram from "../../hooks/useTelegram";
@@ -27,6 +27,7 @@ const Main: FC = () => {
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
   const [dailyBonusData, setDailyBonusData] = useState<any | null>(null);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
+  const animationRef = useRef<HTMLDivElement>(null);
 
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
@@ -47,24 +48,33 @@ const Main: FC = () => {
   const toggleBonusOverlay = () => {
     setShowBonusOverlay(!showBonusOverlay);
   };
-    // показать окно бонуса или нет
-    useEffect(() => {
-      (dailyBonusData && dailyBonusData !== 'no') ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
-    }, [dailyBonusData]);
+  // показать окно бонуса или нет
+  useEffect(() => {
+    (dailyBonusData && dailyBonusData !== 'no') ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
+  }, [dailyBonusData]);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const res = await getAppData(userId);
-          dispatch(setDailyBonus(res.daily_bonus));
-          setDailyBonusData(res.daily_bonus);
-        } catch (error) {
-          console.log(error);
-        };
+  useEffect(() => {
+    const addAnimationClass = () => {
+      if (animationRef.current) {
+        animationRef.current.classList.add(styles.shake);
+        setTimeout(() => {
+          animationRef.current && animationRef.current.classList.remove(styles.shake);
+        }, 1000);
       }
-      fetchData();
+    };
+    const fetchData = async () => {
+      try {
+        const res = await getAppData(userId);
+        dispatch(setDailyBonus(res.daily_bonus));
+        setDailyBonusData(res.daily_bonus);
+      } catch (error) {
+        console.log(error);
+      };
+    }
+    fetchData();
+    addAnimationClass();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+  }, [])
 
   return (
     <div className={styles.main}>
@@ -73,7 +83,9 @@ const Main: FC = () => {
         <MainUserInfo toggleOverlay={toggleRefOverlay} isOverlayOpen={showReferralOverlay} />
       </div>
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
-        <AdvertisementBanner onBannerClick={handleBannerClick} />
+        <div ref={animationRef}>
+          <AdvertisementBanner onBannerClick={handleBannerClick} />
+        </div>
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
             <SmallButton
@@ -121,7 +133,7 @@ const Main: FC = () => {
         show={showBannerOverlay}
         onClose={toggleBannerOverlay}
       />
-      {(dailyBonusData && dailyBonusData !== 'no') && 
+      {(dailyBonusData && dailyBonusData !== 'no') &&
         <Overlay
           closeButton
           show={showBonusOverlay}

@@ -25,7 +25,7 @@ const App: FC = () => {
   const dispatch = useAppDispatch();
 
   function handleViewportChange(event: any) {
-    if (event.isStateStable && !event.isExpanded) {
+    if (!event.isExpanded) {
       tg.expand();
     }
   }

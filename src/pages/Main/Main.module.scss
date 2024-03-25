@@ -61,3 +61,19 @@
   overflow: hidden;
   transition: height .5s ease;
 }
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25%, 75% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+.shake {
+  animation: shake 1s ease-in-out;
+}

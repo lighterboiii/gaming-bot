@@ -19,6 +19,7 @@
   }
 
   &__header {
+    @include size(100%, unset);
     @include flex(column, center, center, 16px);
   }
 
