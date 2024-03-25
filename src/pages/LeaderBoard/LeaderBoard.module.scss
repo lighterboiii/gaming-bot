@@ -31,7 +31,12 @@
   &__leader {
     @include size(100%, 30vh);
     @include flex(column, flex-end, flex-end);
-    margin-right: 20px;
+    margin-right: 30px;
+
+    @media screen and (min-height: 691px) {
+      @include size(100%, 20vh);
+      margin-bottom: 20px;
+    }
   }
 
   &__leaderInfo {

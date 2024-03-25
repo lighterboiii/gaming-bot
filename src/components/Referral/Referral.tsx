@@ -13,7 +13,7 @@ import { getReferralsData } from "../../api/mainApi";
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [totalBalance, setTotalBalance] = useState<any>(null);
   const [refsBoard, setRefsBoard] = useState<any>(null);
 
@@ -54,7 +54,7 @@ const Referral: FC = () => {
       </div>
       <div className={styles.referral__board}>
         {refsBoard?.map((referral: any, index: number) => (
-          <UserContainer user={referral} index={index} length={refsBoard.length + 1} key={index} />
+          <UserContainer member={referral} index={index} length={refsBoard.length + 1} key={index} />
         ))}
       </div>
     </div>

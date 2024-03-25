@@ -3,6 +3,7 @@
 
 .referral {
   @include children-layout();
+  justify-content: flex-start;
 
   &__content {
     @include indents();

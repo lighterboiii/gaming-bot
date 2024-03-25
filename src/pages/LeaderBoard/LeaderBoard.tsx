@@ -62,7 +62,7 @@ const LeaderBoard: FC = () => {
       </div>
       <div className={styles.leaderBoard__board}>
         {leaderBoard?.filter((leader: any) => leader.id !== 1).map((leader: any, index: number) =>
-          <UserContainer user={leader} key={leader.id} index={index} length={leaderBoard.length} darkBackground />
+          <UserContainer member={leader} key={leader.id} index={index} length={leaderBoard.length + 1} darkBackground />
         )
         }
       </div>
