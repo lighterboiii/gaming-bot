@@ -32,6 +32,16 @@ const App: FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  function handleViewportChange(e: any) {
+    if (!e.isStateStable) {
+      tg.expand();
+    }
+  }
+  if (tg) {
+    tg.onEvent('viewportChanged', handleViewportChange);
+    tg.expand();
+  };
+
   useEffect(() => {
     setLoading(true);
     const fetchUserData = async () => {

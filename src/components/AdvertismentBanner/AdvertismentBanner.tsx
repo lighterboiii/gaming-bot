@@ -21,22 +21,20 @@ const AdvertisementBanner: FC<IProps> = ({ onBannerClick }) => {
     onBannerClick(currentBannerData);
   };
 
-  const handleSwipeStart = (event: React.TouchEvent<HTMLDivElement>) => {
-    touchStartX.current = event.touches[0].clientX;
+  const handleSwipeStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.touches[0].clientX;
   };
 
-  const handleSwipeMove = (event: React.TouchEvent<HTMLDivElement>) => {
+  const handleSwipeMove = (e: React.TouchEvent<HTMLDivElement>) => {
     if (touchStartX.current === null) return;
 
-    const currentX = event.touches[0].clientX;
+    const currentX = e.touches[0].clientX;
     const difference = touchStartX.current - currentX;
 
-    if (Math.abs(difference) > 50) { // Threshold for swipe
+    if (Math.abs(difference) > 50) {
       if (difference > 0) {
-        // Swiped left
         goToSlide((currentIndex + 1) % bannersData.length);
       } else {
-        // Swiped right
         goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length);
       }
       touchStartX.current = null;
