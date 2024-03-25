@@ -32,11 +32,6 @@ const App: FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-
-  if (!tg.isExpanded) {
-    tg.expand();
-  };
-
   useEffect(() => {
     setLoading(true);
     const fetchUserData = async () => {

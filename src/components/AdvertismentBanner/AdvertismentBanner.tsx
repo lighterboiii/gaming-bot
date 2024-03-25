@@ -22,10 +22,12 @@ const AdvertisementBanner: FC<IProps> = ({ onBannerClick }) => {
   };
 
   const handleSwipeStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault();
     touchStartX.current = e.touches[0].clientX;
   };
 
   const handleSwipeMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault();
     if (touchStartX.current === null) return;
 
     const currentX = e.touches[0].clientX;
