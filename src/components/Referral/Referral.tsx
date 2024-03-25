@@ -8,19 +8,19 @@ import { userId } from "../../api/requestData";
 import { useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { getReq } from "../../api/api";
+import { getReferralsData } from "../../api/mainApi";
 
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [totalBalance, setTotalBalance] = useState<any>(null);
   const [refsBoard, setRefsBoard] = useState<any>(null);
-  console.log(totalBalance);
-  console.log(refsBoard);
+
   useEffect(() => {
     const fetchRefsData = async () => {
       try {
-        const leaders = await getReq<any>({ uri: 'get_refs_info?user_id=', userId: userId });
+        const leaders = await getReferralsData(userId);
         setRefsBoard(leaders.result_data.refs_info);
         setTotalBalance(leaders.result_data.total_balance);
       } catch (error) {
@@ -48,7 +48,7 @@ const Referral: FC = () => {
       <div className={styles.referral__weekly}>
         <p className={styles.referral__text}>Заработано за неделю:
           <span className={styles.referral__sumSpan}>
-            + 💵 16$
+            + 💵 3$
           </span>
         </p>
       </div>

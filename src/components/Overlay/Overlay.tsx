@@ -11,7 +11,14 @@ interface IProps {
   crossColor?: string;
 }
 
-const Overlay: FC<IProps> = ({ show, children, onClose, closeButton, buttonColor = '#ac1a44', crossColor = '#FFF' }) => {
+const Overlay: FC<IProps> = ({
+  show,
+  children,
+  onClose,
+  closeButton,
+  buttonColor = '#ac1a44',
+  crossColor = '#FFF'
+}) => {
   return (
     <div className={`${styles.overlay} ${show ? styles.active : ''}`}>
       <div className={styles.overlay__children}>

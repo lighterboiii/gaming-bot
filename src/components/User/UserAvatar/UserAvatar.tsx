@@ -1,16 +1,15 @@
 import { FC, useEffect, useState } from "react";
 import styles from './UserAvatar.module.scss';
-import avatar from '../../../images/griffin.jpeg';
 import { useAppSelector } from "../../../services/reduxHooks";
-import { ItemData } from "../../../utils/types";
 import { getImageLink, getImageMaskLink } from "../../../api/requestData";
 
 interface IProps {
   // если передан пропс skin, то отрисовка будет происходит именно этого скина, если нет, то скин подтягивается из userData
-  item?: ItemData;
+  item?: any;
+  avatar?: string;
 }
 
-const UserAvatar: FC<IProps> = ({ item }) => {
+const UserAvatar: FC<IProps> = ({ item, avatar }) => {
   const [userSkin, setSkin] = useState<string | null>(null);
   const [userMask, setMask] = useState<string | null>(null);
 
@@ -42,7 +41,7 @@ const UserAvatar: FC<IProps> = ({ item }) => {
         </div>
 
         <img
-          src={userAvatar ? userAvatar : avatar}
+          src={avatar ?  avatar : userAvatar}
           alt="user_avatar"
           className={styles.userAvatar__userAvatar}
           style={{ maskImage: `url(${userMask})` }}

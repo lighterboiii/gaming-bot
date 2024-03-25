@@ -18,28 +18,32 @@ interface IProps {
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
-  
+
   const [priceValue, setPriceValue] = useState('')
   // продажа товара в лавку
   const handleSellToLavka = async (itemId: number, price: number) => {
-    const res: any = await sellLavkaRequest(itemId, price, userId);
-    const itemWithPrice = {
-      ...item,
-      item_price_coins: price,
-    };
-    setMessageShown(true);
-    switch (res.message) {
-      case "already":
-        setMessage("Товар уже на витрине");
-        break;
-      case "ok":
-        setMessage("Размещено в лавке");
-        dispatch(addItemToLavka(itemWithPrice));
-        break;
-      default:
-        break;
+    try {
+      const res: any = await sellLavkaRequest(itemId, price, userId);
+      const itemWithPrice = {
+        ...item,
+        item_price_coins: price,
+      };
+      setMessageShown(true);
+      switch (res.message) {
+        case "already":
+          setMessage("Товар уже на витрине");
+          break;
+        case "ok":
+          setMessage("Размещено в лавке");
+          dispatch(addItemToLavka(itemWithPrice));
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      console.log(error);
     }
     onClose();
   };
@@ -62,10 +66,10 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
         </fieldset>
       </form>
       <div className={styles.sellModal__button}>
-        <Button 
-        text="Продать в лавке" 
-        handleClick={() => handleSellToLavka(item.item_id, Number(priceValue))} 
-        disabled={!priceValue}
+        <Button
+          text="Продать в лавке"
+          handleClick={() => handleSellToLavka(item.item_id, Number(priceValue))}
+          disabled={!priceValue}
         />
       </div>
     </div>

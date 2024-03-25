@@ -11,7 +11,7 @@ import Referral from "../../components/Referral/Referral";
 import BannerData from "../../components/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
-import DailyBonus from "../../components/Shopping/Bonus/Bonus";
+import DailyBonus from "../../components/Bonus/Bonus";
 import {userId } from "../../api/requestData";
 import { setDailyBonus } from "../../services/appSlice";
 import { useAppDispatch } from "../../services/reduxHooks";
@@ -21,7 +21,7 @@ import { getAppData } from "../../api/mainApi";
 const Main: FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [currentBanner, setCurrentBanner] = useState(bannersData[0]);
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);

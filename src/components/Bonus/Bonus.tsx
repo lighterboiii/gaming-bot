@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
-import { Bonus } from "../../../utils/types";
+import { Bonus } from "../../utils/types";
 import styles from './Bonus.module.scss';
-import Button from "../../ui/Button/Button";
-import { useAppDispatch } from "../../../services/reduxHooks";
-import { setCollectibles, setEnergyDrinksValue, setNewExpValue, setNewTokensValue } from "../../../services/appSlice";
-import { userId } from "../../../api/requestData";
-import useTelegram from "../../../hooks/useTelegram";
-import { makeCollectibleRequest } from "../../../api/shopApi";
+import Button from "../ui/Button/Button";
+import { useAppDispatch } from "../../services/reduxHooks";
+import { setCollectibles, setEnergyDrinksValue, setNewExpValue, setNewTokensValue } from "../../services/appSlice";
+import { userId } from "../../api/requestData";
+import useTelegram from "../../hooks/useTelegram";
+import { makeCollectibleRequest } from "../../api/shopApi";
 
 interface IProps {
   bonus: Bonus;
@@ -17,7 +17,7 @@ interface IProps {
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: Bonus) => {
     const itemId = Number(item.bonus_item_id);

@@ -3,7 +3,7 @@
 
 .leader {
   @include position(relative);
-  @include size(90%, 60px);
+  @include size(90%, 40px);
   @include indents(0 16px, 0);
   @include flex(row, flex-end, center);
 
@@ -50,7 +50,7 @@
   &__textCoins {
     @include indents();
     @include ellipsis();
-    @include size(50px, unset);
+    @include size(70px, 100%);
     text-align: left;
     color: $main-color;
     font-weight: 900;

@@ -4,6 +4,7 @@ export const userId = '172359056';
 export const mainAppDataUri = `get_start_info?user_id=`;
 export const getUserAvatarUri = `getuserphoto?user_id=`;
 export const getLeadersUri = `get_leaderboard_top_users`;
+export const getRefsUri = `get_refs_info?user_id=`;
 export const setCollectiblesUri = 'add_collectible?user_id=';
 export const setActiveSkinUri = 'setactive_skin?user_id=';
 export const buyShopItemUri = `shop_buy_item?user_id=`;
@@ -23,9 +24,6 @@ export const activeSkinValue = '&active_skin=';
 export const newTokensValue = '&newtokens=';
 export const newCoinsValue = '&newcoins=';
 
-// export const getUserInfoUri = `getuserinfo?user_id=`;
-// export const getDailyBonusUri = `get_daily_check?user_id=`;
-// export const getShopAvailableUri = `get_shop_available`;
 
 // export const setRoomIdValueUri = 'setroomidvalue?user_id=';
 // export const setDaysOnlineUri = 'setdays_online?user_id=';

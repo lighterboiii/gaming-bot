@@ -13,13 +13,13 @@ import { getReq } from "../../api/api";
 import { mainAppDataUri, userId } from "../../api/requestData";
 import Loader from "../../components/Loader/Loader";
 import { Bonus, IAppData, ItemData } from "../../utils/types";
-import DailyBonus from "../../components/Shopping/Bonus/Bonus";
+import DailyBonus from "../../components/Bonus/Bonus";
 import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../services/appSlice";
 import { getAppData } from "../../api/mainApi";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 

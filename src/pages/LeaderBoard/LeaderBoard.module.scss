@@ -3,7 +3,7 @@
 
 .leaderBoard {
   @include size(100%, 100%);
-  @include flex(column, space-between, center, 20px);
+  @include flex(column, space-between, center);
   @include indents(16px 0 0 0, 0);
   background-color: $secondary-color;
   z-index: 3;
@@ -29,40 +29,50 @@
   }
 
   &__leader {
-    @include size(100%, auto);
-    @include flex(column, center, center, 20px);
+    @include size(100%, 30vh);
+    @include flex(column, flex-end, flex-end);
+    margin-right: 20px;
   }
 
   &__leaderInfo {
+    @include position(absolute, $left: 55%, $top: 47%);
     @include size(70%, auto);
-    @include flex(row, space-between, center, 20px);
+    @include flex(column, center, center, 4px);
+    align-self: center;
+    transform: translate(50%, 50%);
   }
 
   &__avatarContainer {
     @include indents();
+    @include position(absolute, $top: -55%, $left: -35%);
     @include size(180px, 180px);
-    @include position(relative);
   }
 
   &__label {
-    @include position(absolute, $right: -10%, $bottom: -5%);
-    @include indents(8px 12px, 0);
+    @include position(absolute, $right: 10%, $bottom: 7%);
+    @include indents(6px 8px, 0);
     background-color: $main-color;
-    border-radius: $radius-15;
-    color: $tertiary-color;
+    border-radius: $radius-12;
+    color: $secondary-color;
     font-style: italic;
     font-weight: 900;
-    font-size: 24px;
+    font-size: 18px;
     transform: rotate(-15deg);
     z-index: 3;
   }
 
   &__leaderText {
     @include indents();
-    color: $main-color;
-    font-style: italic;
+    color: $black-color;
     font-weight: 900;
-    font-size: 24px;
+    font-size: 18px;
+  }
+
+  &__leaderName {
+    @include indents();
+    color: $secondary-color;
+    font-weight: 900;
+    font-size: 16px;
   }
 
   &__jew {
@@ -74,5 +84,13 @@
     @include flex(column, flex-start, flex-end, 16px);
     @include size(100%, calc(100vh - 40vh - 3 * 16px));
     overflow-y: auto;
+  }
+
+  &__background {
+    @include position(relative);
+    @include size(259px, 106px);
+    background-image: url('../../images/leader_bg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 }
