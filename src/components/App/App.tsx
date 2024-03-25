@@ -33,11 +33,10 @@ const App: FC = () => {
   }, []);
 
   function handleViewportChange(e: any) {
-    if (!e.isStateStable) {
-      tg.expand();
-    }
+    tg.expand();
   }
-  if (tg) {
+
+  if (!tg.isExpanded()) {
     tg.onEvent('viewportChanged', handleViewportChange);
     tg.expand();
   };
