@@ -23,11 +23,6 @@ const App: FC = () => {
   const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const [viewportSize, setViewportSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight
-  });
-  
 
   function handleViewportChange(event: any) {
     if (!event.isExpanded) {
@@ -47,6 +42,7 @@ const App: FC = () => {
       tg.offEvent('viewportChanged', handleViewportChange);
     })
   }, []);
+  
 
   useEffect(() => {
     setLoading(true);
@@ -64,20 +60,12 @@ const App: FC = () => {
         console.error('Ошибка в получении данных пользователя:' + error);
       }
     };
-    const handleResize = () => {
-      setViewportSize({
-        width: window.innerWidth,
-        height: window.innerHeight
-      });
-    };
+
     fetchUserData();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
   return (
-    <div className={styles.app} style={{ height: `${viewportSize.height}px` }}>
+    <div className={styles.app}>
       {loading ? <Loader /> : (
         <Routes>
           <Route path={indexUrl} element={<Main />} />
