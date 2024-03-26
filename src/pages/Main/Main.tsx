@@ -12,20 +12,23 @@ import BannerData from "../../components/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
 import DailyBonus from "../../components/Bonus/Bonus";
-import { useAppSelector } from "../../services/reduxHooks";
-// import useTelegram from "../../hooks/useTelegram";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { getReq } from "../../api/api";
+import { userId } from "../../api/requestData";
+import { setDailyBonus } from "../../services/appSlice";
+import useTelegram from "../../hooks/useTelegram";
 
 const Main: FC = () => {
-  // const { user } = useTelegram();
-  // const userId = user?.id;
+  const { user } = useTelegram();
+  const userId = user?.id;
   const animationRef = useRef<HTMLDivElement>(null);
   const dailyBonusData = useAppSelector(store => store.app.bonus);
-
+  const dispatch = useAppDispatch();
   const [currentBanner, setCurrentBanner] = useState(bannersData[0]);
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
-  const [dailyBonus, setDailyBonus] = useState<any>(null);
+  const [bonus, setBonus] = useState<any>(null);
   
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
@@ -46,13 +49,35 @@ const Main: FC = () => {
   const toggleBonusOverlay = () => {
     setShowBonusOverlay(!showBonusOverlay);
   };
-
+  console.log(dailyBonusData);
+  console.log(bonus);
   useEffect(() => {
-    if (dailyBonusData && dailyBonusData !== 'no') {
-      setDailyBonus(dailyBonusData);
-      setShowBonusOverlay(true);
+    const today = new Date().toISOString().split('T')[0];
+    const lastBonusCheckDate = localStorage.getItem('lastBonusCheckDate');
+
+    if (lastBonusCheckDate === today) {
+      if (dailyBonusData && dailyBonusData !== 'no') {
+        setBonus(dailyBonusData);
+        setShowBonusOverlay(true);
+      }
+    } else {
+      const fetchDailyBonus = async () => {
+        try {
+          const res: any = await getReq({ uri: 'get_daily_check?user_id=', userId: userId });
+          dispatch(setDailyBonus(res.daily_bonus));
+          if (res.daily_bonus && res.daily_bonus !== 'no') {
+            setDailyBonus(res.daily_bonus);
+            setShowBonusOverlay(true);
+          }
+          localStorage.setItem('lastBonusCheckDate', today);
+        } catch (error) {
+          console.error('Ошибка в получении ежедневного бонуса:', error);
+        }
+      };
+      fetchDailyBonus();
     }
-  }, [dailyBonusData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const addAnimationClass = () => {
@@ -123,14 +148,14 @@ const Main: FC = () => {
         show={showBannerOverlay}
         onClose={toggleBannerOverlay}
       />
-      {(dailyBonus && dailyBonus !== "no") &&
+      {(bonus && bonus !== "no") &&
         <Overlay
           closeButton
           show={showBonusOverlay}
           onClose={() => setShowBonusOverlay(false)}
           children={
             <DailyBonus
-              bonus={dailyBonus}
+              bonus={bonus}
               closeOverlay={toggleBonusOverlay}
             />}
         />}

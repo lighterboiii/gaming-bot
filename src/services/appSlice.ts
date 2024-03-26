@@ -5,7 +5,7 @@ interface AppState {
   info: UserInfo | null;
   products: ItemData[] | null;
   archive: ItemData[] | null;
-  bonus: Bonus | string | null;
+  bonus: Bonus | any | null;
   lavka: any | null;
 }
 

@@ -15,7 +15,7 @@ import { getLavkaAvailable } from "../../api/shopApi";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+
   const navigate = useNavigate();
 
   const shopData = useAppSelector(store => store.app.products);
