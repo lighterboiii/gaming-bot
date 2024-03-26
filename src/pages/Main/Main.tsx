@@ -12,23 +12,20 @@ import BannerData from "../../components/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
 import DailyBonus from "../../components/Bonus/Bonus";
-import { userId } from "../../api/requestData";
-import { setDailyBonus } from "../../services/appSlice";
-import { useAppDispatch } from "../../services/reduxHooks";
+import { useAppSelector } from "../../services/reduxHooks";
 import useTelegram from "../../hooks/useTelegram";
-import { getAppData } from "../../api/mainApi";
 
 const Main: FC = () => {
-  const dispatch = useAppDispatch();
   const { user } = useTelegram();
   // const userId = user?.id;
+  const animationRef = useRef<HTMLDivElement>(null);
+  const dailyBonusData = useAppSelector(store => store.app.bonus);
+  
   const [currentBanner, setCurrentBanner] = useState(bannersData[0]);
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
-  const [dailyBonusData, setDailyBonusData] = useState<any | null>(null);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
-  const animationRef = useRef<HTMLDivElement>(null);
-
+  console.log(dailyBonusData);
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
     setShowBannerOverlay(!showBannerOverlay)
@@ -62,16 +59,6 @@ const Main: FC = () => {
         }, 1000);
       }
     };
-    const fetchData = async () => {
-      try {
-        const res = await getAppData(userId);
-        dispatch(setDailyBonus(res.daily_bonus));
-        setDailyBonusData(res.daily_bonus);
-      } catch (error) {
-        console.log(error);
-      };
-    }
-    fetchData();
     addAnimationClass();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -115,25 +102,25 @@ const Main: FC = () => {
         </div>
         <ShopLink />
       </div>
-      <Overlay
-        children={
-          <Referral />
-        }
-        show={showReferralOverlay}
-        onClose={toggleRefOverlay}
-      />
-      <Overlay
-        buttonColor="#FFF"
-        crossColor="#ac1a44"
-        closeButton
-        children={
-          <BannerData
-            data={currentBanner}
-          />}
-        show={showBannerOverlay}
-        onClose={toggleBannerOverlay}
-      />
-      {(dailyBonusData && dailyBonusData !== 'no') &&
+        <Overlay
+          children={
+            <Referral />
+          }
+          show={showReferralOverlay}
+          onClose={toggleRefOverlay}
+        />
+        <Overlay
+          buttonColor="#FFF"
+          crossColor="#ac1a44"
+          closeButton
+          children={
+            <BannerData
+              data={currentBanner}
+            />}
+          show={showBannerOverlay}
+          onClose={toggleBannerOverlay}
+        />
+      {(dailyBonusData) &&
         <Overlay
           closeButton
           show={showBonusOverlay}

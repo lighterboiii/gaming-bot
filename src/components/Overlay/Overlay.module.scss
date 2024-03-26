@@ -8,8 +8,8 @@
   @include size(calc(100% - 32px), 0);
   overflow: hidden;
   transition: height .5s ease;
-  border-top-left-radius: $radius-15;
-  border-top-right-radius: $radius-15;
+  border-top-left-radius: $radius-12;
+  border-top-right-radius: $radius-12;
   z-index: 666;
 
   &__children {

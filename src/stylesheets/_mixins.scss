@@ -102,8 +102,8 @@
   @include flex(column, center, center, 16px);
   @include size(100%, 100%);
   background-color: $tertiary-color;
-  border-top-left-radius: $radius-15;
-  border-top-right-radius: $radius-15;
+  border-top-left-radius: $radius-12;
+  border-top-right-radius: $radius-12;
 }
 /* миксин для стилизации больших кнопок */
 @mixin big-link-layout {

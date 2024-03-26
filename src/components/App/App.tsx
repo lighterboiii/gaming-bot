@@ -12,7 +12,7 @@ import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import { createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setUserData, setUserPhoto } from '../../services/appSlice';
+import { setDailyBonus, setLavkaAvailable, setShopAvailable, setUserData, setUserPhoto } from '../../services/appSlice';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
 import { setProductsArchive } from '../../services/appSlice';
@@ -53,6 +53,9 @@ const App: FC = () => {
         const userPhotoResponse = await getUserAvatarRequest(userId);
         dispatch(setUserData(res.user_info));
         dispatch(setProductsArchive(res.collectibles_data));
+        dispatch(setDailyBonus(res.daily_bonus));
+        dispatch(setShopAvailable(res.shop_available));
+        dispatch(setLavkaAvailable(res.lavka_available));
         dispatch(setUserPhoto(userPhotoResponse?.info));
         setLoading(false);
       } catch (error) {

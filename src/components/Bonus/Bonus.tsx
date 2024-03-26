@@ -10,7 +10,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { makeCollectibleRequest } from "../../api/shopApi";
 
 interface IProps {
-  bonus: Bonus;
+  bonus: Bonus | any;
   closeOverlay: () => void;
 }
 

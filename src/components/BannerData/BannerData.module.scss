@@ -51,7 +51,5 @@
   &__button {
     @include indents(0 16px, 0);
     @include size(100%, 40px);
-    // @include position(absolute, $left: 50%, $bottom: 80px);
-    // transform: translate(-50%);
   }
 }

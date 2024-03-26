@@ -8,7 +8,7 @@ import { userId } from "../../api/requestData";
 import { useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { putReq } from "../../api/api";
-import { getReferralsData } from "../../api/mainApi";
+import { getReferralsData, transferCoinsToBalanceReq } from "../../api/mainApi";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { setCoinsSum } from "../../services/appSlice";
@@ -26,16 +26,6 @@ const Referral: FC = () => {
   console.log(message);
 
   useEffect(() => {
-    const fetchRefsData = async () => {
-      try {
-        const refs = await getReferralsData(userId);
-        setRefsBoard(refs.result_data.refs_info);
-        setTotalBalance(refs.result_data.total_balance);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     const checkForReferralUpdates = async () => {
       try {
         const latestRefs = await getReferralsData(userId);
@@ -52,11 +42,23 @@ const Referral: FC = () => {
     return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refsBoard]);
-  
+
+  useEffect(() => {
+    const fetchRefsData = async () => {
+      try {
+        const refs = await getReferralsData(userId);
+        setRefsBoard(refs.result_data.refs_info);
+        setTotalBalance(refs.result_data.total_balance);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRefsData();
+  }, [])
 
   const handleTransferCoins = async () => {
     try {
-      const res: any = await putReq({ uri: `transfer_refs_to_balance?user_id=`, userId: userId });
+      const res: any = transferCoinsToBalanceReq(userId);
       setMessageShown(true);
       switch (res.transfered) {
         case "small":
