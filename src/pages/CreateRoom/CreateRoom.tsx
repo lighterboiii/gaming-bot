@@ -17,7 +17,7 @@ const CreateRoom: FC = () => {
   // const [betAmount, setBetAmount] = useState(0.1);
   // const [currency, setCurrency] = useState('💵');
   const [gameData, setGameData] = useState(null);
-  const [rpsOverlay, setRpsOverlay] = useState(false);
+  const [settingsOverlay, setSettingsOverlay] = useState(false);
   // const dispatch = useAppDispatch();
   // const userCoins = useAppSelector(store => store.app.info);
 
@@ -32,7 +32,7 @@ const CreateRoom: FC = () => {
 
   const handleGameClick = (game: any) => {
     setGameData(game);
-    setRpsOverlay(!rpsOverlay)
+    setSettingsOverlay(!settingsOverlay)
   };
 
   return (
@@ -40,7 +40,7 @@ const CreateRoom: FC = () => {
       <div className={styles.create__header}>
         <h2 className={styles.create__heading}>Создать комнату</h2>
       </div>
-      <div className={`${styles.create__content} ${rpsOverlay ? styles.hidden : ''}`}>
+      <div className={`${styles.create__content} ${settingsOverlay ? styles.hidden : ''}`}>
         {games.map((game: any, index: number) => (
           <GameCard
             game={game}
@@ -58,8 +58,8 @@ const CreateRoom: FC = () => {
         crossColor="#ac1a44"
         buttonColor="#FFF"
         closeButton
-        show={rpsOverlay} 
-        onClose={() => setRpsOverlay(false)} 
+        show={settingsOverlay} 
+        onClose={() => setSettingsOverlay(false)} 
         children={
         <GameSettings
           data={gameData}

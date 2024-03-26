@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import styles from './GameSettings.module.scss';
 import Button from '../../ui/Button/Button';
+import BetSlider from '../../BetSlider/Betslider';
 
 interface IProps {
   data: any;
@@ -21,15 +22,15 @@ const GameSettings: FC<IProps> = ({ data }) => {
             <p className={styles.game__text}>🔰 138</p>
           </div>
         </div>
-        <div>
+        <div className={styles.game__menu}>
           <p className={styles.game__text}>Ставка в комнате:</p>
           <div className={styles.game__buttons}>
-            <button className={`${styles.game__button}${styles.game__buttonLeft}`}></button>
-            <button className={`${styles.game__button}${styles.game__buttonRight}`}></button>
+            <BetSlider isPrice />
+            <BetSlider isCurrency />
           </div>
         </div>
         <div className={styles.game__buttonWrapper}>
-          <Button text='Создать' handleClick={() => { }} />
+          <Button text='Создать' handleClick={() => {}} />
         </div>
       </div>
     </div>

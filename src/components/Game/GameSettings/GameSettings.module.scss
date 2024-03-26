@@ -6,9 +6,9 @@
   justify-content: flex-start;
 
   &__logo {
+    @include max-size(120px, 120px);
     @include size(100%, 100%);
-    @include max-size(164px, 164px);
-    @include position(absolute, $top: 0, $left: 17%);
+    @include position(absolute, $top: 0, $left: 25%);
     background-size: contain;
     background-repeat: no-repeat;
     z-index: 777;
@@ -16,9 +16,9 @@
   }
 
   &__content {
-    @include flex(column, center, center, 16px);
-    @include indents(0, 30% 0 0 0);
-    @include size(100%, auto);
+    @include flex(column, center, center, 10px);
+    @include indents(0, 20% 0 0 0);
+    @include size(100%, 100%);
   }
 
   &__title {
@@ -32,6 +32,7 @@
   &__balance { 
     @include indents(8px 0, 0);
     @include size(100%, auto);
+    @include max-size(100%, 62px);
     @include flex(column, center, center, 8px);
     background-color: $black-color;
   }
@@ -49,5 +50,14 @@
 
   &__buttonWrapper {
     @include size(calc(100% - 32px), 40px);
+  }
+
+  &__buttons {
+    @include size(100%, auto);
+    @include flex(column, center, center, 8px);
+  }
+
+  &__menu {
+    @include flex(column, center, center, 8px);
   }
 }
