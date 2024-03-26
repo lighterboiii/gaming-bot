@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { getReq } from "../../api/api";
 import { getReferralsData } from "../../api/mainApi";
+import { useAppSelector } from "../../services/reduxHooks";
 
 const Referral: FC = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Referral: FC = () => {
   // const userId = user?.id;
   const [totalBalance, setTotalBalance] = useState<any>(null);
   const [refsBoard, setRefsBoard] = useState<any>(null);
+  const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
 
   useEffect(() => {
     const fetchRefsData = async () => {
@@ -41,14 +43,14 @@ const Referral: FC = () => {
       <div className={styles.referral__amount}>
         <p className={styles.referral__text}>Заработано за всё время:
           <span className={styles.referral__sumSpan}>
-            + {totalBalance}$
+            + 💵 {referralCoinsAmount ? referralCoinsAmount : '0'}$
           </span>
         </p>
       </div>
       <div className={styles.referral__weekly}>
         <p className={styles.referral__text}>Заработано за неделю:
           <span className={styles.referral__sumSpan}>
-            + 💵 3$
+            + 💵 {totalBalance ? totalBalance : '0'}$
           </span>
         </p>
       </div>

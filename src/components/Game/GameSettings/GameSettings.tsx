@@ -7,24 +7,30 @@ interface IProps {
 }
 
 const GameSettings: FC<IProps> = ({ data }) => {
+
   console.log(data);
   return (
     <div className={styles.game}>
-      <h3>{data?.name}</h3>
-      <div>
-        <p>Ваш баланс</p>
-        <div>
-          <p>1200494</p>
-          <p>123123123</p>
+      <div style={{ backgroundImage: `${data?.img}` }} className={styles.game__logo} />
+      <div className={styles.game__content}>
+        <h3 className={styles.game__title}>{data?.name}</h3>
+        <div className={styles.game__balance}>
+          <p className={styles.game__text}>Ваш баланс:</p>
+          <div className={styles.game__balanceWrapper}>
+            <p className={styles.game__text}>💵 2435</p>
+            <p className={styles.game__text}>🔰 138</p>
+          </div>
         </div>
-      </div>
-      <div>
-        <p>Ставка в комнате:</p>
-        <input type="text" />
-        <input type="text" />
-      </div>
-      <div>
-        <Button text='Создать' handleClick={() => {}} />
+        <div>
+          <p className={styles.game__text}>Ставка в комнате:</p>
+          <div className={styles.game__buttons}>
+            <button className={`${styles.game__button}${styles.game__buttonLeft}`}></button>
+            <button className={`${styles.game__button}${styles.game__buttonRight}`}></button>
+          </div>
+        </div>
+        <div className={styles.game__buttonWrapper}>
+          <Button text='Создать' handleClick={() => { }} />
+        </div>
       </div>
     </div>
   )

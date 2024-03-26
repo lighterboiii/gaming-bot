@@ -4,4 +4,50 @@
 .game {
   @include children-layout();
   justify-content: flex-start;
+
+  &__logo {
+    @include size(100%, 100%);
+    @include max-size(164px, 164px);
+    @include position(absolute, $top: 0, $left: 17%);
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 777;
+    rotate: 30deg;
+  }
+
+  &__content {
+    @include flex(column, center, center, 16px);
+    @include indents(0, 30% 0 0 0);
+    @include size(100%, auto);
+  }
+
+  &__title {
+    @include indents();
+    text-transform: uppercase;
+    color: $main-color;
+    font-style: italic;
+    font-weight: 900;
+  }
+
+  &__balance { 
+    @include indents(8px 0, 0);
+    @include size(100%, auto);
+    @include flex(column, center, center, 8px);
+    background-color: $black-color;
+  }
+
+  &__text {
+    @include indents();
+    font-size: 16px;
+    color: $main-color;
+    font-weight: 900;
+  }
+
+  &__balanceWrapper {
+    @include flex(row, center, center, 20px);
+  }
+
+  &__buttonWrapper {
+    @include size(calc(100% - 32px), 40px);
+  }
 }

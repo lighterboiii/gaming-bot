@@ -55,6 +55,8 @@ const CreateRoom: FC = () => {
         ))}
       </div>
         <Overlay 
+        crossColor="#ac1a44"
+        buttonColor="#FFF"
         closeButton
         show={rpsOverlay} 
         onClose={() => setRpsOverlay(false)} 
