@@ -54,11 +54,11 @@
   &__textCoins {
     @include indents();
     @include ellipsis();
-    @include size(70px, 100%);
+    @include size(80px, 100%);
     text-align: left;
     color: $main-color;
     font-weight: 900;
-    font-size: 14px;
+    font-size: 12px;
     font-style: italic;
   }
 

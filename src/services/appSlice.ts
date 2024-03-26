@@ -62,9 +62,9 @@ const appSlice = createSlice({
         state.info.tokens = state.info.tokens - action.payload;
       }
     },
-    setNewCoinsValue: (state, action: PayloadAction<number>) => {
+    setCoinsSum: (state, action: PayloadAction<number>) => {
       if (state.info) {
-        state.info.coins = action.payload;
+        state.info.coins += action.payload;
       }
     },
     setNewTokensValue: (state, action: PayloadAction<number>) => {
@@ -119,8 +119,8 @@ export const {
   setNewExpValue,
   setEnergyDrinksValue,
   addItemToLavka,
-  removeItemFromLavka
-  // setNewCoinsValue
+  removeItemFromLavka,
+  setCoinsSum
 } = appSlice.actions;
 
 export default appSlice.reducer;

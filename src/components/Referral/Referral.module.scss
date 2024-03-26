@@ -38,7 +38,7 @@
 
   &__sumSpan {
     color: $mustard-color;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 700;
   }
 
@@ -56,5 +56,19 @@
     @include size(100%, auto);
     overflow: auto;
     z-index: 3;
+  }
+
+  &__chevron {
+    @include button-style-reset();
+    @include size(24px, 24px);
+    cursor: pointer;
+  }
+
+  &__notification {
+    @include indents();
+    @include size(calc(100% - 32px), 100%);
+    @include flex(column, center, center);
+    color: $main-color;
+    font-weight: 900;
   }
 }

@@ -11,8 +11,8 @@ import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
 import { userId } from "../../api/requestData";
 import Loader from "../../components/Loader/Loader";
-import { ItemData, LavkaData } from "../../utils/types";
-import { setDailyBonus, setLavkaAvailable, setShopAvailable } from "../../services/appSlice";
+import { ItemData } from "../../utils/types";
+import { setLavkaAvailable, setShopAvailable } from "../../services/appSlice";
 import { getAppData } from "../../api/mainApi";
 
 const Shop: FC = () => {
