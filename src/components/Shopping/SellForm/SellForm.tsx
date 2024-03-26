@@ -29,6 +29,7 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
       const itemWithPrice = {
         ...item,
         item_price_coins: price,
+        seller_id: +userId,
       };
       setMessageShown(true);
       switch (res.message) {

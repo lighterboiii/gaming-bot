@@ -11,6 +11,7 @@ import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
 import Loader from "../../components/Loader/Loader";
 import { ItemData } from "../../utils/types";
+import { getLavkaAvailable } from "../../api/shopApi";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
@@ -20,7 +21,6 @@ const Shop: FC = () => {
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const archiveData = useAppSelector(store => store.app.archive);
-  const lavkaAvailable = useAppSelector(store => store.app.lavka);
 
   const [goods, setGoods] = useState<any>([]);
   const [activeButton, setActiveButton] = useState<string>('Магазин');
@@ -53,13 +53,11 @@ const Shop: FC = () => {
   };
   // при монтировании компонента
   useEffect(() => {
-    setLoading(true);
     setActiveButton('Магазин');
     shopData && handleAddIsCollectible(shopData);
     tg.BackButton.show().onClick(() => {
       navigate(-1);
     });
-    setLoading(false);
     return () => {
       tg.BackButton.hide();
     }
@@ -80,40 +78,45 @@ const Shop: FC = () => {
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
-  const handleClickLavka = () => {
+  const handleClickLavka = async () => {
+    setLoading(true);
     setActiveButton("Лавка");
-    setGoods(lavkaAvailable);
+    const updatedLavka: any = await getLavkaAvailable();
+    setGoods(updatedLavka.lavka);
+    setLoading(false);
   };
 
   return (
     <div className={styles.shop}>
-      {loading ? <Loader /> : (
-        <>
-          <div className={styles.shop__header}>
-            <h2 className={styles.shop__title}>Магазин</h2>
-            <UserInfo />
+      {/* {loading ? <Loader /> : (
+        <> */}
+      <div className={styles.shop__header}>
+        <h2 className={styles.shop__title}>Магазин</h2>
+        <UserInfo />
+      </div>
+      <div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
+        <div className={styles.shop__buttons}>
+          <div className={styles.shop__leftButtonsContainer}>
+            <button
+              className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
+              onClick={handleClickShop}>
+              Магазин
+            </button>
+            <button
+              className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
+              onClick={handleClickLavka}>
+              Лавка
+            </button>
           </div>
-          <div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
-            <div className={styles.shop__buttons}>
-              <div className={styles.shop__leftButtonsContainer}>
-                <button
-                  className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
-                  onClick={handleClickShop}>
-                  Магазин
-                </button>
-                <button
-                  className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
-                  onClick={handleClickLavka}>
-                  Лавка
-                </button>
-              </div>
-              <button
-                className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
-                onClick={handleClickInventory}
-              >
-                Приобретено
-              </button>
-            </div>
+          <button
+            className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
+            onClick={handleClickInventory}
+          >
+            Приобретено
+          </button>
+        </div>
+        {loading ? <p>Загрузка...</p> : (
+          <>
             <div className={styles.shop__goods}>
               {goods?.length > 0 ? (
                 <>
@@ -131,24 +134,28 @@ const Shop: FC = () => {
                 <div style={{ color: '#FFF' }}>Ничего нет :с</div>
               )}
             </div>
+          </>
+            )
+          }
           </div>
-          <Overlay
-            buttonColor="#FFF"
-            crossColor="#ac1a44"
-            closeButton
-            show={showOverlay}
+      <Overlay
+        buttonColor="#FFF"
+        crossColor="#ac1a44"
+        closeButton
+        show={showOverlay}
+        onClose={toggleOverlay}
+        children={
+          <Product
+            activeButton={activeButton}
+            item={selectedItem}
             onClose={toggleOverlay}
-            children={
-              <Product
-                activeButton={activeButton}
-                item={selectedItem}
-                onClose={toggleOverlay}
-                isCollectible={selectedItem?.isCollectible}
-              />}
-          />
-        </>
-      )}
-    </div>
+            isCollectible={selectedItem?.isCollectible}
+          />}
+      />
+        {/* </>
+)
+} */}
+    </div >
   )
 };
 

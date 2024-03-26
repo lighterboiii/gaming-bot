@@ -7,7 +7,6 @@ import UserContainer from "../User/UserContainer/UserContainer";
 import { userId } from "../../api/requestData";
 import { useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
-import { putReq } from "../../api/api";
 import { getReferralsData, transferCoinsToBalanceReq } from "../../api/mainApi";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
@@ -18,13 +17,13 @@ const Referral: FC = () => {
   const { user, tg } = useTelegram();
   // const userId = user?.id;
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
+  
   const [totalBalance, setTotalBalance] = useState<any>(null);
   const [refsBoard, setRefsBoard] = useState<any>(null);
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
   const dispatch = useAppDispatch();
-  console.log(message);
-
+  console.log(refsBoard);
   useEffect(() => {
     const checkForReferralUpdates = async () => {
       try {
@@ -37,7 +36,7 @@ const Referral: FC = () => {
         console.log(error);
       }
     };
-    const intervalId = setInterval(checkForReferralUpdates, 60000);
+    const intervalId = setInterval(checkForReferralUpdates, 30000);
 
     return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,16 +57,22 @@ const Referral: FC = () => {
 
   const handleTransferCoins = async () => {
     try {
-      const res: any = transferCoinsToBalanceReq(userId);
+      const res: any = await transferCoinsToBalanceReq(userId);
+      console.log(res);
       setMessageShown(true);
-      switch (res.transfered) {
+      switch (res && res.transfered) {
         case "small":
           setMessage("Минимальная сумма для перевода 0.1");
           break;
-        default:
+        case res === undefined: 
+          setMessage("Нечего переводить");
+          break; 
+        case res !== undefined:
           setMessage(`Баланс пополнен на ${res.transfered}`);
-          setTotalBalance(0);
           dispatch(setCoinsSum(Number(res.transfered)));
+          setTotalBalance(0);
+          break;
+        default: 
           break;
       }
       setTimeout(async () => {
@@ -81,6 +86,7 @@ const Referral: FC = () => {
       console.log(error);
     }
   };
+  
   return (
     <div className={styles.referral}>
       <h3 className={styles.referral__h3}>

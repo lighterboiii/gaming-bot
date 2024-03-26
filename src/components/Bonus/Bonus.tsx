@@ -20,9 +20,9 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   // const userId = user?.id;
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: Bonus) => {
-    const itemId = Number(item.bonus_item_id);
-    const itemCount = Number(item.bonus_count);
-    switch (item.bonus_type) {
+    const itemId = Number(item?.bonus_item_id);
+    const itemCount = Number(item?.bonus_count);
+    switch (item?.bonus_type) {
       case "tokens":
         const tokens = await makeCollectibleRequest(itemId, itemCount, userId);
         const formattedTokens = Math.floor(tokens.message);
@@ -45,21 +45,21 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   };
 
   return (
-    <div key={bonus.bonus_item_id} className={styles.bonus}>
+    <div key={bonus?.bonus_item_id} className={styles.bonus}>
       <div className={styles.bonus__layout}>
         <div className={styles.bonus__titleContainer}>
           <h2 className={styles.bonus__title}>Ежедневная награда</h2>
           <p className={styles.bonus__text}>Вернитесь завтра, чтобы получить ещё</p>
         </div>
         <div className={styles.bonus__content}>
-          <img src={bonus.bonus_image} alt="bonus_image" className={styles.bonus__image} />
-          <p className={styles.bonus__text}>{bonus.bonus_type}</p>
+          <img src={bonus?.bonus_image} alt="bonus_image" className={styles.bonus__image} />
+          <p className={styles.bonus__text}>{bonus?.bonus_type}</p>
           <div className={styles.bonus__button}>
             <Button
               handleClick={() => handleGetBonus(bonus)}
               text={
-                `${(bonus.bonus_type === "tokens" || bonus.bonus_type === "exp" || bonus.bonus_type === "energy_drink")
-                  ? `Забрать ${bonus.bonus_count}`
+                `${(bonus?.bonus_type === "tokens" || bonus?.bonus_type === "exp" || bonus?.bonus_type === "energy_drink")
+                  ? `Забрать ${bonus?.bonus_count}`
                   : 'Забрать'}`
               }
             />
