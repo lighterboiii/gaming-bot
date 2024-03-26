@@ -2,13 +2,14 @@ import { FC } from 'react';
 import styles from './GameSettings.module.scss';
 import Button from '../../ui/Button/Button';
 import BetSlider from '../../BetSlider/Betslider';
+import { useNavigate } from 'react-router-dom';
 
 interface IProps {
   data: any;
 }
 
 const GameSettings: FC<IProps> = ({ data }) => {
-
+  const navigate = useNavigate();
   console.log(data);
   return (
     <div className={styles.game}>
@@ -30,7 +31,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
           </div>
         </div>
         <div className={styles.game__buttonWrapper}>
-          <Button text='Создать' handleClick={() => {}} />
+          <Button text='Создать' handleClick={() => navigate('/404')} />
         </div>
       </div>
     </div>

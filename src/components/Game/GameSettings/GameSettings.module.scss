@@ -16,7 +16,7 @@
   }
 
   &__content {
-    @include flex(column, center, center, 10px);
+    @include flex(column, space-evenly, center, 10px);
     @include indents(0, 20% 0 0 0);
     @include size(100%, 100%);
   }
