@@ -118,7 +118,7 @@ const Main: FC = () => {
         show={showBannerOverlay}
         onClose={toggleBannerOverlay}
       />
-      {dailyBonusData &&
+      {(dailyBonusData && dailyBonusData !== "no") &&
         <Overlay
           closeButton
           show={showBonusOverlay}
