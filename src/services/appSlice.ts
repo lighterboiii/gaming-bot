@@ -32,6 +32,9 @@ const appSlice = createSlice({
     setDailyBonus: (state, action: PayloadAction<Bonus>) => {
       state.bonus = action.payload;
     },
+    clearDailyBonus: (state) => {
+      state.bonus = null;
+    },
     setActiveSkin: (state, action: PayloadAction<number>) => {
       if (state.info) {
         state.info.active_skin = action.payload;
@@ -120,7 +123,8 @@ export const {
   setEnergyDrinksValue,
   addItemToLavka,
   removeItemFromLavka,
-  setCoinsNewValue
+  setCoinsNewValue,
+  clearDailyBonus
 } = appSlice.actions;
 
 export default appSlice.reducer;
