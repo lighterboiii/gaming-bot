@@ -12,13 +12,12 @@ import BannerData from "../../components/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
 import DailyBonus from "../../components/Bonus/Bonus";
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import useTelegram from "../../hooks/useTelegram";
+import { useAppSelector } from "../../services/reduxHooks";
+// import useTelegram from "../../hooks/useTelegram";
 
 const Main: FC = () => {
-  const dispatch = useAppDispatch();
-  const { user } = useTelegram();
-  const userId = user?.id;
+  // const { user } = useTelegram();
+  // const userId = user?.id;
   const animationRef = useRef<HTMLDivElement>(null);
   const dailyBonusData = useAppSelector(store => store.app.bonus);
 
@@ -26,7 +25,8 @@ const Main: FC = () => {
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
-  console.log(dailyBonusData);
+  const [dailyBonus, setDailyBonus] = useState<any>(null);
+  
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
     setShowBannerOverlay(!showBannerOverlay)
@@ -48,7 +48,13 @@ const Main: FC = () => {
   };
 
   useEffect(() => {
-    (dailyBonusData && dailyBonusData !== 'no') ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
+    if (dailyBonusData && dailyBonusData !== 'no') {
+      setDailyBonus(dailyBonusData);
+      setShowBonusOverlay(true);
+    }
+  }, [dailyBonusData]);
+
+  useEffect(() => {
     const addAnimationClass = () => {
       if (animationRef.current) {
         animationRef.current.classList.add(styles.shake);
@@ -58,7 +64,6 @@ const Main: FC = () => {
       }
     };
     addAnimationClass();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -118,14 +123,14 @@ const Main: FC = () => {
         show={showBannerOverlay}
         onClose={toggleBannerOverlay}
       />
-      {(dailyBonusData && dailyBonusData !== "no") &&
+      {(dailyBonus && dailyBonus !== "no") &&
         <Overlay
           closeButton
           show={showBonusOverlay}
           onClose={() => setShowBonusOverlay(false)}
           children={
             <DailyBonus
-              bonus={dailyBonusData}
+              bonus={dailyBonus}
               closeOverlay={toggleBonusOverlay}
             />}
         />}

@@ -28,7 +28,7 @@ const App: FC = () => {
     if (!event.isExpanded) {
       tg.expand();
     }
-  }
+  };
   
   useEffect(() => {
     tg.setHeaderColor('#d51845');

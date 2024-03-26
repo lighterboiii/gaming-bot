@@ -24,7 +24,7 @@ const Referral: FC = () => {
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
   const dispatch = useAppDispatch();
-  console.log(refsBoard);
+  // console.log(refsBoard);
   useEffect(() => {
     const fetchData = async () => {
       try {
