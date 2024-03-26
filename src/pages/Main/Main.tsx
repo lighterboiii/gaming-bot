@@ -12,17 +12,16 @@ import BannerData from "../../components/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
 import DailyBonus from "../../components/Bonus/Bonus";
-import { useAppSelector } from "../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import useTelegram from "../../hooks/useTelegram";
-import { getReq } from "../../api/api";
-import { userId } from "../../api/requestData";
 
 const Main: FC = () => {
+  const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const animationRef = useRef<HTMLDivElement>(null);
   const dailyBonusData = useAppSelector(store => store.app.bonus);
-  const [bonuss, setBonus] = useState(null);
+
   const [currentBanner, setCurrentBanner] = useState(bannersData[0]);
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
@@ -49,21 +48,7 @@ const Main: FC = () => {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const bonus: any = await getReq({
-          uri: `get_daily_check?user_id=`,
-          userId: userId
-        });
-        console.log(bonus);
-        setBonus(bonus.bonus);
-        console.log(bonuss)
-        // dispatch(setDailyBonus(bonus.bonus));
-      } catch (error) {
-        console.error('Ошибка в получении данных пользователя:' + error);
-      }
-    };
-    // (dailyBonusData && dailyBonusData !== 'no') ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
+    (dailyBonusData && dailyBonusData !== 'no') ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
     const addAnimationClass = () => {
       if (animationRef.current) {
         animationRef.current.classList.add(styles.shake);
@@ -72,7 +57,6 @@ const Main: FC = () => {
         }, 1000);
       }
     };
-    fetchUserData();
     addAnimationClass();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

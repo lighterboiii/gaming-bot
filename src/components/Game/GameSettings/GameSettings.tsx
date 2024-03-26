@@ -10,7 +10,7 @@ interface IProps {
 
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
-  console.log(data);
+  // console.log(data);
   return (
     <div className={styles.game}>
       <div style={{ backgroundImage: `${data?.img}` }} className={styles.game__logo} />

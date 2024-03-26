@@ -15,7 +15,7 @@ import { getLavkaAvailable } from "../../api/shopApi";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const navigate = useNavigate();
 
   const shopData = useAppSelector(store => store.app.products);
@@ -115,7 +115,7 @@ const Shop: FC = () => {
             Приобретено
           </button>
         </div>
-        {loading ? <p>Загрузка...</p> : (
+        {loading ?  <p style={{ color: '#ffdb50', fontWeight: '900' }}>Загрузка...</p>: (
           <>
             <div className={styles.shop__goods}>
               {goods?.length > 0 ? (
@@ -131,7 +131,7 @@ const Shop: FC = () => {
                   )}
                 </>
               ) : (
-                <div style={{ color: '#FFF' }}>Ничего нет :с</div>
+                <p style={{ color: '#ffdb50', fontWeight: '900' }}>Ничего нет :с</p>
               )}
             </div>
           </>

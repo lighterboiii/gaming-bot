@@ -10,14 +10,15 @@ import useTelegram from "../../hooks/useTelegram";
 import { getReferralsData, transferCoinsToBalanceReq } from "../../api/mainApi";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
-import { setCoinsSum } from "../../services/appSlice";
+import { setCoinsNewValue } from "../../services/appSlice";
+import { formatNumber } from "../../utils/additionalFunctions";
 
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
-  
+
   const [totalBalance, setTotalBalance] = useState<any>(null);
   const [refsBoard, setRefsBoard] = useState<any>(null);
   const [message, setMessage] = useState('');
@@ -25,25 +26,7 @@ const Referral: FC = () => {
   const dispatch = useAppDispatch();
   console.log(refsBoard);
   useEffect(() => {
-    const checkForReferralUpdates = async () => {
-      try {
-        const latestRefs = await getReferralsData(userId);
-        if (JSON.stringify(latestRefs.result_data.refs_info) !== JSON.stringify(refsBoard)) {
-          setRefsBoard(latestRefs.result_data.refs_info);
-          setTotalBalance(latestRefs.result_data.total_balance);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const intervalId = setInterval(checkForReferralUpdates, 30000);
-
-    return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refsBoard]);
-
-  useEffect(() => {
-    const fetchRefsData = async () => {
+    const fetchData = async () => {
       try {
         const refs = await getReferralsData(userId);
         setRefsBoard(refs.result_data.refs_info);
@@ -52,27 +35,30 @@ const Referral: FC = () => {
         console.log(error);
       }
     };
-    fetchRefsData();
-  }, [])
+    fetchData();
+
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 60000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const handleTransferCoins = async () => {
     try {
       const res: any = await transferCoinsToBalanceReq(userId);
       console.log(res);
       setMessageShown(true);
-      switch (res && res.transfered) {
+      switch (res.transfered) {
         case "small":
           setMessage("Минимальная сумма для перевода 0.1");
           break;
-        case res === undefined: 
-          setMessage("Нечего переводить");
-          break; 
-        case res !== undefined:
-          setMessage(`Баланс пополнен на ${res.transfered}`);
-          dispatch(setCoinsSum(Number(res.transfered)));
+        default:
+          setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
+          dispatch(setCoinsNewValue(Number(res.new_coins)));
           setTotalBalance(0);
-          break;
-        default: 
           break;
       }
       setTimeout(async () => {
@@ -86,7 +72,7 @@ const Referral: FC = () => {
       console.log(error);
     }
   };
-  
+
   return (
     <div className={styles.referral}>
       <h3 className={styles.referral__h3}>
@@ -108,6 +94,7 @@ const Referral: FC = () => {
             + 💵 {totalBalance ? totalBalance : '0'}$
           </span>
           <button
+            disabled={totalBalance === 0}
             className={styles.referral__chevron}
             onClick={handleTransferCoins}
           >

@@ -26,5 +26,5 @@ export const getTopUsers = async () => {
 };
 // перевести коины юзера на баланс юзера
 export const transferCoinsToBalanceReq = async (userIdValue: string) => {
-  await putReq({ uri: setTransferCoinsUri, userId: userIdValue });
+  return await putReq({ uri: setTransferCoinsUri, userId: userIdValue });
 };

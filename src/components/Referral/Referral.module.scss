@@ -30,7 +30,7 @@
   &__text {
     @include size(calc(100% - 32px), unset);
     @include indents();
-    @include flex(row, space-between, center);
+    @include flex(row, space-evenly, center);
     font-weight: 400;
     font-size: 16px;
     color: $main-color;
@@ -51,7 +51,7 @@
   }
 
   &__board {
-    @include indents(16px 16px 0, 0 20px 0 0);
+    @include indents(16px 16px 0, 0);
     @include flex(column, unset, flex-end, 16px);
     @include size(100%, auto);
     overflow: auto;
@@ -61,7 +61,14 @@
   &__chevron {
     @include button-style-reset();
     @include size(24px, 24px);
+    border-radius: $radius-round;
+    background-color: $secondary-color;
     cursor: pointer;
+
+    &:disabled {
+      opacity: .3;
+      cursor: not-allowed;
+    }
   }
 
   &__notification {
