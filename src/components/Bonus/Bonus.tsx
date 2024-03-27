@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
-import { Bonus } from "../../utils/types";
+import { Bonus } from "../../utils/types/mainTypes";
 import styles from './Bonus.module.scss';
 import Button from "../ui/Button/Button";
 import { useAppDispatch } from "../../services/reduxHooks";

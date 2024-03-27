@@ -1,4 +1,4 @@
-import { LavkaData } from "../utils/types";
+import { LavkaData } from "../utils/types/shopTypes";
 import { getReq, putReq } from "./api";
 import { activeSkinValue, buyLavkaUri, buyShopItemUri, cancelSellLavka, getLavkaUri, sellLavkaUri, setActiveSkinUri, setCollectiblesUri } from "./requestData";
 // Product

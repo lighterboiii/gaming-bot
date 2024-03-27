@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
-import { GoodsItem, ItemData } from "../../utils/types";
+import { GoodsItem, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
 import { getLavkaAvailableRequest } from "../../api/shopApi";
 import { setLavkaAvailable } from "../../services/appSlice";
 
@@ -83,14 +83,14 @@ const Shop: FC = () => {
   const handleClickLavka = async () => {
     setLoading(true);
     setActiveButton("Лавка");
-    const updatedLavka: any = await getLavkaAvailableRequest();
+    const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
     setGoods(updatedLavka.lavka);
     setLoading(false);
   };
 
   useEffect(() => {
-    setGoods(lavkaShop);
+    lavkaShop && setGoods(lavkaShop);
   }, [lavkaShop])
 
   return (

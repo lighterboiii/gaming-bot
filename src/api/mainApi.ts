@@ -1,4 +1,5 @@
-import { IAppData, UserPhoto } from "../utils/types";
+import { IAppData } from "../utils/types/appType";
+import { UserPhoto } from "../utils/types/mainTypes";
 import { getReq, putReq } from "./api";
 import { getLeadersUri, getRefsUri, getUserAvatarUri, mainAppDataUri, setTransferCoinsUri } from "./requestData";
 
@@ -18,11 +19,11 @@ export const getUserAvatarRequest = async (userIdValue: string) => {
 };
 // получить данные рефералов юзера
 export const getReferralsData = async (userIdValue: string) => {
-  return await getReq<any>({ uri: getRefsUri, userId: userIdValue });
+  return await getReq({ uri: getRefsUri, userId: userIdValue });
 };
 // получить данные о лидерах 
 export const getTopUsers = async () => {
-  return await getReq<any>({ uri: getLeadersUri, userId: '' });
+  return await getReq({ uri: getLeadersUri, userId: '' });
 };
 // перевести коины юзера на баланс юзера
 export const transferCoinsToBalanceReq = async (userIdValue: string) => {

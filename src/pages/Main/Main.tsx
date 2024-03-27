@@ -14,7 +14,7 @@ import { bannersData } from "../../utils/mockData";
 import DailyBonus from "../../components/Bonus/Bonus";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import useTelegram from "../../hooks/useTelegram";
-
+// типизация будет сильно позже
 const Main: FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();

@@ -1,12 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Bonus, ItemData, LavkaData, UserInfo } from "../utils/types";
+import { Bonus, UserInfo } from "../utils/types/mainTypes";
+import { ItemData, LavkaData } from "../utils/types/shopTypes";
 
 interface AppState {
   info: UserInfo | null;
   products: ItemData[] | null;
   archive: ItemData[] | null;
   bonus: Bonus | any | null;
-  lavka: any | null;
+  lavka: LavkaData[] | null;
 }
 
 const initialState: AppState = {
@@ -100,7 +101,9 @@ const appSlice = createSlice({
       state.lavka = action.payload;
     },
     addItemToLavka: (state, action: PayloadAction<LavkaData>) => {
-      state.lavka.push(action.payload);
+      if (state.lavka) {
+        state.lavka.push(action.payload);
+      }
     },
     removeItemFromLavka: (state, action: PayloadAction<number>) => {
       if (state.lavka) {

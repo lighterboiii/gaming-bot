@@ -28,33 +28,6 @@ export interface UserInfo {
   photo: string;
 }
 
-export interface ItemData {
-  isCollectible?: boolean;
-  item_count?: number;
-  item_id: number;
-  item_mask: string;
-  item_pic: string;
-  item_price_coins: number;
-  item_price_tokens: number;
-  item_type: string;
-}
-
-
-export interface LavkaData {
-  item_id: number;
-  item_mask: string;
-  item_pic: string;
-  item_type: string;
-  price: string;
-  nft_id: number;
-  seller_id: number;
-  seller_publicname: string;
-  item_price_coins: number;
-  item_price_tokens: number;
-}
-
-export type GoodsItem = LavkaData | ItemData;
-
 export interface Bonus {
   bonus_count: number;
   bonus_image: string;
@@ -67,10 +40,14 @@ export interface UserPhoto {
   info: string;
 }
 
-export interface IAppData {
-  collectibles_data: ItemData[];
-  daily_bonus: Bonus;
-  shop_available: ItemData[];
-  user_info: UserInfo;
-  lavka_available: LavkaData[];
+export interface IReferralResponse {
+  result_data: {
+    refs_info: any[];
+    total_balance: number;
+  }
+}
+
+export interface IReferralCoinsTransferResponse {
+  transfered: number | string;
+  new_coins: number;
 }

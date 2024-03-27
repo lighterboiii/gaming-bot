@@ -8,20 +8,22 @@ import UserContainer from "../../components/User/UserContainer/UserContainer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
+import { ILeader, ILeaderBoardResponse } from "../../utils/types/leaderboardTypes";
 
 const LeaderBoard: FC = () => {
   const { user, tg } = useTelegram();
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [leaderBoard, setLeaderBoard] = useState<any>(null);
-  const [topLeader, setTopLeader] = useState<any>(null);
+  const [leaderBoard, setLeaderBoard] = useState<ILeader[] | null>(null);
+  const [topLeader, setTopLeader] = useState<ILeader | null>(null);
   const isUserLeader = user?.id === topLeader;
+
   useEffect(() => {
     setLoading(true);
     const fetchLeadersData = async () => {
       try {
-        const leaders = await getTopUsers();
+        const leaders: ILeaderBoardResponse = await getTopUsers() as ILeaderBoardResponse;
         console.log(leaders);
         setTopLeader(leaders?.top_users[0]);
         setLeaderBoard(leaders?.top_users.slice(1));

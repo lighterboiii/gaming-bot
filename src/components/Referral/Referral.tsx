@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { setCoinsNewValue } from "../../services/appSlice";
 import { formatNumber } from "../../utils/additionalFunctions";
+import { IReferralCoinsTransferResponse, IReferralResponse } from "../../utils/types/mainTypes";
 
 const Referral: FC = () => {
   const navigate = useNavigate();
@@ -24,11 +25,11 @@ const Referral: FC = () => {
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
   const dispatch = useAppDispatch();
-  // console.log(refsBoard);
+  console.log(refsBoard);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const refs = await getReferralsData(userId);
+        const refs: IReferralResponse = await getReferralsData(userId) as IReferralResponse;
         setRefsBoard(refs.result_data.refs_info);
         setTotalBalance(refs.result_data.total_balance);
       } catch (error) {
@@ -48,7 +49,7 @@ const Referral: FC = () => {
 
   const handleTransferCoins = async () => {
     try {
-      const res: any = await transferCoinsToBalanceReq(userId);
+      const res: IReferralCoinsTransferResponse = await transferCoinsToBalanceReq(userId) as IReferralCoinsTransferResponse;
       console.log(res);
       setMessageShown(true);
       switch (res.transfered) {

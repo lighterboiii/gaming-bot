@@ -6,7 +6,7 @@ import { sellLavkaRequest } from "../../../api/shopApi";
 import { userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
 import { useAppDispatch } from "../../../services/reduxHooks";
-import { LavkaData } from "../../../utils/types";
+import { LavkaData } from "../../../utils/types/shopTypes";
 import { addItemToLavka } from "../../../services/appSlice";
 
 interface IProps {

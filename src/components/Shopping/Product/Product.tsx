@@ -5,7 +5,7 @@ import styles from './Product.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
-import { ItemData, LavkaData } from "../../../utils/types";
+import { ItemData, LavkaData } from "../../../utils/types/shopTypes";
 import { 
   addEnergyDrink, 
   removeItemFromLavka, 
