@@ -73,9 +73,9 @@ const OpenedRooms: FC = () => {
     setRooms(sortedRooms);
     setSortByType(!sortByType);
     if (sortByType === true) {
-      setTypeValue("Цу-е-фа");
-    } else {
       setTypeValue("Кто ближе");
+    } else {
+      setTypeValue("Цу-е-фа");
     }
   };
   const toggleSortByCurrency = () => {

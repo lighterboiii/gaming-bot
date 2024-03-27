@@ -22,10 +22,11 @@
   }
 
   &__sliderButton {
-    @include size(64px, 100%);
+    @include size(48px, 100%);
     @include button-style-reset();
     align-self: flex-end;
     cursor: pointer;
+    z-index: 3;
   }
 
   &__leftButton {

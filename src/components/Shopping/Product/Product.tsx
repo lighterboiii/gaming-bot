@@ -18,6 +18,7 @@ import {
   buyItemRequest, 
   buyLavkaRequest, 
   cancelLavkaRequest, 
+  getLavkaAvailableRequest, 
   setActiveEmojiRequest, 
   setActiveSkinRequest 
 } from "../../../api/shopApi";
@@ -33,9 +34,8 @@ interface ProductProps {
 }
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
-  console.log(item);
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);

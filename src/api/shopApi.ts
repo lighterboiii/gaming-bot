@@ -57,6 +57,6 @@ export const setActiveEmojiRequest = async (userIdValue: string, activeEmoji: nu
   return await putReq({
     uri: `setactive_emoji?user_id=`,
     userId: userIdValue,
-    endpoint: `active_emoji=${activeEmoji}`
+    endpoint: `&active_emoji=${activeEmoji}`
   })
 }

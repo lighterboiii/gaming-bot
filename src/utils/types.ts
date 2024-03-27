@@ -30,7 +30,7 @@ export interface UserInfo {
 
 export interface ItemData {
   isCollectible?: boolean;
-  item_count: number;
+  item_count?: number;
   item_id: number;
   item_mask: string;
   item_pic: string;
@@ -39,17 +39,6 @@ export interface ItemData {
   item_type: string;
 }
 
-export interface Bonus {
-  bonus_count: number;
-  bonus_image: string;
-  bonus_item_id: number;
-  bonus_type: string;
-  day: number;
-}
-
-export interface UserPhoto {
-  info: string;
-}
 
 export interface LavkaData {
   item_id: number;
@@ -62,6 +51,20 @@ export interface LavkaData {
   seller_publicname: string;
   item_price_coins: number;
   item_price_tokens: number;
+}
+
+export type GoodsItem = LavkaData | ItemData;
+
+export interface Bonus {
+  bonus_count: number;
+  bonus_image: string;
+  bonus_item_id: number;
+  bonus_type: string;
+  day: number;
+}
+
+export interface UserPhoto {
+  info: string;
 }
 
 export interface IAppData {

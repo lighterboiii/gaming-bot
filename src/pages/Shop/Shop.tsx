@@ -5,24 +5,25 @@ import styles from './Shop.module.scss';
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
 import { useNavigate } from "react-router-dom";
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
-import { useAppSelector } from "../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
-import Loader from "../../components/Loader/Loader";
-import { ItemData } from "../../utils/types";
+import { GoodsItem, ItemData } from "../../utils/types";
 import { getLavkaAvailableRequest } from "../../api/shopApi";
+import { setLavkaAvailable } from "../../services/appSlice";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
 
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const archiveData = useAppSelector(store => store.app.archive);
+  const lavkaShop = useAppSelector(store => store.app.lavka);
 
-  const [goods, setGoods] = useState<any>([]);
+  const [goods, setGoods] = useState<GoodsItem[]>([]);
   const [activeButton, setActiveButton] = useState<string>('Магазин');
 
   const [showOverlay, setShowOverlay] = useState(false);
@@ -54,6 +55,7 @@ const Shop: FC = () => {
   // при монтировании компонента
   useEffect(() => {
     setActiveButton('Магазин');
+    shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
     tg.BackButton.show().onClick(() => {
       navigate(-1);
@@ -82,14 +84,17 @@ const Shop: FC = () => {
     setLoading(true);
     setActiveButton("Лавка");
     const updatedLavka: any = await getLavkaAvailableRequest();
+    dispatch(setLavkaAvailable(updatedLavka.lavka));
     setGoods(updatedLavka.lavka);
     setLoading(false);
   };
 
+  useEffect(() => {
+    setGoods(lavkaShop);
+  }, [lavkaShop])
+
   return (
     <div className={styles.shop}>
-      {/* {loading ? <Loader /> : (
-        <> */}
       <div className={styles.shop__header}>
         <h2 className={styles.shop__title}>Магазин</h2>
         <UserInfo />
@@ -120,7 +125,7 @@ const Shop: FC = () => {
             <div className={styles.shop__goods}>
               {goods?.length > 0 ? (
                 <>
-                  {goods.map((item: ItemData, index: number) => (
+                  {goods.map((item: GoodsItem, index: number) => (
                     <ShopItem
                       key={index}
                       item={item}
@@ -152,9 +157,6 @@ const Shop: FC = () => {
             isCollectible={selectedItem?.isCollectible}
           />}
       />
-        {/* </>
-)
-} */}
     </div >
   )
 };
