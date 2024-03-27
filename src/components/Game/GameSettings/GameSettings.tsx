@@ -3,6 +3,8 @@ import styles from './GameSettings.module.scss';
 import Button from '../../ui/Button/Button';
 import BetSlider from '../../BetSlider/Betslider';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../../services/reduxHooks';
+import { formatNumber } from '../../../utils/additionalFunctions';
 
 interface IProps {
   data: any;
@@ -11,6 +13,8 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
   // console.log(data);
+  const userTokens = useAppSelector(store => store.app.info?.tokens);
+  const userCoins = useAppSelector(store => store.app.info?.coins);
   return (
     <div className={styles.game}>
       <div style={{ backgroundImage: `${data?.img}` }} className={styles.game__logo} />
@@ -19,8 +23,8 @@ const GameSettings: FC<IProps> = ({ data }) => {
         <div className={styles.game__balance}>
           <p className={styles.game__text}>Ваш баланс:</p>
           <div className={styles.game__balanceWrapper}>
-            <p className={styles.game__text}>💵 2435</p>
-            <p className={styles.game__text}>🔰 138</p>
+            <p className={styles.game__text}>💵 {userCoins && formatNumber(userCoins)}</p>
+            <p className={styles.game__text}>🔰 {userTokens && formatNumber(userTokens)}</p>
           </div>
         </div>
         <div className={styles.game__menu}>

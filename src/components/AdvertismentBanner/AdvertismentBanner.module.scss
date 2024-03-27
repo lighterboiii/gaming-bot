@@ -21,11 +21,34 @@
     cursor: pointer;
   }
 
-  // &__sliderButton {
-  //   @include size(60px, 100%);
-  //   @include button-style-reset();
-  //   align-self: flex-end;
-  // }
+  &__sliderButton {
+    @include size(64px, 100%);
+    @include button-style-reset();
+    align-self: flex-end;
+    cursor: pointer;
+  }
+
+  &__leftButton {
+    @include position(absolute, $left: 0, $top: 50%);
+    @include flex(row, flex-start, center);
+    @include indents(0 0 0 4px, 0);
+    transform: translateY(-50%);
+    background-color: $black-color;
+    opacity: .1;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
+
+  &__rightButton {
+    @include position(absolute, $right: 0, $top: 50%);
+    @include flex(row, flex-end, center);
+    @include indents(0 4px 0 0, 0);
+    transform: translateY(-50%);
+    background-color: $black-color;
+    opacity: .1;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+  }
 
   &__text {
     @include indents(30px, 0);

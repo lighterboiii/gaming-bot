@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from 'react';
 import styles from './BetSlider.module.scss';
 import ChevronIcon from '../../icons/Chevron/ChevronIcon';
+import { useAppSelector } from '../../services/reduxHooks';
 
 interface IProps {
   isPrice?: boolean;
@@ -10,6 +12,8 @@ interface IProps {
 const BetSlider: FC<IProps> = ({ isPrice, isCurrency }) => {
   const [price, setPrice] = useState(0);
   const [currency, setCurrency] = useState("💵");
+  const coinsBalance = useAppSelector(store => store.app.info?.coins);
+  const tokensBalance = useAppSelector(store => store.app.info?.tokens)
 
   const increasePrice = () => {
     setPrice(prevPrice => prevPrice + 0.1);
