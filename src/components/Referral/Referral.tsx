@@ -78,8 +78,8 @@ const Referral: FC = () => {
       <h3 className={styles.referral__h3}>
         Приглашай друзей и получай процент с каждой игры
       </h3>
-      <Link to={'https://t.me/lighterboygamebot?start=invite_link'} className={styles.referral__buttonWrapper}>
-        <Button text="Пригласить" handleClick={() => navigate('/404')} />
+      <Link to='https://t.me/lighterboygamebot?start=invite_link' className={styles.referral__buttonWrapper}>
+        <Button text="Пригласить"  handleClick={() => {}}/>
       </Link>
       <div className={styles.referral__amount}>
         <p className={styles.referral__text}>Заработано за всё время:

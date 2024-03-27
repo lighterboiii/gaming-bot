@@ -44,11 +44,10 @@
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     @include size(100%, auto);
-    @include max-size(100%, 164px);
   }
 
   &__smallButtonsContainer {
-    @include size(100%, 164px);
+    @include size(100%, 190px);
     @include flex(column, space-between, space-between, 16px);
   }
 
