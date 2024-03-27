@@ -25,7 +25,7 @@
     @include size(110px, 26px);
   }
 
-  &__content { // d
+  &__content {
     margin-top: 30vh;
     @include flex(column, center, unset, 16px);
     @include size(100%, 100%);
@@ -44,10 +44,11 @@
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     @include size(100%, auto);
+    @include max-size(100%, 164px);
   }
 
   &__smallButtonsContainer {
-    @include size(100%, 190px);
+    @include size(100%, 164px);
     @include flex(column, space-between, space-between, 16px);
   }
 

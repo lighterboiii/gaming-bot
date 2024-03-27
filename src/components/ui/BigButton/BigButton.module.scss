@@ -4,9 +4,10 @@
 .button {
   @include button-style-reset();
   @include position(relative);
-  @include indents(10px, 0);
-  @include max-size(100%, 190px);
+  // @include indents(10px, 0);
+  @include max-size(100%, 164px);
   @include size(100%, 100%);
+  aspect-ratio: 1;
   background-color: $secondary-color;
   border-radius: $radius-12;
   text-decoration: none;

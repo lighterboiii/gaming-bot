@@ -5,7 +5,7 @@ import styles from './Referral.module.scss';
 import Button from "../ui/Button/Button";
 import UserContainer from "../User/UserContainer/UserContainer";
 import { userId } from "../../api/requestData";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { getReferralsData, transferCoinsToBalanceReq } from "../../api/mainApi";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
@@ -17,7 +17,7 @@ import { IReferralCoinsTransferResponse, IReferralResponse } from "../../utils/t
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
 
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
@@ -25,7 +25,7 @@ const Referral: FC = () => {
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
   const dispatch = useAppDispatch();
-  console.log(refsBoard);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,7 +50,6 @@ const Referral: FC = () => {
   const handleTransferCoins = async () => {
     try {
       const res: IReferralCoinsTransferResponse = await transferCoinsToBalanceReq(userId) as IReferralCoinsTransferResponse;
-      console.log(res);
       setMessageShown(true);
       switch (res.transfered) {
         case "small":
@@ -79,9 +78,9 @@ const Referral: FC = () => {
       <h3 className={styles.referral__h3}>
         Приглашай друзей и получай процент с каждой игры
       </h3>
-      <div className={styles.referral__buttonWrapper}>
-        <Button text="Пригласить" handleClick={() => navigate('/lesf')} />
-      </div>
+      <Link to={'https://t.me/lighterboygamebot?start=invite_link'} className={styles.referral__buttonWrapper}>
+        <Button text="Пригласить" handleClick={() => navigate('/404')} />
+      </Link>
       <div className={styles.referral__amount}>
         <p className={styles.referral__text}>Заработано за всё время:
           <span className={styles.referral__sumSpan}>
