@@ -5,36 +5,56 @@
   @include indents(8px 16px, 0);
   @include flex(row, space-between, center, 8px);
   @include size(100%, 100%);
-  @include min-size(100%, 70px);
+  @include min-size(100%, 78px);
   @include position(relative);
   background-color: $tertiary-color;
   border-radius: $radius-10;
 
+  &__game {
+    @include size(100%, 100%);
+    @include max-size(70px, 100%);
+    @include flex(column, center, center, 18px);
+  }
+
   &__image {
-    @include size(28px, auto);
-    @include position(absolute, $top: 50%, $left: -4%);
-    transform: translateY(-50%);
-    z-index: 5;
+    @include size(48px, auto);
+    rotate: 30deg
   }
 
   &__number {
     @include indents();
     @include min-size(15%, auto);
     @include ellipsis();
+    @include flex(row, center, center, 2px);
     color: $main-color;
     text-align: center;
     font-weight: 700;
+    font-size: 12px;
   }
 
-  &__text {
+  &__bet {
+    text-align: left;
+  }
+
+  &__gameName {
     @include indents();
-    @include size(35%, auto);
     color: $main-color;
-    text-align: center;
+    font-size: 12px;
+    text-align: left;
+    text-transform: uppercase;
     font-weight: 700;
 
     &:nth-child(3) {
       @include ellipsis();
     }
+  }
+
+  &__creator {
+    @include indents();
+    @include size(100%, 100%);
+    color: $main-color;
+    font-size: 12px;
+    text-align: center;
+    font-weight: 700;
   }
 }

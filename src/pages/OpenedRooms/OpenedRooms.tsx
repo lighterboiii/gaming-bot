@@ -23,10 +23,20 @@ const OpenedRooms: FC = () => {
     <div className={styles.rooms}>
       <h2 className={styles.rooms__heading}>Найти игру</h2>
       <div className={styles.rooms__content}>
-        <select className={styles.rooms__select} id="select" value="bet">
-          <option value="bet">по ставке</option>
-          <option value="type">по типу игры</option>
-        </select>
+        <div className={styles.rooms__buttons}>
+          <button className={styles.rooms__button}>
+            <p className={styles.rooms__game}>Игра</p>
+            <p className={styles.rooms__name}>Цу-е-фа</p>
+          </button>
+          <button className={styles.rooms__button}>
+            <p className={styles.rooms__game}>Валюта</p>
+            <p className={styles.rooms__name}>Все</p>
+          </button>
+          <button className={styles.rooms__button}>
+            <p className={styles.rooms__game}>Ставка</p>
+            <p className={styles.rooms__name}>Возрастание</p>
+          </button>
+        </div>
         <div className={styles.rooms__roomList}>
           {openedRooms.map((room: any) => (
             <Room room={room} />

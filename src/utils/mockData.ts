@@ -28,56 +28,56 @@ export const bannersData = [
 export const openedRooms = [
   {
     id: 1,
-    gameType: 'Камень/ножницы/бумага',
+    gameType: 'Цу-е-фа',
     creator: 'lighterboii',
     users: 1,
     bet: 1.2
   },
   {
     id: 2,
-    gameType: 'Камень/ножницы/бумага',
+    gameType: 'Цу-е-фа',
     creator: 'hellboy',
     users: 1,
     bet: 0.7
   },
   {
     id: 3,
-    gameType: 'Камень/ножницы/бумага',
+    gameType: 'Цу-е-фа',
     creator: 'moneyChaser',
     users: 1,
     bet: 0.95
   },
   {
     id: 4,
-    gameType: 'Камень/ножницы/бумага',
+    gameType: 'Цу-е-фа',
     creator: 'go_fuck_yourself',
     users: 1,
     bet: 1.5
   },
   {
     id: 5,
-    gameType: 'Камень/ножницы/бумага',
+    gameType: 'Цу-е-фа',
     creator: '9/11',
     users: 1,
     bet: 6
   },
   {
     id: 6,
-    gameType: 'Камень/ножницы/бумага',
+    gameType: 'Цу-е-фа',
     creator: 'vyacheslav',
     users: 2,
     bet: 5.2
   },
   {
     id: 7,
-    gameType: 'Камень/ножницы/бумага',
+    gameType: 'Цу-е-фа',
     creator: 'eminem',
     users: 1,
     bet: 2.5
   },
   {
     id: 8,
-    gameType: 'Камень/ножницы/бумага',
+    gameType: 'Цу-е-фа',
     creator: '9/11',
     users: 1,
     bet: 14

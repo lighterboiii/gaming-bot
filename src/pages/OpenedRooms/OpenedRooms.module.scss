@@ -18,28 +18,46 @@
     line-height: 1;
   }
 
+  &__buttons {
+    @include size(100%, auto);
+    @include flex(row, space-between, center, 16px);
+    border: none;
+    border-radius: $radius-40;
+  }
+
+  &__button {
+    @include button-style-reset();
+    @include size(100%, 40px);
+    @include indents(6px 12px, 0);
+    @include flex(column, space-between, center);
+    background-color: $black-color;
+    border-radius: $radius-40;
+    cursor: pointer;
+  }
+
+  &__game, &__name {
+    @include indents();
+    font-size: 12px;
+    text-transform: lowercase;
+    font-weight: 700;
+  }
+
+  &__game {
+    color: $main-color;
+  }
+
+  &__name {
+    color: $mustard-color;
+  }
+
   &__content {
     @include size(100%, 100%);
     @include flex(column, flex-start, center, 20px);
-  }
-
-  &__select {
-    position: relative;
-    @include size(100%, 28px);
-    @include indents(6px, 0);
-    border: none;
-    // background-color: $black-color;
-    border-radius: $radius-40;
-
-    &:checked {
-      color: #FFF;
-    }
   }
 
   &__roomList {
     @include size(100%, auto);
     @include max-size(100%, calc(var(--tg-viewport-height) - 20vh));
     @include flex(column, flex-start, center, 8px);
-    // overflow-y: auto;
   }
 }

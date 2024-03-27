@@ -1,7 +1,7 @@
 @use '../../../stylesheets/mixins' as *;
 @use '../../../stylesheets/variables' as *;
 
-.leader {
+.userContainer {
   @include position(relative);
   @include size(90%, 40px);
   @include indents(0 16px 0 32px, 0);
