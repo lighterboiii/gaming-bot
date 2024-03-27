@@ -45,10 +45,18 @@ export const makeCollectibleRequest = async (itemId: number, itemCount: number, 
     userId: userIdValue,
   });
 };
-
-export const getLavkaAvailable = async () => {
+// получить данные из лавки
+export const getLavkaAvailableRequest = async () => {
   return await getReq({
     uri: getLavkaUri,
     userId: '',
   })
 };
+// поставить активный эмодзи
+export const setActiveEmojiRequest = async (userIdValue: string, activeEmoji: number) => {
+  return await putReq({
+    uri: `setactive_emoji?user_id=`,
+    userId: userIdValue,
+    endpoint: `active_emoji=${activeEmoji}`
+  })
+}

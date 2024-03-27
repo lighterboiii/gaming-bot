@@ -85,6 +85,11 @@ const appSlice = createSlice({
         state.info.user_energy_drinks = action.payload;
       }
     },
+    addEnergyDrink: (state, action: PayloadAction<number>) => {
+      if (state.info) {
+        state.info.user_energy_drinks += action.payload;
+      }
+    },
     setShopAvailable: (state, action: PayloadAction<ItemData[]>) => {
       state.products = action.payload;
     },
@@ -124,7 +129,8 @@ export const {
   addItemToLavka,
   removeItemFromLavka,
   setCoinsNewValue,
-  clearDailyBonus
+  clearDailyBonus,
+  addEnergyDrink
 } = appSlice.actions;
 
 export default appSlice.reducer;

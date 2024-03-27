@@ -1,13 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react";
+import useTelegram from "../../../hooks/useTelegram";
 import styles from './Product.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { ItemData, LavkaData } from "../../../utils/types";
-import { removeItemFromLavka, setActiveSkin, setCoinsValueAfterBuy, setCollectibles } from "../../../services/appSlice";
-import useTelegram from "../../../hooks/useTelegram";
-import { buyItemRequest, buyLavkaRequest, cancelLavkaRequest, setActiveSkinRequest } from "../../../api/shopApi";
+import { 
+  addEnergyDrink, 
+  removeItemFromLavka, 
+  setActiveSkin, 
+  setCoinsValueAfterBuy, 
+  setCollectibles, 
+  setTokensValueAfterBuy 
+} from "../../../services/appSlice";
+import { 
+  buyItemRequest, 
+  buyLavkaRequest, 
+  cancelLavkaRequest, 
+  setActiveEmojiRequest, 
+  setActiveSkinRequest 
+} from "../../../api/shopApi";
 import { userId } from "../../../api/requestData";
 import { Modal } from "../../Modal/Modal";
 import SellForm from "../SellForm/SellForm";
@@ -20,19 +33,36 @@ interface ProductProps {
 }
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
+  console.log(item);
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   // для отрисовки интерфейса продажи айтема
   const isUserSeller = Number(userId) === Number(item?.seller_id);
+  // функция для фильтрации купленных товаров
+  const handlePurchaseItemTypes = async (item: any) => {
+    item?.item_price_coins !== 0 
+    ? dispatch(setCoinsValueAfterBuy(item.item_price_coins)) 
+    : dispatch(setTokensValueAfterBuy(item.item_price_tokens));
+    if (item?.item_type === "skin" || item?.item_type ===  "skin_anim") {
+      dispatch(setCollectibles(item.item_id));
+      dispatch(setActiveSkin(item.item_id));
+      await setActiveSkinRequest(item.item_id, userId);
+    } else if (item?.item_type === "energy_drink") {
+      dispatch(addEnergyDrink(1));
+    } else if (item?.item_type === "emoji") {
+      await setActiveEmojiRequest(userId, item?.item_id);
+    }
+  };
   // хендлер покупки
   const handleBuyShopItem = async (item: ItemData) => {
     try {
       const res: any = await buyItemRequest(item.item_id, 1, userId);
       setMessageShown(true);
+      console.log(res);
       switch (res.message) {
         case "out":
           setMessage("Товара нет в наличии");
@@ -42,10 +72,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
           break;
         case "ok":
           setMessage("Успешная покупка");
-          dispatch(setCollectibles(item.item_id));
-          dispatch(setCoinsValueAfterBuy(item.item_price_coins));
-          await setActiveSkinRequest(item.item_id, userId);
-          dispatch(setActiveSkin(item.item_id));
+          handlePurchaseItemTypes(item);
           break;
         default:
           break;
@@ -98,7 +125,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
       setMessageShown(false);
     }, 1000);
   };
-// хендлер покупки в лавке
+  // хендлер покупки в лавке
   const handleBuyLavkaitem = async (item: LavkaData) => {
     try {
       const res: any = await buyLavkaRequest(item, userId);
@@ -115,10 +142,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
           break;
         case "ok":
           setMessage("Куплено из лавки!");
-          dispatch(setCollectibles(item.item_id));
-          dispatch(setCoinsValueAfterBuy(item.item_price_coins));
-          await setActiveSkinRequest(item.item_id, userId);
-          dispatch(setActiveSkin(item.item_id));
+          handlePurchaseItemTypes(item);
           break;
         default:
           break;
@@ -183,9 +207,17 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
             ) : (
               <div className={styles.product__buttonWrapper}>
                 {activeButton === "Лавка" ? (
-                  <Button text={`💵 ${item?.item_price_coins}`} handleClick={() => handleBuyLavkaitem(item)} isWhiteBackground />
+                  <Button
+                    text={item?.item_price_coins !== 0 ? `💵 ${item?.item_price_coins}` : `🔰 ${item?.item_price_tokens}`}
+                    handleClick={() => handleBuyLavkaitem(item)}
+                    isWhiteBackground
+                  />
                 ) : (
-                  <Button text={`💵 ${item?.item_price_coins}`} handleClick={() => handleBuyShopItem(item)} isWhiteBackground />
+                  <Button
+                    text={item?.item_price_coins !== 0 ? `💵 ${item?.item_price_coins}` : `🔰 ${item?.item_price_tokens}`}
+                    handleClick={() => handleBuyShopItem(item)}
+                    isWhiteBackground
+                  />
                 )}
               </div>
             )}

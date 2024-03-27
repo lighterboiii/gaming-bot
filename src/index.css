@@ -8,7 +8,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   /* height: var(--tg-viewport-stable-height); */
   background-color: #d51845;
-  
   ::-webkit-scrollbar {
     display: none;
 }
@@ -25,7 +24,7 @@ html {
 
 html, body {
   width: 100%;
-  height: var(--tg-viewport-height);
+  height: 100%;
   overflow-y: auto;
   overflow-x: scroll;
 }

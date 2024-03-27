@@ -11,7 +11,7 @@ import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
 import Loader from "../../components/Loader/Loader";
 import { ItemData } from "../../utils/types";
-import { getLavkaAvailable } from "../../api/shopApi";
+import { getLavkaAvailableRequest } from "../../api/shopApi";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
@@ -81,7 +81,7 @@ const Shop: FC = () => {
   const handleClickLavka = async () => {
     setLoading(true);
     setActiveButton("Лавка");
-    const updatedLavka: any = await getLavkaAvailable();
+    const updatedLavka: any = await getLavkaAvailableRequest();
     setGoods(updatedLavka.lavka);
     setLoading(false);
   };

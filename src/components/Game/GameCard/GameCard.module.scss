@@ -5,7 +5,7 @@
   @include position(relative);
   @include indents(16px, 0);
   @include size(100%, 100%);
-  @include max-size(194px, 194px);
+  @include max-size(182px, 182px);
   aspect-ratio: 1;
   border-radius: $radius-10;
   background-color: $tertiary-color;
@@ -22,6 +22,7 @@
     @include indents();
     color: $main-color;
     font-weight: 900;
+    text-transform: uppercase;
   }
 
   &__players {
@@ -33,7 +34,7 @@
 
   &__image, &__imageRight {
     @include indents();
-    @include max-size(148px, auto);
+    @include max-size(136px, auto);
   }
 
   &__image {

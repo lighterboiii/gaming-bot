@@ -16,7 +16,9 @@ const ShopItem: FC<IProps> = ({ item, onClick, activeButton }) => {
         <UserAvatar item={item} />
       </div>
       {activeButton !== "Приобретено" && (
-        <p className={styles.item__price}>{item.item_price_coins !== 0 && `${item.item_price_coins} 💵`}</p>
+        <p className={styles.item__price}>
+          {item?.item_price_coins !== 0 ? `💵 ${item?.item_price_coins}` : `🔰 ${item?.item_price_tokens}`}
+        </p>
       )}
     </div>
   )

@@ -9,18 +9,18 @@ import NotFoundPage from '../../pages/NotFoundPage/NotFoundPage';
 import Shop from '../../pages/Shop/Shop';
 import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
+import Loader from '../Loader/Loader';
+import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
 import { createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setDailyBonus, setLavkaAvailable, setShopAvailable, setUserData, setUserPhoto } from '../../services/appSlice';
-import Loader from '../Loader/Loader';
-import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
+import { setDailyBonus, setShopAvailable, setUserData, setUserPhoto } from '../../services/appSlice';
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  //const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 

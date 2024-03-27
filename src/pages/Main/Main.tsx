@@ -18,7 +18,7 @@ import useTelegram from "../../hooks/useTelegram";
 const Main: FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const animationRef = useRef<HTMLDivElement>(null);
   const dailyBonusData = useAppSelector(store => store.app.bonus);
 
@@ -26,7 +26,7 @@ const Main: FC = () => {
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
-  console.log(dailyBonusData);
+  
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
     setShowBannerOverlay(!showBannerOverlay)
