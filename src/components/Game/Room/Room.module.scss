@@ -38,6 +38,7 @@
 
   &__gameName {
     @include indents();
+    @include ellipsis();
     color: $main-color;
     font-size: 12px;
     text-align: left;

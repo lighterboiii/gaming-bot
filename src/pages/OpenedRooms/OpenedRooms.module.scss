@@ -51,13 +51,21 @@
   }
 
   &__content {
-    @include size(100%, 100%);
+    @include size(100%, 20vh);
     @include flex(column, flex-start, center, 20px);
+
+    @media screen and (max-height: 690px) {
+      @include size(100%, 25vh);
+    }
   }
 
   &__roomList {
-    @include size(100%, auto);
-    @include max-size(100%, calc(var(--tg-viewport-height) - 20vh));
+    @include size(100%, 70vh);
     @include flex(column, flex-start, center, 8px);
+    overflow-y: auto;
+
+    @media screen and (min-height: 691px) {
+      @include size(100%, 75vh);
+    }
   }
 }

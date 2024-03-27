@@ -31,56 +31,64 @@ export const openedRooms = [
     gameType: 'Цу-е-фа',
     creator: 'lighterboii',
     users: 1,
-    bet: 1.2
+    bet: 1.2,
+    currency: "coins"
   },
   {
     id: 2,
-    gameType: 'Цу-е-фа',
+    gameType: 'Кто ближе',
     creator: 'hellboy',
     users: 1,
-    bet: 0.7
+    bet: 0.7,
+    currency: "tokens"
   },
   {
     id: 3,
     gameType: 'Цу-е-фа',
     creator: 'moneyChaser',
     users: 1,
-    bet: 0.95
+    bet: 120,
+    currency: "coins"
   },
   {
     id: 4,
     gameType: 'Цу-е-фа',
     creator: 'go_fuck_yourself',
     users: 1,
-    bet: 1.5
+    bet: 1.5,
+    currency: "tokens"
   },
   {
     id: 5,
     gameType: 'Цу-е-фа',
     creator: '9/11',
     users: 1,
-    bet: 6
+    bet: 6,
+    currency: "tokens"
   },
   {
     id: 6,
-    gameType: 'Цу-е-фа',
+    gameType: 'Кто ближе',
     creator: 'vyacheslav',
     users: 2,
-    bet: 5.2
+    bet: 5.2,
+    currency: "coins"
   },
   {
     id: 7,
     gameType: 'Цу-е-фа',
     creator: 'eminem',
     users: 1,
-    bet: 2.5
+    bet: 2.5,
+    currency: "tokens"
   },
   {
     id: 8,
-    gameType: 'Цу-е-фа',
-    creator: '9/11',
+    gameType: 'Кто ближе',
+    creator: 'mammolog',
     users: 1,
-    bet: 14
+    bet: 14,
+    currency: "tokens"
   },
 ];
 // gameData 
