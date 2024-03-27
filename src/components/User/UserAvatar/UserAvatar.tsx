@@ -2,17 +2,18 @@ import { FC, useEffect, useState } from "react";
 import styles from './UserAvatar.module.scss';
 import { useAppSelector } from "../../../services/reduxHooks";
 import { getImageLink, getImageMaskLink } from "../../../api/requestData";
+import { ItemData } from "../../../utils/types/shopTypes";
+import { IMember } from "../../../utils/types/memberTypes";
 
 interface IProps {
-  // если передан пропс skin, то отрисовка будет происходит именно этого скина, если нет, то скин подтягивается из userData
-  item?: any;
+  item?: ItemData | IMember;
   avatar?: string;
 }
 
 const UserAvatar: FC<IProps> = ({ item, avatar }) => {
   const [userSkin, setSkin] = useState<string | null>(null);
   const [userMask, setMask] = useState<string | null>(null);
-
+  console.log(item);
   const userAvatar = useAppSelector(store => store.app.info?.photo);
   const userData = useAppSelector(store => store.app.info);
   const activeSkin = useAppSelector(store => store.app.info?.active_skin);

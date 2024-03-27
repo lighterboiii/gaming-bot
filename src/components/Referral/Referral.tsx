@@ -17,11 +17,11 @@ import { IReferralCoinsTransferResponse, IReferralResponse } from "../../utils/t
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
 
-  const [totalBalance, setTotalBalance] = useState<any>(null);
-  const [refsBoard, setRefsBoard] = useState<any>(null);
+  const [totalBalance, setTotalBalance] = useState<number | null>(null);
+  const [refsBoard, setRefsBoard] = useState<any>(null); // типизировать
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
   const dispatch = useAppDispatch();

@@ -14,11 +14,11 @@ import { bannersData } from "../../utils/mockData";
 import DailyBonus from "../../components/Bonus/Bonus";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import useTelegram from "../../hooks/useTelegram";
-// типизация будет сильно позже
+
 const Main: FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const animationRef = useRef<HTMLDivElement>(null);
   const dailyBonusData = useAppSelector(store => store.app.bonus);
 

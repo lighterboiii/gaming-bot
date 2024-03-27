@@ -6,7 +6,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { useNavigate } from "react-router-dom";
 import { openedRooms } from "../../utils/mockData";
 import Room from "../../components/Game/Room/Room";
-// типизация будет сильно позже
+// типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();

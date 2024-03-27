@@ -14,7 +14,7 @@ interface IProps {
   users: number;
   extraClass?: string;
   handleClickGame: (game: any) => void;
-}
+} // типизировать
 
 const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass }) => {
   const gameCardClassNames = classNames(

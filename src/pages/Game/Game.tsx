@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import useTelegram from "../../hooks/useTelegram";
 import styles from './Game.module.scss';
 import { useNavigate } from "react-router-dom";
-
+// типизировать
 const Game: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user } = useTelegram();

@@ -7,7 +7,7 @@ import { useAppSelector } from '../../../services/reduxHooks';
 import { formatNumber } from '../../../utils/additionalFunctions';
 
 interface IProps {
-  data: any;
+  data: any; // типизировать
 }
 
 const GameSettings: FC<IProps> = ({ data }) => {

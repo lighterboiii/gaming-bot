@@ -10,7 +10,7 @@ import { games } from "../../utils/mockData";
 import GameCard from "../../components/Game/GameCard/GameCard";
 import Overlay from "../../components/Overlay/Overlay";
 import GameSettings from "../../components/Game/GameSettings/GameSettings";
-
+// типизировать
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();

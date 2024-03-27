@@ -3,9 +3,10 @@ import { FC } from "react";
 import styles from './UserContainer.module.scss';
 import useTelegram from "../../../hooks/useTelegram";
 import { userId } from "../../../api/requestData";
+import { IMember } from "../../../utils/types/memberTypes";
 
 interface IProps {
-  member: any;
+  member: IMember;
   index: number;
   length: number;
   darkBackground?: boolean;
@@ -13,7 +14,7 @@ interface IProps {
 
 const UserContainer: FC<IProps> = ({ member, index, length, darkBackground = false }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const isUser = Number(userId) === member?.user_id;
 
   return (

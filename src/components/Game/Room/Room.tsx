@@ -4,7 +4,7 @@ import hand from '../../../images/main_hand_1_tiny.png';
 import whoCloser from '../../../images/gameSec.png';
 import { useNavigate } from "react-router-dom";
 import ManIcon from "../../../icons/Man/Man";
-
+// типизировать
 interface IProps {
   room: any;
 }
