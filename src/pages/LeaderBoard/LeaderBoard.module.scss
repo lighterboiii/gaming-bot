@@ -88,7 +88,7 @@
     @include indents(16px, 0 20px 0 0);
     @include flex(column, flex-start, flex-end, 16px);
     @include size(100%, 58vh);
-    overflow-y: scroll;
+    // overflow-y: scroll;
   }
 
   &__background {
