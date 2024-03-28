@@ -33,14 +33,19 @@ interface ProductProps {
 }
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
-  const { user } = useTelegram();
-  const userId = user?.id;
+  const { user, tg } = useTelegram();
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   // для отрисовки интерфейса продажи айтема
   const isUserSeller = Number(userId) === Number(item?.seller_id);
+  const eventData = {
+    type: 'notification',
+    impact_style: 'medium',
+    notification_type: 'success'
+  };
   // функция для фильтрации купленных товаров
   const handlePurchaseItemTypes = async (item: any) => {
     item?.item_price_coins !== 0 
@@ -72,6 +77,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         case "ok":
           setMessage("Успешная покупка");
           handlePurchaseItemTypes(item);
+          tg.postEvent('web_app_trigger_haptic_feedback', eventData);
           break;
         default:
           break;

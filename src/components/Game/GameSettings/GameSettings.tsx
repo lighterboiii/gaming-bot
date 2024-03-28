@@ -5,6 +5,8 @@ import BetSlider from '../../BetSlider/Betslider';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../services/reduxHooks';
 import { formatNumber } from '../../../utils/additionalFunctions';
+import { postReq } from '../../../api/api';
+import { userId } from '../../../api/requestData';
 
 interface IProps {
   data: any; // типизировать
@@ -12,9 +14,23 @@ interface IProps {
 
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
-  // console.log(data);
+  console.log(data);
   const userTokens = useAppSelector(store => store.app.info?.tokens);
   const userCoins = useAppSelector(store => store.app.info?.coins);
+
+  const handleCreateRoomClick = async () => {
+    try {
+      const res = await postReq({
+        uri: 'createroom?user_id=',
+        userId: userId,
+        endpoint: `&bet=${0.1}&bet_type=${1}&room_type=${1}`,
+      })
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={styles.game}>
       <div style={{ backgroundImage: `${data?.img}` }} className={styles.game__logo} />
@@ -35,7 +51,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
           </div>
         </div>
         <div className={styles.game__buttonWrapper}>
-          <Button text='Создать' handleClick={() => navigate('/404')} />
+          <Button text='Создать' handleClick={handleCreateRoomClick} />
         </div>
       </div>
     </div>

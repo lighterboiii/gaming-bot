@@ -6,6 +6,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { useNavigate } from "react-router-dom";
 import { openedRooms } from "../../utils/mockData";
 import Room from "../../components/Game/Room/Room";
+import { getReq } from "../../api/api";
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
@@ -20,6 +21,18 @@ const OpenedRooms: FC = () => {
   const [sortByCurr, setSortByCurr] = useState(false);
 
   useEffect(() => {
+    const fetchRoomsData = async () => {
+      try {
+        const res = await getReq({
+          uri: 'getrooms',
+          userId: '',
+        })
+        console.log(res)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRoomsData();
     setRooms(openedRooms);
     tg.BackButton.show().onClick(() => {
       navigate(-1);
@@ -87,7 +100,7 @@ const OpenedRooms: FC = () => {
     } else {
       setCurrencyValue("🔰");
     }
-  }
+  };
 
   return (
     <div className={styles.rooms}>

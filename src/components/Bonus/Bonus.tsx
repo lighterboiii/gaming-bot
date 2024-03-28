@@ -8,6 +8,7 @@ import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewExpValue,
 import { userId } from "../../api/requestData";
 import useTelegram from "../../hooks/useTelegram";
 import { makeCollectibleRequest } from "../../api/shopApi";
+import { postEvent } from '@tma.js/sdk';
 
 interface IProps {
   bonus: Bonus;
@@ -16,8 +17,13 @@ interface IProps {
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
-  const { user } = useTelegram();
-  const userId = user?.id;
+  const { user, tg } = useTelegram();
+  // const userId = user?.id;
+  const eventData = {
+    type: 'notification',
+    impact_style: 'medium',
+    notification_type: 'success'
+  };
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: Bonus) => {
     const itemId = Number(item?.bonus_item_id);
@@ -33,11 +39,12 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         dispatch(setEnergyDrinksValue(resEnergy.message));
         break;
         case "exp":
-          const resExp = await await makeCollectibleRequest(itemId, itemCount, userId);
+          const resExp = await makeCollectibleRequest(itemId, itemCount, userId);
           dispatch(setNewExpValue(resExp.message));
           break;
       default:
         await makeCollectibleRequest(itemId, itemCount, userId);
+        tg.postEvent('web_app_trigger_haptic_feedback', eventData);
         dispatch(setCollectibles(item.bonus_item_id));
         break;
     }
