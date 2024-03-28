@@ -16,6 +16,7 @@
   @include position(relative);
   @include indents(0 16px 16px, 0);
   @include size(100%, 100%);
+  min-height: 100vh;
   @include flex(column, flex-start, center, 16px);
 
   &__header {

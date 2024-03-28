@@ -5,6 +5,7 @@
   @include indents(0 16px, 0);
   @include flex(column, flex-start, center);
   @include size(100%, 100%);
+  min-height: 100vh;
 
   @media screen and (min-height: 691px) {
     padding-top: 8px;

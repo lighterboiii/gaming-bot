@@ -3,6 +3,7 @@
 
 .leaderBoard {
   @include size(100%, 100%);
+  min-height: 100vh;
   @include flex(column, space-between, center);
   @include indents(16px 0 0 0, 0);
   background-color: $secondary-color;
@@ -88,7 +89,7 @@
     @include indents(16px, 0 20px 0 0);
     @include flex(column, flex-start, flex-end, 16px);
     @include size(100%, 58vh);
-    // overflow-y: scroll;
+    overflow-y: auto;
   }
 
   &__background {
