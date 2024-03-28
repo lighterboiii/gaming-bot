@@ -6,20 +6,21 @@ import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { CombinedItemData, ItemData, LavkaData } from "../../../utils/types/shopTypes";
-import { 
-  addEnergyDrink, 
-  removeItemFromLavka, 
-  setActiveSkin, 
-  setCoinsValueAfterBuy, 
-  setCollectibles, 
-  setTokensValueAfterBuy 
+import {
+  addEnergyDrink,
+  removeItemFromLavka,
+  setActiveEmoji,
+  setActiveSkin,
+  setCoinsValueAfterBuy,
+  setCollectibles,
+  setTokensValueAfterBuy
 } from "../../../services/appSlice";
-import { 
-  buyItemRequest, 
-  buyLavkaRequest, 
+import {
+  buyItemRequest,
+  buyLavkaRequest,
   cancelLavkaRequest,
-  setActiveEmojiRequest, 
-  setActiveSkinRequest 
+  setActiveEmojiRequest,
+  setActiveSkinRequest
 } from "../../../api/shopApi";
 import { userId } from "../../../api/requestData";
 import { Modal } from "../../Modal/Modal";
@@ -45,16 +46,17 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   const isUserSeller = Number(userId) === Number(item?.seller_id);
   // функция для фильтрации купленных товаров
   const handlePurchaseItemTypes = async (item: any) => {
-    item?.item_price_coins !== 0 
-    ? dispatch(setCoinsValueAfterBuy(item.item_price_coins)) 
-    : dispatch(setTokensValueAfterBuy(item.item_price_tokens));
-    if (item?.item_type === "skin" || item?.item_type ===  "skin_anim") {
+    item?.item_price_coins !== 0
+      ? dispatch(setCoinsValueAfterBuy(item.item_price_coins))
+      : dispatch(setTokensValueAfterBuy(item.item_price_tokens));
+    if (item?.item_type === "skin" || item?.item_type === "skin_anim") {
       dispatch(setCollectibles(item.item_id));
       dispatch(setActiveSkin(item.item_id));
       await setActiveSkinRequest(item.item_id, userId);
     } else if (item?.item_type === "energy_drink") {
       dispatch(addEnergyDrink(1));
     } else if (item?.item_type === "emoji") {
+      dispatch(setCollectibles(item.item_id));
       await setActiveEmojiRequest(userId, item?.item_id);
     }
   };
@@ -111,6 +113,16 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
       // });
       dispatch(setActiveSkin(itemId));
       onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // хендлер установки активного пака эмодзи
+  const handleSetActiveEmoji = async (itemId: number) => {
+    try {
+      const res = await setActiveEmojiRequest(userId, item?.item_id);
+      dispatch(setActiveEmoji(String(itemId)));
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -221,7 +233,9 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
                 <div className={styles.product__buttonWrapper}>
                   <Button
                     text="Использовать"
-                    handleClick={() => handleSetActiveSkin(item?.item_id)} />
+                    handleClick={item?.item_type === "emoji"
+                      ? () => handleSetActiveEmoji(item?.item_id)
+                      : () => handleSetActiveSkin(item?.item_id)} />
                 </div>
                 <div className={styles.product__buttonWrapper}>
                   <Button

@@ -88,6 +88,11 @@ const appSlice = createSlice({
         state.info.user_exp = action.payload;
       }
     },
+    setActiveEmoji: (state, action: PayloadAction<string>) => {
+      if (state.info) {
+        state.info.user_active_emoji = action.payload;
+      }
+    },
     // daily bonus part
     setDailyBonus: (state, action: PayloadAction<Bonus>) => {
       state.bonus = action.payload;
@@ -144,6 +149,7 @@ export const {
   clearDailyBonus,
   addEnergyDrink,
   getOpenedRooms,
+  setActiveEmoji,
 } = appSlice.actions;
 
 export default appSlice.reducer;
