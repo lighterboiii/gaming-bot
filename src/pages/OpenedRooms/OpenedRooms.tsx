@@ -103,7 +103,7 @@ const OpenedRooms: FC = () => {
   };
 
   return (
-    <div className={styles.rooms + ' scrollable'}>
+    <div className={styles.rooms}>
       <div className={styles.rooms__content}>
         <h2 className={styles.rooms__heading}>Найти игру</h2>
         <div className={styles.rooms__buttons}>
