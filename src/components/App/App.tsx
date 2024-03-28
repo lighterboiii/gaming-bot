@@ -20,13 +20,18 @@ import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
-  document.addEventListener('touchmove', function(event) {
+  document.addEventListener('touchmove', (event: TouchEvent) => {
+    if ((event.target as Element).classList.contains('scrollable')) {
+      return;
+    }
+
     event.preventDefault();
   }, { passive: false });
+
   
   useEffect(() => {
     tg.setHeaderColor('#d51845');
