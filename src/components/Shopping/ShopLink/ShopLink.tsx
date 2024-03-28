@@ -4,18 +4,23 @@ import { Link } from "react-router-dom";
 import { shopUrl } from "../../../utils/routes";
 import gowinLogo from '../../../images/gowin.png';
 import girl from '../../../images/Shop_small_char.png';
-import { postEvent } from "@tma.js/sdk";
+// import { postEvent } from "@tma.js/sdk";
 
 const ShopLink: FC = () => {
-  
-  const handleClick = () => {
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'impact',
-      impact_style: 'medium',
-    });
-  }
+
+
+  // const handleClick = () => {
+  //   postEvent('web_app_trigger_haptic_feedback', {
+  //     type: 'impact',
+  //     impact_style: 'medium',
+  //   });
+  // }
   return (
-    <Link to={shopUrl} className={styles.shopLink} onClick={handleClick}>
+    <Link
+      to={shopUrl}
+      className={styles.shopLink}
+      // onClick={handleClick}
+    >
       <div className={styles.shopLink__content}>
         <img src={gowinLogo} alt="main_logo" className={styles.shopLink__logo} />
         <h2 className={styles.shopLink__title}>Магазин</h2>
@@ -24,7 +29,7 @@ const ShopLink: FC = () => {
             Обновление магазина через: <Countdown />
           </p>
         </div> */}
-        <img src={girl} alt="character"  className={styles.shopLink__char} />
+        <img src={girl} alt="character" className={styles.shopLink__char} />
       </div>
     </Link>
   )
