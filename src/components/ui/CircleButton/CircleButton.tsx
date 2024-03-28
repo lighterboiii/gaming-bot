@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './CircleButton.module.scss';
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
@@ -27,10 +28,10 @@ const CircleButton: FC<IProps> = ({
 }) => {
 
   const handleClick = () => {
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'impact',
-      impact_style: 'soft',
-    });
+    // postEvent('web_app_trigger_haptic_feedback', {
+    //   type: 'impact',
+    //   impact_style: 'soft',
+    // });
   }
 
   return (

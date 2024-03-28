@@ -35,7 +35,7 @@ interface ProductProps {
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
@@ -66,25 +66,25 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
       switch (res.message) {
         case "out":
           setMessage("Товара нет в наличии");
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error'
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'error'
+          // });
           break;
         case "money":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error'
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'error'
+          // });
           setMessage("Недостаточно средств");
           break;
         case "ok":
           setMessage("Успешная покупка");
           handlePurchaseItemTypes(item);
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'success'
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'success'
+          // });
           break;
         default:
           break;
@@ -104,10 +104,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   const handleSetActiveSkin = async (itemId: number) => {
     try {
       await setActiveSkinRequest(itemId, userId);
-      postEvent('web_app_trigger_haptic_feedback', {
-        type: 'impact',
-        impact_style: 'soft',
-      });
+      // postEvent('web_app_trigger_haptic_feedback', {
+      //   type: 'impact',
+      //   impact_style: 'soft',
+      // });
       dispatch(setActiveSkin(itemId));
       onClose();
     } catch (error) {
@@ -119,10 +119,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
     try {
       await cancelLavkaRequest(itemId, userId);
       setMessageShown(true);
-      postEvent('web_app_trigger_haptic_feedback', {
-        type: 'notification',
-        notification_type: 'success'
-      });
+      // postEvent('web_app_trigger_haptic_feedback', {
+      //   type: 'notification',
+      //   notification_type: 'success'
+      // });
       setMessage("Товар снят с продажи");
       dispatch(removeItemFromLavka(itemId));
     } catch (error) {
@@ -152,31 +152,31 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
       setMessageShown(true);
       switch (res.message) {
         case "sold":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error'
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'error'
+          // });
           setMessage("Уже продано!");
           break;
         case "money":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error'
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'error'
+          // });
           setMessage("Недостаточно средств");
           break;
         case "break":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error'
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'error'
+          // });
           setMessage("У вас уже есть этот товар");
           break;
         case "ok":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'success'
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'success'
+          // });
           setMessage("Куплено из лавки!");
           handlePurchaseItemTypes(item);
           break;
