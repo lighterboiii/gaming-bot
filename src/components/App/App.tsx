@@ -27,24 +27,13 @@ const App: FC = () => {
   document.addEventListener('touchmove', function(event) {
     event.preventDefault();
   }, { passive: false });
-
-  // function handleViewportChange(event: any) {
-  //   if (!event.isExpanded) {
-  //     tg.expand();
-  //   }
-  // };
   
   useEffect(() => {
     tg.setHeaderColor('#d51845');
     tg.expand();
-    // tg.onEvent('viewportChanged', handleViewportChange);
     tg.enableClosingConfirmation();
     tg.ready();
     window.scrollTo(0, 0);
-
-    // return(() =>{
-    //   tg.offEvent('viewportChanged', handleViewportChange);
-    // })
   }, []);
   
 
