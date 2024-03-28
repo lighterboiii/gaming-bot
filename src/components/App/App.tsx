@@ -30,7 +30,7 @@ const App: FC = () => {
     }
 
     event.preventDefault();
-  }, { passive: true });
+  }, { passive: false });
   
   
   useEffect(() => {
