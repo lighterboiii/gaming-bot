@@ -2,15 +2,16 @@
 @use '../../stylesheets/variables' as *;
 
 .main {
-  @include indents(8px 16px 16px, 0);
+  // @include indents(8px 16px 16px, 0);
+  @include indents(0 16px, 0);
   @include flex(column, flex-start, center);
   @include size(100%, 100%);
 
 
   &__header {
     @include indents(0 16px, 0);
-    @include position(fixed, $top: 0, $left: 50%);
-    transform: translate(-50%);
+    // @include position(fixed, $top: 0, $left: 50%);
+    // transform: translate(-50%);
     @include size(100%, 20vh);
     @include flex(column, center, center);
     z-index: 8;
@@ -26,14 +27,14 @@
   }
 
   &__content {
-    margin-top: 30vh;
-    @include flex(column, center, unset, 16px);
-    @include size(100%, 70vh);
-    overflow-y: auto;
+    // margin-top: 30vh;
+    @include flex(column, flex-start, unset, 16px);
+    @include size(100%, 100%);
+    @include max-size(100%, 70vh);
+    overflow: scroll;
 
     @media screen and (min-height: 691px) {
-      margin-top: 20vh;
-      @include size(100%, 80vh);
+      @include max-size(100%, 80vh);
     }
   }
 

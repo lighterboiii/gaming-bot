@@ -31,6 +31,7 @@ const App: FC = () => {
 
     event.preventDefault();
   }, { passive: false });
+
   
   
   useEffect(() => {
