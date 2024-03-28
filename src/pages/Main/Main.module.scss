@@ -29,6 +29,7 @@
     // margin-top: 30vh;
     @include flex(column, center, unset, 16px);
     @include size(100%, 70vh);
+    overflow-y: auto;
 
     @media screen and (min-height: 691px) {
       // margin-top: 20vh;
