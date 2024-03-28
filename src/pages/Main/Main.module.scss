@@ -27,10 +27,9 @@
   &__content {
     @include flex(column, flex-start, unset, 16px);
     @include size(100%, calc(70vh - 16px));
-    @include min-size(100%, 60vh);
 
     @media screen and (min-height: 691px) {
-      @include max-size(100%, 80vh);
+      @include size(100%, 80vh);
     }
   }
 
