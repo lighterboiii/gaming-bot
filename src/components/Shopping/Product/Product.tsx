@@ -66,8 +66,16 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
       switch (res.message) {
         case "out":
           setMessage("Товара нет в наличии");
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'warning'
+          });
           break;
         case "money":
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'warning'
+          });
           setMessage("Недостаточно средств");
           break;
         case "ok":
@@ -107,6 +115,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
     try {
       await cancelLavkaRequest(itemId, userId);
       setMessageShown(true);
+      postEvent('web_app_trigger_haptic_feedback', {
+        type: 'notification',
+        notification_type: 'success'
+      });
       setMessage("Товар снят с продажи");
       dispatch(removeItemFromLavka(itemId));
     } catch (error) {
@@ -136,15 +148,31 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
       setMessageShown(true);
       switch (res.message) {
         case "sold":
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'warning'
+          });
           setMessage("Уже продано!");
           break;
         case "money":
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'warning'
+          });
           setMessage("Недостаточно средств");
           break;
         case "break":
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'warning'
+          });
           setMessage("У вас уже есть этот товар");
           break;
         case "ok":
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'success'
+          });
           setMessage("Куплено из лавки!");
           handlePurchaseItemTypes(item);
           break;
