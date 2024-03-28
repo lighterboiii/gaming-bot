@@ -19,7 +19,7 @@ code {
 }
 
 html {
-  touch-action: manipulation;
+  touch-action: pan-y; 
 } 
 
 html, body {
