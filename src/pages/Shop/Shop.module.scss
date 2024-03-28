@@ -50,13 +50,17 @@
 
   &__goods {
     @include indents();
-    @include size(100%, 70vh);
+    @include size(100%, 50vh);
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(3, 1fr);
     align-content: start;
     justify-items: center;
     overflow-y: auto;
+
+    @media screen and (min-height: 691px) {
+      @include size(100%, 65vh);
+    }
   }
 
   &__leftButtonsContainer {
