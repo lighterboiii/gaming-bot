@@ -15,7 +15,7 @@ const Button: FC<IProps> = ({ text, isWhiteBackground, handleClick, disabled }) 
     handleClick();
     postEvent('web_app_trigger_haptic_feedback', {
       type: 'impact',
-      impact_style: 'medium',
+      impact_style: 'light',
     });
   }
   

@@ -18,7 +18,7 @@ const BigButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, che
   const handleClick = () => {
     postEvent('web_app_trigger_haptic_feedback', {
       type: 'impact',
-      impact_style: 'heavy',
+      impact_style: 'medium',
     });
   }
   return (
