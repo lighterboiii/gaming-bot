@@ -2,8 +2,7 @@
 @use '../../stylesheets/variables' as *;
 
 .main {
-  // @include indents(8px 16px 16px, 0);
-  @include indents(0 16px, 0);
+  @include indents(8px 16px 16px, 0);
   @include flex(column, flex-start, center);
   @include size(100%, 100%);
 

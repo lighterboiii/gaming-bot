@@ -20,17 +20,33 @@ import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
-  document.addEventListener('touchmove', (event: TouchEvent) => {
-    if ((event.target as Element).classList.contains('scrollable')) {
-      return;
-    }
+  // document.addEventListener('touchmove', (event: TouchEvent) => {
+  //   if ((event.target as Element).classList.contains('scrollable')) {
+  //     return;
+  //   }
 
-    event.preventDefault();
-  }, { passive: false });
+  //   event.preventDefault();
+  // }, { passive: false });
+
+  document.addEventListener(
+    'touchmove',
+    (event: TouchEvent) => {
+      let target: EventTarget | null = event.target;
+  
+      while (target instanceof Node && target !== document) {
+        if (target instanceof Element && target.classList.contains('scrollable')) {
+          return;
+        }
+        target = target.parentNode;
+      }
+      event.preventDefault();
+    },
+    { passive: false },
+  );
 
   
   
