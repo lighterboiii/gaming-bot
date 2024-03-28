@@ -106,7 +106,7 @@ const Shop: FC = () => {
     if (activeButton === "Лавка") {
       lavkaShop && setGoods(lavkaShop);
     }
-  }, [lavkaShop])
+  }, [lavkaShop, activeButton])
 
   return (
     <div className={styles.shop}>

@@ -35,7 +35,7 @@ interface ProductProps {
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
   const { user, tg } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
@@ -104,6 +104,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   const handleSetActiveSkin = async (itemId: number) => {
     try {
       await setActiveSkinRequest(itemId, userId);
+      postEvent('web_app_trigger_haptic_feedback', {
+        type: 'impact',
+        impact_style: 'soft',
+      });
       dispatch(setActiveSkin(itemId));
       onClose();
     } catch (error) {

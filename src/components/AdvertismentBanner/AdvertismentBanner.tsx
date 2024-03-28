@@ -3,6 +3,7 @@ import { FC, useRef, useState } from "react";
 import styles from './AdvertismentBanner.module.scss';
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { bannersData } from "../../utils/mockData";
+import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
   onBannerClick: (bannerData: any) => void;
@@ -10,7 +11,7 @@ interface IProps {
 
 const AdvertisementBanner: FC<IProps> = ({ onBannerClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const touchStartX = useRef<number | null>(null);
+  // const touchStartX = useRef<number | null>(null);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
@@ -18,6 +19,10 @@ const AdvertisementBanner: FC<IProps> = ({ onBannerClick }) => {
 
   const handleBannerClick = () => {
     const currentBannerData = bannersData[currentIndex];
+    postEvent('web_app_trigger_haptic_feedback', {
+      type: 'impact',
+      impact_style: 'soft',
+    });
     onBannerClick(currentBannerData);
   };
 
