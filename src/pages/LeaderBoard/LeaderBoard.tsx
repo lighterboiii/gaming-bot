@@ -24,7 +24,6 @@ const LeaderBoard: FC = () => {
     const fetchLeadersData = async () => {
       try {
         const leaders: IMemberDataResponse = await getTopUsers() as IMemberDataResponse;
-        console.log(leaders);
         setTopLeader(leaders?.top_users[0]);
         setLeaderBoard(leaders?.top_users.slice(1));
       } catch (error) {
@@ -66,7 +65,8 @@ const LeaderBoard: FC = () => {
                 </div>
               </div>
             </div>
-          </div><div className={styles.leaderBoard__board}>
+          </div>
+          <div className={styles.leaderBoard__board}>
             {leaderBoard?.filter((leader: any) => leader.id !== 1).map((leader: any, index: number) =>
               <UserContainer
                 member={leader}

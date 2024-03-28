@@ -8,6 +8,7 @@ import useTelegram from "../../../hooks/useTelegram";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { LavkaData } from "../../../utils/types/shopTypes";
 import { addItemToLavka } from "../../../services/appSlice";
+import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
   item: LavkaData;
@@ -34,9 +35,17 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
       setMessageShown(true);
       switch (res.message) {
         case "already":
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'error',
+          });
           setMessage("Товар уже на витрине");
           break;
         case "ok":
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'success',
+          });
           setMessage("Размещено в лавке");
           dispatch(addItemToLavka(itemWithPrice));
           break;

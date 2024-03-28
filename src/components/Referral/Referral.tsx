@@ -13,6 +13,7 @@ import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { setCoinsNewValue } from "../../services/appSlice";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { IReferralCoinsTransferResponse, IReferralResponse } from "../../utils/types/mainTypes";
+import { postEvent } from "@tma.js/sdk";
 
 const Referral: FC = () => {
   const navigate = useNavigate();
@@ -53,9 +54,17 @@ const Referral: FC = () => {
       setMessageShown(true);
       switch (res.transfered) {
         case "small":
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'error',
+          });
           setMessage("Минимальная сумма для перевода 0.1");
           break;
         default:
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'success',
+          });
           setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
           dispatch(setCoinsNewValue(Number(res.new_coins)));
           setTotalBalance(0);

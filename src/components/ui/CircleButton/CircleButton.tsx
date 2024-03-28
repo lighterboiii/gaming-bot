@@ -4,6 +4,7 @@ import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import RefIcon from "../../../icons/Referral/ReferralIcon";
 import CrossIcon from "../../../icons/Cross/Cross";
 import com from '../../../images/community_icon_tiny.png';
+import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
   chevronPosition?: string;
@@ -25,8 +26,16 @@ const CircleButton: FC<IProps> = ({
   iconType,
 }) => {
 
+    const handleClick = () => {
+      postEvent('web_app_trigger_haptic_feedback', {
+        type: 'impact',
+        impact_style: 'soft',
+      });
+    }
+
   return (
     <div 
+    onClick={handleClick}
     className={`${styles.button} ${isWhiteBackground ? styles.whiteButton : styles.pinkButton}`} 
     style={shadow ? { boxShadow: '2px 1px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
     

@@ -12,6 +12,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { GoodsItem, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
 import { getLavkaAvailableRequest } from "../../api/shopApi";
 import { setLavkaAvailable } from "../../services/appSlice";
+import { postEvent } from "@tma.js/sdk";
 
 const Shop: FC = () => {
   const { tg, user } = useTelegram();
@@ -71,17 +72,29 @@ const Shop: FC = () => {
   };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
+    postEvent('web_app_trigger_haptic_feedback', {
+      type: 'impact',
+      impact_style: 'soft',
+    });
     setActiveButton("Приобретено");
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
+    postEvent('web_app_trigger_haptic_feedback', {
+      type: 'impact',
+      impact_style: 'soft',
+    });
     setActiveButton("Магазин");
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
+    postEvent('web_app_trigger_haptic_feedback', {
+      type: 'impact',
+      impact_style: 'soft',
+    });
     setActiveButton("Лавка");
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
@@ -90,7 +103,9 @@ const Shop: FC = () => {
   };
 
   useEffect(() => {
-    lavkaShop && setGoods(lavkaShop);
+    if (activeButton === "Лавка") {
+      lavkaShop && setGoods(lavkaShop);
+    }
   }, [lavkaShop])
 
   return (

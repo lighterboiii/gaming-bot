@@ -1,5 +1,6 @@
 import { FC } from "react";
 import styles from './Button.module.scss';
+import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
   text: string;
@@ -9,6 +10,14 @@ interface IProps {
 }
 
 const Button: FC<IProps> = ({ text, isWhiteBackground, handleClick, disabled }) => {
+
+  const handleButtonClick = () => {
+    handleClick();
+    postEvent('web_app_trigger_haptic_feedback', {
+      type: 'impact',
+      impact_style: 'medium',
+    });
+  }
   
   return (
     <button
@@ -16,7 +25,7 @@ const Button: FC<IProps> = ({ text, isWhiteBackground, handleClick, disabled }) 
       style={{ 
         backgroundColor: (!isWhiteBackground && !disabled) ? '#ffdb50' : '#FFF',
       }}
-      onClick={handleClick}
+      onClick={handleButtonClick}
       disabled={disabled}
     >
       {text}

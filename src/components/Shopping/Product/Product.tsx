@@ -68,13 +68,13 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
           setMessage("Товара нет в наличии");
           postEvent('web_app_trigger_haptic_feedback', {
             type: 'notification',
-            notification_type: 'warning'
+            notification_type: 'error'
           });
           break;
         case "money":
           postEvent('web_app_trigger_haptic_feedback', {
             type: 'notification',
-            notification_type: 'warning'
+            notification_type: 'error'
           });
           setMessage("Недостаточно средств");
           break;
@@ -150,21 +150,21 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         case "sold":
           postEvent('web_app_trigger_haptic_feedback', {
             type: 'notification',
-            notification_type: 'warning'
+            notification_type: 'error'
           });
           setMessage("Уже продано!");
           break;
         case "money":
           postEvent('web_app_trigger_haptic_feedback', {
             type: 'notification',
-            notification_type: 'warning'
+            notification_type: 'error'
           });
           setMessage("Недостаточно средств");
           break;
         case "break":
           postEvent('web_app_trigger_haptic_feedback', {
             type: 'notification',
-            notification_type: 'warning'
+            notification_type: 'error'
           });
           setMessage("У вас уже есть этот товар");
           break;
