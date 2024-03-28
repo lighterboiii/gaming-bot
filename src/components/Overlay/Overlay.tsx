@@ -1,6 +1,7 @@
 import { FC } from "react";
 import styles from './Overlay.module.scss';
 import CrossIcon from "../../icons/Cross/Cross";
+import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
   show: boolean;
@@ -19,6 +20,15 @@ const Overlay: FC<IProps> = ({
   buttonColor = '#ac1a44',
   crossColor = '#FFF'
 }) => {
+
+  const handleClose = () => {
+    postEvent('web_app_trigger_haptic_feedback', {
+      type: 'impact',
+      impact_style: 'soft',
+    });
+    onClose && onClose();
+  }
+
   return (
     <div className={`${styles.overlay} ${show ? styles.active : ''}`}>
       <div className={styles.overlay__children}>
@@ -26,7 +36,7 @@ const Overlay: FC<IProps> = ({
       </div>
       {closeButton &&
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className={styles.overlay__closeButton}
           style={{ backgroundColor: buttonColor }}
         >

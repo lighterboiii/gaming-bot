@@ -26,24 +26,24 @@ const CircleButton: FC<IProps> = ({
   iconType,
 }) => {
 
-    const handleClick = () => {
-      postEvent('web_app_trigger_haptic_feedback', {
-        type: 'impact',
-        impact_style: 'soft',
-      });
-    }
+  const handleClick = () => {
+    postEvent('web_app_trigger_haptic_feedback', {
+      type: 'impact',
+      impact_style: 'soft',
+    });
+  }
 
   return (
-    <div 
-    onClick={handleClick}
-    className={`${styles.button} ${isWhiteBackground ? styles.whiteButton : styles.pinkButton}`} 
-    style={shadow ? { boxShadow: '2px 1px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
-    
+    <div
+      onClick={handleClick}
+      className={`${styles.button} ${isWhiteBackground ? styles.whiteButton : styles.pinkButton}`}
+      style={shadow ? { boxShadow: '2px 1px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
+
     >
       {iconType === 'chevron' && <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />}
       {iconType === 'ref' && <RefIcon />}
       {iconType === 'cross' && <CrossIcon color={color} />}
-      {iconType === 'community' && <img src={com} alt="icon" style={{ width: '20px', height: '20px' }} /> }
+      {iconType === 'community' && <img src={com} alt="icon" style={{ width: '20px', height: '20px' }} />}
     </div>
   )
 }
