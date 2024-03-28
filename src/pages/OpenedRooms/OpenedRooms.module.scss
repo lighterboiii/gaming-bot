@@ -6,7 +6,6 @@
   @include size(100%, 100%);
   @include flex(column, flex-start, center, 16px);
   z-index: 1;
-  overflow: auto;
 
   &__heading {
     @include size(50%, auto);
@@ -35,7 +34,8 @@
     cursor: pointer;
   }
 
-  &__game, &__name {
+  &__game,
+  &__name {
     @include indents();
     font-size: 12px;
     text-transform: lowercase;
@@ -62,7 +62,7 @@
   &__roomList {
     @include size(100%, 70vh);
     @include flex(column, flex-start, center, 8px);
-    overflow: scroll;
+    overflow-y: auto;
 
     @media screen and (min-height: 691px) {
       @include size(100%, 75vh);
