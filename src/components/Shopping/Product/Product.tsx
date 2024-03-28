@@ -5,7 +5,7 @@ import styles from './Product.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
-import { ItemData, LavkaData } from "../../../utils/types/shopTypes";
+import { CombinedItemData, ItemData, LavkaData } from "../../../utils/types/shopTypes";
 import { 
   addEnergyDrink, 
   removeItemFromLavka, 
@@ -27,13 +27,14 @@ import SellForm from "../SellForm/SellForm";
 import { postEvent } from "@tma.js/sdk";
 
 interface ProductProps {
-  item: any; // типизвция
+  item: CombinedItemData;
   onClose: () => void;
   isCollectible?: boolean;
   activeButton?: string;
 }
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
+  console.log(item);
   const { user, tg } = useTelegram();
   // const userId = user?.id;
   const dispatch = useAppDispatch();

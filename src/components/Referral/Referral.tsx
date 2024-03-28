@@ -14,6 +14,7 @@ import { setCoinsNewValue } from "../../services/appSlice";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { IReferralCoinsTransferResponse, IReferralResponse } from "../../utils/types/mainTypes";
 import { postEvent } from "@tma.js/sdk";
+import { IMember } from "../../utils/types/memberTypes";
 
 const Referral: FC = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Referral: FC = () => {
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
 
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
-  const [refsBoard, setRefsBoard] = useState<any>(null); // типизировать
+  const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
   const dispatch = useAppDispatch();

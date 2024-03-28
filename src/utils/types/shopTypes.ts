@@ -9,7 +9,6 @@ export interface ItemData {
   item_type: string;
 }
 
-
 export interface LavkaData {
   item_id: number;
   item_mask: string;
@@ -28,3 +27,5 @@ export type GoodsItem = LavkaData | ItemData;
 export interface LavkaResponse {
   lavka: LavkaData[]; 
 };
+
+export interface CombinedItemData extends ItemData, LavkaData {};

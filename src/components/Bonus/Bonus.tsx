@@ -16,10 +16,9 @@ interface IProps {
 }
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
-  const dispatch = useAppDispatch();
-  console.log(bonus);
   const { user } = useTelegram();
   // const userId = user?.id;
+  const dispatch = useAppDispatch();
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: Bonus) => {
     const itemId = Number(item?.bonus_item_id);
