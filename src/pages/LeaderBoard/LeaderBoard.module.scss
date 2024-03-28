@@ -87,8 +87,8 @@
   &__board {
     @include indents(16px, 0 20px 0 0);
     @include flex(column, flex-start, flex-end, 16px);
-    @include size(100%, 70vh);
-    overflow-y: auto;
+    @include size(100%, 60vh);
+    overflow-y: scroll;
   }
 
   &__background {
