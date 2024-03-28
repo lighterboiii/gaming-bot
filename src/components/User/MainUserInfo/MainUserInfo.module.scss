@@ -8,7 +8,7 @@
   @include flex(row, space-between, center, 10px);
 
   &__content {
-    @include size(130px, 130px);
+    // @include size(130px, 130px);
     @include flex(row, flex-start, center, 6px);
     flex: 1;
   }
@@ -19,8 +19,7 @@
   }
 
   &__avatarContainer {
-    @include indents();
-    @include position(relative);
+    // @include position(relative);
     @include size(130px, 130px);
   }
 
