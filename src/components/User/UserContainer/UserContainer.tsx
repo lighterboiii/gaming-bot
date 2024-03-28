@@ -4,6 +4,7 @@ import styles from './UserContainer.module.scss';
 import useTelegram from "../../../hooks/useTelegram";
 import { userId } from "../../../api/requestData";
 import { IMember } from "../../../utils/types/memberTypes";
+import UserAvatar from "../UserAvatar/UserAvatar";
 
 interface IProps {
   member: IMember;
@@ -16,19 +17,14 @@ const UserContainer: FC<IProps> = ({ member, index, length, darkBackground = fal
   const { user } = useTelegram();
   // const userId = user?.id;
   const isUser = Number(userId) === member?.user_id;
-
+  
   return (
     <div
       className={`${styles.userContainer} ${index === 0 ? styles.roundedBorders : ''} ${index === length - 2 ? styles.lowRoundedBorders : ''}`}
       style={{ backgroundColor: isUser ? '#FFF' : (darkBackground ? '#ac1a44' : '#d51845') }}
     >
       <div className={styles.userContainer__avatarWrapper}>
-        <div className={styles.userContainer__avatarBackground} style={{ backgroundImage: `url(${member.item_pic})` }}></div>
-        <img className={styles.userContainer__avatar}
-          src={member.avatar}
-          alt="leader_avatar"
-          style={{ maskImage: `url(${member.item_mask})` }}
-        />
+        <UserAvatar avatar={member.avatar} item={member}  />
       </div>
       <div className={styles.userContainer__container}>
         <h3 className={styles.userContainer__number}

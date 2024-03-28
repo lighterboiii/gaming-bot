@@ -123,7 +123,7 @@ const Referral: FC = () => {
               <UserContainer member={referral} index={index} length={refsBoard.length + 1} key={index} />
             ))) :
             <span className={styles.referral__sumSpan}>
-              ...Пока никто из друзей, которых вы пригласили, не играл
+              ...Пока никто из ваших друзей не играл
             </span>
           }
         </div>

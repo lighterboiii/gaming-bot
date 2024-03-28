@@ -13,7 +13,7 @@ interface IProps {
 const UserAvatar: FC<IProps> = ({ item, avatar }) => {
   const [userSkin, setSkin] = useState<string | null>(null);
   const [userMask, setMask] = useState<string | null>(null);
-
+  
   const userAvatar = useAppSelector(store => store.app.info?.photo);
   const userData = useAppSelector(store => store.app.info);
   const activeSkin = useAppSelector(store => store.app.info?.active_skin);
