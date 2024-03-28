@@ -26,10 +26,9 @@
   }
 
   &__content {
-    // margin-top: 30vh;
+    margin-top: 30vh;
     @include flex(column, center, unset, 16px);
-    @include size(100%, auto);
-    overflow: scroll;
+    @include size(100%, 100%);
 
     @media screen and (min-height: 691px) {
       margin-top: 20vh;
