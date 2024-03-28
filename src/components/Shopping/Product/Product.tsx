@@ -24,6 +24,7 @@ import {
 import { userId } from "../../../api/requestData";
 import { Modal } from "../../Modal/Modal";
 import SellForm from "../SellForm/SellForm";
+import { postEvent } from "@tma.js/sdk";
 
 interface ProductProps {
   item: any; // типизвция
@@ -41,11 +42,6 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   const [isModalOpen, setModalOpen] = useState(false);
   // для отрисовки интерфейса продажи айтема
   const isUserSeller = Number(userId) === Number(item?.seller_id);
-  const eventData = {
-    type: 'notification',
-    impact_style: 'medium',
-    notification_type: 'success'
-  };
   // функция для фильтрации купленных товаров
   const handlePurchaseItemTypes = async (item: any) => {
     item?.item_price_coins !== 0 
@@ -77,7 +73,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         case "ok":
           setMessage("Успешная покупка");
           handlePurchaseItemTypes(item);
-          tg.postEvent('web_app_trigger_haptic_feedback', eventData);
+          postEvent('web_app_trigger_haptic_feedback', {
+            type: 'notification',
+            notification_type: 'success'
+          });
           break;
         default:
           break;
