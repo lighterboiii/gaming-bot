@@ -62,7 +62,7 @@
   &__roomList {
     @include size(100%, 70vh);
     @include flex(column, flex-start, center, 8px);
-    overflow-y: auto;
+    overflow: scroll;
 
     @media screen and (min-height: 691px) {
       @include size(100%, 75vh);
