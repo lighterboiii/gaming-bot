@@ -63,7 +63,7 @@ const Main: FC = () => {
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
         <MainUserInfo toggleOverlay={toggleRefOverlay} isOverlayOpen={showReferralOverlay} />
       </div>
-      <div className={`${styles.main__content + ' scrollable'} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
+      <div className={`${styles.main__content  + ' scrollable'} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
         <div ref={animationRef}>
           <AdvertisementBanner onBannerClick={handleBannerClick} />
         </div>
