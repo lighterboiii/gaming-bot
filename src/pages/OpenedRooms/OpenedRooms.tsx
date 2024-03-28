@@ -15,7 +15,7 @@ const OpenedRooms: FC = () => {
   const [typeValue, setTypeValue] = useState('Все');
   const [currencyValue, setCurrencyValue] = useState('Все');
   const [betValue, setBetValue] = useState('Все');
-
+  console.log(rooms);
   const [sortByBetAsc, setSortByBetAsc] = useState(false);
   const [sortByType, setSortByType] = useState(false);
   const [sortByCurr, setSortByCurr] = useState(false);
@@ -23,17 +23,17 @@ const OpenedRooms: FC = () => {
   useEffect(() => {
     const fetchRoomsData = async () => {
       try {
-        const res = await getReq({
+        const res: any = await getReq({
           uri: 'getrooms',
           userId: '',
         })
-        console.log(res)
+        setRooms(res.rooms);
+        console.log(res.rooms)
       } catch (error) {
         console.log(error);
       }
     };
     fetchRoomsData();
-    setRooms(openedRooms);
     tg.BackButton.show().onClick(() => {
       navigate(-1);
     });

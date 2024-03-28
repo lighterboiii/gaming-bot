@@ -50,6 +50,7 @@ const App: FC = () => {
       try {
         const res = await getAppData(userId);
         const userPhotoResponse = await getUserAvatarRequest(userId);
+        console.log(userPhotoResponse);
         dispatch(setUserData(res.user_info));
         dispatch(setDailyBonus(res.daily_bonus));
         dispatch(setProductsArchive(res.collectibles_data));

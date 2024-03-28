@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './BigButton.module.scss';
 import { Link } from "react-router-dom";
 import CircleButton from "../CircleButton/CircleButton";
 import { postEvent } from "@tma.js/sdk";
-// import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
   to: string;
