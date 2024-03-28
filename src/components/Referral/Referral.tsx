@@ -18,7 +18,7 @@ import { postEvent } from "@tma.js/sdk";
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
 
   const [totalBalance, setTotalBalance] = useState<number | null>(null);

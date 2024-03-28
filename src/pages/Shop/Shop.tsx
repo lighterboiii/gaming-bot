@@ -137,7 +137,7 @@ const Shop: FC = () => {
         </div>
         {loading ?  <p style={{ color: '#ffdb50', fontWeight: '900' }}>Загрузка...</p>: (
           <>
-            <div className={styles.shop__goods}>
+            <div className={styles.shop__goods + " scrollable"}>
               {goods?.length > 0 ? (
                 <>
                   {goods.map((item: GoodsItem, index: number) => (
