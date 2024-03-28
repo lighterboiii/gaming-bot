@@ -26,12 +26,13 @@
   }
 
   &__content {
-    margin-top: 30vh;
+    // margin-top: 30vh;
     @include flex(column, center, unset, 16px);
-    @include size(100%, 100%);
+    @include size(100%, 70vh);
 
     @media screen and (min-height: 691px) {
-      margin-top: 20vh;
+      // margin-top: 20vh;
+      @include size(100%, 80vh);
     }
   }
 
