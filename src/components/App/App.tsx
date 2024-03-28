@@ -24,13 +24,13 @@ const App: FC = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
-  document.addEventListener('touchstart', (event: TouchEvent) => {
+  document.addEventListener('touchmove', (event: TouchEvent) => {
     if ((event.target as Element).classList.contains('scrollable')) {
       return;
     }
 
     event.preventDefault();
-  }, { passive: false });
+  }, { passive: true });
   
   
   useEffect(() => {
