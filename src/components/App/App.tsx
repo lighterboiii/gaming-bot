@@ -24,6 +24,10 @@ const App: FC = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
+  document.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+  }, { passive: false });
+
   function handleViewportChange(event: any) {
     if (!event.isExpanded) {
       tg.expand();
