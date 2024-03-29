@@ -21,10 +21,10 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
 
   const handleClickBalance = () => {
     tg.openTelegramLink('https://t.me/lighterboygamebot');
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'notification',
-      notification_type: 'warning',
-    });
+    // postEvent('web_app_trigger_haptic_feedback', {
+    //   type: 'notification',
+    //   notification_type: 'warning',
+    // });
     tg.close();
   };
 

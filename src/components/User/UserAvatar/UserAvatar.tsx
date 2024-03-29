@@ -29,27 +29,24 @@ const UserAvatar: FC<IProps> = ({ item, avatar }) => {
       setSkin('');
       setMask('');
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSkin, userData, item]);
 
   return (
-    <>
-      <div className={styles.userAvatar}>
-        <div
-          className={styles.userAvatar__avatarBackground}
-          style={{ backgroundImage: `url(${userSkin})` }}
-        >
-        </div>
-
-        <img
-          src={avatar ?  avatar : userAvatar}
-          alt="user_avatar"
-          className={styles.userAvatar__userAvatar}
-          style={{ maskImage: `url(${userMask})` }}
-        />
+    <div className={`${styles.userAvatar} ${activeSkin === 0 && styles.userBigAvatar}`}>
+      <div
+        className={styles.userAvatar__avatarBackground}
+        style={{ backgroundImage: `url(${userSkin})` }}
+      >
       </div>
-    </>
+      <img
+        src={avatar ? avatar : userAvatar}
+        alt="user_avatar"
+        className={styles.userAvatar__userAvatar}
+        style={{ maskImage: `url(${userMask})` }}
+      />
+    </div>
   )
-}
+};
 
 export default UserAvatar;

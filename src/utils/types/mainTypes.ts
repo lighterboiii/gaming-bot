@@ -1,3 +1,5 @@
+import { IMember } from "./memberTypes";
+
 export interface UserInfo {
   active_skin: number;
   all_games_played_count: number;
@@ -42,7 +44,7 @@ export interface UserPhoto {
 
 export interface IReferralResponse {
   result_data: {
-    refs_info: any[];
+    refs_info: IMember[];
     total_balance: number;
   }
 }

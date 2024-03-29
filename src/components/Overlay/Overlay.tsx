@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './Overlay.module.scss';
 import CrossIcon from "../../icons/Cross/Cross";
@@ -22,10 +23,10 @@ const Overlay: FC<IProps> = ({
 }) => {
 
   const handleClose = () => {
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'impact',
-      impact_style: 'soft',
-    });
+    // postEvent('web_app_trigger_haptic_feedback', {
+    //   type: 'impact',
+    //   impact_style: 'soft',
+    // });
     onClose && onClose();
   }
 

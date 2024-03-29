@@ -25,26 +25,3 @@ export const collectiblesValue = '&collectibles=';
 export const activeSkinValue = '&active_skin=';
 export const newTokensValue = '&newtokens=';
 export const newCoinsValue = '&newcoins=';
-
-
-// export const setRoomIdValueUri = 'setroomidvalue?user_id=';
-// export const setDaysOnlineUri = 'setdays_online?user_id=';
-// export const setAllGamesUri = 'setall_games_played_count?user_id=';
-// export const setWinsUri = 'setwins?user_id=';
-// export const setLosesUri = 'setloses?user_id=';
-// export const setTicketsUri = 'settiketsnewvalue?user_id=';
-// export const setTokenWinsUri = 'settokenwins?user_id=';
-// export const setCoinWinsUri = 'setcoinwins?user_id=';
-// export const setTokenLosesUri = 'settokenloses?user_id=';
-// export const setCoinLosesUri = 'setcoinloses?user_id=';
-
-// export const roomIdValue = '&room_id=';
-// export const daysOnlineValue = '&days_online=';
-// export const allGamesValues = '&all_games=';
-// export const sumWinsValue = '&wins=';
-// export const sumLosesValue = '&loses=';
-// export const ticketsValue = '&newtikets=';
-// export const tokenWinsValue = '&tokenwins=';
-// export const coinWinsValue = '&coinwins=';
-// export const tokenLosesValue = '&tokenloses=';
-// export const coinLosesValue = '&coinloses=';

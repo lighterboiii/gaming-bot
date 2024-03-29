@@ -38,10 +38,10 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         dispatch(setNewExpValue(resExp.message));
         break;
       default:
-        postEvent('web_app_trigger_haptic_feedback', {
-          type: 'notification',
-          notification_type: 'success',
-        });
+        // postEvent('web_app_trigger_haptic_feedback', {
+        //   type: 'notification',
+        //   notification_type: 'success',
+        // });
         await makeCollectibleRequest(itemId, itemCount, userId);
         dispatch(setCollectibles(item.bonus_item_id));
         break;

@@ -20,16 +20,17 @@ const GameSettings: FC<IProps> = ({ data }) => {
   const userCoins = useAppSelector(store => store.app.info?.coins);
 
   const handleCreateRoomClick = async () => {
-    try {
-      const res = await postReq({
-        uri: 'createroom?user_id=',
-        userId: userId,
-        endpoint: `&bet=${0.1}&bet_type=${1}&room_type=${1}`,
-      })
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
+    navigate('/404');
+    // try {
+    //   const res = await postReq({
+    //     uri: 'createroom?user_id=',
+    //     userId: userId,
+    //     endpoint: `&bet=${0.1}&bet_type=${1}&room_id=${1}`,
+    //   })
+    //   console.log(res);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (

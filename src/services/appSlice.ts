@@ -8,6 +8,7 @@ interface AppState {
   archive: ItemData[] | null;
   bonus: Bonus | any | null;
   lavka: LavkaData[] | null;
+  openedRooms: any | null;
 }
 
 const initialState: AppState = {
@@ -16,12 +17,14 @@ const initialState: AppState = {
   archive: null,
   bonus: null,
   lavka: null,
+  openedRooms: null
 }
 
 const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
+    // userInfo part
     setUserData: (state, action: PayloadAction<UserInfo>) => {
       state.info = action.payload;
     },
@@ -29,12 +32,6 @@ const appSlice = createSlice({
       if (state.info) {
         state.info.photo = action.payload
       }
-    },
-    setDailyBonus: (state, action: PayloadAction<Bonus>) => {
-      state.bonus = action.payload;
-    },
-    clearDailyBonus: (state) => {
-      state.bonus = null;
     },
     setActiveSkin: (state, action: PayloadAction<number>) => {
       if (state.info) {
@@ -76,11 +73,6 @@ const appSlice = createSlice({
         state.info.tokens = action.payload;
       }
     },
-    setNewExpValue: (state, action: PayloadAction<number>) => {
-      if (state.info) {
-        state.info.user_exp = action.payload;
-      }
-    },
     setEnergyDrinksValue: (state, action: PayloadAction<number>) => {
       if (state.info) {
         state.info.user_energy_drinks = action.payload;
@@ -91,6 +83,24 @@ const appSlice = createSlice({
         state.info.user_energy_drinks += action.payload;
       }
     },
+    setNewExpValue: (state, action: PayloadAction<number>) => {
+      if (state.info) {
+        state.info.user_exp = action.payload;
+      }
+    },
+    setActiveEmoji: (state, action: PayloadAction<string>) => {
+      if (state.info) {
+        state.info.user_active_emoji = action.payload;
+      }
+    },
+    // daily bonus part
+    setDailyBonus: (state, action: PayloadAction<Bonus>) => {
+      state.bonus = action.payload;
+    },
+    clearDailyBonus: (state) => {
+      state.bonus = null;
+    },
+    // shop part
     setShopAvailable: (state, action: PayloadAction<ItemData[]>) => {
       state.products = action.payload;
     },
@@ -110,6 +120,10 @@ const appSlice = createSlice({
         const updatedLavka = state.lavka.filter((item: LavkaData) => item.item_id !== action.payload);
         state.lavka = updatedLavka;
       }
+    },
+    // rooms & game part
+    getOpenedRooms: (state, action: PayloadAction<any>) => {
+      state.openedRooms = action.payload;
     },
   }
 })
@@ -133,7 +147,9 @@ export const {
   removeItemFromLavka,
   setCoinsNewValue,
   clearDailyBonus,
-  addEnergyDrink
+  addEnergyDrink,
+  getOpenedRooms,
+  setActiveEmoji,
 } = appSlice.actions;
 
 export default appSlice.reducer;

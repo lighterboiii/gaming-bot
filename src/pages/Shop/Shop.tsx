@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import useTelegram from "../../hooks/useTelegram";
-import { GoodsItem, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
+import { CombinedItemData, GoodsItem, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
 import { getLavkaAvailableRequest } from "../../api/shopApi";
 import { setLavkaAvailable } from "../../services/appSlice";
 import { postEvent } from "@tma.js/sdk";
@@ -29,7 +29,7 @@ const Shop: FC = () => {
 
   const [showOverlay, setShowOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
+  const [selectedItem, setSelectedItem] = useState<CombinedItemData | null>(null);
 
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
@@ -66,35 +66,35 @@ const Shop: FC = () => {
     }
   }, []);
   // открыть страничку с данными скина
-  const handleShowItemDetails = (item: ItemData) => {
+  const handleShowItemDetails = (item: CombinedItemData) => {
     setSelectedItem(item);
     toggleOverlay();
   };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'impact',
-      impact_style: 'soft',
-    });
+    // postEvent('web_app_trigger_haptic_feedback', {
+    //   type: 'impact',
+    //   impact_style: 'soft',
+    // });
     setActiveButton("Приобретено");
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'impact',
-      impact_style: 'soft',
-    });
+    // postEvent('web_app_trigger_haptic_feedback', {
+    //   type: 'impact',
+    //   impact_style: 'soft',
+    // });
     setActiveButton("Магазин");
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'impact',
-      impact_style: 'soft',
-    });
+    // postEvent('web_app_trigger_haptic_feedback', {
+    //   type: 'impact',
+    //   impact_style: 'soft',
+    // });
     setActiveButton("Лавка");
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
@@ -158,7 +158,7 @@ const Shop: FC = () => {
             )
           }
           </div>
-      <Overlay
+      {selectedItem && <Overlay
         buttonColor="#FFF"
         crossColor="#ac1a44"
         closeButton
@@ -171,7 +171,7 @@ const Shop: FC = () => {
             onClose={toggleOverlay}
             isCollectible={selectedItem?.isCollectible}
           />}
-      />
+      />}
     </div >
   )
 };

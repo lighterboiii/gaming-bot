@@ -14,6 +14,7 @@ import { setCoinsNewValue } from "../../services/appSlice";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { IReferralCoinsTransferResponse, IReferralResponse } from "../../utils/types/mainTypes";
 import { postEvent } from "@tma.js/sdk";
+import { IMember } from "../../utils/types/memberTypes";
 
 const Referral: FC = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Referral: FC = () => {
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
 
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
-  const [refsBoard, setRefsBoard] = useState<any>(null); // типизировать
+  const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
   const dispatch = useAppDispatch();
@@ -54,17 +55,17 @@ const Referral: FC = () => {
       setMessageShown(true);
       switch (res.transfered) {
         case "small":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error',
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'error',
+          // });
           setMessage("Минимальная сумма для перевода 0.1");
           break;
         default:
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'success',
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'success',
+          // });
           setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
           dispatch(setCoinsNewValue(Number(res.new_coins)));
           setTotalBalance(0);
@@ -122,7 +123,7 @@ const Referral: FC = () => {
               <UserContainer member={referral} index={index} length={refsBoard.length + 1} key={index} />
             ))) :
             <span className={styles.referral__sumSpan}>
-              ...Пока никто из друзей, которых вы пригласили, не играл
+              ...Пока никто из ваших друзей не играл
             </span>
           }
         </div>

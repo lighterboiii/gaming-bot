@@ -35,17 +35,17 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
       setMessageShown(true);
       switch (res.message) {
         case "already":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error',
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'error',
+          // });
           setMessage("Товар уже на витрине");
           break;
         case "ok":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'success',
-          });
+          // postEvent('web_app_trigger_haptic_feedback', {
+          //   type: 'notification',
+          //   notification_type: 'success',
+          // });
           setMessage("Размещено в лавке");
           dispatch(addItemToLavka(itemWithPrice));
           break;

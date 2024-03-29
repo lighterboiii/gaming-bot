@@ -6,7 +6,6 @@ import CircleButton from '../../ui/CircleButton/CircleButton';
 import game1 from '../../../images/main_hand_1_tiny.png';
 import game2 from '../../../images/gameSec.png';
 import ManIcon from '../../../icons/Man/Man';
-import { games } from '../../../utils/mockData';
 
 interface IProps {
   game: any;
@@ -17,6 +16,7 @@ interface IProps {
 } // типизировать
 
 const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass }) => {
+
   const gameCardClassNames = classNames(
     styles.game,
     extraClass
@@ -24,7 +24,7 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
 
   const handleClick = () => {
     handleClickGame(game);
-  }
+  };
 
   return (
     <div
