@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import useTelegram from "../../hooks/useTelegram";
@@ -25,13 +26,15 @@ const Game: FC = () => {
   const { tg } = useTelegram();
   const { roomId } = useParams<any>();
   const [roomData, setRoomData] = useState<any>(null);
-  const { user } = useTelegram();
-  const [choice, setChoice] = useState('');
-  const navigate = useNavigate();
+  // const [choice, setChoice] = useState('');
+  // const navigate = useNavigate();
   console.log(roomId);
   console.log(roomData);
   useEffect(() => {
     tg.setHeaderColor('#0F3276');
+  }, [])
+
+  useEffect(() => {
     getRoomInfoRequest(roomId!)
       .then((data) => {
         setRoomData(data);
@@ -41,9 +44,9 @@ const Game: FC = () => {
       });
   }, [roomId]);
 
-  const handleChoice = (value: string) => {
-    setChoice(value);
-  }
+  // const handleChoice = (value: string) => {
+  //   setChoice(value);
+  // }
 
   return (
     <div className={styles.game}>
