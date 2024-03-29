@@ -25,11 +25,16 @@ const Game: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { roomId } = useParams<any>();
   const [roomData, setRoomData] = useState<any>(null);
-  const { user } = useTelegram();
+  const { tg, user } = useTelegram();
   const [choice, setChoice] = useState('');
   const navigate = useNavigate();
   console.log(roomId);
   console.log(roomData);
+  useEffect(() => {
+    tg.setHeaderColor('#184193');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
   useEffect(() => {
     getRoomInfoRequest(roomId!)
       .then((data) => {
@@ -54,10 +59,10 @@ const Game: FC = () => {
         ))}
       </div>
       <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
-      <div className={styles.game__hands}>
+      {/* <div className={styles.game__hands}>
         <img src={leftHand} alt="left hand" className={`${styles.game__mainImage} ${styles.game__leftMainImage}`} />
         <img src={rightHand} alt="right hand" className={`${styles.game__mainImage} ${styles.game__rightMainImage}`} />
-      </div>
+      </div> */}
       <div className={styles.game__lowerContainer}>
         <div className={styles.game__betContainer}>
           <p className={styles.game__text}>Ставка</p>
