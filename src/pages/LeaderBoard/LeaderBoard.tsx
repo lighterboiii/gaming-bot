@@ -66,7 +66,7 @@ const LeaderBoard: FC = () => {
               </div>
             </div>
           </div>
-          <div className={styles.leaderBoard__board}>
+          <div className={styles.leaderBoard__board + " scrollable"}>
             {leaderBoard?.filter((leader: any) => leader.id !== 1).map((leader: any, index: number) =>
               <UserContainer
                 member={leader}

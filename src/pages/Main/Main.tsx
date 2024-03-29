@@ -22,7 +22,7 @@ const Main: FC = () => {
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
-  
+
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
     setShowBannerOverlay(!showBannerOverlay)
@@ -94,7 +94,9 @@ const Main: FC = () => {
             shadow
           />
         </div>
-        <ShopLink />
+        <div>
+          <ShopLink />
+        </div>
       </div>
       <Overlay
         children={

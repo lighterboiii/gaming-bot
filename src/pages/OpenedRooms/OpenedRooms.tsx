@@ -91,7 +91,7 @@ const OpenedRooms: FC = () => {
           </button>
         </div>
       </div>
-      <div className={styles.rooms__roomList}>
+      <div className={styles.rooms__roomList + " scrollable"}>
         {rooms?.map((room: any) => (
           <Room room={room} />
         ))}

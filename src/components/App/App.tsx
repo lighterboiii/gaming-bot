@@ -24,23 +24,28 @@ const App: FC = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
-  function handleViewportChange(event: any) {
-    if (!event.isExpanded) {
-      tg.expand();
-    }
-  };
+  document.addEventListener(
+    'touchmove',
+    (event: TouchEvent) => {
+      let target: EventTarget | null = event.target;
+  
+      while (target instanceof Node) {
+        if (target instanceof Element && target.classList.contains('scrollable')) {
+          return;
+        }
+        target = target.parentNode;
+      }
+      event.preventDefault();
+    },
+    { passive: false },
+  );
   
   useEffect(() => {
     tg.setHeaderColor('#d51845');
     tg.expand();
-    tg.onEvent('viewportChanged', handleViewportChange);
     tg.enableClosingConfirmation();
     tg.ready();
     window.scrollTo(0, 0);
-
-    return(() =>{
-      tg.offEvent('viewportChanged', handleViewportChange);
-    })
   }, []);
   
 

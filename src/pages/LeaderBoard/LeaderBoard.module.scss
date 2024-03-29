@@ -2,7 +2,8 @@
 @use '../../stylesheets/variables' as *;
 
 .leaderBoard {
-  @include size(100%, 100%);
+  // @include size(100%, 100vh);
+  @include min-size(100%, calc(100vh + 1px));
   @include flex(column, space-between, center);
   @include indents(16px 0 0 0, 0);
   background-color: $secondary-color;
@@ -87,7 +88,7 @@
   &__board {
     @include indents(16px, 0 20px 0 0);
     @include flex(column, flex-start, flex-end, 16px);
-    @include size(100%, calc(100vh - 40vh - 3 * 16px));
+    @include size(100%, 58vh);
     overflow-y: auto;
   }
 
