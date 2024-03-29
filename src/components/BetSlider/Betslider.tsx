@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // Importing necessary React and style modules
-import { FC, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import styles from './BetSlider.module.scss';
 import ChevronIcon from '../../icons/Chevron/ChevronIcon';
 import { useAppSelector } from '../../services/reduxHooks';
@@ -18,7 +18,7 @@ const BetSlider: FC<IProps> = ({
   onBetChange = (newBet: number) => {}, 
   onCurrencyChange = (newCurrency: number) => {},
 }) => {
-  const [bet, setBet] = useState(0.1);
+  const [bet, setBet] = useState('0');
   const [currency, setCurrency] = useState(1);
 
   const coinsBalance = useAppSelector(store => store.app.info?.coins);
@@ -27,21 +27,23 @@ const BetSlider: FC<IProps> = ({
   const increaseBet = () => {
     // postEvent('web_app_trigger_haptic_feedback', {type: 'impact', impact_style: 'soft'});
     setBet(prevBet => {
-      const newBet = prevBet + 0.1;
-      onBetChange(newBet);
+      const newBet = (parseFloat(prevBet) + 0.1).toFixed(1);
+      onBetChange(parseFloat(newBet));
       return newBet;
     });
   };
-
+  
   const decreaseBet = () => {
     // postEvent('web_app_trigger_haptic_feedback', {type: 'impact', impact_style: 'soft'});
-    if (bet > 0.1) {
-      setBet(prevBet => {
-        const newBet = prevBet - 0.1;
-        onBetChange(newBet);
+    setBet(prevBet => {
+      const currentBet = parseFloat(prevBet);
+      if (currentBet > 0.1) {
+        const newBet = (currentBet - 0.1).toFixed(1);
+        onBetChange(parseFloat(newBet));
         return newBet;
-      });
-    }
+      }
+      return prevBet;
+    });
   };
 
   const toggleCurrency = () => {
@@ -49,6 +51,18 @@ const BetSlider: FC<IProps> = ({
     setCurrency(newCurrency);
     onCurrencyChange(newCurrency);
   };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setBet(value);
+
+    const newBetValue = parseFloat(value);
+    if (!isNaN(newBetValue)) {
+      onBetChange(newBetValue);
+    }
+  };
+
+
 
   return (
     <div className={styles.slider}>
@@ -58,9 +72,20 @@ const BetSlider: FC<IProps> = ({
       >
         <ChevronIcon position='left' />
       </button>
-      <span className={styles.slider__text}>
-      {isCurrency ? (currency === 1 ? '💵' : '🔰') : bet.toFixed(1)}
-      </span>
+      {isCurrency ? (
+        <span className={styles.slider__text}>
+          {currency === 1 ? '💵' : '🔰'}
+        </span>
+      ) : (
+        <input
+          type="number"
+          // step="0.1"
+          value={bet}
+          className={styles.slider__input}
+          onChange={handleInputChange}
+        />
+      )}
+
       <button
         onClick={isCurrency ? toggleCurrency : increaseBet}
         className={styles.slider__button}

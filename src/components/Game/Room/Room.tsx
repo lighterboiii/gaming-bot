@@ -13,7 +13,7 @@ const Room: FC<IProps> = ({ room }) => {
   console.log(room);
   const navigate = useNavigate();
   return (
-    <div className={styles.room} onClick={() => navigate('/4')} key={room?.id}>
+    <div className={styles.room} onClick={() => navigate(`/room/${room.room_id}`)} key={room?.id}>
       <div className={styles.room__game}>
         <p className={styles.room__gameName}>
           {room?.room_id === 1 ? "Цу-Е-ФА" : "Кто ближе"}
