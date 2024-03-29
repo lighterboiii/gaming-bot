@@ -6,6 +6,7 @@ export const getUserAvatarUri = `getuserphoto?user_id=`;
 export const getLeadersUri = `get_leaderboard_top_users`;
 export const getLavkaUri = `get_lavka_available?user_id=`;
 export const getRefsUri = `get_refs_info?user_id=`;
+export const getRoomsUri = `getrooms`;
 export const setCollectiblesUri = 'add_collectible?user_id=';
 export const setActiveSkinUri = 'setactive_skin?user_id=';
 export const buyShopItemUri = `shop_buy_item?user_id=`;

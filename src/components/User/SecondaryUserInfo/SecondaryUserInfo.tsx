@@ -12,11 +12,11 @@ const UserInfo: FC = () => {
   const userData = useAppSelector(store => store.app.info);
 
   const handleClickBalance = () => {
-    // tg.openTelegramLink('https://t.me/lighterboygamebot');
-    // postEvent('web_app_trigger_haptic_feedback', {
-    //   type: 'notification',
-    //   notification_type: 'warning',
-    // });
+    tg.openTelegramLink('https://t.me/lighterboygamebot');
+    postEvent('web_app_trigger_haptic_feedback', {
+      type: 'notification',
+      notification_type: 'warning',
+    });
     tg.close();
   };
 

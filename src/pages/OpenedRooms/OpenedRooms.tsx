@@ -4,12 +4,14 @@ import { FC, useEffect, useState } from "react";
 import styles from './OpenedRooms.module.scss';
 import useTelegram from "../../hooks/useTelegram";
 import { useNavigate } from "react-router-dom";
-import { openedRooms } from "../../utils/mockData";
 import Room from "../../components/Game/Room/Room";
 import { getReq } from "../../api/api";
 import { useAppDispatch } from "../../services/reduxHooks";
 import { getOpenedRooms } from "../../services/appSlice";
 import { sortRooms } from "../../utils/additionalFunctions";
+import { postEvent } from "@tma.js/sdk";
+import Loader from "../../components/Loader/Loader";
+import { getOpenedRoomsRequest } from "../../api/gameApi";
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
@@ -24,16 +26,16 @@ const OpenedRooms: FC = () => {
   const [sortByBetAsc, setSortByBetAsc] = useState(false);
   const [sortByType, setSortByType] = useState(false);
   const [sortByCurr, setSortByCurr] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetchRoomsData = async () => {
       try {
-        const res: any = await getReq({
-          uri: 'getrooms',
-          userId: '',
-        })
+        const res: any = await getOpenedRoomsRequest();
         setRooms(res.rooms);
         dispatch(getOpenedRooms(res.rooms));
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -66,36 +68,44 @@ const OpenedRooms: FC = () => {
         setBetValue(sortByBetAsc ? 'Возрастание' : 'Убывание');
         break;
       default:
+        postEvent('web_app_trigger_haptic_feedback', {
+          type: 'impact',
+          impact_style: 'soft',
+        });
         sortedRooms = rooms;
     }
     setRooms(sortedRooms);
   };
-  
+
 
   return (
     <div className={styles.rooms}>
-      <div className={styles.rooms__content}>
-        <h2 className={styles.rooms__heading}>Найти игру</h2>
-        <div className={styles.rooms__buttons}>
-          <button type="button" name="type" className={styles.rooms__button} onClick={() => toggleSort('type')}>
-            <p className={styles.rooms__game}>Игра</p>
-            <p className={styles.rooms__name}>{typeValue}</p>
-          </button>
-          <button type="button" name="currency" className={styles.rooms__button} onClick={() => toggleSort('currency')}>
-            <p className={styles.rooms__game}>Валюта</p>
-            <p className={styles.rooms__name}>{currencyValue}</p>
-          </button>
-          <button type="button" name="bet" className={styles.rooms__button} onClick={() => toggleSort('bet')}>
-            <p className={styles.rooms__game}>Ставка</p>
-            <p className={styles.rooms__name}>{betValue}</p>
-          </button>
-        </div>
-      </div>
-      <div className={styles.rooms__roomList + " scrollable"}>
-        {rooms?.map((room: any) => (
-          <Room room={room} />
-        ))}
-      </div>
+      {loading ? <Loader /> : (
+        <>
+          <div className={styles.rooms__content}>
+            <h2 className={styles.rooms__heading}>Найти игру</h2>
+            <div className={styles.rooms__buttons}>
+              <button type="button" name="type" className={styles.rooms__button} onClick={() => toggleSort('type')}>
+                <p className={styles.rooms__game}>Игра</p>
+                <p className={styles.rooms__name}>{typeValue}</p>
+              </button>
+              <button type="button" name="currency" className={styles.rooms__button} onClick={() => toggleSort('currency')}>
+                <p className={styles.rooms__game}>Валюта</p>
+                <p className={styles.rooms__name}>{currencyValue}</p>
+              </button>
+              <button type="button" name="bet" className={styles.rooms__button} onClick={() => toggleSort('bet')}>
+                <p className={styles.rooms__game}>Ставка</p>
+                <p className={styles.rooms__name}>{betValue}</p>
+              </button>
+            </div>
+          </div>
+          <div className={styles.rooms__roomList + " scrollable"}>
+            {rooms?.map((room: any) => (
+              <Room room={room} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 };

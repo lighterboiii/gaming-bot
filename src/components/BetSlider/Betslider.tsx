@@ -17,18 +17,18 @@ const BetSlider: FC<IProps> = ({ isPrice, isCurrency }) => {
   const tokensBalance = useAppSelector(store => store.app.info?.tokens)
 
   const increasePrice = () => {
-    // postEvent('web_app_trigger_haptic_feedback', {
-    //   type: 'impact',
-    //   impact_style: 'soft',
-    // });
+    postEvent('web_app_trigger_haptic_feedback', {
+      type: 'impact',
+      impact_style: 'soft',
+    });
     setPrice(prevPrice => prevPrice + 0.1);
   };
 
   const decreasePrice = () => {
-    // postEvent('web_app_trigger_haptic_feedback', {
-    //   type: 'impact',
-    //   impact_style: 'soft',
-    // });
+    postEvent('web_app_trigger_haptic_feedback', {
+      type: 'impact',
+      impact_style: 'soft',
+    });
     if (price >= 0.1) {
       setPrice(prevPrice => prevPrice - 0.1);
     }
