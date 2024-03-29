@@ -2,8 +2,8 @@
 @use '../../stylesheets/variables' as *;
 
 .leaderBoard {
-  @include size(100%, 100%);
-  min-height: 100vh;
+  // @include size(100%, 100vh);
+  @include min-size(100%, calc(100vh + 1px));
   @include flex(column, space-between, center);
   @include indents(16px 0 0 0, 0);
   background-color: $secondary-color;

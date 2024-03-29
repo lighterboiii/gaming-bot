@@ -29,7 +29,7 @@ const App: FC = () => {
     (event: TouchEvent) => {
       let target: EventTarget | null = event.target;
   
-      while (target instanceof Node && target !== document) {
+      while (target instanceof Node) {
         if (target instanceof Element && target.classList.contains('scrollable')) {
           return;
         }
@@ -39,8 +39,6 @@ const App: FC = () => {
     },
     { passive: false },
   );
-
-  
   
   useEffect(() => {
     tg.setHeaderColor('#d51845');
