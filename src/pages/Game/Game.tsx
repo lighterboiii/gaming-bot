@@ -22,6 +22,7 @@ import scissorsSelect from '../../images/rock-paper-scissors/hands-icons/scissor
 // типизировать
 const Game: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { tg } = useTelegram();
   const { roomId } = useParams<any>();
   const [roomData, setRoomData] = useState<any>(null);
   const { user } = useTelegram();
@@ -30,6 +31,7 @@ const Game: FC = () => {
   console.log(roomId);
   console.log(roomData);
   useEffect(() => {
+    tg.setHeaderColor('#0F3276');
     getRoomInfoRequest(roomId!)
       .then((data) => {
         setRoomData(data);
