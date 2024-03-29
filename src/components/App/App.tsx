@@ -17,6 +17,7 @@ import { useAppDispatch } from '../../services/reduxHooks';
 import { setDailyBonus, setShopAvailable, setUserData, setUserPhoto } from '../../services/appSlice';
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
+import Game from '../../pages/Game/Game';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -28,7 +29,7 @@ const App: FC = () => {
     'touchmove',
     (event: TouchEvent) => {
       let target: EventTarget | null = event.target;
-  
+
       while (target instanceof Node) {
         if (target instanceof Element && target.classList.contains('scrollable')) {
           return;
@@ -39,7 +40,7 @@ const App: FC = () => {
     },
     { passive: false },
   );
-  
+
   useEffect(() => {
     tg.setHeaderColor('#d51845');
     tg.expand();
@@ -47,7 +48,7 @@ const App: FC = () => {
     tg.ready();
     window.scrollTo(0, 0);
   }, []);
-  
+
 
   useEffect(() => {
     setLoading(true);
@@ -82,6 +83,7 @@ const App: FC = () => {
           <Route path={createRoomUrl} element={<CreateRoom />} />
           <Route path={shopUrl} element={<Shop />} />
           <Route path={leaderboardUrl} element={<LeaderBoard />} />
+          <Route path="/room/:roomId" element={<Game />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       )}

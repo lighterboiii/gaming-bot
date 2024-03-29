@@ -46,6 +46,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
         console.log(response);
         if (response.message === 'success') {
           console.log('Комната успешно создана:', response.room_id);
+          navigate(`/room/${response.room_id}`);
         } else if (response.message === 'not_enough_coins') {
           console.log('Недостаточно средств для создания комнаты')
         }

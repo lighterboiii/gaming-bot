@@ -10,9 +10,16 @@ export const getOpenedRoomsRequest = () => {
 };
 // создать игру 
 export const postNewRoomRequest = (data: any, userIdValue: string) => {
-  return   postReq({
+  return postReq({
     uri: createRoomUri,
     userId: userIdValue,
     data: data
   });
+};
+// получить инфо о комнате по айди
+export const getRoomInfoRequest = (roomId: string) => {
+  return getReq({
+    uri: `getroominfo?room_id=`,
+    userId: roomId,
+  })
 };
