@@ -53,7 +53,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
   };
 
   return (
-    <div className={styles.game}>
+    <div className={styles.game + 'scrollable'}>
       {/* {messageShown ? (
         <div className={styles.product__notification}>
           {message}
