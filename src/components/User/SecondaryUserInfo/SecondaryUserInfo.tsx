@@ -6,13 +6,14 @@ import useTelegram from "../../../hooks/useTelegram";
 import { useAppSelector } from "../../../services/reduxHooks";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
+import { inviteLink } from "../../../api/requestData";
 
 const UserInfo: FC = () => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.app.info);
 
   const handleClickBalance = () => {
-    tg.openTelegramLink('https://t.me/lighterboygamebot');
+    tg.openTelegramLink(inviteLink);
     // postEvent('web_app_trigger_haptic_feedback', {
     //   type: 'notification',
     //   notification_type: 'warning',

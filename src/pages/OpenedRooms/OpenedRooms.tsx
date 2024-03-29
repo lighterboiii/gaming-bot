@@ -12,6 +12,7 @@ import { sortRooms } from "../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
 import Loader from "../../components/Loader/Loader";
 import { getOpenedRoomsRequest } from "../../api/gameApi";
+import Button from "../../components/ui/Button/Button";
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
@@ -41,7 +42,7 @@ const OpenedRooms: FC = () => {
           console.log(error);
         });
     };
-  
+
     fetchRoomsData();
     tg.BackButton.show().onClick(() => {
       navigate(-1);
@@ -101,9 +102,18 @@ const OpenedRooms: FC = () => {
             </div>
           </div>
           <div className={styles.rooms__roomList + " scrollable"}>
-            {rooms?.map((room: any) => (
+            {rooms && rooms.length > 0 ? rooms?.map((room: any) => (
               <Room room={room} />
-            ))}
+            )) : (
+              <div className={styles.rooms__createNew}>
+                <p className={styles.rooms__notify}>Нет открытых комнат, создай первую</p>
+                <div className={styles.rooms__buttonWrapper}>
+                  <Button handleClick={() => navigate('/create-room')} text="Cоздать 🚀" />
+                </div>
+              </div>
+
+            )
+            }
           </div>
         </>
       )}

@@ -9,6 +9,7 @@ import { useAppSelector } from "../../../services/reduxHooks";
 import CircleButton from "../../ui/CircleButton/CircleButton";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
+import { inviteLink } from "../../../api/requestData";
 
 interface IProps {
   toggleOverlay: () => void;
@@ -20,7 +21,7 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
   const userData = useAppSelector(store => store.app.info);
 
   const handleClickBalance = () => {
-    tg.openTelegramLink('https://t.me/lighterboygamebot');
+    tg.openTelegramLink(inviteLink);
     // postEvent('web_app_trigger_haptic_feedback', {
     //   type: 'notification',
     //   notification_type: 'warning',

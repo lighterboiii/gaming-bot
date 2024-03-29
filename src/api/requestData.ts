@@ -6,7 +6,6 @@ export const getUserAvatarUri = `getuserphoto?user_id=`;
 export const getLeadersUri = `get_leaderboard_top_users`;
 export const getLavkaUri = `get_lavka_available?user_id=`;
 export const getRefsUri = `get_refs_info?user_id=`;
-export const getRoomsUri = `getrooms`;
 export const setCollectiblesUri = 'add_collectible?user_id=';
 export const setActiveSkinUri = 'setactive_skin?user_id=';
 export const buyShopItemUri = `shop_buy_item?user_id=`;
@@ -16,9 +15,12 @@ export const buyLavkaUri = `buy_lavka?user_id=`;
 export const sellLavkaUri = `add_sell_lavka?user_id=`;
 export const cancelSellLavka = `cancel_sell_lavka?user_id=`;
 export const setTransferCoinsUri = `transfer_refs_to_balance?user_id=`;
+export const getRoomsUri = `getrooms?user_id=`
+export const createRoomUri = `createroom?user_id=`
 // links
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
+export const inviteLink = 'https://t.me/lighterboygamebot';
 // endpoints
 export const itemIdValue = '&item_id=';
 export const itemCount = '&count=';
