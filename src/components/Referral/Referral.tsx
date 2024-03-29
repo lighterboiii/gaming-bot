@@ -39,7 +39,6 @@ const Referral: FC = () => {
           console.log(error);
         });
     };
-  
     fetchData();
   
     const intervalId = setInterval(() => {
@@ -57,17 +56,17 @@ const Referral: FC = () => {
         setMessageShown(true);
         switch (res.transfered) {
           case "small":
-            postEvent('web_app_trigger_haptic_feedback', {
-              type: 'notification',
-              notification_type: 'error',
-            });
+            // postEvent('web_app_trigger_haptic_feedback', {
+            //   type: 'notification',
+            //   notification_type: 'error',
+            // });
             setMessage("Минимальная сумма для перевода 0.1");
             break;
           default:
-            postEvent('web_app_trigger_haptic_feedback', {
-              type: 'notification',
-              notification_type: 'success',
-            });
+            // postEvent('web_app_trigger_haptic_feedback', {
+            //   type: 'notification',
+            //   notification_type: 'success',
+            // });
             setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
             dispatch(setCoinsNewValue(Number(res.new_coins)));
             setTotalBalance(0);

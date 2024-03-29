@@ -17,16 +17,16 @@ interface IProps {
 const SmallButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, chevronPosition, shadow }) => {
   
   const handleGetHapticFeedback = () => {
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'impact',
-      impact_style: 'light',
-    });
+    // postEvent('web_app_trigger_haptic_feedback', {
+    //   type: 'impact',
+    //   impact_style: 'light',
+    // });
   };
 
   return (
     <Link
       to={to}
-      // onClick={handleGetHapticFeedback}
+      onClick={handleGetHapticFeedback}
       className={`${styles.button} ${isWhiteBackground ? styles.whiteButton : styles.blackButton}`}
       style={shadow ? { boxShadow: '2px 2px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
     >

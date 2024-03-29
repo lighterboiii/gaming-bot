@@ -10,10 +10,10 @@ import { postEvent } from "@tma.js/sdk";
 const ShopLink: FC = () => {
 
   const handleGetHapticFeedback = () => {
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'impact',
-      impact_style: 'light',
-    });
+    // postEvent('web_app_trigger_haptic_feedback', {
+    //   type: 'impact',
+    //   impact_style: 'light',
+    // });
   };
 
   return (
@@ -29,6 +29,6 @@ const ShopLink: FC = () => {
       </div>
     </Link>
   )
-}
+};
 
 export default ShopLink;
