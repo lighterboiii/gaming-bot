@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import useTelegram from "../../hooks/useTelegram";
@@ -10,6 +9,7 @@ import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import leftHand from '../../images/rock-paper-scissors/l-pp.webp'
 import rightHand from '../../images/rock-paper-scissors/r-rr.webp';
 import versus from '../../images/rock-paper-scissors/VS.webp';
+import newVS from '../../images/rock-paper-scissors/VS_new.png';
 import rock from '../../images/rock-paper-scissors/hands-icons/rock.png'
 import rockDeselect from '../../images/rock-paper-scissors/hands-icons/rock_deselect.png'
 import rockSelect from '../../images/rock-paper-scissors/hands-icons/rock_select.png'
@@ -23,17 +23,13 @@ import scissorsSelect from '../../images/rock-paper-scissors/hands-icons/scissor
 // типизировать
 const Game: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { tg } = useTelegram();
   const { roomId } = useParams<any>();
   const [roomData, setRoomData] = useState<any>(null);
-  // const [choice, setChoice] = useState('');
-  // const navigate = useNavigate();
+  const { user } = useTelegram();
+  const [choice, setChoice] = useState('');
+  const navigate = useNavigate();
   console.log(roomId);
   console.log(roomData);
-  useEffect(() => {
-    tg.setHeaderColor('#0F3276');
-  }, [])
-
   useEffect(() => {
     getRoomInfoRequest(roomId!)
       .then((data) => {
@@ -44,9 +40,9 @@ const Game: FC = () => {
       });
   }, [roomId]);
 
-  // const handleChoice = (value: string) => {
-  //   setChoice(value);
-  // }
+  const handleChoice = (value: string) => {
+    setChoice(value);
+  }
 
   return (
     <div className={styles.game}>
@@ -57,7 +53,7 @@ const Game: FC = () => {
           </div>
         ))}
       </div>
-      <img src={versus} alt="versus icon" className={styles.game__versusImage} />
+      <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
       <div className={styles.game__hands}>
         <img src={leftHand} alt="left hand" className={`${styles.game__mainImage} ${styles.game__leftMainImage}`} />
         <img src={rightHand} alt="right hand" className={`${styles.game__mainImage} ${styles.game__rightMainImage}`} />
