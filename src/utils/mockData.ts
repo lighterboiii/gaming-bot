@@ -28,12 +28,14 @@ export const bannersData = [
 export const games = [
   {
     id: 1,
+    room_type: 1,
     name: 'Цу-е-фа',
     users: '2',
     img: `url(${hand})`,
   },
   {
     id: 2,
+    room_type: 2,
     name: 'Кто ближе',
     users: '2-10',
     img: `url(${line})`,

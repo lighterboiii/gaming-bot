@@ -22,7 +22,7 @@ const OpenedRooms: FC = () => {
   const [typeValue, setTypeValue] = useState('Все');
   const [currencyValue, setCurrencyValue] = useState('Все');
   const [betValue, setBetValue] = useState('Все');
-  console.log(rooms);
+
   const [sortByBetAsc, setSortByBetAsc] = useState(false);
   const [sortByType, setSortByType] = useState(false);
   const [sortByCurr, setSortByCurr] = useState(false);
