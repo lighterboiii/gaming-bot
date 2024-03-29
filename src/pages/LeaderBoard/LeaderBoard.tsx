@@ -21,26 +21,30 @@ const LeaderBoard: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    const fetchLeadersData = async () => {
-      try {
-        const leaders: IMemberDataResponse = await getTopUsers() as IMemberDataResponse;
-        setTopLeader(leaders?.top_users[0]);
-        setLeaderBoard(leaders?.top_users.slice(1));
-      } catch (error) {
-        console.log(error);
-      }
-      setLoading(false);
-    }
+    const fetchLeadersData = () => {
+      getTopUsers()
+        .then((leaders: any) => {
+          setTopLeader(leaders?.top_users[0]);
+          setLeaderBoard(leaders?.top_users.slice(1));
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
     window.scrollTo(0, 0);
     tg.BackButton.show().onClick(() => {
       navigate(-1);
     });
     fetchLeadersData();
+  
     return () => {
       tg.BackButton.hide();
-    }
+    };
   }, []);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
 
   return (
     <div className={styles.leaderBoard}>

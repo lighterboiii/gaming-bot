@@ -13,7 +13,7 @@ const Room: FC<IProps> = ({ room }) => {
   console.log(room);
   const navigate = useNavigate();
   return (
-    <div className={styles.room} onClick={() => navigate('/4')} key={room?.id}>
+    <div className={styles.room} onClick={() => navigate(`/room/${room.room_id}`)} key={room?.id}>
       <div className={styles.room__game}>
         <p className={styles.room__gameName}>
           {room?.room_id === 1 ? "Цу-Е-ФА" : "Кто ближе"}
@@ -21,9 +21,9 @@ const Room: FC<IProps> = ({ room }) => {
         <img src={room?.room_id === 1 ? hand : whoCloser} alt="game-logo" className={styles.room__image} />
       </div>
       <p className={styles.room__creator}>{room?.players[0].public_name}</p>
-      <p className={styles.room__number}><ManIcon width={12} height={12} /> {room.players_count}/2</p>
+      <p className={styles.room__number}><ManIcon width={12} height={12} /> {room.players_count}/{room.free_places + room.players_count}</p>
       <p className={`${styles.room__number} ${styles.room__bet}`}>
-        {room.currency === "coins" ? `💵 ${room.bet}` : `🔰 ${room.bet}`}
+        {room.bet_type === 1 ? `💵 ${room.bet}` : `🔰 ${room.bet}`}
       </p>
     </div>
   )

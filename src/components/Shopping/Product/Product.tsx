@@ -35,7 +35,7 @@ interface ProductProps {
 }
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
-  console.log(item);
+  
   const { user, tg } = useTelegram();
   const userId = user?.id;
   const dispatch = useAppDispatch();
@@ -60,94 +60,84 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
       await setActiveEmojiRequest(userId, item?.item_id);
     }
   };
-  // хендлер покупки
-  const handleBuyShopItem = async (item: ItemData) => {
-    try {
-      const res: any = await buyItemRequest(item.item_id, 1, userId);
-      setMessageShown(true);
-      console.log(res);
-      switch (res.message) {
-        case "out":
-          setMessage("Товара нет в наличии");
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error'
-          });
-          break;
-        case "money":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error'
-          });
-          setMessage("Недостаточно средств");
-          break;
-        case "ok":
-          setMessage("Успешная покупка");
-          handlePurchaseItemTypes(item);
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'success'
-          });
-          break;
-        default:
-          break;
-      }
-      setTimeout(async () => {
-        onClose();
-        setTimeout(() => {
-          setMessage('');
-          setMessageShown(false);
-        }, 200)
-      }, 1000)
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // хендлер установки скина в актив
-  const handleSetActiveSkin = async (itemId: number) => {
-    try {
-      await setActiveSkinRequest(itemId, userId);
-      postEvent('web_app_trigger_haptic_feedback', {
-        type: 'impact',
-        impact_style: 'soft',
-      });
-      dispatch(setActiveSkin(itemId));
+  // закрытие с задержкой
+  function closeWithDelay(onClose: any, setMessage: any, setMessageShown: any, closeDelay = 1000, messageResetDelay = 200) {
+    setTimeout(() => {
       onClose();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // хендлер установки активного пака эмодзи
-  const handleSetActiveEmoji = async (itemId: number) => {
-    try {
-      const res = await setActiveEmojiRequest(userId, item?.item_id);
-      dispatch(setActiveEmoji(String(itemId)));
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // хендлер снятия товара с продажи
-  const handleCancelSelling = async (itemId: number) => {
-    try {
-      await cancelLavkaRequest(itemId, userId);
-      setMessageShown(true);
-      postEvent('web_app_trigger_haptic_feedback', {
-        type: 'notification',
-        notification_type: 'success'
-      });
-      setMessage("Товар снят с продажи");
-      dispatch(removeItemFromLavka(itemId));
-    } catch (error) {
-      console.log(error);
-    }
-    setTimeout(async () => {
-      onClose();
+  
+      // Внутренний setTimeout для сброса сообщения
       setTimeout(() => {
         setMessage('');
         setMessageShown(false);
-      }, 200)
-    }, 1000)
+      }, messageResetDelay);
+  
+    }, closeDelay);
+  };
+  // хендлер покупки
+  const handleBuyShopItem = (item: ItemData) => {
+    buyItemRequest(item.item_id, 1, userId)
+      .then((res: any) => {
+        setMessageShown(true);
+        switch (res.message) {
+          case "out":
+            setMessage("Товара нет в наличии");
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            break;
+          case "money":
+            setMessage("Недостаточно средств");
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            break;
+          case "ok":
+            setMessage("Успешная покупка");
+            handlePurchaseItemTypes(item);
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+            break;
+          default:
+            break;
+        }
+        closeWithDelay(onClose, setMessage, setMessageShown);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  // хендлер установки скина в актив
+  const handleSetActiveSkin = (itemId: number) => {
+    setActiveSkinRequest(itemId, userId)
+      .then(() => {
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        dispatch(setActiveSkin(itemId));
+        onClose();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  // хендлер установки активного пака эмодзи
+  const handleSetActiveEmoji = (itemId: number) => {
+      setActiveEmojiRequest(userId, item?.item_id)
+        .then(() => {
+          postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+          dispatch(setActiveEmoji(String(itemId)));
+          onClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+  };
+  // хендлер снятия товара с продажи
+  const handleCancelSelling = (itemId: number) => {
+    cancelLavkaRequest(itemId, userId)
+      .then(() => {
+        setMessageShown(true);
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+        setMessage("Товар снят с продажи");
+        dispatch(removeItemFromLavka(itemId));
+        closeWithDelay(onClose, setMessage, setMessageShown);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   // закрыть попап с продажей
   const handleCloseFormModal = () => {
@@ -159,53 +149,36 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
     }, 1000);
   };
   // хендлер покупки в лавке
-  const handleBuyLavkaitem = async (item: LavkaData) => {
-    try {
-      const res: any = await buyLavkaRequest(item, userId);
-      setMessageShown(true);
-      switch (res.message) {
-        case "sold":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error'
-          });
-          setMessage("Уже продано!");
-          break;
-        case "money":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error'
-          });
-          setMessage("Недостаточно средств");
-          break;
-        case "break":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error'
-          });
-          setMessage("У вас уже есть этот товар");
-          break;
-        case "ok":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'success'
-          });
-          setMessage("Куплено из лавки!");
-          handlePurchaseItemTypes(item);
-          break;
-        default:
-          break;
-      }
-      setTimeout(async () => {
-        onClose();
-        setTimeout(() => {
-          setMessage('');
-          setMessageShown(false);
-        }, 200)
-      }, 1000)
-    } catch (error) {
-      console.log(error);
-    }
+  const handleBuyLavkaitem = (item: LavkaData) => {
+    buyLavkaRequest(item, userId)
+      .then((res: any) => {
+        setMessageShown(true);
+        switch (res.message) {
+          case "sold":
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            setMessage("Уже продано!");
+            break;
+          case "money":
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            setMessage("Недостаточно средств");
+            break;
+          case "break":
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            setMessage("У вас уже есть этот товар");
+            break;
+          case "ok":
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success'});
+            setMessage("Куплено из лавки!");
+            handlePurchaseItemTypes(item);
+            break;
+          default:
+            break;
+        }
+        closeWithDelay(onClose, setMessage, setMessageShown);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (

@@ -29,68 +29,76 @@ const Referral: FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const refs: IReferralResponse = await getReferralsData(userId) as IReferralResponse;
-        setRefsBoard(refs.result_data.refs_info);
-        setTotalBalance(refs.result_data.total_balance);
-      } catch (error) {
-        console.log(error);
-      }
+    const fetchData = () => {
+      getReferralsData(userId)
+        .then((res: any) => {
+          setRefsBoard(res.result_data.refs_info);
+          setTotalBalance(res.result_data.total_balance);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
     fetchData();
-
+  
     const intervalId = setInterval(() => {
       fetchData();
     }, 60000);
-
+  
     return () => {
       clearInterval(intervalId);
     };
   }, []);
 
-  const handleTransferCoins = async () => {
-    try {
-      const res: IReferralCoinsTransferResponse = await transferCoinsToBalanceReq(userId) as IReferralCoinsTransferResponse;
-      setMessageShown(true);
-      switch (res.transfered) {
-        case "small":
-          // postEvent('web_app_trigger_haptic_feedback', {
-          //   type: 'notification',
-          //   notification_type: 'error',
-          // });
-          setMessage("Минимальная сумма для перевода 0.1");
-          break;
-        default:
-          // postEvent('web_app_trigger_haptic_feedback', {
-          //   type: 'notification',
-          //   notification_type: 'success',
-          // });
-          setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
-          dispatch(setCoinsNewValue(Number(res.new_coins)));
-          setTotalBalance(0);
-          break;
-      }
-      setTimeout(async () => {
-        setRefsBoard(null);
+  const handleTransferCoins = () => {
+    transferCoinsToBalanceReq(userId)
+      .then((res: any) => {
+        setMessageShown(true);
+        switch (res.transfered) {
+          case "small":
+            postEvent('web_app_trigger_haptic_feedback', {
+              type: 'notification',
+              notification_type: 'error',
+            });
+            setMessage("Минимальная сумма для перевода 0.1");
+            break;
+          default:
+            postEvent('web_app_trigger_haptic_feedback', {
+              type: 'notification',
+              notification_type: 'success',
+            });
+            setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
+            dispatch(setCoinsNewValue(Number(res.new_coins)));
+            setTotalBalance(0);
+            break;
+        }
+
         setTimeout(() => {
-          setMessage('');
-          setMessageShown(false);
-        }, 200)
-      }, 1000)
-    } catch (error) {
-      console.log(error);
-    }
+          setRefsBoard(null);
+          setTimeout(() => {
+            setMessage('');
+            setMessageShown(false);
+          }, 200);
+        }, 1000);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
+  const handleInviteClick = () => {
+    navigate('https://t.me/lighterboygamebot?start=invite_link');
+    tg.onClose();
+  }
 
   return (
     <div className={styles.referral}>
       <h3 className={styles.referral__h3}>
         Приглашай друзей и получай процент с каждой игры
       </h3>
-      <Link to='https://t.me/lighterboygamebot?start=invite_link' className={styles.referral__buttonWrapper}>
-        <Button text="Пригласить"  handleClick={() => {}}/>
-      </Link>
+      <div  className={styles.referral__buttonWrapper}>
+        <Button text="Пригласить"  handleClick={handleInviteClick} />
+      </div>
       <div className={styles.referral__amount}>
         <p className={styles.referral__text}>Заработано за всё время:
           <span className={styles.referral__sumSpan}>

@@ -12,6 +12,7 @@ import { sortRooms } from "../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
 import Loader from "../../components/Loader/Loader";
 import { getOpenedRoomsRequest } from "../../api/gameApi";
+import Button from "../../components/ui/Button/Button";
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
@@ -22,7 +23,7 @@ const OpenedRooms: FC = () => {
   const [typeValue, setTypeValue] = useState('Все');
   const [currencyValue, setCurrencyValue] = useState('Все');
   const [betValue, setBetValue] = useState('Все');
-  console.log(rooms);
+
   const [sortByBetAsc, setSortByBetAsc] = useState(false);
   const [sortByType, setSortByType] = useState(false);
   const [sortByCurr, setSortByCurr] = useState(false);
@@ -30,16 +31,18 @@ const OpenedRooms: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    const fetchRoomsData = async () => {
-      try {
-        const res: any = await getOpenedRoomsRequest();
-        setRooms(res.rooms);
-        dispatch(getOpenedRooms(res.rooms));
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
+    const fetchRoomsData = () => {
+      getOpenedRoomsRequest()
+        .then((res: any) => {
+          setRooms(res.rooms);
+          dispatch(getOpenedRooms(res.rooms));
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
+
     fetchRoomsData();
     tg.BackButton.show().onClick(() => {
       navigate(-1);
@@ -77,7 +80,6 @@ const OpenedRooms: FC = () => {
     setRooms(sortedRooms);
   };
 
-
   return (
     <div className={styles.rooms}>
       {loading ? <Loader /> : (
@@ -100,9 +102,18 @@ const OpenedRooms: FC = () => {
             </div>
           </div>
           <div className={styles.rooms__roomList + " scrollable"}>
-            {rooms?.map((room: any) => (
+            {rooms && rooms.length > 0 ? rooms?.map((room: any) => (
               <Room room={room} />
-            ))}
+            )) : (
+              <div className={styles.rooms__createNew}>
+                <p className={styles.rooms__notify}>Нет открытых комнат, создай первую</p>
+                <div className={styles.rooms__buttonWrapper}>
+                  <Button handleClick={() => navigate('/create-room')} text="Cоздать 🚀" />
+                </div>
+              </div>
+
+            )
+            }
           </div>
         </>
       )}
