@@ -18,8 +18,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
-  // const [message, setMessage] = useState('');
-  // const [messageShown, setMessageShown] = useState(false);
+
   console.log(data);
   console.log(bet);
   console.log(currency);

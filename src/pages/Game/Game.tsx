@@ -5,13 +5,19 @@ import styles from './Game.module.scss';
 import { useNavigate, useParams } from "react-router-dom";
 import { getRoomInfoRequest } from "../../api/gameApi";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
-import rock_icon from '../../images/rock-paper-scissors/Rock_icon.png'
-import sciss_icon from '../../images/rock-paper-scissors/Scissors_icon.png';
-import paper_icon from '../../images/rock-paper-scissors/Paper_icon.png';
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import leftHand from '../../images/rock-paper-scissors/l-pp.webp'
 import rightHand from '../../images/rock-paper-scissors/r-rr.webp';
 import versus from '../../images/rock-paper-scissors/VS.webp';
+import rock from '../../images/rock-paper-scissors/hands-icons/rock.png'
+import rockDeselect from '../../images/rock-paper-scissors/hands-icons/rock_deselect.png'
+import rockSelect from '../../images/rock-paper-scissors/hands-icons/rock_select.png'
+import paper from '../../images/rock-paper-scissors/hands-icons/paper.png'
+import paperDeselect from '../../images/rock-paper-scissors/hands-icons/paper_deselect.png'
+import paperSelect from '../../images/rock-paper-scissors/hands-icons/paper_select.png'
+import scissors from '../../images/rock-paper-scissors/hands-icons/scissors.png'
+import scissorsDeselect from '../../images/rock-paper-scissors/hands-icons/scissors_deselect.png'
+import scissorsSelect from '../../images/rock-paper-scissors/hands-icons/scissors_select.png'
 
 // типизировать
 const Game: FC = () => {
@@ -63,18 +69,20 @@ const Game: FC = () => {
           <div className={styles.game__choiceBox}>
             <button
               type="button"
-              className={styles.game__button}>
-              <img src={rock_icon} alt="rock icon" className={styles.game__icon} />
+              className={styles.game__button}
+              >
+              <img src={rock} alt="rock icon" className={styles.game__icon} 
+              />
             </button>
             <button
               type="button"
               className={styles.game__button}>
-              <img src={sciss_icon} alt="scissors icon" className={styles.game__icon1} />
+              <img src={scissors} alt="scissors icon" className={styles.game__icon} />
             </button>
             <button
               type="button"
               className={styles.game__button}>
-              <img src={paper_icon} alt="paper icon" className={styles.game__icon} />
+              <img src={paper} alt="paper icon" className={styles.game__icon} />
             </button>
             <button type="button" className={`${styles.game__button} ${styles.game__emojiButton}`}>
               <img src={emoji_icon} alt="emoji icon" className={styles.game__icon} />
@@ -82,11 +90,6 @@ const Game: FC = () => {
           </div>
         </div>
       </div>
-      {/* {choice && <h4 className={styles.game__heading}>Вы выбрали {choice}</h4>}
-      <button className={styles.game__button} onClick={() => handleChoice('Камень')}>Камень</button>
-      <button className={styles.game__button} onClick={() => handleChoice('Ножницы')}>Ножницы</button>
-      <button className={styles.game__button} onClick={() => handleChoice('Бумага')}>Бумага</button>
-      <button onClick={() => navigate(-1)}>go back</button> */}
     </div>
   )
 }

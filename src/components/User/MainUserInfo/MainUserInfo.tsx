@@ -22,10 +22,7 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
 
   const handleClickBalance = () => {
     tg.openTelegramLink(inviteLink);
-    // postEvent('web_app_trigger_haptic_feedback', {
-    //   type: 'notification',
-    //   notification_type: 'warning',
-    // });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
     tg.close();
   };
 

@@ -19,7 +19,7 @@ import { IMember } from "../../utils/types/memberTypes";
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
 
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
@@ -56,17 +56,17 @@ const Referral: FC = () => {
         setMessageShown(true);
         switch (res.transfered) {
           case "small":
-            // postEvent('web_app_trigger_haptic_feedback', {
-            //   type: 'notification',
-            //   notification_type: 'error',
-            // });
+            postEvent('web_app_trigger_haptic_feedback', {
+              type: 'notification',
+              notification_type: 'error',
+            });
             setMessage("Минимальная сумма для перевода 0.1");
             break;
           default:
-            // postEvent('web_app_trigger_haptic_feedback', {
-            //   type: 'notification',
-            //   notification_type: 'success',
-            // });
+            postEvent('web_app_trigger_haptic_feedback', {
+              type: 'notification',
+              notification_type: 'success',
+            });
             setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
             dispatch(setCoinsNewValue(Number(res.new_coins)));
             setTotalBalance(0);
