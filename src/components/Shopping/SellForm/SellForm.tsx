@@ -19,43 +19,46 @@ interface IProps {
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
 
   const [priceValue, setPriceValue] = useState('')
   // продажа товара в лавку
-  const handleSellToLavka = async (itemId: number, price: number) => {
-    try {
-      const res: any = await sellLavkaRequest(itemId, price, userId);
-      const itemWithPrice = {
-        ...item,
-        item_price_coins: price,
-        seller_id: +userId,
-      };
-      setMessageShown(true);
-      switch (res.message) {
-        case "already":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'error',
-          });
-          setMessage("Товар уже на витрине");
-          break;
-        case "ok":
-          postEvent('web_app_trigger_haptic_feedback', {
-            type: 'notification',
-            notification_type: 'success',
-          });
-          setMessage("Размещено в лавке");
-          dispatch(addItemToLavka(itemWithPrice));
-          break;
-        default:
-          break;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    onClose();
+  const handleSellToLavka = (itemId: number, price: number) => {
+    sellLavkaRequest(itemId, price, userId)
+      .then((res: any) => {
+        const itemWithPrice = {
+          ...item,
+          item_price_coins: price,
+          seller_id: +userId,
+        };
+        setMessageShown(true);
+        switch (res.message) {
+          case "already":
+            postEvent('web_app_trigger_haptic_feedback', {
+              type: 'notification',
+              notification_type: 'error',
+            });
+            setMessage("Товар уже на витрине");
+            break;
+          case "ok":
+            postEvent('web_app_trigger_haptic_feedback', {
+              type: 'notification',
+              notification_type: 'success',
+            });
+            setMessage("Размещено в лавке");
+            dispatch(addItemToLavka(itemWithPrice));
+            break;
+          default:
+            break;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        onClose();
+      });
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {

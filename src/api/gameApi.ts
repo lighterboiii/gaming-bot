@@ -1,7 +1,7 @@
 import { getReq } from "./api";
 
-export const getOpenedRoomsRequest = async () => {
-  return await getReq({
+export const getOpenedRoomsRequest = () => {
+  return getReq({
     uri: 'getrooms',
     userId: '',
   });

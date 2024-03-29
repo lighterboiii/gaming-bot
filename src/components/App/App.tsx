@@ -20,7 +20,7 @@ import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -51,19 +51,23 @@ const App: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    const fetchUserData = async () => {
-      try {
-        const res = await getAppData(userId);
-        const userPhotoResponse = await getUserAvatarRequest(userId);
-        dispatch(setUserData(res.user_info));
-        dispatch(setDailyBonus(res.daily_bonus));
-        dispatch(setProductsArchive(res.collectibles_data));
-        dispatch(setShopAvailable(res.shop_available));
-        dispatch(setUserPhoto(userPhotoResponse?.info));
-        setLoading(false);
-      } catch (error) {
-        console.error('Ошибка в получении данных пользователя:' + error);
-      }
+    const fetchUserData = () => {
+      getAppData(userId)
+        .then((res) => {
+          dispatch(setUserData(res.user_info));
+          dispatch(setDailyBonus(res.daily_bonus));
+          dispatch(setProductsArchive(res.collectibles_data));
+          dispatch(setShopAvailable(res.shop_available));
+          return getUserAvatarRequest(userId);
+        })
+        .then((userPhotoResponse) => {
+          dispatch(setUserPhoto(userPhotoResponse?.info));
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error('Ошибка в получении данных пользователя:', error);
+          setLoading(false);
+        });
     };
 
     fetchUserData();

@@ -30,16 +30,18 @@ const OpenedRooms: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    const fetchRoomsData = async () => {
-      try {
-        const res: any = await getOpenedRoomsRequest();
-        setRooms(res.rooms);
-        dispatch(getOpenedRooms(res.rooms));
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
+    const fetchRoomsData = () => {
+      getOpenedRoomsRequest()
+        .then((res: any) => {
+          setRooms(res.rooms);
+          dispatch(getOpenedRooms(res.rooms));
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
+  
     fetchRoomsData();
     tg.BackButton.show().onClick(() => {
       navigate(-1);
@@ -76,7 +78,6 @@ const OpenedRooms: FC = () => {
     }
     setRooms(sortedRooms);
   };
-
 
   return (
     <div className={styles.rooms}>

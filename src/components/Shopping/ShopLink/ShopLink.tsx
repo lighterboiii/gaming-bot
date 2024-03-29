@@ -19,7 +19,7 @@ const ShopLink: FC = () => {
   return (
     <Link
       to={shopUrl}
-      // onClick={handleGetHapticFeedback}
+      onClick={handleGetHapticFeedback}
       className={styles.shopLink}
     >
       <div className={styles.shopLink__content}>
