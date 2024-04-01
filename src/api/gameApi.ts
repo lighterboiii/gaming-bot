@@ -1,5 +1,5 @@
-import { getReq, postReq } from "./api";
-import { createRoomUri, getRoomsUri } from "./requestData";
+import { getReq, postReq, putReq } from "./api";
+import { createRoomUri, getRoomsUri, roomIdValue, setChoiceUri } from "./requestData";
 
 // получить все комнаты
 export const getOpenedRoomsRequest = () => {
@@ -21,5 +21,13 @@ export const getRoomInfoRequest = (roomId: string) => {
   return getReq({
     uri: `getroominfo?room_id=`,
     userId: roomId,
+  })
+};
+// отправить выбор игрока на сервер
+export const setUserChoice = (userIdValue: string, roomId: string, choice: string) => {
+  return putReq({
+    uri: setChoiceUri,
+    userId: userIdValue,
+    endpoint: `${roomIdValue}${roomId}&choice=${choice}`
   })
 };

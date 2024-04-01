@@ -17,7 +17,7 @@ import { useAppDispatch } from '../../services/reduxHooks';
 import { setDailyBonus, setShopAvailable, setUserData, setUserPhoto } from '../../services/appSlice';
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
-import Game from '../../pages/Game/Game';
+import RockPaperScissors from '../../pages/RockPaperScissors/RockPaperScissors';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -83,7 +83,7 @@ const App: FC = () => {
           <Route path={createRoomUrl} element={<CreateRoom />} />
           <Route path={shopUrl} element={<Shop />} />
           <Route path={leaderboardUrl} element={<LeaderBoard />} />
-          <Route path="/room/:roomId" element={<Game />} />
+          <Route path="/room/:roomId" element={<RockPaperScissors />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       )}

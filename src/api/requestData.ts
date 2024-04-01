@@ -17,6 +17,7 @@ export const cancelSellLavka = `cancel_sell_lavka?user_id=`;
 export const setTransferCoinsUri = `transfer_refs_to_balance?user_id=`;
 export const getRoomsUri = `getrooms?user_id=`
 export const createRoomUri = `createroom?user_id=`
+export const setChoiceUri = `setchoice?user_id=`;
 // links
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
@@ -28,3 +29,4 @@ export const collectiblesValue = '&collectibles=';
 export const activeSkinValue = '&active_skin=';
 export const newTokensValue = '&newtokens=';
 export const newCoinsValue = '&newcoins=';
+export const roomIdValue = '&room_id=';

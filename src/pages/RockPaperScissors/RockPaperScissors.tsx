@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import useTelegram from "../../hooks/useTelegram";
-import styles from './Game.module.scss';
+import styles from './RockPaperScissors.module.scss';
 import { useNavigate, useParams } from "react-router-dom";
-import { getRoomInfoRequest } from "../../api/gameApi";
+import { getRoomInfoRequest, setUserChoice } from "../../api/gameApi";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import leftHand from '../../images/rock-paper-scissors/l-pp.png'
@@ -20,6 +20,7 @@ import scissorsDeselect from '../../images/rock-paper-scissors/hands-icons/sciss
 import scissorsSelect from '../../images/rock-paper-scissors/hands-icons/scissors_select.png'
 import Loader from "../../components/Loader/Loader";
 import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
+import { userId } from "../../api/requestData";
 
 // типизировать
 const Game: FC = () => {
@@ -28,12 +29,13 @@ const Game: FC = () => {
   const [roomData, setRoomData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const { tg, user } = useTelegram();
+  // const userId = user?.id;
   const [choice, setChoice] = useState('');
   const [ready, setReady] = useState(false);
   const navigate = useNavigate();
   console.log(roomData);
   useEffect(() => {
-    tg.setHeaderColor('#184193');
+    tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
       navigate(-1);
     });
@@ -57,6 +59,13 @@ const Game: FC = () => {
 
   const handleChoice = (value: string) => {
     setChoice(value);
+    setUserChoice(userId, roomData?.room_id, "rock")
+      .then((res: any) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   return (
