@@ -22,13 +22,14 @@
 
   &__player {
     @include size(178px, 178px);
+    @include position(relative);
     @include flex(row, center, center);
   }
 
   &__choiceBox {
-    @include size(200px, 64px);
+    @include size(200px, 68px);
     @include position(relative);
-    @include flex(row, center, center, 4px);
+    @include flex(row, center, center, 6px);
     background-image: url('../../images/rock-paper-scissors/choise-plate.png');
     background-position: center;
     background-size: contain;
@@ -39,14 +40,14 @@
     @include size(42px, 52px);
   }
   // подогнать по размеру иконки потом
-  &__icon1 {
-    @include size(52px, 52px);
+  &__iconEmoji {
+    @include size(48px, 48px);
   }
 
   &__lowerContainer {
     @include size(100%, auto);
     @include position(absolute, $bottom: 10%, $left: 50%);
-    @include flex(column, center, center, 20px);
+    @include flex(column, center, center, 10px);
     transform: translate(-50%);
   }
 
@@ -78,7 +79,7 @@
   }
 
   &__emojiButton {
-    @include position(absolute, $bottom: 50%, $right: -32px);
+    @include position(absolute, $bottom: 50%, $right: -64px);
     transform: translateY(50%);
   }
 
@@ -100,5 +101,34 @@
     @include size(160px, auto);
     @include position(absolute, $top: 150px, $left: 50%);
     transform: translateX(-50%);
+  }
+
+  &__notify {
+    @include position(absolute, $top: 50%, $left: 50%);
+    @include indents();
+    @include size(100%, auto);
+    color: $main-color;
+    transform: translate(-50%, -50%);
+  }
+
+  &__checkbox {
+    display: none;
+  }
+
+  &__label {
+    background-image: url('../../images/rock-paper-scissors/ready_image.png');
+    @include size(200px, 68px);
+    @include position(relative);
+    @include flex(row, center, center, 6px);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  &__readyIcon {
+    @include size(60px, 60px);
+    @include position(absolute, $left: 50%, $bottom: -5%);
+    transform: translateX(-50%);
+    z-index: 2;
   }
 }
