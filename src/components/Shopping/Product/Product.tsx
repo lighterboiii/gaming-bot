@@ -5,7 +5,7 @@ import styles from './Product.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
 import { useAppDispatch } from "../../../services/reduxHooks";
-import { CombinedItemData, ItemData, LavkaData } from "../../../utils/types/shopTypes";
+import { CombinedItemData, ItemData, ILavkaData } from "../../../utils/types/shopTypes";
 import {
   addEnergyDrink,
   removeItemFromLavka,
@@ -64,8 +64,6 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   function closeWithDelay(onClose: any, setMessage: any, setMessageShown: any, closeDelay = 1000, messageResetDelay = 200) {
     setTimeout(() => {
       onClose();
-  
-      // Внутренний setTimeout для сброса сообщения
       setTimeout(() => {
         setMessage('');
         setMessageShown(false);
@@ -81,16 +79,16 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         switch (res.message) {
           case "out":
             setMessage("Товара нет в наличии");
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
             break;
           case "money":
             setMessage("Недостаточно средств");
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
             break;
           case "ok":
             setMessage("Успешная покупка");
             handlePurchaseItemTypes(item);
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
             break;
           default:
             break;
@@ -105,7 +103,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   const handleSetActiveSkin = (itemId: number) => {
     setActiveSkinRequest(itemId, userId)
       .then(() => {
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
         dispatch(setActiveSkin(itemId));
         onClose();
       })
@@ -117,7 +115,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   const handleSetActiveEmoji = (itemId: number) => {
       setActiveEmojiRequest(userId, item?.item_id)
         .then(() => {
-          postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+          // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
           dispatch(setActiveEmoji(String(itemId)));
           onClose();
         })
@@ -130,7 +128,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
     cancelLavkaRequest(itemId, userId)
       .then(() => {
         setMessageShown(true);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         setMessage("Товар снят с продажи");
         dispatch(removeItemFromLavka(itemId));
         closeWithDelay(onClose, setMessage, setMessageShown);
@@ -149,7 +147,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
     }, 1000);
   };
   // хендлер покупки в лавке
-  const handleBuyLavkaitem = (item: LavkaData) => {
+  const handleBuyLavkaitem = (item: ILavkaData) => {
     buyLavkaRequest(item, userId)
       .then((res: any) => {
         setMessageShown(true);

@@ -1,11 +1,11 @@
-import { Bonus, UserInfo } from "./mainTypes";
-import { ItemData, LavkaData } from "./shopTypes";
+import { IBonus, IUserData } from "./mainTypes";
+import { ItemData, ILavkaData } from "./shopTypes";
 
 
 export interface IAppData {
   collectibles_data: ItemData[];
-  daily_bonus: Bonus;
+  daily_bonus: IBonus;
   shop_available: ItemData[];
-  user_info: UserInfo;
-  lavka_available: LavkaData[];
+  user_info: IUserData;
+  lavka_available: ILavkaData[];
 }

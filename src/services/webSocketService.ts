@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 
 type MessageHandler<T> = (message: T) => void;
 
-interface WebSocketService<T> {
+interface IWebSocketService<T> {
   setMessageHandler: (handler: MessageHandler<T>) => void;
   sendMessage: (message: T) => void;
   close: () => void;
 }
 
-const useWebSocketService = <T>(url: string): WebSocketService<T> => {
+const useWebSocketService = <T>(url: string): IWebSocketService<T> => {
   const [ws, setWebSocket] = useState<WebSocket | null>(null);
   const [messageHandler, setMessageHandler] = useState<MessageHandler<T> | null>(null);
 

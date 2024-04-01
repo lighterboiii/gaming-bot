@@ -16,7 +16,6 @@ import { postEvent } from "@tma.js/sdk";
 
 const Shop: FC = () => {
   const { tg } = useTelegram();
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const shopData = useAppSelector(store => store.app.products);
@@ -72,20 +71,20 @@ const Shop: FC = () => {
   };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
     setActiveButton("Приобретено");
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
     setActiveButton("Магазин");
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
     setActiveButton("Лавка");
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));

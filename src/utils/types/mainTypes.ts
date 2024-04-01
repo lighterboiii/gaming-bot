@@ -1,6 +1,6 @@
 import { IMember } from "./memberTypes";
 
-export interface UserInfo {
+export interface IUserData {
   active_skin: number;
   all_games_played_count: number;
   coinloses: number;
@@ -30,7 +30,7 @@ export interface UserInfo {
   photo: string;
 }
 
-export interface Bonus {
+export interface IBonus {
   bonus_count: number;
   bonus_image: string;
   bonus_item_id: number;
@@ -38,7 +38,7 @@ export interface Bonus {
   day: number;
 }
 
-export interface UserPhoto {
+export interface IUserPhoto {
   info: string;
 }
 

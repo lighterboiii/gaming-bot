@@ -18,10 +18,7 @@ const AdvertisementBanner: FC<IProps> = ({ onBannerClick }) => {
 
   const handleBannerClick = () => {
     const currentBannerData = bannersData[currentIndex];
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'impact',
-      impact_style: 'soft',
-    });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     onBannerClick(currentBannerData);
   };
 

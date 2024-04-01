@@ -16,17 +16,24 @@ export const sellLavkaUri = `add_sell_lavka?user_id=`;
 export const cancelSellLavka = `cancel_sell_lavka?user_id=`;
 export const setTransferCoinsUri = `transfer_refs_to_balance?user_id=`;
 export const getRoomsUri = `getrooms?user_id=`
+export const getCurrentRoomInfo = `getroominfo?room_id=`;
 export const createRoomUri = `createroom?user_id=`
 export const setChoiceUri = `setchoice?user_id=`;
+export const setActiveEmojiUri = `setactive_emoji?user_id=`;
 // links
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
 export const inviteLink = 'https://t.me/lighterboygamebot';
 // endpoints
-export const itemIdValue = '&item_id=';
-export const itemCount = '&count=';
-export const collectiblesValue = '&collectibles=';
-export const activeSkinValue = '&active_skin=';
-export const newTokensValue = '&newtokens=';
-export const newCoinsValue = '&newcoins=';
-export const roomIdValue = '&room_id=';
+export const itemIdParamString = '&item_id=';
+export const itemCountParamString = '&count=';
+export const collectiblesParamString = '&collectibles=';
+export const addNewCollectibleParamString = '&add_collectible=';
+export const activeSkinParamString = '&active_skin=';
+export const newTokensParamString = '&newtokens=';
+export const newCoinsParamString = '&newcoins=';
+export const roomIdParamString = '&room_id=';
+export const priceParamString = '&price=';
+export const nftIdParamString = '&nft_id=';
+export const playerChoiceParamString = '&choice=';
+export const activeEmojiParamString = '&active_emoji=';

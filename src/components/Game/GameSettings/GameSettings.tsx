@@ -34,7 +34,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
 
   const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number) => {
     const data = {
-      creator_id: userIdValue,
+      user_id: userIdValue,
       bet: bet,
       bet_type: betType,
       room_type: roomType

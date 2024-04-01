@@ -1,5 +1,5 @@
 import { IAppData } from "../utils/types/appType";
-import { UserPhoto } from "../utils/types/mainTypes";
+import { IUserPhoto } from "../utils/types/mainTypes";
 import { getReq, putReq } from "./api";
 import { getLeadersUri, getRefsUri, getUserAvatarUri, mainAppDataUri, setTransferCoinsUri } from "./requestData";
 
@@ -12,7 +12,7 @@ export const getAppData = (userIdValue: string) => {
 };
 // Получить фото пользователя
 export const getUserAvatarRequest = (userIdValue: string) => {
-  return getReq<UserPhoto>({
+  return getReq<IUserPhoto>({
     uri: getUserAvatarUri,
     userId: userIdValue,
   });

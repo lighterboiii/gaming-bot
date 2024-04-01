@@ -1,13 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Bonus, UserInfo } from "../utils/types/mainTypes";
-import { ItemData, LavkaData } from "../utils/types/shopTypes";
+import { IBonus, IUserData } from "../utils/types/mainTypes";
+import { ItemData, ILavkaData } from "../utils/types/shopTypes";
 
 interface AppState {
-  info: UserInfo | null;
+  info: IUserData | null;
   products: ItemData[] | null;
   archive: ItemData[] | null;
-  bonus: Bonus | any | null;
-  lavka: LavkaData[] | null;
+  bonus: IBonus | any | null;
+  lavka: ILavkaData[] | null;
   openedRooms: any | null;
 }
 
@@ -25,7 +25,7 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     // userInfo part
-    setUserData: (state, action: PayloadAction<UserInfo>) => {
+    setUserData: (state, action: PayloadAction<IUserData>) => {
       state.info = action.payload;
     },
     setUserPhoto: (state, action: PayloadAction<string>) => {
@@ -94,7 +94,7 @@ const appSlice = createSlice({
       }
     },
     // daily bonus part
-    setDailyBonus: (state, action: PayloadAction<Bonus>) => {
+    setDailyBonus: (state, action: PayloadAction<IBonus>) => {
       state.bonus = action.payload;
     },
     clearDailyBonus: (state) => {
@@ -107,17 +107,17 @@ const appSlice = createSlice({
     setProductsArchive: (state, action: PayloadAction<ItemData[]>) => {
       state.archive = action.payload;
     },
-    setLavkaAvailable: (state, action: PayloadAction<LavkaData[]>) => {
+    setLavkaAvailable: (state, action: PayloadAction<ILavkaData[]>) => {
       state.lavka = action.payload;
     },
-    addItemToLavka: (state, action: PayloadAction<LavkaData>) => {
+    addItemToLavka: (state, action: PayloadAction<ILavkaData>) => {
       if (state.lavka) {
         state.lavka.push(action.payload);
       }
     },
     removeItemFromLavka: (state, action: PayloadAction<number>) => {
       if (state.lavka) {
-        const updatedLavka = state.lavka.filter((item: LavkaData) => item.item_id !== action.payload);
+        const updatedLavka = state.lavka.filter((item: ILavkaData) => item.item_id !== action.payload);
         state.lavka = updatedLavka;
       }
     },
