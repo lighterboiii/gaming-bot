@@ -67,7 +67,6 @@ const App: FC = () => {
         })
         .catch((error) => {
           console.error('Ошибка в получении данных пользователя:', error);
-          setLoading(false);
         });
     };
 
