@@ -124,7 +124,7 @@ const Referral: FC = () => {
             refsBoard?.map((referral: any, index: number) => (
               <UserContainer member={referral} index={index} length={refsBoard.length + 1} key={index} />
             ))) :
-            <span className={styles.referral__emptyBoar }>
+            <span className={styles.referral__emptyBoard}>
               ...Пока никто из ваших друзей не играл
             </span>
           }

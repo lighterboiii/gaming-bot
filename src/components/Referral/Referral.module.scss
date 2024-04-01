@@ -84,4 +84,9 @@
     color: $main-color;
     font-weight: 900;
   }
+
+  &__emptyBoard {
+    @extend .referral__sumSpan;
+    @include size(100%, auto);
+  }
 }
