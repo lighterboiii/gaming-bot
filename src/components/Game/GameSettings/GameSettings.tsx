@@ -34,7 +34,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
 
   const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number) => {
     const data = {
-      user_id: userIdValue,
+      creator_id: userIdValue,
       bet: bet,
       bet_type: betType,
       room_type: roomType
@@ -56,6 +56,9 @@ const GameSettings: FC<IProps> = ({ data }) => {
           } else if (response.message === 'not_enough_coins') {
             console.log('Недостаточно средств для создания комнаты')
           }
+        })
+        .catch(error => {
+          console.log(error);
         })
     }
   };
