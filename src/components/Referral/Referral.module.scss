@@ -40,6 +40,12 @@
     color: $mustard-color;
     font-size: 14px;
     font-weight: 700;
+    text-align: center;
+  }
+
+  &__emptyBoardMessage {
+    @include size(100%, auto);
+    @extend .referral__sumSpan;
   }
 
   &__h3 {
