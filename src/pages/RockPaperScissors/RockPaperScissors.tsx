@@ -37,6 +37,7 @@ const RockPaperScissors: FC = () => {
     });
     return () => {
       tg.BackButton.hide();
+      tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate]);
 
