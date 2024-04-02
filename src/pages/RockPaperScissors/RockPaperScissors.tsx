@@ -11,8 +11,8 @@ import { userId } from "../../api/requestData";
 import useWebSocketService from "../../services/webSocketService";
 import styles from "./RockPaperScissors.module.scss";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
-import leftHand from '../../images/rock-paper-scissors/l-pp.png'
-import rightHand from '../../images/rock-paper-scissors/r-rr.png';
+// import leftHand from '../../images/rock-paper-scissors/l-pp.png'
+// import rightHand from '../../images/rock-paper-scissors/r-rr.png';
 import newVS from '../../images/rock-paper-scissors/VS_new.png';
 import rock from '../../images/rock-paper-scissors/hands-icons/rock.png'
 import rockDeselect from '../../images/rock-paper-scissors/hands-icons/rock_deselect.png'
@@ -26,19 +26,21 @@ import scissorsSelect from '../../images/rock-paper-scissors/hands-icons/scissor
 import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
 import { useAppSelector } from "../../services/reduxHooks";
 import { setSocket } from "../../services/wsSlice";
+import HandShake from './HandShake';
 
 const RockPaperScissors: FC = () => {
-  const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useDispatch();
-  const [roomData, setRoomData] = useState<any>(null);
+  const { roomId } = useParams<{ roomId: string }>();
+  const [roomData, setRoomData] = useState<any>(null); // не вебсокет
   const [loading, setLoading] = useState(false);
   const { tg, user } = useTelegram();
-  const [choice, setChoice] = useState('');
-  const [ready, setReady] = useState(false);
+  const [choice, setChoice] = useState('none');
+  console.log(roomData);
   const navigate = useNavigate();
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
   const socket = useAppSelector(store => store.ws.socket);
-
+  const [message, setMessage] = useState<any>(null);
+  // console.log(message?.choice);
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
@@ -51,6 +53,7 @@ const RockPaperScissors: FC = () => {
 
   useEffect(() => {
     webSocketService.setMessageHandler((message) => {
+      setMessage(message);
       console.log('Received message:', message);
     });
   }, [webSocketService]);
@@ -78,6 +81,9 @@ const RockPaperScissors: FC = () => {
   const handleChoice = (value: string) => {
     setChoice(value);
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: value });
+    // setTimeout(() => {
+    //   webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: 'none' });
+    // }, 5000)
   };
 
   return (
@@ -88,21 +94,24 @@ const RockPaperScissors: FC = () => {
             {roomData?.players.map((player: any) => (
               <div className={styles.game__player}>
                 <UserAvatar item={player} avatar={player.avatar} key={player.userId} />
-                {(ready || choice) && <img src={readyIcon} alt="ready icon" className={styles.game__readyIcon} />}
+                {message?.choice === 'ready' && (
+                  <img src={readyIcon} alt="ready icon" className={styles.game__readyIcon} />
+                )}
               </div>
             ))}
           </div>
           <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
-          {choice ? (
+          {choice !== 'none' && (
             <div className={styles.game__hands}>
-              <img src={leftHand} alt="left hand" className={`${styles.game__mainImage} ${styles.game__leftMainImage}`} />
-              <img src={rightHand} alt="right hand" className={`${styles.game__mainImage} ${styles.game__rightMainImage}`} />
-            </div>
-          ) : (
-            <p className={styles.game__notify}>Ожидание игроков</p>
-          )}
+              <HandShake playerChoice={choice} secondPlayerChoice={choice} />
+              {/* <img src={leftHand} alt="left hand" className={`${styles.game__mainImage} ${styles.game__leftMainImage}`} />
+              <img src={rightHand} alt="right hand" className={`${styles.game__mainImage} ${styles.game__rightMainImage}`} /> */}
+            </div>)}
+          {/* ) : ( */}
+            {/* <p className={styles.game__notify}>Ожидание игроков</p> */}
+          {/* )} */}
           <div className={styles.game__lowerContainer}>
-            {ready && roomData?.free_places === "0" ? (
+            {choice === 'ready' ? (
               <>
                 <div className={styles.game__betContainer}>
                   <p className={styles.game__text}>Ставка</p>
@@ -123,14 +132,14 @@ const RockPaperScissors: FC = () => {
                       type="button"
                       className={styles.game__button}
                       onClick={() => handleChoice('scissors')}
-                      >
+                    >
                       <img src={scissors} alt="scissors icon" className={styles.game__icon} />
                     </button>
                     <button
                       type="button"
                       className={styles.game__button}
                       onClick={() => handleChoice('paper')}
-                      >
+                    >
                       <img src={paper} alt="paper icon" className={styles.game__icon} />
                     </button>
                     <button type="button" className={`${styles.game__button} ${styles.game__emojiButton}`}>
@@ -144,8 +153,7 @@ const RockPaperScissors: FC = () => {
                 <input
                   type="checkbox"
                   id="ready"
-                  checked={ready}
-                  onChange={(e) => setReady(e.target.checked)}
+                  onChange={() => handleChoice('ready')}
                   className={styles.game__checkbox}
                 />
                 <label htmlFor="ready" className={styles.game__label}>
