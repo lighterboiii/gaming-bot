@@ -4,7 +4,7 @@ import useTelegram from "../../../hooks/useTelegram";
 import styles from './Product.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import Button from "../../ui/Button/Button";
-import { useAppDispatch } from "../../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { CombinedItemData, ItemData, ILavkaData } from "../../../utils/types/shopTypes";
 import {
   addEnergyDrink,
@@ -44,6 +44,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   const [isModalOpen, setModalOpen] = useState(false);
   // для отрисовки интерфейса продажи айтема
   const isUserSeller = Number(userId) === Number(item?.seller_id);
+  const translation = useAppSelector(store => store.app.languageSettings);
   // функция для фильтрации купленных товаров
   const handlePurchaseItemTypes = async (item: any) => {
     item?.item_price_coins !== 0
@@ -78,15 +79,15 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         setMessageShown(true);
         switch (res.message) {
           case "out":
-            setMessage("Товара нет в наличии");
+            setMessage(`${translation?.out_of_stock}`);
             // postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
             break;
           case "money":
-            setMessage("Недостаточно средств");
+            setMessage(`${translation?.insufficient_funds}`);
             // postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
             break;
           case "ok":
-            setMessage("Успешная покупка");
+            setMessage(`${translation?.successful_purchase}`);
             handlePurchaseItemTypes(item);
             // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
             break;
@@ -129,7 +130,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
       .then(() => {
         setMessageShown(true);
         // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
-        setMessage("Товар снят с продажи");
+        setMessage(`${translation?.item_removed_from_sale}`);
         dispatch(removeItemFromLavka(itemId));
         closeWithDelay(onClose, setMessage, setMessageShown);
       })
@@ -154,19 +155,19 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         switch (res.message) {
           case "sold":
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
-            setMessage("Уже продано!");
+            setMessage(`${translation?.already_sold}`);
             break;
           case "money":
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
-            setMessage("Недостаточно средств");
+            setMessage(`${translation?.insufficient_funds}`);
             break;
           case "break":
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
-            setMessage("У вас уже есть этот товар");
+            setMessage(`${translation?.item_already_owned}`);
             break;
           case "ok":
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success'});
-            setMessage("Куплено из лавки!");
+            setMessage(`${translation?.purchased_from_market}`);
             handlePurchaseItemTypes(item);
             break;
           default:
@@ -192,10 +193,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
           </div>
           <div className={styles.product__info}>
             <div className={styles.product__textElements}>
-              <p className={styles.product__type}>Тип: {item?.item_type}</p>
+              <p className={styles.product__type}>{translation?.item_type}: {item?.item_type}</p>
               {item?.seller_publicname &&
                 <p className={styles.product__type}>
-                  Продавец: {item.seller_publicname}
+                  {translation?.main_menu_seller} {item.seller_publicname}
                 </p>
               }
             </div>
@@ -203,14 +204,14 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
               <div className={styles.product__buttons}>
                 <div className={styles.product__buttonWrapper}>
                   <Button
-                    text="Использовать"
+                    text={translation?.use}
                     handleClick={item?.item_type === "emoji"
                       ? () => handleSetActiveEmoji(item?.item_id)
                       : () => handleSetActiveSkin(item?.item_id)} />
                 </div>
                 <div className={styles.product__buttonWrapper}>
                   <Button
-                    text="Продать"
+                    text={translation?.sell}
                     handleClick={() => setModalOpen(true)}
                     isWhiteBackground
                   />
@@ -220,7 +221,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
               <div className={styles.product__buttons}>
                 <div className={styles.product__buttonWrapper}>
                   <Button
-                    text="Снять с продажи"
+                    text={translation?.remove_from_sale}
                     handleClick={() => handleCancelSelling(item?.item_id)}
                     isWhiteBackground
                   />
@@ -228,7 +229,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
               </div>
             ) : (
               <div className={styles.product__buttonWrapper}>
-                {activeButton === "Лавка" ? (
+                {activeButton === `${translation?.marketplace}` ? (
                   <Button
                     text={item?.item_price_coins !== 0 ? `💵 ${item?.item_price_coins}` : `🔰 ${item?.item_price_tokens}`}
                     handleClick={() => handleBuyLavkaitem(item)}
@@ -247,7 +248,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         </>
       )}
       {isModalOpen && (
-        <Modal title="Выставить в лавку" closeModal={() => setModalOpen(false)}>
+        <Modal title={translation?.list_in_shop} closeModal={() => setModalOpen(false)}>
           <SellForm item={item} setMessage={setMessage} setMessageShown={setMessageShown} onClose={handleCloseFormModal} />
         </Modal>
 

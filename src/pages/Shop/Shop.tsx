@@ -72,7 +72,7 @@ const Shop: FC = () => {
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
-    setActiveButton("Приобретено");
+    setActiveButton(`${translation?.purchased}`);
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
@@ -85,7 +85,7 @@ const Shop: FC = () => {
   const handleClickLavka = async () => {
     setLoading(true);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
-    setActiveButton("Лавка");
+    setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
     setGoods(updatedLavka.lavka);
@@ -93,7 +93,7 @@ const Shop: FC = () => {
   };
 
   useEffect(() => {
-    if (activeButton === "Лавка") {
+    if (activeButton === `${translation?.marketplace}`) {
       lavkaShop && setGoods(lavkaShop);
     }
   }, [lavkaShop, activeButton])
@@ -113,19 +113,19 @@ const Shop: FC = () => {
               {translation?.shop}
             </button>
             <button
-              className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
+              className={`${styles.shop__button} ${activeButton === `${translation?.marketplace}` ? styles.activeButton : ''}`}
               onClick={handleClickLavka}>
               Лавка
             </button>
           </div>
           <button
-            className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
+            className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === `${translation?.purchased}` ? styles.activeButton : ''}`}
             onClick={handleClickInventory}
           >
             Приобретено
           </button>
         </div>
-        {loading ?  <p style={{ color: '#ffdb50', fontWeight: '900' }}>Загрузка...</p>: (
+        {loading ?  <p style={{ color: '#ffdb50', fontWeight: '900' }}>{translation?.loading}...</p>: (
           <>
             <div className={styles.shop__goods + ' scrollable'}>
               {goods?.length > 0 ? (

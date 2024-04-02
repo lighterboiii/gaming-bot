@@ -18,7 +18,7 @@ interface IProps {
 const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.app.info);
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   const handleClickBalance = () => {
     tg.openTelegramLink(inviteLink);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
@@ -46,7 +46,7 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
             </div>
           </div>
           <button type="button" className={styles.userInfo__balance} onClick={handleClickBalance}>
-            баланс
+            {translation?.webapp_balance}
           </button>
         </div>
       </div>

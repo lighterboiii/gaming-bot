@@ -52,8 +52,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
     <div key={bonus?.bonus_item_id} className={styles.bonus}>
       <div className={styles.bonus__layout}>
         <div className={styles.bonus__titleContainer}>
-          <h2 className={styles.bonus__title}>Ежедневная награда</h2>
-          <p className={styles.bonus__text}>Вернитесь завтра, чтобы получить ещё</p>
+          <h2 className={styles.bonus__title}>{translation?.daily_reward}</h2>
+          <p className={styles.bonus__text}>{translation?.come_back_tomorrow}</p>
         </div>
         <div className={styles.bonus__content}>
           <img src={bonus?.bonus_image} alt="bonus_image" className={styles.bonus__image} />

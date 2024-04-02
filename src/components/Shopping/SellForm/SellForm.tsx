@@ -5,7 +5,7 @@ import Button from "../../ui/Button/Button";
 import { sellLavkaRequest } from "../../../api/shopApi";
 import { userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
-import { useAppDispatch } from "../../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { ILavkaData } from "../../../utils/types/shopTypes";
 import { addItemToLavka } from "../../../services/appSlice";
 import { postEvent } from "@tma.js/sdk";
@@ -21,7 +21,7 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
   const { user } = useTelegram();
   // const userId = user?.id;
   const dispatch = useAppDispatch();
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   const [priceValue, setPriceValue] = useState('')
   // продажа товара в лавку
   const handleSellToLavka = (itemId: number, price: number) => {
@@ -36,11 +36,11 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
         switch (res.message) {
           case "already":
             // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
-            setMessage("Товар уже на витрине");
+            setMessage(`${translation?.item_on_display}`);
             break;
           case "ok":
             // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
-            setMessage("Размещено в лавке");
+            setMessage(`${translation?.listed_in_marketplace}`);
             dispatch(addItemToLavka(itemWithPrice));
             break;
           default:
@@ -72,14 +72,14 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
             value={priceValue}
             className={styles.form__input}
             onChange={handlePriceChange}
-            placeholder="Введите цену"
+            placeholder={translation?.enter_price}
           />
           {/* <input type="number" name="count" id="count" value={''} className={styles.form__input} /> */}
         </fieldset>
       </form>
       <div className={styles.sellModal__button}>
         <Button
-          text="Продать"
+          text={translation?.sell}
           handleClick={() => handleSellToLavka(item.item_id, Number(priceValue))}
           disabled={!priceValue}
         />

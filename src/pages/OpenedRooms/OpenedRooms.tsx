@@ -103,7 +103,7 @@ const OpenedRooms: FC = () => {
               <Room room={room} />
             )) : (
               <div className={styles.rooms__createNew}>
-                <p className={styles.rooms__notify}>Нет открытых комнат, создай первую</p>
+                <p className={styles.rooms__notify}>{translation?.no_open_rooms}</p>
                 <div className={styles.rooms__buttonWrapper}>
                   <Button handleClick={() => navigate('/create-room')} text={translation?.create_room_button} />
                 </div>
