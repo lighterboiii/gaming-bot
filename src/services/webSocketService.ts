@@ -24,7 +24,6 @@ const useWebSocketService = <T>(url: string): IWebSocketService<T> => {
         try {
           const data: T = JSON.parse(event.data);
           messageHandlerRef.current!(data);
-          console.log(data);
         } catch (e) {
           console.error('Ошибка обмена ws сообщением', e);
         }
@@ -52,7 +51,6 @@ const useWebSocketService = <T>(url: string): IWebSocketService<T> => {
 
   const sendMessage = (message: T) => {
     if (ws && ws.readyState === WebSocket.OPEN) {
-      console.log(message);
       ws.send(JSON.stringify(message));
     } else {
       console.error('WebSocket соединение не открыто.');

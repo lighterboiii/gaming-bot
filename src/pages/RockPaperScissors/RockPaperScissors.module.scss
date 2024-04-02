@@ -26,20 +26,20 @@
     @include flex(row, center, center);
   }
 
-  &__choiceBox {
-    @include size(200px, 68px);
-    @include position(relative);
-    @include flex(row, center, center, 6px);
-    background-image: url('../../images/rock-paper-scissors/choise-plate.png');
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-  }
+  // &__choiceBox {
+  //   @include size(200px, 68px);
+  //   @include position(relative);
+  //   @include flex(row, center, center, 6px);
+  //   background-image: url('../../images/rock-paper-scissors/choise-plate.png');
+  //   background-position: center;
+  //   background-size: contain;
+  //   background-repeat: no-repeat;
+  // }
 
   &__icon {
     @include size(42px, 52px);
   }
-  // подогнать по размеру иконки потом
+
   &__iconEmoji {
     @include size(48px, 48px);
   }
@@ -74,14 +74,14 @@
     opacity: .5;
   }
 
-  &__button {
-    @include button-style-reset();
-  }
+  // &__button {
+  //   @include button-style-reset();
+  // }
 
-  &__emojiButton {
-    @include position(absolute, $bottom: 50%, $right: -64px);
-    transform: translateY(50%);
-  }
+  // &__emojiButton {
+  //   @include position(absolute, $bottom: 50%, $right: -64px);
+  //   transform: translateY(50%);
+  // }
 
   // &__mainImage {
   //   @include size(200px, auto);

@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import styles from './HandShake.module.scss';
-import leftPP from '../../images/rock-paper-scissors/l-pp.png'
-import leftPR from '../../images/rock-paper-scissors/l-pr.png';
-import leftPS from '../../images/rock-paper-scissors/l-ps.png';
-import rightPP from '../../images/rock-paper-scissors/r-pp.png';
+import leftPP from '../../../images/rock-paper-scissors/l-pp.png'
+import leftPR from '../../../images/rock-paper-scissors/l-pr.png';
+import leftPS from '../../../images/rock-paper-scissors/l-ps.png';
+import rightPP from '../../../images/rock-paper-scissors/r-pp.png';
 // import rightPS from '../../images/rock-paper-scissors/r-ps.png';
-import rightPR from '../../images/rock-paper-scissors/r-pr.png';
-import leftRR from '../../images/rock-paper-scissors/l-rr.png';
-import leftRP from '../../images/rock-paper-scissors/l-rp.png';
-import leftRS from '../../images/rock-paper-scissors/l-rs.png';
-import rightRR from '../../images/rock-paper-scissors/r-rr.png';
-import rightRP from '../../images/rock-paper-scissors/r-rp.png';
-import rightRS from '../../images/rock-paper-scissors/r-rs.png';
-import leftSS from '../../images/rock-paper-scissors/l-ss.png';
-import leftSR from '../../images/rock-paper-scissors/l-sr.png';
-import leftSP from '../../images/rock-paper-scissors/l-sp.png';
-import rightSS from '../../images/rock-paper-scissors/r-ss.png';
-import rightSR from '../../images/rock-paper-scissors/r-sr.png';
-import rightSP from '../../images/rock-paper-scissors/r-sp.png';
+import rightPR from '../../../images/rock-paper-scissors/r-pr.png';
+import leftRR from '../../../images/rock-paper-scissors/l-rr.png';
+import leftRP from '../../../images/rock-paper-scissors/l-rp.png';
+import leftRS from '../../../images/rock-paper-scissors/l-rs.png';
+import rightRR from '../../../images/rock-paper-scissors/r-rr.png';
+import rightRP from '../../../images/rock-paper-scissors/r-rp.png';
+import rightRS from '../../../images/rock-paper-scissors/r-rs.png';
+import leftSS from '../../../images/rock-paper-scissors/l-ss.png';
+import leftSR from '../../../images/rock-paper-scissors/l-sr.png';
+import leftSP from '../../../images/rock-paper-scissors/l-sp.png';
+import rightSS from '../../../images/rock-paper-scissors/r-ss.png';
+import rightSR from '../../../images/rock-paper-scissors/r-sr.png';
+import rightSP from '../../../images/rock-paper-scissors/r-sp.png';
 
 
 interface IProps {
@@ -27,8 +27,6 @@ interface IProps {
 }
 
 const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice }) => {
-  console.log(playerChoice);
-  console.log(secondPlayerChoice);
   const [key, setKey] = useState(false);
 
   useEffect(() => {
