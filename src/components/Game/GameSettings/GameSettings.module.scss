@@ -4,6 +4,7 @@
 .game {
   @include children-layout();
   justify-content: flex-start;
+  // background-color: $tertiary-color;
 
   &__logo {
     @include max-size(120px, 120px);
@@ -59,5 +60,12 @@
 
   &__menu {
     @include flex(column, center, center, 8px);
+  }
+
+  &__notification {
+    color: $main-color;
+    @include indents(0, 60px 0 0 0);
+    @include size(100%, 100%);
+    @include flex(column, center, center);
   }
 }

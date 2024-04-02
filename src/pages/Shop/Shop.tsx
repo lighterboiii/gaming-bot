@@ -16,16 +16,15 @@ import { postEvent } from "@tma.js/sdk";
 
 const Shop: FC = () => {
   const { tg } = useTelegram();
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const archiveData = useAppSelector(store => store.app.archive);
   const lavkaShop = useAppSelector(store => store.app.lavka);
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   const [goods, setGoods] = useState<GoodsItem[]>([]);
-  const [activeButton, setActiveButton] = useState<string>('Магазин');
+  const [activeButton, setActiveButton] = useState<string>(`${translation?.shop}`);
 
   const [showOverlay, setShowOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -55,7 +54,7 @@ const Shop: FC = () => {
   };
   // при монтировании компонента
   useEffect(() => {
-    setActiveButton('Магазин');
+    setActiveButton(`${translation?.shop}`);
     shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
     tg.BackButton.show().onClick(() => {
@@ -73,20 +72,20 @@ const Shop: FC = () => {
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
-    setActiveButton("Приобретено");
+    setActiveButton(`${translation?.purchased}`);
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
-    setActiveButton("Магазин");
+    setActiveButton(`${translation?.shop}`);
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
-    setActiveButton("Лавка");
+    setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
     setGoods(updatedLavka.lavka);
@@ -94,7 +93,7 @@ const Shop: FC = () => {
   };
 
   useEffect(() => {
-    if (activeButton === "Лавка") {
+    if (activeButton === `${translation?.marketplace}`) {
       lavkaShop && setGoods(lavkaShop);
     }
   }, [lavkaShop, activeButton])
@@ -102,31 +101,31 @@ const Shop: FC = () => {
   return (
     <div className={styles.shop}>
       <div className={styles.shop__header}>
-        <h2 className={styles.shop__title}>Магазин</h2>
+        <h2 className={styles.shop__title}>{translation?.shop}</h2>
         <UserInfo />
       </div>
       <div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
         <div className={styles.shop__buttons}>
           <div className={styles.shop__leftButtonsContainer}>
             <button
-              className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
+              className={`${styles.shop__button} ${activeButton === `${translation?.shop}` ? styles.activeButton : ''}`}
               onClick={handleClickShop}>
-              Магазин
+              {translation?.shop}
             </button>
             <button
-              className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
+              className={`${styles.shop__button} ${activeButton === `${translation?.marketplace}` ? styles.activeButton : ''}`}
               onClick={handleClickLavka}>
               Лавка
             </button>
           </div>
           <button
-            className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === 'Приобретено' ? styles.activeButton : ''}`}
+            className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === `${translation?.purchased}` ? styles.activeButton : ''}`}
             onClick={handleClickInventory}
           >
             Приобретено
           </button>
         </div>
-        {loading ?  <p style={{ color: '#ffdb50', fontWeight: '900' }}>Загрузка...</p>: (
+        {loading ?  <p style={{ color: '#ffdb50', fontWeight: '900' }}>{translation?.loading}...</p>: (
           <>
             <div className={styles.shop__goods + ' scrollable'}>
               {goods?.length > 0 ? (

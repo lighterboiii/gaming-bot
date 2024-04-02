@@ -8,6 +8,7 @@
   @include size(calc(100% - 32px), 0);
   overflow: hidden;
   transition: height .5s ease;
+  background-color: $tertiary-color;
   border-top-left-radius: $radius-12;
   border-top-right-radius: $radius-12;
   z-index: 666;

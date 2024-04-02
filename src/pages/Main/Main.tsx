@@ -17,6 +17,7 @@ import { useAppSelector } from "../../services/reduxHooks";
 const Main: FC = () => {
   const animationRef = useRef<HTMLDivElement>(null);
   const dailyBonusData = useAppSelector(store => store.app.bonus);
+  const translation = useAppSelector(store => store.app.languageSettings);
 
   const [currentBanner, setCurrentBanner] = useState(bannersData[0]);
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
@@ -71,23 +72,23 @@ const Main: FC = () => {
           <div className={styles.main__smallButtonsContainer}>
             <SmallButton
               to="/create-room"
-              text="Создать комнату"
-              secondaryText="Для игры с другими людьми"
+              text={translation?.create_room}
+              secondaryText={translation?.play_with_others}
               chevronPosition="right"
               isWhiteBackground
               shadow
             />
             <SmallButton
               to="/leaderboard"
-              text="Таблица лидеров"
-              secondaryText="Лучшие из лучших"
+              text={translation?.webapp_leaderboard}
+              secondaryText={translation?.become_weekly_leader}
               chevronPosition="right"
             />
           </div>
           <BigButton
             to="/rooms"
-            text="Найти игру"
-            secondaryText="Открытые комнаты с играми"
+            text={translation?.find_game}
+            secondaryText={translation?.open_game_rooms}
             chevronPosition="right"
             isWhiteBackground
             circleIconColor="#FFF"

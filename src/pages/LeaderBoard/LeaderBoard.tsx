@@ -9,10 +9,11 @@ import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
 import { IMember, IMemberDataResponse } from "../../utils/types/memberTypes";
+import { useAppSelector } from "../../services/reduxHooks";
 
 const LeaderBoard: FC = () => {
   const { user, tg } = useTelegram();
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [leaderBoard, setLeaderBoard] = useState<IMember[] | null>(null);
@@ -44,7 +45,6 @@ const LeaderBoard: FC = () => {
       tg.BackButton.hide();
     };
   }, []);
-  
 
   return (
     <div className={styles.leaderBoard}>
@@ -52,7 +52,7 @@ const LeaderBoard: FC = () => {
         <>
           <div className={styles.leaderBoard__header}>
             <h2 className={styles.leaderBoard__heading}>
-              Таблица <br /> лидеров
+              {translation?.webapp_leaderboard}
             </h2>
           </div><div className={styles.leaderBoard__leader}>
             <div className={styles.leaderBoard__background}>

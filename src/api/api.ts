@@ -31,7 +31,7 @@ function getRequestParams({ uri, userId, method, data, endpoint }: TRequest) {
     ...BASE_PARAMS,
     method
   };
-  const path = `${BASE_URL}${uri}${userId && `${userId}`}${endpoint ? `${endpoint}` : ''}`;
+  const path = `${BASE_URL}${uri}${userId ? `${userId}` : ''}${endpoint ? `${endpoint}` : ''}`;
   if (data) {
     params.body = JSON.stringify(data);
   }

@@ -11,7 +11,7 @@ import { inviteLink } from "../../../api/requestData";
 const UserInfo: FC = () => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.app.info);
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   const handleClickBalance = () => {
     tg.openTelegramLink(inviteLink);
     postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
@@ -32,7 +32,9 @@ const UserInfo: FC = () => {
             <p className={styles.user__text}>🔋 {userData ? userData?.user_energy_drinks : '0'}</p>
             <p className={styles.user__text}>🧙‍♂️ {userData ? userData?.user_exp : '0'}</p>
           </div>
-          <button type="button" className={styles.user__balance} onClick={handleClickBalance}>баланс</button>
+          <button type="button" className={styles.user__balance} onClick={handleClickBalance}>
+            {translation?.webapp_balance}
+          </button>
         </div>
       </div>
     </div>

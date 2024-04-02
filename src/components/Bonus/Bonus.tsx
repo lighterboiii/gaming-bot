@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
-import { Bonus } from "../../utils/types/mainTypes";
+import { IBonus } from "../../utils/types/mainTypes";
 import styles from './Bonus.module.scss';
 import Button from "../ui/Button/Button";
-import { useAppDispatch } from "../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewExpValue, setNewTokensValue } from "../../services/appSlice";
 import { userId } from "../../api/requestData";
 import useTelegram from "../../hooks/useTelegram";
@@ -11,7 +11,7 @@ import { makeCollectibleRequest } from "../../api/shopApi";
 import { postEvent } from '@tma.js/sdk';
 
 interface IProps {
-  bonus: Bonus;
+  bonus: IBonus;
   closeOverlay: () => void;
 }
 
@@ -19,8 +19,9 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
   const userId = user?.id;
+  const translation = useAppSelector(store => store.app.languageSettings);
   // обработчик действия по кнопке "забрать"
-  const handleGetBonus = async (item: Bonus) => {
+  const handleGetBonus = async (item: IBonus) => {
     const itemId = Number(item?.bonus_item_id);
     const itemCount = Number(item?.bonus_count);
     switch (item?.bonus_type) {
@@ -51,8 +52,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
     <div key={bonus?.bonus_item_id} className={styles.bonus}>
       <div className={styles.bonus__layout}>
         <div className={styles.bonus__titleContainer}>
-          <h2 className={styles.bonus__title}>Ежедневная награда</h2>
-          <p className={styles.bonus__text}>Вернитесь завтра, чтобы получить ещё</p>
+          <h2 className={styles.bonus__title}>{translation?.daily_reward}</h2>
+          <p className={styles.bonus__text}>{translation?.come_back_tomorrow}</p>
         </div>
         <div className={styles.bonus__content}>
           <img src={bonus?.bonus_image} alt="bonus_image" className={styles.bonus__image} />
@@ -62,8 +63,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
               handleClick={() => handleGetBonus(bonus)}
               text={
                 `${(bonus?.bonus_type === "tokens" || bonus?.bonus_type === "exp" || bonus?.bonus_type === "energy_drink")
-                  ? `Забрать ${bonus?.bonus_count}`
-                  : 'Забрать'}`
+                  ? `${translation?.claim} ${bonus?.bonus_count}`
+                  : `${translation?.claim}`}`
               }
             />
           </div>

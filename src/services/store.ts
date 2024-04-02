@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import appReducer from './appSlice';
-// import gameReducer from './gameSlice';
+import rpsReducer from './rockPaperScissorsSlice';
+import wsSlice from "./wsSlice";
 
 const store = configureStore({
   reducer: {
     app: appReducer,
-    // game: gameReducer
+    game: rpsReducer,
+    ws: wsSlice,
   }
 });
 

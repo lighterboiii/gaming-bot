@@ -1,0 +1,134 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.game {
+  @include size(100%, 100vh);
+  @include position(relative);
+  // @include min-size(100%, calc(100vh + 1px));
+  @include flex(column, flex-start, center, 10px);
+  background-image: url('../../images/rock-paper-scissors/rps-bg.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  &__heading {
+    color: #FFF;
+  }
+
+  &__players {
+    @include size(100%, auto);
+    @include flex(row, space-between, center);
+  }
+
+  &__player {
+    @include size(178px, 178px);
+    @include position(relative);
+    @include flex(row, center, center);
+  }
+
+  // &__choiceBox {
+  //   @include size(200px, 68px);
+  //   @include position(relative);
+  //   @include flex(row, center, center, 6px);
+  //   background-image: url('../../images/rock-paper-scissors/choise-plate.png');
+  //   background-position: center;
+  //   background-size: contain;
+  //   background-repeat: no-repeat;
+  // }
+
+  &__icon {
+    @include size(42px, 52px);
+  }
+
+  &__iconEmoji {
+    @include size(48px, 48px);
+  }
+
+  &__lowerContainer {
+    @include size(100%, auto);
+    @include position(absolute, $bottom: 10%, $left: 50%);
+    @include flex(column, center, center, 10px);
+    transform: translate(-50%);
+  }
+
+  &__buttonsWrapper {
+    @include size(100%, auto);
+    @include flex(row, center, center);
+  }
+
+  &__text {
+    @include indents();
+    color: $main-color;
+  }
+
+  &__betContainer {
+    @include flex(column, center, center, 10px);
+  }
+
+  &__bet {
+    @include indents(6px 16px, 0);
+    @include flex(row, center, center, 10px);
+    background-color: #140957;
+    color: $main-color;
+    border-radius: $radius-40;
+    opacity: .5;
+  }
+
+  // &__button {
+  //   @include button-style-reset();
+  // }
+
+  // &__emojiButton {
+  //   @include position(absolute, $bottom: 50%, $right: -64px);
+  //   transform: translateY(50%);
+  // }
+
+  // &__mainImage {
+  //   @include size(200px, auto);
+  // }
+
+  // &__leftMainImage {
+  //   @include position(absolute, $top: 50%, $left: -10%);
+  //   transform: translateY(-50%);
+  // }
+
+  // &__rightMainImage {
+  //   @include position(absolute, $top: 50%, $right: -10%);
+  //   transform: translateY(-50%);
+  // }
+
+  &__versusImage {
+    @include size(160px, auto);
+    @include position(absolute, $top: 150px, $left: 50%);
+    transform: translateX(-50%);
+  }
+
+  &__notify {
+    @include position(absolute, $top: 50%, $left: 50%);
+    @include indents();
+    @include size(100%, auto);
+    color: $main-color;
+    transform: translate(-50%, -50%);
+  }
+
+  &__checkbox {
+    display: none;
+  }
+
+  &__label {
+    background-image: url('../../images/rock-paper-scissors/ready_image.png');
+    @include size(200px, 68px);
+    @include position(relative);
+    @include flex(row, center, center, 6px);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  &__readyIcon {
+    @include size(60px, 60px);
+    @include position(absolute, $left: 50%, $bottom: -5%);
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+}

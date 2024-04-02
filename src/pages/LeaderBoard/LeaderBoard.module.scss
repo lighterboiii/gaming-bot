@@ -23,9 +23,11 @@
 
   &__heading {
     @include indents();
+    @include size(80%, auto);
     color: $main-color;
     font-weight: 900;
     font-size: 40px;
+    line-height: 1;
     font-style: italic;
   }
 

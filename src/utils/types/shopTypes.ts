@@ -9,7 +9,7 @@ export interface ItemData {
   item_type: string;
 }
 
-export interface LavkaData {
+export interface ILavkaData {
   item_id: number;
   item_mask: string;
   item_pic: string;
@@ -21,10 +21,10 @@ export interface LavkaData {
   item_price_tokens: number;
 }
 
-export type GoodsItem = LavkaData | ItemData;
+export type GoodsItem = ILavkaData | ItemData;
 
 export interface LavkaResponse {
-  lavka: LavkaData[]; 
+  lavka: ILavkaData[]; 
 };
 
-export interface CombinedItemData extends ItemData, LavkaData {};
+export interface CombinedItemData extends ItemData, ILavkaData {};

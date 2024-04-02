@@ -6,14 +6,12 @@ import { shopUrl } from "../../../utils/routes";
 import gowinLogo from '../../../images/gowin.png';
 import girl from '../../../images/Shop_small_char.png';
 import { postEvent } from "@tma.js/sdk";
+import { useAppSelector } from "../../../services/reduxHooks";
 
 const ShopLink: FC = () => {
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   const handleGetHapticFeedback = () => {
-    postEvent('web_app_trigger_haptic_feedback', {
-      type: 'impact',
-      impact_style: 'light',
-    });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
   };
 
   return (
@@ -24,7 +22,7 @@ const ShopLink: FC = () => {
     >
       <div className={styles.shopLink__content}>
         <img src={gowinLogo} alt="main_logo" className={styles.shopLink__logo} />
-        <h2 className={styles.shopLink__title}>Магазин</h2>
+        <h2 className={styles.shopLink__title}>{translation?.shop}</h2>
         <img src={girl} alt="character" className={styles.shopLink__char} />
       </div>
     </Link>
