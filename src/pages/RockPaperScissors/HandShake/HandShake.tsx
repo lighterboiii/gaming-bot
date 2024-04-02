@@ -28,7 +28,8 @@ interface IProps {
 
 const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice }) => {
   const [key, setKey] = useState(false);
-
+  // console.log(playerChoice);
+  // console.log(secondPlayerChoice);
   useEffect(() => {
     setKey(prevKey => !prevKey);
   }, [playerChoice, secondPlayerChoice]);
@@ -48,9 +49,9 @@ const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice }) => {
 
   const getRightHandImage = (choice: string) => {
     switch (choice) {
-      case 'rock':
-        return rightPP;
       case 'paper':
+        return rightPP;
+      case 'rock':
         return rightPR;
       case 'scissors':
         return rightRS;

@@ -22,13 +22,14 @@ const RockPaperScissors: FC = () => {
   const dispatch = useDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [roomData, setRoomData] = useState<any>(null); // https
+  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [choice, setChoice] = useState('none');
   const navigate = useNavigate();
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
   const socket = useAppSelector(store => store.ws.socket);
   const [message, setMessage] = useState<any>(null);
-
+  console.log(data?.players[0].choice);
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
@@ -42,7 +43,8 @@ const RockPaperScissors: FC = () => {
   useEffect(() => {
     webSocketService.setMessageHandler((message) => {
       setMessage(message);
-      console.log('Received message:', message);
+      setData(message?.room_data);
+      console.log('Получено сообщение:', message);
     });
   }, [webSocketService]);
 
@@ -69,7 +71,12 @@ const RockPaperScissors: FC = () => {
   const handleChoice = (value: string) => {
     setChoice(value);
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: value });
+    webSocketService.sendMessage({ type: 'choice', user_id: 5858080651, room_id: roomId, choice: 'paper' });
+    
+    setTimeout(() => {
     webSocketService.sendMessage({ type: 'whoiswin', room_id: roomId });
+      // webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: 'none' });
+    }, 5000)
   };
 
   const handleReady = () => {
@@ -94,8 +101,11 @@ const RockPaperScissors: FC = () => {
           <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
           {choice !== 'none' && (
             <div className={styles.game__hands}>
-              <HandShake playerChoice={choice} secondPlayerChoice={choice} />
-            </div>)}
+              {data?.players.map((player: any, index: number) => (
+                <HandShake key={index} playerChoice={player?.choice} secondPlayerChoice={player?.choice} />
+              ))}
+            </div>
+          )}
           <div className={styles.game__lowerContainer}>
             {choice === 'ready' ? (
               <>
