@@ -36,7 +36,7 @@ const RockPaperScissors: FC = () => {
   const [choice, setChoice] = useState('');
   const [ready, setReady] = useState(false);
   const navigate = useNavigate();
-  const webSocketService = useWebSocketService<any>(`ws://gamebottggw.ngrok.app/ws`);
+  const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
   const socket = useAppSelector(store => store.ws.socket);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const RockPaperScissors: FC = () => {
 
   const handleChoice = (value: string) => {
     setChoice(value);
-    webSocketService.sendMessage({ type: 'choice', userId, roomId, value });
+    webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: value });
   };
 
   return (
