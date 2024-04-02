@@ -6,7 +6,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { useNavigate } from "react-router-dom";
 import Room from "../../components/Game/Room/Room";
 import { getReq } from "../../api/api";
-import { useAppDispatch } from "../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { getOpenedRooms } from "../../services/appSlice";
 import { sortRooms } from "../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
@@ -18,11 +18,11 @@ const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   const [rooms, setRooms] = useState<any>(null);
-  const [typeValue, setTypeValue] = useState('Все');
-  const [currencyValue, setCurrencyValue] = useState('Все');
-  const [betValue, setBetValue] = useState('Все');
+  const [typeValue, setTypeValue] = useState(`${translation?.sort_all}`);
+  const [currencyValue, setCurrencyValue] = useState(`${translation?.sort_all}`);
+  const [betValue, setBetValue] = useState(`${translation?.sort_all}`);
 
   const [sortByBetAsc, setSortByBetAsc] = useState(false);
   const [sortByType, setSortByType] = useState(false);
@@ -58,7 +58,7 @@ const OpenedRooms: FC = () => {
       case 'type':
         sortedRooms = sortRooms(rooms, 'gameType', sortByType);
         setSortByType(!sortByType);
-        setTypeValue(sortByType ? 'Кто ближе' : 'Цу-е-фа');
+        setTypeValue(sortByType ? `${translation?.closest_number}` : `${translation?.rock_paper_scissors}`);
         break;
       case 'currency':
         sortedRooms = sortRooms(rooms, 'currency', sortByCurr);
@@ -68,7 +68,7 @@ const OpenedRooms: FC = () => {
       case 'bet':
         sortedRooms = sortRooms(rooms, 'bet', sortByBetAsc);
         setSortByBetAsc(!sortByBetAsc);
-        setBetValue(sortByBetAsc ? 'Возрастание' : 'Убывание');
+        setBetValue(sortByBetAsc ? `${translation?.sort_ascending}` : `${translation?.sort_descending}`);
         break;
       default:
         // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
@@ -82,18 +82,18 @@ const OpenedRooms: FC = () => {
       {loading ? <Loader /> : (
         <>
           <div className={styles.rooms__content}>
-            <h2 className={styles.rooms__heading}>Найти игру</h2>
+            <h2 className={styles.rooms__heading}>{translation?.find_game}</h2>
             <div className={styles.rooms__buttons}>
               <button type="button" name="type" className={styles.rooms__button} onClick={() => toggleSort('type')}>
-                <p className={styles.rooms__game}>Игра</p>
+                <p className={styles.rooms__game}>{translation?.sort_game}</p>
                 <p className={styles.rooms__name}>{typeValue}</p>
               </button>
               <button type="button" name="currency" className={styles.rooms__button} onClick={() => toggleSort('currency')}>
-                <p className={styles.rooms__game}>Валюта</p>
+                <p className={styles.rooms__game}>{translation?.sort_currency}</p>
                 <p className={styles.rooms__name}>{currencyValue}</p>
               </button>
               <button type="button" name="bet" className={styles.rooms__button} onClick={() => toggleSort('bet')}>
-                <p className={styles.rooms__game}>Ставка</p>
+                <p className={styles.rooms__game}>{translation?.sort_bet}</p>
                 <p className={styles.rooms__name}>{betValue}</p>
               </button>
             </div>
@@ -105,7 +105,7 @@ const OpenedRooms: FC = () => {
               <div className={styles.rooms__createNew}>
                 <p className={styles.rooms__notify}>Нет открытых комнат, создай первую</p>
                 <div className={styles.rooms__buttonWrapper}>
-                  <Button handleClick={() => navigate('/create-room')} text="Cоздать 🚀" />
+                  <Button handleClick={() => navigate('/create-room')} text={translation?.create_room_button} />
                 </div>
               </div>
 

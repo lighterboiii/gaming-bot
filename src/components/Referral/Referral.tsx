@@ -5,14 +5,12 @@ import styles from './Referral.module.scss';
 import Button from "../ui/Button/Button";
 import UserContainer from "../User/UserContainer/UserContainer";
 import { userId } from "../../api/requestData";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { getReferralsData, transferCoinsToBalanceReq } from "../../api/mainApi";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { setCoinsNewValue } from "../../services/appSlice";
-import { formatNumber } from "../../utils/additionalFunctions";
-import { IReferralCoinsTransferResponse, IReferralResponse } from "../../utils/types/mainTypes";
 import { postEvent } from "@tma.js/sdk";
 import { IMember } from "../../utils/types/memberTypes";
 
@@ -21,6 +19,7 @@ const Referral: FC = () => {
   const { user, tg } = useTelegram();
   // const userId = user?.id;
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
+  const translation = useAppSelector(store => store.app.languageSettings);
 
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
@@ -40,11 +39,11 @@ const Referral: FC = () => {
         });
     };
     fetchData();
-  
+
     const intervalId = setInterval(() => {
       fetchData();
     }, 60000);
-  
+
     return () => {
       clearInterval(intervalId);
     };
@@ -57,11 +56,12 @@ const Referral: FC = () => {
         switch (res.transfered) {
           case "small":
             // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
-            setMessage("Минимальная сумма для перевода 0.1");
+            setMessage(`${translation?.claim_minimum}`);
             break;
           default:
             // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
-            setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
+            // setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
+            setMessage(`${translation?.funds_transferred}`);
             dispatch(setCoinsNewValue(Number(res.new_coins)));
             setTotalBalance(0);
             break;
@@ -87,21 +87,26 @@ const Referral: FC = () => {
 
   return (
     <div className={styles.referral}>
+      {totalBalance !== 0 && <div className={styles.referral__buttonWrapper}>
+        <Button text={translation?.claim} handleClick={handleInviteClick} isWhiteBackground />
+      </div>}
       <h3 className={styles.referral__h3}>
-        Приглашай друзей и получай процент с каждой игры
+        {translation?.invite_friends_bonus}
       </h3>
-      <div  className={styles.referral__buttonWrapper}>
-        <Button text="Пригласить"  handleClick={handleInviteClick} />
+      <div className={styles.referral__buttonWrapper}>
+        <Button text={translation?.invite} handleClick={handleInviteClick} />
       </div>
       <div className={styles.referral__amount}>
-        <p className={styles.referral__text}>Заработано за всё время:
+        <p className={styles.referral__text}>
+          {translation?.total_earned}
           <span className={styles.referral__sumSpan}>
             + 💵 {referralCoinsAmount ? referralCoinsAmount : '0'}$
           </span>
         </p>
       </div>
       <div className={styles.referral__weekly}>
-        <p className={styles.referral__text}>Заработано за неделю:
+        <p className={styles.referral__text}>
+          {translation?.earned_now}
           <span className={styles.referral__sumSpan}>
             + 💵 {totalBalance ? totalBalance : '0'}$
           </span>
@@ -125,7 +130,7 @@ const Referral: FC = () => {
               <UserContainer member={referral} index={index} length={refsBoard.length + 1} key={index} />
             ))) :
             <span className={styles.referral__emptyBoard}>
-              ...Пока никто из ваших друзей не играл
+              {translation?.no_friends_played}
             </span>
           }
         </div>

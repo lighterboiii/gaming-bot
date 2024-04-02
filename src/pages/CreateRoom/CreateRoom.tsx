@@ -10,10 +10,12 @@ import { games } from "../../utils/mockData";
 import GameCard from "../../components/Game/GameCard/GameCard";
 import Overlay from "../../components/Overlay/Overlay";
 import GameSettings from "../../components/Game/GameSettings/GameSettings";
+import { useAppSelector } from "../../services/reduxHooks";
 // типизировать
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
+  const translation = useAppSelector(store => store.app.languageSettings);
   // const [betAmount, setBetAmount] = useState(0.1);
   // const [currency, setCurrency] = useState('💵');
   const [gameData, setGameData] = useState(null);
@@ -38,7 +40,7 @@ const CreateRoom: FC = () => {
   return (
     <div className={styles.create}>
       <div className={styles.create__header}>
-        <h2 className={styles.create__heading}>Создать комнату</h2>
+        <h2 className={styles.create__heading}>{translation?.create_room}</h2>
       </div>
       <div className={`${styles.create__content} ${settingsOverlay ? styles.hidden : ''}`}>
         {games.map((game: any, index: number) => (

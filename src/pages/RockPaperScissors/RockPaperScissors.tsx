@@ -21,6 +21,7 @@ import scissorsSelect from '../../images/rock-paper-scissors/hands-icons/scissor
 import Loader from "../../components/Loader/Loader";
 import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
 import { userId } from "../../api/requestData";
+import useWebSocketService from "../../services/webSocketService";
 
 // типизировать
 const Game: FC = () => {
@@ -44,6 +45,18 @@ const Game: FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const webSocketService = useWebSocketService<any>(`ws://gamebottggw.ngrok.app/ws`);
+
+  useEffect(() => {
+    webSocketService.setMessageHandler((message) => {
+      console.log('Received message:', message);
+    });
+
+    // return () => {
+    //   webSocketService.close();
+    // };
+  }, [webSocketService]);
 
   useEffect(() => {
     setLoading(true);

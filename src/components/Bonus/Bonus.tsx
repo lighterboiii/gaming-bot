@@ -3,7 +3,7 @@ import { FC } from "react";
 import { IBonus } from "../../utils/types/mainTypes";
 import styles from './Bonus.module.scss';
 import Button from "../ui/Button/Button";
-import { useAppDispatch } from "../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewExpValue, setNewTokensValue } from "../../services/appSlice";
 import { userId } from "../../api/requestData";
 import useTelegram from "../../hooks/useTelegram";
@@ -19,6 +19,7 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
   // const userId = user?.id;
+  const translation = useAppSelector(store => store.app.languageSettings);
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: IBonus) => {
     const itemId = Number(item?.bonus_item_id);
@@ -62,8 +63,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
               handleClick={() => handleGetBonus(bonus)}
               text={
                 `${(bonus?.bonus_type === "tokens" || bonus?.bonus_type === "exp" || bonus?.bonus_type === "energy_drink")
-                  ? `Забрать ${bonus?.bonus_count}`
-                  : 'Забрать'}`
+                  ? `${translation?.claim} ${bonus?.bonus_count}`
+                  : `${translation?.claim}`}`
               }
             />
           </div>

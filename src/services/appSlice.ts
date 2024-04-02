@@ -9,6 +9,7 @@ interface AppState {
   bonus: IBonus | any | null;
   lavka: ILavkaData[] | null;
   openedRooms: any | null;
+  languageSettings: any | null,
 }
 
 const initialState: AppState = {
@@ -17,7 +18,8 @@ const initialState: AppState = {
   archive: null,
   bonus: null,
   lavka: null,
-  openedRooms: null
+  openedRooms: null,
+  languageSettings: null,
 }
 
 const appSlice = createSlice({
@@ -121,6 +123,9 @@ const appSlice = createSlice({
         state.lavka = updatedLavka;
       }
     },
+    setLanguageSettings: (state, action: PayloadAction<any>) => {
+      state.languageSettings = action.payload;
+    },
     // rooms & game part
     getOpenedRooms: (state, action: PayloadAction<any>) => {
       state.openedRooms = action.payload;
@@ -150,6 +155,7 @@ export const {
   addEnergyDrink,
   getOpenedRooms,
   setActiveEmoji,
+  setLanguageSettings,
 } = appSlice.actions;
 
 export default appSlice.reducer;

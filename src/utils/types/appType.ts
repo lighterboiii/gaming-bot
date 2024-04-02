@@ -8,4 +8,5 @@ export interface IAppData {
   shop_available: ItemData[];
   user_info: IUserData;
   lavka_available: ILavkaData[];
+  translate: any;
 }

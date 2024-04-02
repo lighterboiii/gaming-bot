@@ -22,9 +22,9 @@ const Shop: FC = () => {
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const archiveData = useAppSelector(store => store.app.archive);
   const lavkaShop = useAppSelector(store => store.app.lavka);
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   const [goods, setGoods] = useState<GoodsItem[]>([]);
-  const [activeButton, setActiveButton] = useState<string>('Магазин');
+  const [activeButton, setActiveButton] = useState<string>(`${translation?.shop}`);
 
   const [showOverlay, setShowOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -54,7 +54,7 @@ const Shop: FC = () => {
   };
   // при монтировании компонента
   useEffect(() => {
-    setActiveButton('Магазин');
+    setActiveButton(`${translation?.shop}`);
     shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
     tg.BackButton.show().onClick(() => {
@@ -78,7 +78,7 @@ const Shop: FC = () => {
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
-    setActiveButton("Магазин");
+    setActiveButton(`${translation?.shop}`);
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
@@ -101,16 +101,16 @@ const Shop: FC = () => {
   return (
     <div className={styles.shop}>
       <div className={styles.shop__header}>
-        <h2 className={styles.shop__title}>Магазин</h2>
+        <h2 className={styles.shop__title}>{translation?.shop}</h2>
         <UserInfo />
       </div>
       <div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
         <div className={styles.shop__buttons}>
           <div className={styles.shop__leftButtonsContainer}>
             <button
-              className={`${styles.shop__button} ${activeButton === 'Магазин' ? styles.activeButton : ''}`}
+              className={`${styles.shop__button} ${activeButton === `${translation?.shop}` ? styles.activeButton : ''}`}
               onClick={handleClickShop}>
-              Магазин
+              {translation?.shop}
             </button>
             <button
               className={`${styles.shop__button} ${activeButton === 'Лавка' ? styles.activeButton : ''}`}
