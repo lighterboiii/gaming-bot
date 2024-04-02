@@ -45,7 +45,6 @@ const LeaderBoard: FC = () => {
       tg.BackButton.hide();
     };
   }, []);
-  
 
   return (
     <div className={styles.leaderBoard}>

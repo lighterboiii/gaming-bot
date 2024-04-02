@@ -11,7 +11,7 @@ import { useAppSelector } from "../../../services/reduxHooks";
 const ShopLink: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const handleGetHapticFeedback = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
   };
 
   return (

@@ -71,7 +71,7 @@ const OpenedRooms: FC = () => {
         setBetValue(sortByBetAsc ? `${translation?.sort_ascending}` : `${translation?.sort_descending}`);
         break;
       default:
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
         sortedRooms = rooms;
     }
     setRooms(sortedRooms);

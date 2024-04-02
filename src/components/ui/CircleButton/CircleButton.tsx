@@ -28,7 +28,7 @@ const CircleButton: FC<IProps> = ({
 }) => {
 
   const handleClick = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   }
 
   return (

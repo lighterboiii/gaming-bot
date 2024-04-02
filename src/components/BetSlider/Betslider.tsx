@@ -24,7 +24,7 @@ const BetSlider: FC<IProps> = ({
   const tokensBalance = useAppSelector(store => store.app.info?.tokens);
 
   const increaseBet = () => {
-    // postEvent('web_app_trigger_haptic_feedback', {type: 'impact', impact_style: 'soft'});
+    postEvent('web_app_trigger_haptic_feedback', {type: 'impact', impact_style: 'soft'});
     setBet(prevBet => {
       const newBet = (parseFloat(prevBet) + 0.1).toFixed(1);
       onBetChange(parseFloat(newBet));
@@ -33,7 +33,7 @@ const BetSlider: FC<IProps> = ({
   };
 
   const decreaseBet = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
     setBet(prevBet => {
       const currentBet = parseFloat(prevBet);
       if (currentBet > 0.1) {
@@ -60,8 +60,6 @@ const BetSlider: FC<IProps> = ({
       onBetChange(newBetValue);
     }
   };
-
-
 
   return (
     <div className={styles.slider}>

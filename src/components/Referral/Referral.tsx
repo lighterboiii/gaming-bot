@@ -55,11 +55,11 @@ const Referral: FC = () => {
         setMessageShown(true);
         switch (res.transfered) {
           case "small":
-            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
             setMessage(`${translation?.claim_minimum}`);
             break;
           default:
-            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
             // setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
             setMessage(`${translation?.funds_transferred}`);
             dispatch(setCoinsNewValue(Number(res.new_coins)));
