@@ -35,7 +35,7 @@ const useWebSocketService = <T>(url: string): IWebSocketService<T> => {
     };
 
     socket.onerror = (error) => {
-      console.error('Ошибка соединение ws', error);
+      console.error('Ошибка соединения ws', error);
     };
 
     setWebSocket(socket);

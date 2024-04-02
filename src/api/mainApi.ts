@@ -28,7 +28,6 @@ export const getReferralsData = (userIdValue: string) => {
 export const getTopUsers = () => {
   return getReq({
     uri: getLeadersUri,
-    userId: ''
   });
 };
 // перевести коины юзера на баланс юзера

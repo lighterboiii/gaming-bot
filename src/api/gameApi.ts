@@ -5,7 +5,6 @@ import { createRoomUri, getCurrentRoomInfo, getRoomsUri, playerChoiceParamString
 export const getOpenedRoomsRequest = () => {
   return getReq({
     uri: getRoomsUri,
-    userId: '',
   });
 };
 // создать игру 

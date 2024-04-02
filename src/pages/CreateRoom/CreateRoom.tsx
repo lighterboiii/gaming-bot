@@ -16,13 +16,10 @@ const CreateRoom: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const translation = useAppSelector(store => store.app.languageSettings);
-  // const [betAmount, setBetAmount] = useState(0.1);
-  // const [currency, setCurrency] = useState('💵');
+
   const [gameData, setGameData] = useState(null);
   const [settingsOverlay, setSettingsOverlay] = useState(false);
-  // const dispatch = useAppDispatch();
-  // const userCoins = useAppSelector(store => store.app.info);
-
+  
   useEffect(() => {
     tg.BackButton.show().onClick(() => {
       navigate(-1);

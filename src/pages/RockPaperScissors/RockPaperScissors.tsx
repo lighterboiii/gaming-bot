@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
-import useTelegram from "../../hooks/useTelegram";
-import styles from './RockPaperScissors.module.scss';
-import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import { getRoomInfoRequest, setUserChoice } from "../../api/gameApi";
+import { RootState } from "../../services/store";
+import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import useTelegram from "../../hooks/useTelegram";
+import { userId } from "../../api/requestData";
+import useWebSocketService from "../../services/webSocketService";
+import styles from "./RockPaperScissors.module.scss";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import leftHand from '../../images/rock-paper-scissors/l-pp.png'
 import rightHand from '../../images/rock-paper-scissors/r-rr.png';
@@ -18,23 +23,22 @@ import paperSelect from '../../images/rock-paper-scissors/hands-icons/paper_sele
 import scissors from '../../images/rock-paper-scissors/hands-icons/scissors.png'
 import scissorsDeselect from '../../images/rock-paper-scissors/hands-icons/scissors_deselect.png'
 import scissorsSelect from '../../images/rock-paper-scissors/hands-icons/scissors_select.png'
-import Loader from "../../components/Loader/Loader";
 import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
-import { userId } from "../../api/requestData";
-import useWebSocketService from "../../services/webSocketService";
+import { useAppSelector } from "../../services/reduxHooks";
+import { setSocket } from "../../services/wsSlice";
 
-// типизировать
-const Game: FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { roomId } = useParams<string>();
+const RockPaperScissors: FC = () => {
+  const { roomId } = useParams<{ roomId: string }>();
+  const dispatch = useDispatch();
   const [roomData, setRoomData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
   const [choice, setChoice] = useState('');
   const [ready, setReady] = useState(false);
   const navigate = useNavigate();
-  console.log(roomData);
+  const webSocketService = useWebSocketService<any>(`ws://gamebottggw.ngrok.app/ws`);
+  const socket = useAppSelector(store => store.ws.socket);
+
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
@@ -43,20 +47,21 @@ const Game: FC = () => {
     return () => {
       tg.BackButton.hide();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const webSocketService = useWebSocketService<any>(`ws://gamebottggw.ngrok.app/ws`);
+  }, [tg, navigate]);
 
   useEffect(() => {
     webSocketService.setMessageHandler((message) => {
       console.log('Received message:', message);
     });
-
-    // return () => {
-    //   webSocketService.close();
-    // };
   }, [webSocketService]);
+
+  useEffect(() => {
+    dispatch(setSocket(socket));
+
+    return () => {
+      socket?.close();
+    };
+  }, [dispatch, socket]);
 
   useEffect(() => {
     setLoading(true);
@@ -72,14 +77,8 @@ const Game: FC = () => {
 
   const handleChoice = (value: string) => {
     setChoice(value);
-    setUserChoice(userId, roomData?.room_id, "rock")
-      .then((res: any) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  }
+    webSocketService.sendMessage({ type: 'choice', userId, roomId, value });
+  };
 
   return (
     <div className={styles.game}>
@@ -116,18 +115,22 @@ const Game: FC = () => {
                     <button
                       type="button"
                       className={styles.game__button}
-                      onClick={() => handleChoice('2')}
+                      onClick={() => handleChoice('rock')}
                     >
                       <img src={rock} alt="rock icon" className={styles.game__icon} />
                     </button>
                     <button
                       type="button"
-                      className={styles.game__button}>
+                      className={styles.game__button}
+                      onClick={() => handleChoice('scissors')}
+                      >
                       <img src={scissors} alt="scissors icon" className={styles.game__icon} />
                     </button>
                     <button
                       type="button"
-                      className={styles.game__button}>
+                      className={styles.game__button}
+                      onClick={() => handleChoice('paper')}
+                      >
                       <img src={paper} alt="paper icon" className={styles.game__icon} />
                     </button>
                     <button type="button" className={`${styles.game__button} ${styles.game__emojiButton}`}>
@@ -154,7 +157,7 @@ const Game: FC = () => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Game;
+export default RockPaperScissors;

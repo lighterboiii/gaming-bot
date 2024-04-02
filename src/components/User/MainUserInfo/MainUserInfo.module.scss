@@ -18,8 +18,11 @@
     @include flex(column, space-evenly, flex-start, 4px);
   }
 
+  &__textWrapper {
+    @include flex(row, center, center, 8px);
+  }
+
   &__avatarContainer {
-    // @include position(relative);
     @include size(130px, 130px);
   }
 

@@ -3,7 +3,6 @@ import { FC } from "react";
 import styles from './MainUserInfo.module.scss';
 import { Link } from "react-router-dom";
 import useTelegram from "../../../hooks/useTelegram";
-import { roomsUrl } from "../../../utils/routes";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import { useAppSelector } from "../../../services/reduxHooks";
 import CircleButton from "../../ui/CircleButton/CircleButton";
@@ -36,11 +35,11 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
           <div className={styles.userInfo__textElements}>
             <p className={styles.userInfo__name}>{userData && userData?.publicname}</p>
             <div className={styles.userInfo__money}>
-              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+              <div className={styles.userInfo__textWrapper}>
                 <p className={styles.userInfo__text}>💵 {userData ? formatNumber(userData?.coins) : '0'}</p>
                 <p className={styles.userInfo__text}>🔰 {userData ? formatNumber(userData?.tokens) : '0'}</p>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "center", alignItems: 'center', gap: '8px' }}>
+              <div className={styles.userInfo__textWrapper}>
                 <p className={styles.userInfo__text}>🔋 {userData ? userData?.user_energy_drinks : '0'}</p>
                 <p className={styles.userInfo__text}>🧙‍♂️ {userData ? userData?.user_exp : '0'}</p>
               </div>

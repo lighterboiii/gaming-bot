@@ -10,7 +10,6 @@ interface IProps {
 }
 
 const Room: FC<IProps> = ({ room }) => {
-  console.log(room);
   const navigate = useNavigate();
   return (
     <div className={styles.room} onClick={() => navigate(`/room/${room.room_id}`)} key={room?.id}>

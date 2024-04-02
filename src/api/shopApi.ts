@@ -65,7 +65,6 @@ export const makeCollectibleRequest = async (itemId: number, itemCount: number, 
 export const getLavkaAvailableRequest = async () => {
   return await getReq({
     uri: getLavkaUri,
-    userId: '',
   })
 };
 // поставить активный эмодзи
