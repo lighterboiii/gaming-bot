@@ -33,7 +33,8 @@ const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice }) => {
   useEffect(() => {
     setKey(prevKey => !prevKey);
   }, [playerChoice, secondPlayerChoice]);
-
+  console.log(playerChoice);
+  console.log(secondPlayerChoice);
   const getLeftHandImage = (choice: string) => {
     switch (choice) {
       case 'rock':

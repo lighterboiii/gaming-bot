@@ -74,28 +74,18 @@
     opacity: .5;
   }
 
-  // &__button {
-  //   @include button-style-reset();
-  // }
+  &__iconEmoji {
+    @include size(48px, 48px);
+  }
 
-  // &__emojiButton {
-  //   @include position(absolute, $bottom: 50%, $right: -64px);
-  //   transform: translateY(50%);
-  // }
+  &__button {
+    @include button-style-reset();
+  }
 
-  // &__mainImage {
-  //   @include size(200px, auto);
-  // }
-
-  // &__leftMainImage {
-  //   @include position(absolute, $top: 50%, $left: -10%);
-  //   transform: translateY(-50%);
-  // }
-
-  // &__rightMainImage {
-  //   @include position(absolute, $top: 50%, $right: -10%);
-  //   transform: translateY(-50%);
-  // }
+  &__emojiButton {
+    @include position(absolute, $bottom: 50%, $right: 24px);
+    transform: translateY(50%);
+  }
 
   &__versusImage {
     @include size(160px, auto);

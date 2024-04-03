@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { setSocket } from "../../services/wsSlice";
 import HandShake from './HandShake/HandShake';
 import ChoiceBox from "./ChoiceBox/ChoiceBox";
+import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 
 const RockPaperScissors: FC = () => {
   const dispatch = useAppDispatch();
@@ -22,20 +23,20 @@ const RockPaperScissors: FC = () => {
   const { tg, user } = useTelegram();
   // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
-
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [choice, setChoice] = useState('none');
-  const [message, setMessage] = useState<any>(null);
+  const [choice, setChoice] = useState<string>('none');
+
+  // const [message, setMessage] = useState<any>(null);
   const [roomData, setRoomData] = useState<any>(null); // https
-  
+  console.log(data?.players);
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
 
   const socket = useAppSelector(store => store.ws.socket);
   const isUserCreator = Number(userId) === Number(roomData?.creator_id);
   const isInRoom = roomData?.players.some((player: any) => player.userid === userId)
   console.log(isUserCreator);
-  // console.log(data?.players[0].choice);
+  console.log(data?.players[1].choice);
   console.log(roomData);
   // задать и сбросить цвет шапки + backButton
   useEffect(() => {
@@ -55,15 +56,14 @@ const RockPaperScissors: FC = () => {
       tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate]);
-// подключиться по ws
+  // подключиться по ws
   useEffect(() => {
     webSocketService.setMessageHandler((message) => {
-      setMessage(message);
       setData(message?.room_data);
       console.log('Получено сообщение:', message);
     });
   }, [webSocketService]);
-// записать в редукс ??
+  // записать в редукс ??
   useEffect(() => {
     dispatch(setSocket(socket));
 
@@ -71,43 +71,39 @@ const RockPaperScissors: FC = () => {
       socket?.close();
     };
   }, [dispatch, socket]);
-// получить даныне о комнате при входе в игру
-useEffect(() => {
-  setLoading(true);
-  getRoomInfoRequest(roomId!)
-    .then((data) => {
-      setRoomData(data);
-      setLoading(false);
-      const isUserInRoom = roomData.players.some((player: any) => player.userid === userId);
-      if (!isUserCreator && !isUserInRoom) {
-        joinRoomRequest(userId, roomId!)
-          .then((res) => {
-            console.log("Присоединение к комнате выполнено успешно:", res);
-          })
-          .catch((error) => {
-            console.error("Ошибка при присоединении к комнате:", error);
-          });
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}, [isUserCreator, roomId]);
-// хендлер выбора хода
+  // получить даныне о комнате при входе в игру
+  useEffect(() => {
+    setLoading(true);
+    getRoomInfoRequest(roomId!)
+      .then((data) => {
+        setRoomData(data);
+        setLoading(false);
+        const isUserInRoom = roomData.players.some((player: any) => player.userid === userId);
+        if (!isUserCreator && !isUserInRoom) {
+          joinRoomRequest(userId, roomId!)
+            .then((res) => {
+              console.log("Присоединение к комнате выполнено успешно:", res);
+            })
+            .catch((error) => {
+              console.error("Ошибка при присоединении к комнате:", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [isUserCreator, roomId]);
+  // хендлер выбора хода
   const handleChoice = (value: string) => {
     setChoice(value);
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: value });
-    
-    setTimeout(() => {
-    webSocketService.sendMessage({ type: 'whoiswin', room_id: roomId });
-      // webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: 'none' });
-    }, 5000)
   };
-// хендлер готовности игрока
+  // хендлер готовности игрока
   const handleReady = () => {
     setChoice('ready');
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: 'ready' });
   }
+
 
   return (
     <div className={styles.game}>
@@ -117,20 +113,18 @@ useEffect(() => {
             {roomData?.players.map((player: any) => (
               <div className={styles.game__player}>
                 <UserAvatar item={player} avatar={player.avatar} key={player.userId} />
-                {message?.choice === 'ready' && (
+                {player.choice === 'ready' && (
                   <img src={readyIcon} alt="ready icon" className={styles.game__readyIcon} />
                 )}
               </div>
             ))}
           </div>
           <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
-          {choice !== 'none' && (
-            <div className={styles.game__hands}>
-              {data?.players.map((player: any, index: number) => (
-                <HandShake key={index} playerChoice={player?.choice} secondPlayerChoice={player?.choice} />
-              ))}
-            </div>
-          )}
+          <div className={styles.game__hands}>
+            {/* {data?.players.map((player: any, index: number) => ( */}
+            <HandShake playerChoice={data?.players[0].choice} secondPlayerChoice={data?.players[1].choice} />
+            {/* ))} */}
+          </div>
           <div className={styles.game__lowerContainer}>
             {choice === 'ready' ? (
               <>
@@ -156,11 +150,14 @@ useEffect(() => {
                 <label htmlFor="ready" className={styles.game__label}></label>
               </div>
             )}
+            <button type="button" className={`${styles.game__button} ${styles.game__emojiButton}`}>
+              <img src={emoji_icon} alt="emoji icon" className={styles.game__iconEmoji} />
+            </button>
           </div>
         </>
       )}
     </div>
   );
-};
+}
 
 export default RockPaperScissors;
