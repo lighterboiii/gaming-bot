@@ -37,3 +37,10 @@ export const transferCoinsToBalanceReq = (userIdValue: string) => {
     userId: userIdValue
   });
 };
+// получить активный пак эмодзи
+export const getActiveEmojiPack = (userIdValue: string) => {
+  return getReq({
+    uri: 'user_emoji?user_id=',
+    userId: userIdValue,
+  })
+};

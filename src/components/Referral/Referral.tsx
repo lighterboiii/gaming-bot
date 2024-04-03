@@ -60,7 +60,6 @@ const Referral: FC = () => {
             break;
           default:
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
-            // setMessage(`Баланс пополнен на ${formatNumber(Number(res.transfered))}`);
             setMessage(`${translation?.funds_transferred}`);
             dispatch(setCoinsNewValue(Number(res.new_coins)));
             setTotalBalance(0);
@@ -88,7 +87,7 @@ const Referral: FC = () => {
   return (
     <div className={styles.referral}>
       {totalBalance !== 0 && <div className={styles.referral__buttonWrapper}>
-        <Button text={translation?.claim} handleClick={handleInviteClick} isWhiteBackground />
+        <Button text={translation?.claim} handleClick={handleTransferCoins} isWhiteBackground />
       </div>}
       <h3 className={styles.referral__h3}>
         {translation?.invite_friends_bonus}
@@ -110,13 +109,6 @@ const Referral: FC = () => {
           <span className={styles.referral__sumSpan}>
             + 💵 {totalBalance ? totalBalance : '0'}$
           </span>
-          <button
-            disabled={totalBalance === 0}
-            className={styles.referral__chevron}
-            onClick={handleTransferCoins}
-          >
-            <ChevronIcon position="up" />
-          </button>
         </p>
       </div>
       {messageShown ? (

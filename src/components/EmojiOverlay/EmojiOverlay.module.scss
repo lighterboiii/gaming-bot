@@ -15,7 +15,9 @@
   opacity: .9;
 
   &__children {
+    @include indents(16px, 0);
     @include size(100%, 100%);
+    @include flex(column, flex-start, center);
   }
 
   &__closeButton {
@@ -26,6 +28,29 @@
     @include size(25px, 25px);
     border-radius: 40px;
     background-color: $main-color;
+  }
+
+  &__emoji {
+    @include size(84px, 84px);
+    aspect-ratio: 1;
+    cursor: pointer;
+  }
+
+  &__emojis {
+    @include size(100%, auto);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-content: start;
+    justify-items: center;
+    overflow-y: auto;
+  }
+
+  &__name {
+    @include indents(0, 10px 0);
+    @include size(100%, auto);
+    font-size: 20px;
+    font-weight: 700;
+    color: $main-color;
   }
 }
 

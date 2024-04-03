@@ -13,13 +13,14 @@ import { postEvent } from "@tma.js/sdk";
 import Loader from "../../components/Loader/Loader";
 import { getOpenedRoomsRequest } from "../../api/gameApi";
 import Button from "../../components/ui/Button/Button";
+import { IGameCardData } from "../../utils/types/gameTypes";
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
   const translation = useAppSelector(store => store.app.languageSettings);
-  const [rooms, setRooms] = useState<any>(null);
+  const [rooms, setRooms] = useState<IGameCardData[] | null>(null);
   const [typeValue, setTypeValue] = useState(`${translation?.sort_all}`);
   const [currencyValue, setCurrencyValue] = useState(`${translation?.sort_all}`);
   const [betValue, setBetValue] = useState(`${translation?.sort_all}`);
@@ -56,17 +57,17 @@ const OpenedRooms: FC = () => {
     let sortedRooms;
     switch (sortBy) {
       case 'type':
-        sortedRooms = sortRooms(rooms, 'gameType', sortByType);
+        sortedRooms = sortRooms(rooms as any, 'gameType', sortByType);
         setSortByType(!sortByType);
         setTypeValue(sortByType ? `${translation?.closest_number}` : `${translation?.rock_paper_scissors}`);
         break;
       case 'currency':
-        sortedRooms = sortRooms(rooms, 'currency', sortByCurr);
+        sortedRooms = sortRooms(rooms as any, 'currency', sortByCurr);
         setSortByCurr(!sortByCurr);
         setCurrencyValue(sortByCurr ? '💵' : '🔰');
         break;
       case 'bet':
-        sortedRooms = sortRooms(rooms, 'bet', sortByBetAsc);
+        sortedRooms = sortRooms(rooms as any, 'bet', sortByBetAsc);
         setSortByBetAsc(!sortByBetAsc);
         setBetValue(sortByBetAsc ? `${translation?.sort_ascending}` : `${translation?.sort_descending}`);
         break;

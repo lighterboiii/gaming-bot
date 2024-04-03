@@ -12,15 +12,18 @@ import GameSettings from "../../components/Game/GameSettings/GameSettings";
 import { useAppSelector } from "../../services/reduxHooks";
 import { getExistingGamesRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
+import { IGameCardData } from "../../utils/types/gameTypes";
 // типизировать
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
-  const translation = useAppSelector(store => store.app.languageSettings);
-  const [games, setGames] = useState<any>(null);
+
+  const [games, setGames] = useState<IGameCardData[] | null>(null);
   const [gameData, setGameData] = useState(null);
   const [settingsOverlay, setSettingsOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const translation = useAppSelector(store => store.app.languageSettings);
 
   useEffect(() => {
     setLoading(true);
@@ -28,7 +31,7 @@ const CreateRoom: FC = () => {
       navigate(-1);
     });
     getExistingGamesRequest()
-      .then((res) => {
+      .then((res: any) => {
         setGames(res);
         setLoading(false);
       })

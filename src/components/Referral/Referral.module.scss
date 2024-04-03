@@ -64,19 +64,6 @@
     z-index: 3;
   }
 
-  &__chevron {
-    @include button-style-reset();
-    @include size(24px, 24px);
-    border-radius: $radius-round;
-    background-color: $secondary-color;
-    cursor: pointer;
-
-    &:disabled {
-      opacity: .3;
-      cursor: not-allowed;
-    }
-  }
-
   &__notification {
     @include indents();
     @include size(calc(100% - 32px), 100%);
