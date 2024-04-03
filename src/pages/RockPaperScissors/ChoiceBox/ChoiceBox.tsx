@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './ChoiceBox.module.scss';
-import emoji_icon from '../../../images/rock-paper-scissors/emoji_icon.png';
+// import emoji_icon from '../../../images/rock-paper-scissors/emoji_icon.png';
 import rock from '../../../images/rock-paper-scissors/hands-icons/rock.png'
 import rockDeselect from '../../../images/rock-paper-scissors/hands-icons/rock_deselect.png'
 import rockSelect from '../../../images/rock-paper-scissors/hands-icons/rock_select.png'
@@ -13,7 +13,7 @@ import scissorsDeselect from '../../../images/rock-paper-scissors/hands-icons/sc
 import scissorsSelect from '../../../images/rock-paper-scissors/hands-icons/scissors_select.png'
 
 interface IProps {
-  handleChoice: any;
+  handleChoice: (value: string) => void;
 }
 
 const ChoiceBox: FC<IProps> = ({ handleChoice }) => {
@@ -40,9 +40,9 @@ const ChoiceBox: FC<IProps> = ({ handleChoice }) => {
       >
         <img src={paper} alt="paper icon" className={styles.choiceBox__icon} />
       </button>
-      <button type="button" className={`${styles.choiceBox__button} ${styles.choiceBox__emojiButton}`}>
+      {/* <button type="button" className={`${styles.choiceBox__button} ${styles.choiceBox__emojiButton}`}>
         <img src={emoji_icon} alt="emoji icon" className={styles.choiceBox__iconEmoji} />
-      </button>
+      </button> */}
     </div>
   )
 };

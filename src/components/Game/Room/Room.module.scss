@@ -2,7 +2,7 @@
 @use '../../../stylesheets/variables' as *;
 
 .room {
-  @include indents(8px 16px, 0);
+  @include indents(8px, 0);
   @include flex(row, space-between, center, 8px);
   // @include size(100%, 100%);
   @include min-size(100%, 76px);
@@ -37,10 +37,11 @@
   }
 
   &__gameName {
+    @include size(100%, auto);
     @include indents();
     @include ellipsis();
     color: $main-color;
-    font-size: 12px;
+    font-size: 10px;
     text-align: left;
     text-transform: uppercase;
     font-weight: 700;

@@ -6,24 +6,38 @@ import styles from './CreateRoom.module.scss';
 import { useNavigate } from "react-router-dom";
 import { userId } from "../../api/requestData";
 import useTelegram from "../../hooks/useTelegram";
-import { games } from "../../utils/mockData";
 import GameCard from "../../components/Game/GameCard/GameCard";
 import Overlay from "../../components/Overlay/Overlay";
 import GameSettings from "../../components/Game/GameSettings/GameSettings";
 import { useAppSelector } from "../../services/reduxHooks";
+import { getExistingGamesRequest } from "../../api/gameApi";
+import Loader from "../../components/Loader/Loader";
+import { IGameCardData } from "../../utils/types/gameTypes";
 // типизировать
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
-  const translation = useAppSelector(store => store.app.languageSettings);
 
+  const [games, setGames] = useState<IGameCardData[] | null>(null);
   const [gameData, setGameData] = useState(null);
   const [settingsOverlay, setSettingsOverlay] = useState(false);
-  
+  const [loading, setLoading] = useState(false);
+
+  const translation = useAppSelector(store => store.app.languageSettings);
+
   useEffect(() => {
+    setLoading(true);
     tg.BackButton.show().onClick(() => {
       navigate(-1);
     });
+    getExistingGamesRequest()
+      .then((res: any) => {
+        setGames(res);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     return () => {
       tg.BackButton.hide();
     }
@@ -36,34 +50,35 @@ const CreateRoom: FC = () => {
 
   return (
     <div className={styles.create}>
-      <div className={styles.create__header}>
-        <h2 className={styles.create__heading}>{translation?.create_room}</h2>
-      </div>
-      <div className={`${styles.create__content} ${settingsOverlay ? styles.hidden : ''}`}>
-        {games.map((game: any, index: number) => (
-          <GameCard
-            game={game}
-            key={game.id}
-            imagePosition={game.id === 1 ? 'left' : 'right'}
-            users={game.users}
-            extraClass={`${styles['create__game-card']} ${
-              index % 2 === 0 ? styles['create__game-card--even'] : styles['create__game-card--odd']
-            }`}
-            handleClickGame={handleGameClick}
-          />
-        ))}
-      </div>
-        <Overlay 
+      {loading ? <Loader /> : (
+        <>
+          <div className={styles.create__header}>
+            <h2 className={styles.create__heading}>{translation?.create_room}</h2>
+          </div>
+          <div className={`${styles.create__content} ${settingsOverlay ? styles.hidden : ''}`}>
+            {games?.map((game: any, index: number) => (
+              <GameCard
+                game={game}
+                key={game.id}
+                imagePosition={game.id === 1 ? 'left' : 'right'}
+                users={game.users}
+                extraClass={`${styles['create__game-card']} ${index % 2 === 0 ? styles['create__game-card--even'] : styles['create__game-card--odd']}`}
+                handleClickGame={handleGameClick} />
+            ))}
+          </div>
+        </>
+      )}
+      <Overlay
         crossColor="#ac1a44"
         buttonColor="#FFF"
         closeButton
-        show={settingsOverlay} 
-        onClose={() => setSettingsOverlay(false)} 
+        show={settingsOverlay}
+        onClose={() => setSettingsOverlay(false)}
         children={
-        <GameSettings
-          data={gameData}
+          <GameSettings
+            data={gameData}
           />}
-        />
+      />
     </div>
   );
 };

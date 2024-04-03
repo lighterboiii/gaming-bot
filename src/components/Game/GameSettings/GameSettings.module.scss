@@ -9,11 +9,11 @@
   &__logo {
     @include max-size(120px, 120px);
     @include size(100%, 100%);
-    @include position(absolute, $top: 0, $left: 25%);
+    @include position(absolute, $top: -10%, $left: 30%);
     background-size: contain;
     background-repeat: no-repeat;
     z-index: 777;
-    rotate: 30deg;
+    // rotate: 30deg;
   }
 
   &__content {

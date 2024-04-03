@@ -14,16 +14,16 @@
     @include size(42px, 52px);
   }
 
-  &__iconEmoji {
-    @include size(48px, 48px);
-  }
+  // &__iconEmoji {
+  //   @include size(48px, 48px);
+  // }
 
   &__button {
     @include button-style-reset();
   }
 
-  &__emojiButton {
-    @include position(absolute, $bottom: 50%, $right: -64px);
-    transform: translateY(50%);
-  }
+  // &__emojiButton {
+  //   @include position(absolute, $bottom: 50%, $right: -64px);
+  //   transform: translateY(50%);
+  // }
 }

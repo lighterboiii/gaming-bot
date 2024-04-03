@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import styles from './GameSettings.module.scss';
@@ -18,7 +19,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
   const [message, setMessage] = useState('');
@@ -67,6 +68,12 @@ const GameSettings: FC<IProps> = ({ data }) => {
     }
   };
 
+  useEffect(() => {
+    if (user && data && bet && currency) {
+      handleCreateRoom(userId, bet, currency, data.id);
+    }
+  }, []);
+
   return (
     <div className={styles.game + 'scrollable'}>
       {messageShown ? (
@@ -75,9 +82,11 @@ const GameSettings: FC<IProps> = ({ data }) => {
         </div>
       ) : (
         <>
-          <div style={{ backgroundImage: `${data?.img}` }} className={styles.game__logo} />
+          <div style={{ backgroundImage: `url(${data?.url})` }} className={styles.game__logo} />
           <div className={styles.game__content}>
-            <h3 className={styles.game__title}>{data?.name}</h3>
+            <h3 className={styles.game__title}>
+              {data?.room_type === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
+            </h3>
             <div className={styles.game__balance}>
               <p className={styles.game__text}>{translation?.user_balance}</p>
               <div className={styles.game__balanceWrapper}>

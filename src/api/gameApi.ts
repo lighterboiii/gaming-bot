@@ -7,6 +7,12 @@ export const getOpenedRoomsRequest = () => {
     uri: getRoomsUri,
   });
 };
+// получить список доступных игр
+export const getExistingGamesRequest = () => {
+  return getReq({
+    uri: 'get_existing_games',
+  })
+};
 // создать игру 
 export const postNewRoomRequest = (data: any, userIdValue: string) => {
   return postReq({
@@ -34,6 +40,14 @@ export const setUserChoice = (userIdValue: string, roomId: string, choice: strin
 export const joinRoomRequest = (userIdValue: string, roomId: string) => {
   return putReq({
     uri: 'addplayer?user_id=',
+    userId: userIdValue,
+    endpoint: `&room_id=${roomId}`,
+  })
+};
+// запрос на отключение от комнаты
+export const leaveRoomRequest = (userIdValue: string, roomId: string) => {
+  return putReq({
+    uri: 'kickplayer?user_id=',
     userId: userIdValue,
     endpoint: `&room_id=${roomId}`,
   })

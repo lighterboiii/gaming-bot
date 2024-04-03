@@ -6,6 +6,7 @@ import CircleButton from '../../ui/CircleButton/CircleButton';
 import game1 from '../../../images/main_hand_1_tiny.png';
 import game2 from '../../../images/gameSec.png';
 import ManIcon from '../../../icons/Man/Man';
+import { useAppSelector } from '../../../services/reduxHooks';
 
 interface IProps {
   game: any;
@@ -16,7 +17,7 @@ interface IProps {
 } // типизировать
 
 const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass }) => {
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   const gameCardClassNames = classNames(
     styles.game,
     extraClass
@@ -35,7 +36,7 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
         style={{ textAlign: imagePosition === "left" ? 'right' : 'left' }}
         className={styles.game__name}
       >
-        {game.name}
+        {game.room_type === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
       </h3>
       <img
         src={imagePosition === "left" ? game1 : game2}
