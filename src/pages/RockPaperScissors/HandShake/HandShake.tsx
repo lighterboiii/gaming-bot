@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import styles from './HandShake.module.scss';
@@ -28,13 +29,22 @@ interface IProps {
 
 const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice }) => {
   const [key, setKey] = useState(false);
+  const [previousChoice1, setPreviousChoice1] = useState<string | null>(null);
+  const [previousChoice2, setPreviousChoice2] = useState<string | null>(null);
   // console.log(playerChoice);
   // console.log(secondPlayerChoice);
+  
   useEffect(() => {
     setKey(prevKey => !prevKey);
   }, [playerChoice, secondPlayerChoice]);
-  console.log(playerChoice);
-  console.log(secondPlayerChoice);
+
+  useEffect(() => {
+    if (previousChoice2 !== 'ready' && (secondPlayerChoice === 'rock' || secondPlayerChoice === 'paper' || secondPlayerChoice === 'scissors')) {
+      console.log('Запуск анимации для нового выбора:', playerChoice);
+    }
+    setPreviousChoice2(playerChoice);
+  }, [playerChoice, secondPlayerChoice]);
+
   const getLeftHandImage = (choice: string) => {
     switch (choice) {
       case 'rock':
@@ -57,7 +67,7 @@ const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice }) => {
       case 'scissors':
         return rightRS;
       default:
-        return '';
+        return previousChoice2!;
     }
   };
 
@@ -70,7 +80,7 @@ const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice }) => {
   const [lastChoice, setChoice] = useState();
   return (
     <div className={styles.hands}>
-      {(playerChoice !== 'none' && playerChoice !== 'ready') && (
+      {(playerChoice !== 'none' && secondPlayerChoice !== 'none') && (
         <>
           <img src={getLeftHandImage(playerChoice)} alt="left hand" className={`${styles.hands__mainImage} ${styles.hands__leftMainImage}`} />
           <img src={getRightHandImage(secondPlayerChoice)} alt="right hand" className={`${styles.hands__mainImage} ${styles.hands__rightMainImage}`} />
