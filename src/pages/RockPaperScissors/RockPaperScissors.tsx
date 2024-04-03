@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getRoomInfoRequest, joinRoomRequest, setUserChoice } from "../../api/gameApi";
+import { getRoomInfoRequest, joinRoomRequest, leaveRoomRequest, setUserChoice } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useTelegram from "../../hooks/useTelegram";
@@ -20,7 +20,7 @@ const RockPaperScissors: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
 
   const [data, setData] = useState<any>(null);
@@ -33,14 +33,22 @@ const RockPaperScissors: FC = () => {
 
   const socket = useAppSelector(store => store.ws.socket);
   const isUserCreator = Number(userId) === Number(roomData?.creator_id);
-  // console.log(isUserCreator);
+  const isInRoom = roomData?.players.some((player: any) => player.userid === userId)
+  console.log(isUserCreator);
   // console.log(data?.players[0].choice);
-  // console.log(roomData);
+  console.log(roomData);
   // задать и сбросить цвет шапки + backButton
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
       navigate(-1);
+      leaveRoomRequest(userId, roomId!)
+        .then((res) => {
+          console.log('Вы отключены от комнаты', res)
+        })
+        .catch((error: any) => {
+          console.log('Ошибка', error);
+        })
     });
     return () => {
       tg.BackButton.hide();
@@ -64,33 +72,27 @@ const RockPaperScissors: FC = () => {
     };
   }, [dispatch, socket]);
 // получить даныне о комнате при входе в игру
-  useEffect(() => {
-    setLoading(true);
-    getRoomInfoRequest(roomId!)
-      .then((data) => {
-        setRoomData(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [roomId]);
-  // проверка пользователя и подключение
-  useEffect(() => {
-    setLoading(true);
-    if (!isUserCreator) {
-      joinRoomRequest(userId, roomId!)
-        .then((res) => {
-          console.log("Присоединение к комнате выполнено успешно:", res);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Ошибка при присоединении к комнате:", error);
-        });
-    } else {
-      navigate(-1);
-    }
-  }, [isUserCreator, roomId]);
+useEffect(() => {
+  setLoading(true);
+  getRoomInfoRequest(roomId!)
+    .then((data) => {
+      setRoomData(data);
+      setLoading(false);
+      const isUserInRoom = roomData.players.some((player: any) => player.userid === userId);
+      if (!isUserCreator && !isUserInRoom) {
+        joinRoomRequest(userId, roomId!)
+          .then((res) => {
+            console.log("Присоединение к комнате выполнено успешно:", res);
+          })
+          .catch((error) => {
+            console.error("Ошибка при присоединении к комнате:", error);
+          });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}, [isUserCreator, roomId]);
 // хендлер выбора хода
   const handleChoice = (value: string) => {
     setChoice(value);

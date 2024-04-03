@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import styles from './GameSettings.module.scss';
@@ -18,7 +19,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
   const [message, setMessage] = useState('');
@@ -66,6 +67,12 @@ const GameSettings: FC<IProps> = ({ data }) => {
         })
     }
   };
+
+  useEffect(() => {
+    if (user && data && bet && currency) {
+      handleCreateRoom(userId, bet, currency, data.id);
+    }
+  }, []);
 
   return (
     <div className={styles.game + 'scrollable'}>

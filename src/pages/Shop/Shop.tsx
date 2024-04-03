@@ -115,14 +115,14 @@ const Shop: FC = () => {
             <button
               className={`${styles.shop__button} ${activeButton === `${translation?.marketplace}` ? styles.activeButton : ''}`}
               onClick={handleClickLavka}>
-              Лавка
+              {translation?.marketplace}
             </button>
           </div>
           <button
             className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === `${translation?.purchased}` ? styles.activeButton : ''}`}
             onClick={handleClickInventory}
           >
-            Приобретено
+            {translation?.purchased}
           </button>
         </div>
         {loading ?  <p style={{ color: '#ffdb50', fontWeight: '900' }}>{translation?.loading}...</p>: (
