@@ -80,6 +80,7 @@
 
   &__button {
     @include button-style-reset();
+    cursor: pointer;
   }
 
   &__emojiButton {

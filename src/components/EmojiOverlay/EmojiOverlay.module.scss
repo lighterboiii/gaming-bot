@@ -1,0 +1,40 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.overlay {
+  @include flex(column, flex-start, center);
+  @include position(fixed, $bottom: 0, $left: 50%);
+  transform: translate(-50%);
+  @include size(100%, 0);
+  overflow: hidden;
+  transition: height .5s ease;
+  background-color: $dark-blue-color;
+  border-top-left-radius: $radius-12;
+  border-top-right-radius: $radius-12;
+  z-index: 666;
+  opacity: .9;
+
+  &__children {
+    @include size(100%, 100%);
+  }
+
+  &__closeButton {
+    @include button-style-reset();
+    @include position(absolute, $right: -8px, $top: 4px);
+    transform: translate(-50%);
+    @include flex(row, center, center);
+    @include size(25px, 25px);
+    border-radius: 40px;
+    background-color: $main-color;
+  }
+}
+
+.overlay.active {
+  @include size(100%, calc(100% - 40vh));
+  z-index: 666;
+  overflow: visible;
+
+  // @media screen and (max-height: 690px) {
+  //   @include size(calc(100% - 32px), calc(100% - 50vh));
+  // }
+}

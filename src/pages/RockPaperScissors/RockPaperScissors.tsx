@@ -16,6 +16,7 @@ import { setSocket } from "../../services/wsSlice";
 import HandShake from './HandShake/HandShake';
 import ChoiceBox from "./ChoiceBox/ChoiceBox";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
+import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 
 const RockPaperScissors: FC = () => {
   const dispatch = useAppDispatch();
@@ -26,18 +27,16 @@ const RockPaperScissors: FC = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [choice, setChoice] = useState<string>('none');
-
-  // const [message, setMessage] = useState<any>(null);
+  const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
   const [roomData, setRoomData] = useState<any>(null); // https
   console.log(data?.players);
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
 
   const socket = useAppSelector(store => store.ws.socket);
   const isUserCreator = Number(userId) === Number(roomData?.creator_id);
-  const isInRoom = roomData?.players.some((player: any) => player.userid === userId)
-  console.log(isUserCreator);
+
+  console.log(data?.players[0].choice);
   console.log(data?.players[1].choice);
-  console.log(roomData);
   // задать и сбросить цвет шапки + backButton
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -102,8 +101,7 @@ const RockPaperScissors: FC = () => {
   const handleReady = () => {
     setChoice('ready');
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: 'ready' });
-  }
-
+  };
 
   return (
     <div className={styles.game}>
@@ -121,9 +119,9 @@ const RockPaperScissors: FC = () => {
           </div>
           <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
           <div className={styles.game__hands}>
-            {/* {data?.players.map((player: any, index: number) => ( */}
-            <HandShake playerChoice={data?.players[0].choice} secondPlayerChoice={data?.players[1].choice} />
-            {/* ))} */}
+            {(data?.players[0].choice !== undefined && data?.players[1].choice !== undefined) && (
+              <HandShake playerChoice={data?.players[0].choice} secondPlayerChoice={data?.players[1].choice} />
+            )}
           </div>
           <div className={styles.game__lowerContainer}>
             {choice === 'ready' ? (
@@ -150,12 +148,20 @@ const RockPaperScissors: FC = () => {
                 <label htmlFor="ready" className={styles.game__label}></label>
               </div>
             )}
-            <button type="button" className={`${styles.game__button} ${styles.game__emojiButton}`}>
+            <button
+              type="button"
+              className={`${styles.game__button} ${styles.game__emojiButton}`}
+              onClick={() => setShowEmojiOverlay(true)}
+            >
               <img src={emoji_icon} alt="emoji icon" className={styles.game__iconEmoji} />
             </button>
           </div>
         </>
       )}
+      <EmojiOverlay
+        show={showEmojiOverlay}
+        onClose={() => setShowEmojiOverlay(!showEmojiOverlay)}
+      />
     </div>
   );
 }
