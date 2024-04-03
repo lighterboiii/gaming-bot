@@ -30,3 +30,11 @@ export const setUserChoice = (userIdValue: string, roomId: string, choice: strin
     endpoint: `${roomIdParamString}${roomId}${playerChoiceParamString}${choice}`
   })
 };
+// запрос на подключение к комнатеъ
+export const joinRoomRequest = (userIdValue: string, roomId: string) => {
+  return putReq({
+    uri: 'addplayer?user_id=',
+    userId: userIdValue,
+    endpoint: `&room_id=${roomId}`,
+  })
+};
