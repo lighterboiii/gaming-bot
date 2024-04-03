@@ -73,6 +73,19 @@ const RockPaperScissors: FC = () => {
         console.log(error);
       });
   }, [roomId]);
+  useEffect(() => {
+    setLoading(true);
+    // const isUserCreator = roomData && Number(userId) === Number(roomData.creator_id);
+    // const isUserInRoom = roomData?.players.some((player: any) => Number(player.userid) === Number(userId));
+    getRoomInfoRequest(roomId!)
+      .then((data) => {
+        setRoomData(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   useEffect(() => {
     if (roomData) {

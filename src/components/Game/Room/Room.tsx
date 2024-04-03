@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react";
 import styles from './Room.module.scss';
 import hand from '../../../images/main_hand_1_tiny.png';
@@ -18,10 +19,10 @@ const Room: FC<IProps> = ({ room }) => {
   const { user } = useTelegram();
   // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
-  const [joiningRoom, setJoiningRoom] = useState(false);
+  // const [joiningRoom, setJoiningRoom] = useState(false);
   const handleJoinRoom = () => {
-    if (joiningRoom) return;
-    setJoiningRoom(true);
+    // if (joiningRoom) return;
+    // setJoiningRoom(true);
 
     joinRoomRequest(userId, room.room_id)
       .then((res) => {
@@ -30,7 +31,7 @@ const Room: FC<IProps> = ({ room }) => {
       })
       .catch((error) => {
         console.error("Ошибка при присоединении к комнате:", error);
-        setJoiningRoom(false);
+        // setJoiningRoom(false);
       });
   };
   return (
