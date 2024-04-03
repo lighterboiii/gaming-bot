@@ -1,9 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { getRoomInfoRequest, setUserChoice } from "../../api/gameApi";
-import { RootState } from "../../services/store";
+import { getRoomInfoRequest, joinRoomRequest, setUserChoice } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useTelegram from "../../hooks/useTelegram";
@@ -12,24 +11,32 @@ import useWebSocketService from "../../services/webSocketService";
 import styles from "./RockPaperScissors.module.scss";
 import newVS from '../../images/rock-paper-scissors/VS_new.png';
 import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
-import { useAppSelector } from "../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { setSocket } from "../../services/wsSlice";
 import HandShake from './HandShake/HandShake';
 import ChoiceBox from "./ChoiceBox/ChoiceBox";
 
 const RockPaperScissors: FC = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const dispatch = useDispatch();
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
-  const [roomData, setRoomData] = useState<any>(null); // https
+
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [choice, setChoice] = useState('none');
-  const navigate = useNavigate();
-  const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
-  const socket = useAppSelector(store => store.ws.socket);
   const [message, setMessage] = useState<any>(null);
-  console.log(data?.players[0].choice);
+  const [roomData, setRoomData] = useState<any>(null); // https
+  
+  const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
+
+  const socket = useAppSelector(store => store.ws.socket);
+  const isUserCreator = Number(userId) === Number(roomData?.creator_id);
+  // console.log(isUserCreator);
+  // console.log(data?.players[0].choice);
+  // console.log(roomData);
+  // задать и сбросить цвет шапки + backButton
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
@@ -40,7 +47,7 @@ const RockPaperScissors: FC = () => {
       tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate]);
-
+// подключиться по ws
   useEffect(() => {
     webSocketService.setMessageHandler((message) => {
       setMessage(message);
@@ -48,7 +55,7 @@ const RockPaperScissors: FC = () => {
       console.log('Получено сообщение:', message);
     });
   }, [webSocketService]);
-
+// записать в редукс ??
   useEffect(() => {
     dispatch(setSocket(socket));
 
@@ -56,7 +63,7 @@ const RockPaperScissors: FC = () => {
       socket?.close();
     };
   }, [dispatch, socket]);
-
+// получить даныне о комнате при входе в игру
   useEffect(() => {
     setLoading(true);
     getRoomInfoRequest(roomId!)
@@ -68,18 +75,33 @@ const RockPaperScissors: FC = () => {
         console.log(error);
       });
   }, [roomId]);
-
+  // проверка пользователя и подключение
+  useEffect(() => {
+    setLoading(true);
+    if (!isUserCreator) {
+      joinRoomRequest(userId, roomId!)
+        .then((res) => {
+          console.log("Присоединение к комнате выполнено успешно:", res);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Ошибка при присоединении к комнате:", error);
+        });
+    } else {
+      navigate(-1);
+    }
+  }, [isUserCreator, roomId]);
+// хендлер выбора хода
   const handleChoice = (value: string) => {
     setChoice(value);
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: value });
-    webSocketService.sendMessage({ type: 'choice', user_id: 5858080651, room_id: roomId, choice: 'paper' });
     
     setTimeout(() => {
     webSocketService.sendMessage({ type: 'whoiswin', room_id: roomId });
       // webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: 'none' });
     }, 5000)
   };
-
+// хендлер готовности игрока
   const handleReady = () => {
     setChoice('ready');
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: 'ready' });
@@ -129,9 +151,7 @@ const RockPaperScissors: FC = () => {
                   onChange={handleReady}
                   className={styles.game__checkbox}
                 />
-                <label htmlFor="ready" className={styles.game__label}>
-                  <p>готовы?</p>
-                </label>
+                <label htmlFor="ready" className={styles.game__label}></label>
               </div>
             )}
           </div>
