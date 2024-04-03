@@ -1,10 +1,13 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import styles from './Room.module.scss';
 import hand from '../../../images/main_hand_1_tiny.png';
 import whoCloser from '../../../images/gameSec.png';
 import { useNavigate } from "react-router-dom";
 import ManIcon from "../../../icons/Man/Man";
 import { useAppSelector } from "../../../services/reduxHooks";
+import useTelegram from "../../../hooks/useTelegram";
+import { joinRoomRequest } from "../../../api/gameApi";
+import { userId } from "../../../api/requestData";
 // типизировать
 interface IProps {
   room: any;
@@ -12,9 +15,26 @@ interface IProps {
 
 const Room: FC<IProps> = ({ room }) => {
   const navigate = useNavigate();
+  const { user } = useTelegram();
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
+  const [joiningRoom, setJoiningRoom] = useState(false);
+  const handleJoinRoom = () => {
+    if (joiningRoom) return;
+    setJoiningRoom(true);
+
+    joinRoomRequest(userId, room.room_id)
+      .then((res) => {
+        console.log("Присоединение к комнате выполнено успешно:", res);
+        navigate(`/room/${room.room_id}`);
+      })
+      .catch((error) => {
+        console.error("Ошибка при присоединении к комнате:", error);
+        setJoiningRoom(false);
+      });
+  };
   return (
-    <div className={styles.room} onClick={() => navigate(`/room/${room.room_id}`)} key={room?.id}>
+    <div className={styles.room} onClick={handleJoinRoom} key={room?.id}>
       <div className={styles.room__game}>
         <p className={styles.room__gameName}>
           {room?.room_type === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}

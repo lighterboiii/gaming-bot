@@ -22,7 +22,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [choice, setChoice] = useState<string>('none');
@@ -33,8 +33,8 @@ const RockPaperScissors: FC = () => {
   const [wsMessage, setWsMessage] = useState<any>(null);
   console.log(player1State);
   console.log(player2State);
-  // console.log(roomData);
-  // console.log(data);
+  console.log(roomData);
+  console.log(data);
   // console.log(wsMessage);
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
   // const isUserCreator = Number(userId) === Number(roomData?.creator_id);
@@ -62,26 +62,24 @@ const RockPaperScissors: FC = () => {
   // получить даныне о комнате при входе в игру
   useEffect(() => {
     setLoading(true);
-    const isUserCreator = roomData && Number(userId) === Number(roomData.creator_id);
-    const isUserInRoom = roomData?.players.some((player: any) => Number(player.userid) === Number(userId));
+    // const isUserCreator = roomData && Number(userId) === Number(roomData.creator_id);
+    // const isUserInRoom = roomData?.players.some((player: any) => Number(player.userid) === Number(userId));
     getRoomInfoRequest(roomId!)
       .then((data) => {
         setRoomData(data);
         setLoading(false);
-        if (!isUserCreator && !isUserInRoom) {
-          joinRoomRequest(userId, roomId!)
-            .then((res) => {
-              console.log("Присоединение к комнате выполнено успешно:", res);
-            })
-            .catch((error) => {
-              console.error("Ошибка при присоединении к комнате:", error);
-            });
-        }
       })
       .catch((error) => {
         console.log(error);
       });
   }, [roomId]);
+
+  useEffect(() => {
+    if (roomData) {
+      setPlayer1State(roomData.players[0]);
+      setPlayer2State(roomData.players[1]);
+    }
+  }, [roomData]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     setChoice(value);
