@@ -7,6 +7,12 @@ export const getOpenedRoomsRequest = () => {
     uri: getRoomsUri,
   });
 };
+// получить список доступных игр
+export const getExistingGamesRequest = () => {
+  return getReq({
+    uri: 'get_existing_games',
+  })
+};
 // создать игру 
 export const postNewRoomRequest = (data: any, userIdValue: string) => {
   return postReq({

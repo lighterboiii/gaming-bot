@@ -68,7 +68,7 @@ const RockPaperScissors: FC = () => {
       .then((data) => {
         setRoomData(data);
         setLoading(false);
-        const isUserInRoom = roomData.players.some((player: any) => player.userid === userId);
+        const isUserInRoom = roomData?.players.some((player: any) => player.userid === userId);
         if (!isUserCreator && !isUserInRoom) {
           joinRoomRequest(userId, roomId!)
             .then((res) => {

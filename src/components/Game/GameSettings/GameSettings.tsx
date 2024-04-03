@@ -82,9 +82,11 @@ const GameSettings: FC<IProps> = ({ data }) => {
         </div>
       ) : (
         <>
-          <div style={{ backgroundImage: `${data?.img}` }} className={styles.game__logo} />
+          <div style={{ backgroundImage: `url(${data?.url})` }} className={styles.game__logo} />
           <div className={styles.game__content}>
-            <h3 className={styles.game__title}>{data?.name}</h3>
+            <h3 className={styles.game__title}>
+              {data?.room_type === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
+            </h3>
             <div className={styles.game__balance}>
               <p className={styles.game__text}>{translation?.user_balance}</p>
               <div className={styles.game__balanceWrapper}>

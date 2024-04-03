@@ -1,8 +1,6 @@
 import banner1 from '../images/banner_1.png';
 import banner2 from '../images/banner_2.png';
 import banner3 from '../images/banner_3.png';
-import hand from '../images/main_hand_1_tiny.png';
-import line from '../images/gameSec.png';
 // advertisement banner data
 export const bannersData = [
   {
@@ -24,20 +22,3 @@ export const bannersData = [
     title: 'Помогите, меня заставляют работать'
   },
 ];
-// gameData 
-export const games = [
-  {
-    id: 1,
-    room_type: 1,
-    name: 'Цу-е-фа',
-    users: '2',
-    img: `url(${hand})`,
-  },
-  {
-    id: 2,
-    room_type: 2,
-    name: 'Кто ближе',
-    users: '2-10',
-    img: `url(${line})`,
-  },
-]
