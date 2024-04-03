@@ -100,8 +100,8 @@ const OpenedRooms: FC = () => {
             </div>
           </div>
           <div className={styles.rooms__roomList + " scrollable"}>
-            {rooms && rooms.length > 0 ? rooms?.map((room: any) => (
-              <Room room={room} />
+            {rooms && rooms.length > 0 ? rooms?.map((room: any, index: number) => (
+              <Room room={room} key={index} />
             )) : (
               <div className={styles.rooms__createNew}>
                 <p className={styles.rooms__notify}>{translation?.no_open_rooms}</p>

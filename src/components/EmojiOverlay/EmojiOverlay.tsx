@@ -9,9 +9,10 @@ import useTelegram from "../../hooks/useTelegram";
 interface IProps {
   show: boolean;
   onClose: () => void;
+  onEmojiSelect: (emoji: string) => void;
 }
 
-const EmojiOverlay: FC<IProps> = ({ show, onClose }) => {
+const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
   const { user } = useTelegram();
   // const userId = user?.id;
   const [emojis, setEmojis] = useState<any>(null);
@@ -35,7 +36,13 @@ const EmojiOverlay: FC<IProps> = ({ show, onClose }) => {
         <h2 className={styles.overlay__name}>{name}</h2>
         <div className={styles.overlay__emojis}>
           {emojis && emojis?.map((emoji: string, index: number) => (
-            <img key={index} src={emoji} alt={`Emoji ${index}`} className={styles.overlay__emoji} />
+            <img
+              key={index}
+              src={emoji}
+              alt={`Emoji ${index}`}
+              className={styles.overlay__emoji}
+              onClick={() => onEmojiSelect(emoji)}
+            />
           ))}
         </div>
       </div>

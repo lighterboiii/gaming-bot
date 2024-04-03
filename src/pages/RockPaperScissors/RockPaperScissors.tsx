@@ -28,10 +28,14 @@ const RockPaperScissors: FC = () => {
   const [choice, setChoice] = useState<string>('none');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
   const [roomData, setRoomData] = useState<any>(null); // https
+  const [player1State, setPlayer1State] = useState<any>(null);
+  const [player2State, setPlayer2State] = useState<any>(null);
   const [wsMessage, setWsMessage] = useState<any>(null);
-  console.log(roomData);
-  console.log(data);
-  console.log(wsMessage);
+  console.log(player1State);
+  console.log(player2State);
+  // console.log(roomData);
+  // console.log(data);
+  // console.log(wsMessage);
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
   // const isUserCreator = Number(userId) === Number(roomData?.creator_id);
   // задать и сбросить цвет шапки + backButton
@@ -49,8 +53,10 @@ const RockPaperScissors: FC = () => {
   useEffect(() => {
     webSocketService.setMessageHandler((message) => {
       setData(message?.room_data);
+      setPlayer1State(message?.room_data.players[0]);
+      setPlayer2State(message?.room_data.players[1]);
       setWsMessage(message);
-      console.log('Получено сообщение:', message);
+      // console.log('Получено сообщение:', message);
     });
   }, [webSocketService]);
   // получить даныне о комнате при входе в игру
@@ -90,6 +96,10 @@ const RockPaperScissors: FC = () => {
     setChoice('ready');
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: 'ready' });
   };
+  // хендлер отпрвки эмодзи
+  const handleEmojiSelect = (emoji: string) => {
+    webSocketService.sendMessage({ type: 'emoji', user_id: userId, room_id: roomId, emoji: emoji });
+  };
 
   return (
     <div className={styles.game}>
@@ -110,8 +120,8 @@ const RockPaperScissors: FC = () => {
           ) : (
             <>
               <img src={newVS} alt="versus icon" className={styles.game__versusImage} /><div className={styles.game__hands}>
-                {(data?.players[0].choice !== undefined && data?.players[1].choice !== undefined) && (
-                  <HandShake playerChoice={data?.players[0].choice} secondPlayerChoice={data?.players[1].choice} />
+                {(player1State?.choice !== undefined && player2State?.choice !== undefined) && (
+                  <HandShake playerChoice={player1State.choice} secondPlayerChoice={player2State.choice} />
                 )}
               </div>
               {wsMessage?.winner && (
@@ -161,6 +171,7 @@ const RockPaperScissors: FC = () => {
       <EmojiOverlay
         show={showEmojiOverlay}
         onClose={() => setShowEmojiOverlay(!showEmojiOverlay)}
+        onEmojiSelect={() => handleEmojiSelect}
       />
     </div>
   );
