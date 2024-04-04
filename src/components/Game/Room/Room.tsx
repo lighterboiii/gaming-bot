@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from './Room.module.scss';
 import hand from '../../../images/main_hand_1_tiny.png';
 import whoCloser from '../../../images/gameSec.png';
 import { useNavigate } from "react-router-dom";
 import ManIcon from "../../../icons/Man/Man";
-import { useAppSelector } from "../../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import useTelegram from "../../../hooks/useTelegram";
 import { joinRoomRequest } from "../../../api/gameApi";
 import { userId } from "../../../api/requestData";
+import useWebSocketService from "../../../services/webSocketService";
+import { setSocket } from "../../../services/wsSlice";
 // типизировать
 interface IProps {
   room: any;
@@ -17,13 +19,11 @@ interface IProps {
 const Room: FC<IProps> = ({ room }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const dispatch = useAppDispatch();
+  const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
-  // const [joiningRoom, setJoiningRoom] = useState(false);
+  // const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
   const handleJoinRoom = () => {
-    // if (joiningRoom) return;
-    // setJoiningRoom(true);
-
     joinRoomRequest(userId, room.room_id)
       .then((res) => {
         console.log("Присоединение к комнате выполнено успешно:", res);
@@ -31,7 +31,6 @@ const Room: FC<IProps> = ({ room }) => {
       })
       .catch((error) => {
         console.error("Ошибка при присоединении к комнате:", error);
-        // setJoiningRoom(false);
       });
   };
   return (

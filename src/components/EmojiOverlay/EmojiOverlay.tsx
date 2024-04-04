@@ -22,7 +22,6 @@ const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
   useEffect(() => {
     getActiveEmojiPack(userId)
       .then((res: any) => {
-        console.log(res);
         setName(res.user_emoji_pack.name);
         setEmojis(res.user_emoji_pack.user_emoji_pack);
       })

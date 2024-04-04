@@ -27,17 +27,13 @@ const RockPaperScissors: FC = () => {
   const [loading, setLoading] = useState(false);
   const [choice, setChoice] = useState<string>('none');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
-  const [roomData, setRoomData] = useState<any>(null); // https
   const [player1State, setPlayer1State] = useState<any>(null);
   const [player2State, setPlayer2State] = useState<any>(null);
   const [wsMessage, setWsMessage] = useState<any>(null);
-  console.log(player1State);
-  console.log(player2State);
-  console.log(roomData);
+  const roomData = useAppSelector(store => store.ws.socket);
   console.log(data);
   // console.log(wsMessage);
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
-  // const isUserCreator = Number(userId) === Number(roomData?.creator_id);
   // задать и сбросить цвет шапки + backButton
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -53,54 +49,47 @@ const RockPaperScissors: FC = () => {
   useEffect(() => {
     webSocketService.setMessageHandler((message) => {
       setData(message?.room_data);
-      setPlayer1State(message?.room_data.players[0]);
-      setPlayer2State(message?.room_data.players[1]);
-      setWsMessage(message);
-      // console.log('Получено сообщение:', message);
+      // setPlayer1State(message?.room_data.players[0]);
+      // setPlayer2State(message?.room_data.players[1]);
+      // setWsMessage(message);
+      console.log('Получено сообщение:', message);
     });
   }, [webSocketService]);
-  // получить даныне о комнате при входе в игру
+
+  useEffect(() => {
+    console.log("roomData changed:", roomData);
+    setData(roomData);
+  }, [roomData]);
   useEffect(() => {
     setLoading(true);
-    // const isUserCreator = roomData && Number(userId) === Number(roomData.creator_id);
-    // const isUserInRoom = roomData?.players.some((player: any) => Number(player.userid) === Number(userId));
     getRoomInfoRequest(roomId!)
       .then((data) => {
-        setRoomData(data);
+        setData(data);
         setLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
   }, [roomId]);
-  useEffect(() => {
-    setLoading(true);
-    // const isUserCreator = roomData && Number(userId) === Number(roomData.creator_id);
-    // const isUserInRoom = roomData?.players.some((player: any) => Number(player.userid) === Number(userId));
-    getRoomInfoRequest(roomId!)
-      .then((data) => {
-        setRoomData(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
-  useEffect(() => {
-    if (roomData) {
-      setPlayer1State(roomData.players[0]);
-      setPlayer2State(roomData.players[1]);
-    }
-  }, [roomData]);
+
+
+
+
+
+
+
+
+
+
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     setChoice(value);
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: value });
     webSocketService.sendMessage({ type: 'choice', user_id: 116496831, room_id: roomId, choice: 'paper' });
-    setTimeout(() => {
-      webSocketService.sendMessage({ type: 'whoiswin', room_id: roomId });
-    }, 2500)
+    // setTimeout(() => {
+    //   webSocketService.sendMessage({ type: 'whoiswin', room_id: roomId });
+    // }, 2500)
   };
   // хендлер готовности игрока
   const handleReady = () => {
@@ -117,7 +106,7 @@ const RockPaperScissors: FC = () => {
       {loading ? <Loader /> : (
         <>
           <div className={styles.game__players}>
-            {roomData?.players.map((player: any) => (
+            {data?.players.map((player: any) => (
               <div className={styles.game__player}>
                 <UserAvatar item={player} avatar={player.avatar} key={player.userId} />
                 {player.choice === 'ready' && (
@@ -126,14 +115,14 @@ const RockPaperScissors: FC = () => {
               </div>
             ))}
           </div>
-          {(roomData?.players_count === "1") ? (
+          {/* {(roomData) ? (
             <div className={styles.game__notify}>Ожидание игрока...</div> // перевод
-          ) : (
+          ) : ( */}
             <>
               <img src={newVS} alt="versus icon" className={styles.game__versusImage} /><div className={styles.game__hands}>
-                {(player1State?.choice !== undefined && player2State?.choice !== undefined) && (
-                  <HandShake playerChoice={player1State.choice} secondPlayerChoice={player2State.choice} />
-                )}
+                {/* {(player1State?.choice !== undefined && player2State?.choice !== undefined) && ( */}
+                  <HandShake playerChoice={player1State?.choice} secondPlayerChoice={player2State?.choice} />
+                {/* )} */}
               </div>
               {wsMessage?.winner && (
                 <div className={styles.game__resultMessage}>
@@ -148,8 +137,8 @@ const RockPaperScissors: FC = () => {
                     <div className={styles.game__betContainer}>
                       <p className={styles.game__text}>Ставка</p>
                       <div className={styles.game__bet}>
-                        <p className={styles.game__text}>{roomData?.bet_type === "1" ? "💵" : "🔰"}</p>
-                        <p className={styles.game__text}>{roomData?.bet}</p>
+                        {/* <p className={styles.game__text}>{roomData?.bet_type === "1" ? "💵" : "🔰"}</p>
+                        <p className={styles.game__text}>{roomData?.bet}</p> */}
                       </div>
                     </div>
                     <div className={styles.game__buttonsWrapper}>
@@ -176,7 +165,7 @@ const RockPaperScissors: FC = () => {
                 </button>
               </div>
             </>
-          )}
+          {/* )} */}
         </>
       )}
       <EmojiOverlay

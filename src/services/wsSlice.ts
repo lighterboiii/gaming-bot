@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface WebSocketState {
-  socket: WebSocket | null;
+  socket: any | null;
 }
 
 const initialState: WebSocketState = {

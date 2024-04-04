@@ -5,7 +5,6 @@ import styles from './OpenedRooms.module.scss';
 import useTelegram from "../../hooks/useTelegram";
 import { useNavigate } from "react-router-dom";
 import Room from "../../components/Game/Room/Room";
-import { getReq } from "../../api/api";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { getOpenedRooms } from "../../services/appSlice";
 import { sortRooms } from "../../utils/additionalFunctions";
@@ -29,7 +28,7 @@ const OpenedRooms: FC = () => {
   const [sortByType, setSortByType] = useState(false);
   const [sortByCurr, setSortByCurr] = useState(false);
   const [loading, setLoading] = useState(false);
-  console.log(rooms);
+
   useEffect(() => {
     setLoading(true);
     const fetchRoomsData = () => {

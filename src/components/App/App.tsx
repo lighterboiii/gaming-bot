@@ -49,23 +49,26 @@ const App: FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-
   useEffect(() => {
     setLoading(true);
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
           dispatch(setLanguageSettings(res.translate));
-          console.log(res.translate);
+          console.log(res);
           dispatch(setUserData(res.user_info));
           dispatch(setDailyBonus(res.daily_bonus));
           dispatch(setProductsArchive(res.collectibles_data));
           dispatch(setShopAvailable(res.shop_available));
-          return getUserAvatarRequest(userId);
+          const userPhotoResponse = getUserAvatarRequest(userId);
+          return userPhotoResponse;
         })
         .then((userPhotoResponse) => {
-          dispatch(setUserPhoto(userPhotoResponse?.info));
-          setLoading(false);
+          console.log(userPhotoResponse);
+          if (userPhotoResponse) {
+            dispatch(setUserPhoto(userPhotoResponse?.info));
+            setLoading(false);
+          }
         })
         .catch((error) => {
           console.error('Ошибка в получении данных пользователя:', error);
