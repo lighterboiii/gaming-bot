@@ -27,9 +27,6 @@ const RockPaperScissors: FC = () => {
   const [loading, setLoading] = useState(false);
   const [choice, setChoice] = useState<string>('none');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
-  const [player1State, setPlayer1State] = useState<any>(null);
-  const [player2State, setPlayer2State] = useState<any>(null);
-  const [wsMessage, setWsMessage] = useState<any>(null);
   const roomData = useAppSelector(store => store.ws.socket);
   console.log(data);
   // console.log(wsMessage);
@@ -49,9 +46,6 @@ const RockPaperScissors: FC = () => {
   useEffect(() => {
     webSocketService.setMessageHandler((message) => {
       setData(message?.room_data);
-      // setPlayer1State(message?.room_data.players[0]);
-      // setPlayer2State(message?.room_data.players[1]);
-      // setWsMessage(message);
       console.log('Получено сообщение:', message);
     });
   }, [webSocketService]);
@@ -60,27 +54,17 @@ const RockPaperScissors: FC = () => {
     console.log("roomData changed:", roomData);
     setData(roomData);
   }, [roomData]);
+
   useEffect(() => {
-    setLoading(true);
+    // webSocketService.sendMessage({ type: 'room_info', room_id: roomId  });
     getRoomInfoRequest(roomId!)
       .then((data) => {
         setData(data);
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [roomId]);
-
-
-
-
-
-
-
-
-
-
+  }, [data]);
 
   // хендлер выбора хода
   const handleChoice = (value: string) => {
@@ -121,16 +105,16 @@ const RockPaperScissors: FC = () => {
             <>
               <img src={newVS} alt="versus icon" className={styles.game__versusImage} /><div className={styles.game__hands}>
                 {/* {(player1State?.choice !== undefined && player2State?.choice !== undefined) && ( */}
-                  <HandShake playerChoice={player1State?.choice} secondPlayerChoice={player2State?.choice} />
+                  <HandShake playerChoice={'paper'} secondPlayerChoice={'paper'} />
                 {/* )} */}
               </div>
-              {wsMessage?.winner && (
+              {/* {wsMessage?.winner && (
                 <div className={styles.game__resultMessage}>
                   {wsMessage.winner?.userid === Number(userId) && <p>Поздравляем! Вы выиграли!</p>}
                   {wsMessage.loser?.userid === Number(userId) && <p>К сожалению, вы проиграли.</p>}
                   {wsMessage.winner === 'draw' && <p>Ничья!</p>}
                 </div>
-              )}
+              )} */}
               <div className={styles.game__lowerContainer}>
                 {choice === 'ready' ? (
                   <>
