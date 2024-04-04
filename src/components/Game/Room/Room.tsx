@@ -10,8 +10,6 @@ import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import useTelegram from "../../../hooks/useTelegram";
 import { joinRoomRequest } from "../../../api/gameApi";
 import { userId } from "../../../api/requestData";
-import useWebSocketService from "../../../services/webSocketService";
-import { setSocket } from "../../../services/wsSlice";
 // типизировать
 interface IProps {
   room: any;
@@ -23,14 +21,6 @@ const Room: FC<IProps> = ({ room }) => {
   const dispatch = useAppDispatch();
   const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
-  // const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
-  // useEffect(() => {
-  //   webSocketService.setMessageHandler((message) => {
-  //     console.log('Получено сообщение:', message);
-  //     dispatch(setSocket(message?.room_data));
-  //     navigate(`/room/${message.room_id}`);
-  //   });
-  // }, [webSocketService]);
   
   const handleJoinRoom = () => {
     joinRoomRequest(userId, room.room_id)
@@ -42,18 +32,7 @@ const Room: FC<IProps> = ({ room }) => {
         console.error("Ошибка при присоединении к комнате:", error);
       });
   };
-  // const handleJoinRoom = (roomId: any) => {
-  //   const data = {
-  //     user_id: userId,
-  //     room_id: room.room_id
-  //   };
-  //   const joinRoomMessage = {
-  //     type: 'addplayer',
-  //     ...data
-  //   };
-  //   webSocketService.sendMessage(joinRoomMessage);
-  // };
-  
+
   return (
     <div className={styles.room} onClick={handleJoinRoom} key={room?.id}>
       <div className={styles.room__game}>

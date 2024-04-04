@@ -11,8 +11,6 @@ import { postReq } from '../../../api/api';
 import { userId } from '../../../api/requestData';
 import { postNewRoomRequest } from '../../../api/gameApi';
 import useTelegram from '../../../hooks/useTelegram';
-import useWebSocketService from '../../../services/webSocketService';
-import { setSocket } from '../../../services/wsSlice';
 
 interface IProps {
   data: any; // типизировать
@@ -31,8 +29,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
   const userTokens = useAppSelector(store => store.app.info?.tokens);
   const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);
-  const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
-
+  
   const handleCurrencyChange = (newCurrency: number) => {
     setCurrency(newCurrency);
   };
@@ -41,14 +38,6 @@ const GameSettings: FC<IProps> = ({ data }) => {
     setBet(newBet);
   };
 
-  useEffect(() => {
-    webSocketService.setMessageHandler((message) => {
-      console.log('Получено сообщение:', message);
-      dispatch(setSocket(message?.room_data));
-      navigate(`/room/${message.room_id}`);
-    });
-  }, [webSocketService]);
-
   const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number) => {
     const data = {
       user_id: userIdValue,
@@ -56,55 +45,29 @@ const GameSettings: FC<IProps> = ({ data }) => {
       bet_type: betType,
       room_type: roomType
     };
-  
     if (roomType === 2) {
       setMessage("Контент находится в разработке, создай другую игру");
       setMessageShown(true);
       setTimeout(() => {
         setMessage(""); // на время разработки
         setMessageShown(false);
-      }, 2000);
+      }, 2000)
     } else {
-      const createRoomMessage = {
-        type: 'create_room',
-        ...data
-      };
-      
-      webSocketService.sendMessage(createRoomMessage);
+      postNewRoomRequest(data, userIdValue)
+        .then((response: any) => {
+          console.log(response);
+          if (response.message === 'success') {
+            console.log('Комната успешно создана:', response.room_id);
+            navigate(`/room/${response.room_id}`);
+          } else if (response.message === 'not_enough_coins') {
+            console.log('Недостаточно средств для создания комнаты')
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        })
     }
   };
-  
-  // const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number) => {
-  //   const data = {
-  //     user_id: userIdValue,
-  //     bet: bet,
-  //     bet_type: betType,
-  //     room_type: roomType
-  //   };
-  //   if (roomType === 2) {
-  //     setMessage("Контент находится в разработке, создай другую игру");
-  //     setMessageShown(true);
-  //     setTimeout(() => {
-  //       setMessage(""); // на время разработки
-  //       setMessageShown(false);
-  //     }, 2000)
-  //   } else {
-  //     postNewRoomRequest(data, userIdValue)
-  //       .then((response: any) => {
-  //         console.log(response);
-  //         if (response.message === 'success') {
-  //           console.log('Комната успешно создана:', response.room_id);
-  //           navigate(`/room/${response.room_id}`);
-  //           webSocketService.sendMessage({ type: 'create_room', room_id: response.room_id });
-  //         } else if (response.message === 'not_enough_coins') {
-  //           console.log('Недостаточно средств для создания комнаты')
-  //         }
-  //       })
-  //       .catch(error => {
-  //         console.log(error);
-  //       })
-  //   }
-  // };
 
   return (
     <div className={styles.game + 'scrollable'}>
