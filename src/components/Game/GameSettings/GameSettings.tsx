@@ -21,7 +21,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
@@ -32,6 +32,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
   const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
+
   const handleCurrencyChange = (newCurrency: number) => {
     setCurrency(newCurrency);
   };
@@ -39,6 +40,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
   const handleBetChange = (newBet: number) => {
     setBet(newBet);
   };
+
   useEffect(() => {
     webSocketService.setMessageHandler((message) => {
       console.log('Получено сообщение:', message);
@@ -46,7 +48,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
       navigate(`/room/${message.room_id}`);
     });
   }, [webSocketService]);
-  
+
   const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number) => {
     const data = {
       user_id: userIdValue,

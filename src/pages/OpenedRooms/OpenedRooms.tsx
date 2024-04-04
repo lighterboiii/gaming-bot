@@ -13,8 +13,6 @@ import Loader from "../../components/Loader/Loader";
 import { getOpenedRoomsRequest } from "../../api/gameApi";
 import Button from "../../components/ui/Button/Button";
 import { IGameCardData } from "../../utils/types/gameTypes";
-import { userId } from "../../api/requestData";
-import useWebSocketService from "../../services/webSocketService";
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getRoomInfoRequest, joinRoomRequest, leaveRoomRequest, setUserChoice } from "../../api/gameApi";
+import { getRoomInfoRequest, joinRoomRequest, leaveRoomRequest, setChoiceRequest, setUserChoice } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useTelegram from "../../hooks/useTelegram";
@@ -23,17 +23,24 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
   const roomData = useAppSelector(store => store.ws.socket);
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
-  // задать и сбросить цвет шапки + backButton
+
+  console.log(data);
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
-      webSocketService.sendMessage({ type: 'kickplayer', user_id: userId, room_id: roomId  });
+      leaveRoomRequest(userId, roomId!)
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
       navigate(-1);
     });
     return () => {
@@ -59,15 +66,23 @@ const RockPaperScissors: FC = () => {
     //   .catch((error) => {
     //     console.log(error);
     //   });
-  }, [roomData]);
+  }, []);
 
   // хендлер выбора хода
   const handleChoice = (value: string) => {
+    // setChoiceRequest(userId, roomId!, value)
+    //   .then((data) => {
+    //     console.log(data);
+    //   })
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: value });
 
   };
   // хендлер готовности игрока
   const handleReady = () => {
+    setChoiceRequest(userId, roomId!, 'ready')
+    .then((data: any) => {
+      console.log(data);
+    })
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: 'ready' });
   };
   // хендлер отпрвки эмодзи

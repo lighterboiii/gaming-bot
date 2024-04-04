@@ -52,3 +52,11 @@ export const leaveRoomRequest = (userIdValue: string, roomId: string) => {
     endpoint: `&room_id=${roomId}`,
   })
 };
+// запрос на отправку выбора 
+export const setChoiceRequest = (userIdValue: string, roomId: string, choice: string) => {
+  return putReq({
+    uri: 'setchoice?user_id=',
+    userId: userIdValue,
+    endpoint: `&room_id=${roomId}&choice=${choice}`,
+  })
+};
