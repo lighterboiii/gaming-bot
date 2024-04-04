@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getRoomInfoRequest, joinRoomRequest, leaveRoomRequest, setChoiceRequest, setUserChoice } from "../../api/gameApi";
+import { getRoomInfoRequest, leaveRoomRequest, setChoiceRequest, setUserChoice } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useTelegram from "../../hooks/useTelegram";
@@ -10,7 +10,7 @@ import { userId } from "../../api/requestData";
 import styles from "./RockPaperScissors.module.scss";
 import newVS from '../../images/rock-paper-scissors/VS_new.png';
 import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { useAppDispatch } from "../../services/reduxHooks";
 import HandShake from './HandShake/HandShake';
 import ChoiceBox from "./ChoiceBox/ChoiceBox";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
