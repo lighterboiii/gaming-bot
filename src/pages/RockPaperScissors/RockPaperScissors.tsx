@@ -16,13 +16,14 @@ import HandShake from './HandShake/HandShake';
 import ChoiceBox from "./ChoiceBox/ChoiceBox";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
+import { setSocket } from "../../services/wsSlice";
 
 const RockPaperScissors: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
@@ -40,29 +41,30 @@ const RockPaperScissors: FC = () => {
       tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate]);
-  // подключиться по ws
+  // // подключиться по ws
   useEffect(() => {
     webSocketService.setMessageHandler((message) => {
       setData(message?.room_data);
+      setSocket(message?.room_data);
       console.log('Получено сообщение:', message);
     });
   }, [webSocketService]);
 
   useEffect(() => {
-    // setData(roomData);
-    webSocketService.sendMessage({ type: 'room_info', room_id: roomId  });
-    getRoomInfoRequest(roomId!)
-      .then((data) => {
-        setData(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    setData(roomData);
+    // getRoomInfoRequest(roomId!)
+    //   .then((data) => {
+    //     setData(data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  }, [roomData]);
 
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: value });
+
   };
   // хендлер готовности игрока
   const handleReady = () => {
@@ -94,7 +96,7 @@ const RockPaperScissors: FC = () => {
                 {/* )} */}
               </div>
               <div className={styles.game__lowerContainer}>
-                {(data?.players[0]?.choice === 'ready' && data?.players[1]?.choice === 'ready') ? (
+                {(data?.players.every((player: any) => player.choice === 'ready')) ? (
                   <>
                     <div className={styles.game__betContainer}>
                       <p className={styles.game__text}>Ставка</p>

@@ -78,19 +78,6 @@ const OpenedRooms: FC = () => {
     }
     setRooms(sortedRooms);
   };
-  //  ??
-  const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
-  const handleJoinRoom = (roomId: any) => {
-    const data = {
-      user_id: userId,
-      room_id: roomId
-    };
-    const joinRoomMessage = {
-      type: 'addplayer',
-      ...data
-    };
-    webSocketService.sendMessage(joinRoomMessage);
-  };
 
   return (
     <div className={styles.rooms}>
@@ -115,7 +102,7 @@ const OpenedRooms: FC = () => {
           </div>
           <div className={styles.rooms__roomList + " scrollable"}>
             {rooms && rooms.length > 0 ? rooms?.map((room: any, index: number) => (
-              <Room room={room} key={index} onJoinRoom={handleJoinRoom}  />
+              <Room room={room} key={index} />
             )) : (
               <div className={styles.rooms__createNew}>
                 <p className={styles.rooms__notify}>{translation?.no_open_rooms}</p>
