@@ -78,6 +78,7 @@ const OpenedRooms: FC = () => {
     }
     setRooms(sortedRooms);
   };
+  //  ??
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
   const handleJoinRoom = (roomId: any) => {
     const data = {

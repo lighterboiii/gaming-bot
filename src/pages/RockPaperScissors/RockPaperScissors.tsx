@@ -22,15 +22,11 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
-  const [playersCount, setCount] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [choice, setChoice] = useState<string>('none');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
   const roomData = useAppSelector(store => store.ws.socket);
-
-  // console.log(wsMessage);
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
   // задать и сбросить цвет шапки + backButton
   useEffect(() => {
@@ -53,24 +49,20 @@ const RockPaperScissors: FC = () => {
   }, [webSocketService]);
 
   useEffect(() => {
-    setData(roomData);
-    if (Number(userId) !== Number(data?.creator_id)) {
-
-    }
-    // getRoomInfoRequest(roomId!)
-    //   .then((data) => {
-    //     setData(data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    // setData(roomData);
+    webSocketService.sendMessage({ type: 'room_info', room_id: roomId  });
+    getRoomInfoRequest(roomId!)
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   // хендлер выбора хода
   const handleChoice = (value: string) => {
-    setChoice(value);
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: value });
-    // webSocketService.sendMessage({ type: 'choice', user_id: 116496831, room_id: roomId, choice: 'paper' });
   };
   // хендлер готовности игрока
   const handleReady = () => {

@@ -21,7 +21,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
@@ -46,32 +46,6 @@ const GameSettings: FC<IProps> = ({ data }) => {
       navigate(`/room/${message.room_id}`);
     });
   }, [webSocketService]);
-  const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number) => {
-    const data = {
-      user_id: userIdValue,
-      bet: bet,
-      bet_type: betType,
-      room_type: roomType
-    };
-  
-    if (roomType === 2) {
-      setMessage("Контент находится в разработке, создай другую игру");
-      setMessageShown(true);
-      setTimeout(() => {
-        setMessage(""); // на время разработки
-        setMessageShown(false);
-      }, 2000);
-    } else {
-      const createRoomMessage = {
-        type: 'create_room',
-        ...data
-      };
-      
-      webSocketService.sendMessage(createRoomMessage);
-    }
-  };
-  
-
   // const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number) => {
   //   const data = {
   //     user_id: userIdValue,
@@ -79,30 +53,55 @@ const GameSettings: FC<IProps> = ({ data }) => {
   //     bet_type: betType,
   //     room_type: roomType
   //   };
+  
   //   if (roomType === 2) {
   //     setMessage("Контент находится в разработке, создай другую игру");
   //     setMessageShown(true);
   //     setTimeout(() => {
   //       setMessage(""); // на время разработки
   //       setMessageShown(false);
-  //     }, 2000)
+  //     }, 2000);
   //   } else {
-  //     postNewRoomRequest(data, userIdValue)
-  //       .then((response: any) => {
-  //         console.log(response);
-  //         if (response.message === 'success') {
-  //           console.log('Комната успешно создана:', response.room_id);
-  //           navigate(`/room/${response.room_id}`);
-  //           webSocketService.sendMessage({ type: 'create_room', room_id: response.room_id });
-  //         } else if (response.message === 'not_enough_coins') {
-  //           console.log('Недостаточно средств для создания комнаты')
-  //         }
-  //       })
-  //       .catch(error => {
-  //         console.log(error);
-  //       })
+  //     const createRoomMessage = {
+  //       type: 'create_room',
+  //       ...data
+  //     };
+      
+  //     webSocketService.sendMessage(createRoomMessage);
   //   }
   // };
+  
+  const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number) => {
+    const data = {
+      user_id: userIdValue,
+      bet: bet,
+      bet_type: betType,
+      room_type: roomType
+    };
+    if (roomType === 2) {
+      setMessage("Контент находится в разработке, создай другую игру");
+      setMessageShown(true);
+      setTimeout(() => {
+        setMessage(""); // на время разработки
+        setMessageShown(false);
+      }, 2000)
+    } else {
+      postNewRoomRequest(data, userIdValue)
+        .then((response: any) => {
+          console.log(response);
+          if (response.message === 'success') {
+            console.log('Комната успешно создана:', response.room_id);
+            navigate(`/room/${response.room_id}`);
+            webSocketService.sendMessage({ type: 'create_room', room_id: response.room_id });
+          } else if (response.message === 'not_enough_coins') {
+            console.log('Недостаточно средств для создания комнаты')
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    }
+  };
 
   return (
     <div className={styles.game + 'scrollable'}>
