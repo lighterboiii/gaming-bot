@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import styles from './Room.module.scss';
@@ -14,25 +15,57 @@ import { setSocket } from "../../../services/wsSlice";
 // типизировать
 interface IProps {
   room: any;
+  onJoinRoom: any;
 }
 
-const Room: FC<IProps> = ({ room }) => {
+const Room: FC<IProps> = ({ room, onJoinRoom }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
   const dispatch = useAppDispatch();
-  const userId = user?.id;
+  // const userId = user?.id;
+  // console.log(room);
   const translation = useAppSelector(store => store.app.languageSettings);
-  // const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
+  const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
+  useEffect(() => {
+    webSocketService.setMessageHandler((message) => {
+      console.log('Получено сообщение:', message);
+      dispatch(setSocket(message?.room_data));
+      navigate(`/room/${message.room_id}`);
+    });
+  }, [webSocketService]);
+  
   const handleJoinRoom = () => {
-    joinRoomRequest(userId, room.room_id)
-      .then((res) => {
-        console.log("Присоединение к комнате выполнено успешно:", res);
-        navigate(`/room/${room.room_id}`);
-      })
-      .catch((error) => {
-        console.error("Ошибка при присоединении к комнате:", error);
-      });
+    webSocketService.setMessageHandler((message) => {
+      console.log('Получено сообщение:', message);
+      dispatch(setSocket(message?.room_data));
+      navigate(`/room/${message.room_id}`);
+    });
+    const data = {
+      user_id: userId,
+      room_id: room.room_id
+    };
+    const joinRoomMessage = {
+      type: 'addplayer',
+      ...data
+    };
+    webSocketService.sendMessage(joinRoomMessage);
+    // joinRoomRequest(userId, room.room_id)
+    //   .then((res) => {
+    //     console.log("Присоединение к комнате выполнено успешно:", res);
+    //     navigate(`/room/${room.room_id}`);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Ошибка при присоединении к комнате:", error);
+    //   });
   };
+  // const handleJoinRoom = () => {
+  //   webSocketService.setMessageHandler((message) => {
+  //     console.log('Получено сообщение:', message);
+  //     // dispatch(setSocket(message?.room_data));
+  //     navigate(`/room/${message.room_id}`);
+  //   });
+  //   onJoinRoom(room.room_id); // Вызываем функцию для подключения к комнате с передачей roomId
+  // };
   return (
     <div className={styles.room} onClick={handleJoinRoom} key={room?.id}>
       <div className={styles.room__game}>

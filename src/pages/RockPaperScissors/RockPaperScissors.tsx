@@ -22,19 +22,21 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
+  const [playersCount, setCount] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [choice, setChoice] = useState<string>('none');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
   const roomData = useAppSelector(store => store.ws.socket);
-  console.log(data);
+
   // console.log(wsMessage);
   const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
   // задать и сбросить цвет шапки + backButton
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
+      webSocketService.sendMessage({ type: 'kickplayer', user_id: userId, room_id: roomId  });
       navigate(-1);
     });
     return () => {
@@ -51,33 +53,27 @@ const RockPaperScissors: FC = () => {
   }, [webSocketService]);
 
   useEffect(() => {
-    console.log("roomData changed:", roomData);
     setData(roomData);
-  }, [roomData]);
+    if (Number(userId) !== Number(data?.creator_id)) {
 
-  useEffect(() => {
-    // webSocketService.sendMessage({ type: 'room_info', room_id: roomId  });
-    getRoomInfoRequest(roomId!)
-      .then((data) => {
-        setData(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [data]);
+    }
+    // getRoomInfoRequest(roomId!)
+    //   .then((data) => {
+    //     setData(data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  }, []);
 
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     setChoice(value);
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: value });
-    webSocketService.sendMessage({ type: 'choice', user_id: 116496831, room_id: roomId, choice: 'paper' });
-    // setTimeout(() => {
-    //   webSocketService.sendMessage({ type: 'whoiswin', room_id: roomId });
-    // }, 2500)
+    // webSocketService.sendMessage({ type: 'choice', user_id: 116496831, room_id: roomId, choice: 'paper' });
   };
   // хендлер готовности игрока
   const handleReady = () => {
-    setChoice('ready');
     webSocketService.sendMessage({ type: 'choice', user_id: userId, room_id: roomId, choice: 'ready' });
   };
   // хендлер отпрвки эмодзи
@@ -99,30 +95,20 @@ const RockPaperScissors: FC = () => {
               </div>
             ))}
           </div>
-          {/* {(roomData) ? (
-            <div className={styles.game__notify}>Ожидание игрока...</div> // перевод
-          ) : ( */}
             <>
               <img src={newVS} alt="versus icon" className={styles.game__versusImage} /><div className={styles.game__hands}>
                 {/* {(player1State?.choice !== undefined && player2State?.choice !== undefined) && ( */}
                   <HandShake playerChoice={'paper'} secondPlayerChoice={'paper'} />
                 {/* )} */}
               </div>
-              {/* {wsMessage?.winner && (
-                <div className={styles.game__resultMessage}>
-                  {wsMessage.winner?.userid === Number(userId) && <p>Поздравляем! Вы выиграли!</p>}
-                  {wsMessage.loser?.userid === Number(userId) && <p>К сожалению, вы проиграли.</p>}
-                  {wsMessage.winner === 'draw' && <p>Ничья!</p>}
-                </div>
-              )} */}
               <div className={styles.game__lowerContainer}>
-                {choice === 'ready' ? (
+                {(data?.players[0]?.choice === 'ready' && data?.players[1]?.choice === 'ready') ? (
                   <>
                     <div className={styles.game__betContainer}>
                       <p className={styles.game__text}>Ставка</p>
                       <div className={styles.game__bet}>
-                        {/* <p className={styles.game__text}>{roomData?.bet_type === "1" ? "💵" : "🔰"}</p>
-                        <p className={styles.game__text}>{roomData?.bet}</p> */}
+                        <p className={styles.game__text}>{data?.bet_type === "1" ? "💵" : "🔰"}</p>
+                        <p className={styles.game__text}>{data?.bet}</p>
                       </div>
                     </div>
                     <div className={styles.game__buttonsWrapper}>

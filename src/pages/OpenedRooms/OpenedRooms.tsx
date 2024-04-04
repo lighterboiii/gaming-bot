@@ -13,6 +13,8 @@ import Loader from "../../components/Loader/Loader";
 import { getOpenedRoomsRequest } from "../../api/gameApi";
 import Button from "../../components/ui/Button/Button";
 import { IGameCardData } from "../../utils/types/gameTypes";
+import { userId } from "../../api/requestData";
+import useWebSocketService from "../../services/webSocketService";
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
@@ -76,6 +78,18 @@ const OpenedRooms: FC = () => {
     }
     setRooms(sortedRooms);
   };
+  const webSocketService = useWebSocketService<any>(`wss://gamebottggw.ngrok.app/room`);
+  const handleJoinRoom = (roomId: any) => {
+    const data = {
+      user_id: userId,
+      room_id: roomId
+    };
+    const joinRoomMessage = {
+      type: 'addplayer',
+      ...data
+    };
+    webSocketService.sendMessage(joinRoomMessage);
+  };
 
   return (
     <div className={styles.rooms}>
@@ -100,7 +114,7 @@ const OpenedRooms: FC = () => {
           </div>
           <div className={styles.rooms__roomList + " scrollable"}>
             {rooms && rooms.length > 0 ? rooms?.map((room: any, index: number) => (
-              <Room room={room} key={index} />
+              <Room room={room} key={index} onJoinRoom={handleJoinRoom}  />
             )) : (
               <div className={styles.rooms__createNew}>
                 <p className={styles.rooms__notify}>{translation?.no_open_rooms}</p>
