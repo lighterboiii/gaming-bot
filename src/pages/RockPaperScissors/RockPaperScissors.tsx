@@ -45,13 +45,6 @@ const RockPaperScissors: FC = () => {
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
-      leaveRoomRequest(userId)
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
     }
   }, [tg, navigate]);
   // автозапрос состояния страницы
