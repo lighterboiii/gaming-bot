@@ -18,10 +18,23 @@ interface IProps {
 
 const ChoiceBox: FC<IProps> = ({ handleChoice }) => {
   const [choiceItem, setChoiceItem] = useState('');
-  console.log(choiceItem);
+
   const onChoiceClick = (choice: string) => {
     handleChoice(choice);
     setChoiceItem(choice);
+  };
+
+  const getIconPath = (choice: string): string => {
+    switch (choice) {
+      case 'rock':
+        return choiceItem === 'rock' ? rockSelect : choiceItem === '' ? rock : rockDeselect;
+      case 'scissors':
+        return choiceItem === 'scissors' ? scissorsSelect : choiceItem === '' ? scissors : scissorsDeselect;
+      case 'paper':
+        return choiceItem === 'paper' ? paperSelect : choiceItem === '' ? paper : paperDeselect;
+      default:
+        return '';
+    }
   };
 
   return (
@@ -29,23 +42,34 @@ const ChoiceBox: FC<IProps> = ({ handleChoice }) => {
       <button
         type="button"
         className={styles.choiceBox__button}
-        onClick={() => handleChoice('rock')}
+        onClick={() => onChoiceClick('rock')}
       >
-        <img src={rock} alt="rock icon" className={styles.choiceBox__icon} />
+        <img
+          src={getIconPath('rock')}
+          alt="rock icon" className={styles.choiceBox__icon}
+        />
       </button>
       <button
         type="button"
         className={styles.choiceBox__button}
-        onClick={() => handleChoice('scissors')}
+        onClick={() => onChoiceClick('scissors')}
       >
-        <img src={scissors} alt="scissors icon" className={styles.choiceBox__icon} />
+        <img
+          src={getIconPath('scissors')}
+          alt="scissors icon"
+          className={styles.choiceBox__icon}
+        />
       </button>
       <button
         type="button"
         className={styles.choiceBox__button}
-        onClick={() => handleChoice('paper')}
+        onClick={() => onChoiceClick('paper')}
       >
-        <img src={paper} alt="paper icon" className={styles.choiceBox__icon} />
+        <img
+          src={getIconPath('paper')}
+          alt="paper icon"
+          className={styles.choiceBox__icon}
+        />
       </button>
     </div>
   )

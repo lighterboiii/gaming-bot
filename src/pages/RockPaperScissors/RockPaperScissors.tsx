@@ -22,14 +22,14 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
   const [playerEmojis, setPlayerEmojis] = useState<any>({});
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
-  console.log(playerEmojis);
+  // console.log(playerEmojis);
   console.log(data?.players);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
@@ -76,36 +76,42 @@ const RockPaperScissors: FC = () => {
       });
   }, [])
 
-  // useEffect(() => {
-  //   if (data && data?.players_count === '2' && !timerStarted) {
-  //     setTimerStarted(true);
-  //     setTimer(15);
-  //   } else if (data && data?.players_count !== '2') {
-  //     setTimerStarted(false);
-  //     setTimer(15);
-  //   }
-  //   if (data?.players.every((player: any) => player.choice === 'ready')) {
-  //     setTimerStarted(false);
-  //     setTimer(15);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data && data?.players_count === '2' && !timerStarted) {
+      setTimerStarted(true);
+      setTimer(15);
+    } else if (data && data?.players_count !== '2') {
+      setTimerStarted(false);
+      setTimer(15);
+    }
+    if (data?.players.every((player: any) => player.choice === 'ready')) {
+      setTimerStarted(false);
+      setTimer(15);
+    }
+  }, [data]);
 
-  // useEffect(() => {
-  //   if (timerStarted && timer > 0) {
-  //     const ticker = setInterval(() => {
-  //       setTimer(prevTimer => prevTimer - 1);
-  //     }, 1000);
-  //     return () => clearInterval(ticker);
-  //   } else if (timer === 0) {
-  //     leaveRoomRequest(data?.players[1]?.userid, roomId!)
-  //       .then((data) => {
-  //         console.log(data);
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-  //   }
-  // }, [timerStarted, timer]);
+  useEffect(() => {
+    if (timerStarted && timer > 0) {
+      const ticker = setInterval(() => {
+        setTimer(prevTimer => prevTimer - 1);
+      }, 1000);
+      return () => clearInterval(ticker);
+    } else if (timer === 0) {
+      const hasPlayerWithChoiceNone = data?.players.some((player: any) => player.choice === 'none');
+      if (hasPlayerWithChoiceNone) {
+        leaveRoomRequest(userId, roomId!)
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      setTimerStarted(false);
+      setTimer(15);
+    }
+  }, [timerStarted, timer]);
+  
 
   // хендлер выбора хода
   const handleChoice = (value: string) => {
@@ -113,6 +119,10 @@ const RockPaperScissors: FC = () => {
       .then((data) => {
         console.log(data);
       })
+
+    // setTimeout(() => {
+    //   setChoiceRequest(userId, roomId!, 'none');
+    // }, 5000)
   };
   // хендлер готовности игрока
   const handleReady = () => {
@@ -159,11 +169,10 @@ const RockPaperScissors: FC = () => {
             {<img src={newVS} alt="versus icon" className={styles.game__versusImage} />}
             <div className={styles.game__hands}>
               {(
-                data?.players[0]?.choice !== 'none' && data?.players[0]?.choice !== 'ready' &&
-                data?.players[1]?.choice !== 'none' && data?.players[1]?.choice !== 'ready' && // перенести в состояние?
-                data?.players_count === "2"
+                data?.players_count === "2" &&
+                data?.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')
               ) ? (
-                <HandShake playerChoice={'paper'} secondPlayerChoice={'paper'} />
+                <HandShake playerChoice={data?.players[0]?.choice} secondPlayerChoice={data?.players[1]?.choice} />
               ) : (
                 data?.players_count === "1"
               ) ? (
@@ -171,7 +180,7 @@ const RockPaperScissors: FC = () => {
               ) : (
                 <p className={styles.game__notify}>
                   {
-                    data?.players.every((player: any) => player.choice !== 'ready') &&
+                    data?.players.some((player: any) => player.choice === 'none') &&
                     timer
                   }
                 </p>
