@@ -1,8 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import styles from './HandShake.module.scss';
-import leftPP from '../../../images/rock-paper-scissors/l-pp.png'
+import leftPP from '../../../images/rock-paper-scissors/l-pp.png';
 import leftPR from '../../../images/rock-paper-scissors/l-pr.png';
 import leftPS from '../../../images/rock-paper-scissors/l-ps.png';
 import rightPP from '../../../images/rock-paper-scissors/r-pp.png';
@@ -21,103 +19,98 @@ import rightSS from '../../../images/rock-paper-scissors/r-ss.png';
 import rightSR from '../../../images/rock-paper-scissors/r-sr.png';
 import rightSP from '../../../images/rock-paper-scissors/r-sp.png';
 
-
 interface IProps {
   playerChoice: any;
   secondPlayerChoice: any;
-  prevChoice1: string;
-  prevChoice2: string;
+  prevChoices: { player1: string; player2: string };
 }
 
-const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice, prevChoice1, prevChoice2 }) => {
-  const [key, setKey] = useState(false);
-  console.log(prevChoice1);
-  console.log(prevChoice2);
+const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice, prevChoices }) => {
+  const { player1, player2 } = prevChoices;
+  const [leftHandImage, setLeftHandImage] = useState<string>('');
+  const [rightHandImage, setRightHandImage] = useState<string>('');
+
+  console.log(player1);
+  console.log(player2);
+
+  useEffect(() => {
+    const getLeftHandImage = (choice: string) => {
+      switch (player1) {
+        case 'rock':
+          if (choice === 'rock') {
+            return leftRR;
+          } else if (choice === 'scissors') {
+            return leftRS;
+          } else {
+            return leftRP;
+          }
+        case 'paper':
+          if (choice === 'rock') {
+            return leftPR;
+          } else if (choice === 'scissors') {
+            return leftPS;
+          } else {
+            return leftPP;
+          }
+        case 'scissors':
+          if (choice === 'rock') {
+            return leftSR;
+          } else if (choice === 'scissors') {
+            return leftSS;
+          } else {
+            return leftSP;
+          }
+        default:
+          return '';
+      }
+    };
   
-  useEffect(() => {
-    setKey(prevKey => !prevKey);
-  }, [playerChoice, secondPlayerChoice]);
+    const getRightHandImage = (choice: string) => {
+      switch (player2) {
+        case 'rock':
+          if (choice === 'rock') {
+            return rightRR;
+          } else if (choice === 'scissors') {
+            return rightRS;
+          } else {
+            return rightRP;
+          }
+        case 'paper':
+          if (choice === 'rock') {
+            return rightPR;
+          } else if (choice === 'scissors') {
+            return rightPS;
+          } else {
+            return rightPP;
+          }
+        case 'scissors':
+          if (choice === 'rock') {
+            return rightSR;
+          } else if (choice === 'scissors') {
+            return rightSS;
+          } else {
+            return rightSP;
+          }
+        default:
+          return '';
+      }
+    };
 
-  const getLeftHandImage = (choice: string) => {
-    switch (prevChoice1) {
-      case 'rock':
-        if (choice === 'rock') {
-          return leftRR;
-        } else if (choice === 'scissors') {
-          return leftRS;
-        } else {
-          return leftRP;
-        }
-      case 'paper':
-        if (choice === 'rock') {
-          return leftPR;
-        } else if (choice === 'scissors') {
-          return leftPS;
-        } else {
-          return leftPP;
-        }
-      case 'scissors':
-        if (choice === 'rock') {
-          return leftSR
-        } else if (choice === 'scissors') {
-          return leftSS;
-        } else {
-          return leftSP;
-        }
-      default:
-        return '';
-    }
-  };
-
-  const getRightHandImage = (choice: string) => {
-    switch (prevChoice2) {
-      case 'rock':
-        if (choice === 'rock') {
-          return rightRR;
-        } else if (choice === 'scissors') {
-          return rightRS;
-        } else {
-          return rightRP;
-        }
-      case 'paper':
-        if (choice === 'rock') {
-          return rightPR;
-        } else if (choice === 'scissors') {
-          return rightPS;
-        } else {
-          return rightPP;
-        }
-      case 'scissors':
-        if (choice === 'rock') {
-          return rightSR
-        } else if (choice === 'scissors') {
-          return rightSS;
-        } else {
-          return rightSP;
-        }
-      default:
-        return '';
-    }
-  };
-
-  useEffect(() => {
-    getLeftHandImage(playerChoice);
-    getRightHandImage(secondPlayerChoice);
+    setLeftHandImage(getLeftHandImage(player1));
+    setRightHandImage(getRightHandImage(player2));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
+  }, [player1, player2]);
 
-  const [lastChoice, setChoice] = useState();
   return (
     <div className={styles.hands}>
       {(playerChoice !== 'none' && secondPlayerChoice !== 'none') && (
         <>
-          <img src={getLeftHandImage(playerChoice)} alt="left hand" className={`${styles.hands__mainImage} ${styles.hands__leftMainImage}`} />
-          <img src={getRightHandImage(secondPlayerChoice)} alt="right hand" className={`${styles.hands__mainImage} ${styles.hands__rightMainImage}`} />
+          <img src={leftHandImage} alt="left hand" className={`${styles.hands__mainImage} ${styles.hands__leftMainImage}`} />
+          <img src={rightHandImage} alt="right hand" className={`${styles.hands__mainImage} ${styles.hands__rightMainImage}`} />
         </>
-      )
-      }
+      )}
     </div>
-  )
+  );
 };
 
 export default HandShake;

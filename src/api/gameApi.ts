@@ -67,3 +67,10 @@ export const setEmojiRequest = (userIdValue: string, roomId: string, emoji: stri
     endpoint: `&room_id=${roomId}&emoji_id=${emoji}`,
   })
 };
+// запрос на отправку определения победителя
+export const whoIsWinRequest = (roomId: string) => {
+  return getReq({
+    uri: 'whoiswin?user_id=',
+    endpoint: `&room_id=${roomId}`,
+  })
+};

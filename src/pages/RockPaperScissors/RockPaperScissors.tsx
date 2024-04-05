@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getRoomInfoRequest, leaveRoomRequest, setChoiceRequest, setEmojiRequest, setUserChoice } from "../../api/gameApi";
+import { getRoomInfoRequest, leaveRoomRequest, setChoiceRequest, setEmojiRequest, setUserChoice, whoIsWinRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useTelegram from "../../hooks/useTelegram";
@@ -22,7 +22,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
@@ -31,6 +31,7 @@ const RockPaperScissors: FC = () => {
 
   const [prevChoice1, setPrevChoice1] = useState('');
   const [prevChoice2, setPrevChoice2] = useState('');
+  const [prevChoices, setPrevChoices] = useState({ player1: '', player2: '' });
   console.log(data);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
@@ -76,7 +77,7 @@ const RockPaperScissors: FC = () => {
         console.error('Ошибка при получении информации о комнате', error);
       });
   }, [])
-
+  // установка таймера
   useEffect(() => {
     if (data && data?.players_count === '2' && !timerStarted) {
       setTimerStarted(true);
@@ -90,7 +91,7 @@ const RockPaperScissors: FC = () => {
       setTimer(15);
     }
   }, [data]);
-
+  // установка таймера
   useEffect(() => {
     if (timerStarted && timer > 0) {
       const ticker = setInterval(() => {
@@ -112,20 +113,27 @@ const RockPaperScissors: FC = () => {
       setTimer(15);
     }
   }, [timerStarted, timer]);
-
-
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     setChoiceRequest(userId, roomId!, value)
       .then((data) => {
         console.log(data);
       })
-
     setTimeout(() => {
-      setPrevChoice1(value);
-      setPrevChoice2(value);
+      if (Number(userId) === Number(data?.players[0]?.userid)) {
+        setPrevChoice1(value);
+      } else if (Number(userId) === Number(data?.players[1]?.userid)) {
+        setPrevChoice2(value);
+      }
+      whoIsWinRequest(roomId!)
+        .then((res: any) => {
+          console.log(res);
+        })
     }, 3000)
   };
+  useEffect(() => {
+    setPrevChoices({ player1: prevChoice1, player2: prevChoice2 });
+  }, [prevChoice1, prevChoice2]);
   // хендлер готовности игрока
   const handleReady = () => {
     setChoiceRequest(userId, roomId!, 'ready')
@@ -172,11 +180,10 @@ const RockPaperScissors: FC = () => {
                 data?.players_count === "2" &&
                 data?.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')
               ) ? (
-                <HandShake 
-                playerChoice={data?.players[0]?.choice} 
-                secondPlayerChoice={data?.players[1]?.choice} 
-                prevChoice1={prevChoice1}
-                prevChoice2={prevChoice2}
+                <HandShake
+                  playerChoice={data?.players[0]?.choice}
+                  secondPlayerChoice={data?.players[1]?.choice}
+                  prevChoices={prevChoices}
                 />
               ) : (
                 data?.players_count === "1"
