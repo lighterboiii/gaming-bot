@@ -26,11 +26,11 @@ const RockPaperScissors: FC = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
+  const [playerEmojis, setPlayerEmojis] = useState<any>({});
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
-  const [timerExpired, setTimerExpired] = useState(false);
-
-  console.log(data);
+  console.log(playerEmojis);
+  console.log(data?.players);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -63,12 +63,28 @@ const RockPaperScissors: FC = () => {
 
     return () => clearInterval(intervalId);
   }, []);
+  // подгрузка при монтировании компонента ??
+  useEffect(() => {
+    setLoading(true);
+    getRoomInfoRequest(roomId!)
+      .then((data) => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Ошибка при получении информации о комнате', error);
+      });
+  }, [])
 
   useEffect(() => {
     if (data && data?.players_count === '2' && !timerStarted) {
       setTimerStarted(true);
       setTimer(15);
     } else if (data && data?.players_count !== '2') {
+      setTimerStarted(false);
+      setTimer(15);
+    }
+    if (data?.players.every((player: any) => player.choice === 'ready')) {
       setTimerStarted(false);
       setTimer(15);
     }
@@ -107,6 +123,18 @@ const RockPaperScissors: FC = () => {
   };
   // хендлер отпрвки эмодзи
   const handleEmojiSelect = (emoji: string) => {
+    const currentPlayerId = userId;
+    console.log(currentPlayerId);
+    setPlayerEmojis((prevState: any) => ({
+      ...prevState,
+      [currentPlayerId]: emoji,
+    }));
+    setTimeout(() => {
+      setPlayerEmojis((prevState: any) => ({
+        ...prevState,
+        [currentPlayerId]: '',
+      }));
+    }, 2000)
   };
 
   return (
@@ -116,19 +144,23 @@ const RockPaperScissors: FC = () => {
           <div className={styles.game__players}>
             {data?.players.map((player: any) => (
               <div className={styles.game__player}>
+                {/* <p>{player?.publicname}</p> */}
                 <UserAvatar item={player} avatar={player.avatar} key={player.userId} />
-                {player.choice === 'ready' && (
+                {player?.choice === 'ready' && (
                   <img src={readyIcon} alt="ready icon" className={styles.game__readyIcon} />
                 )}
+                {playerEmojis[player?.userid] && 
+                  <img src={playerEmojis[player?.userid]} alt="selected emoji" className={styles.game__selectedEmoji} />
+                }
               </div>
             ))}
           </div>
           <>
-            <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
+            {<img src={newVS} alt="versus icon" className={styles.game__versusImage} />}
             <div className={styles.game__hands}>
               {(
                 data?.players[0]?.choice !== 'none' && data?.players[0]?.choice !== 'ready' &&
-                data?.players[1]?.choice !== 'none' && data?.players[1]?.choice !== 'ready' &&
+                data?.players[1]?.choice !== 'none' && data?.players[1]?.choice !== 'ready' && // перенести в состояние?
                 data?.players_count === "2"
               ) ? (
                 <HandShake playerChoice={'paper'} secondPlayerChoice={'paper'} />
@@ -184,7 +216,7 @@ const RockPaperScissors: FC = () => {
       <EmojiOverlay
         show={showEmojiOverlay}
         onClose={() => setShowEmojiOverlay(!showEmojiOverlay)}
-        onEmojiSelect={() => handleEmojiSelect}
+        onEmojiSelect={handleEmojiSelect}
       />
     </div>
   );

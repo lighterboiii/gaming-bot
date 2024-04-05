@@ -112,4 +112,9 @@
     transform: translateX(-50%);
     z-index: 2;
   }
+
+  &__selectedEmoji {
+    @include size(72px, 72px);
+    @include position(absolute, $bottom: -35%, $left: 3%);
+  }
 }

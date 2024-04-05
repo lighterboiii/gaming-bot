@@ -9,6 +9,7 @@
   @include position(relative);
   background-color: $tertiary-color;
   border-radius: $radius-10;
+  cursor: pointer;
 
   &__game {
     @include size(100%, 100%);
