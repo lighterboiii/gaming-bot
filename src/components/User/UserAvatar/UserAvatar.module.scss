@@ -19,11 +19,11 @@
     @include size(65%, 65%);
     z-index: 1;
     mask-composite: exclude;
-    mask-size: 155%;
+    mask-size: 162%;
     mask-position: center;
   }
 }
 
-.userBigAvatar {
-  @include size(110%, 110%);
-}
+// .userBigAvatar {
+//   @include size(110%, 110%);
+// }

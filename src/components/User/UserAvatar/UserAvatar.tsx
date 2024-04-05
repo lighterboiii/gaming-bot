@@ -33,7 +33,7 @@ const UserAvatar: FC<IProps> = ({ item, avatar }) => {
   }, [activeSkin, userData, item]);
 
   return (
-    <div className={`${styles.userAvatar} ${activeSkin === 0 && styles.userBigAvatar}`}>
+    <div className={`${styles.userAvatar}`}>
       <div
         className={styles.userAvatar__avatarBackground}
         style={{ backgroundImage: `url(${userSkin})` }}

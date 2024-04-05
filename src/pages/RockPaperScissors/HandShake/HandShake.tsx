@@ -25,7 +25,7 @@ interface IProps {
   prevChoices: { player1: string; player2: string };
 }
 
-const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice, prevChoices }) => {
+const HandShake: FC<IProps> = ({ prevChoices }) => {
   const { player1, player2 } = prevChoices;
   const [leftHandImage, setLeftHandImage] = useState<string>('');
   const [rightHandImage, setRightHandImage] = useState<string>('');
@@ -103,12 +103,10 @@ const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice, prevChoices }
 
   return (
     <div className={styles.hands}>
-      {(playerChoice !== 'none' && secondPlayerChoice !== 'none') && (
         <>
           <img src={leftHandImage} alt="left hand" className={`${styles.hands__mainImage} ${styles.hands__leftMainImage}`} />
           <img src={rightHandImage} alt="right hand" className={`${styles.hands__mainImage} ${styles.hands__rightMainImage}`} />
         </>
-      )}
     </div>
   );
 };

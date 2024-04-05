@@ -21,7 +21,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
@@ -78,10 +78,6 @@ useEffect(() => {
   };
 
   fetchRoomInfo();
-
-  // return () => {
-  //   // вы можете отправить запрос на отмену к серверу, если это поддерживается
-  // };
 }, []);
 
 // ...
@@ -124,6 +120,7 @@ useEffect(() => {
         leaveRoomRequest(userId)
           .then((data) => {
             console.log(data);
+            navigate(-1);
           })
           .catch((error) => {
             console.error(error);
