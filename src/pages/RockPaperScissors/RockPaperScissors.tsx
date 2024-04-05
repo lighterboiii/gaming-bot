@@ -45,6 +45,13 @@ const RockPaperScissors: FC = () => {
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
+      leaveRoomRequest(userId)
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
     }
   }, [tg, navigate]);
   // автозапрос состояния страницы
@@ -109,7 +116,7 @@ const RockPaperScissors: FC = () => {
       setTimer(15);
     }
   }, [timerStarted, timer]);
-  
+
 
   // хендлер выбора хода
   const handleChoice = (value: string) => {
@@ -132,22 +139,15 @@ const RockPaperScissors: FC = () => {
   // хендлер отпрвки эмодзи
   const handleEmojiSelect = (emoji: string) => {
     setEmojiRequest(userId, roomId!, emoji)
-      .then(res => {
+      .then((res: any) => {
         console.log(res);
+        if (res?.message === 'success') {
+          setShowEmojiOverlay(false);
+        }
       })
       .catch((error) => {
         console.log(error);
       })
-
-    // setTimeout(() => {
-    //   setEmojiRequest(userId, roomId!, 'none')
-    //   .then(res => {
-    //     console.log(res);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   })
-    // }, 2500)
   };
 
   return (
