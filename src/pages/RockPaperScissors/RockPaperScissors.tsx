@@ -33,7 +33,7 @@ const RockPaperScissors: FC = () => {
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
-      leaveRoomRequest(userId, roomId!)
+      leaveRoomRequest(userId)
         .then((data) => {
           console.log(data);
         })
@@ -97,7 +97,7 @@ const RockPaperScissors: FC = () => {
     } else if (timer === 0) {
       const hasPlayerWithChoiceNone = data?.players.some((player: any) => player.choice === 'none');
       if (hasPlayerWithChoiceNone) {
-        leaveRoomRequest(userId, roomId!)
+        leaveRoomRequest(userId)
           .then((data) => {
             console.log(data);
           })

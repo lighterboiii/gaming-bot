@@ -18,6 +18,7 @@ import { setDailyBonus, setLanguageSettings, setShopAvailable, setUserData, setU
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 import RockPaperScissors from '../../pages/RockPaperScissors/RockPaperScissors';
+import { leaveRoomRequest } from '../../api/gameApi';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
@@ -47,6 +48,16 @@ const App: FC = () => {
     tg.enableClosingConfirmation();
     tg.ready();
     window.scrollTo(0, 0);
+
+    return(() => {
+      leaveRoomRequest(userId)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    })
   }, []);
 
   useEffect(() => {

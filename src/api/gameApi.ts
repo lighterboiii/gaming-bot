@@ -45,11 +45,10 @@ export const joinRoomRequest = (userIdValue: string, roomId: string) => {
   })
 };
 // запрос на отключение от комнаты
-export const leaveRoomRequest = (userIdValue: string, roomId: string) => {
+export const leaveRoomRequest = (userIdValue: string) => {
   return putReq({
     uri: 'kickplayer?user_id=',
     userId: userIdValue,
-    endpoint: `&room_id=${roomId}`,
   })
 };
 // запрос на отправку выбора 
