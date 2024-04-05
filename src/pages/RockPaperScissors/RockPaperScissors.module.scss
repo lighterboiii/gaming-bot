@@ -21,7 +21,7 @@
   }
 
   &__player {
-    @include size(136px, 136px);
+    @include size(164px, 164px);
     @include position(relative);
     @include flex(row, center, center);
   }
