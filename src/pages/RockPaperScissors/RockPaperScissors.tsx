@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getRoomInfoRequest, leaveRoomRequest, setChoiceRequest, setEmojiRequest, setUserChoice, whoIsWinRequest } from "../../api/gameApi";
+import { getRoomInfoRequest, leaveRoomRequest, setChoiceRequest, setEmojiRequest, whoIsWinRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useTelegram from "../../hooks/useTelegram";
@@ -15,7 +15,6 @@ import HandShake from './HandShake/HandShake';
 import ChoiceBox from "./ChoiceBox/ChoiceBox";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
-import Countdown from "../../components/Countdown/Countdown";
 
 const RockPaperScissors: FC = () => {
   const dispatch = useAppDispatch();
@@ -52,19 +51,40 @@ const RockPaperScissors: FC = () => {
     }
   }, [tg, navigate]);
   // автозапрос состояния страницы
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      getRoomInfoRequest(roomId!)
-        .then((data) => {
-          setData(data);
-        })
-        .catch((error) => {
-          console.error('Ошибка при получении информации о комнате', error);
-        });
-    }, 1000);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     getRoomInfoRequest(roomId!)
+  //       .then((data) => {
+  //         setData(data);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Ошибка при получении информации о комнате', error);
+  //       });
+  //   }, 1000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+  //   return () => clearInterval(intervalId);
+  // }, []);
+useEffect(() => {
+  const fetchRoomInfo = () => {
+    getRoomInfoRequest(roomId!)
+      .then((data) => {
+        setData(data);
+        fetchRoomInfo();
+      })
+      .catch((error) => {
+        console.error('Ошибка при получении информации о комнате', error);
+        setTimeout(fetchRoomInfo, 10000);
+      });
+  };
+
+  fetchRoomInfo();
+
+  // return () => {
+  //   // вы можете отправить запрос на отмену к серверу, если это поддерживается
+  // };
+}, []);
+
+// ...
   // подгрузка при монтировании компонента ??
   useEffect(() => {
     setLoading(true);
@@ -119,17 +139,17 @@ const RockPaperScissors: FC = () => {
       .then((data) => {
         console.log(data);
       })
-    setTimeout(() => {
+    // setTimeout(() => {
       if (Number(userId) === Number(data?.players[0]?.userid)) {
         setPrevChoice1(value);
       } else if (Number(userId) === Number(data?.players[1]?.userid)) {
         setPrevChoice2(value);
       }
-      whoIsWinRequest(roomId!)
-        .then((res: any) => {
-          console.log(res);
-        })
-    }, 3000)
+    //   whoIsWinRequest(roomId!)
+    //     .then((res: any) => {
+    //       console.log(res);
+    //     })
+    // }, 3000)
   };
   useEffect(() => {
     setPrevChoices({ player1: prevChoice1, player2: prevChoice2 });
