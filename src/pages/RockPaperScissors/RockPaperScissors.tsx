@@ -76,36 +76,36 @@ const RockPaperScissors: FC = () => {
       });
   }, [])
 
-  useEffect(() => {
-    if (data && data?.players_count === '2' && !timerStarted) {
-      setTimerStarted(true);
-      setTimer(15);
-    } else if (data && data?.players_count !== '2') {
-      setTimerStarted(false);
-      setTimer(15);
-    }
-    if (data?.players.every((player: any) => player.choice === 'ready')) {
-      setTimerStarted(false);
-      setTimer(15);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data && data?.players_count === '2' && !timerStarted) {
+  //     setTimerStarted(true);
+  //     setTimer(15);
+  //   } else if (data && data?.players_count !== '2') {
+  //     setTimerStarted(false);
+  //     setTimer(15);
+  //   }
+  //   if (data?.players.every((player: any) => player.choice === 'ready')) {
+  //     setTimerStarted(false);
+  //     setTimer(15);
+  //   }
+  // }, [data]);
 
-  useEffect(() => {
-    if (timerStarted && timer > 0) {
-      const ticker = setInterval(() => {
-        setTimer(prevTimer => prevTimer - 1);
-      }, 1000);
-      return () => clearInterval(ticker);
-    } else if (timer === 0) {
-      leaveRoomRequest(data?.players[1]?.userid, roomId!)
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [timerStarted, timer]);
+  // useEffect(() => {
+  //   if (timerStarted && timer > 0) {
+  //     const ticker = setInterval(() => {
+  //       setTimer(prevTimer => prevTimer - 1);
+  //     }, 1000);
+  //     return () => clearInterval(ticker);
+  //   } else if (timer === 0) {
+  //     leaveRoomRequest(data?.players[1]?.userid, roomId!)
+  //       .then((data) => {
+  //         console.log(data);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   }
+  // }, [timerStarted, timer]);
 
   // хендлер выбора хода
   const handleChoice = (value: string) => {
@@ -146,10 +146,10 @@ const RockPaperScissors: FC = () => {
               <div className={styles.game__player}>
                 {/* <p>{player?.publicname}</p> */}
                 <UserAvatar item={player} avatar={player.avatar} key={player.userId} />
-                {player?.choice === 'ready' && (
+                {player?.choice !== 'none' && (
                   <img src={readyIcon} alt="ready icon" className={styles.game__readyIcon} />
                 )}
-                {playerEmojis[player?.userid] && 
+                {playerEmojis[player?.userid] &&
                   <img src={playerEmojis[player?.userid]} alt="selected emoji" className={styles.game__selectedEmoji} />
                 }
               </div>
@@ -171,13 +171,24 @@ const RockPaperScissors: FC = () => {
               ) : (
                 <p className={styles.game__notify}>
                   {
-                    data?.players.some((player: any) => player.choice !== 'ready') &&
+                    data?.players.every((player: any) => player.choice !== 'ready') &&
                     timer
-                  }</p>
+                  }
+                </p>
               )}
             </div>
             <div className={styles.game__lowerContainer}>
-              {(data?.players.every((player: any) => player.choice === 'ready')) ? (
+              {(data?.players.some((player: any) => player.choice === 'none')) ? (
+                <div>
+                  <input
+                    type="checkbox"
+                    id="ready"
+                    onChange={handleReady}
+                    className={styles.game__checkbox}
+                  />
+                  <label htmlFor="ready" className={styles.game__label}></label>
+                </div>
+              ) : (
                 <>
                   <div className={styles.game__betContainer}>
                     <p className={styles.game__text}>Ставка</p>
@@ -190,16 +201,6 @@ const RockPaperScissors: FC = () => {
                     <ChoiceBox handleChoice={handleChoice} />
                   </div>
                 </>
-              ) : (
-                <div>
-                  <input
-                    type="checkbox"
-                    id="ready"
-                    onChange={handleReady}
-                    className={styles.game__checkbox}
-                  />
-                  <label htmlFor="ready" className={styles.game__label}></label>
-                </div>
               )}
               <button
                 type="button"

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
+import { FC, useState } from "react";
 import styles from './ChoiceBox.module.scss';
 // import emoji_icon from '../../../images/rock-paper-scissors/emoji_icon.png';
 import rock from '../../../images/rock-paper-scissors/hands-icons/rock.png'
@@ -17,6 +17,13 @@ interface IProps {
 }
 
 const ChoiceBox: FC<IProps> = ({ handleChoice }) => {
+  const [choiceItem, setChoiceItem] = useState('');
+  console.log(choiceItem);
+  const onChoiceClick = (choice: string) => {
+    handleChoice(choice);
+    setChoiceItem(choice);
+  };
+
   return (
     <div className={styles.choiceBox}>
       <button
@@ -40,9 +47,6 @@ const ChoiceBox: FC<IProps> = ({ handleChoice }) => {
       >
         <img src={paper} alt="paper icon" className={styles.choiceBox__icon} />
       </button>
-      {/* <button type="button" className={`${styles.choiceBox__button} ${styles.choiceBox__emojiButton}`}>
-        <img src={emoji_icon} alt="emoji icon" className={styles.choiceBox__iconEmoji} />
-      </button> */}
     </div>
   )
 };
