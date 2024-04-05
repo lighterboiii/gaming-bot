@@ -58,6 +58,7 @@ const RockPaperScissors: FC = () => {
 
   //   return () => clearInterval(intervalId);
   // }, []);
+  // long polling loop
   useEffect(() => {
     const fetchRoomInfo = () => {
       getRoomInfoRequest(roomId!)
