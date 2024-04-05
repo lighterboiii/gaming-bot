@@ -6,7 +6,7 @@ import leftPP from '../../../images/rock-paper-scissors/l-pp.png'
 import leftPR from '../../../images/rock-paper-scissors/l-pr.png';
 import leftPS from '../../../images/rock-paper-scissors/l-ps.png';
 import rightPP from '../../../images/rock-paper-scissors/r-pp.png';
-// import rightPS from '../../images/rock-paper-scissors/r-ps.png';
+import rightPS from '../../../images/rock-paper-scissors/r_ps.png';
 import rightPR from '../../../images/rock-paper-scissors/r-pr.png';
 import leftRR from '../../../images/rock-paper-scissors/l-rr.png';
 import leftRP from '../../../images/rock-paper-scissors/l-rp.png';
@@ -25,49 +25,78 @@ import rightSP from '../../../images/rock-paper-scissors/r-sp.png';
 interface IProps {
   playerChoice: any;
   secondPlayerChoice: any;
+  prevChoice1: string;
+  prevChoice2: string;
 }
 
-const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice }) => {
+const HandShake: FC<IProps> = ({ playerChoice, secondPlayerChoice, prevChoice1, prevChoice2 }) => {
   const [key, setKey] = useState(false);
-  const [previousChoice1, setPreviousChoice1] = useState<string | null>(null);
-  const [previousChoice2, setPreviousChoice2] = useState<string | null>(null);
-  // console.log(playerChoice);
-  // console.log(secondPlayerChoice);
+  console.log(prevChoice1);
+  console.log(prevChoice2);
   
   useEffect(() => {
     setKey(prevKey => !prevKey);
   }, [playerChoice, secondPlayerChoice]);
 
-  useEffect(() => {
-    if (previousChoice2 !== 'ready' && (secondPlayerChoice === 'rock' || secondPlayerChoice === 'paper' || secondPlayerChoice === 'scissors')) {
-      console.log('Запуск анимации для нового выбора:', playerChoice);
-    }
-    setPreviousChoice2(playerChoice);
-  }, [playerChoice, secondPlayerChoice]);
-
   const getLeftHandImage = (choice: string) => {
-    switch (choice) {
+    switch (prevChoice1) {
       case 'rock':
-        return leftSR;
+        if (choice === 'rock') {
+          return leftRR;
+        } else if (choice === 'scissors') {
+          return leftRS;
+        } else {
+          return leftRP;
+        }
       case 'paper':
-        return leftSP;
+        if (choice === 'rock') {
+          return leftPR;
+        } else if (choice === 'scissors') {
+          return leftPS;
+        } else {
+          return leftPP;
+        }
       case 'scissors':
-        return leftSS;
+        if (choice === 'rock') {
+          return leftSR
+        } else if (choice === 'scissors') {
+          return leftSS;
+        } else {
+          return leftSP;
+        }
       default:
         return '';
     }
   };
 
   const getRightHandImage = (choice: string) => {
-    switch (choice) {
-      case 'paper':
-        return rightPP;
+    switch (prevChoice2) {
       case 'rock':
-        return rightPR;
+        if (choice === 'rock') {
+          return rightRR;
+        } else if (choice === 'scissors') {
+          return rightRS;
+        } else {
+          return rightRP;
+        }
+      case 'paper':
+        if (choice === 'rock') {
+          return rightPR;
+        } else if (choice === 'scissors') {
+          return rightPS;
+        } else {
+          return rightPP;
+        }
       case 'scissors':
-        return rightRS;
+        if (choice === 'rock') {
+          return rightSR
+        } else if (choice === 'scissors') {
+          return rightSS;
+        } else {
+          return rightSP;
+        }
       default:
-        return previousChoice2!;
+        return '';
     }
   };
 

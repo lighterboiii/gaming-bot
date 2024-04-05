@@ -22,12 +22,15 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
+
+  const [prevChoice1, setPrevChoice1] = useState('');
+  const [prevChoice2, setPrevChoice2] = useState('');
   console.log(data);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
@@ -118,9 +121,10 @@ const RockPaperScissors: FC = () => {
         console.log(data);
       })
 
-    // setTimeout(() => {
-    //   setChoiceRequest(userId, roomId!, 'none');
-    // }, 5000)
+    setTimeout(() => {
+      setPrevChoice1(value);
+      setPrevChoice2(value);
+    }, 3000)
   };
   // хендлер готовности игрока
   const handleReady = () => {
@@ -168,7 +172,12 @@ const RockPaperScissors: FC = () => {
                 data?.players_count === "2" &&
                 data?.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')
               ) ? (
-                <HandShake playerChoice={data?.players[0]?.choice} secondPlayerChoice={data?.players[1]?.choice} />
+                <HandShake 
+                playerChoice={data?.players[0]?.choice} 
+                secondPlayerChoice={data?.players[1]?.choice} 
+                prevChoice1={prevChoice1}
+                prevChoice2={prevChoice2}
+                />
               ) : (
                 data?.players_count === "1"
               ) ? (
