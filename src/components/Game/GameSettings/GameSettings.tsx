@@ -19,13 +19,13 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
-  console.log(data);
+  // console.log(data);
   const userTokens = useAppSelector(store => store.app.info?.tokens);
   const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);

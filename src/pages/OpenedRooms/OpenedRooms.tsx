@@ -52,6 +52,22 @@ const OpenedRooms: FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getOpenedRoomsRequest()
+        .then((res: any) => {
+          setRooms(res.rooms);
+          dispatch(getOpenedRooms(res.rooms));
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   const toggleSort = (sortBy: string) => {
     let sortedRooms;
     switch (sortBy) {

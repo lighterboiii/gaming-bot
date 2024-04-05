@@ -74,8 +74,8 @@
   }
 
   &__emojiButton {
-    @include position(absolute, $bottom: 8%, $right: 0);
-    transform: translate(-50%);
+    @include position(absolute, $bottom: 8%, $right: 16px);
+    // transform: translate(-50%);
   }
 
   &__versusImage {

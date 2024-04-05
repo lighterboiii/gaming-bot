@@ -15,18 +15,23 @@ import HandShake from './HandShake/HandShake';
 import ChoiceBox from "./ChoiceBox/ChoiceBox";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
+import Countdown from "../../components/Countdown/Countdown";
 
 const RockPaperScissors: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
+  const [timer, setTimer] = useState<number>(15);
+  const [timerStarted, setTimerStarted] = useState(false);
+  const [timerExpired, setTimerExpired] = useState(false);
 
   console.log(data);
+  // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
@@ -44,7 +49,7 @@ const RockPaperScissors: FC = () => {
       tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate]);
-
+  // автозапрос состояния страницы
   useEffect(() => {
     const intervalId = setInterval(() => {
       getRoomInfoRequest(roomId!)
@@ -59,16 +64,32 @@ const RockPaperScissors: FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  useEffect(() => {
+    if (data && data?.players_count === '2' && !timerStarted) {
+      setTimerStarted(true);
+      setTimer(15);
+    } else if (data && data?.players_count !== '2') {
+      setTimerStarted(false);
+      setTimer(15);
+    }
+  }, [data]);
 
-  // useEffect(() => {
-  //   getRoomInfoRequest(roomId!)
-  //     .then((data) => {
-  //       setData(data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, [data]);
+  useEffect(() => {
+    if (timerStarted && timer > 0) {
+      const ticker = setInterval(() => {
+        setTimer(prevTimer => prevTimer - 1);
+      }, 1000);
+      return () => clearInterval(ticker);
+    } else if (timer === 0) {
+      leaveRoomRequest(data?.players[1]?.userid, roomId!)
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [timerStarted, timer]);
 
   // хендлер выбора хода
   const handleChoice = (value: string) => {
@@ -105,10 +126,24 @@ const RockPaperScissors: FC = () => {
           <>
             <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
             <div className={styles.game__hands}>
-              {(data?.players[0]?.choice !== undefined && data?.players[1]?.choice !== undefined) && (
+              {(
+                data?.players[0]?.choice !== 'none' && data?.players[0]?.choice !== 'ready' &&
+                data?.players[1]?.choice !== 'none' && data?.players[1]?.choice !== 'ready' &&
+                data?.players_count === "2"
+              ) ? (
                 <HandShake playerChoice={'paper'} secondPlayerChoice={'paper'} />
-                )}
-              </div>
+              ) : (
+                data?.players_count === "1"
+              ) ? (
+                <p className={styles.game__notify}>Ожидание игроков...</p>
+              ) : (
+                <p className={styles.game__notify}>
+                  {
+                    data?.players.some((player: any) => player.choice !== 'ready') &&
+                    timer
+                  }</p>
+              )}
+            </div>
             <div className={styles.game__lowerContainer}>
               {(data?.players.every((player: any) => player.choice === 'ready')) ? (
                 <>
