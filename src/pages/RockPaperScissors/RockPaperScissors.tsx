@@ -139,15 +139,15 @@ const RockPaperScissors: FC = () => {
         console.log(error);
       })
 
-    setTimeout(() => {
-      setEmojiRequest(userId, roomId!, 'none')
-      .then(res => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-    }, 2500)
+    // setTimeout(() => {
+    //   setEmojiRequest(userId, roomId!, 'none')
+    //   .then(res => {
+    //     console.log(res);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   })
+    // }, 2500)
   };
 
   return (
@@ -162,9 +162,9 @@ const RockPaperScissors: FC = () => {
                 {player?.choice !== 'none' && (
                   <img src={readyIcon} alt="ready icon" className={styles.game__readyIcon} />
                 )}
-                {player?.emoji !== 'none' &&
+                {player?.emoji !== 'none' && (
                   <img src={player?.emoji} alt="selected emoji" className={styles.game__selectedEmoji} />
-                }
+                )}
               </div>
             ))}
           </div>
