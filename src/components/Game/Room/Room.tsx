@@ -6,7 +6,7 @@ import hand from '../../../images/main_hand_1_tiny.png';
 import whoCloser from '../../../images/gameSec.png';
 import { useNavigate } from "react-router-dom";
 import ManIcon from "../../../icons/Man/Man";
-import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { useAppSelector } from "../../../services/reduxHooks";
 import useTelegram from "../../../hooks/useTelegram";
 import { joinRoomRequest } from "../../../api/gameApi";
 import { userId } from "../../../api/requestData";
@@ -18,8 +18,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const dispatch = useAppDispatch();
-  // const userId = user?.id;
+  const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   
   const handleJoinRoom = () => {

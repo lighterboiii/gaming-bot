@@ -20,8 +20,6 @@ import rightSR from '../../../images/rock-paper-scissors/r-sr.png';
 import rightSP from '../../../images/rock-paper-scissors/r-sp.png';
 
 interface IProps {
-  playerChoice: any;
-  secondPlayerChoice: any;
   prevChoices: { player1: string; player2: string };
 }
 
@@ -103,10 +101,8 @@ const HandShake: FC<IProps> = ({ prevChoices }) => {
 
   return (
     <div className={styles.hands}>
-        <>
           <img src={leftHandImage} alt="left hand" className={`${styles.hands__mainImage} ${styles.hands__leftMainImage}`} />
           <img src={rightHandImage} alt="right hand" className={`${styles.hands__mainImage} ${styles.hands__rightMainImage}`} />
-        </>
     </div>
   );
 };
