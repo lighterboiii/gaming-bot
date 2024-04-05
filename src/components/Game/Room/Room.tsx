@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import styles from './Room.module.scss';
 import hand from '../../../images/main_hand_1_tiny.png';
 import whoCloser from '../../../images/gameSec.png';
@@ -20,7 +20,7 @@ const Room: FC<IProps> = ({ room }) => {
   const { user } = useTelegram();
   const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
-  
+
   const handleJoinRoom = () => {
     joinRoomRequest(userId, room.room_id)
       .then((res) => {
@@ -41,7 +41,9 @@ const Room: FC<IProps> = ({ room }) => {
         <img src={room?.room_type === 1 ? hand : whoCloser} alt="game-logo" className={styles.room__image} />
       </div>
       <p className={styles.room__creator}>{room?.players[0].public_name}</p>
-      <p className={styles.room__number}><ManIcon width={12} height={12} /> {room.players_count}/{room.free_places + room.players_count}</p>
+      <p className={styles.room__number}>
+        <ManIcon width={12} height={12} /> {room.players_count}/{room.free_places + room.players_count}
+      </p>
       <p className={`${styles.room__number} ${styles.room__bet}`}>
         {room.bet_type === 1 ? `💵 ${room.bet}` : `🔰 ${room.bet}`}
       </p>

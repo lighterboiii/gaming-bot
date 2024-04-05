@@ -4,7 +4,6 @@ import styles from './BetSlider.module.scss';
 import ChevronIcon from '../../icons/Chevron/ChevronIcon';
 import { useAppSelector } from '../../services/reduxHooks';
 import { postEvent } from '@tma.js/sdk';
-// import { postEvent } from '@tma.js/sdk'; 
 
 interface IProps {
   isCurrency?: boolean;
@@ -14,14 +13,11 @@ interface IProps {
 
 const BetSlider: FC<IProps> = ({
   isCurrency = false,
-  onBetChange = (newBet: number) => { },
-  onCurrencyChange = (newCurrency: number) => { },
+  onBetChange = () => {},
+  onCurrencyChange = () => {},
 }) => {
   const [bet, setBet] = useState('0');
   const [currency, setCurrency] = useState(1);
-
-  const coinsBalance = useAppSelector(store => store.app.info?.coins);
-  const tokensBalance = useAppSelector(store => store.app.info?.tokens);
 
   const increaseBet = () => {
     postEvent('web_app_trigger_haptic_feedback', {type: 'impact', impact_style: 'soft'});
@@ -49,6 +45,7 @@ const BetSlider: FC<IProps> = ({
     const newCurrency = currency === 3 ? 1 : 3;
     setCurrency(newCurrency);
     onCurrencyChange(newCurrency);
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {

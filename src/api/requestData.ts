@@ -11,7 +11,7 @@ export const setCollectiblesUri = 'add_collectible?user_id=';
 export const setActiveSkinUri = 'setactive_skin?user_id=';
 export const buyShopItemUri = `shop_buy_item?user_id=`;
 export const setTokensValueUri = `settokensnewvalue?user_id=`;
-export const setCoinsValueUri = 'setcoinsnewvalue?user_id=';
+export const setCoinsValueUri = `setcoinsnewvalue?user_id=`;
 export const buyLavkaUri = `buy_lavka?user_id=`;
 export const sellLavkaUri = `add_sell_lavka?user_id=`;
 export const cancelSellLavka = `cancel_sell_lavka?user_id=`;
@@ -19,8 +19,12 @@ export const setTransferCoinsUri = `transfer_refs_to_balance?user_id=`;
 export const getRoomsUri = `getrooms?user_id=`
 export const getCurrentRoomInfo = `getroominfo?room_id=`;
 export const createRoomUri = `createroom?user_id=`
-export const setChoiceUri = `setchoice?user_id=`;
 export const setActiveEmojiUri = `setactive_emoji?user_id=`;
+export const addPlayerUri = `addplayer?user_id=`;
+export const kickPlayerUri = `kickplayer?user_id=`;
+export const setUserChoiceUri = `setchoice?user_id=`;
+export const setEmojiUri = `setemoji?user_id=`;
+export const whoIsWinUri = `whoiswin?user_id=`;
 // links
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
@@ -38,3 +42,4 @@ export const priceParamString = '&price=';
 export const nftIdParamString = '&nft_id=';
 export const playerChoiceParamString = '&choice=';
 export const activeEmojiParamString = '&active_emoji=';
+export const emojiIdParamString = '&emoji_id=';

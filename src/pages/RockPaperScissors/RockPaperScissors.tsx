@@ -10,8 +10,8 @@ import { userId } from "../../api/requestData";
 import styles from "./RockPaperScissors.module.scss";
 import newVS from '../../images/rock-paper-scissors/VS_new.png';
 import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
-import HandShake from './HandShake/HandShake';
-import ChoiceBox from "./ChoiceBox/ChoiceBox";
+import HandShake from '../../components/Game/HandShake/HandShake';
+import ChoiceBox from "../../components/Game/ChoiceBox/ChoiceBox";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 

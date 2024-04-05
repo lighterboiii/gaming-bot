@@ -1,5 +1,17 @@
 import { getReq, postReq, putReq } from "./api";
-import { createRoomUri, getCurrentRoomInfo, getRoomsUri, playerChoiceParamString, roomIdParamString, setChoiceUri } from "./requestData";
+import {
+  addPlayerUri,
+  createRoomUri,
+  emojiIdParamString,
+  getCurrentRoomInfo,
+  getRoomsUri,
+  kickPlayerUri,
+  playerChoiceParamString,
+  roomIdParamString,
+  setEmojiUri,
+  setUserChoiceUri,
+  whoIsWinUri
+} from "./requestData";
 
 // получить все комнаты
 export const getOpenedRoomsRequest = () => {
@@ -28,49 +40,41 @@ export const getRoomInfoRequest = (roomId: string) => {
     userId: roomId,
   })
 };
-// отправить выбор игрока на сервер
-export const setUserChoice = (userIdValue: string, roomId: string, choice: string) => {
-  return putReq({
-    uri: setChoiceUri,
-    userId: userIdValue,
-    endpoint: `${roomIdParamString}${roomId}${playerChoiceParamString}${choice}`
-  })
-};
 // запрос на подключение к комнатеъ
 export const joinRoomRequest = (userIdValue: string, roomId: string) => {
   return putReq({
-    uri: 'addplayer?user_id=',
+    uri: addPlayerUri,
     userId: userIdValue,
-    endpoint: `&room_id=${roomId}`,
+    endpoint: `${roomIdParamString}${roomId}`,
   })
 };
 // запрос на отключение от комнаты
 export const leaveRoomRequest = (userIdValue: string) => {
   return putReq({
-    uri: 'kickplayer?user_id=',
+    uri: kickPlayerUri,
     userId: userIdValue,
   })
 };
 // запрос на отправку выбора 
 export const setChoiceRequest = (userIdValue: string, roomId: string, choice: string) => {
   return putReq({
-    uri: 'setchoice?user_id=',
+    uri: setUserChoiceUri,
     userId: userIdValue,
-    endpoint: `&room_id=${roomId}&choice=${choice}`,
+    endpoint: `${roomIdParamString}${roomId}${playerChoiceParamString}${choice}`,
   })
 };
 // запрос на отправку эмодзи 
 export const setEmojiRequest = (userIdValue: string, roomId: string, emoji: string) => {
   return putReq({
-    uri: 'setemoji?user_id=',
+    uri: setEmojiUri,
     userId: userIdValue,
-    endpoint: `&room_id=${roomId}&emoji_id=${emoji}`,
+    endpoint: `${roomIdParamString}${roomId}${emojiIdParamString}${emoji}`,
   })
 };
 // запрос на отправку определения победителя
 export const whoIsWinRequest = (roomId: string) => {
   return getReq({
-    uri: 'whoiswin?user_id=',
-    endpoint: `&room_id=${roomId}`,
+    uri: whoIsWinUri,
+    endpoint: `${roomIdParamString}${roomId}`,
   })
 };

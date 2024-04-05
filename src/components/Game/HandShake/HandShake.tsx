@@ -28,9 +28,6 @@ const HandShake: FC<IProps> = ({ prevChoices }) => {
   const [leftHandImage, setLeftHandImage] = useState<string>('');
   const [rightHandImage, setRightHandImage] = useState<string>('');
 
-  console.log(player1);
-  console.log(player2);
-
   useEffect(() => {
     const getLeftHandImage = (choice: string) => {
       switch (player1) {

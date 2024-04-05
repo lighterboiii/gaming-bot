@@ -4,7 +4,6 @@
 .game {
   @include size(100%, 100vh);
   @include position(relative);
-  // @include min-size(100%, calc(100vh + 1px));
   @include flex(column, flex-start, center, 10px);
   background-image: url('../../images/rock-paper-scissors/rps-bg.png');
   background-position: center;
@@ -111,6 +110,7 @@
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
+    cursor: pointer;
   }
 
   &__readyIcon {
