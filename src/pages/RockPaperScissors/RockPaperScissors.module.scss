@@ -115,6 +115,6 @@
 
   &__selectedEmoji {
     @include size(72px, 72px);
-    @include position(absolute, $bottom: -35%, $left: 3%);
+    @include position(absolute, $bottom: -50%, $left: 0);
   }
 }

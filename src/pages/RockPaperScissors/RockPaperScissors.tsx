@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getRoomInfoRequest, leaveRoomRequest, setChoiceRequest, setUserChoice } from "../../api/gameApi";
+import { getRoomInfoRequest, leaveRoomRequest, setChoiceRequest, setEmojiRequest, setUserChoice } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useTelegram from "../../hooks/useTelegram";
@@ -22,15 +22,13 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
-  const [playerEmojis, setPlayerEmojis] = useState<any>({});
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
-  // console.log(playerEmojis);
-  console.log(data?.players);
+  console.log(data);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -133,18 +131,23 @@ const RockPaperScissors: FC = () => {
   };
   // хендлер отпрвки эмодзи
   const handleEmojiSelect = (emoji: string) => {
-    const currentPlayerId = userId;
-    console.log(currentPlayerId);
-    setPlayerEmojis((prevState: any) => ({
-      ...prevState,
-      [currentPlayerId]: emoji,
-    }));
+    setEmojiRequest(userId, roomId!, emoji)
+      .then(res => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+
     setTimeout(() => {
-      setPlayerEmojis((prevState: any) => ({
-        ...prevState,
-        [currentPlayerId]: '',
-      }));
-    }, 2000)
+      setEmojiRequest(userId, roomId!, 'none')
+      .then(res => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }, 2500)
   };
 
   return (
@@ -159,8 +162,8 @@ const RockPaperScissors: FC = () => {
                 {player?.choice !== 'none' && (
                   <img src={readyIcon} alt="ready icon" className={styles.game__readyIcon} />
                 )}
-                {playerEmojis[player?.userid] &&
-                  <img src={playerEmojis[player?.userid]} alt="selected emoji" className={styles.game__selectedEmoji} />
+                {player?.emoji !== 'none' &&
+                  <img src={player?.emoji} alt="selected emoji" className={styles.game__selectedEmoji} />
                 }
               </div>
             ))}

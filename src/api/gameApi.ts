@@ -60,3 +60,11 @@ export const setChoiceRequest = (userIdValue: string, roomId: string, choice: st
     endpoint: `&room_id=${roomId}&choice=${choice}`,
   })
 };
+// запрос на отправку эмодзи 
+export const setEmojiRequest = (userIdValue: string, roomId: string, emoji: string) => {
+  return putReq({
+    uri: 'setemoji?user_id=',
+    userId: userIdValue,
+    endpoint: `&room_id=${roomId}&emoji_id=${emoji}`,
+  })
+};
