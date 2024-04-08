@@ -80,42 +80,42 @@ const RockPaperScissors: FC = () => {
       });
   }, [])
   // установка таймера
-  // useEffect(() => {
-  //   if (data && data?.players_count === '2' && !timerStarted) {
-  //     setTimerStarted(true);
-  //     setTimer(15);
-  //   } else if (data && data?.players_count !== '2') {
-  //     setTimerStarted(false);
-  //     setTimer(15);
-  //   }
-  //   if (data?.players.every((player: any) => player.choice === 'ready')) {
-  //     setTimerStarted(false);
-  //     setTimer(15);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data && data?.players_count === '2' && !timerStarted) {
+      setTimerStarted(true);
+      setTimer(15);
+    } else if (data && data?.players_count !== '2') {
+      setTimerStarted(false);
+      setTimer(15);
+    }
+    if (data?.players.every((player: any) => player.choice === 'ready')) {
+      setTimerStarted(false);
+      setTimer(15);
+    }
+  }, [data]);
   // установка таймера
-  // useEffect(() => {
-  //   if (timerStarted && timer > 0) {
-  //     const ticker = setInterval(() => {
-  //       setTimer(prevTimer => prevTimer - 1);
-  //     }, 1000);
-  //     return () => clearInterval(ticker);
-  //   } else if (timer === 0) {
-  //     const hasPlayerWithChoiceNone = data?.players.some((player: any) => player.choice === 'none');
-  //     if (hasPlayerWithChoiceNone) {
-  //       leaveRoomRequest(userId)
-  //         .then((data) => {
-  //           console.log(data);
-  //           navigate(-1);
-  //         })
-  //         .catch((error) => {
-  //           console.error(error);
-  //         });
-  //     }
-  //     setTimerStarted(false);
-  //     setTimer(15);
-  //   }
-  // }, [timerStarted, timer]);
+  useEffect(() => {
+    if (timerStarted && timer > 0) {
+      const ticker = setInterval(() => {
+        setTimer(prevTimer => prevTimer - 1);
+      }, 1000);
+      return () => clearInterval(ticker);
+    } else if (timer === 0) {
+      const hasPlayerWithChoiceNone = data?.players.some((player: any) => player.choice === 'none');
+      if (hasPlayerWithChoiceNone) {
+        leaveRoomRequest(userId)
+          .then((data) => {
+            console.log(data);
+            navigate(-1);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      setTimerStarted(false);
+      setTimer(15);
+    }
+  }, [timerStarted, timer]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     setChoiceRequest(userId, roomId!, value)
@@ -201,11 +201,10 @@ const RockPaperScissors: FC = () => {
                 <p className={styles.game__notify}>Ожидание игроков...</p>
               ) : (
                 <p className={styles.game__notify}>
-                  {message}
-                  {/* {
-                    data?.players.some((player: any) => player.choice === 'none') &&
-                    timer
-                  } */}
+                  {
+                    data?.players.some((player: any) => player.choice === 'none') && message === '' ?
+                    timer : message
+                  }
                 </p>
               )}
             </div>
