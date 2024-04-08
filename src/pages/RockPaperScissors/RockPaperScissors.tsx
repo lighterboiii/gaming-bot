@@ -30,6 +30,8 @@ const RockPaperScissors: FC = () => {
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
+  console.log(player1Chosen);
+  console.log(player2Chosen);
   console.log(data);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
@@ -120,9 +122,9 @@ const RockPaperScissors: FC = () => {
     .then((res: any) => {
       console.log(res);
       if (res?.message === 'success') {
-        if (Number(userId) === Number(data.players[0].userId)) {
+        if (Number(userId) === Number(data.players[0].userid)) {
           setPlayer1Chosen(true);
-        } else if (Number(userId) === Number(data.players[1].userId)) {
+        } else if (Number(userId) === Number(data.players[1].userid)) {
           setPlayer2Chosen(true);
         }
       }
