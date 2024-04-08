@@ -24,15 +24,10 @@ const RockPaperScissors: FC = () => {
   const [choice, setChoice] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [player1Chosen, setPlayer1Chosen] = useState(false);
-  const [player2Chosen, setPlayer2Chosen] = useState(false);  
   const [emojiVisible, setEmojiVisible] = useState(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
-  console.log(player1Chosen);
-  console.log(player2Chosen);
-  console.log(data);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -119,30 +114,33 @@ const RockPaperScissors: FC = () => {
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     setChoiceRequest(userId, roomId!, value)
-    .then((res: any) => {
-      console.log(res);
-      if (res?.message === 'success') {
-        if (Number(userId) === Number(data.players[0].userid)) {
-          setPlayer1Chosen(true);
-        } else if (Number(userId) === Number(data.players[1].userid)) {
-          setPlayer2Chosen(true);
-        }
-      }
-      setTimeout(() => {
-        if (data?.players?.every((player: any) => player.choice !== 'none') && data?.players?.every((player: any) => player.choice !== 'ready')) {
+      .then((res: any) => {
+        setTimeout(() => {
           whoIsWinRequest(roomId!)
-          .then((winData: any) => {
-            console.log(winData);
-            if (Number(winData?.winner?.userid) === Number(userId)) {
-              setMessage('Вы победили');
-            } else if ((Number(winData?.loser?.userid) === Number(userId))) {
-              setMessage('Вы проиграли'); 
-            }
-          })
-          setChoice('');
-        }
-      }, 3000)
-    })
+            .then((winData: any) => {
+              setTimerStarted(false);
+              if (Number(winData?.winner?.userid) === Number(userId)) {
+                setMessage('Вы победили');
+              } else if ((Number(winData?.loser?.userid) === Number(userId))) {
+                setMessage('Вы проиграли');
+              } else if (winData?.winner === 'draw') {
+                setMessage('Ничья');
+              }
+              setTimeout(() => {
+                setChoice('');
+                setMessage('');
+              }, 2000)
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+            setTimerStarted(true);
+        }, 3000)
+        setMessage('');
+      })
+      .catch((error) => {
+        console.error('Ошибка при установке выбора', error);
+      });
   };
   // хендлер готовности игрока
   const handleReady = () => {
@@ -164,9 +162,9 @@ const RockPaperScissors: FC = () => {
       .catch((error) => {
         console.log(error);
       })
-      setTimeout(() => {
-        setEmojiVisible(false);
-      }, 2500)
+    setTimeout(() => {
+      setEmojiVisible(false);
+    }, 2500)
   };
 
   return (
@@ -187,12 +185,16 @@ const RockPaperScissors: FC = () => {
               </div>
             ))}
           </div>
+          {message !== '' && (
+          <p className={styles.game__notify}>
+            {message}
+          </p>)}
           <>
             <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
             <div className={styles.game__hands}>
-              {( player1Chosen && player2Chosen
-                // data?.players_count === "2"
-                // data?.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')
+              {(
+                data?.players_count === "2" &&
+                data?.players.every((player: any) => player.choice !== 'none' &&  player.choice !== 'ready')
               ) ? (
                 <HandShake prevChoices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} />
               ) : (
