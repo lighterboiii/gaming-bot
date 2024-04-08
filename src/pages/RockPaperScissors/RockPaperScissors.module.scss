@@ -15,6 +15,7 @@
   }
 
   &__players {
+    @include indents(0, 16px 0 0 0);
     @include size(100%, auto);
     @include flex(row, space-between, center);
   }
@@ -26,7 +27,7 @@
   }
 
   &__playerName {
-    @include position(absolute, $left: 50%, $top: -5%);
+    @include position(absolute, $left: 50%, $top: -15%);
     transform: translateX(-50%);
     color: $main-color;
     font-weight: 200;

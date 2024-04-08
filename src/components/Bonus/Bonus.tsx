@@ -29,17 +29,17 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         const tokens = await makeCollectibleRequest(itemId, itemCount, userId);
         const formattedTokens = Math.floor(tokens.message);
         dispatch(setNewTokensValue(formattedTokens));
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         break;
       case "energy_drink":
         const resEnergy = await makeCollectibleRequest(itemId, itemCount, userId);
         dispatch(setEnergyDrinksValue(resEnergy.message));
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         break;
       case "exp":
         const resExp = await makeCollectibleRequest(itemId, itemCount, userId);
         dispatch(setNewExpValue(resExp.message));
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         break;
       default:
         await makeCollectibleRequest(itemId, itemCount, userId);

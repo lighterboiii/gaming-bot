@@ -14,14 +14,16 @@ import scissorsSelect from '../../../images/rock-paper-scissors/hands-icons/scis
 
 interface IProps {
   handleChoice: (value: string) => void;
+  choice?: string;
 }
 
-const ChoiceBox: FC<IProps> = ({ handleChoice }) => {
-  const [choiceItem, setChoiceItem] = useState('');
-
+const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
+  const [choiceItem, setChoiceItem] = useState(choice);
+  console.log(choice);
   const onChoiceClick = (choice: string) => {
     handleChoice(choice);
     setChoiceItem(choice);
+    
   };
 
   const getIconPath = (choice: string): string => {
