@@ -19,7 +19,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState('');
   const [loading, setLoading] = useState(false);
@@ -120,9 +120,9 @@ const RockPaperScissors: FC = () => {
     .then((res: any) => {
       console.log(res);
       if (res?.message === 'success') {
-        if (userId === data.players[0].userId) {
+        if (Number(userId) === Number(data.players[0].userId)) {
           setPlayer1Chosen(true);
-        } else if (userId === data.players[1].userId) {
+        } else if (Number(userId) === Number(data.players[1].userId)) {
           setPlayer2Chosen(true);
         }
       }
