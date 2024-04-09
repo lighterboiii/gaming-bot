@@ -50,33 +50,58 @@ const RockPaperScissors: FC = () => {
   }, [tg, navigate]);
   // long polling
   useEffect(() => {
-    const fetchRoomInfo = () => {
-      getRoomInfoRequest(roomId!)
-        .then((data: any) => {
-          setData(data);
-          setTimeout(fetchRoomInfo, 30000);
-          // fetchRoomInfo();
-        })
-        .catch((error) => {
-          console.error('Ошибка при получении информации о комнате', error);
-          setTimeout(fetchRoomInfo, 10000);
-        });
-    };
-
-    fetchRoomInfo();
-  }, []);
-  // подгрузка при монтировании компонента ??
-  useEffect(() => {
-    setLoading(true);
-    getRoomInfoRequest(roomId!)
-      .then((data) => {
+    const fetchRoomInfo = async () => {
+      try {
+        const response = await fetch(`/getroominfo?room_id=${roomId}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(JSON.parse(data));
         setData(data);
-        setLoading(false);
-      })
-      .catch((error) => {
+  
+        fetchRoomInfo();
+      } catch (error) {
         console.error('Ошибка при получении информации о комнате', error);
-      });
-  }, [])
+
+        setTimeout(fetchRoomInfo, 10000);
+      }
+    };
+  
+    fetchRoomInfo();
+  
+    // Очищаем таймеры или прерываем long polling при размонтировании компонента
+    // return () => clearTimeout();
+  }, []);
+  
+  // useEffect(() => {
+  //   const fetchRoomInfo = () => {
+  //     getRoomInfoRequest(roomId!)
+  //       .then((data: any) => {
+  //         setData(data);
+  //         setTimeout(fetchRoomInfo, 30000);
+  //         // fetchRoomInfo();
+  //       })
+  //       .catch((error) => {
+  //         console.error('Ошибка при получении информации о комнате', error);
+  //         setTimeout(fetchRoomInfo, 10000);
+  //       });
+  //   };
+
+  //   fetchRoomInfo();
+  // }, []);
+  // подгрузка при монтировании компонента ??
+  // useEffect(() => {
+  //   setLoading(true);
+  //   getRoomInfoRequest(roomId!)
+  //     .then((data) => {
+  //       setData(data);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Ошибка при получении информации о комнате', error);
+  //     });
+  // }, [])
   // Функция для запуска таймера
   const startTimer = () => {
     setTimerStarted(true);
