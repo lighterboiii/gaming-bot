@@ -51,34 +51,32 @@ const RockPaperScissors: FC = () => {
   // long polling
   useEffect(() => {
     const fetchRoomInfo = async () => {
-      try {
-        const response = await fetch(`/getroominfo?room_id=${roomId}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        console.log(JSON.parse(data));
-        setData(data);
-  
-        fetchRoomInfo();
-      } catch (error) {
-        console.error('Ошибка при получении информации о комнате', error);
-
-        setTimeout(fetchRoomInfo, 10000);
-      }
+    getRoomInfoRequest(roomId!)
+    .then((res: any) => {
+      console.log(res);
+      setData(res);
+      setTimeout(fetchRoomInfo, 30000);
+      // fetchRoomInfo();
+    })
+    .catch((error) => {
+      console.error('Ошибка при получении информации о комнате', error);
+      setTimeout(fetchRoomInfo, 10000);
+    });
     };
   
     fetchRoomInfo();
+
+    const timerId = setTimeout(fetchRoomInfo, 10000);
+    return () => clearTimeout(timerId);
+  }, [roomId]);
   
-    // Очищаем таймеры или прерываем long polling при размонтировании компонента
-    // return () => clearTimeout();
-  }, []);
   
   // useEffect(() => {
   //   const fetchRoomInfo = () => {
   //     getRoomInfoRequest(roomId!)
-  //       .then((data: any) => {
-  //         setData(data);
+  //       .then((res: any) => {
+  //         console.log(res);
+  //         setData(res);
   //         setTimeout(fetchRoomInfo, 30000);
   //         // fetchRoomInfo();
   //       })
@@ -89,7 +87,7 @@ const RockPaperScissors: FC = () => {
   //   };
 
   //   fetchRoomInfo();
-  // }, []);
+  // }, [roomId]);
   // подгрузка при монтировании компонента ??
   // useEffect(() => {
   //   setLoading(true);
