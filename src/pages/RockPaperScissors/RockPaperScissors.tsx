@@ -32,8 +32,6 @@ const RockPaperScissors: FC = () => {
   const [user2Choice, setUser2Choice] = useState<string>('');
   const [prev1Choice, setPrev1] = useState('');
   const [prev2Choice, setPrev2] = useState('');
-  console.log(user1Choice);
-  console.log(user2Choice);
   console.log(data);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
@@ -157,6 +155,8 @@ const RockPaperScissors: FC = () => {
           console.log(error);
         })
     }
+    setChoice('');
+    setMessage('');
   }, [data, userId]);
 
   // хендлер готовности игрока
@@ -217,7 +217,7 @@ const RockPaperScissors: FC = () => {
                 data?.players_count === "2"
                 // data?.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')
               ) ? (
-                <HandShake prevChoices={{ player1: user1Choice, player2: user2Choice }} />
+                <HandShake prevChoices={{ player1: prev1Choice, player2: prev2Choice }} />
               ) : (
                 data?.players_count === "1"
               ) ? (
