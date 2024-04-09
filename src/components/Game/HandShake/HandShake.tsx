@@ -27,6 +27,8 @@ const HandShake: FC<IProps> = ({ prevChoices }) => {
   const { player1, player2 } = prevChoices;
   const [leftHandImage, setLeftHandImage] = useState<string>('');
   const [rightHandImage, setRightHandImage] = useState<string>('');
+  const [prevPlayer1Choice, setPrevPlayer1Choice] = useState<string>('');
+  const [prevPlayer2Choice, setPrevPlayer2Choice] = useState<string>('');
 
   useEffect(() => {
     const getLeftHandImage = (choice: string) => {
@@ -91,8 +93,12 @@ const HandShake: FC<IProps> = ({ prevChoices }) => {
       }
     };
 
-    setLeftHandImage(getLeftHandImage(player1));
-    setRightHandImage(getRightHandImage(player2));
+    if (prevPlayer1Choice !== player1 || prevPlayer2Choice !== player2) {
+      setLeftHandImage(getLeftHandImage(player1));
+      setRightHandImage(getRightHandImage(player2));
+      setPrevPlayer1Choice(player1);
+      setPrevPlayer2Choice(player2);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [player1, player2]);
 

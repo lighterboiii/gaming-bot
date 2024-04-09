@@ -9,7 +9,7 @@ import { formatNumber } from '../../../utils/additionalFunctions';
 import { userId } from '../../../api/requestData';
 import { postNewRoomRequest } from '../../../api/gameApi';
 import useTelegram from '../../../hooks/useTelegram';
-import BetSlider from '../../GameSettingsSlider/GameSettingsSlider';
+import SettingsSlider from '../../SettingsSlider/SettingsSlider';
 
 interface IProps {
   data: any; // типизировать
@@ -91,8 +91,8 @@ const GameSettings: FC<IProps> = ({ data }) => {
             <div className={styles.game__menu}>
               <p className={styles.game__text}>{translation?.bet_in_room}</p>
               <div className={styles.game__buttons}>
-                <BetSlider isCurrency={false} onBetChange={handleBetChange} />
-                <BetSlider isCurrency onCurrencyChange={handleCurrencyChange} />
+                <SettingsSlider isCurrency={false} onBetChange={handleBetChange} />
+                <SettingsSlider isCurrency onCurrencyChange={handleCurrencyChange} />
               </div>
             </div>
             <div className={styles.game__buttonWrapper}>
