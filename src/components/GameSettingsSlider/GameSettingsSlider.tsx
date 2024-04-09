@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChangeEvent, FC, useState } from 'react';
-import styles from './BetSlider.module.scss';
+import styles from './GameSettingsSlider.module.scss';
 import ChevronIcon from '../../icons/Chevron/ChevronIcon';
 import { useAppSelector } from '../../services/reduxHooks';
 import { postEvent } from '@tma.js/sdk';

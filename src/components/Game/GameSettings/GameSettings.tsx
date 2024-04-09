@@ -9,7 +9,7 @@ import { formatNumber } from '../../../utils/additionalFunctions';
 import { userId } from '../../../api/requestData';
 import { postNewRoomRequest } from '../../../api/gameApi';
 import useTelegram from '../../../hooks/useTelegram';
-import BetSlider from '../../BetSlider/BetSlider';
+import BetSlider from '../../GameSettingsSlider/GameSettingsSlider';
 
 interface IProps {
   data: any; // типизировать
