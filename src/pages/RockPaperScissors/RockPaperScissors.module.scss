@@ -122,7 +122,12 @@
   }
 
   &__selectedEmoji {
-    @include size(72px, 72px);
-    @include position(absolute, $bottom: -50%, $left: 0);
+    @include size(60px, 60px);
+    @include position(absolute, $bottom: -25%, $right: 0);
+  }
+
+  &__selectedEmojiRight {
+    @include size(60px, 60px);
+    @include position(absolute, $bottom: -25%, $left: 0);
   }
 }

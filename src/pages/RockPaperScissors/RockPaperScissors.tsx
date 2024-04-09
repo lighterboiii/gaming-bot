@@ -21,13 +21,15 @@ const RockPaperScissors: FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
   // const userId = user?.id;
   const [data, setData] = useState<any>(null);
-  const [choice, setChoice] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [emojiVisible, setEmojiVisible] = useState(false);
-  const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
+  const [choice, setChoice] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
+  const [emojiVisible, setEmojiVisible] = useState<boolean>(false);
+  const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [timer, setTimer] = useState<number>(15);
-  const [timerStarted, setTimerStarted] = useState(false);
+  const [timerStarted, setTimerStarted] = useState<boolean>(false);
+  const [playerEmoji, setPlayerEmoji] = useState<string>('');
+  const [secPlayerEmoji, setSecPlayerEmoji] = useState<string>('');
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -74,18 +76,24 @@ const RockPaperScissors: FC = () => {
         console.error('Ошибка при получении информации о комнате', error);
       });
   }, [])
+  // Функция для запуска таймера
+  const startTimer = () => {
+    setTimerStarted(true);
+    setTimer(15);
+  };
+
+  // Функция для остановки таймера
+  const stopTimer = () => {
+    setTimerStarted(false);
+    setTimer(15);
+  };
   // установка таймера
   useEffect(() => {
-    if (data && data?.players_count === '2' && !timerStarted) {
-      setTimerStarted(true);
-      setTimer(15);
-    } else if (data && data?.players_count !== '2') {
-      setTimerStarted(false);
-      setTimer(15);
+    if (data && data?.players_count !== '2') {
+      stopTimer();
     }
     if (data?.players.every((player: any) => player.choice === 'ready')) {
-      setTimerStarted(false);
-      setTimer(15);
+      stopTimer();
     }
   }, [data]);
   // установка таймера
@@ -107,8 +115,7 @@ const RockPaperScissors: FC = () => {
             console.error(error);
           });
       }
-      setTimerStarted(false);
-      setTimer(15);
+      startTimer();
     }
   }, [timerStarted, timer]);
   // хендлер выбора хода
@@ -118,8 +125,8 @@ const RockPaperScissors: FC = () => {
         setTimeout(() => {
           whoIsWinRequest(roomId!)
             .then((winData: any) => {
-              setTimerStarted(false);
-              if (Number(winData?.winner?.userid) === Number(userId)) {
+              console.log(winData);
+              if (Number(winData?.winner?.userid) === Number(userId) && winData?.winner !== 'draw') {
                 setMessage('Вы победили');
               } else if ((Number(winData?.loser?.userid) === Number(userId))) {
                 setMessage('Вы проиграли');
@@ -129,14 +136,13 @@ const RockPaperScissors: FC = () => {
               setTimeout(() => {
                 setChoice('');
                 setMessage('');
+                startTimer();
               }, 2000)
             })
             .catch((error) => {
               console.log(error);
             })
-          setTimerStarted(true);
         }, 3000)
-        setMessage('');
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
@@ -157,6 +163,11 @@ const RockPaperScissors: FC = () => {
         if (res?.message === 'success') {
           setShowEmojiOverlay(false);
           setEmojiVisible(true);
+          if (Number(res?.player_id) === Number(data?.players[0]?.userid)) {
+            setPlayerEmoji(res?.emoji);
+          } else {
+            setSecPlayerEmoji(res?.emoji);
+          }
         }
       })
       .catch((error) => {
@@ -177,20 +188,31 @@ const RockPaperScissors: FC = () => {
                 <p className={styles.game__playerName}>{player?.publicname}</p>
                 <UserAvatar item={player} avatar={player.avatar} key={player.userId} />
                 {player?.choice !== 'none' && (
-                  <img src={readyIcon} alt="ready icon" className={styles.game__readyIcon} />
+                  <img
+                    src={readyIcon}
+                    alt="ready icon"
+                    className={styles.game__readyIcon}
+                  />
                 )}
-                {player?.emoji !== 'none' && emojiVisible && (
-                  <img src={player?.emoji} alt="selected emoji" className={styles.game__selectedEmoji} />
+                {(playerEmoji || secPlayerEmoji) && emojiVisible && player?.userid === Number(data?.players[0]?.userid) && (
+                  <img
+                    src={player?.userid === Number(data?.players[0]?.userid) ? playerEmoji : secPlayerEmoji}
+                    alt="selected emoji"
+                    className={
+                      player?.userid === Number(data?.players[0]?.userid) ?
+                        styles.game__selectedEmoji :
+                        styles.game__selectedEmojiRight
+                    }
+                  />
                 )}
               </div>
             ))}
           </div>
-          {message !== '' && (
-            <p className={styles.game__notify}>
-              {message}
-            </p>)}
           <>
-            <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
+            {data?.players_count === "2" &&
+              data?.players.every((player: any) => player.choice === 'ready') &&
+              <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
+            }
             <div className={styles.game__hands}>
               {(
                 data?.players_count === "2" &&
@@ -204,7 +226,7 @@ const RockPaperScissors: FC = () => {
               ) : (
                 <p className={styles.game__notify}>
                   {
-                    data?.players.some((player: any) => player.choice === 'none') && message === '' ?
+                    timerStarted && timer > 0 ?
                       timer : message
                   }
                 </p>
