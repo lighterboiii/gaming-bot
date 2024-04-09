@@ -121,13 +121,11 @@ const RockPaperScissors: FC = () => {
     setChoiceRequest(userId, roomId!, value)
       .then((res: any) => {
         console.log(res);
-        if (data && data.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')) {
           if (res?.player_id === data?.players[0]?.userid) {
             setUser1Choice(res?.choice);
           } else if ((res?.player_id === data?.players[1]?.userid)) {
             setUser2Choice(res?.choice);
           }
-        }
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
