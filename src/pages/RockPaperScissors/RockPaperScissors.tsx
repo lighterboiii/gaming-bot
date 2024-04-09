@@ -67,7 +67,9 @@ const RockPaperScissors: FC = () => {
     fetchRoomInfo();
 
     const timerId = setTimeout(fetchRoomInfo, 10000);
-    return () => clearTimeout(timerId);
+    return () => {
+      clearTimeout(timerId);
+    }
   }, [roomId]);
   
   
@@ -112,14 +114,14 @@ const RockPaperScissors: FC = () => {
     setTimer(15);
   };
   // установка таймера
-  // useEffect(() => {
-  //   if (data && data?.players_count !== '2') {
-  //     stopTimer();
-  //   }
-  //   if (data?.players.every((player: any) => player.choice === 'ready')) {
-  //     stopTimer();
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data && data?.players_count !== '2') {
+      stopTimer();
+    }
+    if (data?.players.every((player: any) => player.choice === 'ready')) {
+      stopTimer();
+    }
+  }, [data]);
   // установка таймера
   useEffect(() => {
     if (timerStarted && timer > 0) {
@@ -146,35 +148,62 @@ const RockPaperScissors: FC = () => {
   const handleChoice = (value: string) => {
     setChoiceRequest(userId, roomId!, value)
       .then((res: any) => {
-        setTimeout(() => {
-          whoIsWinRequest(roomId!)
-            .then((winData: any) => {
-              console.log(winData);
-              if (Number(winData?.winner?.userid) === Number(userId) && winData?.winner !== 'draw') {
-                setMessage('Вы победили');
-              } else if ((Number(winData?.loser?.userid) === Number(userId))) {
-                setMessage('Вы проиграли');
-              } else if (winData?.winner === 'draw') {
-                setMessage('Ничья');
-              }
-              setTimeout(() => {
-                setChoice('');
-                setMessage('');
-                startTimer();
-              }, 2000)
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-        }, 3000)
+        console.log(res);
+        getRoomInfoRequest(roomId!)
+          .then((res: any) => {
+            console.log(res)
+            setData(res);
+          })
+        // setTimeout(() => {
+        //   whoIsWinRequest(roomId!)
+        //     .then((winData: any) => {
+        //       console.log(winData);
+        //       if (Number(winData?.winner?.userid) === Number(userId) && winData?.winner !== 'draw') {
+        //         setMessage('Вы победили');
+        //       } else if ((Number(winData?.loser?.userid) === Number(userId))) {
+        //         setMessage('Вы проиграли');
+        //       } else if (winData?.winner === 'draw') {
+        //         setMessage('Ничья');
+        //       }
+        //       setTimeout(() => {
+        //         setChoice('');
+        //         setMessage('');
+        //         startTimer();
+        //       }, 2000)
+        //     })
+        //     .catch((error) => {
+        //       console.log(error);
+        //     })
+        // }, 3000)
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
-  // useEffect(() => {
-
-  // }, [data, userId]);
+  useEffect(() => {
+    if (data && data.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')) {
+      // setTimeout(() => {
+      whoIsWinRequest(roomId!)
+        .then((winData: any) => {
+          console.log(winData)
+            if (Number(winData?.winner?.userid) === Number(userId)) {
+              setMessage('Вы победили');
+            } else if ((Number(winData?.loser?.userid) === Number(userId))) {
+              setMessage('Вы проиграли');
+            } else if (winData?.winner === 'draw') {
+              setMessage('Ничья');
+            }
+            setTimeout(() => {
+              setChoice('');
+              setMessage('');
+            }, 0)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      // }, 3500)
+    }
+  }, [roomId, userId]);
   // хендлер готовности игрока
   const handleReady = () => {
     setChoiceRequest(userId, roomId!, 'ready')
@@ -221,10 +250,10 @@ const RockPaperScissors: FC = () => {
                     className={styles.game__readyIcon}
                   />
                 )}
-                {(playerEmoji || secPlayerEmoji) && emojiVisible && (
+                {emojiVisible && (data?.players[0]?.emoji !== 'none' || data?.players[1]?.emoji) && (
                   <img
-                    src={player?.userid === Number(data?.players[0]?.userid) ? playerEmoji : secPlayerEmoji}
-                    alt="selected emoji"
+                    src={player?.emoji}
+                    alt="player emoji"
                     className={
                       player?.userid === Number(data?.players[0]?.userid) ?
                         styles.game__selectedEmoji :
