@@ -3,13 +3,13 @@
 import { FC, useEffect, useState } from 'react';
 import styles from './GameSettings.module.scss';
 import Button from '../../ui/Button/Button';
-import BetSlider from '../../BetSlider/BetSlider';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
 import { formatNumber } from '../../../utils/additionalFunctions';
 import { userId } from '../../../api/requestData';
 import { postNewRoomRequest } from '../../../api/gameApi';
 import useTelegram from '../../../hooks/useTelegram';
+import BetSlider from '../../BetSlider/BetSlider';
 
 interface IProps {
   data: any; // типизировать

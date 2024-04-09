@@ -30,6 +30,8 @@ const RockPaperScissors: FC = () => {
   const [timerStarted, setTimerStarted] = useState(false);
   const [user1Choice, setUser1Choice] = useState<string>('');
   const [user2Choice, setUser2Choice] = useState<string>('');
+  const [prev1Choice, setPrev1] = useState('');
+  const [prev2Choice, setPrev2] = useState('');
   console.log(user1Choice);
   console.log(user2Choice);
   console.log(data);
@@ -121,11 +123,11 @@ const RockPaperScissors: FC = () => {
     setChoiceRequest(userId, roomId!, value)
       .then((res: any) => {
         console.log(res);
-          if (res?.player_id === data?.players[0]?.userid) {
-            setUser1Choice(res?.choice);
-          } else if ((res?.player_id === data?.players[1]?.userid)) {
-            setUser2Choice(res?.choice);
-          }
+        if (res?.player_id === data?.players[0]?.userid) {
+          setUser1Choice(res?.choice);
+        } else if ((res?.player_id === data?.players[1]?.userid)) {
+          setUser2Choice(res?.choice);
+        }
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
@@ -133,9 +135,11 @@ const RockPaperScissors: FC = () => {
   };
   useEffect(() => {
     if (data && data.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')) {
-      setTimeout(() => {
-        whoIsWinRequest(roomId!)
-          .then((winData: any) => {
+      whoIsWinRequest(roomId!)
+        .then((winData: any) => {
+          setPrev1(user1Choice);
+          setPrev2(user2Choice);
+          setTimeout(() => {
             if (Number(winData?.winner?.userid) === Number(userId)) {
               setMessage('Вы победили');
             } else if ((Number(winData?.loser?.userid) === Number(userId))) {
@@ -143,15 +147,15 @@ const RockPaperScissors: FC = () => {
             } else if (winData?.winner === 'draw') {
               setMessage('Ничья');
             }
-            setTimeout(() => {
-              setChoice('');
-              setMessage('');
-            }, 2000)
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-      }, 3000)
+            // setTimeout(() => {
+            //   setChoice('');
+            //   setMessage('');
+            // }, 2000)
+          }, 3500)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
     }
   }, [data, userId]);
 
