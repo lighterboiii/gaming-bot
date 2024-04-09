@@ -78,3 +78,10 @@ export const whoIsWinRequest = (roomId: string) => {
     endpoint: `${roomIdParamString}${roomId}`,
   })
 };
+
+export const getEmojiRequest = (packId: string, emojiId: string) => {
+  return getReq({
+    uri: 'getemojiphoto',
+    endpoint: `&pack_id=${packId}&emotion_id=${emojiId}`,
+  })
+};

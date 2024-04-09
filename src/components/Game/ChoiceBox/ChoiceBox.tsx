@@ -19,7 +19,7 @@ interface IProps {
 
 const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
   const [choiceItem, setChoiceItem] = useState(choice);
-  console.log(choice);
+
   const onChoiceClick = (choice: string) => {
     handleChoice(choice);
     setChoiceItem(choice);

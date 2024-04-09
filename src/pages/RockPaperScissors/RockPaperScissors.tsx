@@ -28,6 +28,11 @@ const RockPaperScissors: FC = () => {
   const [showEmojiOverlay, setShowEmojiOverlay] = useState(false);
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
+  const [user1Choice, setUser1Choice] = useState<string>('');
+  const [user2Choice, setUser2Choice] = useState<string>('');
+  console.log(user1Choice);
+  console.log(user2Choice);
+  console.log(data);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -76,7 +81,7 @@ const RockPaperScissors: FC = () => {
   }, [])
   // установка таймера
   useEffect(() => {
-    if (data && data?.players_count === '2' && !timerStarted) {
+    if (data && data?.players_count === '2' && !timerStarted && message === '') {
       setTimerStarted(true);
       setTimer(15);
     } else if (data && data?.players_count !== '2') {
@@ -115,33 +120,43 @@ const RockPaperScissors: FC = () => {
   const handleChoice = (value: string) => {
     setChoiceRequest(userId, roomId!, value)
       .then((res: any) => {
-        setTimeout(() => {
-          whoIsWinRequest(roomId!)
-            .then((winData: any) => {
-              setTimerStarted(false);
-              if (Number(winData?.winner?.userid) === Number(userId)) {
-                setMessage('Вы победили');
-              } else if ((Number(winData?.loser?.userid) === Number(userId))) {
-                setMessage('Вы проиграли');
-              } else if (winData?.winner === 'draw') {
-                setMessage('Ничья');
-              }
-              setTimeout(() => {
-                setChoice('');
-                setMessage('');
-              }, 2000)
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-            setTimerStarted(true);
-        }, 3000)
-        setMessage('');
+        console.log(res);
+        if (data && data.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')) {
+          if (res?.player_id === data?.players[0]?.userid) {
+            setUser1Choice(res?.choice);
+          } else if ((res?.player_id === data?.players[1]?.userid)) {
+            setUser2Choice(res?.choice);
+          }
+        }
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
+  useEffect(() => {
+    if (data && data.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')) {
+      setTimeout(() => {
+        whoIsWinRequest(roomId!)
+          .then((winData: any) => {
+            if (Number(winData?.winner?.userid) === Number(userId)) {
+              setMessage('Вы победили');
+            } else if ((Number(winData?.loser?.userid) === Number(userId))) {
+              setMessage('Вы проиграли');
+            } else if (winData?.winner === 'draw') {
+              setMessage('Ничья');
+            }
+            setTimeout(() => {
+              setChoice('');
+              setMessage('');
+            }, 2000)
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }, 3000)
+    }
+  }, [data, userId]);
+
   // хендлер готовности игрока
   const handleReady = () => {
     setChoiceRequest(userId, roomId!, 'ready')
@@ -180,23 +195,27 @@ const RockPaperScissors: FC = () => {
                   <img src={readyIcon} alt="ready icon" className={styles.game__readyIcon} />
                 )}
                 {player?.emoji !== 'none' && emojiVisible && (
-                  <img src={player?.emoji} alt="selected emoji" className={styles.game__selectedEmoji} />
+                  <img
+                    src={player?.emoji}
+                    alt="selected emoji"
+                    className={styles.game__selectedEmoji}
+                  />
                 )}
               </div>
             ))}
           </div>
           {message !== '' && (
-          <p className={styles.game__notify}>
-            {message}
-          </p>)}
+            <p className={styles.game__notify}>
+              {message}
+            </p>)}
           <>
             <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
             <div className={styles.game__hands}>
               {(
-                data?.players_count === "2" &&
-                data?.players.every((player: any) => player.choice !== 'none' &&  player.choice !== 'ready')
+                data?.players_count === "2"
+                // data?.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')
               ) ? (
-                <HandShake prevChoices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} />
+                <HandShake prevChoices={{ player1: user1Choice, player2: user2Choice }} />
               ) : (
                 data?.players_count === "1"
               ) ? (
@@ -205,12 +224,19 @@ const RockPaperScissors: FC = () => {
                 <p className={styles.game__notify}>
                   {
                     data?.players.some((player: any) => player.choice === 'none') && message === '' ?
-                    timer : message
+                      timer : message
                   }
                 </p>
               )}
             </div>
             <div className={styles.game__lowerContainer}>
+              <div className={styles.game__betContainer}>
+                <p className={styles.game__text}>Ставка</p>
+                <div className={styles.game__bet}>
+                  <p className={styles.game__text}>{data?.bet_type === "1" ? "💵" : "🔰"}</p>
+                  <p className={styles.game__text}>{data?.bet}</p>
+                </div>
+              </div>
               {(data?.players.some((player: any) => player.choice === 'none')) ? (
                 <div>
                   <input
@@ -222,18 +248,9 @@ const RockPaperScissors: FC = () => {
                   <label htmlFor="ready" className={styles.game__label}></label>
                 </div>
               ) : (
-                <>
-                  <div className={styles.game__betContainer}>
-                    <p className={styles.game__text}>Ставка</p>
-                    <div className={styles.game__bet}>
-                      <p className={styles.game__text}>{data?.bet_type === "1" ? "💵" : "🔰"}</p>
-                      <p className={styles.game__text}>{data?.bet}</p>
-                    </div>
-                  </div>
-                  <div className={styles.game__buttonsWrapper}>
-                    <ChoiceBox choice={choice} handleChoice={handleChoice} />
-                  </div>
-                </>
+                <div className={styles.game__buttonsWrapper}>
+                  <ChoiceBox choice={choice} handleChoice={handleChoice} />
+                </div>
               )}
               <button
                 type="button"
