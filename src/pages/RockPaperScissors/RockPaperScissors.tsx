@@ -48,13 +48,14 @@ const RockPaperScissors: FC = () => {
       tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate]);
-  // long polling loop
+  // long polling
   useEffect(() => {
     const fetchRoomInfo = () => {
       getRoomInfoRequest(roomId!)
         .then((data: any) => {
           setData(data);
-          fetchRoomInfo();
+          setTimeout(fetchRoomInfo, 30000);
+          // fetchRoomInfo();
         })
         .catch((error) => {
           console.error('Ошибка при получении информации о комнате', error);
@@ -88,14 +89,14 @@ const RockPaperScissors: FC = () => {
     setTimer(15);
   };
   // установка таймера
-  useEffect(() => {
-    if (data && data?.players_count !== '2') {
-      stopTimer();
-    }
-    if (data?.players.every((player: any) => player.choice === 'ready')) {
-      stopTimer();
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data && data?.players_count !== '2') {
+  //     stopTimer();
+  //   }
+  //   if (data?.players.every((player: any) => player.choice === 'ready')) {
+  //     stopTimer();
+  //   }
+  // }, [data]);
   // установка таймера
   useEffect(() => {
     if (timerStarted && timer > 0) {
@@ -148,6 +149,9 @@ const RockPaperScissors: FC = () => {
         console.error('Ошибка при установке выбора', error);
       });
   };
+  // useEffect(() => {
+
+  // }, [data, userId]);
   // хендлер готовности игрока
   const handleReady = () => {
     setChoiceRequest(userId, roomId!, 'ready')
@@ -194,7 +198,7 @@ const RockPaperScissors: FC = () => {
                     className={styles.game__readyIcon}
                   />
                 )}
-                {(playerEmoji || secPlayerEmoji) && emojiVisible && player?.userid === Number(data?.players[0]?.userid) && (
+                {(playerEmoji || secPlayerEmoji) && emojiVisible && (
                   <img
                     src={player?.userid === Number(data?.players[0]?.userid) ? playerEmoji : secPlayerEmoji}
                     alt="selected emoji"
