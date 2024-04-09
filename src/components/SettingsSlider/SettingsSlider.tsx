@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChangeEvent, FC, useState } from 'react';
-import styles from './BetSlider.module.scss';
+import styles from './SettingsSlider.module.scss';
 import ChevronIcon from '../../icons/Chevron/ChevronIcon';
 import { useAppSelector } from '../../services/reduxHooks';
 import { postEvent } from '@tma.js/sdk';
@@ -11,7 +11,7 @@ interface IProps {
   onCurrencyChange?: (newCurrency: number) => void;
 }
 
-const BetSlider: FC<IProps> = ({
+const SettingsSlider: FC<IProps> = ({
   isCurrency = false,
   onBetChange = () => {},
   onCurrencyChange = () => {},
@@ -90,4 +90,4 @@ const BetSlider: FC<IProps> = ({
   );
 };
 
-export default BetSlider;
+export default SettingsSlider;
