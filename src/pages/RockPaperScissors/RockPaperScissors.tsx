@@ -88,17 +88,17 @@ const RockPaperScissors: FC = () => {
     }
   }, [roomId]);
   // подгрузка при монтировании компонента ??
-  useEffect(() => {
-    setLoading(true);
-    getRoomInfoRequest(roomId!)
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Ошибка при получении информации о комнате', error);
-      });
-  }, [])
+  // useEffect(() => {
+  //   setLoading(true);
+  //   getRoomInfoRequest(roomId!)
+  //     .then((data) => {
+  //       setData(data);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Ошибка при получении информации о комнате', error);
+  //     });
+  // }, [])
   // Функция для запуска таймера
   const startTimer = () => {
     setTimerStarted(true);
@@ -232,7 +232,7 @@ const RockPaperScissors: FC = () => {
                     className={styles.game__readyIcon}
                   />
                 )}
-                {emojiVisible && (playerEmoji || secPlayerEmoji) && (
+                {emojiVisible && (
                   <img
                     src={player?.userid === Number(data?.players[0]?.userid) ? playerEmoji : secPlayerEmoji}
                     alt="player emoji"
