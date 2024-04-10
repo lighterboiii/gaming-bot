@@ -31,8 +31,8 @@ const RockPaperScissors: FC = () => {
   const [playerEmoji, setPlayerEmoji] = useState<string>('');
   const [secPlayerEmoji, setSecPlayerEmoji] = useState<string>('');
 
-  const [player1, setPlayer1] = useState(null);
-  const [player2, setPlayer2] = useState(null);
+  // const [player1, setPlayer1] = useState(null);
+  // const [player2, setPlayer2] = useState(null);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -54,34 +54,35 @@ const RockPaperScissors: FC = () => {
   // long polling
   useEffect(() => {
     const fetchRoomInfo = async () => {
-      getRoomInfoRequest(roomId!)
+      roomId && getRoomInfoRequest(roomId)
         .then((res: any) => {
           console.log(res);
-          setData(res);
-          setPlayer1(res?.players[0])
-          if (res?.status === 'no_update') {
-            fetchRoomInfo();
-            // setTimeout(fetchRoomInfo, 30000);
+          if (res?.status !== 'no_update') {
+            setData(res);
+            setTimeout(fetchRoomInfo, 60000);
+          } else {
+            setTimeout(fetchRoomInfo, 60000);
+            // fetchRoomInfo();
           }
-          setTimeout(fetchRoomInfo, 30000);
         })
         .catch((error) => {
           console.error('Ошибка при получении информации о комнате', error);
-          setTimeout(fetchRoomInfo, 10000);
+          setTimeout(fetchRoomInfo, 60000);
         });
     };
 
-    fetchRoomInfo();
+    
+    roomId && fetchRoomInfo();
 
     const timerId = setTimeout(fetchRoomInfo, 10000);
     return () => {
       clearTimeout(timerId);
     }
-  }, [roomId, userId]);
+  }, [roomId]);
   // подгрузка при монтировании компонента ??
   // useEffect(() => {
   //   // setLoading(true);
-  //   getRoomInfoRequest(roomId!)
+  //   roomId && getRoomInfoRequest(roomId)
   //     .then((res) => {
   //       setData(res);
   //       // setLoading(false);
@@ -90,51 +91,51 @@ const RockPaperScissors: FC = () => {
   //       console.error('Ошибка при получении информации о комнате', error);
   //     });
   // }, [])
-  // Функция для запуска таймера
-  const startTimer = () => {
-    setTimerStarted(true);
-    setTimer(15);
-  };
+  // // Функция для запуска таймера
+  // const startTimer = () => {
+  //   setTimerStarted(true);
+  //   setTimer(15);
+  // };
 
-  // Функция для остановки таймера
-  const stopTimer = () => {
-    setTimerStarted(false);
-    setTimer(15);
-  };
+  // // Функция для остановки таймера
+  // const stopTimer = () => {
+  //   setTimerStarted(false);
+  //   setTimer(15);
+  // };
   // установка таймера
-  useEffect(() => {
-    if (data && data?.players_count !== '2') {
-      stopTimer();
-    }
-    if (data?.players?.every((player: any) => player.choice === 'ready')) {
-      stopTimer();
-    }
-    if  (data && data?.players_count === '2') {
-      startTimer();
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data && data?.players_count !== '2') {
+  //     stopTimer();
+  //   }
+  //   if (data?.players?.every((player: any) => player.choice === 'ready')) {
+  //     stopTimer();
+  //   }
+  //   if  (data && data?.players_count === '2') {
+  //     startTimer();
+  //   }
+  // }, [data]);
   // установка таймера
-  useEffect(() => {
-    if (timerStarted && timer > 0) {
-      const ticker = setInterval(() => {
-        setTimer(prevTimer => prevTimer - 1);
-      }, 1000);
-      return () => clearInterval(ticker);
-    } else if (timer === 0) {
-      const hasPlayerWithChoiceNone = data?.players.some((player: any) => player.choice === 'none');
-      if (hasPlayerWithChoiceNone) {
-        leaveRoomRequest(userId)
-          .then((data) => {
-            console.log(data);
-            navigate(-1);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-      startTimer();
-    }
-  }, [timerStarted, timer]);
+  // useEffect(() => {
+  //   if (timerStarted && timer > 0) {
+  //     const ticker = setInterval(() => {
+  //       setTimer(prevTimer => prevTimer - 1);
+  //     }, 1000);
+  //     return () => clearInterval(ticker);
+  //   } else if (timer === 0) {
+  //     const hasPlayerWithChoiceNone = data?.players.some((player: any) => player.choice === 'none');
+  //     if (hasPlayerWithChoiceNone) {
+  //       leaveRoomRequest(userId)
+  //         .then((data) => {
+  //           console.log(data);
+  //           navigate(-1);
+  //         })
+  //         .catch((error) => {
+  //           console.error(error);
+  //         });
+  //     }
+  //     startTimer();
+  //   }
+  // }, [timerStarted, timer]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     setChoiceRequest(userId, roomId!, value)
@@ -156,7 +157,6 @@ const RockPaperScissors: FC = () => {
                     } else if (winData?.winner === 'draw') {
                       setMessage('Ничья');
                     }
-                    getRoomInfoRequest(roomId!)
                     setTimeout(() => {
                       setChoice('');
                       setMessage('');
@@ -242,14 +242,10 @@ const RockPaperScissors: FC = () => {
             }
             <div className={styles.game__hands}>
               {(
-                data?.players_count === "2"
-                // data?.players?.every((player: any) => player?.choice !== 'none')
+                data?.players_count === "2" &&
+                data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready' )
               ) ? (
-                // <HandShake prevChoices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} />
-                <HandShake 
-                choices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} 
-                prevChoices={{ player1prev: data?.players[0]?.prev_choice, player2prev: data?.players[1]?.prev_choice }} 
-                />
+                <HandShake prevChoices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} />
               ) : (
                 data?.players_count === "1"
               ) ? (
