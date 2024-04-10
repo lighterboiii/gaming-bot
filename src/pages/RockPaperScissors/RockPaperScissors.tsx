@@ -19,7 +19,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,7 +30,9 @@ const RockPaperScissors: FC = () => {
   const [timerStarted, setTimerStarted] = useState<boolean>(false);
   const [playerEmoji, setPlayerEmoji] = useState<string>('');
   const [secPlayerEmoji, setSecPlayerEmoji] = useState<string>('');
-  console.log(data);
+
+  const [player1, setPlayer1] = useState(null);
+  const [player2, setPlayer2] = useState(null);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -49,18 +51,6 @@ const RockPaperScissors: FC = () => {
       tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate]);
-
-  // useEffect(() => {
-  //   return () => {
-  //     leaveRoomRequest(userId)
-  //       .then((data) => {
-  //         console.log(data);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   };
-  // }, []);
   // long polling
   useEffect(() => {
     const fetchRoomInfo = async () => {
@@ -68,6 +58,7 @@ const RockPaperScissors: FC = () => {
         .then((res: any) => {
           console.log(res);
           setData(res);
+          setPlayer1(res?.players[0])
           if (res?.status === 'no_update') {
             fetchRoomInfo();
             // setTimeout(fetchRoomInfo, 30000);
@@ -86,19 +77,19 @@ const RockPaperScissors: FC = () => {
     return () => {
       clearTimeout(timerId);
     }
-  }, [roomId]);
+  }, [roomId, userId]);
   // подгрузка при монтировании компонента ??
-  useEffect(() => {
-    // setLoading(true);
-    getRoomInfoRequest(roomId!)
-      .then((res) => {
-        setData(res);
-        // setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Ошибка при получении информации о комнате', error);
-      });
-  }, [])
+  // useEffect(() => {
+  //   // setLoading(true);
+  //   getRoomInfoRequest(roomId!)
+  //     .then((res) => {
+  //       setData(res);
+  //       // setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Ошибка при получении информации о комнате', error);
+  //     });
+  // }, [])
   // Функция для запуска таймера
   const startTimer = () => {
     setTimerStarted(true);
@@ -117,6 +108,9 @@ const RockPaperScissors: FC = () => {
     }
     if (data?.players?.every((player: any) => player.choice === 'ready')) {
       stopTimer();
+    }
+    if  (data && data?.players_count === '2') {
+      startTimer();
     }
   }, [data]);
   // установка таймера
@@ -181,11 +175,11 @@ const RockPaperScissors: FC = () => {
     setChoiceRequest(userId, roomId!, 'ready')
       .then((data: any) => {
         console.log(data);
-      })
-    getRoomInfoRequest(roomId!)
-      .then((res: any) => {
-        console.log(res)
-        setData(res);
+        getRoomInfoRequest(roomId!)
+        .then((res: any) => {
+          console.log(res)
+          setData(res);
+        })
       })
   };
   // хендлер отпрвки эмодзи
@@ -220,7 +214,7 @@ const RockPaperScissors: FC = () => {
               <div className={styles.game__player} key={player?.userid}>
                 <p className={styles.game__playerName}>{player?.publicname}</p>
                 <UserAvatar item={player} avatar={player?.avatar} key={player?.userId} />
-                {player?.choice !== 'none' && (
+                {player && player?.choice === 'ready' && (
                   <img
                     src={readyIcon}
                     alt="ready icon"
@@ -248,16 +242,20 @@ const RockPaperScissors: FC = () => {
             }
             <div className={styles.game__hands}>
               {(
-                data?.players_count === "2" &&
-                data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready')
+                data?.players_count === "2"
+                // data?.players?.every((player: any) => player?.choice !== 'none')
               ) ? (
-                <HandShake prevChoices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} />
+                // <HandShake prevChoices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} />
+                <HandShake 
+                choices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} 
+                prevChoices={{ player1prev: data?.players[0]?.prev_choice, player2prev: data?.players[1]?.prev_choice }} 
+                />
               ) : (
                 data?.players_count === "1"
               ) ? (
                 <p className={styles.game__notify}>Ожидание игроков...</p>
               ) : (
-                <p className={styles.game__notify}>
+                <p className={styles.game__resultMessage}>
                   {
                     timerStarted && timer > 0 ?
                       timer : message
@@ -273,7 +271,7 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players?.some((player: any) => player.choice === 'none')) ? (
+              {(data?.players?.some((player: any) => player?.choice === 'none')) ? (
                 <div>
                   <input
                     type="checkbox"

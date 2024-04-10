@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import styles from './HandShake.module.scss';
 import leftPP from '../../../images/rock-paper-scissors/l-pp.png';
@@ -18,18 +19,21 @@ import leftSP from '../../../images/rock-paper-scissors/l-sp.png';
 import rightSS from '../../../images/rock-paper-scissors/r-ss.png';
 import rightSR from '../../../images/rock-paper-scissors/r-sr.png';
 import rightSP from '../../../images/rock-paper-scissors/r-sp.png';
+import startLeftRock from '../../../images/rock-paper-scissors/left_rock.png';
+import startRightRock from '../../../images/rock-paper-scissors/right_rock.png';
 
 interface IProps {
-  prevChoices: { player1: string; player2: string };
+  choices: { player1: string; player2: string };
+  prevChoices: { player1prev: string; player2prev: string };
 }
 
-const HandShake: FC<IProps> = ({ prevChoices }) => {
-  const { player1, player2 } = prevChoices;
+const HandShake: FC<IProps> = ({ choices, prevChoices }) => {
+  const { player1, player2 } = choices;
+  const { player1prev, player2prev } = prevChoices;
   const [leftHandImage, setLeftHandImage] = useState<string>('');
   const [rightHandImage, setRightHandImage] = useState<string>('');
-  const [prevPlayer1Choice, setPrevPlayer1Choice] = useState<string>('');
-  const [prevPlayer2Choice, setPrevPlayer2Choice] = useState<string>('');
-
+// console.log(prevChoices);
+// console.log(choices);
   useEffect(() => {
     const getLeftHandImage = (choice: string) => {
       switch (player1) {
@@ -93,11 +97,9 @@ const HandShake: FC<IProps> = ({ prevChoices }) => {
       }
     };
 
-    if (prevPlayer1Choice !== player1 || prevPlayer2Choice !== player2) {
+    if (player1prev !== player1 || player2prev !== player2) {
       setLeftHandImage(getLeftHandImage(player1));
       setRightHandImage(getRightHandImage(player2));
-      setPrevPlayer1Choice(player1);
-      setPrevPlayer2Choice(player2);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [player1, player2]);

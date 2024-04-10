@@ -130,4 +130,9 @@
     @include size(60px, 60px);
     @include position(absolute, $bottom: -25%, $left: 0);
   }
+
+  &__resultMessage {
+    @extend .game__notify;
+    @include position(absolute, $top: 25%, $left: 50%);
+  }
 }
