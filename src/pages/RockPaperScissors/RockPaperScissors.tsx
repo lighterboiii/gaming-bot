@@ -88,17 +88,17 @@ const RockPaperScissors: FC = () => {
     }
   }, [roomId]);
   // подгрузка при монтировании компонента ??
-  // useEffect(() => {
-  //   setLoading(true);
-  //   getRoomInfoRequest(roomId!)
-  //     .then((data) => {
-  //       setData(data);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Ошибка при получении информации о комнате', error);
-  //     });
-  // }, [])
+  useEffect(() => {
+    // setLoading(true);
+    getRoomInfoRequest(roomId!)
+      .then((res) => {
+        setData(res);
+        // setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Ошибка при получении информации о комнате', error);
+      });
+  }, [])
   // Функция для запуска таймера
   const startTimer = () => {
     setTimerStarted(true);
@@ -147,40 +147,35 @@ const RockPaperScissors: FC = () => {
       .then((res: any) => {
         console.log(res);
         getRoomInfoRequest(roomId!)
-        .then((res: any) => {
-          console.log(res)
-          setData(res);
-        })
+          .then((res: any) => {
+            console.log(res)
+            setData(res);
+            if (res) {
+              setTimeout(() => {
+                whoIsWinRequest(roomId!)
+                  .then((winData: any) => {
+                    console.log(winData);
+                    if (Number(winData?.winner?.userid) === Number(userId)) {
+                      setMessage('Вы победили');
+                    } else if ((Number(winData?.loser?.userid) === Number(userId))) {
+                      setMessage('Вы проиграли');
+                    } else if (winData?.winner === 'draw') {
+                      setMessage('Ничья');
+                    }
+                    getRoomInfoRequest(roomId!)
+                    setTimeout(() => {
+                      setChoice('');
+                      setMessage('');
+                    }, 2000)
+                  })
+              }, 3000)
+            }
+          })
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
-
-  useEffect(() => {
-    if (data && data?.players?.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')) {
-      setTimeout(() => {
-      whoIsWinRequest(roomId!)
-        .then((winData: any) => {
-          console.log(winData)
-          if (Number(winData?.winner?.userid) === Number(userId)) {
-            setMessage('Вы победили');
-          } else if ((Number(winData?.loser?.userid) === Number(userId))) {
-            setMessage('Вы проиграли');
-          } else if (winData?.winner === 'draw') {
-            setMessage('Ничья');
-          }
-          // setTimeout(() => {
-          //   setChoice('');
-          //   setMessage('');
-          // }, 0)
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-      }, 2000)
-    }
-  }, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
     setChoiceRequest(userId, roomId!, 'ready')
