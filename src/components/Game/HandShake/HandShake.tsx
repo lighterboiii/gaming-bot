@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import styles from './HandShake.module.scss';
 import leftPP from '../../../images/rock-paper-scissors/l-pp.png';
