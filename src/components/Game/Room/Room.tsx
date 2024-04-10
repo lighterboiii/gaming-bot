@@ -20,7 +20,7 @@ const Room: FC<IProps> = ({ room }) => {
   const { user } = useTelegram();
   // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
-
+console.log(room);
   const handleJoinRoom = () => {
     joinRoomRequest(userId, room.room_id)
       .then((res) => {

@@ -30,6 +30,7 @@ const RockPaperScissors: FC = () => {
   const [timerStarted, setTimerStarted] = useState<boolean>(false);
   const [playerEmoji, setPlayerEmoji] = useState<string>('');
   const [secPlayerEmoji, setSecPlayerEmoji] = useState<string>('');
+  console.log(roomId);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -51,45 +52,28 @@ const RockPaperScissors: FC = () => {
   // long polling
   useEffect(() => {
     const fetchRoomInfo = async () => {
-    getRoomInfoRequest(roomId!)
-    .then((res: any) => {
-      console.log(res);
-      setData(res);
-      setTimeout(fetchRoomInfo, 30000);
-      // fetchRoomInfo();
-    })
-    .catch((error) => {
-      console.error('Ошибка при получении информации о комнате', error);
-      setTimeout(fetchRoomInfo, 10000);
-    });
+      getRoomInfoRequest(roomId!)
+        .then((res: any) => {
+          console.log(res);
+          setData(res);
+          if (res?.status === 'no update') {
+            fetchRoomInfo();
+            // setTimeout(fetchRoomInfo, 30000);
+          }
+        })
+        .catch((error) => {
+          console.error('Ошибка при получении информации о комнате', error);
+          setTimeout(fetchRoomInfo, 10000);
+        });
     };
-  
+
     fetchRoomInfo();
 
     const timerId = setTimeout(fetchRoomInfo, 10000);
     return () => {
       clearTimeout(timerId);
     }
-  }, [roomId]);
-  
-  
-  // useEffect(() => {
-  //   const fetchRoomInfo = () => {
-  //     getRoomInfoRequest(roomId!)
-  //       .then((res: any) => {
-  //         console.log(res);
-  //         setData(res);
-  //         setTimeout(fetchRoomInfo, 30000);
-  //         // fetchRoomInfo();
-  //       })
-  //       .catch((error) => {
-  //         console.error('Ошибка при получении информации о комнате', error);
-  //         setTimeout(fetchRoomInfo, 10000);
-  //       });
-  //   };
-
-  //   fetchRoomInfo();
-  // }, [roomId]);
+  }, []);
   // подгрузка при монтировании компонента ??
   // useEffect(() => {
   //   setLoading(true);
@@ -149,66 +133,46 @@ const RockPaperScissors: FC = () => {
     setChoiceRequest(userId, roomId!, value)
       .then((res: any) => {
         console.log(res);
-        getRoomInfoRequest(roomId!)
-          .then((res: any) => {
-            console.log(res)
-            setData(res);
-          })
-        // setTimeout(() => {
-        //   whoIsWinRequest(roomId!)
-        //     .then((winData: any) => {
-        //       console.log(winData);
-        //       if (Number(winData?.winner?.userid) === Number(userId) && winData?.winner !== 'draw') {
-        //         setMessage('Вы победили');
-        //       } else if ((Number(winData?.loser?.userid) === Number(userId))) {
-        //         setMessage('Вы проиграли');
-        //       } else if (winData?.winner === 'draw') {
-        //         setMessage('Ничья');
-        //       }
-        //       setTimeout(() => {
-        //         setChoice('');
-        //         setMessage('');
-        //         startTimer();
-        //       }, 2000)
-        //     })
-        //     .catch((error) => {
-        //       console.log(error);
-        //     })
-        // }, 3000)
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
+
   useEffect(() => {
     if (data && data.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')) {
       // setTimeout(() => {
       whoIsWinRequest(roomId!)
         .then((winData: any) => {
           console.log(winData)
-            if (Number(winData?.winner?.userid) === Number(userId)) {
-              setMessage('Вы победили');
-            } else if ((Number(winData?.loser?.userid) === Number(userId))) {
-              setMessage('Вы проиграли');
-            } else if (winData?.winner === 'draw') {
-              setMessage('Ничья');
-            }
-            setTimeout(() => {
-              setChoice('');
-              setMessage('');
-            }, 0)
+          if (Number(winData?.winner?.userid) === Number(userId)) {
+            setMessage('Вы победили');
+          } else if ((Number(winData?.loser?.userid) === Number(userId))) {
+            setMessage('Вы проиграли');
+          } else if (winData?.winner === 'draw') {
+            setMessage('Ничья');
+          }
+          // setTimeout(() => {
+          //   setChoice('');
+          //   setMessage('');
+          // }, 0)
         })
         .catch((error) => {
           console.log(error);
         })
       // }, 3500)
     }
-  }, [roomId, userId]);
+  }, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
     setChoiceRequest(userId, roomId!, 'ready')
       .then((data: any) => {
         console.log(data);
+      })
+    getRoomInfoRequest(roomId!)
+      .then((res: any) => {
+        console.log(res)
+        setData(res);
       })
   };
   // хендлер отпрвки эмодзи
@@ -221,7 +185,7 @@ const RockPaperScissors: FC = () => {
           setEmojiVisible(true);
           if (Number(res?.player_id) === Number(data?.players[0]?.userid)) {
             setPlayerEmoji(res?.emoji);
-          } else {
+          } else if (Number(res?.player_id) === Number(data?.players[1]?.userid)) {
             setSecPlayerEmoji(res?.emoji);
           }
         }
@@ -239,10 +203,10 @@ const RockPaperScissors: FC = () => {
       {loading ? <Loader /> : (
         <>
           <div className={styles.game__players}>
-            {data?.players.map((player: any) => (
+            {data?.players?.map((player: any) => (
               <div className={styles.game__player}>
                 <p className={styles.game__playerName}>{player?.publicname}</p>
-                <UserAvatar item={player} avatar={player.avatar} key={player.userId} />
+                <UserAvatar item={player} avatar={player?.avatar} key={player.userId} />
                 {player?.choice !== 'none' && (
                   <img
                     src={readyIcon}
@@ -250,9 +214,9 @@ const RockPaperScissors: FC = () => {
                     className={styles.game__readyIcon}
                   />
                 )}
-                {emojiVisible && (data?.players[0]?.emoji !== 'none' || data?.players[1]?.emoji) && (
+                {emojiVisible && (playerEmoji || secPlayerEmoji) && (
                   <img
-                    src={player?.emoji}
+                    src={player?.userid === Number(data?.players[0]?.userid) ? playerEmoji : secPlayerEmoji}
                     alt="player emoji"
                     className={
                       player?.userid === Number(data?.players[0]?.userid) ?
@@ -266,13 +230,13 @@ const RockPaperScissors: FC = () => {
           </div>
           <>
             {data?.players_count === "2" &&
-              data?.players.every((player: any) => player.choice === 'ready') &&
+              data?.players?.every((player: any) => player?.choice === 'ready') &&
               <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
             }
             <div className={styles.game__hands}>
               {(
                 data?.players_count === "2" &&
-                data?.players.every((player: any) => player.choice !== 'none' && player.choice !== 'ready')
+                data?.players.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready')
               ) ? (
                 <HandShake prevChoices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} />
               ) : (
@@ -296,7 +260,7 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players.some((player: any) => player.choice === 'none')) ? (
+              {(data?.players?.some((player: any) => player.choice === 'none')) ? (
                 <div>
                   <input
                     type="checkbox"

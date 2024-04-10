@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styles from './SettingsSlider.module.scss';
 import ChevronIcon from '../../icons/Chevron/ChevronIcon';
-import { useAppSelector } from '../../services/reduxHooks';
 import { postEvent } from '@tma.js/sdk';
 
 interface IProps {
@@ -20,21 +19,17 @@ const SettingsSlider: FC<IProps> = ({
   const [currency, setCurrency] = useState(1);
 
   const increaseBet = () => {
-    // postEvent('web_app_trigger_haptic_feedback', {type: 'impact', impact_style: 'soft'});
     setBet(prevBet => {
       const newBet = (parseFloat(prevBet) + 0.1).toFixed(1);
-      onBetChange(parseFloat(newBet));
       return newBet;
     });
   };
 
   const decreaseBet = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
     setBet(prevBet => {
       const currentBet = parseFloat(prevBet);
       if (currentBet > 0.1) {
         const newBet = (currentBet - 0.1).toFixed(1);
-        onBetChange(parseFloat(newBet));
         return newBet;
       }
       return prevBet;
@@ -44,8 +39,6 @@ const SettingsSlider: FC<IProps> = ({
   const toggleCurrency = () => {
     const newCurrency = currency === 3 ? 1 : 3;
     setCurrency(newCurrency);
-    onCurrencyChange(newCurrency);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +50,14 @@ const SettingsSlider: FC<IProps> = ({
       onBetChange(newBetValue);
     }
   };
+
+  useEffect(() => {
+    onBetChange(parseFloat(bet));
+  }, [bet, onBetChange]);
+
+  useEffect(() => {
+    onCurrencyChange(currency);
+  }, [currency, onCurrencyChange]);
 
   return (
     <div className={styles.slider}>
@@ -73,7 +74,6 @@ const SettingsSlider: FC<IProps> = ({
       ) : (
         <input
           type="number"
-          // step="0.1"
           value={bet}
           className={styles.slider__input}
           onChange={handleInputChange}
