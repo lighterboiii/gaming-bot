@@ -4,12 +4,11 @@
 @mixin buttonStyle {
   @include button-style-reset();
   @include size(142px, 30px);
-  border-radius: 40px;
+  border-radius: $radius-10;
   color: $main-color;
-  text-transform: lowercase;
   font-weight: 900;
   font-size: 12px;
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 
 .shop {
@@ -21,7 +20,7 @@
 
   &__header {
     @include size(100%, 20vh);
-    @include flex(column, flex-start, center, 8px);
+    @include flex(column, space-evenly, center, 8px);
 
     @media screen and (max-height: 690px) {
       @include size(100%, 30vh);

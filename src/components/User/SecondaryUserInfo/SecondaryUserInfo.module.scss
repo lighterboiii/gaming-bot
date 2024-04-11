@@ -2,7 +2,7 @@
 @use '../../../stylesheets/variables' as *;
 
 .user {
-  @include indents(0, 0 60px 0 0);
+  @include indents();
   @include size(100%, auto);
   @include flex(row, flex-end, center, 10px);
   z-index: 10;
@@ -15,8 +15,8 @@
 
   &__userInfo {
     @include position(relative);
-    @include indents(16px, 0);
-    @include size(260px, auto);
+    @include indents(16px 26px 16px 16px, 0);
+    @include size(70%, auto);
     @include flex(column, center, flex-end);
     background-color: $main-color;
     border-radius: $radius-10;
@@ -24,11 +24,12 @@
 
   &__textElements {
     @include size(80%, auto);
-    @include flex(column, space-between, center, 10px);
+    @include flex(column, space-between, flex-end, 10px);
   }
 
   &__money {
-    @include flex(row, center, center, 10px);
+    @include size(100%, auto);
+    @include flex(row, flex-end, center, 10px);
   }
 
   &__name {
@@ -43,21 +44,21 @@
     @include indents();
     @include ellipsis();
     color: $black-color;
-    font-weight: 400;
-    font-size: 10px;
+    font-weight: 800;
+    font-size: 12px;
     line-height: 1;
   }
 
   &__balance {
     @include button-style-reset();
     @include size(85px, auto);
-    @include flex(row, center, center);
-    @include indents(4px 8px, 0);
+    @include flex(row, space-evenly, center);
+    @include indents(8px, 0);
     border-radius: $radius-40;
     background-color: $black-color;
     text-align: center;
     color: $main-color;
-    font-size: 12px;
-    font-weight: 200;
+    font-size: 10px;
+    font-weight: 600;
   }
 }

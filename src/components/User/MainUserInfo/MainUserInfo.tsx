@@ -39,8 +39,6 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
               <LevelIcon level={userData?.user_exp} />
               {userData && userData?.publicname}
             </p>
-            {/* <div className={styles.userInfo__money}> */}
-            {/* <div className={styles.userInfo__textWrapper}> */}
             <p className={styles.userInfo__text}>
               <span>💵</span>
               {userData ? formatNumber(userData?.coins) : '0'}
@@ -49,15 +47,8 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
               <span>🔰</span>
               {userData ? formatNumber(userData?.tokens) : '0'}
             </p>
-            {/* </div> */}
-            {/* <div className={styles.userInfo__textWrapper}>
-                <p className={styles.userInfo__text}>🔋 {userData ? userData?.user_energy_drinks : '0'}</p>
-                <p className={styles.userInfo__text}>🧙‍♂️ {userData ? userData?.user_exp : '0'}</p>
-              </div> */}
-            {/* </div> */}
           </div>
           <button type="button" className={styles.userInfo__balance} onClick={handleClickBalance}>
-            {/* <img src="" alt="balance_icon" className={styles.userInfo__balanceIcon} /> */}
             <WalletIcon
               width={12}
               height={12}

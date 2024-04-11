@@ -7,6 +7,7 @@ import { useAppSelector } from "../../../services/reduxHooks";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
 import { inviteLink } from "../../../api/requestData";
+import WalletIcon from "../../../icons/Wallet/WalletIcon";
 
 const UserInfo: FC = () => {
   const { tg } = useTelegram();
@@ -29,10 +30,12 @@ const UserInfo: FC = () => {
           <div className={styles.user__money}>
             <p className={styles.user__text}>💵 {userData ? formatNumber(userData?.coins) : '0'}</p>
             <p className={styles.user__text}>🔰 {userData ? formatNumber(userData?.tokens) : '0'}</p>
-            <p className={styles.user__text}>🔋 {userData ? userData?.user_energy_drinks : '0'}</p>
-            <p className={styles.user__text}>🧙‍♂️ {userData ? userData?.user_exp : '0'}</p>
           </div>
           <button type="button" className={styles.user__balance} onClick={handleClickBalance}>
+            <WalletIcon
+              width={12}
+              height={12}
+            />
             {translation?.webapp_balance}
           </button>
         </div>

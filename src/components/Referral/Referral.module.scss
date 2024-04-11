@@ -61,7 +61,7 @@
   }
 
   &__board {
-    @include indents(16px 16px 0, 0);
+    @include indents(6px 16px 0, 0);
     @include flex(column, unset, flex-end, 16px);
     @include size(100%, auto);
     overflow: auto;
