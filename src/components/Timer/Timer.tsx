@@ -14,7 +14,7 @@ const Timer = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setTime((prevTime) => updateTime(prevTime));
-    }, 60000); // Здесь нужно изменить интервал на 60000 мс (1 минута)
+    }, 60000);
   
     return () => clearInterval(interval);
   }, []);

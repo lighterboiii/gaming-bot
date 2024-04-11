@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { getReferralsData, transferCoinsToBalanceReq } from "../../api/mainApi";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import ChevronIcon from "../../icons/Chevron/ChevronIcon";
 import { setCoinsNewValue } from "../../services/appSlice";
 import { postEvent } from "@tma.js/sdk";
 import { IMember } from "../../utils/types/memberTypes";
@@ -92,7 +91,7 @@ const Referral: FC = () => {
         <p className={styles.referral__text}>
           <span className={styles.referral__earn}>Заработано</span>
           <span className={styles.referral__sumSpan}>
-            💵 {referralCoinsAmount ? referralCoinsAmount : '0'}$
+            💵 {referralCoinsAmount && referralCoinsAmount}$
           </span>
         </p>
       </div>
@@ -100,6 +99,7 @@ const Referral: FC = () => {
         <Button
           text="Забрать"
           handleClick={handleTransferCoins}
+          disabled={referralCoinsAmount === 0}
         />
       </div>
       <div className={styles.referral__weekly}>

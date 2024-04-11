@@ -15,7 +15,7 @@ const Button: FC<IProps> = ({ text, isWhiteBackground, handleClick, disabled }) 
       className={styles.button}
       style={{ 
         backgroundColor: (!isWhiteBackground && !disabled) ? '#ffdb50' : '#FFF',
-        color: !isWhiteBackground ? '#000' : '#d51845'
+        color: disabled ? 'grey' : '#000'
       }}
       onClick={handleClick}
       disabled={disabled}

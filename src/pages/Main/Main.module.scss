@@ -21,7 +21,7 @@
   }
 
   &__logo {
-    @include size(110px, 26px);
+    @include size(133px, 38px);
   }
 
   &__content {
@@ -42,12 +42,13 @@
   &__centralButtonsContainer {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    justify-content: center;
     gap: 12px;
-    @include size(100%, 166px);
+    @include size(100%, 168px);
   }
 
   &__smallButtonsContainer {
-    @include size(100%, 166px);
+    @include size(100%, 168px);
     @include flex(column, space-between, space-between, 12px);
   }
 
