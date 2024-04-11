@@ -1,28 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
+import React, { FC } from "react";
 import styles from './SmallButton.module.scss';
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import { Link } from "react-router-dom";
 import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
-  to: string;
-  text: string;
+  text: string | React.ReactNode;
   secondaryText: string;
   isWhiteBackground?: boolean;
   chevronPosition?: string;
   shadow?: boolean;
+  handleClick: () => void;
 }
 
-const SmallButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, chevronPosition, shadow }) => {
+const SmallButton: FC<IProps> = ({ text, secondaryText, isWhiteBackground, chevronPosition, shadow }) => {
   
   const handleGetHapticFeedback = () => {
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
   };
 
   return (
-    <Link
-      to={to}
+    <button
       onClick={handleGetHapticFeedback}
       className={`${styles.button} ${isWhiteBackground ? styles.whiteButton : styles.blackButton}`}
       style={shadow ? { boxShadow: '2px 2px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
@@ -42,12 +41,12 @@ const SmallButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, c
       <div className={styles.button__chevronWrapper}>
         <ChevronIcon
           position={chevronPosition}
-          width={16}
-          height={16}
+          width={24}
+          height={24}
           color={isWhiteBackground ? '#FF0080' : '#ffdb50'}
         />
       </div>
-    </Link>
+    </button>
   )
 }
 

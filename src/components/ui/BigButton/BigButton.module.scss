@@ -5,17 +5,18 @@
   @include button-style-reset();
   @include position(relative);
   // @include indents(10px, 0);
-  @include max-size(100%, 190px);
+  @include max-size(100%, 166px);
   @include size(100%, 100%);
   aspect-ratio: 1;
   background-color: $secondary-color;
-  border-radius: $radius-12;
+  border-radius: $radius-15;
   text-decoration: none;
 
   &__text {
     @include indents();
     @include size(60%, auto);
     @include position(absolute, $left: 12px, $top: 12px);
+    @include flex(row, flex-start, center, 10px);
     color: $secondary-color;
     font-size: 16px;
     font-weight: 700;

@@ -1,0 +1,16 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.icon {
+  @include position(relative);
+  @include flex(column, center, center);
+
+  &__text {
+    @include indents();
+    @include position(absolute, $left: 50%, $top: 42%);
+    transform: translate(-50%, -50%);
+    font-size: 8px;
+    color: $secondary-color;
+    z-index: 5;
+  }
+}

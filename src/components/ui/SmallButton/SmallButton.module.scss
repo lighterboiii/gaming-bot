@@ -2,21 +2,27 @@
 @use '../../../stylesheets/variables' as *;
 
 .button {
+  @include button-style-reset();
   @include position(relative);
-  @include indents(16px, 0);
+  @include indents(12px, 0);
   @include flex(column, center, flex-start);
   @include min-size(unset, 74px);
   @include size(100%, 100%);
   text-decoration: none;
-  border-radius: $radius-12;
+  border-radius: $radius-15;
 
   &__textWrapper {
+    @include size(90%, 100%);
     @include flex(column, space-between, flex-start, 16px);
 
   }
 
   &__text, &__secondaryText {
     @include indents();
+    @include size(100%, auto);
+    @include flex(row, flex-start, center, 10px);
+    line-height: 1;
+    text-wrap: balance;
   }
 
   &__text {
@@ -28,7 +34,7 @@
 
   &__secondaryText {
     color: $main-color;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 200;
     text-align: left;
   }

@@ -5,7 +5,7 @@
   @include position(relative);
   @include indents();
   @include size(100%, unset);
-  @include flex(row, space-between, center, 10px);
+  @include flex(row, space-between, center);
 
   &__content {
     @include flex(row, flex-start, center, 6px);
@@ -14,7 +14,7 @@
 
   &__textElements {
     @include size(auto, 100%);
-    @include flex(column, space-between, flex-start, 4px);
+    @include flex(column, space-evenly, flex-start, 4px);
   }
 
   &__textWrapper {
@@ -22,12 +22,12 @@
   }
 
   &__avatarContainer {
-    @include size(130px, 130px);
+    @include size(136px, 136px);
   }
 
   &__info {
     @include size(auto, 100px);
-    @include flex(column, space-between, center, 6px);
+    @include flex(column, space-between, flex-start, 6px);
     flex-grow: 1;
   }
 
@@ -37,6 +37,7 @@
 
   &__name {
     @include indents();
+    @include flex(row, flex-start, center, 6px);
     color: $main-color;
     font-weight: 900;
     font-size: 14px;
@@ -46,6 +47,7 @@
   &__text {
     @include indents();
     @include ellipsis();
+    @include flex(row, flex-start, center, 8px);
     color: $main-color;
     font-weight: 900;
     font-size: 12px;
@@ -94,9 +96,5 @@
 
   &__button {
     @include button-style-reset();
-  }
-
-  &__balanceIcon {
-    @include size(10px, 8px);
   }
 }

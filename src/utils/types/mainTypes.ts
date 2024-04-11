@@ -53,3 +53,9 @@ export interface IReferralCoinsTransferResponse {
   transfered: number | string;
   new_coins: number;
 }
+
+export interface ICommonIconProps {
+  color?: string;
+  width?: number;
+  height?: number;
+}

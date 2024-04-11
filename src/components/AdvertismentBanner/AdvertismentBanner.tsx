@@ -33,8 +33,9 @@ const AdvertisementBanner: FC<IProps> = ({ onBannerClick }) => {
       > 
         <ChevronIcon
           position="left"
-          width={24}
-          height={24}
+          width={12}
+          height={12}
+          color="#d51845"
         />
       </button>
       <div className={styles.banner__link} onClick={handleBannerClick}></div>
@@ -44,8 +45,9 @@ const AdvertisementBanner: FC<IProps> = ({ onBannerClick }) => {
       >
         <ChevronIcon
           position="right"
-          width={24}
-          height={24}
+          width={12}
+          height={12}
+          color="#d51845"
         />
       </button>
       <div className={styles.banner__indicators}>

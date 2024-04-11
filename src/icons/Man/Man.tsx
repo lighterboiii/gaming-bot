@@ -1,14 +1,7 @@
 import { FC } from 'react';
+import { ICommonIconProps } from '../../utils/types/mainTypes';
 
-export interface ICrossIcon {
-  color?: string;
-  position?: string;
-  width?: number;
-  height?: number;
-  strokeWidth?: number;
-}
-
-const ManIcon: FC<ICrossIcon> = ({
+const ManIcon: FC<ICommonIconProps> = ({
   color = "#F50941",
   width = 16,
   height = 16,
