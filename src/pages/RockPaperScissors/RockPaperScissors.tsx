@@ -60,9 +60,9 @@ const RockPaperScissors: FC = () => {
           if (res?.status !== 'no_update') {
             setData(res);
             setTimeout(fetchRoomInfo, 60000);
-          } else {
-            setTimeout(fetchRoomInfo, 60000);
-            // fetchRoomInfo();
+          } else if ( res?.status === 'no_update') {
+            // setTimeout(fetchRoomInfo, 60000);
+            fetchRoomInfo();
           }
         })
         .catch((error) => {
@@ -141,11 +141,11 @@ const RockPaperScissors: FC = () => {
     setChoiceRequest(userId, roomId!, value)
       .then((res: any) => {
         console.log(res);
-        getRoomInfoRequest(roomId!)
-          .then((res: any) => {
-            console.log(res)
-            setData(res);
-            if (res) {
+        // getRoomInfoRequest(roomId!)
+          // .then((res: any) => {
+        //     console.log(res)
+        //     setData(res);
+        //     if (res) {
               setTimeout(() => {
                 whoIsWinRequest(roomId!)
                   .then((winData: any) => {
@@ -163,8 +163,8 @@ const RockPaperScissors: FC = () => {
                     }, 2000)
                   })
               }, 3000)
-            }
-          })
+        //     }
+        //   })
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
@@ -175,11 +175,11 @@ const RockPaperScissors: FC = () => {
     setChoiceRequest(userId, roomId!, 'ready')
       .then((data: any) => {
         console.log(data);
-        getRoomInfoRequest(roomId!)
-        .then((res: any) => {
-          console.log(res)
-          setData(res);
-        })
+        // getRoomInfoRequest(roomId!)
+        // .then((res: any) => {
+        //   console.log(res)
+        //   setData(res);
+        // })
       })
   };
   // хендлер отпрвки эмодзи
