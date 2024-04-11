@@ -17,8 +17,10 @@ import CommunityIcon from "../../icons/Community/CommunityIcon";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
+import { useNavigate } from "react-router-dom";
 
 const Main: FC = () => {
+  const navigate = useNavigate();
   const animationRef = useRef<HTMLDivElement>(null);
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -91,7 +93,7 @@ const Main: FC = () => {
               shadow
             />
             <SmallButton
-              handleClick={() => { }}
+              handleClick={() => navigate('/leaderboard')}
               text={
                 <>
                   <LeaderBoardIcon width={12} height={12} />

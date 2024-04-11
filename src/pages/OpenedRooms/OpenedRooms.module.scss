@@ -11,11 +11,7 @@
   &__heading {
     @include size(50%, auto);
     @include indents();
-    color: $main-color;
-    font-weight: 900;
-    font-size: 40px;
-    font-style: italic;
-    line-height: 1;
+    @include page-title();
   }
 
   &__buttons {

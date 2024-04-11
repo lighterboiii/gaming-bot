@@ -34,12 +34,7 @@
 
   &__title {
     @include indents();
-    color: $main-color;
-    text-transform: uppercase;
-    font-size: 32px;
-    font-weight: 900;
-    font-style: italic;
-    line-height: 1;
+    @include page-title();
   }
 
   &__buttons {

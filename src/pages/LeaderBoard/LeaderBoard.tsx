@@ -10,6 +10,8 @@ import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
 import { IMember, IMemberDataResponse } from "../../utils/types/memberTypes";
 import { useAppSelector } from "../../services/reduxHooks";
+import TimerIcon from "../../icons/Timer/TimerIcon";
+import Timer from "../../components/Timer/Timer";
 
 const LeaderBoard: FC = () => {
   const { user, tg } = useTelegram();
@@ -52,9 +54,20 @@ const LeaderBoard: FC = () => {
         <>
           <div className={styles.leaderBoard__header}>
             <h2 className={styles.leaderBoard__heading}>
-              {translation?.webapp_leaderboard}
+              Топ <br /> недели
             </h2>
-          </div><div className={styles.leaderBoard__leader}>
+          </div>
+          <div className={styles.leaderBoard__leader}>
+            <div className={styles.leaderBoard__timeWrapper}>
+              <div className={styles.leaderBoard__prize}>
+                <TimerIcon />
+                <Timer />
+              </div>
+              <div className={styles.leaderBoard__prize}>
+                <span>Приз:</span>
+                <span>💵 25</span>
+              </div>
+            </div>
             <div className={styles.leaderBoard__background}>
               <div className={styles.leaderBoard__avatarContainer}>
                 {topLeader && <UserAvatar avatar={topLeader.avatar} item={topLeader} />}
@@ -64,7 +77,7 @@ const LeaderBoard: FC = () => {
                     {topLeader?.public_name}
                   </p>
                   <p className={styles.leaderBoard__leaderText}>
-                    +💵 {topLeader?.coins}
+                    <span>+ 💵 </span> {topLeader?.coins}
                   </p>
                 </div>
               </div>

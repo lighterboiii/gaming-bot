@@ -35,10 +35,10 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
         </div>
         <div className={styles.userInfo__info}>
           <div className={styles.userInfo__textElements}>
-            <p className={styles.userInfo__name}>
+            <div className={styles.userInfo__name}>
               <LevelIcon level={userData?.user_exp} />
               {userData && userData?.publicname}
-            </p>
+            </div>
             <p className={styles.userInfo__text}>
               <span>💵</span>
               {userData ? formatNumber(userData?.coins) : '0'}

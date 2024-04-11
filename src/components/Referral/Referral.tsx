@@ -67,7 +67,6 @@ const Referral: FC = () => {
         }
 
         setTimeout(() => {
-          setRefsBoard(null);
           setTimeout(() => {
             setMessage('');
             setMessageShown(false);
@@ -98,14 +97,19 @@ const Referral: FC = () => {
         </p>
       </div>
       <div className={styles.referral__buttonWrapper}>
-        <Button text="Забрать" handleClick={handleInviteClick} />
+        <Button
+          text="Забрать"
+          handleClick={handleTransferCoins}
+        />
       </div>
       <div className={styles.referral__weekly}>
         <p className={styles.referral__text}>
           Приглашай друзей и получай процент с каждой игры!
         </p>
         <div className={styles.referral__inviteButtonWrapper}>
-          <Button text="Пригласить" handleClick={handleTransferCoins} isWhiteBackground />
+          <Button text="Пригласить"
+            handleClick={handleInviteClick}
+            isWhiteBackground />
         </div>
       </div>
       {messageShown ? (

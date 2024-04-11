@@ -12,10 +12,6 @@
     @include size(100%, 20vh);
     @include flex(column, center, center);
     background-color: $secondary-color;
-
-    // @media screen and (max-height: 690px) {
-    //   @include size(100%, 20vh);
-    // }
   }
 
   &__content {
@@ -37,12 +33,7 @@
   &__heading {
     @include indents();
     @include size(70%, unset);
-    color: $main-color;
-    font-weight: 900;
-    font-size: 40px;
-    font-style: italic;
-    line-height: 1;
-    text-transform: uppercase;
+    @include page-title();
   }
 
   &__bets {

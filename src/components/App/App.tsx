@@ -54,7 +54,6 @@ const App: FC = () => {
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
-          console.log(res);
           dispatch(setLanguageSettings(res.translate));
           dispatch(setUserData(res.user_info));
           dispatch(setDailyBonus(res.daily_bonus));
