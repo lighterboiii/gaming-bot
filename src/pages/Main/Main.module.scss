@@ -50,7 +50,7 @@
     @include size(100%, 166px);
     @include flex(column, space-between, space-between, 12px);
   }
-  
+
   &::-webkit-scrollbar {
     display: none;
   }
