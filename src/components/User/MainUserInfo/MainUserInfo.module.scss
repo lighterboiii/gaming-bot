@@ -8,14 +8,13 @@
   @include flex(row, space-between, center, 10px);
 
   &__content {
-    // @include size(130px, 130px);
     @include flex(row, flex-start, center, 6px);
-    flex: 1;
+    flex-grow: 1;
   }
 
   &__textElements {
     @include size(auto, 100%);
-    @include flex(column, space-evenly, flex-start, 4px);
+    @include flex(column, space-between, flex-start, 4px);
   }
 
   &__textWrapper {
@@ -28,7 +27,8 @@
 
   &__info {
     @include size(auto, 100px);
-    @include flex(column, space-between, flex-start);
+    @include flex(column, space-between, center, 6px);
+    flex-grow: 1;
   }
 
   &__money {
@@ -47,7 +47,7 @@
     @include indents();
     @include ellipsis();
     color: $main-color;
-    font-weight: 400;
+    font-weight: 900;
     font-size: 12px;
     line-height: 1;
   }
@@ -63,13 +63,14 @@
   &__balance {
     @include button-style-reset();
     @include size(85px, auto);
-    @include flex(row, center, center);
-    @include indents(4px 8px, 0);
+    @include flex(row, space-evenly, center);
+    @include indents(8px, 0);
     border-radius: $radius-40;
     background-color: $black-color;
     text-align: center;
     color: $main-color;
-    font-size: 12px;
+    font-size: 10px;
+    font-weight: 600;
   }
 
   &__linkContainer {
@@ -93,5 +94,9 @@
 
   &__button {
     @include button-style-reset();
+  }
+
+  &__balanceIcon {
+    @include size(10px, 8px);
   }
 }
