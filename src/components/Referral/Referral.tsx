@@ -86,30 +86,27 @@ const Referral: FC = () => {
 
   return (
     <div className={styles.referral}>
-      {totalBalance !== 0 && <div className={styles.referral__buttonWrapper}>
-        <Button text={translation?.claim} handleClick={handleTransferCoins} isWhiteBackground />
-      </div>}
       <h3 className={styles.referral__h3}>
-        {translation?.invite_friends_bonus}
+        Друзья
       </h3>
-      <div className={styles.referral__buttonWrapper}>
-        <Button text={translation?.invite} handleClick={handleInviteClick} />
-      </div>
       <div className={styles.referral__amount}>
         <p className={styles.referral__text}>
-          {translation?.total_earned}
+          <span className={styles.referral__earn}>Заработано</span>
           <span className={styles.referral__sumSpan}>
-            + 💵 {referralCoinsAmount ? referralCoinsAmount : '0'}$
+            💵 {referralCoinsAmount ? referralCoinsAmount : '0'}$
           </span>
         </p>
+      </div>
+      <div className={styles.referral__buttonWrapper}>
+        <Button text="Забрать" handleClick={handleInviteClick} />
       </div>
       <div className={styles.referral__weekly}>
         <p className={styles.referral__text}>
-          {translation?.earned_now}
-          <span className={styles.referral__sumSpan}>
-            + 💵 {totalBalance ? totalBalance : '0'}$
-          </span>
+          Приглашай друзей и получай процент с каждой игры!
         </p>
+        <div className={styles.referral__inviteButtonWrapper}>
+          <Button text="Пригласить" handleClick={handleTransferCoins} isWhiteBackground />
+        </div>
       </div>
       {messageShown ? (
         <div className={styles.referral__notification}>

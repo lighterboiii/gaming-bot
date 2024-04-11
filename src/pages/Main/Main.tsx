@@ -66,7 +66,10 @@ const Main: FC = () => {
     <div className={styles.main}>
       <div className={styles.main__header}>
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
-        <MainUserInfo toggleOverlay={toggleRefOverlay} isOverlayOpen={showReferralOverlay} />
+        <MainUserInfo 
+        toggleOverlay={() => {}} 
+        isOverlayOpen={showReferralOverlay} // после заменить
+        />
       </div>
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
         <div ref={animationRef}>
@@ -75,7 +78,7 @@ const Main: FC = () => {
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
             <SmallButton
-              handleClick={() => { }}
+              handleClick={() => toggleRefOverlay()}
               text={
                 <>
                   <FriendsIcon width={12} height={12} />
@@ -131,6 +134,9 @@ const Main: FC = () => {
         }
         show={showReferralOverlay}
         onClose={toggleRefOverlay}
+        closeButton
+        buttonColor="#FFF"
+        crossColor="#ac1a44"
       />
       <Overlay
         buttonColor="#FFF"

@@ -16,22 +16,26 @@
     @include min-size(100%, 40px);
   }
 
+  &__inviteButtonWrapper {
+    @include indents();
+    @include size(70%, 40px);
+  }
+
   &__amount {
-    @include min-size(100%, 40px);
+    @include min-size(100%, auto);
     @include flex(column, center, center);
-    background-color: $black-color;
   }
 
   &__weekly {
     @include size(100%, auto);
-    @include flex(column, center, center);
+    @include flex(column, center, center, 16px);
   }
 
   &__text {
-    @include size(calc(100% - 32px), unset);
+    @include size(70%, unset);
     @include indents();
-    @include flex(row, space-evenly, center);
-    font-weight: 400;
+    @include flex(row, center, center, 10px);
+    font-weight: 700;
     font-size: 16px;
     color: $main-color;
   }
@@ -49,10 +53,10 @@
   }
 
   &__h3 {
-    @include indents(16px 16px 0, 0);
-    font-weight: 500;
+    @include indents();
+    font-weight: 900;
     color: $main-color;
-    font-size: 16px;
+    font-size: 32px;
     text-align: center;
   }
 
