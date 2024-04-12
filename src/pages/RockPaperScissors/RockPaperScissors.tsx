@@ -60,8 +60,10 @@ const RockPaperScissors: FC = () => {
     })
   };
   useEffect(() => {
+    let isMounted = true;
+
     const fetchRoomInfo = async () => {
-      if (!roomId) {
+      if (!roomId || !isMounted) {
         return;
       }
       const data = {
@@ -73,10 +75,11 @@ const RockPaperScissors: FC = () => {
         .then((res: any) => {
           console.log(res);
           setData(res);
-          if (res?.message === 'timeout') {
+
+          if (res?.message === 'timeout' && isMounted) {
             fetchRoomInfo();
           }
-          setTimeout(fetchRoomInfo, 10000);
+          setTimeout(fetchRoomInfo, 10000)
         })
         .catch((error) => {
           console.error('Ошибка при получении информации о комнате', error);
@@ -84,9 +87,13 @@ const RockPaperScissors: FC = () => {
         });
     };
 
-
     fetchRoomInfo();
+
+    return () => {
+      isMounted = false;
+    };
   }, [roomId]);
+
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     console.log(value);
@@ -99,7 +106,7 @@ const RockPaperScissors: FC = () => {
     getRoomInfoRequest(userId, data)
       .then((res: any) => {
         console.log(res);
-        
+
         // setTimeout(() => {
         //   whoIsWinRequest(roomId!)
         //     .then((winData: any) => {
