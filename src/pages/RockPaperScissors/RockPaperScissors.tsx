@@ -111,7 +111,7 @@ const RockPaperScissors: FC = () => {
               console.log(currentUser);
               if (Number(winData?.winner?.userid) === Number(currentUser?.userid)) {
                 setMessage('Вы победили');
-              } else if (Number(winData?.winner?.userid) !== Number(currentUser?.userid)) {
+              } else if (Number(winData?.winner?.userid) === Number(currentUser?.userid)) {
                 setMessage('Вы проиграли');
               }
             }
