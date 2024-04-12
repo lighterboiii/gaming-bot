@@ -60,18 +60,45 @@ console.log(data);
       data: data,
     })
   };
+  // useEffect(() => {
+  //   const data = {
+  //     user_id: userId,
+  //     room_id: roomId,
+  //     type: 'wait'
+  //   };
+  //   getRoomInfoRequest(userId, data)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setData(res);
+  //     })
+  // }, [roomId, userId])
   useEffect(() => {
-    const data = {
-      user_id: userId,
-      room_id: roomId,
-      type: 'wait'
+    const fetchRoomInfo = async () => {
+      const data = {
+        user_id: userId,
+        room_id: roomId,
+        type: 'wait'
+      };
+      roomId && getRoomInfoRequest(userId, data)
+        .then((res: any) => {
+          console.log(res);
+            setData(res);
+            setTimeout(fetchRoomInfo, 60000);
+        })
+        .catch((error) => {
+          console.error('Ошибка при получении информации о комнате', error);
+          setTimeout(fetchRoomInfo, 60000);
+        });
     };
-    getRoomInfoRequest(userId, data)
-      .then((res) => {
-        console.log(res);
-        setData(res);
-      })
-  }, [roomId, userId])
+
+    
+    roomId && fetchRoomInfo();
+
+    const timerId = setTimeout(fetchRoomInfo, 10000);
+    return () => {
+      clearTimeout(timerId);
+    }
+  }, [roomId]);
   // useEffect(() => {
   //   const fetchRoomInfo = async () => {
   //     roomId && getRoomInfoRequest(userId,roomId)

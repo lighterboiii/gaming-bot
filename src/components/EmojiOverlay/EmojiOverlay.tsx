@@ -15,14 +15,13 @@ interface IProps {
 
 const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [emojis, setEmojis] = useState<any>(null);
   const [name, setName] = useState<string>("");
 
   useEffect(() => {
     getActiveEmojiPack(userId)
       .then((res: any) => {
-        console.log(res);
         setName(res.user_emoji_pack.name);
         setEmojis(res.user_emoji_pack.user_emoji_pack);
       })

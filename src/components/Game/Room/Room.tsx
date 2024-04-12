@@ -32,15 +32,20 @@ console.log(room);
         console.error("Ошибка при присоединении к комнате:", error);
       });
   };
-  // const joinRoomRequest = (userIdValue: string, roomId: string) => {
+  // const joinRoomRequest = (userIdValue: string, data: any) => {
   //   return postReq({
-  //     uri: '/polling',
+  //     uri: 'polling?user_id=',
   //     userId: userIdValue,
-  //     endpoint: `${roomIdParamString}${roomId}&type=addplayer`,
+  //     data: data,
   //   })
   // };
   // const handleJoinRoom = () => {
-  //   joinRoomRequest(userId, room.room_id)
+  //   const data = {
+  //     user_id: userId,
+  //     room_id: room.room_id,
+  //     type: 'addplayer'
+  //   }
+  //   joinRoomRequest(userId, data)
   //     .then((res) => {
   //       console.log("Присоединение к комнате выполнено успешно:", res);
   //       navigate(`/room/${room.room_id}`);
