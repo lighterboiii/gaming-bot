@@ -130,7 +130,7 @@ const RockPaperScissors: FC = () => {
         }, 1000)
       }
     }
-  }, [data]);
+  }, [data, userId]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     console.log(value);
