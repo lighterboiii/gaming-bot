@@ -108,20 +108,28 @@ const RockPaperScissors: FC = () => {
             }
             const currentUser = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
             if (currentUser) {
-              if (Number(winData?.winner?.userid) === Number(userId)) {
+              console.log(currentUser);
+              if (Number(winData?.winner?.userid) === Number(currentUser?.userid)) {
                 setMessage('Вы победили');
-              } else if (Number(winData?.loser?.userid) === Number(userId)) {
+              } else if (Number(winData?.winner?.userid) !== Number(currentUser?.userid)) {
                 setMessage('Вы проиграли');
               }
             }
             setTimeout(() => {
               setChoice('');
               setMessage('');
+              const noneData = {
+                user_id: userId,
+                room_id: roomId,
+                type: 'setchoice',
+                choice: 'none'
+              };
+              getPollingRequest(userId, noneData)
             }, 2500)
           })
       }, 3000)
     }
-  }, [data])
+  }, [data]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     console.log(value);
