@@ -104,7 +104,7 @@ const RockPaperScissors: FC = () => {
       const bothPlayersMadeChoice = data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready');
       console.log(bothPlayersMadeChoice);
       if (bothPlayersMadeChoice) {
-        // setTimeout(() => {
+        setTimeout(() => {
         roomId && whoIsWinRequest(roomId)
           .then((winData: any) => {
             console.log(winData);
@@ -132,7 +132,7 @@ const RockPaperScissors: FC = () => {
               getPollingRequest(userId, noneData)
             }, 2500)
           })
-        // }, 3000)
+        }, 1000)
       }
     }
   }, [data]);
