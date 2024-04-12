@@ -31,7 +31,7 @@ const RockPaperScissors: FC = () => {
   const [timerStarted, setTimerStarted] = useState<boolean>(false);
   const [playerEmoji, setPlayerEmoji] = useState<string>('');
   const [secPlayerEmoji, setSecPlayerEmoji] = useState<string>('');
-console.log(data);
+  console.log(data);
   // const [player1, setPlayer1] = useState(null);
   // const [player2, setPlayer2] = useState(null);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
@@ -79,11 +79,17 @@ console.log(data);
         room_id: roomId,
         type: 'wait'
       };
-      roomId && getRoomInfoRequest(userId, data)
+      getRoomInfoRequest(userId, data)
         .then((res: any) => {
           console.log(res);
-            setData(res);
-            setTimeout(fetchRoomInfo, 60000);
+          setData(res);
+          if (res?.message === 'timeout') {
+            fetchRoomInfo();
+          }
+          if (res?.message === 'None') {
+            fetchRoomInfo();
+          }
+          setTimeout(fetchRoomInfo, 3000);
         })
         .catch((error) => {
           console.error('Ошибка при получении информации о комнате', error);
@@ -91,8 +97,8 @@ console.log(data);
         });
     };
 
-    
-    roomId && fetchRoomInfo();
+
+    fetchRoomInfo();
 
     const timerId = setTimeout(fetchRoomInfo, 10000);
     return () => {
@@ -118,7 +124,7 @@ console.log(data);
   //       });
   //   };
 
-    
+
   //   roomId && fetchRoomInfo();
 
   //   const timerId = setTimeout(fetchRoomInfo, 10000);
@@ -185,6 +191,7 @@ console.log(data);
   // }, [timerStarted, timer]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
+    console.log(value);
     const data = {
       user_id: userId,
       room_id: roomId,
@@ -194,28 +201,23 @@ console.log(data);
     setChoiceRequest(userId, data)
       .then((res: any) => {
         console.log(res);
-        // getRoomInfoRequest(roomId!)
-          // .then((res: any) => {
-        //     console.log(res)
-        //     setData(res);
-        //     if (res) {
+        setTimeout(() => {
+          whoIsWinRequest(roomId!)
+            .then((winData: any) => {
+              console.log(winData);
+              if (Number(winData?.winner?.userid) === Number(userId)) {
+                setMessage('Вы победили');
+              } else if ((Number(winData?.loser?.userid) === Number(userId))) {
+                setMessage('Вы проиграли');
+              } else if (winData?.winner === 'draw') {
+                setMessage('Ничья');
+              }
               setTimeout(() => {
-                whoIsWinRequest(roomId!)
-                  .then((winData: any) => {
-                    console.log(winData);
-                    if (Number(winData?.winner?.userid) === Number(userId)) {
-                      setMessage('Вы победили');
-                    } else if ((Number(winData?.loser?.userid) === Number(userId))) {
-                      setMessage('Вы проиграли');
-                    } else if (winData?.winner === 'draw') {
-                      setMessage('Ничья');
-                    }
-                    setTimeout(() => {
-                      setChoice('');
-                      setMessage('');
-                    }, 2000)
-                  })
-              }, 3000)
+                setChoice('');
+                setMessage('');
+              }, 2000)
+            })
+        }, 3000)
         //     }
         //   })
       })
@@ -279,7 +281,7 @@ console.log(data);
               <div className={styles.game__player} key={player?.userid}>
                 <p className={styles.game__playerName}>{player?.publicname}</p>
                 <UserAvatar item={player} avatar={player?.avatar} key={player?.userId} />
-                {player && player?.choice === 'ready' && (
+                {player?.choice === 'ready' && (
                   <img
                     src={readyIcon}
                     alt="ready icon"
@@ -308,7 +310,7 @@ console.log(data);
             <div className={styles.game__hands}>
               {(
                 data?.players_count === "2" &&
-                data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready' )
+                data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready')
               ) ? (
                 <HandShake prevChoices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} />
               ) : (

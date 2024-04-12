@@ -66,8 +66,8 @@ export const leaveRoomRequest = (userIdValue: string) => {
 // };
 export const setChoiceRequest = (userIdValue: string, data: any) => {
   return postReq({
-    uri: 'polling?user_id=',
-    userId: userIdValue,
+    uri: 'polling',
+    // userId: userIdValue,
     data: data
   })
 };
