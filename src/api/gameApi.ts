@@ -71,11 +71,18 @@ export const setChoiceRequest = (userIdValue: string, data: any) => {
   })
 };
 // запрос на отправку эмодзи 
-export const setEmojiRequest = (userIdValue: string, roomId: string, emoji: string) => {
-  return putReq({
-    uri: setEmojiUri,
+// export const setEmojiRequest = (userIdValue: string, roomId: string, emoji: string) => {
+//   return putReq({
+//     uri: setEmojiUri,
+//     userId: userIdValue,
+//     endpoint: `${roomIdParamString}${roomId}${emojiIdParamString}${emoji}`,
+//   })
+// };
+export const setEmojiRequest = (userIdValue: string, data: any) => {
+  return postReq({
+    uri: 'polling?user_id=',
     userId: userIdValue,
-    endpoint: `${roomIdParamString}${roomId}${emojiIdParamString}${emoji}`,
+    data: data
   })
 };
 // запрос на отправку определения победителя

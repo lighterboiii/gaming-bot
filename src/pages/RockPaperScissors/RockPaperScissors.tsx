@@ -216,18 +216,24 @@ console.log(data);
   };
   // хендлер отпрвки эмодзи
   const handleEmojiSelect = (emoji: string) => {
-    setEmojiRequest(userId, roomId!, emoji)
+    const data = {
+      user_id: userId,
+      room_id: roomId,
+      type: 'setemoji',
+      choice: emoji
+    }
+    setEmojiRequest(userId, data)
       .then((res: any) => {
         console.log(res);
-        if (res?.message === 'success') {
-          setShowEmojiOverlay(false);
-          setEmojiVisible(true);
-          if (Number(res?.player_id) === Number(data?.creator_id)) {
-            setPlayerEmoji(res?.emoji);
-          } else if (Number(res?.player_id) === Number(data?.players[1]?.userid)) {
-            setSecPlayerEmoji(res?.emoji);
-          }
-        }
+        // if (res?.message === 'success') {
+        //   setShowEmojiOverlay(false);
+        //   setEmojiVisible(true);
+        //   if (Number(res?.player_id) === Number(data?.creator_id)) {
+        //     setPlayerEmoji(res?.emoji);
+        //   } else if (Number(res?.player_id) === Number(data?.players[1]?.userid)) {
+        //     setSecPlayerEmoji(res?.emoji);
+        //   }
+        // }
       })
       .catch((error) => {
         console.log(error);
