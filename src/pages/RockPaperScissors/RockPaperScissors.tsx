@@ -61,6 +61,9 @@ const RockPaperScissors: FC = () => {
   };
   useEffect(() => {
     const fetchRoomInfo = async () => {
+      if (!roomId) {
+        return;
+      }
       const data = {
         user_id: userId,
         room_id: roomId,
@@ -83,12 +86,7 @@ const RockPaperScissors: FC = () => {
 
 
     fetchRoomInfo();
-
-    const timerId = setTimeout(fetchRoomInfo, 1000);
-    return () => {
-      clearTimeout(timerId);
-    }
-  }, []);
+  }, [roomId]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     console.log(value);
