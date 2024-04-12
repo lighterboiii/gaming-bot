@@ -119,20 +119,22 @@ const RockPaperScissors: FC = () => {
     };
     getPollingRequest(userId, reqData)
       .then((res: any) => {
-        if (res?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-          whoIsWinRequest(roomId!)
-          .then((res: any) => {
-            res?.message !== 'player_not_ready' && 
-            setWin(res);
-            setFirstAnim(win?.f_anim);
-            setSecondAnim(win?.s_anim);
-          })
-        }
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
+  useEffect(() => {
+    if (data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+      whoIsWinRequest(roomId!)
+      .then((res: any) => {
+        res?.message !== 'player_not_ready' && 
+        setWin(res);
+        setFirstAnim(win?.f_anim);
+        setSecondAnim(win?.s_anim);
+      })
+    }
+  }, [data])
   // useEffect(() => {
   //   setFirstAnim(win?.f_anim);
   //   setSecondAnim(win?.s_anim);
