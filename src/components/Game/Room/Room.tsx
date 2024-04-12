@@ -19,7 +19,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
 console.log(room);
   const handleJoinRoom = () => {
@@ -32,29 +32,6 @@ console.log(room);
         console.error("Ошибка при присоединении к комнате:", error);
       });
   };
-  // const joinRoomRequest = (userIdValue: string, data: any) => {
-  //   return postReq({
-  //     uri: 'polling?user_id=',
-  //     userId: userIdValue,
-  //     data: data,
-  //   })
-  // };
-  // const handleJoinRoom = () => {
-  //   const data = {
-  //     user_id: userId,
-  //     room_id: room.room_id,
-  //     type: 'addplayer'
-  //   }
-  //   joinRoomRequest(userId, data)
-  //     .then((res) => {
-  //       console.log("Присоединение к комнате выполнено успешно:", res);
-  //       navigate(`/room/${room.room_id}`);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Ошибка при присоединении к комнате:", error);
-  //     });
-  // };
-
   return (
     <div className={styles.room} onClick={handleJoinRoom} key={room?.id}>
       <div className={styles.room__game}>
