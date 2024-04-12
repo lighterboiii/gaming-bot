@@ -113,17 +113,17 @@ const RockPaperScissors: FC = () => {
     getRoomInfoRequest(userId, reqData)
       .then((res: any) => {
         console.log(res);
-        const bothPlayersMadeChoice = data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready');
+        const bothPlayersMadeChoice = res?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready');
         console.log(bothPlayersMadeChoice);
         if (bothPlayersMadeChoice) {
           setTimeout(() => {
-            whoIsWinRequest(roomId!)
+            roomId && whoIsWinRequest(roomId)
               .then((winData: any) => {
                 console.log(winData);
                 if (winData?.winner === 'draw') {
                   setMessage('Ничья');
                 } else {
-                  const currentUser = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
+                  const currentUser = res?.players?.find((player: any) => Number(player?.userid) === Number(userId));
                   if (currentUser) {
                     if (Number(winData?.winner?.userid) === Number(userId)) {
                       setMessage('Вы победили');
@@ -224,10 +224,7 @@ const RockPaperScissors: FC = () => {
                 <p className={styles.game__notify}>Ожидание игроков...</p>
               ) : (
                 <p className={styles.game__resultMessage}>
-                  {
-                    timerStarted && timer > 0 ?
-                      timer : message
-                  }
+                  {message}
                 </p>
               )}
             </div>
