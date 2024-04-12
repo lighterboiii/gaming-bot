@@ -19,7 +19,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,9 +28,6 @@ const RockPaperScissors: FC = () => {
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState<boolean>(false);
-  const [playerEmoji, setPlayerEmoji] = useState<string>('');
-  const [secPlayerEmoji, setSecPlayerEmoji] = useState<string>('');
-  console.log(data);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -89,6 +86,14 @@ const RockPaperScissors: FC = () => {
       isMounted = false;
     };
   }, [roomId]);
+  // показать/скрыть лоадер
+  useEffect(() => {
+    if (data) {
+      setLoading(false);
+    } else if (data) {
+      setLoading(true);
+    }
+  }, [data])
   // проверка на выбор обоих игроков перед отправкой запроса на результат игры
   useEffect(() => {
     const bothPlayersMadeChoice = data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready');
@@ -100,14 +105,13 @@ const RockPaperScissors: FC = () => {
             console.log(winData);
             if (winData?.winner === 'draw') {
               setMessage('Ничья');
-            } else {
-              const currentUser = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
-              if (currentUser) {
-                if (Number(winData?.winner?.userid) === Number(userId)) {
-                  setMessage('Вы победили');
-                } else if (Number(winData?.loser?.userid) === Number(userId)) {
-                  setMessage('Вы проиграли');
-                }
+            }
+            const currentUser = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
+            if (currentUser) {
+              if (Number(winData?.winner?.userid) === Number(userId)) {
+                setMessage('Вы победили');
+              } else if (Number(winData?.loser?.userid) === Number(userId)) {
+                setMessage('Вы проиграли');
               }
             }
             setTimeout(() => {
