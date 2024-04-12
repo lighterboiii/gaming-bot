@@ -30,6 +30,7 @@ const RockPaperScissors: FC = () => {
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [leftRockImage, setLeftRockImage] = useState<string>('');
   const [rightRockImage, setRightRockImage] = useState<string>('');
+  const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -131,9 +132,38 @@ const RockPaperScissors: FC = () => {
             firstAnim: res?.f_anim,
             secondAnim: res?.s_anim
           })
+          const animationTime = 3000;
+  
+          setTimeout(() => {
+            if (Number(res?.winner?.userid) === Number(userId)) {
+              setMessage("Вы победили")
+            } else if (Number(res?.loser?.userid) === Number(userId)) {
+              setMessage("Вы проиграли")
+            } else if (res?.winner === 'draw') {
+              setMessage("Ничья")
+            }
+            setMessageVisible(true);
+
+            setTimeout(() => {
+              const data = {
+                user_id: userId,
+                room_id: roomId,
+                type: 'setchoice',
+                choice: 'none'
+              };
+              getPollingRequest(userId, data)
+                .then(data => {
+                  console.log(data);
+                })
+              setMessageVisible(false);
+              setMessage('');
+              setChoice('');
+            }, 2000);
+  
+          }, animationTime);
         })
     }
-  }, [data])
+  }, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
     const data = {
@@ -204,19 +234,18 @@ const RockPaperScissors: FC = () => {
               data?.players?.every((player: any) => player?.choice === 'ready') &&
               <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
             }
+            {messageVisible && (
+              <p className={styles.game__resultMessage}>
+                {message}
+              </p>
+            )}
             <div className={styles.game__hands}>
               {(
                 data?.players_count === "2"
               ) ? (
                 <HandShake prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }} />
               ) : (
-                data?.players_count === "1"
-              ) ? (
                 <p className={styles.game__notify}>Ожидание игроков...</p>
-              ) : (
-                <p className={styles.game__resultMessage}>
-                  {message}
-                </p>
               )}
             </div>
             <div className={styles.game__lowerContainer}>
