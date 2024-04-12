@@ -69,10 +69,14 @@ const RockPaperScissors: FC = () => {
             navigate(-1);
           }
 
+          if (res?.message === 'timeout') {
+            fetchRoomInfo();
+          }
+
           if (isMounted) {
             fetchRoomInfo();
           }
-          setTimeout(fetchRoomInfo, 10000)
+          // setTimeout(fetchRoomInfo, 10000)
         })
         .catch((error) => {
           console.error('Ошибка при получении информации о комнате', error);
