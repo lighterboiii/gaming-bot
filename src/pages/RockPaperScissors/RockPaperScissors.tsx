@@ -98,7 +98,7 @@ console.log(data);
     return () => {
       clearTimeout(timerId);
     }
-  }, [roomId]);
+  }, [roomId, userId]);
   // useEffect(() => {
   //   const fetchRoomInfo = async () => {
   //     roomId && getRoomInfoRequest(userId,roomId)
