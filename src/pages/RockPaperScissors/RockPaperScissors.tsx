@@ -20,7 +20,8 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  console.log(roomId);
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -32,8 +33,6 @@ const RockPaperScissors: FC = () => {
   const [playerEmoji, setPlayerEmoji] = useState<string>('');
   const [secPlayerEmoji, setSecPlayerEmoji] = useState<string>('');
   console.log(data);
-  // const [player1, setPlayer1] = useState(null);
-  // const [player2, setPlayer2] = useState(null);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -85,11 +84,11 @@ const RockPaperScissors: FC = () => {
 
     fetchRoomInfo();
 
-    const timerId = setTimeout(fetchRoomInfo, 10000);
+    const timerId = setTimeout(fetchRoomInfo, 1000);
     return () => {
       clearTimeout(timerId);
     }
-  }, [roomId, userId]);
+  }, []);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     console.log(value);
@@ -103,25 +102,23 @@ const RockPaperScissors: FC = () => {
       .then((res: any) => {
         console.log(res);
         
-        setTimeout(() => {
-          whoIsWinRequest(roomId!)
-            .then((winData: any) => {
-              console.log(winData);
-              if (Number(winData?.winner?.userid) === Number(userId)) {
-                setMessage('Вы победили');
-              } else if ((Number(winData?.loser?.userid) === Number(userId))) {
-                setMessage('Вы проиграли');
-              } else if (winData?.winner === 'draw') {
-                setMessage('Ничья');
-              }
-              setTimeout(() => {
-                setChoice('');
-                setMessage('');
-              }, 2000)
-            })
-        }, 3000)
-        //     }
-        //   })
+        // setTimeout(() => {
+        //   whoIsWinRequest(roomId!)
+        //     .then((winData: any) => {
+        //       console.log(winData);
+        //       if (Number(winData?.winner?.userid) === Number(userId)) {
+        //         setMessage('Вы победили');
+        //       } else if ((Number(winData?.loser?.userid) === Number(userId))) {
+        //         setMessage('Вы проиграли');
+        //       } else if (winData?.winner === 'draw') {
+        //         setMessage('Ничья');
+        //       }
+        //       setTimeout(() => {
+        //         setChoice('');
+        //         setMessage('');
+        //       }, 2000)
+        //     })
+        // }, 3000)
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
