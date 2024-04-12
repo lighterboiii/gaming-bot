@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getReq, postReq, putReq } from "./api";
 import {
   addPlayerUri,
@@ -34,12 +35,12 @@ export const postNewRoomRequest = (data: any, userIdValue: string) => {
   });
 };
 // получить инфо о комнате по айди
-export const getRoomInfoRequest = (roomId: string) => {
-  return getReq({
-    uri: getCurrentRoomInfo,
-    userId: roomId,
-  })
-};
+// export const getRoomInfoRequest = (roomId: string) => {
+//   return getReq({
+//     uri: getCurrentRoomInfo,
+//     userId: roomId,
+//   })
+// };
 // запрос на подключение к комнатеъ
 export const joinRoomRequest = (userIdValue: string, roomId: string) => {
   return putReq({
@@ -56,21 +57,21 @@ export const leaveRoomRequest = (userIdValue: string) => {
   })
 };
 // запрос на отправку выбора 
-export const setChoiceRequest = (userIdValue: string, roomId: string, choice: string) => {
-  return putReq({
-    uri: setUserChoiceUri,
-    userId: userIdValue,
-    endpoint: `${roomIdParamString}${roomId}${playerChoiceParamString}${choice}`,
-  })
-};
+// export const setChoiceRequest = (userIdValue: string, roomId: string, choice: string) => {
+//   return putReq({
+//     uri: setUserChoiceUri,
+//     userId: userIdValue,
+//     endpoint: `${roomIdParamString}${roomId}${playerChoiceParamString}${choice}`,
+//   })
+// };
 // запрос на отправку эмодзи 
-export const setEmojiRequest = (userIdValue: string, roomId: string, emoji: string) => {
-  return putReq({
-    uri: setEmojiUri,
-    userId: userIdValue,
-    endpoint: `${roomIdParamString}${roomId}${emojiIdParamString}${emoji}`,
-  })
-};
+// export const setEmojiRequest = (userIdValue: string, roomId: string, emoji: string) => {
+//   return putReq({
+//     uri: setEmojiUri,
+//     userId: userIdValue,
+//     endpoint: `${roomIdParamString}${roomId}${emojiIdParamString}${emoji}`,
+//   })
+// };
 // запрос на отправку определения победителя
 export const whoIsWinRequest = (roomId: string) => {
   return getReq({
@@ -78,10 +79,19 @@ export const whoIsWinRequest = (roomId: string) => {
     endpoint: `${roomIdParamString}${roomId}`,
   })
 };
-
+// получить активный пак эмодзи пользователя
 export const getEmojiRequest = (packId: string, emojiId: string) => {
   return getReq({
     uri: 'getemojiphoto',
     endpoint: `&pack_id=${packId}&emotion_id=${emojiId}`,
+  })
+};
+
+// запрос на получение данных внутри игры 
+export const getPollingRequest = (userIdValue: string, data: any) => {
+  return postReq({
+    uri: 'polling?user_id=',
+    userId: userIdValue,
+    data: data,
   })
 };

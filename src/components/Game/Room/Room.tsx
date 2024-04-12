@@ -19,9 +19,8 @@ interface IProps {
 const Room: FC<IProps> = ({ room }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
-console.log(room);
   const handleJoinRoom = () => {
     joinRoomRequest(userId, room.room_id)
       .then((res) => {

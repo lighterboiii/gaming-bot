@@ -2,11 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getRoomInfoRequest, leaveRoomRequest, setChoiceRequest, setEmojiRequest, whoIsWinRequest } from "../../api/gameApi";
+import { getPollingRequest, leaveRoomRequest, whoIsWinRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useTelegram from "../../hooks/useTelegram";
-import { roomIdParamString, userId } from "../../api/requestData";
+import { userId } from "../../api/requestData";
 import styles from "./RockPaperScissors.module.scss";
 import newVS from '../../images/rock-paper-scissors/VS_new.png';
 import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
@@ -14,14 +14,12 @@ import HandShake from '../../components/Game/HandShake/HandShake';
 import ChoiceBox from "../../components/Game/ChoiceBox/ChoiceBox";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
-import { postReq } from "../../api/api";
 
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  console.log(roomId);
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -52,13 +50,6 @@ const RockPaperScissors: FC = () => {
     }
   }, [tg, navigate]);
   // long polling
-  const getRoomInfoRequest = (userIdValue: string, data: any) => {
-    return postReq({
-      uri: 'polling?user_id=',
-      userId: userIdValue,
-      data: data,
-    })
-  };
   useEffect(() => {
     let isMounted = true;
 
@@ -71,17 +62,15 @@ const RockPaperScissors: FC = () => {
         room_id: roomId,
         type: 'wait'
       };
-      getRoomInfoRequest(userId, data)
+      getPollingRequest(userId, data)
         .then((res: any) => {
           console.log(res);
-
+          setData(res);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
             navigate(-1);
           }
-
-          setData(res);
 
           if (isMounted) {
             fetchRoomInfo();
@@ -99,8 +88,36 @@ const RockPaperScissors: FC = () => {
     return () => {
       isMounted = false;
     };
-  }, []);
-  console.log(message);
+  }, [roomId]);
+  // проверка на выбор обоих игроков перед отправкой запроса на результат игры
+  useEffect(() => {
+    const bothPlayersMadeChoice = data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready');
+    console.log(bothPlayersMadeChoice);
+    if (bothPlayersMadeChoice) {
+      setTimeout(() => {
+        roomId && whoIsWinRequest(roomId)
+          .then((winData: any) => {
+            console.log(winData);
+            if (winData?.winner === 'draw') {
+              setMessage('Ничья');
+            } else {
+              const currentUser = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
+              if (currentUser) {
+                if (Number(winData?.winner?.userid) === Number(userId)) {
+                  setMessage('Вы победили');
+                } else if (Number(winData?.loser?.userid) === Number(userId)) {
+                  setMessage('Вы проиграли');
+                }
+              }
+            }
+            setTimeout(() => {
+              setChoice('');
+              setMessage('');
+            }, 2500)
+          })
+      }, 3000)
+    }
+  }, [data])
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     console.log(value);
@@ -110,35 +127,9 @@ const RockPaperScissors: FC = () => {
       type: 'setchoice',
       choice: value
     };
-    getRoomInfoRequest(userId, reqData)
+    getPollingRequest(userId, reqData)
       .then((res: any) => {
         console.log(res);
-        const bothPlayersMadeChoice = res?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready');
-        console.log(bothPlayersMadeChoice);
-        if (bothPlayersMadeChoice) {
-          setTimeout(() => {
-            roomId && whoIsWinRequest(roomId)
-              .then((winData: any) => {
-                console.log(winData);
-                if (winData?.winner === 'draw') {
-                  setMessage('Ничья');
-                } else {
-                  const currentUser = res?.players?.find((player: any) => Number(player?.userid) === Number(userId));
-                  if (currentUser) {
-                    if (Number(winData?.winner?.userid) === Number(userId)) {
-                      setMessage('Вы победили');
-                    } else if (Number(winData?.loser?.userid) === Number(userId)) {
-                      setMessage('Вы проиграли');
-                    }
-                  }
-                }
-                setTimeout(() => {
-                  setChoice('');
-                  setMessage('');
-                }, 2000)
-              })
-          }, 3000)
-        }
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
@@ -152,7 +143,7 @@ const RockPaperScissors: FC = () => {
       type: 'setchoice',
       choice: 'ready'
     };
-    getRoomInfoRequest(userId, data)
+    getPollingRequest(userId, data)
       .then((data: any) => {
         console.log(data);
       })
@@ -163,11 +154,13 @@ const RockPaperScissors: FC = () => {
       user_id: userId,
       room_id: roomId,
       type: 'setemoji',
-      choice: emoji
+      emoji: emoji
     }
-    getRoomInfoRequest(userId, data)
+    getPollingRequest(userId, data)
       .then((res: any) => {
         console.log(res);
+        setEmojiVisible(true);
+        setData(res);
       })
       .catch((error) => {
         console.log(error);
@@ -193,9 +186,9 @@ const RockPaperScissors: FC = () => {
                     className={styles.game__readyIcon}
                   />
                 )}
-                {emojiVisible && (
+                {emojiVisible && player?.emoji !== 'none' && (
                   <img
-                    src={player?.userid === Number(data?.players[0]?.userid) ? playerEmoji : secPlayerEmoji}
+                    src={player?.emoji}
                     alt="player emoji"
                     className={
                       player?.userid === Number(data?.players[0]?.userid) ?
