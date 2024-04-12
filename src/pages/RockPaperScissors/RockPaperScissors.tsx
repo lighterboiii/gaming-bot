@@ -21,7 +21,7 @@ const RockPaperScissors: FC = () => {
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
   console.log(roomId);
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -76,7 +76,7 @@ const RockPaperScissors: FC = () => {
           console.log(res);
           setData(res);
 
-          if (res?.message === 'timeout' && isMounted) {
+          if (isMounted) {
             fetchRoomInfo();
           }
           setTimeout(fetchRoomInfo, 10000)
@@ -92,7 +92,7 @@ const RockPaperScissors: FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [roomId]);
+  }, []);
 
   // хендлер выбора хода
   const handleChoice = (value: string) => {
@@ -107,23 +107,23 @@ const RockPaperScissors: FC = () => {
       .then((res: any) => {
         console.log(res);
 
-        // setTimeout(() => {
-        //   whoIsWinRequest(roomId!)
-        //     .then((winData: any) => {
-        //       console.log(winData);
-        //       if (Number(winData?.winner?.userid) === Number(userId)) {
-        //         setMessage('Вы победили');
-        //       } else if ((Number(winData?.loser?.userid) === Number(userId))) {
-        //         setMessage('Вы проиграли');
-        //       } else if (winData?.winner === 'draw') {
-        //         setMessage('Ничья');
-        //       }
-        //       setTimeout(() => {
-        //         setChoice('');
-        //         setMessage('');
-        //       }, 2000)
-        //     })
-        // }, 3000)
+        setTimeout(() => {
+          whoIsWinRequest(roomId!)
+            .then((winData: any) => {
+              console.log(winData);
+              if (Number(winData?.winner?.userid) === Number(userId)) {
+                setMessage('Вы победили');
+              } else if ((Number(winData?.loser?.userid) === Number(userId))) {
+                setMessage('Вы проиграли');
+              } else if (winData?.winner === 'draw') {
+                setMessage('Ничья');
+              }
+              setTimeout(() => {
+                setChoice('');
+                setMessage('');
+              }, 2000)
+            })
+        }, 3000)
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
