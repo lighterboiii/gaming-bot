@@ -14,20 +14,30 @@ import HandShake from '../../components/Game/HandShake/HandShake';
 import ChoiceBox from "../../components/Game/ChoiceBox/ChoiceBox";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
+import leftRock from '../../images/rock-paper-scissors/left_rock.png';
+import rightRock from '../../images/rock-paper-scissors/right_rock.png';
 
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [emojiVisible, setEmojiVisible] = useState<boolean>(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
-  const [timer, setTimer] = useState<number>(15);
-  const [timerStarted, setTimerStarted] = useState<boolean>(false);
+  const [firstAnim, setFirstAnim] = useState<string>('');
+  const [secondAnim, setSecondAnim] = useState<string>('');
+  const [leftRockImage, setLeftRockImage] = useState<string>(''); 
+  const [rightRockImage, setRightRockImage] = useState<string>('');
+  useEffect(() => {
+    setLeftRockImage(leftRock);
+    setRightRockImage(rightRock);
+  }, []);
+  const [win, setWin] = useState<any>(null);
+
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -89,7 +99,7 @@ const RockPaperScissors: FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [roomId]);
+  }, []);
   // показать/скрыть лоадер
   useEffect(() => {
     if (data) {
@@ -98,39 +108,6 @@ const RockPaperScissors: FC = () => {
       setLoading(true);
     }
   }, [data])
-  // проверка на выбор обоих игроков перед отправкой запроса на результат игры
-  useEffect(() => {
-    if (data) {
-      const bothPlayersMadeChoice = data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready');
-      console.log(bothPlayersMadeChoice);
-      if (bothPlayersMadeChoice) {
-        setTimeout(() => {
-        roomId && whoIsWinRequest(roomId)
-          .then((winData: any) => {
-            console.log(winData);
-              if (Number(winData?.winner?.userid) === Number(userId)) {
-                setMessage('Вы победили');
-              } else if (Number(winData?.loser?.userid) === Number(userId)) {
-                setMessage('Вы проиграли');
-              } else if (winData?.winner === 'draw') {
-                setMessage('Ничья');
-              }
-            setTimeout(() => {
-              setChoice('');
-              setMessage('');
-              const noneData = {
-                user_id: userId,
-                room_id: roomId,
-                type: 'setchoice',
-                choice: 'none'
-              };
-              getPollingRequest(userId, noneData)
-            }, 2500)
-          })
-        }, 1000)
-      }
-    }
-  }, [data, userId]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     console.log(value);
@@ -142,12 +119,24 @@ const RockPaperScissors: FC = () => {
     };
     getPollingRequest(userId, reqData)
       .then((res: any) => {
-        console.log(res);
+        if (res?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+          whoIsWinRequest(roomId!)
+          .then((res: any) => {
+            res?.message !== 'player_not_ready' && 
+            setWin(res);
+            setFirstAnim(win?.f_anim);
+            setSecondAnim(win?.s_anim);
+          })
+        }
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
+  // useEffect(() => {
+  //   setFirstAnim(win?.f_anim);
+  //   setSecondAnim(win?.s_anim);
+  // }, [win])
   // хендлер готовности игрока
   const handleReady = () => {
     const data = {
@@ -220,10 +209,9 @@ const RockPaperScissors: FC = () => {
             }
             <div className={styles.game__hands}>
               {(
-                data?.players_count === "2" &&
-                data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready')
+                data?.players_count === "2"
               ) ? (
-                <HandShake prevChoices={{ player1: data?.players[0]?.choice, player2: data?.players[1]?.choice }} />
+                <HandShake prevChoices={{ player1: firstAnim || leftRockImage, player2: secondAnim || rightRockImage }} />
               ) : (
                 data?.players_count === "1"
               ) ? (
