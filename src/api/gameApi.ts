@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getReq, postReq, putReq } from "./api";
 import {
   addPlayerUri,
