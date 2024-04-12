@@ -28,15 +28,13 @@ const RockPaperScissors: FC = () => {
   const [message, setMessage] = useState<string>('');
   const [emojiVisible, setEmojiVisible] = useState<boolean>(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
-  const [firstAnim, setFirstAnim] = useState<string>('');
-  const [secondAnim, setSecondAnim] = useState<string>('');
-  const [leftRockImage, setLeftRockImage] = useState<string>(''); 
+  const [leftRockImage, setLeftRockImage] = useState<string>('');
   const [rightRockImage, setRightRockImage] = useState<string>('');
+  const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
   useEffect(() => {
     setLeftRockImage(leftRock);
     setRightRockImage(rightRock);
   }, []);
-  const [win, setWin] = useState<any>(null);
 
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
@@ -127,18 +125,15 @@ const RockPaperScissors: FC = () => {
   useEffect(() => {
     if (data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready')) {
       whoIsWinRequest(roomId!)
-      .then((res: any) => {
-        res?.message !== 'player_not_ready' && 
-        setWin(res);
-        setFirstAnim(win?.f_anim);
-        setSecondAnim(win?.s_anim);
-      })
+        .then((res: any) => {
+          console.log(res);
+          setPlayersAnim({
+            firstAnim: res?.f_anim,
+            secondAnim: res?.s_anim
+          })
+        })
     }
   }, [data])
-  // useEffect(() => {
-  //   setFirstAnim(win?.f_anim);
-  //   setSecondAnim(win?.s_anim);
-  // }, [win])
   // хендлер готовности игрока
   const handleReady = () => {
     const data = {
@@ -213,7 +208,7 @@ const RockPaperScissors: FC = () => {
               {(
                 data?.players_count === "2"
               ) ? (
-                <HandShake prevChoices={{ player1: firstAnim || leftRockImage, player2: secondAnim || rightRockImage }} />
+                <HandShake prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }} />
               ) : (
                 data?.players_count === "1"
               ) ? (
