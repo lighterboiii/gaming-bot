@@ -96,10 +96,11 @@ const RockPaperScissors: FC = () => {
   }, [data])
   // проверка на выбор обоих игроков перед отправкой запроса на результат игры
   useEffect(() => {
-    const bothPlayersMadeChoice = data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready');
-    console.log(bothPlayersMadeChoice);
-    if (bothPlayersMadeChoice) {
-      setTimeout(() => {
+    if (data) {
+      const bothPlayersMadeChoice = data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready');
+      console.log(bothPlayersMadeChoice);
+      if (bothPlayersMadeChoice) {
+        // setTimeout(() => {
         roomId && whoIsWinRequest(roomId)
           .then((winData: any) => {
             console.log(winData);
@@ -111,7 +112,7 @@ const RockPaperScissors: FC = () => {
               console.log(currentUser);
               if (Number(winData?.winner?.userid) === Number(currentUser?.userid)) {
                 setMessage('Вы победили');
-              } else if (Number(winData?.winner?.userid) === Number(currentUser?.userid)) {
+              } else if (Number(winData?.loser?.userid) === Number(currentUser?.userid)) {
                 setMessage('Вы проиграли');
               }
             }
@@ -127,7 +128,8 @@ const RockPaperScissors: FC = () => {
               getPollingRequest(userId, noneData)
             }, 2500)
           })
-      }, 3000)
+        // }, 3000)
+      }
     }
   }, [data]);
   // хендлер выбора хода
