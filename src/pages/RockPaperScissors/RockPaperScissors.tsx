@@ -108,18 +108,13 @@ const RockPaperScissors: FC = () => {
         roomId && whoIsWinRequest(roomId)
           .then((winData: any) => {
             console.log(winData);
-            if (winData?.winner === 'draw') {
-              setMessage('Ничья');
-            }
-            const currentUser = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
-            if (currentUser) {
-              console.log(currentUser);
-              if (Number(winData?.winner?.userid) === Number(currentUser?.userid)) {
+              if (Number(winData?.winner?.userid) === Number(userId)) {
                 setMessage('Вы победили');
-              } else if (Number(winData?.loser?.userid) === Number(currentUser?.userid)) {
+              } else if (Number(winData?.loser?.userid) === Number(userId)) {
                 setMessage('Вы проиграли');
+              } else if (winData?.winner === 'draw') {
+                setMessage('Ничья');
               }
-            }
             setTimeout(() => {
               setChoice('');
               setMessage('');
