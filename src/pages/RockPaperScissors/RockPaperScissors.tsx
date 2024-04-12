@@ -74,10 +74,7 @@ const RockPaperScissors: FC = () => {
           if (res?.message === 'timeout') {
             fetchRoomInfo();
           }
-          if (res?.message === 'None') {
-            navigate(-1);
-          }
-          setTimeout(fetchRoomInfo, 30000);
+          setTimeout(fetchRoomInfo, 10000);
         })
         .catch((error) => {
           console.error('Ошибка при получении информации о комнате', error);
@@ -93,90 +90,6 @@ const RockPaperScissors: FC = () => {
       clearTimeout(timerId);
     }
   }, [roomId, userId]);
-  // useEffect(() => {
-  //   const fetchRoomInfo = async () => {
-  //     roomId && getRoomInfoRequest(userId,roomId)
-  //       .then((res: any) => {
-  //         console.log(res);
-  //         if (res?.status !== 'no_update') {
-  //           setData(res);
-  //           setTimeout(fetchRoomInfo, 60000);
-  //         } else if ( res?.status === 'no_update') {
-  //           // setTimeout(fetchRoomInfo, 60000);
-  //           fetchRoomInfo();
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error('Ошибка при получении информации о комнате', error);
-  //         setTimeout(fetchRoomInfo, 60000);
-  //       });
-  //   };
-
-
-  //   roomId && fetchRoomInfo();
-
-  //   const timerId = setTimeout(fetchRoomInfo, 10000);
-  //   return () => {
-  //     clearTimeout(timerId);
-  //   }
-  // }, [roomId]);
-  // подгрузка при монтировании компонента ??
-  // useEffect(() => {
-  //   // setLoading(true);
-  //   roomId && getRoomInfoRequest(roomId)
-  //     .then((res) => {
-  //       setData(res);
-  //       // setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Ошибка при получении информации о комнате', error);
-  //     });
-  // }, [])
-  // // Функция для запуска таймера
-  // const startTimer = () => {
-  //   setTimerStarted(true);
-  //   setTimer(15);
-  // };
-
-  // // Функция для остановки таймера
-  // const stopTimer = () => {
-  //   setTimerStarted(false);
-  //   setTimer(15);
-  // };
-  // установка таймера
-  // useEffect(() => {
-  //   if (data && data?.players_count !== '2') {
-  //     stopTimer();
-  //   }
-  //   if (data?.players?.every((player: any) => player.choice === 'ready')) {
-  //     stopTimer();
-  //   }
-  //   if  (data && data?.players_count === '2') {
-  //     startTimer();
-  //   }
-  // }, [data]);
-  // установка таймера
-  // useEffect(() => {
-  //   if (timerStarted && timer > 0) {
-  //     const ticker = setInterval(() => {
-  //       setTimer(prevTimer => prevTimer - 1);
-  //     }, 1000);
-  //     return () => clearInterval(ticker);
-  //   } else if (timer === 0) {
-  //     const hasPlayerWithChoiceNone = data?.players.some((player: any) => player.choice === 'none');
-  //     if (hasPlayerWithChoiceNone) {
-  //       leaveRoomRequest(userId)
-  //         .then((data) => {
-  //           console.log(data);
-  //           navigate(-1);
-  //         })
-  //         .catch((error) => {
-  //           console.error(error);
-  //         });
-  //     }
-  //     startTimer();
-  //   }
-  // }, [timerStarted, timer]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     console.log(value);
@@ -186,9 +99,10 @@ const RockPaperScissors: FC = () => {
       type: 'setchoice',
       choice: value
     };
-    setChoiceRequest(userId, data)
+    getRoomInfoRequest(userId, data)
       .then((res: any) => {
         console.log(res);
+        
         setTimeout(() => {
           whoIsWinRequest(roomId!)
             .then((winData: any) => {
@@ -221,14 +135,9 @@ const RockPaperScissors: FC = () => {
       type: 'setchoice',
       choice: 'ready'
     };
-    setChoiceRequest(userId, data)
+    getRoomInfoRequest(userId, data)
       .then((data: any) => {
         console.log(data);
-        // getRoomInfoRequest(roomId!)
-        // .then((res: any) => {
-        //   console.log(res)
-        //   setData(res);
-        // })
       })
   };
   // хендлер отпрвки эмодзи
@@ -239,18 +148,9 @@ const RockPaperScissors: FC = () => {
       type: 'setemoji',
       choice: emoji
     }
-    setEmojiRequest(userId, data)
+    getRoomInfoRequest(userId, data)
       .then((res: any) => {
         console.log(res);
-        // if (res?.message === 'success') {
-        //   setShowEmojiOverlay(false);
-        //   setEmojiVisible(true);
-        //   if (Number(res?.player_id) === Number(data?.creator_id)) {
-        //     setPlayerEmoji(res?.emoji);
-        //   } else if (Number(res?.player_id) === Number(data?.players[1]?.userid)) {
-        //     setSecPlayerEmoji(res?.emoji);
-        //   }
-        // }
       })
       .catch((error) => {
         console.log(error);

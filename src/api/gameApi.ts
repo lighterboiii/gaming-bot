@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getReq, postReq, putReq } from "./api";
 import {
   addPlayerUri,
@@ -57,33 +56,19 @@ export const leaveRoomRequest = (userIdValue: string) => {
   })
 };
 // запрос на отправку выбора 
-// export const setChoiceRequest = (userIdValue: string, roomId: string, choice: string) => {
-//   return putReq({
-//     uri: setUserChoiceUri,
-//     userId: userIdValue,
-//     endpoint: `${roomIdParamString}${roomId}${playerChoiceParamString}${choice}`,
-//   })
-// };
-export const setChoiceRequest = (userIdValue: string, data: any) => {
-  return postReq({
-    uri: 'polling',
-    // userId: userIdValue,
-    data: data
+export const setChoiceRequest = (userIdValue: string, roomId: string, choice: string) => {
+  return putReq({
+    uri: setUserChoiceUri,
+    userId: userIdValue,
+    endpoint: `${roomIdParamString}${roomId}${playerChoiceParamString}${choice}`,
   })
 };
 // запрос на отправку эмодзи 
-// export const setEmojiRequest = (userIdValue: string, roomId: string, emoji: string) => {
-//   return putReq({
-//     uri: setEmojiUri,
-//     userId: userIdValue,
-//     endpoint: `${roomIdParamString}${roomId}${emojiIdParamString}${emoji}`,
-//   })
-// };
-export const setEmojiRequest = (userIdValue: string, data: any) => {
-  return postReq({
-    uri: 'polling?user_id=',
+export const setEmojiRequest = (userIdValue: string, roomId: string, emoji: string) => {
+  return putReq({
+    uri: setEmojiUri,
     userId: userIdValue,
-    data: data
+    endpoint: `${roomIdParamString}${roomId}${emojiIdParamString}${emoji}`,
   })
 };
 // запрос на отправку определения победителя
