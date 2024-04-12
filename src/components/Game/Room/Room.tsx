@@ -9,7 +9,8 @@ import ManIcon from "../../../icons/Man/Man";
 import { useAppSelector } from "../../../services/reduxHooks";
 import useTelegram from "../../../hooks/useTelegram";
 import { joinRoomRequest } from "../../../api/gameApi";
-import { userId } from "../../../api/requestData";
+import { roomIdParamString, userId } from "../../../api/requestData";
+import { postReq } from "../../../api/api";
 // типизировать
 interface IProps {
   room: any;
@@ -18,7 +19,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
 console.log(room);
   const handleJoinRoom = () => {
@@ -31,6 +32,23 @@ console.log(room);
         console.error("Ошибка при присоединении к комнате:", error);
       });
   };
+  // const joinRoomRequest = (userIdValue: string, roomId: string) => {
+  //   return postReq({
+  //     uri: '/polling',
+  //     userId: userIdValue,
+  //     endpoint: `${roomIdParamString}${roomId}&type=addplayer`,
+  //   })
+  // };
+  // const handleJoinRoom = () => {
+  //   joinRoomRequest(userId, room.room_id)
+  //     .then((res) => {
+  //       console.log("Присоединение к комнате выполнено успешно:", res);
+  //       navigate(`/room/${room.room_id}`);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Ошибка при присоединении к комнате:", error);
+  //     });
+  // };
 
   return (
     <div className={styles.room} onClick={handleJoinRoom} key={room?.id}>

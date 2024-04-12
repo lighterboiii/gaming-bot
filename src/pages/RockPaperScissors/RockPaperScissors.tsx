@@ -6,7 +6,7 @@ import { getRoomInfoRequest, leaveRoomRequest, setChoiceRequest, setEmojiRequest
 import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useTelegram from "../../hooks/useTelegram";
-import { userId } from "../../api/requestData";
+import { roomIdParamString, userId } from "../../api/requestData";
 import styles from "./RockPaperScissors.module.scss";
 import newVS from '../../images/rock-paper-scissors/VS_new.png';
 import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
@@ -14,12 +14,13 @@ import HandShake from '../../components/Game/HandShake/HandShake';
 import ChoiceBox from "../../components/Game/ChoiceBox/ChoiceBox";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
+import { postReq } from "../../api/api";
 
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,7 +31,7 @@ const RockPaperScissors: FC = () => {
   const [timerStarted, setTimerStarted] = useState<boolean>(false);
   const [playerEmoji, setPlayerEmoji] = useState<string>('');
   const [secPlayerEmoji, setSecPlayerEmoji] = useState<string>('');
-
+console.log(data);
   // const [player1, setPlayer1] = useState(null);
   // const [player2, setPlayer2] = useState(null);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
@@ -52,33 +53,52 @@ const RockPaperScissors: FC = () => {
     }
   }, [tg, navigate]);
   // long polling
+  const getRoomInfoRequest = (userIdValue: string, data: any) => {
+    return postReq({
+      uri: 'polling?user_id=',
+      userId: userIdValue,
+      data: data,
+    })
+  };
   useEffect(() => {
-    const fetchRoomInfo = async () => {
-      roomId && getRoomInfoRequest(roomId)
-        .then((res: any) => {
-          console.log(res);
-          if (res?.status !== 'no_update') {
-            setData(res);
-            setTimeout(fetchRoomInfo, 60000);
-          } else if ( res?.status === 'no_update') {
-            // setTimeout(fetchRoomInfo, 60000);
-            fetchRoomInfo();
-          }
-        })
-        .catch((error) => {
-          console.error('Ошибка при получении информации о комнате', error);
-          setTimeout(fetchRoomInfo, 60000);
-        });
+    const data = {
+      user_id: userId,
+      room_id: roomId,
+      type: 'wait'
     };
+    getRoomInfoRequest(userId, data)
+      .then((res) => {
+        console.log(res);
+        setData(res);
+      })
+  }, [roomId, userId])
+  // useEffect(() => {
+  //   const fetchRoomInfo = async () => {
+  //     roomId && getRoomInfoRequest(userId,roomId)
+  //       .then((res: any) => {
+  //         console.log(res);
+  //         if (res?.status !== 'no_update') {
+  //           setData(res);
+  //           setTimeout(fetchRoomInfo, 60000);
+  //         } else if ( res?.status === 'no_update') {
+  //           // setTimeout(fetchRoomInfo, 60000);
+  //           fetchRoomInfo();
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error('Ошибка при получении информации о комнате', error);
+  //         setTimeout(fetchRoomInfo, 60000);
+  //       });
+  //   };
 
     
-    roomId && fetchRoomInfo();
+  //   roomId && fetchRoomInfo();
 
-    const timerId = setTimeout(fetchRoomInfo, 10000);
-    return () => {
-      clearTimeout(timerId);
-    }
-  }, [roomId]);
+  //   const timerId = setTimeout(fetchRoomInfo, 10000);
+  //   return () => {
+  //     clearTimeout(timerId);
+  //   }
+  // }, [roomId]);
   // подгрузка при монтировании компонента ??
   // useEffect(() => {
   //   // setLoading(true);
@@ -138,7 +158,13 @@ const RockPaperScissors: FC = () => {
   // }, [timerStarted, timer]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
-    setChoiceRequest(userId, roomId!, value)
+    const data = {
+      user_id: userId,
+      room_id: roomId,
+      type: 'setchoice',
+      choice: value
+    };
+    setChoiceRequest(userId, data)
       .then((res: any) => {
         console.log(res);
         // getRoomInfoRequest(roomId!)
@@ -172,7 +198,13 @@ const RockPaperScissors: FC = () => {
   };
   // хендлер готовности игрока
   const handleReady = () => {
-    setChoiceRequest(userId, roomId!, 'ready')
+    const data = {
+      user_id: userId,
+      room_id: roomId,
+      type: 'setchoice',
+      choice: 'ready'
+    };
+    setChoiceRequest(userId, data)
       .then((data: any) => {
         console.log(data);
         // getRoomInfoRequest(roomId!)

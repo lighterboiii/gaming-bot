@@ -56,11 +56,18 @@ export const leaveRoomRequest = (userIdValue: string) => {
   })
 };
 // запрос на отправку выбора 
-export const setChoiceRequest = (userIdValue: string, roomId: string, choice: string) => {
-  return putReq({
-    uri: setUserChoiceUri,
+// export const setChoiceRequest = (userIdValue: string, roomId: string, choice: string) => {
+//   return putReq({
+//     uri: setUserChoiceUri,
+//     userId: userIdValue,
+//     endpoint: `${roomIdParamString}${roomId}${playerChoiceParamString}${choice}`,
+//   })
+// };
+export const setChoiceRequest = (userIdValue: string, data: any) => {
+  return postReq({
+    uri: 'polling?user_id=',
     userId: userIdValue,
-    endpoint: `${roomIdParamString}${roomId}${playerChoiceParamString}${choice}`,
+    data: data
   })
 };
 // запрос на отправку эмодзи 
