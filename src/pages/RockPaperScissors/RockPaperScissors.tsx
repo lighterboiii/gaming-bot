@@ -100,7 +100,7 @@ const RockPaperScissors: FC = () => {
       isMounted = false;
     };
   }, []);
-console.log(message);
+  console.log(message);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     console.log(value);
@@ -116,7 +116,7 @@ console.log(message);
         const bothPlayersMadeChoice = data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready');
         console.log(bothPlayersMadeChoice);
         if (bothPlayersMadeChoice) {
-           setTimeout(() => {
+          setTimeout(() => {
             whoIsWinRequest(roomId!)
               .then((winData: any) => {
                 console.log(winData);
@@ -126,14 +126,17 @@ console.log(message);
                     setMessage('Вы победили');
                   } else if (Number(winData?.loser?.userid) === Number(userId)) {
                     setMessage('Вы проиграли');
-                  } else if (winData?.winner === 'draw') {
-                    setMessage('Ничья');
                   }
                 }
+                else if (winData?.winner === 'draw') {
+                  setMessage('Ничья');
+                }
+                setTimeout(() => {
                   setChoice('');
                   setMessage('');
+                }, 2000)
               })
-           }, 3000)
+          }, 3000)
         }
       })
       .catch((error) => {
