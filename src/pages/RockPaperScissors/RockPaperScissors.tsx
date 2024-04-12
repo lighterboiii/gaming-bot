@@ -60,18 +60,6 @@ const RockPaperScissors: FC = () => {
       data: data,
     })
   };
-  // useEffect(() => {
-  //   const data = {
-  //     user_id: userId,
-  //     room_id: roomId,
-  //     type: 'wait'
-  //   };
-  //   getRoomInfoRequest(userId, data)
-  //     .then((res) => {
-  //       console.log(res);
-  //       setData(res);
-  //     })
-  // }, [roomId, userId])
   useEffect(() => {
     const fetchRoomInfo = async () => {
       const data = {
@@ -89,7 +77,7 @@ const RockPaperScissors: FC = () => {
           if (res?.message === 'None') {
             fetchRoomInfo();
           }
-          setTimeout(fetchRoomInfo, 3000);
+          setTimeout(fetchRoomInfo, 30000);
         })
         .catch((error) => {
           console.error('Ошибка при получении информации о комнате', error);
