@@ -75,7 +75,7 @@ const RockPaperScissors: FC = () => {
             fetchRoomInfo();
           }
           if (res?.message === 'None') {
-            fetchRoomInfo();
+            navigate(-1);
           }
           setTimeout(fetchRoomInfo, 30000);
         })
