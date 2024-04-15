@@ -32,6 +32,8 @@ const RockPaperScissors: FC = () => {
   const [rightRockImage, setRightRockImage] = useState<string>('');
   const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
+  const [animationStarted, setAnimationStarted] = useState(false);
+  // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
     setRightRockImage(rightRock);
@@ -118,53 +120,59 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, reqData)
       .then(res => {
         setData(res);
-        console.log(res);
+        // console.log(res);
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
+  console.log(animationStarted);
   useEffect(() => {
-    if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-      whoIsWinRequest(roomId!)
-        .then((res: any) => {
-          console.log(res);
-          setPlayersAnim({
-            firstAnim: res?.f_anim,
-            secondAnim: res?.s_anim
-          })
-          const animationTime = 3000;
-
+    if (
+      data?.players?.every(
+        (player: IRPSPlayer) =>
+          player?.choice !== 'none' && player?.choice !== 'ready'
+      ) &&
+      !animationStarted
+    ) {
+      whoIsWinRequest(roomId!).then((res: any) => {
+        console.log(res);
+        setPlayersAnim({
+          firstAnim: res?.f_anim,
+          secondAnim: res?.s_anim
+        });
+        const animationTime = 3000;
+  
+        setTimeout(() => {
+          if (Number(res?.winner?.userid) === Number(userId)) {
+            setMessage('Вы победили');
+          } else if (Number(res?.loser?.userid) === Number(userId)) {
+            setMessage('Вы проиграли');
+          } else if (res?.winner === 'draw') {
+            setMessage('Ничья');
+          }
+          setMessageVisible(true);
+  
           setTimeout(() => {
-            if (Number(res?.winner?.userid) === Number(userId)) {
-              setMessage("Вы победили")
-            } else if (Number(res?.loser?.userid) === Number(userId)) {
-              setMessage("Вы проиграли")
-            } else if (res?.winner === 'draw') {
-              setMessage("Ничья")
-            }
-            setMessageVisible(true);
-
-            setTimeout(() => {
-              const data = {
-                user_id: userId,
-                room_id: roomId,
-                type: 'setchoice',
-                choice: 'none'
-              };
-              getPollingRequest(userId, data)
-                .then(res => {
-                  setData(res);
-                })
+            const data = {
+              user_id: userId,
+              room_id: roomId,
+              type: 'setchoice',
+              choice: 'none'
+            };
+            getPollingRequest(userId, data).then((res) => {
+              setData(res);
               setMessageVisible(false);
               setMessage('');
-              setChoice('');
-            }, 2000);
-
-          }, animationTime);
-        })
+              setAnimationStarted(false);
+              // setChoice('');
+            });
+          }, 2000);
+        }, animationTime);
+      });
+      setAnimationStarted(true);
     }
-  }, [data, roomId]);
+  }, [data, roomId, animationStarted]);
   // хендлер готовности игрока
   const handleReady = () => {
     const data = {
@@ -195,16 +203,16 @@ const RockPaperScissors: FC = () => {
       .catch((error) => {
         console.log(error);
       })
-    // setTimeout(() => {
-    //   getPollingRequest(userId, data)
-    //   .then(res => {
-    //     setData(res);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   })
-    //   // setEmojiVisible(false);
-    // }, 2000)
+    setTimeout(() => {
+      getPollingRequest(userId, data)
+      .then(res => {
+        setData(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      // setEmojiVisible(false);
+    }, 2000)
   };
 
   return (
@@ -228,7 +236,7 @@ const RockPaperScissors: FC = () => {
                     src={player?.emoji}
                     alt="player emoji"
                     className={
-                      Number(player?.userid) === Number(data?.players[0]?.userid) ?
+                      player === data?.players[data?.players.length - 1]  ?
                         styles.game__selectedEmoji :
                         styles.game__selectedEmojiRight
                     }
