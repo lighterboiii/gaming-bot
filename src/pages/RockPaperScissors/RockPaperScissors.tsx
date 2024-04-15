@@ -16,6 +16,7 @@ import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import leftRock from '../../images/rock-paper-scissors/left_rock.png';
 import rightRock from '../../images/rock-paper-scissors/right_rock.png';
+import { IRPSPlayer } from "../../utils/types/gameTypes";
 
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const RockPaperScissors: FC = () => {
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
-  const [emojiVisible, setEmojiVisible] = useState<boolean>(false);
+  // const [emojiVisible, setEmojiVisible] = useState<boolean>(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [leftRockImage, setLeftRockImage] = useState<string>('');
   const [rightRockImage, setRightRockImage] = useState<string>('');
@@ -115,7 +116,7 @@ const RockPaperScissors: FC = () => {
       choice: value
     };
     getPollingRequest(userId, reqData)
-      .then((res: any) => {
+      .then(res => {
         setData(res);
         setMessage(`Ваш выбор - ${value}`)
       })
@@ -124,7 +125,7 @@ const RockPaperScissors: FC = () => {
       });
   };
   useEffect(() => {
-    if (data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+    if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
       whoIsWinRequest(roomId!)
         .then((res: any) => {
           setPlayersAnim({
@@ -151,8 +152,8 @@ const RockPaperScissors: FC = () => {
                 choice: 'none'
               };
               getPollingRequest(userId, data)
-                .then(data => {
-                  setData(data);
+                .then(res => {
+                  setData(res);
                 })
               setMessageVisible(false);
               setMessage('');
@@ -172,7 +173,7 @@ const RockPaperScissors: FC = () => {
       choice: 'ready'
     };
     getPollingRequest(userId, data)
-      .then((res: any) => {
+      .then(res => {
         setData(res);
       })
   };
@@ -185,16 +186,24 @@ const RockPaperScissors: FC = () => {
       emoji: emoji
     }
     getPollingRequest(userId, data)
-      .then((res: any) => {
-        setEmojiVisible(true);
+      .then(res => {
         setData(res);
+        // setEmojiVisible(true);
+        console.log(res)
       })
       .catch((error) => {
         console.log(error);
       })
     setTimeout(() => {
-      setEmojiVisible(false);
-    }, 2500)
+      getPollingRequest(userId, data)
+      .then(res => {
+        setData(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      // setEmojiVisible(false);
+    }, 2000)
   };
 
   return (
@@ -202,10 +211,10 @@ const RockPaperScissors: FC = () => {
       {loading ? <Loader /> : (
         <>
           <div className={styles.game__players}>
-            {data?.players?.map((player: any) => (
+            {data?.players?.map((player: IRPSPlayer) => (
               <div className={styles.game__player} key={player?.userid}>
                 <p className={styles.game__playerName}>{player?.publicname}</p>
-                <UserAvatar item={player} avatar={player?.avatar} key={player?.userId} />
+                <UserAvatar item={player} avatar={player?.avatar} key={player?.userid} />
                 {player?.choice === 'ready' && (
                   <img
                     src={readyIcon}
@@ -213,7 +222,7 @@ const RockPaperScissors: FC = () => {
                     className={styles.game__readyIcon}
                   />
                 )}
-                {emojiVisible && player?.emoji !== 'none' && (
+                {player?.emoji !== 'none' && (
                   <img
                     src={player?.emoji}
                     alt="player emoji"
@@ -229,7 +238,7 @@ const RockPaperScissors: FC = () => {
           </div>
           <>
             {data?.players_count === "2" &&
-              data?.players?.every((player: any) => player?.choice === 'ready') &&
+              data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready') &&
               <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
             }
             {messageVisible && (
@@ -254,7 +263,7 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players?.some((player: any) => player?.choice !== 'ready')) ? (
+              {(data?.players?.some((player: IRPSPlayer) => player?.choice !== 'ready')) ? (
                 <div>
                   <input
                     type="checkbox"

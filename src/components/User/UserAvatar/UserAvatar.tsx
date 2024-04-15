@@ -4,9 +4,10 @@ import { useAppSelector } from "../../../services/reduxHooks";
 import { getImageLink, getImageMaskLink } from "../../../api/requestData";
 import { ItemData } from "../../../utils/types/shopTypes";
 import { IMember } from "../../../utils/types/memberTypes";
+import { IRPSPlayer } from "../../../utils/types/gameTypes";
 
 interface IProps {
-  item?: ItemData | IMember;
+  item?: ItemData | IMember | IRPSPlayer;
   avatar?: string;
 }
 
