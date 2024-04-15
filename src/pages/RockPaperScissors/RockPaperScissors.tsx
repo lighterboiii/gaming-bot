@@ -21,12 +21,11 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
-  // const [emojiVisible, setEmojiVisible] = useState<boolean>(false);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [leftRockImage, setLeftRockImage] = useState<string>('');
   const [rightRockImage, setRightRockImage] = useState<string>('');
@@ -56,6 +55,7 @@ const RockPaperScissors: FC = () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tg, navigate]);
   // long polling
   useEffect(() => {
@@ -161,18 +161,17 @@ const RockPaperScissors: FC = () => {
                 choice: 'none'
               };
               getPollingRequest(userId, data).then((res) => {
-                // setAnimationStarted(false);
                 setData(res);
                 setMessageVisible(false);
                 setMessage('');
-                // setChoice('');
               });
             }, 2000);
           }, animationTime);
         });
       setAnimationStarted(true);
     }
-  }, [data, roomId, animationStarted]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId, animationStarted]);
   // хендлер готовности игрока
   const handleReady = () => {
     const data = {
@@ -197,7 +196,6 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, data)
       .then(res => {
         setData(res);
-        // setEmojiVisible(true);
         console.log(res)
       })
       .catch((error) => {
@@ -211,7 +209,6 @@ const RockPaperScissors: FC = () => {
         .catch((error) => {
           console.log(error);
         })
-      // setEmojiVisible(false);
     }, 2000)
   };
 
@@ -231,7 +228,7 @@ const RockPaperScissors: FC = () => {
                     className={styles.game__readyIcon}
                   />
                 )}
-                {player?.emoji !== 'none' && (
+                {data?.players?.some((player: IRPSPlayer) => player?.emoji !== 'none')  && (
                   <img
                     src={player?.emoji}
                     alt="player emoji"
