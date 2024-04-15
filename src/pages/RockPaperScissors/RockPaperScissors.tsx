@@ -85,7 +85,6 @@ const RockPaperScissors: FC = () => {
           if (isMounted) {
             fetchRoomInfo();
           }
-          // setTimeout(fetchRoomInfo, 10000)
         })
         .catch((error) => {
           console.error('Ошибка при получении информации о комнате', error);
@@ -109,7 +108,6 @@ const RockPaperScissors: FC = () => {
   }, [data])
   // хендлер выбора хода
   const handleChoice = (value: string) => {
-    console.log(value);
     const reqData = {
       user_id: userId,
       room_id: roomId,
@@ -118,6 +116,8 @@ const RockPaperScissors: FC = () => {
     };
     getPollingRequest(userId, reqData)
       .then((res: any) => {
+        setData(res);
+        setMessage(`Ваш выбор - ${value}`)
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
@@ -127,7 +127,6 @@ const RockPaperScissors: FC = () => {
     if (data?.players?.every((player: any) => player?.choice !== 'none' && player?.choice !== 'ready')) {
       whoIsWinRequest(roomId!)
         .then((res: any) => {
-          console.log(res);
           setPlayersAnim({
             firstAnim: res?.f_anim,
             secondAnim: res?.s_anim
@@ -153,7 +152,7 @@ const RockPaperScissors: FC = () => {
               };
               getPollingRequest(userId, data)
                 .then(data => {
-                  console.log(data);
+                  setData(data);
                 })
               setMessageVisible(false);
               setMessage('');
@@ -173,8 +172,8 @@ const RockPaperScissors: FC = () => {
       choice: 'ready'
     };
     getPollingRequest(userId, data)
-      .then((data: any) => {
-        console.log(data);
+      .then((res: any) => {
+        setData(res);
       })
   };
   // хендлер отпрвки эмодзи
@@ -187,7 +186,6 @@ const RockPaperScissors: FC = () => {
     }
     getPollingRequest(userId, data)
       .then((res: any) => {
-        console.log(res);
         setEmojiVisible(true);
         setData(res);
       })
@@ -256,7 +254,7 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players?.some((player: any) => player?.choice === 'none')) ? (
+              {(data?.players?.some((player: any) => player?.choice !== 'ready')) ? (
                 <div>
                   <input
                     type="checkbox"
