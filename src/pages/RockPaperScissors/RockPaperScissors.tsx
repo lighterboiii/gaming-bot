@@ -120,13 +120,12 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, reqData)
       .then(res => {
         setData(res);
-        // console.log(res);
+        setAnimationStarted(false);
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
-  console.log(animationStarted);
   useEffect(() => {
     if (
       data?.players?.every(
@@ -135,41 +134,42 @@ const RockPaperScissors: FC = () => {
       ) &&
       !animationStarted
     ) {
-      whoIsWinRequest(roomId!).then((res: any) => {
-        console.log(res);
-        setPlayersAnim({
-          firstAnim: res?.f_anim,
-          secondAnim: res?.s_anim
+      whoIsWinRequest(roomId!)
+        .then((res: any) => {
+          console.log(res);
+          setPlayersAnim({
+            firstAnim: res?.f_anim,
+            secondAnim: res?.s_anim
+          });
+          const animationTime = 3000;
+
+          res?.message === "success" && setTimeout(() => {
+            if (Number(res?.winner?.userid) === Number(userId)) {
+              setMessage('Вы победили');
+            } else if (Number(res?.loser?.userid) === Number(userId)) {
+              setMessage('Вы проиграли');
+            } else if (res?.winner === 'draw') {
+              setMessage('Ничья');
+            }
+            setMessageVisible(true);
+
+            setTimeout(() => {
+              const data = {
+                user_id: userId,
+                room_id: roomId,
+                type: 'setchoice',
+                choice: 'none'
+              };
+              getPollingRequest(userId, data).then((res) => {
+                // setAnimationStarted(false);
+                setData(res);
+                setMessageVisible(false);
+                setMessage('');
+                // setChoice('');
+              });
+            }, 2000);
+          }, animationTime);
         });
-        const animationTime = 3000;
-  
-        setTimeout(() => {
-          if (Number(res?.winner?.userid) === Number(userId)) {
-            setMessage('Вы победили');
-          } else if (Number(res?.loser?.userid) === Number(userId)) {
-            setMessage('Вы проиграли');
-          } else if (res?.winner === 'draw') {
-            setMessage('Ничья');
-          }
-          setMessageVisible(true);
-  
-          setTimeout(() => {
-            const data = {
-              user_id: userId,
-              room_id: roomId,
-              type: 'setchoice',
-              choice: 'none'
-            };
-            getPollingRequest(userId, data).then((res) => {
-              setData(res);
-              setMessageVisible(false);
-              setMessage('');
-              setAnimationStarted(false);
-              // setChoice('');
-            });
-          }, 2000);
-        }, animationTime);
-      });
       setAnimationStarted(true);
     }
   }, [data, roomId, animationStarted]);
@@ -205,12 +205,12 @@ const RockPaperScissors: FC = () => {
       })
     setTimeout(() => {
       getPollingRequest(userId, data)
-      .then(res => {
-        setData(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+        .then(res => {
+          setData(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
       // setEmojiVisible(false);
     }, 2000)
   };
@@ -235,11 +235,7 @@ const RockPaperScissors: FC = () => {
                   <img
                     src={player?.emoji}
                     alt="player emoji"
-                    className={
-                      player === data?.players[data?.players.length - 1]  ?
-                        styles.game__selectedEmoji :
-                        styles.game__selectedEmojiRight
-                    }
+                    className={styles.game__selectedEmoji}
                   />
                 )}
               </div>
