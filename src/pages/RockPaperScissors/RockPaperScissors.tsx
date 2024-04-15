@@ -264,7 +264,7 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready')) ? (
+              {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')) ? (
                 <div className={styles.game__buttonsWrapper}>
                   <ChoiceBox choice={choice} handleChoice={handleChoice} />
                 </div>
