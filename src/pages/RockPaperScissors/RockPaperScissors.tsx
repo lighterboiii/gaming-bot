@@ -146,16 +146,16 @@ const RockPaperScissors: FC = () => {
             setMessageVisible(true);
 
             setTimeout(() => {
-              // const data = {
-              //   user_id: userId,
-              //   room_id: roomId,
-              //   type: 'setchoice',
-              //   choice: 'none'
-              // };
-              // getPollingRequest(userId, data)
-              //   .then(res => {
-              //     setData(res);
-              //   })
+              const data = {
+                user_id: userId,
+                room_id: roomId,
+                type: 'setchoice',
+                choice: 'none'
+              };
+              getPollingRequest(userId, data)
+                .then(res => {
+                  setData(res);
+                })
               setMessageVisible(false);
               setMessage('');
               setChoice('');
