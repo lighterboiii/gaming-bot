@@ -117,8 +117,8 @@ const RockPaperScissors: FC = () => {
     };
     getPollingRequest(userId, reqData)
       .then(res => {
-        setData(res);
-        setMessage(`Ваш выбор - ${value}`)
+        // setData(res);
+        // setMessage(`Ваш выбор - ${value}`)
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
@@ -128,6 +128,7 @@ const RockPaperScissors: FC = () => {
     if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
       whoIsWinRequest(roomId!)
         .then((res: any) => {
+          console.log(res);
           setPlayersAnim({
             firstAnim: res?.f_anim,
             secondAnim: res?.s_anim
@@ -263,7 +264,7 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players?.some((player: IRPSPlayer) => player?.choice === 'none')) ? (
+              {(data?.players?.every((player: IRPSPlayer) => player?.choice === 'none')) ? (
                 <div>
                   <input
                     type="checkbox"
