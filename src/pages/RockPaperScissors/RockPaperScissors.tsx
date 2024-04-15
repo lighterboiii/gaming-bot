@@ -263,7 +263,7 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players?.some((player: IRPSPlayer) => player?.choice !== 'ready')) ? (
+              {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'ready')) ? (
                 <div>
                   <input
                     type="checkbox"
