@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -98,6 +97,7 @@ const RockPaperScissors: FC = () => {
     return () => {
       isMounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // показать/скрыть лоадер
   useEffect(() => {
@@ -164,7 +164,7 @@ const RockPaperScissors: FC = () => {
           }, animationTime);
         })
     }
-  }, [data]);
+  }, [data, roomId]);
   // хендлер готовности игрока
   const handleReady = () => {
     const data = {
@@ -264,7 +264,11 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players?.some((player: IRPSPlayer) => player?.choice === 'none')) ? (
+              {(data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready')) ? (
+                <div className={styles.game__buttonsWrapper}>
+                  <ChoiceBox choice={choice} handleChoice={handleChoice} />
+                </div>
+              ) : (
                 <div>
                   <input
                     type="checkbox"
@@ -274,10 +278,7 @@ const RockPaperScissors: FC = () => {
                   />
                   <label htmlFor="ready" className={styles.game__label}></label>
                 </div>
-              ) : (
-                <div className={styles.game__buttonsWrapper}>
-                  <ChoiceBox choice={choice} handleChoice={handleChoice} />
-                </div>
+
               )}
               <button
                 type="button"
