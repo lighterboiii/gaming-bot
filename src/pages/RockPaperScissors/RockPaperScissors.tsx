@@ -133,7 +133,7 @@ const RockPaperScissors: FC = () => {
             secondAnim: res?.s_anim
           })
           const animationTime = 3000;
-  
+
           setTimeout(() => {
             if (Number(res?.winner?.userid) === Number(userId)) {
               setMessage("Вы победили")
@@ -159,7 +159,7 @@ const RockPaperScissors: FC = () => {
               setMessage('');
               setChoice('');
             }, 2000);
-  
+
           }, animationTime);
         })
     }
@@ -194,16 +194,16 @@ const RockPaperScissors: FC = () => {
       .catch((error) => {
         console.log(error);
       })
-    setTimeout(() => {
-      getPollingRequest(userId, data)
-      .then(res => {
-        setData(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      // setEmojiVisible(false);
-    }, 2000)
+    // setTimeout(() => {
+    //   getPollingRequest(userId, data)
+    //   .then(res => {
+    //     setData(res);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   })
+    //   // setEmojiVisible(false);
+    // }, 2000)
   };
 
   return (
@@ -263,7 +263,7 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'ready')) ? (
+              {(data?.players?.some((player: IRPSPlayer) => player?.choice === 'none')) ? (
                 <div>
                   <input
                     type="checkbox"
