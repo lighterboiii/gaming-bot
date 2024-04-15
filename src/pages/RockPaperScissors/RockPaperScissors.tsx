@@ -117,8 +117,8 @@ const RockPaperScissors: FC = () => {
     };
     getPollingRequest(userId, reqData)
       .then(res => {
-        // setData(res);
-        // setMessage(`Ваш выбор - ${value}`)
+        setData(res);
+        console.log(res);
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
@@ -146,16 +146,16 @@ const RockPaperScissors: FC = () => {
             setMessageVisible(true);
 
             setTimeout(() => {
-              const data = {
-                user_id: userId,
-                room_id: roomId,
-                type: 'setchoice',
-                choice: 'none'
-              };
-              getPollingRequest(userId, data)
-                .then(res => {
-                  setData(res);
-                })
+              // const data = {
+              //   user_id: userId,
+              //   room_id: roomId,
+              //   type: 'setchoice',
+              //   choice: 'none'
+              // };
+              // getPollingRequest(userId, data)
+              //   .then(res => {
+              //     setData(res);
+              //   })
               setMessageVisible(false);
               setMessage('');
               setChoice('');
@@ -228,7 +228,7 @@ const RockPaperScissors: FC = () => {
                     src={player?.emoji}
                     alt="player emoji"
                     className={
-                      player?.userid === Number(data?.players[0]?.userid) ?
+                      Number(player?.userid) === Number(data?.players[0]?.userid) ?
                         styles.game__selectedEmoji :
                         styles.game__selectedEmojiRight
                     }
@@ -264,7 +264,7 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players?.every((player: IRPSPlayer) => player?.choice === 'none')) ? (
+              {(data?.players?.some((player: IRPSPlayer) => player?.choice === 'none')) ? (
                 <div>
                   <input
                     type="checkbox"
