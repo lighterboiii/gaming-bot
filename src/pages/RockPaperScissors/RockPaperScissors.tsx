@@ -125,67 +125,68 @@ const RockPaperScissors: FC = () => {
         console.error('Ошибка при установке выбора', error);
       });
   };
-
   useEffect(() => {
     let timeoutId: any;
-
     const fetchData = () => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-            if (data?.players?.every(
-                (player: IRPSPlayer) =>
-                    player?.choice !== 'none' && player?.choice !== 'ready'
-            )) {
-                whoIsWinRequest(roomId!)
-                    .then((res: any) => {
-                        console.log(res);
-                        if (res.message === 'player_not_ready') {
-                            return;
-                        }
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (data?.players?.every(
+          (player: IRPSPlayer) =>
+            player?.choice !== 'none' && player?.choice !== 'ready'
+        )) {
+          whoIsWinRequest(roomId!)
+            .then((res: any) => {
+              console.log(res);
+              if (res.message === 'player_not_ready') {
+                return;
+              }
 
-                        setPlayersAnim({
-                            firstAnim: res?.f_anim,
-                            secondAnim: res?.s_anim
-                        });
-                        const animationTime = 3000;
+              setPlayersAnim({
+                firstAnim: res?.f_anim,
+                secondAnim: res?.s_anim
+              });
+              const animationTime = 3000;
 
-                        res?.message === "success" && setTimeout(() => {
-                            if (Number(res?.winner?.userid) === Number(userId)) {
-                                setMessage('Вы победили');
-                            } else if (Number(res?.loser?.userid) === Number(userId)) {
-                                setMessage('Вы проиграли');
-                            } else if (res?.winner === 'draw') {
-                                setMessage('Ничья');
-                            }
-                            setMessageVisible(true);
+              if (res?.message === "success") {
+                setTimeout(() => {
+                  if (Number(res?.winner?.userid) === Number(userId)) {
+                    setMessage('Вы победили');
+                  } else if (Number(res?.loser?.userid) === Number(userId)) {
+                    setMessage('Вы проиграли');
+                  } else if (res?.winner === 'draw') {
+                    setMessage('Ничья');
+                  }
+                  setMessageVisible(true);
 
-                            const data = {
-                                user_id: userId,
-                                room_id: roomId,
-                                type: 'setchoice',
-                                choice: 'none'
-                            };
-                            getPollingRequest(userId, data)
-                                .then((res) => {
-                                    setData(res);
-                                    setMessageVisible(false);
-                                    setMessage('');
-                                });
-                        }, animationTime);
-                    })
-                    .catch((error) => {
-                        console.error('Ошибка при запросе данных:', error);
+                  const data = {
+                    user_id: userId,
+                    room_id: roomId,
+                    type: 'setchoice',
+                    choice: 'none'
+                  };
+                  getPollingRequest(userId, data)
+                    .then((res) => {
+                      setData(res);
+                      setMessageVisible(false);
+                      setMessage('');
                     });
-            }
-        }, 1000);
+                }, animationTime);
+              }
+            })
+            .catch((error) => {
+              console.error('Ошибка при запросе данных:', error);
+            });
+        }
+      }, 1000);
     };
 
     fetchData();
 
     return () => {
-        clearTimeout(timeoutId);
+      clearTimeout(timeoutId);
     };
-}, [data]);
+  }, [data, userId, roomId, getPollingRequest, whoIsWinRequest]);
+
   // хендлер готовности игрока
   const handleReady = () => {
     const data = {
