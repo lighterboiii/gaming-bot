@@ -73,9 +73,10 @@ export const leaveRoomRequest = (userIdValue: string) => {
 //   })
 // };
 // запрос на отправку определения победителя
-export const whoIsWinRequest = (roomId: string) => {
+export const whoIsWinRequest = (roomId: string, userId: string) => {
   return getReq({
     uri: whoIsWinUri,
+    userId: userId,
     endpoint: `${roomIdParamString}${roomId}`,
   })
 };

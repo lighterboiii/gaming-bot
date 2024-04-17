@@ -134,13 +134,9 @@ const RockPaperScissors: FC = () => {
           (player: IRPSPlayer) =>
             player?.choice !== 'none' && player?.choice !== 'ready'
         )) {
-          whoIsWinRequest(roomId!)
+          whoIsWinRequest(roomId!, userId)
             .then((res: any) => {
               console.log(res);
-              if (res.message === 'player_not_ready') {
-                return;
-              }
-
               setPlayersAnim({
                 firstAnim: res?.f_anim,
                 secondAnim: res?.s_anim
