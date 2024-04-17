@@ -177,7 +177,7 @@ const RockPaperScissors: FC = () => {
               console.error('Ошибка при запросе данных:', error);
             });
         }
-      }, 1000);
+      }, 1800);
     };
 
     fetchData();
