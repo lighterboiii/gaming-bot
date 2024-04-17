@@ -118,34 +118,36 @@ const RockPaperScissors: FC = () => {
       choice: value
     };
     getPollingRequest(userId, reqData)
-      .then(res => {
+      .then((res: any) => {
         console.log(res);
         setData(res);
-        whoIsWinRequest(roomId!, userId)
-        .then((res: any) => {
-          console.log(res);
-          setPlayersAnim({
-            firstAnim: res?.f_anim,
-            secondAnim: res?.s_anim
-          });
-          const animationTime = 3000;
+        if (res?.players?.every((player: IRPSPlayer) => player?.choice !== 'ready' && player?.choice !== 'none')) {
+          whoIsWinRequest(roomId!, userId)
+            .then((res: any) => {
+              console.log(res);
+              setPlayersAnim({
+                firstAnim: res?.f_anim,
+                secondAnim: res?.s_anim
+              });
+              const animationTime = 3000;
 
-          if (res?.message === "success") {
-            setTimeout(() => {
-              if (Number(res?.winner?.userid) === Number(userId)) {
-                setMessage('Вы победили');
-              } else if (Number(res?.loser?.userid) === Number(userId)) {
-                setMessage('Вы проиграли');
-              } else if (res?.winner === 'draw') {
-                setMessage('Ничья');
+              if (res?.message === "success") {
+                setTimeout(() => {
+                  if (Number(res?.winner?.userid) === Number(userId)) {
+                    setMessage('Вы победили');
+                  } else if (Number(res?.loser?.userid) === Number(userId)) {
+                    setMessage('Вы проиграли');
+                  } else if (res?.winner === 'draw') {
+                    setMessage('Ничья');
+                  }
+                  setMessageVisible(true);
+                }, animationTime);
               }
-              setMessageVisible(true);
-            }, animationTime);
-          }
-        })
-        .catch((error) => {
-          console.error('Ошибка при запросе данных:', error);
-        });
+            })
+            .catch((error) => {
+              console.error('Ошибка при запросе данных:', error);
+            });
+        }
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
