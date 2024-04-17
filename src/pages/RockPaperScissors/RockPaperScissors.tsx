@@ -144,8 +144,10 @@ const RockPaperScissors: FC = () => {
               secondAnim: res?.s_anim
             });
             const animationTime = 3000;
-
-            res?.message === "success" && setTimeout(() => {
+            if (res?.message === "success") {
+              return;
+            }
+            setTimeout(() => {
               if (Number(res?.winner?.userid) === Number(userId)) {
                 setMessage('Вы победили');
               } else if (Number(res?.loser?.userid) === Number(userId)) {
@@ -169,7 +171,7 @@ const RockPaperScissors: FC = () => {
                 });
             }, animationTime);
           });
-        }, 3000);
+        }, 2000);
         // setAnimationStarted(true);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
