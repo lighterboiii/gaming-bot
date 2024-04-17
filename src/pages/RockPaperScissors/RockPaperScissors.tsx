@@ -144,7 +144,7 @@ const RockPaperScissors: FC = () => {
               secondAnim: res?.s_anim
             });
             const animationTime = 3000;
-            if (res?.message === "success") {
+            if (res?.message !== "success") {
               return;
             }
             setTimeout(() => {
