@@ -169,7 +169,7 @@ const RockPaperScissors: FC = () => {
                 });
             }, animationTime);
           });
-        }, 1000);
+        }, 3000);
         // setAnimationStarted(true);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
