@@ -21,7 +21,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -55,7 +55,7 @@ const RockPaperScissors: FC = () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tg, navigate]);
   // long polling
   useEffect(() => {
@@ -120,7 +120,7 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, reqData)
       .then(res => {
         setData(res);
-        setAnimationStarted(false);
+        // setAnimationStarted(false);
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
@@ -131,47 +131,49 @@ const RockPaperScissors: FC = () => {
       data?.players?.every(
         (player: IRPSPlayer) =>
           player?.choice !== 'none' && player?.choice !== 'ready'
-      ) &&
-      !animationStarted
+      )
+      // &&
+      // !animationStarted
     ) {
-      whoIsWinRequest(roomId!)
-        .then((res: any) => {
-          console.log(res);
-          setPlayersAnim({
-            firstAnim: res?.f_anim,
-            secondAnim: res?.s_anim
-          });
-          const animationTime = 3000;
+      setTimeout(() => {
+        whoIsWinRequest(roomId!)
+          .then((res: any) => {
+            console.log(res);
+            setPlayersAnim({
+              firstAnim: res?.f_anim,
+              secondAnim: res?.s_anim
+            });
+            const animationTime = 3000;
 
-          res?.message === "success" && setTimeout(() => {
-            if (Number(res?.winner?.userid) === Number(userId)) {
-              setMessage('Вы победили');
-            } else if (Number(res?.loser?.userid) === Number(userId)) {
-              setMessage('Вы проиграли');
-            } else if (res?.winner === 'draw') {
-              setMessage('Ничья');
-            }
-            setMessageVisible(true);
+            res?.message === "success" && setTimeout(() => {
+              if (Number(res?.winner?.userid) === Number(userId)) {
+                setMessage('Вы победили');
+              } else if (Number(res?.loser?.userid) === Number(userId)) {
+                setMessage('Вы проиграли');
+              } else if (res?.winner === 'draw') {
+                setMessage('Ничья');
+              }
+              setMessageVisible(true);
 
-            setTimeout(() => {
               const data = {
                 user_id: userId,
                 room_id: roomId,
                 type: 'setchoice',
                 choice: 'none'
               };
-              getPollingRequest(userId, data).then((res) => {
-                setData(res);
-                setMessageVisible(false);
-                setMessage('');
-              });
-            }, 2000);
-          }, animationTime);
-        });
-      setAnimationStarted(true);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomId, animationStarted]);
+              getPollingRequest(userId, data)
+                .then((res) => {
+                  setData(res);
+                  setMessageVisible(false);
+                  setMessage('');
+                });
+            }, animationTime);
+          });
+        }, 1000);
+        // setAnimationStarted(true);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
     const data = {
@@ -228,7 +230,7 @@ const RockPaperScissors: FC = () => {
                     className={styles.game__readyIcon}
                   />
                 )}
-                {data?.players?.some((player: IRPSPlayer) => player?.emoji !== 'none')  && (
+                {data?.players?.some((player: IRPSPlayer) => player?.emoji !== 'none') && (
                   <img
                     src={player?.emoji}
                     alt="player emoji"
