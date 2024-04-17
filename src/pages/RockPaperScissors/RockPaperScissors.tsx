@@ -22,7 +22,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -167,8 +167,6 @@ const RockPaperScissors: FC = () => {
                   getPollingRequest(userId, data)
                     .then((res) => {
                       setData(res);
-                      setMessageVisible(false);
-                      setMessage('');
                     });
                 }, animationTime);
               }
@@ -177,7 +175,7 @@ const RockPaperScissors: FC = () => {
               console.error('Ошибка при запросе данных:', error);
             });
         }
-      }, 1800);
+      }, 1200);
     };
 
     fetchData();
@@ -185,10 +183,12 @@ const RockPaperScissors: FC = () => {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [data, userId, roomId, getPollingRequest, whoIsWinRequest]);
+  }, [data]);
 
   // хендлер готовности игрока
   const handleReady = () => {
+    setMessageVisible(false);
+    setMessage('');
     const data = {
       user_id: userId,
       room_id: roomId,
@@ -243,13 +243,11 @@ const RockPaperScissors: FC = () => {
                     className={styles.game__readyIcon}
                   />
                 )}
-                {data?.players?.some((player: IRPSPlayer) => player?.emoji !== 'none') && (
-                  <img
-                    src={player?.emoji}
-                    alt="player emoji"
-                    className={styles.game__selectedEmoji}
-                  />
-                )}
+                <img
+                  src={player?.emoji}
+                  alt="player emoji"
+                  className={styles.game__selectedEmoji}
+                />
               </div>
             ))}
           </div>
