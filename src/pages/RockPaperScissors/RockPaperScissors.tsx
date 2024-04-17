@@ -22,7 +22,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -130,10 +130,10 @@ const RockPaperScissors: FC = () => {
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (data?.players?.every(
-          (player: IRPSPlayer) =>
-            player?.choice !== 'none' && player?.choice !== 'ready'
-        )) {
+        // if (data?.players?.every(
+        //   (player: IRPSPlayer) =>
+        //     player?.choice !== 'none' && player?.choice !== 'ready'
+        // )) {
           whoIsWinRequest(roomId!, userId)
             .then((res: any) => {
               console.log(res);
@@ -170,7 +170,7 @@ const RockPaperScissors: FC = () => {
             .catch((error) => {
               console.error('Ошибка при запросе данных:', error);
             });
-        }
+        // }
       }, 1200);
     };
 
