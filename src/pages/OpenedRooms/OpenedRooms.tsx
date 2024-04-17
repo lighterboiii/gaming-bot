@@ -13,6 +13,7 @@ import Loader from "../../components/Loader/Loader";
 import { getOpenedRoomsRequest } from "../../api/gameApi";
 import Button from "../../components/ui/Button/Button";
 import { IGameCardData } from "../../utils/types/gameTypes";
+import CreateRoomFooter from "../../components/CreateRoomFooter/CreateRoomFooter";
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
@@ -130,6 +131,7 @@ const OpenedRooms: FC = () => {
           </div>
         </>
       )}
+      <CreateRoomFooter />
     </div>
   )
 };
