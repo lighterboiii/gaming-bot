@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -31,7 +32,6 @@ const RockPaperScissors: FC = () => {
   const [rightRockImage, setRightRockImage] = useState<string>('');
   const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
-  const [animationStarted, setAnimationStarted] = useState(false);
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -120,62 +120,72 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, reqData)
       .then(res => {
         setData(res);
-        // setAnimationStarted(false);
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
-  useEffect(() => {
-    if (
-      data?.players?.every(
-        (player: IRPSPlayer) =>
-          player?.choice !== 'none' && player?.choice !== 'ready'
-      )
-      // &&
-      // !animationStarted
-    ) {
-      setTimeout(() => {
-        whoIsWinRequest(roomId!)
-          .then((res: any) => {
-            console.log(res);
-            setPlayersAnim({
-              firstAnim: res?.f_anim,
-              secondAnim: res?.s_anim
-            });
-            const animationTime = 3000;
-            if (res?.message !== "success") {
-              return;
-            }
-            setTimeout(() => {
-              if (Number(res?.winner?.userid) === Number(userId)) {
-                setMessage('Вы победили');
-              } else if (Number(res?.loser?.userid) === Number(userId)) {
-                setMessage('Вы проиграли');
-              } else if (res?.winner === 'draw') {
-                setMessage('Ничья');
-              }
-              setMessageVisible(true);
 
-              const data = {
-                user_id: userId,
-                room_id: roomId,
-                type: 'setchoice',
-                choice: 'none'
-              };
-              getPollingRequest(userId, data)
-                .then((res) => {
-                  setData(res);
-                  setMessageVisible(false);
-                  setMessage('');
-                });
-            }, animationTime);
-          });
-        }, 1200);
-        // setAnimationStarted(true);
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  useEffect(() => {
+    let timeoutId: any;
+
+    const fetchData = () => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            if (data?.players?.every(
+                (player: IRPSPlayer) =>
+                    player?.choice !== 'none' && player?.choice !== 'ready'
+            )) {
+                whoIsWinRequest(roomId!)
+                    .then((res: any) => {
+                        console.log(res);
+                        if (res.message === 'player_not_ready') {
+                            return;
+                        }
+
+                        setPlayersAnim({
+                            firstAnim: res?.f_anim,
+                            secondAnim: res?.s_anim
+                        });
+                        const animationTime = 3000;
+
+                        res?.message === "success" && setTimeout(() => {
+                            if (Number(res?.winner?.userid) === Number(userId)) {
+                                setMessage('Вы победили');
+                            } else if (Number(res?.loser?.userid) === Number(userId)) {
+                                setMessage('Вы проиграли');
+                            } else if (res?.winner === 'draw') {
+                                setMessage('Ничья');
+                            }
+                            setMessageVisible(true);
+
+                            const data = {
+                                user_id: userId,
+                                room_id: roomId,
+                                type: 'setchoice',
+                                choice: 'none'
+                            };
+                            getPollingRequest(userId, data)
+                                .then((res) => {
+                                    setData(res);
+                                    setMessageVisible(false);
+                                    setMessage('');
+                                });
+                        }, animationTime);
+                    })
+                    .catch((error) => {
+                        console.error('Ошибка при запросе данных:', error);
+                    });
+            }
+        }, 1000);
+    };
+
+    fetchData();
+
+    return () => {
+        clearTimeout(timeoutId);
+    };
+}, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
     const data = {
