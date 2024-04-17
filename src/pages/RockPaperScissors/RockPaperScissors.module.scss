@@ -133,6 +133,6 @@
 
   &__resultMessage {
     @extend .game__notify;
-    @include position(absolute, $top: 25%, $left: 50%);
+    @include position(absolute, $top: 35%, $left: 50%);
   }
 }

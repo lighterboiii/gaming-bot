@@ -217,7 +217,13 @@ const RockPaperScissors: FC = () => {
         console.log(error);
       })
     setTimeout(() => {
-      getPollingRequest(userId, data)
+      const noneData = {
+        user_id: userId,
+        room_id: roomId,
+        type: 'setemoji',
+        emoji: 'none'
+      }
+      getPollingRequest(userId, noneData)
         .then(res => {
           setData(res);
         })
@@ -243,11 +249,16 @@ const RockPaperScissors: FC = () => {
                     className={styles.game__readyIcon}
                   />
                 )}
-                <img
-                  src={player?.emoji}
-                  alt="player emoji"
-                  className={styles.game__selectedEmoji}
-                />
+                {player?.emoji !== "none" && (
+                  <img
+                    src={player?.emoji}
+                    alt="player emoji"
+                    className={
+                      Number(player?.userid) === Number(data?.players[0]?.userid) ?
+                        styles.game__selectedEmoji :
+                        styles.game__selectedEmojiRight
+                    }
+                  />)}
               </div>
             ))}
           </div>
