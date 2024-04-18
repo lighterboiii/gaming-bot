@@ -131,7 +131,7 @@ const OpenedRooms: FC = () => {
           </div>
         </>
       )}
-      <CreateRoomFooter />
+      {rooms && <CreateRoomFooter />}
     </div>
   )
 };
