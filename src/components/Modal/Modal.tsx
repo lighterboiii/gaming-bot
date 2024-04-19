@@ -28,9 +28,9 @@ export const Modal: FC<IModal> = ({ title, children, closeModal }) => {
     <>
       <div className={styles.modal}>
         <h3 className={styles.modal__title}>{title}</h3>
-        <span className={styles.close} onClick={closeModal}>
+        <button className={styles.close} onClick={closeModal}>
           <CrossIcon color="#000" width={12} height={12} />
-        </span>
+        </button>
         {children}
       </div>
       <ModalOverlay closeModal={closeModal}/>
