@@ -4,9 +4,21 @@ import Button from "../ui/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../services/reduxHooks";
 
-const CreateRoomFooter: FC = () => {
+interface IProps {
+  openModal: () => void;
+}
+
+const CreateRoomFooter: FC<IProps> = ({ openModal }) => {
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
+
+  const handleClick = () => {
+    if (userInfo?.user_energy === 20) {
+      openModal();
+    } else {
+      navigate('/create-room')
+    }
+  }
 
   return (
     <div className={styles.footer}>
@@ -16,7 +28,7 @@ const CreateRoomFooter: FC = () => {
         <p className={styles.footer__stats}>⚡ {userInfo?.user_energy}</p>
       </div>
       <div className={styles.footer__buttonWrapper}>
-        <Button text="Создать комнату" handleClick={() => navigate('/create-room')} />
+        <Button text="Создать комнату" handleClick={handleClick} />
       </div>
     </div>
   )

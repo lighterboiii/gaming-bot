@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+// /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import { IBonus } from "../../utils/types/mainTypes";
 import styles from './Bonus.module.scss';
@@ -18,7 +19,7 @@ interface IProps {
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: IBonus) => {

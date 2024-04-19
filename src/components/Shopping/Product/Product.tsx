@@ -37,7 +37,7 @@ interface ProductProps {
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
   
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
@@ -251,7 +251,6 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         <Modal title={translation?.list_in_shop} closeModal={() => setModalOpen(false)}>
           <SellForm item={item} setMessage={setMessage} setMessageShown={setMessageShown} onClose={handleCloseFormModal} />
         </Modal>
-
       )}
     </div>
   );

@@ -33,6 +33,7 @@
 
   &__notify {
     @include indents(0, 0 0 16px 0);
+    @include flex(row, center, center, 6px);
     color: $main-color;
     text-align: center;
     font-size: 15px;
@@ -83,5 +84,24 @@
     @media screen and (min-height: 691px) {
       @include size(100%, 75vh);
     }
+  }
+
+  &__modalText {
+    @include indents();
+    color: $main-color;
+    font-weight: 500;
+  }
+
+  &__logoDrink {
+    @include size(20px, 20px);
+  }
+
+  &__modalButtonWrapper {
+    @include size(120px, 32px);
+  }
+
+  &__modalChildren {
+    @include size(100%, auto);
+    @include flex(column, center, center, 4px);
   }
 }

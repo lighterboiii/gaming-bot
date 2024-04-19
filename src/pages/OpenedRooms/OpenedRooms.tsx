@@ -14,17 +14,20 @@ import { getOpenedRoomsRequest } from "../../api/gameApi";
 import Button from "../../components/ui/Button/Button";
 import { IGameCardData } from "../../utils/types/gameTypes";
 import CreateRoomFooter from "../../components/CreateRoomFooter/CreateRoomFooter";
+import { Modal } from "../../components/Modal/Modal";
+import energy from '../../images/energy-drink.png';
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
   const translation = useAppSelector(store => store.app.languageSettings);
+  const userInfo = useAppSelector(store => store.app.info);
   const [rooms, setRooms] = useState<IGameCardData[] | null>(null);
   const [typeValue, setTypeValue] = useState(`${translation?.sort_all}`);
   const [currencyValue, setCurrencyValue] = useState(`${translation?.sort_all}`);
   const [betValue, setBetValue] = useState(`${translation?.sort_all}`);
-
+  const [isModalOpen, setModalOpen] = useState(false);
   const [sortByBetAsc, setSortByBetAsc] = useState(false);
   const [sortByType, setSortByType] = useState(false);
   const [sortByCurr, setSortByCurr] = useState(false);
@@ -131,7 +134,26 @@ const OpenedRooms: FC = () => {
           </div>
         </>
       )}
-      {rooms && <CreateRoomFooter />}
+      {rooms && <CreateRoomFooter openModal={() => setModalOpen(true)} />}
+      {isModalOpen && (
+        <Modal title={"Закончилась энергия!"} closeModal={() => setModalOpen(false)}>
+          <div className={styles.rooms__modalChildren}>
+            <p className={styles.rooms__modalText}>
+              Хотите использовать?
+              <img src={energy} alt="drink" className={styles.rooms__logoDrink} />
+            </p>
+            <p className={styles.rooms__modalText}>(1/{userInfo?.user_energy_drinks})</p>
+          </div>
+          <div className={styles.rooms__buttons}>
+            <div className={styles.rooms__modalButtonWrapper}>
+              <Button text="Нет" handleClick={() => {setModalOpen(false)}}/>
+            </div>
+            <div className={styles.rooms__modalButtonWrapper}>
+              <Button text="Да" handleClick={() => {navigate('/create-room')}}/>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   )
 };

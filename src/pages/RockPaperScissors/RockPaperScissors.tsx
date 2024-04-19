@@ -19,7 +19,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
