@@ -134,7 +134,7 @@ const OpenedRooms: FC = () => {
           </div>
         </>
       )}
-      {rooms && <CreateRoomFooter openModal={() => setModalOpen(true)} />}
+      {rooms && rooms?.length > 0 && <CreateRoomFooter openModal={() => setModalOpen(true)} />}
       {isModalOpen && (
         <Modal title={"Закончилась энергия!"} closeModal={() => setModalOpen(false)}>
           <div className={styles.rooms__modalChildren}>

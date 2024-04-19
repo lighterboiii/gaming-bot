@@ -19,11 +19,11 @@
   @include flex(column, flex-start, center, 16px);
 
   &__header {
-    @include size(100%, 20vh);
+    @include size(100%, 25vh);
     @include flex(column, space-evenly, center, 8px);
 
     @media screen and (max-height: 690px) {
-      @include size(100%, 30vh);
+      @include size(100%, 35vh);
     }
   }
 

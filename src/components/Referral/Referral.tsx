@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { setCoinsNewValue } from "../../services/appSlice";
 import { postEvent } from "@tma.js/sdk";
 import { IMember } from "../../utils/types/memberTypes";
+import { formatNumber } from "../../utils/additionalFunctions";
 
 const Referral: FC = () => {
   const navigate = useNavigate();
@@ -91,7 +92,7 @@ const Referral: FC = () => {
         <p className={styles.referral__text}>
           <span className={styles.referral__earn}>Заработано</span>
           <span className={styles.referral__sumSpan}>
-            💵 {referralCoinsAmount && referralCoinsAmount}$
+            💵 {referralCoinsAmount && formatNumber(referralCoinsAmount)}$
           </span>
         </p>
       </div>

@@ -90,7 +90,6 @@ const Main: FC = () => {
                 </>}
               secondaryText="Приглашай и зарабатывай"
               chevronPosition="right"
-              shadow
             />
             <SmallButton
               handleClick={() => navigate('/leaderboard')}

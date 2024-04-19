@@ -28,7 +28,7 @@
 
   &__weekly {
     @include size(100%, auto);
-    @include flex(column, center, center, 16px);
+    @include flex(column, center, center, 10px);
   }
 
   &__text {
@@ -62,7 +62,7 @@
 
   &__board {
     @include indents(6px 16px 0, 0);
-    @include flex(column, unset, flex-end, 16px);
+    @include flex(column, unset, flex-end, 10px);
     @include size(100%, auto);
     overflow: auto;
     z-index: 3;

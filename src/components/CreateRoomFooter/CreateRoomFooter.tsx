@@ -13,7 +13,7 @@ const CreateRoomFooter: FC<IProps> = ({ openModal }) => {
   const userInfo = useAppSelector(store => store.app.info);
 
   const handleClick = () => {
-    if (userInfo?.user_energy === 20) {
+    if (userInfo?.user_energy === 0) {
       openModal();
     } else {
       navigate('/create-room')

@@ -98,8 +98,8 @@
 }
 /* Миксин для дочернего компонента overlay */
 @mixin children-layout {
-  @include indents(20px 0 0, 0);
-  @include flex(column, center, center, 16px);
+  @include indents(10px 0 0, 0);
+  @include flex(column, center, center, 6px);
   @include size(100%, 100%);
   background-color: $tertiary-color;
   border-top-left-radius: $radius-12;
@@ -109,8 +109,6 @@
 @mixin big-link-layout {
   @include position(relative);
   @include indents(16px, 0);
-  // @include min-size(100%, 90px);
-  // @include max-size(100%, 140px);
   @include size(100%, 106px);
   @include flex(row, space-between, center);
   border-radius: $radius-12;
