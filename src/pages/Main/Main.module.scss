@@ -22,12 +22,13 @@
 
   &__content {
     @include flex(column, flex-start, unset, 24px);
-    @include size(100%, calc(65vh - 16px));
+    @include size(100%, 75vh);
     margin-top: 8px;
     overflow-y: scroll;
 
-    @media screen and (min-height: 691px) {
-      @include size(100%, 75vh);
+    @media screen and (max-height: 690px) {
+      @include size(100%, calc(65vh - 16px));
+      @include flex(column, flex-start, unset, 12px);
     }
   }
 
@@ -40,7 +41,7 @@
     grid-template-columns: 1fr 1fr;
     justify-content: center;
     gap: 12px;
-    @include size(100%, 168px);
+    @include size(100%, auto);
   }
 
   &__smallButtonsContainer {

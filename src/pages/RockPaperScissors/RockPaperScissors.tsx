@@ -22,7 +22,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,7 +36,7 @@ const RockPaperScissors: FC = () => {
   useEffect(() => {
     setLeftRockImage(leftRock);
     setRightRockImage(rightRock);
-  }, [roomId]);
+  }, []);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -142,9 +142,9 @@ const RockPaperScissors: FC = () => {
 
               if (res?.message === "success") {
                 setTimeout(() => {
-                  if (Number(res?.winner_id) === Number(userId)) {
+                  if (Number(res?.winner) === Number(userId)) {
                     setMessage('Вы победили');
-                  } else if (Number(res?.winner_id) !== Number(userId)) {
+                  } else if (Number(res?.winner) !== Number(userId)) {
                     setMessage('Вы проиграли');
                   } else if (res?.winner === 'draw') {
                     setMessage('Ничья');
@@ -157,14 +157,10 @@ const RockPaperScissors: FC = () => {
               console.error('Ошибка при запросе данных:', error);
             });
         }
-      }, 1000);
+      }, 1500);
     };
 
     fetchData();
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
   }, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
