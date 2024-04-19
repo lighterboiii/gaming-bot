@@ -13,8 +13,8 @@
   }
 
   &__textElements {
-    @include size(auto, 100%);
-    @include flex(column, space-evenly, flex-start, 4px);
+    @include size(auto, 80px);
+    @include flex(column, flex-end, flex-start, 8px);
   }
 
   &__textWrapper {
@@ -22,12 +22,12 @@
   }
 
   &__avatarContainer {
-    @include size(136px, 136px);
+    @include size(148px, 148px);
   }
 
   &__info {
-    @include size(auto, 100px);
-    @include flex(column, space-between, flex-start, 6px);
+    @include size(auto, 136px);
+    @include flex(column, center, flex-start, 12px);
     flex-grow: 1;
   }
 
@@ -40,7 +40,7 @@
     @include flex(row, flex-start, center, 6px);
     color: $main-color;
     font-weight: 900;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1;
   }
 
@@ -49,8 +49,8 @@
     @include ellipsis();
     @include flex(row, flex-start, center, 8px);
     color: $main-color;
-    font-weight: 900;
-    font-size: 12px;
+    font-weight: 700;
+    font-size: 16px;
     line-height: 1;
   }
 

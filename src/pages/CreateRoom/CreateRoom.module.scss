@@ -9,9 +9,13 @@
 
   &__header {
     @include indents(0 16px, 0);
-    @include size(100%, 20vh);
+    @include size(100%, 25vh);
     @include flex(column, center, center);
     background-color: $secondary-color;
+
+    @media screen and (max-height: 690px) {
+      @include size(100%, 30vh);
+    }
   }
 
   &__content {

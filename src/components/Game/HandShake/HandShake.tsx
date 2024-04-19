@@ -14,7 +14,8 @@ const HandShake: FC<IProps> = ({ prevChoices }) => {
   useEffect(() => {
       setLeftHandImage(player1);
       setRightHandImage(player2);
-  }, [player1, player2]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prevChoices]);
 
   return (
     <div className={styles.hands}>
