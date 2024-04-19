@@ -5,12 +5,11 @@
   @include position(relative);
   @include indents();
   @include size(100%, unset);
-  @include flex(row, space-between, center, 10px);
+  @include flex(row, space-between, center);
 
   &__content {
-    // @include size(130px, 130px);
     @include flex(row, flex-start, center, 6px);
-    flex: 1;
+    flex-grow: 1;
   }
 
   &__textElements {
@@ -23,12 +22,13 @@
   }
 
   &__avatarContainer {
-    @include size(130px, 130px);
+    @include size(136px, 136px);
   }
 
   &__info {
     @include size(auto, 100px);
-    @include flex(column, space-between, flex-start);
+    @include flex(column, space-between, flex-start, 6px);
+    flex-grow: 1;
   }
 
   &__money {
@@ -37,6 +37,7 @@
 
   &__name {
     @include indents();
+    @include flex(row, flex-start, center, 6px);
     color: $main-color;
     font-weight: 900;
     font-size: 14px;
@@ -46,8 +47,9 @@
   &__text {
     @include indents();
     @include ellipsis();
+    @include flex(row, flex-start, center, 8px);
     color: $main-color;
-    font-weight: 400;
+    font-weight: 900;
     font-size: 12px;
     line-height: 1;
   }
@@ -63,13 +65,14 @@
   &__balance {
     @include button-style-reset();
     @include size(85px, auto);
-    @include flex(row, center, center);
-    @include indents(4px 8px, 0);
+    @include flex(row, space-evenly, center);
+    @include indents(8px, 0);
     border-radius: $radius-40;
     background-color: $black-color;
     text-align: center;
     color: $main-color;
-    font-size: 12px;
+    font-size: 10px;
+    font-weight: 600;
   }
 
   &__linkContainer {

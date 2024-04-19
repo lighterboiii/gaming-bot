@@ -21,7 +21,7 @@ const NotFoundPage: FC = () => {
   return (
     <div className={styles.rooms}>
       <div className={styles.rooms__content}>
-        <SmallButton to='/' text="Давай обратно" secondaryText="Контент в разработке" isWhiteBackground chevronPosition="left" />
+        <SmallButton handleClick={() => navigate(-1)} text="Давай обратно" secondaryText="Контент в разработке" isWhiteBackground chevronPosition="left" />
       </div>
     </div>
   )

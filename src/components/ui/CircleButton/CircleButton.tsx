@@ -4,8 +4,9 @@ import styles from './CircleButton.module.scss';
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import RefIcon from "../../../icons/Referral/ReferralIcon";
 import CrossIcon from "../../../icons/Cross/Cross";
-import com from '../../../images/community_icon_tiny.png';
 import { postEvent } from "@tma.js/sdk";
+import FortuneWheelIcon from "../../../icons/FortuneWheel/FortuneWheel";
+import CommunityIcon from "../../../icons/Community/CommunityIcon";
 
 interface IProps {
   chevronPosition?: string;
@@ -14,7 +15,7 @@ interface IProps {
   color?: string;
   shadow?: boolean;
   isWhiteBackground?: boolean;
-  iconType: 'community' | 'chevron' | 'cross' | 'ref';
+  iconType: 'community' | 'chevron' | 'cross' | 'ref' | 'fortune';
 }
 
 const CircleButton: FC<IProps> = ({
@@ -41,7 +42,8 @@ const CircleButton: FC<IProps> = ({
       {iconType === 'chevron' && <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />}
       {iconType === 'ref' && <RefIcon />}
       {iconType === 'cross' && <CrossIcon color={color} />}
-      {iconType === 'community' && <img src={com} alt="icon" style={{ width: '20px', height: '20px' }} />}
+      {iconType === 'fortune' && <FortuneWheelIcon />}
+      {iconType === 'community' && <CommunityIcon />}
     </div>
   )
 }

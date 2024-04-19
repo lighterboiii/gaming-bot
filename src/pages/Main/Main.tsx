@@ -13,8 +13,14 @@ import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
 import DailyBonus from "../../components/Bonus/Bonus";
 import { useAppSelector } from "../../services/reduxHooks";
+import CommunityIcon from "../../icons/Community/CommunityIcon";
+import FriendsIcon from "../../icons/Friends/FriendsIcon";
+import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
+import PlayIcon from "../../icons/Play/PlayIcon";
+import { useNavigate } from "react-router-dom";
 
 const Main: FC = () => {
+  const navigate = useNavigate();
   const animationRef = useRef<HTMLDivElement>(null);
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -62,7 +68,10 @@ const Main: FC = () => {
     <div className={styles.main}>
       <div className={styles.main__header}>
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
-        <MainUserInfo toggleOverlay={toggleRefOverlay} isOverlayOpen={showReferralOverlay} />
+        <MainUserInfo 
+        toggleOverlay={() => {}} 
+        isOverlayOpen={showReferralOverlay} // после заменить
+        />
       </div>
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
         <div ref={animationRef}>
@@ -71,24 +80,46 @@ const Main: FC = () => {
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
             <SmallButton
-              to="/create-room"
-              text={translation?.create_room}
-              secondaryText={translation?.play_with_others}
+              handleClick={() => toggleRefOverlay()}
+              text={
+                <>
+                  <FriendsIcon width={12} height={12} />
+                  <span>
+                    Друзья
+                  </span>
+                </>}
+              secondaryText="Приглашай и зарабатывай"
               chevronPosition="right"
-              isWhiteBackground
               shadow
             />
             <SmallButton
-              to="/leaderboard"
-              text={translation?.webapp_leaderboard}
-              secondaryText={translation?.become_weekly_leader}
+              handleClick={() => navigate('/leaderboard')}
+              text={
+                <>
+                  <LeaderBoardIcon width={12} height={12} />
+                  <span>
+                    Топ недели
+                  </span>
+                </>
+              }
+              secondaryText="Стань лидером недели!"
               chevronPosition="right"
             />
           </div>
           <BigButton
             to="/rooms"
-            text={translation?.find_game}
-            secondaryText={translation?.open_game_rooms}
+            text={
+              <>
+                <PlayIcon
+                  width={16}
+                  height={16}
+                />
+                <span>
+                  Играть!
+                </span>
+              </>
+            }
+            secondaryText="Онлайн игры против других"
             chevronPosition="right"
             isWhiteBackground
             circleIconColor="#FFF"
@@ -105,6 +136,9 @@ const Main: FC = () => {
         }
         show={showReferralOverlay}
         onClose={toggleRefOverlay}
+        closeButton
+        buttonColor="#FFF"
+        crossColor="#ac1a44"
       />
       <Overlay
         buttonColor="#FFF"

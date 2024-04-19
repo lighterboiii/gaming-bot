@@ -1,18 +1,10 @@
 import { FC } from 'react';
+import { ICommonIconProps } from '../../utils/types/mainTypes';
 
-export interface ICommunityIcon {
-  color?: string;
-  position?: string;
-  width?: number;
-  height?: number;
-  strokeWidth?: number;
-}
-
-const RefIcon: FC<ICommunityIcon> = ({
+const RefIcon: FC<ICommonIconProps> = ({
   color = '#F50941',
   width = 20,
   height = 20,
-  strokeWidth = 2,
 }) => {
   return (
 

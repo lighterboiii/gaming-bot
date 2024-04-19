@@ -1,11 +1,9 @@
 import { FC } from 'react';
 import styles from './ChevronIcon.module.scss';
+import { ICommonIconProps } from '../../utils/types/mainTypes';
 
-export interface IChevronIcon {
-  color?: string;
+export interface IChevronIcon extends ICommonIconProps {
   position?: string;
-  width?: number;
-  height?: number;
   strokeWidth?: number;
 }
 

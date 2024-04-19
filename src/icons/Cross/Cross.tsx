@@ -1,12 +1,9 @@
 import { FC } from 'react';
 import styles from './Cross.module.scss';
+import { ICommonIconProps } from '../../utils/types/mainTypes';
 
-export interface ICrossIcon {
-  color?: string;
+export interface ICrossIcon extends ICommonIconProps {
   position?: string;
-  width?: number;
-  height?: number;
-  strokeWidth?: number;
 }
 
 const CrossIcon: FC<ICrossIcon> = ({
@@ -14,7 +11,6 @@ const CrossIcon: FC<ICrossIcon> = ({
   position = "right",
   width = 16,
   height = 16,
-  strokeWidth = 2,
 }) => {
 
   let rotation: string;

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+// /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import { IBonus } from "../../utils/types/mainTypes";
 import styles from './Bonus.module.scss';

@@ -5,17 +5,24 @@
   @include indents(16px);
   @include position(fixed, $top: 50%, $left: 50%);
   @include flex(column, $gap: 16px);
+  @include size(300px, 168px);
   transform: translate(-50%, -50%);
-  border-radius: $radius-12;
-  background-color: $main-color;
+  border-radius: $radius-15;
+  background-color: $black-color;
   z-index: 667;
 
   &__title {
     @include indents();
+    color: $main-color;
+    text-align: center;
   }
 }
 
 .close {
-  @include position(absolute, $top: 16px, $right: 16px);
+  @include button-style-reset();
+  @include size(20px, 20px);
+  @include position(absolute, $top: 6px, $right: 6px);
   cursor: pointer;
+  background-color: $main-color;
+  border-radius: $radius-round;
 }

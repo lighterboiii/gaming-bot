@@ -4,18 +4,18 @@
 .button {
   @include button-style-reset();
   @include position(relative);
-  // @include indents(10px, 0);
-  @include max-size(100%, 190px);
-  @include size(100%, 100%);
-  aspect-ratio: 1;
+  @include max-size(100%, 168px);
+  @include size(98%, 100%);
+
   background-color: $secondary-color;
-  border-radius: $radius-12;
+  border-radius: $radius-15;
   text-decoration: none;
 
   &__text {
     @include indents();
     @include size(60%, auto);
     @include position(absolute, $left: 12px, $top: 12px);
+    @include flex(row, flex-start, center, 10px);
     color: $secondary-color;
     font-size: 16px;
     font-weight: 700;
@@ -28,7 +28,7 @@
     @include size(60%, auto);
     color: $black-color;
     text-align: left;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 200;
   }
 

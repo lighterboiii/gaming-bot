@@ -9,6 +9,8 @@ import CircleButton from "../../ui/CircleButton/CircleButton";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
 import { inviteLink } from "../../../api/requestData";
+import WalletIcon from "../../../icons/Wallet/WalletIcon";
+import LevelIcon from "../../../icons/Level/LevelIcon";
 
 interface IProps {
   toggleOverlay: () => void;
@@ -33,19 +35,24 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
         </div>
         <div className={styles.userInfo__info}>
           <div className={styles.userInfo__textElements}>
-            <p className={styles.userInfo__name}>{userData && userData?.publicname}</p>
-            <div className={styles.userInfo__money}>
-              <div className={styles.userInfo__textWrapper}>
-                <p className={styles.userInfo__text}>💵 {userData ? formatNumber(userData?.coins) : '0'}</p>
-                <p className={styles.userInfo__text}>🔰 {userData ? formatNumber(userData?.tokens) : '0'}</p>
-              </div>
-              <div className={styles.userInfo__textWrapper}>
-                <p className={styles.userInfo__text}>🔋 {userData ? userData?.user_energy_drinks : '0'}</p>
-                <p className={styles.userInfo__text}>🧙‍♂️ {userData ? userData?.user_exp : '0'}</p>
-              </div>
+            <div className={styles.userInfo__name}>
+              <LevelIcon level={userData?.user_exp} />
+              {userData && userData?.publicname}
             </div>
+            <p className={styles.userInfo__text}>
+              <span>💵</span>
+              {userData ? formatNumber(userData?.coins) : '0'}
+            </p>
+            <p className={styles.userInfo__text}>
+              <span>🔰</span>
+              {userData ? formatNumber(userData?.tokens) : '0'}
+            </p>
           </div>
           <button type="button" className={styles.userInfo__balance} onClick={handleClickBalance}>
+            <WalletIcon
+              width={12}
+              height={12}
+            />
             {translation?.webapp_balance}
           </button>
         </div>
@@ -55,9 +62,9 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
           <CircleButton
             shadow
             isWhiteBackground
-            iconType={isOverlayOpen ? "cross" : "ref"}
-            width={20}
-            height={20}
+            iconType="fortune"
+            width={22}
+            height={22}
             color="#d51845"
           />
         </button>
@@ -66,8 +73,8 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, isOverlayOpen }) => {
             shadow
             isWhiteBackground
             iconType="community"
-            width={20}
-            height={20}
+            width={22}
+            height={22}
           />
         </Link>
       </div>

@@ -2,7 +2,7 @@
 @use '../../../stylesheets/variables' as *;
 
 .button {
-  @include size(40px, 40px);
+  @include size(44px, 44px);
   @include flex(row, center, center);
   background-color: $main-color;
   border-radius: $radius-round;

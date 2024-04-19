@@ -8,12 +8,12 @@
   @include flex(column, center, center, 16px);
 
   &__button {
-    @include size(100%, 32px);
+    @include size(100%, 40px);
   }
 }
 
 .form {
-  @include size(100%, 100%);
+  @include size(100%, auto);
   @include flex(column, center, center, 10px);
 
   &__fieldset {
@@ -27,7 +27,8 @@
     @include size(100%, auto);
     @include min-size(100%, 32px);
     @include indents(6px 12px);
-    border: .5px $black-color solid;
+    border: .5px $main-color solid;
     border-radius: $radius-10;
+    color: $main-color;
   }
 }

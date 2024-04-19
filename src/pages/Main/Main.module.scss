@@ -12,9 +12,8 @@
   }
 
   &__header {
-    // @include indents(0 16px, 0);
     @include size(100%, 20vh);
-    @include flex(column, center, center);
+    @include flex(column, flex-end, center);
 
     @media screen and (max-height: 690px) {
       @include size(100%, 30vh);
@@ -22,12 +21,13 @@
   }
 
   &__logo {
-    @include size(110px, 26px);
+    @include size(133px, 38px);
   }
 
   &__content {
-    @include flex(column, flex-start, unset, 16px);
+    @include flex(column, flex-start, unset, 24px);
     @include size(100%, calc(70vh - 16px));
+    margin-top: 8px;
     overflow-y: scroll;
 
     @media screen and (min-height: 691px) {
@@ -42,13 +42,14 @@
   &__centralButtonsContainer {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    @include size(100%, auto);
+    justify-content: center;
+    gap: 12px;
+    @include size(100%, 168px);
   }
 
   &__smallButtonsContainer {
-    @include size(100%, 190px);
-    @include flex(column, space-between, space-between, 16px);
+    @include size(100%, 168px);
+    @include flex(column, space-between, space-between, 12px);
   }
 
   &::-webkit-scrollbar {

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
+import React, { FC } from "react";
 import styles from './BigButton.module.scss';
 import { Link } from "react-router-dom";
 import CircleButton from "../CircleButton/CircleButton";
@@ -7,7 +7,7 @@ import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
   to: string;
-  text: string;
+  text: string | React.ReactNode;
   secondaryText: string;
   isWhiteBackground?: boolean;
   chevronPosition: string;
@@ -35,8 +35,8 @@ const BigButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, che
           chevronPosition={chevronPosition}
           color={circleIconColor}
           iconType="chevron"
-          width={20}
-          height={20}
+          width={24}
+          height={24}
         />
       </div>
     </Link>

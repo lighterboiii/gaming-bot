@@ -11,10 +11,6 @@
   box-sizing: border-box;
   transition: background-image .7s ease-in-out;
 
-  @media screen and (min-height: 768px) and (max-height: 1024px) {
-    @include size(100%, 164px);
-  }
-
   &__link {
     @include size(100%, 100%);
     @include position(absolute, $top: 0, $left: 0);
@@ -30,25 +26,23 @@
   }
 
   &__leftButton {
-    @include position(absolute, $left: 0, $top: 50%);
-    @include flex(row, flex-start, center);
-    @include indents(0 0 0 4px, 0);
+    @include size(20px, 20px);
+    @include position(absolute, $left: 8px, $top: 50%);
+    @include flex(row, center, center);
+    @include indents(8px, 0);
     transform: translateY(-50%);
     background-color: $black-color;
-    opacity: .1;
-    border-top-right-radius: 30px;
-    border-bottom-right-radius: 30px;
+    border-radius: $radius-round;
   }
 
   &__rightButton {
-    @include position(absolute, $right: 0, $top: 50%);
-    @include flex(row, flex-end, center);
-    @include indents(0 4px 0 0, 0);
+    @include size(20px, 20px);
+    @include position(absolute, $right: 8px, $top: 50%);
+    @include flex(row, center, center);
+    @include indents(8px, 0);
     transform: translateY(-50%);
     background-color: $black-color;
-    opacity: .1;
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
+    border-radius: $radius-round;
   }
 
   &__text {

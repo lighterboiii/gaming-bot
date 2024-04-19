@@ -71,20 +71,20 @@ const Shop: FC = () => {
   };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
     setActiveButton(`${translation?.purchased}`);
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
     setActiveButton(`${translation?.shop}`);
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
     setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
@@ -101,7 +101,7 @@ const Shop: FC = () => {
   return (
     <div className={styles.shop}>
       <div className={styles.shop__header}>
-        <h2 className={styles.shop__title}>{translation?.shop}</h2>
+        <h2 className={styles.shop__title}>Предметы</h2>
         <UserInfo />
       </div>
       <div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>

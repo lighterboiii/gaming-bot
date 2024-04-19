@@ -250,7 +250,6 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
         <Modal title={translation?.list_in_shop} closeModal={() => setModalOpen(false)}>
           <SellForm item={item} setMessage={setMessage} setMessageShown={setMessageShown} onClose={handleCloseFormModal} />
         </Modal>
-
       )}
     </div>
   );

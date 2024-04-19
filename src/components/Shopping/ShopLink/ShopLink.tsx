@@ -22,7 +22,7 @@ const ShopLink: FC = () => {
     >
       <div className={styles.shopLink__content}>
         <img src={gowinLogo} alt="main_logo" className={styles.shopLink__logo} />
-        <h2 className={styles.shopLink__title}>{translation?.shop}</h2>
+        <h2 className={styles.shopLink__title}>Предметы</h2>
         <img src={girl} alt="character" className={styles.shopLink__char} />
       </div>
     </Link>
