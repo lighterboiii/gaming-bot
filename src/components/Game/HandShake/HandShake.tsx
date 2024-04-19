@@ -8,18 +8,26 @@ interface IProps {
 
 const HandShake: FC<IProps> = ({ prevChoices }) => {
   const { player1, player2 } = prevChoices;
-  const [leftHandImage, setLeftHandImage] = useState<string>('');
-  const [rightHandImage, setRightHandImage] = useState<string>('');
+  const [handImages, setHandImages] = useState({
+    leftHandImage: '',
+    rightHandImage: '',
+  })
+  // const [leftHandImage, setLeftHandImage] = useState<string>('');
+  // const [rightHandImage, setRightHandImage] = useState<string>('');
 
   useEffect(() => {
-      setLeftHandImage(player1);
-      setRightHandImage(player2);
+    setHandImages({
+      leftHandImage: player1,
+      rightHandImage: player2,
+    })
+      // setLeftHandImage(player1);
+      // setRightHandImage(player2);
   }, [player1, player2]);
 
   return (
     <div className={styles.hands}>
-      <img src={leftHandImage} alt="left hand" className={`${styles.hands__mainImage} ${styles.hands__leftMainImage}`} />
-      <img src={rightHandImage} alt="right hand" className={`${styles.hands__mainImage} ${styles.hands__rightMainImage}`} />
+      <img src={handImages.leftHandImage} alt="left hand" className={`${styles.hands__mainImage} ${styles.hands__leftMainImage}`} />
+      <img src={handImages.rightHandImage} alt="right hand" className={`${styles.hands__mainImage} ${styles.hands__rightMainImage}`} />
     </div>
   );
 };

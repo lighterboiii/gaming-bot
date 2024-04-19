@@ -32,6 +32,7 @@ const RockPaperScissors: FC = () => {
   const [rightRockImage, setRightRockImage] = useState<string>('');
   const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
+  const [playerChoices, setPlayerChoices] = useState<{ [key: string]: string }>({});
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -134,10 +135,10 @@ const RockPaperScissors: FC = () => {
           whoIsWinRequest(roomId!, userId)
             .then((res: any) => {
               console.log(res);
-                setPlayersAnim({
-                  firstAnim: res?.f_anim,
-                  secondAnim: res?.s_anim,
-                });
+              setPlayersAnim({
+                firstAnim: res?.f_anim,
+                secondAnim: res?.s_anim,
+              });
               const animationTime = 3000;
 
               if (res?.message === "success") {
