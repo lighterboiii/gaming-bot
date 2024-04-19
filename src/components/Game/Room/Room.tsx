@@ -19,7 +19,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const handleJoinRoom = () => {
     joinRoomRequest(userId, room.room_id)
@@ -31,6 +31,7 @@ const Room: FC<IProps> = ({ room }) => {
         console.error("Ошибка при присоединении к комнате:", error);
       });
   };
+
   return (
     <div className={styles.room} onClick={handleJoinRoom} key={room?.id}>
       <div className={styles.room__game}>

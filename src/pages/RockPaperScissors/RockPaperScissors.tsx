@@ -22,7 +22,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,7 +37,6 @@ const RockPaperScissors: FC = () => {
     setLeftRockImage(leftRock);
     setRightRockImage(rightRock);
   }, []);
-
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -135,10 +134,10 @@ const RockPaperScissors: FC = () => {
           whoIsWinRequest(roomId!, userId)
             .then((res: any) => {
               console.log(res);
-              setPlayersAnim({
-                firstAnim: res?.f_anim,
-                secondAnim: res?.s_anim
-              });
+                setPlayersAnim({
+                  firstAnim: res?.f_anim,
+                  secondAnim: res?.s_anim,
+                });
               const animationTime = 3000;
 
               if (res?.message === "success") {
