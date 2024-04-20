@@ -123,17 +123,14 @@ const RockPaperScissors: FC = () => {
         console.error('Ошибка при установке выбора', error);
       });
   };
-const [animationsReceived, setAnimationsReceived] = useState<boolean>(false);
-console.log(animationsReceived);
+// const [animationsReceived, setAnimationsReceived] = useState<boolean>(false);
+// console.log(animationsReceived);
 useEffect(() => {
   // let timeoutId: any;
   const fetchData = () => {
   //   clearTimeout(timeoutId);
   //   timeoutId = setTimeout(() => {
-      if (
-        data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready') &&
-        !animationsReceived
-      ) {
+      if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
         whoIsWinRequest(roomId!, userId)
           .then((res: any) => {
             console.log(res);
@@ -169,7 +166,6 @@ useEffect(() => {
   // хендлер готовности игрока
   const handleReady = () => {
     setMessageVisible(false);
-    setAnimationsReceived(false);
     setMessage('');
     const data = {
       user_id: userId,
