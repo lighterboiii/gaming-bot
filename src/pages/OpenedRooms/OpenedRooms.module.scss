@@ -85,23 +85,4 @@
       @include size(100%, 75vh);
     }
   }
-
-  &__modalText {
-    @include indents();
-    color: $main-color;
-    font-weight: 500;
-  }
-
-  &__logoDrink {
-    @include size(20px, 20px);
-  }
-
-  &__modalButtonWrapper {
-    @include size(120px, 32px);
-  }
-
-  &__modalChildren {
-    @include size(100%, auto);
-    @include flex(column, center, center, 4px);
-  }
 }

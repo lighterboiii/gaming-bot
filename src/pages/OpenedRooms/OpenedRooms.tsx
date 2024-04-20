@@ -15,14 +15,13 @@ import Button from "../../components/ui/Button/Button";
 import { IGameCardData } from "../../utils/types/gameTypes";
 import CreateRoomFooter from "../../components/CreateRoomFooter/CreateRoomFooter";
 import { Modal } from "../../components/Modal/Modal";
-import energy from '../../images/energy-drink.png';
+import JoinRoomPopup from "../../components/JoinRoomPopup/JoinRoomPopup";
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
   const translation = useAppSelector(store => store.app.languageSettings);
-  const userInfo = useAppSelector(store => store.app.info);
   const [rooms, setRooms] = useState<IGameCardData[] | null>(null);
   const [typeValue, setTypeValue] = useState(`${translation?.sort_all}`);
   const [currencyValue, setCurrencyValue] = useState(`${translation?.sort_all}`);
@@ -32,6 +31,7 @@ const OpenedRooms: FC = () => {
   const [sortByType, setSortByType] = useState(false);
   const [sortByCurr, setSortByCurr] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState<IGameCardData | null>(null); 
 
   useEffect(() => {
     setLoading(true);
@@ -97,6 +97,11 @@ const OpenedRooms: FC = () => {
     setRooms(sortedRooms);
   };
 
+  const handleRoomClick = (room: any) => {
+    setSelectedRoom(room);
+    setModalOpen(true);
+  }
+
   return (
     <div className={styles.rooms}>
       {loading ? <Loader /> : (
@@ -120,7 +125,7 @@ const OpenedRooms: FC = () => {
           </div>
           <div className={styles.rooms__roomList + " scrollable"}>
             {rooms && rooms.length > 0 ? rooms?.map((room: any, index: number) => (
-              <Room room={room} key={index} />
+              <Room room={room} key={index} openModal={() => handleRoomClick(room)}  />
             )) : (
               <div className={styles.rooms__createNew}>
                 <p className={styles.rooms__notify}>{translation?.no_open_rooms}</p>
@@ -134,24 +139,10 @@ const OpenedRooms: FC = () => {
           </div>
         </>
       )}
-      {rooms && rooms?.length > 0 && <CreateRoomFooter openModal={() => setModalOpen(true)} />}
+      {rooms &&rooms?.length > 0 && <CreateRoomFooter />}
       {isModalOpen && (
         <Modal title={"Закончилась энергия!"} closeModal={() => setModalOpen(false)}>
-          <div className={styles.rooms__modalChildren}>
-            <p className={styles.rooms__modalText}>
-              Хотите использовать?
-              <img src={energy} alt="drink" className={styles.rooms__logoDrink} />
-            </p>
-            <p className={styles.rooms__modalText}>(1/{userInfo?.user_energy_drinks})</p>
-          </div>
-          <div className={styles.rooms__buttons}>
-            <div className={styles.rooms__modalButtonWrapper}>
-              <Button text="Нет" handleClick={() => {setModalOpen(false)}}/>
-            </div>
-            <div className={styles.rooms__modalButtonWrapper}>
-              <Button text="Да" handleClick={() => {navigate('/create-room')}}/>
-            </div>
-          </div>
+          <JoinRoomPopup setModalOpen={() => setModalOpen(false)} room={selectedRoom} />
         </Modal>
       )}
     </div>

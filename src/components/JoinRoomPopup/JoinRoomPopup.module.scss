@@ -1,0 +1,33 @@
+@use '../../stylesheets/variables' as *;
+@use '../../stylesheets/mixins' as *;
+
+.popup {
+  @include indents();
+  @include size(100%, auto);
+  @include flex(column, center, center, 10px);
+
+  &__modalText {
+    @include indents();
+    color: $main-color;
+    font-weight: 500;
+  }
+
+  &__logoDrink {
+    @include size(20px, 20px);
+  }
+
+  &__modalButtonWrapper {
+    @include size(120px, 32px);
+  }
+
+  &__buttons {
+    @include size(100%, auto);
+    @include flex(row, space-between, center, 16px);
+    border: none;
+  }
+
+  &__modalChildren {
+    @include size(100%, auto);
+    @include flex(column, center, center, 4px);
+  }
+}

@@ -14,22 +14,30 @@ import { postReq } from "../../../api/api";
 // типизировать
 interface IProps {
   room: any;
+  openModal: () => void;
 }
 
-const Room: FC<IProps> = ({ room }) => {
+const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
+  const userInfo = useAppSelector(store => store.app.info);
+  console.log(room);
+
   const handleJoinRoom = () => {
-    joinRoomRequest(userId, room.room_id)
-      .then((res) => {
-        console.log("Присоединение к комнате выполнено успешно:", res);
-        navigate(`/room/${room.room_id}`);
-      })
-      .catch((error) => {
-        console.error("Ошибка при присоединении к комнате:", error);
-      });
+    if (userInfo?.user_energy === 20 && room?.bet_type === 3) {
+      openModal();
+    } else {
+      joinRoomRequest(userId, room.room_id)
+        .then((res) => {
+          console.log("Присоединение к комнате выполнено успешно:", res);
+          navigate(`/room/${room.room_id}`);
+        })
+        .catch((error) => {
+          console.error("Ошибка при присоединении к комнате:", error);
+        });
+    }
   };
 
   return (
