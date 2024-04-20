@@ -19,7 +19,7 @@ interface IProps {
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: IBonus) => {
@@ -39,7 +39,7 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         break;
       case "exp":
         const resExp = await makeCollectibleRequest(itemId, itemCount, userId);
-        dispatch(setNewExpValue(resExp.message));
+        // dispatch(setNewExpValue(resExp.message));
         // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         break;
       default:

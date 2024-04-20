@@ -20,13 +20,13 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
   console.log(room);
 
   const handleJoinRoom = () => {
-    if (userInfo?.user_energy === 20 && room?.bet_type === 3) {
+    if (userInfo?.user_energy === 0 && room?.bet_type === 3) {
       openModal();
     } else {
       joinRoomRequest(userId, room.room_id)

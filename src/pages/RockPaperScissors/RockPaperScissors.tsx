@@ -22,7 +22,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -32,7 +32,6 @@ const RockPaperScissors: FC = () => {
   const [rightRockImage, setRightRockImage] = useState<string>('');
   const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
-  const [playerChoices, setPlayerChoices] = useState<{ [key: string]: string }>({});
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -72,7 +71,6 @@ const RockPaperScissors: FC = () => {
       };
       getPollingRequest(userId, data)
         .then((res: any) => {
-          console.log(res);
           setData(res);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
@@ -102,13 +100,13 @@ const RockPaperScissors: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // показать/скрыть лоадер
-  useEffect(() => {
-    if (data) {
-      setLoading(false);
-    } else if (data) {
-      setLoading(true);
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (data) {
+  //     setLoading(false);
+  //   } else if (data) {
+  //     setLoading(true);
+  //   }
+  // }, [data])
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     const reqData = {
@@ -120,15 +118,13 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, reqData)
       .then((res: any) => {
         setData(res);
-        console.log(res);
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
-// В RockPaperScissors компоненте добавьте состояние для отслеживания получения анимаций
 const [animationsReceived, setAnimationsReceived] = useState<boolean>(false);
-
+console.log(animationsReceived);
 useEffect(() => {
   let timeoutId: any;
   const fetchData = () => {
@@ -140,7 +136,6 @@ useEffect(() => {
       ) {
         whoIsWinRequest(roomId!, userId)
           .then((res: any) => {
-            console.log(res);
             setPlayersAnim({
               firstAnim: res?.f_anim,
               secondAnim: res?.s_anim,
@@ -169,10 +164,11 @@ useEffect(() => {
   };
 
   fetchData();
-}, [data]);
+}, [data, animationsReceived]);
   // хендлер готовности игрока
   const handleReady = () => {
     setMessageVisible(false);
+    setAnimationsReceived(false);
     setMessage('');
     const data = {
       user_id: userId,
