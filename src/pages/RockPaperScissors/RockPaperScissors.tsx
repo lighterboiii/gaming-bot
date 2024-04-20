@@ -136,6 +136,7 @@ useEffect(() => {
       ) {
         whoIsWinRequest(roomId!, userId)
           .then((res: any) => {
+            console.log(res);
             setPlayersAnim({
               firstAnim: res?.f_anim,
               secondAnim: res?.s_anim,
@@ -145,9 +146,9 @@ useEffect(() => {
 
             if (res?.message === "success") {
               setTimeout(() => {
-                if (Number(res?.winner_id) === Number(userId)) {
+                if (Number(res?.winner) === Number(userId)) {
                   setMessage('Вы победили');
-                } else if (Number(res?.winner_id) !== Number(userId)) {
+                } else if (Number(res?.winner) !== Number(userId)) {
                   setMessage('Вы проиграли');
                 } else if (res?.winner === 'draw') {
                   setMessage('Ничья');
@@ -160,7 +161,7 @@ useEffect(() => {
             console.error('Ошибка при запросе данных:', error);
           });
       }
-    }, 1500);
+    }, 0);
   };
 
   fetchData();
