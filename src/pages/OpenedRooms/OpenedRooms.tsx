@@ -142,7 +142,7 @@ const OpenedRooms: FC = () => {
       {rooms &&rooms?.length > 0 && <CreateRoomFooter />}
       {isModalOpen && (
         <Modal title={"Закончилась энергия!"} closeModal={() => setModalOpen(false)}>
-          <JoinRoomPopup setModalOpen={() => setModalOpen(false)} room={selectedRoom} />
+          <JoinRoomPopup handleClick={() => setModalOpen(false)} room={selectedRoom} />
         </Modal>
       )}
     </div>

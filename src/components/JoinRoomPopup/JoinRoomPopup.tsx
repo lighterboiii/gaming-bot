@@ -8,11 +8,11 @@ import { joinRoomRequest } from "../../api/gameApi";
 import { userId } from "../../api/requestData";
 
 interface IProps {
-  setModalOpen: () => void;
+  handleClick: () => void;
   room: any;
 }
 
-const JoinRoomPopup: FC<IProps> = ({ setModalOpen, room }) => {
+const JoinRoomPopup: FC<IProps> = ({ handleClick, room }) => {
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
 
@@ -38,7 +38,7 @@ const JoinRoomPopup: FC<IProps> = ({ setModalOpen, room }) => {
       </div>
       <div className={styles.popup__buttons}>
         <div className={styles.popup__modalButtonWrapper}>
-          <Button text="Нет" handleClick={() => setModalOpen()} />
+          <Button text="Нет" handleClick={() => handleClick()} />
         </div>
         <div className={styles.popup__modalButtonWrapper}>
           <Button text="Да" handleClick={() => handleJoinRoom()} />

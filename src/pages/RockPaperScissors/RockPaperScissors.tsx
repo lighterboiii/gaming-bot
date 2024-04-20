@@ -126,43 +126,50 @@ const RockPaperScissors: FC = () => {
         console.error('Ошибка при установке выбора', error);
       });
   };
-  useEffect(() => {
-    let timeoutId: any;
-    const fetchData = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-          whoIsWinRequest(roomId!, userId)
-            .then((res: any) => {
-              console.log(res);
-              setPlayersAnim({
-                firstAnim: res?.f_anim,
-                secondAnim: res?.s_anim,
-              });
-              const animationTime = 3000;
+// В RockPaperScissors компоненте добавьте состояние для отслеживания получения анимаций
+const [animationsReceived, setAnimationsReceived] = useState<boolean>(false);
 
-              if (res?.message === "success") {
-                setTimeout(() => {
-                  if (Number(res?.winner_id) === Number(userId)) {
-                    setMessage('Вы победили');
-                  } else if (Number(res?.winner_id) !== Number(userId)) {
-                    setMessage('Вы проиграли');
-                  } else if (res?.winner === 'draw') {
-                    setMessage('Ничья');
-                  }
-                  setMessageVisible(true);
-                }, animationTime);
-              }
-            })
-            .catch((error) => {
-              console.error('Ошибка при запросе данных:', error);
+useEffect(() => {
+  let timeoutId: any;
+  const fetchData = () => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      if (
+        data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready') &&
+        !animationsReceived
+      ) {
+        whoIsWinRequest(roomId!, userId)
+          .then((res: any) => {
+            console.log(res);
+            setPlayersAnim({
+              firstAnim: res?.f_anim,
+              secondAnim: res?.s_anim,
             });
-        }
-      }, 1500);
-    };
+            setAnimationsReceived(true);
+            const animationTime = 3000;
 
-    fetchData();
-  }, [data]);
+            if (res?.message === "success") {
+              setTimeout(() => {
+                if (Number(res?.winner_id) === Number(userId)) {
+                  setMessage('Вы победили');
+                } else if (Number(res?.winner_id) !== Number(userId)) {
+                  setMessage('Вы проиграли');
+                } else if (res?.winner === 'draw') {
+                  setMessage('Ничья');
+                }
+                setMessageVisible(true);
+              }, animationTime);
+            }
+          })
+          .catch((error) => {
+            console.error('Ошибка при запросе данных:', error);
+          });
+      }
+    }, 1500);
+  };
+
+  fetchData();
+}, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
     setMessageVisible(false);

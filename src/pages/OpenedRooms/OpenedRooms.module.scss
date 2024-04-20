@@ -77,7 +77,7 @@
 
   &__roomList {
     @include position(relative);
-    @include size(100%, 70vh);
+    @include size(100%, calc(70vh - 124px));
     @include flex(column, flex-start, center, 8px);
     overflow-y: scroll;
 
