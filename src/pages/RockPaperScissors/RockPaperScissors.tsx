@@ -126,10 +126,10 @@ const RockPaperScissors: FC = () => {
 const [animationsReceived, setAnimationsReceived] = useState<boolean>(false);
 console.log(animationsReceived);
 useEffect(() => {
-  let timeoutId: any;
+  // let timeoutId: any;
   const fetchData = () => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
+  //   clearTimeout(timeoutId);
+  //   timeoutId = setTimeout(() => {
       if (
         data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready') &&
         !animationsReceived
@@ -141,7 +141,7 @@ useEffect(() => {
               firstAnim: res?.f_anim,
               secondAnim: res?.s_anim,
             });
-            setAnimationsReceived(true);
+            // setAnimationsReceived(true);
             const animationTime = 3000;
 
             if (res?.message === "success") {
@@ -161,11 +161,11 @@ useEffect(() => {
             console.error('Ошибка при запросе данных:', error);
           });
       }
-    }, 0);
+    // }, 0);
   };
 
   fetchData();
-}, [data, animationsReceived]);
+}, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
     setMessageVisible(false);
