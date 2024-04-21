@@ -22,7 +22,7 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -117,52 +117,76 @@ const RockPaperScissors: FC = () => {
     };
     getPollingRequest(userId, reqData)
       .then((res: any) => {
+        console.log(res);
         setData(res);
+
+        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+          whoIsWinRequest(roomId!, userId)
+            .then((res: any) => {
+              console.log(res);
+              setPlayersAnim({
+                firstAnim: res?.f_anim,
+                secondAnim: res?.s_anim,
+              });
+              const animationTime = 3000;
+  
+              if (res?.message === "success") {
+                setTimeout(() => {
+                  if (Number(res?.winner) === Number(userId)) {
+                    setMessage('Вы победили');
+                  } else if (Number(res?.winner) !== Number(userId)) {
+                    setMessage('Вы проиграли');
+                  } else if (res?.winner === 'draw') {
+                    setMessage('Ничья');
+                  }
+                  setMessageVisible(true);
+                }, animationTime);
+              }
+            })
+            .catch((error) => {
+              console.error('Ошибка при запросе данных:', error);
+            });
+      };
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
       });
   };
-// const [animationsReceived, setAnimationsReceived] = useState<boolean>(false);
-// console.log(animationsReceived);
-useEffect(() => {
-  // let timeoutId: any;
-  const fetchData = () => {
-  //   clearTimeout(timeoutId);
-  //   timeoutId = setTimeout(() => {
-      if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-        whoIsWinRequest(roomId!, userId)
-          .then((res: any) => {
-            console.log(res);
-            setPlayersAnim({
-              firstAnim: res?.f_anim,
-              secondAnim: res?.s_anim,
-            });
-            // setAnimationsReceived(true);
-            const animationTime = 3000;
+  
+  // useEffect(() => {
+  //   const fetchData = () => {
+  //     if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+  //       whoIsWinRequest(roomId!, userId)
+  //         .then((res: any) => {
+  //           console.log(res);
+  //           setPlayersAnim({
+  //             firstAnim: res?.f_anim,
+  //             secondAnim: res?.s_anim,
+  //           });
+  //           const animationTime = 3000;
 
-            if (res?.message === "success") {
-              setTimeout(() => {
-                if (Number(res?.winner) === Number(userId)) {
-                  setMessage('Вы победили');
-                } else if (Number(res?.winner) !== Number(userId)) {
-                  setMessage('Вы проиграли');
-                } else if (res?.winner === 'draw') {
-                  setMessage('Ничья');
-                }
-                setMessageVisible(true);
-              }, animationTime);
-            }
-          })
-          .catch((error) => {
-            console.error('Ошибка при запросе данных:', error);
-          });
-      }
-    // }, 0);
-  };
+  //           if (res?.message === "success") {
+  //             setTimeout(() => {
+  //               if (Number(res?.winner) === Number(userId)) {
+  //                 setMessage('Вы победили');
+  //               } else if (Number(res?.winner) !== Number(userId)) {
+  //                 setMessage('Вы проиграли');
+  //               } else if (res?.winner === 'draw') {
+  //                 setMessage('Ничья');
+  //               }
+  //               setMessageVisible(true);
+  //             }, animationTime);
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           console.error('Ошибка при запросе данных:', error);
+  //         });
+  //     }
+  //   };
 
-  fetchData();
-}, [data]);
+  //   fetchData();
+  // }, [data]);
+
   // хендлер готовности игрока
   const handleReady = () => {
     setMessageVisible(false);

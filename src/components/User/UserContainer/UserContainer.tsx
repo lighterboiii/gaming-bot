@@ -5,6 +5,7 @@ import useTelegram from "../../../hooks/useTelegram";
 import { userId } from "../../../api/requestData";
 import { IMember } from "../../../utils/types/memberTypes";
 import UserAvatar from "../UserAvatar/UserAvatar";
+import { formatNumber } from "../../../utils/additionalFunctions";
 
 interface IProps {
   member: IMember;
@@ -15,7 +16,7 @@ interface IProps {
 
 const UserContainer: FC<IProps> = ({ member, index, length, darkBackground = false }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const isUser = Number(userId) === member?.user_id;
   
   return (
@@ -41,7 +42,7 @@ const UserContainer: FC<IProps> = ({ member, index, length, darkBackground = fal
           <p className={styles.userContainer__textCoins}
             style={{ color: isUser ? "#d51845" : "" }}
           >
-            +💵 {member.coins}
+            +💵 {formatNumber(member.coins)}
           </p>
         </div>
       </div>

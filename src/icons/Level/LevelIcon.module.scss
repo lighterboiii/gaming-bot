@@ -9,7 +9,7 @@
     @include indents();
     @include position(absolute, $left: 50%, $top: 45%);
     transform: translate(-50%, -50%);
-    font-size: 7px;
+    font-size: 10px;
     color: $secondary-color;
     z-index: 5;
   }

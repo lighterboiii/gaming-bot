@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import styles from './Main.module.scss';
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
 import AdvertisementBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
@@ -13,7 +13,6 @@ import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
 import DailyBonus from "../../components/Bonus/Bonus";
 import { useAppSelector } from "../../services/reduxHooks";
-import CommunityIcon from "../../icons/Community/CommunityIcon";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
@@ -21,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 
 const Main: FC = () => {
   const navigate = useNavigate();
-  const animationRef = useRef<HTMLDivElement>(null);
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const translation = useAppSelector(store => store.app.languageSettings);
 
@@ -50,20 +48,6 @@ const Main: FC = () => {
     setShowBonusOverlay(!showBonusOverlay);
   };
 
-  useEffect(() => {
-    (dailyBonusData && dailyBonusData !== 'no') ? setShowBonusOverlay(true) : setShowBonusOverlay(false);
-    const addAnimationClass = () => {
-      if (animationRef.current) {
-        animationRef.current.classList.add(styles.shake);
-        setTimeout(() => {
-          animationRef.current && animationRef.current.classList.remove(styles.shake);
-        }, 1000);
-      }
-    };
-    addAnimationClass();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return (
     <div className={styles.main}>
       <div className={styles.main__header}>
@@ -74,7 +58,7 @@ const Main: FC = () => {
         />
       </div>
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
-        <div ref={animationRef}>
+        <div>
           <AdvertisementBanner onBannerClick={handleBannerClick} />
         </div>
         <div className={styles.main__centralButtonsContainer}>
