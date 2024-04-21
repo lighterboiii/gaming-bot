@@ -120,7 +120,7 @@ const RockPaperScissors: FC = () => {
         console.log(res);
         setData(res);
 
-        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+        // if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
           whoIsWinRequest(roomId!, userId)
             .then((res: any) => {
               console.log(res);
@@ -146,7 +146,7 @@ const RockPaperScissors: FC = () => {
             .catch((error) => {
               console.error('Ошибка при запросе данных:', error);
             });
-      };
+      // };
       })
       .catch((error) => {
         console.error('Ошибка при установке выбора', error);
