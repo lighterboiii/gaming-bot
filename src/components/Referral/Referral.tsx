@@ -17,7 +17,7 @@ import { formatNumber } from "../../utils/additionalFunctions";
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
   const translation = useAppSelector(store => store.app.languageSettings);
 

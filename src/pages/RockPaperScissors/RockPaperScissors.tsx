@@ -22,10 +22,10 @@ const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [leftRockImage, setLeftRockImage] = useState<string>('');
@@ -107,85 +107,39 @@ const RockPaperScissors: FC = () => {
   //     setLoading(true);
   //   }
   // }, [data])
-  // хендлер выбора хода
-  const handleChoice = (value: string) => {
-    const reqData = {
-      user_id: userId,
-      room_id: roomId,
-      type: 'setchoice',
-      choice: value
-    };
-    getPollingRequest(userId, reqData)
-      .then((res: any) => {
-        console.log(res);
-        setData(res);
-
-        // if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-          whoIsWinRequest(roomId!, userId)
-            .then((res: any) => {
-              console.log(res);
-              setPlayersAnim({
-                firstAnim: res?.f_anim,
-                secondAnim: res?.s_anim,
-              });
-              const animationTime = 3000;
-  
-              if (res?.message === "success") {
-                setTimeout(() => {
-                  if (Number(res?.winner) === Number(userId)) {
-                    setMessage('Вы победили');
-                  } else if (Number(res?.winner) !== Number(userId)) {
-                    setMessage('Вы проиграли');
-                  } else if (res?.winner === 'draw') {
-                    setMessage('Ничья');
-                  }
-                  setMessageVisible(true);
-                }, animationTime);
-              }
-            })
-            .catch((error) => {
-              console.error('Ошибка при запросе данных:', error);
+  useEffect(() => {
+    const fetchData = () => {
+      if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+        whoIsWinRequest(roomId!, userId)
+          .then((res: any) => {
+            console.log(res);
+            setPlayersAnim({
+              firstAnim: res?.f_anim,
+              secondAnim: res?.s_anim,
             });
-      // };
-      })
-      .catch((error) => {
-        console.error('Ошибка при установке выбора', error);
-      });
-  };
-  
-  // useEffect(() => {
-  //   const fetchData = () => {
-  //     if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-  //       whoIsWinRequest(roomId!, userId)
-  //         .then((res: any) => {
-  //           console.log(res);
-  //           setPlayersAnim({
-  //             firstAnim: res?.f_anim,
-  //             secondAnim: res?.s_anim,
-  //           });
-  //           const animationTime = 3000;
+            const animationTime = 3000;
 
-  //           if (res?.message === "success") {
-  //             setTimeout(() => {
-  //               if (Number(res?.winner) === Number(userId)) {
-  //                 setMessage('Вы победили');
-  //               } else if (Number(res?.winner) !== Number(userId)) {
-  //                 setMessage('Вы проиграли');
-  //               } else if (res?.winner === 'draw') {
-  //                 setMessage('Ничья');
-  //               }
-  //               setMessageVisible(true);
-  //             }, animationTime);
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.error('Ошибка при запросе данных:', error);
-  //         });
-  //     }
-  //   };
+            if (res?.message === "success") {
+              setTimeout(() => {
+                if (Number(res?.winner) === Number(userId)) {
+                  setMessage('Вы победили');
+                } else if (Number(res?.winner) !== Number(userId)) {
+                  setMessage('Вы проиграли');
+                } else if (res?.winner === 'draw') {
+                  setMessage('Ничья');
+                }
+                setMessageVisible(true);
+              }, animationTime);
+            }
+          })
+          .catch((error) => {
+            console.error('Ошибка при запросе данных:', error);
+          });
+      }
+    };
 
-  //   fetchData();
-  // }, [data]);
+    fetchData();
+  }, [data]);
 
   // хендлер готовности игрока
   const handleReady = () => {
@@ -202,6 +156,23 @@ const RockPaperScissors: FC = () => {
         setData(res);
       })
   };
+    // хендлер выбора хода
+    const handleChoice = (value: string) => {
+      const reqData = {
+        user_id: userId,
+        room_id: roomId,
+        type: 'setchoice',
+        choice: value
+      };
+      getPollingRequest(userId, reqData)
+        .then((res: any) => {
+          console.log(res);
+          setData(res);
+        })
+        .catch((error) => {
+          console.error('Ошибка при установке выбора', error);
+        });
+    };
   // хендлер отпрвки эмодзи
   const handleEmojiSelect = (emoji: string) => {
     const data = {
@@ -238,7 +209,7 @@ const RockPaperScissors: FC = () => {
 
   return (
     <div className={styles.game}>
-      {loading ? <Loader /> : (
+      {/* {loading ? <Loader /> : ( */}
         <>
           <div className={styles.game__players}>
             {data?.players?.map((player: IRPSPlayer) => (
@@ -318,7 +289,7 @@ const RockPaperScissors: FC = () => {
             </div>
           </>
         </>
-      )}
+      {/* )} */}
       <EmojiOverlay
         show={showEmojiOverlay}
         onClose={() => setShowEmojiOverlay(!showEmojiOverlay)}
