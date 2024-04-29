@@ -10,6 +10,7 @@ interface AppState {
   lavka: ILavkaData[] | null;
   openedRooms: any | null;
   languageSettings: any | null,
+  tasks: any | null,
 }
 
 const initialState: AppState = {
@@ -20,6 +21,7 @@ const initialState: AppState = {
   lavka: null,
   openedRooms: null,
   languageSettings: null,
+  tasks: null,
 }
 
 const appSlice = createSlice({
@@ -95,6 +97,11 @@ const appSlice = createSlice({
         state.info.user_active_emoji = action.payload;
       }
     },
+    setTaskList: (state, action: PayloadAction<string>) => {
+      if (state.info) {
+        state.tasks = action.payload;
+      }
+    },
     // daily bonus part
     setDailyBonus: (state, action: PayloadAction<IBonus>) => {
       state.bonus = action.payload;
@@ -146,6 +153,7 @@ export const {
   setProductsArchive,
   setDailyBonus,
   setLavkaAvailable,
+  setTaskList,
   setNewExpValue,
   setEnergyDrinksValue,
   addItemToLavka,

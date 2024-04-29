@@ -2,21 +2,22 @@
 import { FC, useEffect, useState } from "react"
 import styles from './Main.module.scss';
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
-import AdvertisementBanner from "../../components/AdvertismentBanner/AdvertismentBanner";
+import AdvertisementBanner from "../../components/Main/AdvertismentBanner/AdvertismentBanner";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import BigButton from "../../components/ui/BigButton/BigButton";
 import ShopLink from "../../components/Shopping/ShopLink/ShopLink";
 import Overlay from "../../components/Overlay/Overlay";
-import Referral from "../../components/Referral/Referral";
-import BannerData from "../../components/BannerData/BannerData";
+import Referral from "../../components/Main/Referral/Referral";
+import BannerData from "../../components/Main/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
 import { bannersData } from "../../utils/mockData";
-import DailyBonus from "../../components/Bonus/Bonus";
+import DailyBonus from "../../components/Main/Bonus/Bonus";
 import { useAppSelector } from "../../services/reduxHooks";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
 import { useNavigate } from "react-router-dom";
+import Tasks from "../../components/Main/Tasks/Tasks";
 
 const Main: FC = () => {
   const navigate = useNavigate();
@@ -24,9 +25,10 @@ const Main: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
 
   const [currentBanner, setCurrentBanner] = useState(bannersData[0]);
-  const [showReferralOverlay, setShowReferralOverlay] = useState(false);
-  const [showBannerOverlay, setShowBannerOverlay] = useState(false);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
+  const [showBannerOverlay, setShowBannerOverlay] = useState(false);
+  const [showReferralOverlay, setShowReferralOverlay] = useState(false);
+  const [showTasksOverlay, setShowTasksOverlay] = useState(false);
 
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
@@ -47,14 +49,19 @@ const Main: FC = () => {
   const toggleBonusOverlay = () => {
     setShowBonusOverlay(!showBonusOverlay);
   };
+  const toggleTasksOverlay = () => {
+    setShowTasksOverlay(!showTasksOverlay);
+    setShowReferralOverlay(false);
+    setShowBannerOverlay(false);
+  };
 
   return (
     <div className={styles.main}>
       <div className={styles.main__header}>
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
-        <MainUserInfo 
-        toggleOverlay={() => {}} 
-        isOverlayOpen={showReferralOverlay} // после заменить
+        <MainUserInfo
+          toggleOverlay={toggleTasksOverlay}
+          isOverlayOpen={showReferralOverlay}
         />
       </div>
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
@@ -130,9 +137,20 @@ const Main: FC = () => {
         children={
           <BannerData
             data={currentBanner}
-          />}
+          />
+        }
         show={showBannerOverlay}
         onClose={toggleBannerOverlay}
+      />
+      <Overlay
+        buttonColor="#FFF"
+        crossColor="#ac1a44"
+        closeButton
+        children={
+          <Tasks />
+        }
+        show={showTasksOverlay}
+        onClose={toggleTasksOverlay}
       />
       {(dailyBonusData && dailyBonusData !== "no") &&
         <Overlay

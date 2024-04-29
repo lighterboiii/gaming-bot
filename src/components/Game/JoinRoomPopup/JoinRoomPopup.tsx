@@ -1,11 +1,11 @@
 import { FC } from "react";
-import { useAppSelector } from "../../services/reduxHooks";
+import { useAppSelector } from "../../../services/reduxHooks";
 import { useNavigate } from "react-router-dom";
 import styles from './JoinRoomPopup.module.scss';
-import energy from '../../images/energy-drink.png';
-import Button from "../ui/Button/Button";
-import { joinRoomRequest } from "../../api/gameApi";
-import { userId } from "../../api/requestData";
+import energy from '../../../images/energy-drink.png';
+import Button from "../../ui/Button/Button";
+import { joinRoomRequest } from "../../../api/gameApi";
+import { userId } from "../../../api/requestData";
 
 interface IProps {
   handleClick: () => void;

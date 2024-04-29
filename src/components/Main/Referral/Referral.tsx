@@ -2,22 +2,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import styles from './Referral.module.scss';
-import Button from "../ui/Button/Button";
-import UserContainer from "../User/UserContainer/UserContainer";
-import { userId } from "../../api/requestData";
+import Button from "../../ui/Button/Button";
+import UserContainer from "../../User/UserContainer/UserContainer";
+import { userId } from "../../../api/requestData";
 import { useNavigate } from "react-router-dom";
-import useTelegram from "../../hooks/useTelegram";
-import { getReferralsData, transferCoinsToBalanceReq } from "../../api/mainApi";
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import { setCoinsNewValue } from "../../services/appSlice";
+import useTelegram from "../../../hooks/useTelegram";
+import { getReferralsData, transferCoinsToBalanceReq } from "../../../api/mainApi";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { setCoinsNewValue } from "../../../services/appSlice";
 import { postEvent } from "@tma.js/sdk";
-import { IMember } from "../../utils/types/memberTypes";
-import { formatNumber } from "../../utils/additionalFunctions";
+import { IMember } from "../../../utils/types/memberTypes";
+import { formatNumber } from "../../../utils/additionalFunctions";
 
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
   const translation = useAppSelector(store => store.app.languageSettings);
 

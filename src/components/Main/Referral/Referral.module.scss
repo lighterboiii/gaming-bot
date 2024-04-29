@@ -1,5 +1,5 @@
-@use '../../stylesheets/mixins' as *;
-@use '../../stylesheets/variables' as *;
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
 
 .referral {
   @include children-layout();
@@ -32,11 +32,11 @@
   }
 
   &__text {
-    @include size(70%, unset);
+    @include size(80%, unset);
     @include indents();
     @include flex(row, center, center, 10px);
     font-weight: 700;
-    font-size: 16px;
+    font-size: 12px;
     color: $main-color;
   }
 
@@ -61,7 +61,7 @@
   }
 
   &__board {
-    @include indents(6px 16px 0, 0);
+    @include indents(6px 16px 0, 0 12px 0 0);
     @include flex(column, unset, flex-end, 10px);
     @include size(100%, auto);
     overflow: auto;

@@ -13,9 +13,9 @@ import Loader from "../../components/Loader/Loader";
 import { getOpenedRoomsRequest } from "../../api/gameApi";
 import Button from "../../components/ui/Button/Button";
 import { IGameCardData } from "../../utils/types/gameTypes";
-import CreateRoomFooter from "../../components/CreateRoomFooter/CreateRoomFooter";
+import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
 import { Modal } from "../../components/Modal/Modal";
-import JoinRoomPopup from "../../components/JoinRoomPopup/JoinRoomPopup";
+import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
 // типизировать
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();

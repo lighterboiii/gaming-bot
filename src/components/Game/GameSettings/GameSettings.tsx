@@ -9,7 +9,7 @@ import { formatNumber } from '../../../utils/additionalFunctions';
 import { userId } from '../../../api/requestData';
 import { postNewRoomRequest } from '../../../api/gameApi';
 import useTelegram from '../../../hooks/useTelegram';
-import SettingsSlider from '../../SettingsSlider/SettingsSlider';
+import SettingsSlider from '../SettingsSlider/SettingsSlider';
 
 interface IProps {
   data: any; // типизировать
@@ -18,7 +18,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);

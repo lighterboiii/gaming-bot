@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react";
 import styles from './AdvertismentBanner.module.scss';
-import ChevronIcon from "../../icons/Chevron/ChevronIcon";
-import { bannersData } from "../../utils/mockData";
+import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
+import { bannersData } from "../../../utils/mockData";
 import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
