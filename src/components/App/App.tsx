@@ -18,6 +18,7 @@ import { setDailyBonus, setLanguageSettings, setShopAvailable, setTaskList, setU
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 import RockPaperScissors from '../../pages/RockPaperScissors/RockPaperScissors';
+import TaskInfo from '../Main/TaskInfo/TaskInfo';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();

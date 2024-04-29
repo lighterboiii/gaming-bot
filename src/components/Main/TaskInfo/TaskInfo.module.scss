@@ -1,0 +1,6 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.info {
+  @include children-layout();
+}

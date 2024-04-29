@@ -15,8 +15,8 @@
   }
 
   &__blackContainer {
-    @include indents(0 6px, 0);
-    @include size(100%, 80px);
+    @include indents(16px 6px, 0);
+    @include size(100%, auto);
     @include flex(columns, center, center);
     background-color: $black-color;
   }

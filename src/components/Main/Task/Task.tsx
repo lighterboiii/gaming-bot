@@ -4,12 +4,13 @@ import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
 
 interface IProps {
   task: any;
+  onClick: () => void;
 }
 
-const Task: FC<IProps> = ({ task }) => {
+const Task: FC<IProps> = ({ task, onClick }) => {
 
   return (
-    <div className={styles.task}>
+    <div onClick={onClick} className={styles.task}>
       <div>
       <h2 className={styles.task__name}>{task?.desc_locale_key}</h2>
       <p className={styles.task__text}>Награда: скин</p>

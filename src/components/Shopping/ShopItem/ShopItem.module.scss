@@ -26,4 +26,13 @@
     font-size: 10px;
     z-index: 3;
   }
+
+  &__count {
+    @include indents();
+    @include position(absolute, $right: 4px, $top: 4px);
+    color: $main-color;
+    font-weight: 700;
+    font-size: 8px;
+    z-index: 3;
+  }
 }

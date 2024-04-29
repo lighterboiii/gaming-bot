@@ -12,7 +12,6 @@ import useTelegram from "../../hooks/useTelegram";
 import { CombinedItemData, GoodsItem, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
 import { getLavkaAvailableRequest } from "../../api/shopApi";
 import { setLavkaAvailable } from "../../services/appSlice";
-import { postEvent } from "@tma.js/sdk";
 
 const Shop: FC = () => {
   const { tg } = useTelegram();
@@ -130,7 +129,7 @@ const Shop: FC = () => {
             <div className={styles.shop__goods + ' scrollable'}>
               {goods?.length > 0 ? (
                 <>
-                  {goods.map((item: GoodsItem, index: number) => (
+                  {goods.map((item: any, index: number) => (
                     <ShopItem
                       key={index}
                       item={item}
