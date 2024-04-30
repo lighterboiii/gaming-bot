@@ -13,6 +13,7 @@ const UserInfo: FC = () => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
+  
   const handleClickBalance = () => {
     tg.openTelegramLink(inviteLink);
     postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });

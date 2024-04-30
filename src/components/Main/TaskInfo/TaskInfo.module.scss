@@ -3,4 +3,6 @@
 
 .info {
   @include children-layout();
+  justify-content: flex-start;
+  background-color: $main-color;
 }

@@ -19,7 +19,7 @@ interface IProps {
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [priceValue, setPriceValue] = useState('')
@@ -74,7 +74,6 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
             onChange={handlePriceChange}
             placeholder={translation?.enter_price}
           />
-          {/* <input type="number" name="count" id="count" value={''} className={styles.form__input} /> */}
         </fieldset>
       </form>
       <div className={styles.sellModal__button}>

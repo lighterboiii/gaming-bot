@@ -4,7 +4,6 @@
 .banner {
   @include big-link-layout();
   @include position(relative);
-  border: 1px $main-color solid;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: left;

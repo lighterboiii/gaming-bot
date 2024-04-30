@@ -1,6 +1,5 @@
 import { FC } from "react";
 import styles from './Button.module.scss';
-// import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
   text: string;

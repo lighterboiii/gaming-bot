@@ -8,7 +8,7 @@ import UserContainer from "../../components/User/UserContainer/UserContainer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
-import { IMember, IMemberDataResponse } from "../../utils/types/memberTypes";
+import { IMember } from "../../utils/types/memberTypes";
 import { useAppSelector } from "../../services/reduxHooks";
 import TimerIcon from "../../icons/Timer/TimerIcon";
 import Timer from "../../components/Timer/Timer";
@@ -87,7 +87,7 @@ const LeaderBoard: FC = () => {
             {leaderBoard?.filter((leader: any) => leader.id !== 1).map((leader: any, index: number) =>
               <UserContainer
                 member={leader}
-                key={leader.id}
+                key={leader.user_id}
                 index={index}
                 length={leaderBoard.length + 1}
                 darkBackground

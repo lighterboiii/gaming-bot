@@ -19,7 +19,7 @@
   @include flex(column, flex-start, center, 16px);
 
   &__header {
-    @include size(100%, 25vh);
+    @include size(100%, 30vh);
     @include flex(column, space-evenly, center, 8px);
 
     @media screen and (max-height: 690px) {
@@ -45,7 +45,7 @@
 
   &__goods {
     @include indents();
-    @include size(100%, 50vh);
+    @include size(100%, 55vh);
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(3, 1fr);
@@ -53,7 +53,7 @@
     justify-items: center;
     overflow-y: auto;
 
-    @media screen and (min-height: 691px) {
+    @media screen and (max-height: 691px) {
       @include size(100%, 65vh);
     }
   }

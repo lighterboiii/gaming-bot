@@ -16,7 +16,7 @@ import { IGameCardData } from "../../utils/types/gameTypes";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
 import { Modal } from "../../components/Modal/Modal";
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
-// типизировать
+
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();

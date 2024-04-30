@@ -29,7 +29,7 @@
 }
 
 .overlay.active {
-  @include size(calc(100% - 32px), calc(100% - 25vh));
+  @include size(calc(100% - 32px), calc(100% - 30vh));
   z-index: 666;
   overflow: visible;
 

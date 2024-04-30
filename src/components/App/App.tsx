@@ -11,18 +11,17 @@ import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
-import { createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
+import { anyUrl, createRoomUrl, indexUrl, leaderboardUrl, roomUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
 import { setDailyBonus, setLanguageSettings, setShopAvailable, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 import RockPaperScissors from '../../pages/RockPaperScissors/RockPaperScissors';
-import TaskInfo from '../Main/TaskInfo/TaskInfo';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -88,8 +87,8 @@ const App: FC = () => {
           <Route path={createRoomUrl} element={<CreateRoom />} />
           <Route path={shopUrl} element={<Shop />} />
           <Route path={leaderboardUrl} element={<LeaderBoard />} />
-          <Route path="/room/:roomId" element={<RockPaperScissors />} />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path={roomUrl} element={<RockPaperScissors />} />
+          <Route path={anyUrl} element={<NotFoundPage />} />
         </Routes>
       )}
     </div>

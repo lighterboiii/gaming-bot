@@ -36,7 +36,7 @@ interface ProductProps {
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
   const { user, tg } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
@@ -45,7 +45,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
   const isUserSeller = Number(userId) === Number(item?.seller_id);
   const translation = useAppSelector(store => store.app.languageSettings);
   // функция для фильтрации купленных товаров
-  const handlePurchaseItemTypes = async (item: any) => {
+  const handlePurchaseItemTypes = async (item: ILavkaData | ItemData) => {
     item?.item_price_coins !== 0
       ? dispatch(setCoinsValueAfterBuy(item.item_price_coins))
       : dispatch(setTokensValueAfterBuy(item.item_price_tokens));
@@ -61,7 +61,12 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
     }
   };
   // закрытие с задержкой
-  function closeWithDelay(onClose: any, setMessage: any, setMessageShown: any, closeDelay = 1000, messageResetDelay = 200) {
+  function closeWithDelay(
+    onClose: () => void, 
+    setMessage: (arg: string) => void, 
+    setMessageShown: (arg: boolean) => void, 
+    closeDelay = 1000, 
+    messageResetDelay = 200) {
     setTimeout(() => {
       onClose();
       setTimeout(() => {

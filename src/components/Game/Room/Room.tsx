@@ -9,9 +9,8 @@ import ManIcon from "../../../icons/Man/Man";
 import { useAppSelector } from "../../../services/reduxHooks";
 import useTelegram from "../../../hooks/useTelegram";
 import { joinRoomRequest } from "../../../api/gameApi";
-import { roomIdParamString, userId } from "../../../api/requestData";
-import { postReq } from "../../../api/api";
-// типизировать
+import { userId } from "../../../api/requestData";
+
 interface IProps {
   room: any;
   openModal: () => void;
@@ -20,7 +19,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
   console.log(room);

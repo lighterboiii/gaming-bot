@@ -18,7 +18,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
@@ -48,7 +48,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
       setMessage("Контент находится в разработке, создай другую игру");
       setMessageShown(true);
       setTimeout(() => {
-        setMessage(""); // на время разработки
+        setMessage("");
         setMessageShown(false);
       }, 2000)
     } else {
