@@ -1,5 +1,5 @@
-@use '../../stylesheets/mixins' as *;
-@use '../../stylesheets/variables' as *;
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
 
 .footer {
   @include indents(16px 24px, 0);

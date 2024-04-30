@@ -1,10 +1,10 @@
 import { FC } from "react"
 import styles from './BannerData.module.scss';
-import Button from "../ui/Button/Button";
+import Button from "../../ui/Button/Button";
 
 interface IProps {
   data: any;
-} // типизировать
+} //TODO типизировать
 
 const BannerData: FC<IProps> = ({ data }) => {
   return (

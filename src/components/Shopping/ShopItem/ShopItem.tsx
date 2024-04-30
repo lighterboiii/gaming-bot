@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './ShopItem.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
-import { CombinedItemData, ItemData } from "../../../utils/types/shopTypes";
+import { CombinedItemData } from "../../../utils/types/shopTypes";
 import { postEvent } from "@tma.js/sdk";
 import { useAppSelector } from "../../../services/reduxHooks";
-// достать вибрацию из комментов
+
 interface IProps {
   item: CombinedItemData;
   activeButton: string;
@@ -21,6 +20,11 @@ const ShopItem: FC<IProps> = ({ item, onClick, activeButton }) => {
 
   return (
     <div className={styles.item} onClick={handleClick}>
+      {activeButton !== `${translation?.purchased}` && item?.item_count !== -1 && activeButton !== `${translation?.marketplace}` &&
+        <p className={styles.item__count}>
+          {item?.item_count}/{item?.item_max}
+        </p>
+      }
       <div className={styles.item__avatarContainer}>
         <UserAvatar item={item} />
       </div>

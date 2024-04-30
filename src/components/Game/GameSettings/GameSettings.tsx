@@ -9,7 +9,7 @@ import { formatNumber } from '../../../utils/additionalFunctions';
 import { userId } from '../../../api/requestData';
 import { postNewRoomRequest } from '../../../api/gameApi';
 import useTelegram from '../../../hooks/useTelegram';
-import SettingsSlider from '../../SettingsSlider/SettingsSlider';
+import SettingsSlider from '../SettingsSlider/SettingsSlider';
 
 interface IProps {
   data: any; // типизировать
@@ -48,7 +48,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
       setMessage("Контент находится в разработке, создай другую игру");
       setMessageShown(true);
       setTimeout(() => {
-        setMessage(""); // на время разработки
+        setMessage("");
         setMessageShown(false);
       }, 2000)
     } else {

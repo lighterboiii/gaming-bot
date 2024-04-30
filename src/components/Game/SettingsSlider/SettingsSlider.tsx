@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styles from './SettingsSlider.module.scss';
-import ChevronIcon from '../../icons/Chevron/ChevronIcon';
+import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
 import { postEvent } from '@tma.js/sdk';
 
 interface IProps {

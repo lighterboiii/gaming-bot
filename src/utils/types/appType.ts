@@ -9,4 +9,5 @@ export interface IAppData {
   user_info: IUserData;
   lavka_available: ILavkaData[];
   translate: any;
+  tasks_available: any;
 }

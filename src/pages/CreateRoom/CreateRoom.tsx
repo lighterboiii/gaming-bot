@@ -4,7 +4,6 @@
 import { FC, useEffect, useState } from "react";
 import styles from './CreateRoom.module.scss';
 import { useNavigate } from "react-router-dom";
-import { userId } from "../../api/requestData";
 import useTelegram from "../../hooks/useTelegram";
 import GameCard from "../../components/Game/GameCard/GameCard";
 import Overlay from "../../components/Overlay/Overlay";
@@ -13,7 +12,7 @@ import { useAppSelector } from "../../services/reduxHooks";
 import { getExistingGamesRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import { IGameCardData } from "../../utils/types/gameTypes";
-// типизировать
+// TODO типизировать
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
@@ -62,7 +61,10 @@ const CreateRoom: FC = () => {
                 key={game.id}
                 imagePosition={game.id === 1 ? 'left' : 'right'}
                 users={game.users}
-                extraClass={`${styles['create__game-card']} ${index % 2 === 0 ? styles['create__game-card--even'] : styles['create__game-card--odd']}`}
+                extraClass={
+                  `${styles['create__game-card']} 
+                ${index % 2 === 0 ? styles['create__game-card--even'] : styles['create__game-card--odd']}`
+                }
                 handleClickGame={handleGameClick} />
             ))}
           </div>

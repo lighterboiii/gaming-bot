@@ -11,10 +11,10 @@ import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
-import { createRoomUrl, indexUrl, leaderboardUrl, roomsUrl, shopUrl } from '../../utils/routes';
+import { anyUrl, createRoomUrl, indexUrl, leaderboardUrl, roomUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setDailyBonus, setLanguageSettings, setShopAvailable, setUserData, setUserPhoto } from '../../services/appSlice';
+import { setDailyBonus, setLanguageSettings, setShopAvailable, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 import RockPaperScissors from '../../pages/RockPaperScissors/RockPaperScissors';
@@ -54,11 +54,13 @@ const App: FC = () => {
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
+          console.log(res);
           dispatch(setLanguageSettings(res.translate));
           dispatch(setUserData(res.user_info));
           dispatch(setDailyBonus(res.daily_bonus));
           dispatch(setProductsArchive(res.collectibles_data));
           dispatch(setShopAvailable(res.shop_available));
+          dispatch(setTaskList(res.tasks_available));
           const userPhotoResponse = getUserAvatarRequest(userId);
           return userPhotoResponse;
         })
@@ -85,8 +87,8 @@ const App: FC = () => {
           <Route path={createRoomUrl} element={<CreateRoom />} />
           <Route path={shopUrl} element={<Shop />} />
           <Route path={leaderboardUrl} element={<LeaderBoard />} />
-          <Route path="/room/:roomId" element={<RockPaperScissors />} />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path={roomUrl} element={<RockPaperScissors />} />
+          <Route path={anyUrl} element={<NotFoundPage />} />
         </Routes>
       )}
     </div>

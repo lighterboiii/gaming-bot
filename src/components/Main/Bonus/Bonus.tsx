@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
-import { IBonus } from "../../utils/types/mainTypes";
+import { IBonus } from "../../../utils/types/mainTypes";
 import styles from './Bonus.module.scss';
-import Button from "../ui/Button/Button";
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewExpValue, setNewTokensValue } from "../../services/appSlice";
-import { userId } from "../../api/requestData";
-import useTelegram from "../../hooks/useTelegram";
-import { makeCollectibleRequest } from "../../api/shopApi";
+import Button from "../../ui/Button/Button";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewExpValue, setNewTokensValue } from "../../../services/appSlice";
+import { userId } from "../../../api/requestData";
+import useTelegram from "../../../hooks/useTelegram";
+import { makeCollectibleRequest } from "../../../api/shopApi";
 import { postEvent } from '@tma.js/sdk';
 
 interface IProps {
@@ -19,7 +19,7 @@ interface IProps {
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  const userId = user?.id;
+  const userId = user?.id; 
   const translation = useAppSelector(store => store.app.languageSettings);
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: IBonus) => {
@@ -30,17 +30,16 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         const tokens = await makeCollectibleRequest(itemId, itemCount, userId);
         const formattedTokens = Math.floor(tokens.message);
         dispatch(setNewTokensValue(formattedTokens));
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         break;
       case "energy_drink":
         const resEnergy = await makeCollectibleRequest(itemId, itemCount, userId);
         dispatch(setEnergyDrinksValue(resEnergy.message));
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         break;
       case "exp":
-        const resExp = await makeCollectibleRequest(itemId, itemCount, userId);
-        // dispatch(setNewExpValue(resExp.message));
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+        await makeCollectibleRequest(itemId, itemCount, userId);
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         break;
       default:
         await makeCollectibleRequest(itemId, itemCount, userId);

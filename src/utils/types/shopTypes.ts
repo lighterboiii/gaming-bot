@@ -7,6 +7,7 @@ export interface ItemData {
   item_price_coins: number;
   item_price_tokens: number;
   item_type: string;
+  item_max: number;
 }
 
 export interface ILavkaData {

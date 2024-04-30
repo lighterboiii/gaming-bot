@@ -74,7 +74,6 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
             onChange={handlePriceChange}
             placeholder={translation?.enter_price}
           />
-          {/* <input type="number" name="count" id="count" value={''} className={styles.form__input} /> */}
         </fieldset>
       </form>
       <div className={styles.sellModal__button}>

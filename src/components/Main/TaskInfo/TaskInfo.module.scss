@@ -1,0 +1,8 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.info {
+  @include children-layout();
+  justify-content: flex-start;
+  background-color: $main-color;
+}

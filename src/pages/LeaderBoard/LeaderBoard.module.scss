@@ -86,9 +86,9 @@
   }
 
   &__board {
-    @include indents(16px, 0 20px 0 0);
+    @include indents(12px 16px 0, 0 20px 0 0);
     @include flex(column, flex-start, flex-end, 16px);
-    @include size(100%, 58vh);
+    @include size(100%, 50vh);
     overflow-y: auto;
   }
 

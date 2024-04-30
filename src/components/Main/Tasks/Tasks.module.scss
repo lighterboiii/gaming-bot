@@ -1,0 +1,41 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.tasks {
+  @include children-layout();
+  gap: 10px;
+  justify-content: flex-start;
+
+  &__title {
+    @include indents();
+    font-weight: 900;
+    color: $main-color;
+    font-size: 32px;
+    text-align: center;
+  }
+
+  &__blackContainer {
+    @include indents(16px 6px, 0);
+    @include size(100%, auto);
+    @include flex(columns, center, center);
+    background-color: $black-color;
+  }
+
+  &__text {
+    @include size(100%, auto);
+    @include indents();
+    @include flex(row, center, center, 10px);
+    font-weight: 700;
+    font-size: 17px;
+    color: $main-color;
+    line-height: 1.2;
+  }
+
+  &__board {
+    @include indents(6px 16px 0, 0);
+    @include flex(column, flex-start, center, 10px);
+    @include size(100%, 40vh);
+    overflow: scroll;
+    z-index: 3;
+  }
+}
