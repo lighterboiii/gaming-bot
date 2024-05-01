@@ -108,10 +108,10 @@ const RockPaperScissors: FC = () => {
   //   }
   // }, [data])
   useEffect(() => {
-    let timeoutId: any;
+    // let timeoutId: any;
     const fetchData = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
+      // clearTimeout(timeoutId);
+      // timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
           whoIsWinRequest(roomId!, userId)
             .then((res: any) => {
@@ -139,7 +139,7 @@ const RockPaperScissors: FC = () => {
               console.error('Ошибка при запросе данных:', error);
             });
         }
-      }, 1500);
+      // }, 1500);
     };
 
     fetchData();
