@@ -71,6 +71,7 @@ const RockPaperScissors: FC = () => {
       };
       getPollingRequest(userId, data)
         .then((res: any) => {
+          console.log(res);
           setData(res);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
@@ -108,10 +109,10 @@ const RockPaperScissors: FC = () => {
   //   }
   // }, [data])
   useEffect(() => {
-    // let timeoutId: any;
+    let timeoutId: any;
     const fetchData = () => {
-      // clearTimeout(timeoutId);
-      // timeoutId = setTimeout(() => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
           whoIsWinRequest(roomId!, userId)
             .then((res: any) => {
@@ -124,9 +125,9 @@ const RockPaperScissors: FC = () => {
 
               if (res?.message === "success") {
                 setTimeout(() => {
-                  if (Number(res?.winner_id) === Number(userId)) {
+                  if (Number(res?.winner) === Number(userId)) {
                     setMessage('Вы победили');
-                  } else if (Number(res?.winner_id) !== Number(userId)) {
+                  } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
                     setMessage('Вы проиграли');
                   } else if (res?.winner === 'draw') {
                     setMessage('Ничья');
@@ -139,7 +140,7 @@ const RockPaperScissors: FC = () => {
               console.error('Ошибка при запросе данных:', error);
             });
         }
-      // }, 1500);
+      }, 1000);
     };
 
     fetchData();
@@ -170,7 +171,6 @@ const RockPaperScissors: FC = () => {
     };
     getPollingRequest(userId, reqData)
       .then((res: any) => {
-        console.log(res);
         setData(res);
       })
       .catch((error) => {
