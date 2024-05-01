@@ -9,6 +9,8 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  font-family: 'Rubik', sans-serif;
+  font-style: italic;
 
   &__content {
     @include flex(column, space-between, flex-start);

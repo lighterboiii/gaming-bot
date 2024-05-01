@@ -4,6 +4,7 @@
 .product {
   @include children-layout();
   @include position(relative);
+  font-family: 'Rubik', sans-serif;
 
   @media screen and (min-height: 690px) {
     justify-content: center;

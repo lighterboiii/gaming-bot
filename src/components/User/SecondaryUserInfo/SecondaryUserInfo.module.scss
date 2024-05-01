@@ -5,6 +5,7 @@
   @include indents();
   @include size(100%, auto);
   @include flex(row, flex-end, center, 10px);
+  font-family: 'Rubik', sans-serif;
   z-index: 10;
 
   &__avatarContainer {
@@ -54,11 +55,11 @@
     @include size(85px, auto);
     @include flex(row, space-evenly, center);
     @include indents(8px, 0);
+    font-family: 'Rubik', sans-serif;
     border-radius: $radius-40;
     background-color: $black-color;
     text-align: center;
     color: $main-color;
     font-size: 10px;
-    font-weight: 600;
   }
 }

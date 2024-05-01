@@ -5,6 +5,8 @@
   @include size(100%, 100vh);
   @include position(relative);
   @include flex(column, flex-start, center, 10px);
+  font-family: 'Gilroy', sans-serif;
+  font-weight: 900;
   background-image: url('../../images/rock-paper-scissors/rps-bg.png');
   background-position: center;
   background-size: cover;
@@ -30,8 +32,8 @@
     @include position(absolute, $left: 50%, $top: -15%);
     transform: translateX(-50%);
     color: $main-color;
-    font-weight: 200;
     font-size: 16px;
+    color: #ADC9FF;
   }
 
   &__icon {
@@ -56,7 +58,6 @@
 
   &__text {
     @include indents();
-    font-weight: 700;
     color: $main-color;
     font-size: 16px;
 

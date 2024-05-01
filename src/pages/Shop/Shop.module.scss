@@ -4,6 +4,7 @@
 @mixin buttonStyle {
   @include button-style-reset();
   @include size(142px, 30px);
+  font-family: 'Rubik', sans-serif;
   border-radius: $radius-10;
   color: $main-color;
   font-weight: 900;
