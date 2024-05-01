@@ -21,7 +21,7 @@
   }
 
   &__player {
-    @include size(152px, 152px);
+    @include size(178px, 178px);
     @include position(relative);
     @include flex(row, center, center);
   }
@@ -56,7 +56,15 @@
 
   &__text {
     @include indents();
+    font-weight: 700;
     color: $main-color;
+    font-size: 16px;
+
+    @media screen and (min-height: 691px) {
+      font-weight: 900;
+      color: $main-color;
+      font-size: 19px;
+    }
   }
 
   &__betContainer {
@@ -64,12 +72,17 @@
   }
 
   &__bet {
+    @include size(auto, auto);
     @include indents(6px 16px, 0);
     @include flex(row, center, center, 10px);
     background-color: #140957;
     color: $main-color;
     border-radius: $radius-40;
     opacity: .5;
+
+    @media screen and (min-height: 691px) {
+      @include size(100px, 48px);
+    }
   }
 
   &__iconEmoji {
@@ -112,6 +125,10 @@
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
+
+    @media screen and (min-height: 691px) { 
+      @include size(264px, 84px);
+    }
   }
 
   &__readyIcon {

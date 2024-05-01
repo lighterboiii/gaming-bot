@@ -6,6 +6,10 @@
 
   &__mainImage {
     @include size(200px, auto);
+
+    @media screen and (min-height: 691px) {
+      @include size(236px, auto);
+    }
   }
 
   &__leftMainImage {

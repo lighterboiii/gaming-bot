@@ -4,26 +4,26 @@
 .choiceBox {
   @include size(200px, 68px);
   @include position(relative);
-  @include flex(row, center, center, 6px);
+  @include flex(row, center, center, 4px);
   background-image: url('../../../images/rock-paper-scissors/choise-plate.png');
   background-position: center;
-  background-size: contain;
+  background-size: 80%;
   background-repeat: no-repeat;
+
+  @media screen and (min-height: 690px) {
+    @include size(264px, 84px);
+    @include flex(row, center, center, 10px);
+  }
 
   &__icon {
     @include size(42px, 52px);
-  }
 
-  // &__iconEmoji {
-  //   @include size(48px, 48px);
-  // }
+    @media screen and (min-height: 690px) {
+      @include size(48px, 62px);
+    }
+  }
 
   &__button {
     @include button-style-reset();
   }
-
-  // &__emojiButton {
-  //   @include position(absolute, $bottom: 50%, $right: -64px);
-  //   transform: translateY(50%);
-  // }
 }
