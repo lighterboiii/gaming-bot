@@ -6,6 +6,8 @@
   @include size(90%, 40px);
   @include indents(0 16px 0 32px, 0);
   @include flex(row, flex-end, center);
+  font-family: 'Rubik', sans-serif;
+  font-size: 600;
 
   &__container {
     @include size(90%, 48px);

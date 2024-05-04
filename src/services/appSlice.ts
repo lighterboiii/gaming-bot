@@ -11,6 +11,7 @@ interface AppState {
   openedRooms: any | null;
   languageSettings: any | null,
   tasks: any | null,
+  bannerData: any | null;
 }
 
 const initialState: AppState = {
@@ -22,6 +23,7 @@ const initialState: AppState = {
   openedRooms: null,
   languageSettings: null,
   tasks: null,
+  bannerData: null,
 }
 
 const appSlice = createSlice({
@@ -102,6 +104,9 @@ const appSlice = createSlice({
         state.tasks = action.payload;
       }
     },
+    setBannerData: (state, action: PayloadAction<any>) => {
+      state.bannerData = action.payload;
+    },
     // daily bonus part
     setDailyBonus: (state, action: PayloadAction<IBonus>) => {
       state.bonus = action.payload;
@@ -164,6 +169,7 @@ export const {
   getOpenedRooms,
   setActiveEmoji,
   setLanguageSettings,
+  setBannerData,
 } = appSlice.actions;
 
 export default appSlice.reducer;

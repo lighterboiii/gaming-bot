@@ -101,6 +101,7 @@
   @include indents(10px 0 0, 0);
   @include flex(column, center, center, 6px);
   @include size(100%, 100%);
+  font-family: 'Rubik', sans-serif;
   background-color: $tertiary-color;
   border-top-left-radius: $radius-12;
   border-top-right-radius: $radius-12;

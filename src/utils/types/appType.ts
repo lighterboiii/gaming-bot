@@ -10,4 +10,5 @@ export interface IAppData {
   lavka_available: ILavkaData[];
   translate: any;
   tasks_available: any;
+  ad_info: any;
 }

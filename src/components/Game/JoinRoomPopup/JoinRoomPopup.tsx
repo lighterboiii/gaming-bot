@@ -15,15 +15,16 @@ interface IProps {
 const JoinRoomPopup: FC<IProps> = ({ handleClick, room }) => {
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
+  const translation = useAppSelector(store => store.app.languageSettings);
 
   const handleJoinRoom = () => {
       joinRoomRequest(userId, room.room_id)
         .then((res) => {
-          console.log("Присоединение к комнате выполнено успешно:", res);
+          console.log("Joined successfully:", res);
           navigate(`/room/${room.room_id}`);
         })
         .catch((error) => {
-          console.error("Ошибка при присоединении к комнате:", error);
+          console.error("Error joining room:", error);
         });
   };
 
@@ -38,10 +39,10 @@ const JoinRoomPopup: FC<IProps> = ({ handleClick, room }) => {
       </div>
       <div className={styles.popup__buttons}>
         <div className={styles.popup__modalButtonWrapper}>
-          <Button text="Нет" handleClick={() => handleClick()} />
+          <Button text={translation?.no} handleClick={() => handleClick()} />
         </div>
         <div className={styles.popup__modalButtonWrapper}>
-          <Button text="Да" handleClick={() => handleJoinRoom()} />
+          <Button text={translation?.yes} handleClick={() => handleJoinRoom()} />
         </div>
       </div>
     </div>

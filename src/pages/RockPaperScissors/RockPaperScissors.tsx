@@ -18,12 +18,13 @@ import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import leftRock from '../../images/rock-paper-scissors/left_rock.png';
 import rightRock from '../../images/rock-paper-scissors/right_rock.png';
 import { IRPSPlayer } from "../../utils/types/gameTypes";
+import { useAppSelector } from "../../services/reduxHooks";
 
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   // const [loading, setLoading] = useState<boolean>(false);
@@ -33,6 +34,7 @@ const RockPaperScissors: FC = () => {
   const [rightRockImage, setRightRockImage] = useState<string>('');
   const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
+  const translation = useAppSelector(store => store.app.languageSettings);
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -89,7 +91,7 @@ const RockPaperScissors: FC = () => {
           }
         })
         .catch((error) => {
-          console.error('Ошибка при получении информации о комнате', error);
+          console.error('Room data request error', error);
           setTimeout(fetchRoomInfo, 60000);
         });
     };
@@ -127,18 +129,18 @@ const RockPaperScissors: FC = () => {
               if (res?.message === "success") {
                 setTimeout(() => {
                   if (Number(res?.winner) === Number(userId)) {
-                    setMessage('Вы победили');
+                    setMessage(translation?.you_won);
                   } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                    setMessage('Вы проиграли');
+                    setMessage(translation?.you_lost);
                   } else if (res?.winner === 'draw') {
-                    setMessage('Ничья');
+                    setMessage(translation?.draw);
                   }
                   setMessageVisible(true);
                 }, animationTime);
               }
             })
             .catch((error) => {
-              console.error('Ошибка при запросе данных:', error);
+              console.error('Data request error:', error);
             });
         }
       }, 1500);
@@ -175,7 +177,7 @@ const RockPaperScissors: FC = () => {
         setData(res);
       })
       .catch((error) => {
-        console.error('Ошибка при установке выбора', error);
+        console.error('Set choice error:', error);
       });
   };
   // хендлер отпрвки эмодзи

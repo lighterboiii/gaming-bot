@@ -19,7 +19,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
   console.log(room);
@@ -30,11 +30,11 @@ const Room: FC<IProps> = ({ room, openModal }) => {
     } else {
       joinRoomRequest(userId, room.room_id)
         .then((res) => {
-          console.log("Присоединение к комнате выполнено успешно:", res);
+          console.log("Joined successfully:", res);
           navigate(`/room/${room.room_id}`);
         })
         .catch((error) => {
-          console.error("Ошибка при присоединении к комнате:", error);
+          console.error("Error joining room:", error);
         });
     }
   };

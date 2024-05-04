@@ -2,7 +2,7 @@
 @use '../../stylesheets/variables' as *;
 
 .rooms {
-  @include indents(0 16px 16px, 0);
+  @include indents(16px 16px, 0);
   @include size(100%, 100%);
   min-height: calc(100vh + 1px);
   @include flex(column, flex-start, center, 16px);

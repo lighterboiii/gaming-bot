@@ -8,6 +8,7 @@ import { formatNumber } from "../../../utils/additionalFunctions";
 const CreateRoomFooter: FC = () => {
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
+  const translation = useAppSelector(store => store.app.languageSettings);
 
   return (
     <div className={styles.footer}>
@@ -17,7 +18,7 @@ const CreateRoomFooter: FC = () => {
         <p className={styles.footer__stats}>⚡ {userInfo?.user_energy}</p>
       </div>
       <div className={styles.footer__buttonWrapper}>
-        <Button text="Создать комнату" handleClick={() => navigate('/create-room')} />
+        <Button text={translation?.create_room} handleClick={() => navigate('/create-room')} />
       </div>
     </div>
   )

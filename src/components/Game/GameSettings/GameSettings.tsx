@@ -12,13 +12,13 @@ import useTelegram from '../../../hooks/useTelegram';
 import SettingsSlider from '../SettingsSlider/SettingsSlider';
 
 interface IProps {
-  data: any; // типизировать
+  data: any; // TODO типизировать
 }
 
 const GameSettings: FC<IProps> = ({ data }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
@@ -45,7 +45,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
       room_type: roomType
     };
     if (roomType === 2) {
-      setMessage("Контент находится в разработке, создай другую игру");
+      setMessage("This game is not available now");
       setMessageShown(true);
       setTimeout(() => {
         setMessage("");
@@ -56,10 +56,10 @@ const GameSettings: FC<IProps> = ({ data }) => {
         .then((response: any) => {
           console.log(response);
           if (response.message === 'success') {
-            console.log('Комната успешно создана:', response.room_id);
+            console.log('Room created successfully, room_id:', response.room_id);
             navigate(`/room/${response.room_id}`);
           } else if (response.message === 'not_enough_coins') {
-            console.log('Недостаточно средств для создания комнаты')
+            console.log('Insufficient funds')
           }
         })
         .catch(error => {

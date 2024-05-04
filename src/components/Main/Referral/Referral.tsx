@@ -17,7 +17,7 @@ import { formatNumber } from "../../../utils/additionalFunctions";
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
   const translation = useAppSelector(store => store.app.languageSettings);
 
@@ -90,7 +90,7 @@ const Referral: FC = () => {
       </h3>
       <div className={styles.referral__amount}>
         <p className={styles.referral__text}>
-          <span className={styles.referral__earn}>Заработано</span>
+          <span className={styles.referral__earn}>{translation?.earned_now}</span>
           <span className={styles.referral__sumSpan}>
             💵 {referralCoinsAmount && formatNumber(referralCoinsAmount)}$
           </span>
@@ -98,17 +98,17 @@ const Referral: FC = () => {
       </div>
       <div className={styles.referral__buttonWrapper}>
         <Button
-          text="Забрать"
+          text={translation?.claim}
           handleClick={handleTransferCoins}
           disabled={referralCoinsAmount === 0}
         />
       </div>
       <div className={styles.referral__weekly}>
         <p className={styles.referral__text}>
-          Приглашай друзей и получай процент с каждой игры!
+          {translation?.invite_friends_bonus}
         </p>
         <div className={styles.referral__inviteButtonWrapper}>
-          <Button text="Пригласить"
+          <Button text={translation?.invite}
             handleClick={handleInviteClick}
             isWhiteBackground />
         </div>

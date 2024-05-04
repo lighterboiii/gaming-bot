@@ -14,14 +14,14 @@ import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
 import { anyUrl, createRoomUrl, indexUrl, leaderboardUrl, roomUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setDailyBonus, setLanguageSettings, setShopAvailable, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
+import { setBannerData, setDailyBonus, setLanguageSettings, setShopAvailable, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 import RockPaperScissors from '../../pages/RockPaperScissors/RockPaperScissors';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -61,6 +61,7 @@ const App: FC = () => {
           dispatch(setProductsArchive(res.collectibles_data));
           dispatch(setShopAvailable(res.shop_available));
           dispatch(setTaskList(res.tasks_available));
+          dispatch(setBannerData(res.ad_info));
           const userPhotoResponse = getUserAvatarRequest(userId);
           return userPhotoResponse;
         })
@@ -71,7 +72,7 @@ const App: FC = () => {
           }
         })
         .catch((error) => {
-          console.error('Ошибка в получении данных пользователя:', error);
+          console.error('Get user data error:', error);
         });
     };
 

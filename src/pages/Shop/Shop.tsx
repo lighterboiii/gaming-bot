@@ -54,7 +54,7 @@ const Shop: FC = () => {
   };
   // при монтировании компонента
   useEffect(() => {
-    setActiveButton(`${translation?.shop}`);
+    setActiveButton(`${translation?.shop_menu}`);
     shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
     tg.BackButton.show().onClick(() => {
@@ -71,20 +71,20 @@ const Shop: FC = () => {
   };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
     setActiveButton(`${translation?.purchased}`);
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
-    setActiveButton(`${translation?.shop}`);
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    setActiveButton(`${translation?.shop_menu}`);
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
     setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
@@ -110,7 +110,7 @@ const Shop: FC = () => {
             <button
               className={`${styles.shop__button} ${activeButton === `${translation?.shop}` ? styles.activeButton : ''}`}
               onClick={handleClickShop}>
-              {translation?.shop}
+              {translation?.shop_menu}
             </button>
             <button
               className={`${styles.shop__button} ${activeButton === `${translation?.marketplace}` ? styles.activeButton : ''}`}

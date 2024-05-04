@@ -64,7 +64,7 @@ const LeaderBoard: FC = () => {
                 <Timer />
               </div>
               <div className={styles.leaderBoard__prize}>
-                <span>Приз:</span>
+                <span>{translation?.leaders_prize}</span>
                 <span>💵 25</span>
               </div>
             </div>

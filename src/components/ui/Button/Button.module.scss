@@ -5,9 +5,8 @@
   @include size(100%, 100%);
   @include button-style-reset();
   border-radius: 40px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
-  text-transform: uppercase;
   color: $black-color;
   font-family: 'Rubik', sans-serif;
 }

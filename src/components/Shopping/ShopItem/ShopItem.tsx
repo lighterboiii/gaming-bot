@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './ShopItem.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
@@ -15,7 +16,7 @@ const ShopItem: FC<IProps> = ({ item, onClick, activeButton }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const handleClick = () => {
     onClick();
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   return (

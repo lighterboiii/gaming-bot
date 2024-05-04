@@ -1,6 +1,7 @@
 import { FC } from "react"
 import styles from './BannerData.module.scss';
 import Button from "../../ui/Button/Button";
+import { useAppSelector } from "../../../services/reduxHooks";
 
 interface IProps {
   data: any;
@@ -13,7 +14,7 @@ const BannerData: FC<IProps> = ({ data }) => {
         <h3 className={styles.banner__title}>
           {data.title}
         </h3>
-        <div className={styles.banner__bannerWrapper} style={{ backgroundImage: `${data.backgroundImage}` }}></div>
+        <div className={styles.banner__bannerWrapper} style={{ backgroundImage: `${data.pic}` }}></div>
       </div>
       <div className={styles.banner__content}>
         <p className={styles.banner__text}>

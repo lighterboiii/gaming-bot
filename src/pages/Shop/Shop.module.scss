@@ -55,7 +55,7 @@
     overflow-y: auto;
 
     @media screen and (max-height: 691px) {
-      @include size(100%, 65vh);
+      @include size(100%, 50vh);
     }
   }
 

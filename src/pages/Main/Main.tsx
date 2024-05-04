@@ -23,6 +23,7 @@ const Main: FC = () => {
   const navigate = useNavigate();
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const translation = useAppSelector(store => store.app.languageSettings);
+  const banners = useAppSelector(store => store.app.bannerData);
 
   const [currentBanner, setCurrentBanner] = useState(bannersData[0]);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
@@ -76,10 +77,10 @@ const Main: FC = () => {
                 <>
                   <FriendsIcon width={12} height={12} />
                   <span>
-                    Друзья
+                    {translation?.menu_friends}
                   </span>
                 </>}
-              secondaryText="Приглашай и зарабатывай"
+              secondaryText={translation?.menu_invite_earn}
               chevronPosition="right"
             />
             <SmallButton
@@ -88,11 +89,11 @@ const Main: FC = () => {
                 <>
                   <LeaderBoardIcon width={12} height={12} />
                   <span>
-                    Топ недели
+                    {translation?.menu_weekly_top}
                   </span>
                 </>
               }
-              secondaryText="Стань лидером недели!"
+              secondaryText={translation?.become_weekly_leader}
               chevronPosition="right"
             />
           </div>

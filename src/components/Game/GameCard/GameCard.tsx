@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import classNames from 'classnames';
 import styles from './GameCard.module.scss';
 import CircleButton from '../../ui/CircleButton/CircleButton';
@@ -14,7 +13,7 @@ interface IProps {
   users: number;
   extraClass?: string;
   handleClickGame: (game: any) => void;
-} // TODO: типизация
+}
 
 const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
