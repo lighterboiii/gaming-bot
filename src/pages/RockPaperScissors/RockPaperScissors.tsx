@@ -23,8 +23,9 @@ import { useAppSelector } from "../../services/reduxHooks";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const translation = useAppSelector(store => store.app.languageSettings);
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   // const [loading, setLoading] = useState<boolean>(false);
@@ -34,7 +35,9 @@ const RockPaperScissors: FC = () => {
   const [rightRockImage, setRightRockImage] = useState<string>('');
   const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
-  const translation = useAppSelector(store => store.app.languageSettings);
+  const [timer, setTimer] = useState<number>(15);
+  const [timerStarted, setTimerStarted] = useState(false);
+
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -214,6 +217,42 @@ const RockPaperScissors: FC = () => {
     }, 2000)
   };
 
+  // useEffect(() => {
+  //   if (data && data?.players_count === '2' && !timerStarted) {
+  //     setTimerStarted(true);
+  //     setTimer(15);
+  //   } else if (data && data?.players_count !== '2') {
+  //     setTimerStarted(false);
+  //     setTimer(15);
+  //   }
+  //   if (data?.players.every((player: any) => player.choice === 'ready')) {
+  //     setTimerStarted(false);
+  //     setTimer(15);
+  //   }
+  // }, [data]);
+
+  // useEffect(() => {
+  //   if (timerStarted && timer > 0) {
+  //     const ticker = setInterval(() => {
+  //       setTimer(prevTimer => prevTimer - 1);
+  //     }, 1000);
+  //     return () => clearInterval(ticker);
+  //   } else if (timer === 0) {
+  //     const hasPlayerWithChoiceNone = data?.players.some((player: any) => player.choice === 'none');
+  //     if (hasPlayerWithChoiceNone) {
+  //       leaveRoomRequest(userId)
+  //         .then((data) => {
+  //           console.log(data);
+  //         })
+  //         .catch((error) => {
+  //           console.error(error);
+  //         });
+  //     }
+  //     setTimerStarted(false);
+  //     setTimer(15);
+  //   }
+  // }, [timerStarted, timer]);
+
   return (
     <div className={styles.game}>
       {/* {loading ? <Loader /> : ( */}
@@ -253,13 +292,34 @@ const RockPaperScissors: FC = () => {
               {message}
             </p>
           )}
+          {/* <div className={styles.game__hands}>
+            {data?.players_count === "2" ? (
+              <HandShake prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }} />
+            ) : data?.players_count === "1" ? (
+              <p className={styles.game__notify}>Ожидание игроков...</p>
+            ) : (
+              data?.players.some((player: any) => player.choice === 'none') && timer && (
+                <p className={styles.game__notify}>{timer}</p>
+              )
+            )}
+          </div> */}
+
           <div className={styles.game__hands}>
             {(
               data?.players_count === "2"
             ) ? (
               <HandShake prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }} />
             ) : (
+              data?.players_count === "1"
+            ) ? (
               <p className={styles.game__notify}>Ожидание игроков...</p>
+            ) : (
+              <p className={styles.game__notify}>
+                {
+                  data?.players.some((player: any) => player.choice === 'none') &&
+                  timer
+                }
+              </p>
             )}
           </div>
           <div className={styles.game__lowerContainer}>
