@@ -2,7 +2,6 @@
 import React, { FC } from "react";
 import styles from './SmallButton.module.scss';
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
-import { Link } from "react-router-dom";
 import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
@@ -17,7 +16,7 @@ interface IProps {
 const SmallButton: FC<IProps> = ({ text, secondaryText, isWhiteBackground, chevronPosition, shadow, handleClick }) => {
   
   const handleGetHapticFeedback = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
     handleClick();
   };
 

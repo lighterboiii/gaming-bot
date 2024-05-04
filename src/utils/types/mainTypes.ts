@@ -59,3 +59,14 @@ export interface ICommonIconProps {
   width?: number;
   height?: number;
 }
+
+export interface IBannerData {
+  banner_id: number;
+  button_text: string;
+  main_header: string;
+  main_text: string;
+  pic: string;
+  pic_header: string;
+  pic_text: string;
+  pic_text_color: string;
+}
