@@ -27,10 +27,10 @@ export const getExistingGamesRequest = () => {
   })
 };
 // создать игру 
-export const postNewRoomRequest = (data: any) => {
-  return getReq({
+export const postNewRoomRequest = (data: any, userIdValue: string) => {
+  return postReq({
     uri: createRoomUri,
-    // userId: userIdValue,
+    userId: userIdValue,
     data: data
   });
 };
@@ -73,10 +73,10 @@ export const leaveRoomRequest = (userIdValue: string) => {
 //   })
 // };
 // запрос на отправку определения победителя
-export const whoIsWinRequest = (roomId: string, userId: string) => {
+export const whoIsWinRequest = (roomId: string) => {
   return putReq({
     uri: whoIsWinUri,
-    userId: userId,
+    // userId: userId,
     endpoint: `${roomIdParamString}${roomId}`,
   })
 };
