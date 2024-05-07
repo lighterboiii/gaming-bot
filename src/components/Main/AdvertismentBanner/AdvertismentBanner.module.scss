@@ -10,6 +10,11 @@
   box-sizing: border-box;
   transition: background-image .7s ease-in-out;
 
+
+  @media screen and (min-height: 691px) {
+    @include size(auto, 122px);
+  }
+
   &__link {
     @include size(100%, 100%);
     @include position(absolute, $top: 0, $left: 0);

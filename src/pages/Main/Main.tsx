@@ -66,9 +66,9 @@ const Main: FC = () => {
         />
       </div>
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
-        <div>
+        {/* <div > */}
           <AdvertisementBanner bannersData={banners} onBannerClick={handleBannerClick} />
-        </div>
+        {/* </div> */}
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
             <SmallButton

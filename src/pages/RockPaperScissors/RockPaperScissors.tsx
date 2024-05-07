@@ -23,7 +23,7 @@ import { useAppSelector } from "../../services/reduxHooks";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [data, setData] = useState<any>(null);
@@ -85,6 +85,13 @@ const RockPaperScissors: FC = () => {
             navigate(-1);
           }
 
+          if (res?.win?.f_anim !== 'none' && res?.win?.s_anim !== 'none') {
+            setPlayersAnim({
+              firstAnim: res?.win?.f_anim,
+              secondAnim: res?.win?.s_anim,
+            });
+          }
+
           if (res?.message === 'timeout') {
             fetchRoomInfo();
           }
@@ -114,6 +121,7 @@ const RockPaperScissors: FC = () => {
   //     setLoading(true);
   //   }
   // }, [data])
+  console.log(playersAnim);
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
@@ -123,10 +131,6 @@ const RockPaperScissors: FC = () => {
           whoIsWinRequest(roomId!, userId)
             .then((res: any) => {
               console.log(res);
-              setPlayersAnim({
-                firstAnim: res?.f_anim,
-                secondAnim: res?.s_anim,
-              });
               const animationTime = 3000;
 
               if (res?.message === "success") {
@@ -316,7 +320,7 @@ const RockPaperScissors: FC = () => {
             ) : (
               <p className={styles.game__notify}>
                 {
-                  data?.players.some((player: any) => player.choice === 'none') &&
+                  data?.players?.some((player: any) => player.choice === 'none') &&
                   timer
                 }
               </p>

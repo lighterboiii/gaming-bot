@@ -4,12 +4,11 @@
 .button {
   @include button-style-reset();
   @include position(relative);
-  @include size(98%, 100%);
-  @include min-size(98%, 168px);
-
+  @include size(98%, auto);
   background-color: $secondary-color;
   border-radius: $radius-15;
   text-decoration: none;
+  aspect-ratio: 1;
 
   &__text {
     @include indents();

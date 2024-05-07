@@ -24,7 +24,6 @@
   &__content {
     @include flex(column, flex-start, unset, 24px);
     @include size(100%, 75vh);
-    // margin-top: 8px;
     overflow-y: scroll;
 
     @media screen and (max-height: 690px) {
@@ -46,7 +45,7 @@
   }
 
   &__smallButtonsContainer {
-    @include size(100%, 168px);
+    @include size(100%, auto);
     @include flex(column, space-between, space-between, 12px);
   }
 
