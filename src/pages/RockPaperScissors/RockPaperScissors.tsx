@@ -37,7 +37,7 @@ const RockPaperScissors: FC = () => {
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
-
+  const [playersAnimSet, setPlayersAnimSet] = useState<boolean>(false);
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -85,11 +85,14 @@ const RockPaperScissors: FC = () => {
             navigate(-1);
           }
 
-          if (res?.win?.f_anim !== 'none' && res?.win?.s_anim !== 'none') {
-            setPlayersAnim({
-              firstAnim: res?.win?.f_anim,
-              secondAnim: res?.win?.s_anim,
-            });
+          if (!playersAnimSet && res) {
+            setPlayersAnimSet(true);
+            if (res?.win?.f_anim !== 'none' && res?.win?.s_anim !== 'none') {
+              setPlayersAnim({
+                firstAnim: res?.win?.f_anim,
+                secondAnim: res?.win?.s_anim,
+              });
+            }
           }
 
           if (res?.message === 'timeout') {
@@ -159,6 +162,7 @@ const RockPaperScissors: FC = () => {
   // хендлер готовности игрока
   const handleReady = () => {
     setMessageVisible(false);
+    setPlayersAnimSet(true);
     setMessage('');
     const data = {
       user_id: userId,
