@@ -13,7 +13,7 @@
   }
 
   &__textElements {
-    @include size(auto, 80px);
+    @include size(80%, 80px);
     @include flex(column, flex-end, flex-start, 8px);
   }
 
@@ -37,6 +37,9 @@
 
   &__name {
     @include indents();
+    @include ellipsis();
+    @include size(120px, auto);
+    @include max-size(146px, auto);
     @include flex(row, flex-start, center, 6px);
     color: $main-color;
     font-weight: 900;
@@ -46,7 +49,6 @@
 
   &__text {
     @include indents();
-    @include ellipsis();
     @include flex(row, flex-start, center, 8px);
     color: $main-color;
     font-weight: 700;

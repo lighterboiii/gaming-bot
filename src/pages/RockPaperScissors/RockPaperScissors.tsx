@@ -37,7 +37,7 @@ const RockPaperScissors: FC = () => {
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
-  const [playersAnimSet, setPlayersAnimSet] = useState<boolean>(false);
+
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -85,16 +85,6 @@ const RockPaperScissors: FC = () => {
             navigate(-1);
           }
 
-          if (!playersAnimSet && res) {
-            setPlayersAnimSet(true);
-            if (res?.win?.f_anim !== 'none' && res?.win?.s_anim !== 'none') {
-              setPlayersAnim({
-                firstAnim: res?.win?.f_anim,
-                secondAnim: res?.win?.s_anim,
-              });
-            }
-          }
-
           if (res?.message === 'timeout') {
             fetchRoomInfo();
           }
@@ -124,16 +114,19 @@ const RockPaperScissors: FC = () => {
   //     setLoading(true);
   //   }
   // }, [data])
-  console.log(playersAnim);
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-          whoIsWinRequest(roomId!, userId)
+          whoIsWinRequest(roomId!)
             .then((res: any) => {
               console.log(res);
+              setPlayersAnim({
+                firstAnim: res?.f_anim,
+                secondAnim: res?.s_anim,
+              });
               const animationTime = 3000;
 
               if (res?.message === "success") {
@@ -162,7 +155,6 @@ const RockPaperScissors: FC = () => {
   // хендлер готовности игрока
   const handleReady = () => {
     setMessageVisible(false);
-    setPlayersAnimSet(true);
     setMessage('');
     const data = {
       user_id: userId,

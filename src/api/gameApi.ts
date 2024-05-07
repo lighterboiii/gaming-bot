@@ -27,10 +27,10 @@ export const getExistingGamesRequest = () => {
   })
 };
 // создать игру 
-export const postNewRoomRequest = (data: any, userIdValue: string) => {
-  return postReq({
+export const postNewRoomRequest = (data: any) => {
+  return getReq({
     uri: createRoomUri,
-    userId: userIdValue,
+    // userId: userIdValue,
     data: data
   });
 };

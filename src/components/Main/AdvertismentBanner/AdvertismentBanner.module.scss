@@ -2,9 +2,11 @@
 @use '../../../stylesheets/variables' as *;
 
 .banner {
-  @include big-link-layout();
   @include position(relative);
-  background-size: cover;
+  @include size(100%, 106px);
+  @include flex(row, space-between, center);
+  border-radius: $radius-12;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: left;
   box-sizing: border-box;
@@ -12,7 +14,7 @@
 
 
   @media screen and (min-height: 691px) {
-    @include size(auto, 122px);
+    height: 124px;
   }
 
   &__link {
