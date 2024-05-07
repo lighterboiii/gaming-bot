@@ -2,6 +2,7 @@
 // /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPollingRequest, leaveRoomRequest, whoIsWinRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
@@ -23,7 +24,7 @@ import { useAppSelector } from "../../services/reduxHooks";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [data, setData] = useState<any>(null);
@@ -213,7 +214,7 @@ const RockPaperScissors: FC = () => {
         .catch((error) => {
           console.log(error);
         })
-    }, 2000)
+    }, 3000)
   };
 
   // useEffect(() => {
@@ -269,15 +270,15 @@ const RockPaperScissors: FC = () => {
                 />
               )}
               {player?.emoji !== "none" && (
-                <img
-                  src={player?.emoji}
+                <motion.img
+                  src={player.emoji}
                   alt="player emoji"
-                  className={
-                    Number(player?.userid) === Number(data?.players[0]?.userid) ?
-                      styles.game__selectedEmoji :
-                      styles.game__selectedEmojiRight
-                  }
-                />)}
+                  className={player.emoji !== "none" ? styles.game__selectedEmoji : styles.game__selectedEmojiRight}
+                  initial={{ opacity: 0.3 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1.5 }}
+                />
+              )}
             </div>
           ))}
         </div>
