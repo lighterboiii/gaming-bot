@@ -4,7 +4,6 @@
 .room {
   @include indents(8px, 0);
   @include flex(row, space-between, center, 8px);
-  // @include size(100%, 100%);
   @include min-size(100%, 76px);
   @include position(relative);
   background-color: $tertiary-color;
@@ -54,6 +53,7 @@
 
   &__creator {
     @include indents();
+    @include ellipsis();
     @include size(100%, auto);
     color: $main-color;
     font-size: 12px;

@@ -194,7 +194,6 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, data)
       .then(res => {
         setData(res);
-        console.log(res);
         setShowEmojiOverlay(false);
       })
       .catch((error) => {

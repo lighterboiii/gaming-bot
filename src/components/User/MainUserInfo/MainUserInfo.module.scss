@@ -70,6 +70,7 @@
     @include flex(row, space-evenly, center);
     @include indents(8px, 0);
     font-family: 'Rubik', sans-serif;
+    font-weight: 700;
     border-radius: $radius-40;
     background-color: $black-color;
     text-align: center;

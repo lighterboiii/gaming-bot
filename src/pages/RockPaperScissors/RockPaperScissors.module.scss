@@ -29,6 +29,8 @@
   }
 
   &__playerName {
+    @include size(152px, auto);
+    @include ellipsis();
     @include position(absolute, $left: 50%, $top: -15%);
     transform: translateX(-50%);
     color: $main-color;
@@ -141,14 +143,16 @@
 
   &__selectedEmoji {
     @include size(60px, 60px);
-    @include position(absolute, $bottom: -25%, $right: 0);
+    @include position(absolute, $bottom: 0, $right: 0);
+    z-index: 3;
   }
 
   &__selectedEmojiRight {
     @include size(60px, 60px);
-    @include position(absolute, $bottom: -25%, $left: 0);
+    @include position(absolute, $bottom: 0, $left: 0);
+    z-index: 3;
   }
-
+  
   &__resultMessage {
     @extend .game__notify;
     @include position(absolute, $top: 35%, $left: 50%);
