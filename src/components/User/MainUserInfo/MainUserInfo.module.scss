@@ -38,13 +38,24 @@
   &__name {
     @include indents();
     @include ellipsis();
-    @include size(120px, auto);
-    @include max-size(146px, auto);
+    @include size(140px, auto);
+    // @include max-size(146px, auto);
     @include flex(row, flex-start, center, 6px);
     color: $main-color;
     font-weight: 900;
     font-size: 16px;
     line-height: 1;
+  }
+
+  &__overflow {
+    @include size(120px, auto);
+    overflow-x: hidden;
+  }
+
+  &__userName {
+    @include indents();
+    @include size(120px, auto);
+    animation: scrollText 5s linear infinite alternate;
   }
 
   &__text {
@@ -114,5 +125,14 @@
 
   &__tasksImg {
     @include size(12px, 9px);
+  }
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-30%);
   }
 }

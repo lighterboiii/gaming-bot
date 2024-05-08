@@ -39,7 +39,9 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay }) => {
           <div className={styles.userInfo__textElements}>
             <div className={styles.userInfo__name}>
               <LevelIcon level={userData?.user_exp} width={24} height={24} />
-              {userData && userData?.publicname}
+              <div className={styles.userInfo__overflow}>
+                <p className={styles.userInfo__userName}>{userData && userData?.publicname}</p>
+              </div>
             </div>
             <p className={styles.userInfo__text}>
               <span>💵</span>
@@ -51,16 +53,16 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay }) => {
             </p>
           </div>
           <div className={styles.userInfo__buttons}>
-          <button type="button" className={styles.userInfo__balance} onClick={handleClickBalance}>
-            <WalletIcon
-              width={12}
-              height={12}
-            />
-            {translation?.webapp_balance}
-          </button>
-          <button type="button" className={styles.userInfo__tasksButton} onClick={toggleOverlay}>
-            <img src={tasks} alt="task_png" className={styles.userInfo__tasksImg} />
-          </button>
+            <button type="button" className={styles.userInfo__balance} onClick={handleClickBalance}>
+              <WalletIcon
+                width={12}
+                height={12}
+              />
+              {translation?.webapp_balance}
+            </button>
+            <button type="button" className={styles.userInfo__tasksButton} onClick={toggleOverlay}>
+              <img src={tasks} alt="task_png" className={styles.userInfo__tasksImg} />
+            </button>
           </div>
         </div>
       </div>

@@ -7,16 +7,16 @@
   justify-content: space-between;
 
   &__pic {
-    @include size(100%, 128px);
+    @include size(100%, 120px);
     @include flex(column, center, center, 12px);
     border-radius: $radius-12;
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: left;
     position: relative;
 
     @media screen and (max-height: 691px) {
-      @include size(100%, 98px);
+      @include size(100%, 106px);
     }
   }
 
@@ -84,7 +84,7 @@
   }
 
   &__button {
-    @include indents(0 16px, 0);
+    @include indents(0 16px, 0 0 20px 0);
     @include size(100%, 40px);
   }
 }
