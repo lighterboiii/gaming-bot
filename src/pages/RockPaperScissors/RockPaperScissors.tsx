@@ -273,10 +273,18 @@ const RockPaperScissors: FC = () => {
                 <motion.img
                   src={player.emoji}
                   alt="player emoji"
-                  className={player.emoji !== "none" ? styles.game__selectedEmoji : styles.game__selectedEmojiRight}
-                  initial={{ opacity: 0.3 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1.5 }}
+                  className={Number(player?.userid) === Number(data?.players[0]?.userid)
+                    ? styles.game__selectedEmoji
+                    : styles.game__selectedEmojiRight
+                  }
+                  initial={{ scale: 0.1 }}
+                  animate={{
+                    scale: [0.1, 1.5, 1],
+                    transition: {
+                      duration: 1,
+                      times: [0, 0.5, 1],
+                    },
+                  }}
                 />
               )}
             </div>
