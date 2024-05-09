@@ -28,7 +28,6 @@ const RockPaperScissors: FC = () => {
 
   const translation = useAppSelector(store => store.app.languageSettings);
   const userData = useAppSelector(store => store.app.info);
-  console.log(userData);
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   // const [loading, setLoading] = useState<boolean>(false);
@@ -273,7 +272,7 @@ const RockPaperScissors: FC = () => {
               )}
               {Number(player?.userid) === Number(userId) && (
                 <div className={styles.game__balance}>
-                  {data?.bet_type === Number(1) ? `🔰 ${userData?.tokens}` : `💵 ${userData?.coins}`}
+                  {data?.bet_type === "1" ? `🔰 ${userData?.tokens}` : `💵 ${userData?.coins}`}
                 </div>
               )}
               {player?.emoji !== "none" && (
@@ -281,8 +280,8 @@ const RockPaperScissors: FC = () => {
                   src={player.emoji}
                   alt="player emoji"
                   className={Number(player?.userid) === Number(data?.players[0]?.userid)
-                    ? styles.game__selectedEmoji
-                    : styles.game__selectedEmojiRight
+                    ? styles.game__selectedEmojiRight
+                    : styles.game__selectedEmoji
                   }
                   initial={{ scale: 0.1 }}
                   animate={{

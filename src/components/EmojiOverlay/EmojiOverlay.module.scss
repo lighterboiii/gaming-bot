@@ -59,7 +59,7 @@
   z-index: 666;
   overflow: visible;
 
-  // @media screen and (max-height: 690px) {
-  //   @include size(calc(100% - 32px), calc(100% - 50vh));
-  // }
+  @media screen and (min-height: 691px) {
+    @include size(100%, calc(100% - 55vh));
+  }
 }
