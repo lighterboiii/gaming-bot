@@ -55,7 +55,12 @@
   &__userName {
     @include indents();
     @include size(120px, auto);
-    animation: scrollText 5s linear infinite alternate;
+    text-align: left;
+    // animation: scrollText 5s linear infinite alternate;
+
+    &.animateOverflow {
+      animation: scrollText 5s linear infinite alternate;
+    }
   }
 
   &__text {

@@ -101,14 +101,14 @@ const Shop: FC = () => {
   return (
     <div className={styles.shop}>
       <div className={styles.shop__header}>
-        <h2 className={styles.shop__title}>Предметы</h2>
+        <h2 className={styles.shop__title}>{translation?.shop_menu}</h2>
         <UserInfo />
       </div>
       <div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
         <div className={styles.shop__buttons}>
           <div className={styles.shop__leftButtonsContainer}>
             <button
-              className={`${styles.shop__button} ${activeButton === `${translation?.shop}` ? styles.activeButton : ''}`}
+              className={`${styles.shop__button} ${activeButton === `${translation?.shop_menu}` ? styles.activeButton : ''}`}
               onClick={handleClickShop}>
               {translation?.shop_menu}
             </button>

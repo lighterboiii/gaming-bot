@@ -19,7 +19,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
@@ -101,12 +101,16 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
             <div className={styles.game__menu}>
               <p className={styles.game__text}>{translation?.bet_in_room}</p>
               <div className={styles.game__buttons}>
-                <SettingsSlider isCurrency={false} onBetChange={handleBetChange} />
+                <SettingsSlider betValue={bet} isCurrency={false} onBetChange={handleBetChange} />
                 <SettingsSlider isCurrency onCurrencyChange={handleCurrencyChange} />
               </div>
             </div>
             <div className={styles.game__buttonWrapper}>
-              <Button text={translation?.create_room_button} handleClick={() => handleCreateRoom(userId, bet, currency, data.id, closeOverlay)} />
+              <Button 
+              disabled={bet === 0}
+              text={translation?.create_room_button} 
+              handleClick={() => handleCreateRoom(userId, bet, currency, data.id, closeOverlay)} 
+              />
             </div>
           </div>
         </>

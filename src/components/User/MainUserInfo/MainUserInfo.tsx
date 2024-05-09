@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import styles from './MainUserInfo.module.scss';
 import { Link } from "react-router-dom";
 import useTelegram from "../../../hooks/useTelegram";
@@ -22,6 +22,16 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay }) => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
+  const userNameRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const userNameElement = userNameRef.current;
+    if (userNameElement && userNameElement.scrollWidth > userNameElement.clientWidth) {
+      userNameElement.classList.add(styles.animateOverflow);
+    } else {
+      userNameElement?.classList.remove(styles.animateOverflow);
+    }
+  }, [userData]);
 
   const handleClickBalance = () => {
     tg.openTelegramLink(inviteLink);
@@ -40,7 +50,9 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay }) => {
             <div className={styles.userInfo__name}>
               <LevelIcon level={userData?.user_exp} width={24} height={24} />
               <div className={styles.userInfo__overflow}>
-                <p className={styles.userInfo__userName}>{userData && userData?.publicname}</p>
+                <p className={styles.userInfo__userName} ref={userNameRef}>
+                  {userData && userData?.publicname}
+                  </p>
               </div>
             </div>
             <p className={styles.userInfo__text}>

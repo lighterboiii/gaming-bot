@@ -23,7 +23,7 @@ import { useAppSelector } from "../../services/reduxHooks";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
 
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -161,9 +161,48 @@ const RockPaperScissors: FC = () => {
     fetchData();
   }, [data]);
   // запрос на кик юзера при недостатке средств для следующего хода
-  useEffect(() => {
+  // useEffect(() => {
+  //   const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
+  //   if (data?.bet_type === "1") {
+  //     if (player?.money <= data?.bet) {
+  //       leaveRoomRequest(userId)
+  //         .then(res => {
+  //           console.log(res);
+  //         })
+  //         .catch((error) => {
+  //           console.log(error);
+  //         })
+  //     }
+  //   } else if (data?.bet_type === "3") {
+  //     if (player?.tokens <= data?.bet) {
+  //       leaveRoomRequest(userId)
+  //         .then(res => {
+  //           console.log(res);
+  //         })
+  //         .catch((error) => {
+  //           console.log(error);
+  //         })
+  //     }
+  //   }
+  // }, [data])
+  // хендлер готовности игрока
+  const handleReady = () => {
+    setMessageVisible(false);
+    setMessage('');
+    const data = {
+      user_id: userId,
+      room_id: roomId,
+      type: 'setchoice',
+      choice: 'ready'
+    };
+    getPollingRequest(userId, data)
+      .then(res => {
+        setData(res);
+      })
+  };
+  // хендлер выбора хода
+  const handleChoice = (value: string) => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
-    console.log(player);
     if (data?.bet_type === "1") {
       if (player?.money <= data?.bet) {
         leaveRoomRequest(userId)
@@ -185,25 +224,6 @@ const RockPaperScissors: FC = () => {
           })
       }
     }
-  }, [data])
-
-  // хендлер готовности игрока
-  const handleReady = () => {
-    setMessageVisible(false);
-    setMessage('');
-    const data = {
-      user_id: userId,
-      room_id: roomId,
-      type: 'setchoice',
-      choice: 'ready'
-    };
-    getPollingRequest(userId, data)
-      .then(res => {
-        setData(res);
-      })
-  };
-  // хендлер выбора хода
-  const handleChoice = (value: string) => {
     const reqData = {
       user_id: userId,
       room_id: roomId,
