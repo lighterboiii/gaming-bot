@@ -54,15 +54,12 @@
   &__balance {
     @include indents(4px 8px, 0);
     @include flex(row, center,center);
-    @include position(absolute, $bottom: 0, $left: 50%);
+    @include position(absolute, $bottom: -8%, $left: 50%);
     transform: translate(-50%);
     color: #ADC9FF;
     background-color: #140957;
     border-radius: $radius-40;
-
-    @media screen and (min-height: 691px) {
-      @include position(absolute, $bottom: -5%, $left: 50%);
-    }
+    font-size: 14px;
   }
 
   &__icon {

@@ -12,6 +12,7 @@ import { useAppSelector } from "../../services/reduxHooks";
 import { getExistingGamesRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import { IGameCardData } from "../../utils/types/gameTypes";
+
 // TODO типизировать
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
@@ -79,6 +80,7 @@ const CreateRoom: FC = () => {
         children={
           <GameSettings
             data={gameData}
+            closeOverlay={() => setSettingsOverlay(false)}
           />}
       />
     </div>

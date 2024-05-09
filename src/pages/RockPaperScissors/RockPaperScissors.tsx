@@ -97,7 +97,13 @@ const RockPaperScissors: FC = () => {
         })
         .catch((error) => {
           console.error('Room data request error', error);
-          setTimeout(fetchRoomInfo, 60000);
+          leaveRoomRequest(userId)
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((error) => {
+              console.log(error);
+            })
         });
     };
 
@@ -116,6 +122,7 @@ const RockPaperScissors: FC = () => {
   //     setLoading(true);
   //   }
   // }, [data])
+  // запрос результата хода
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
@@ -153,6 +160,32 @@ const RockPaperScissors: FC = () => {
 
     fetchData();
   }, [data]);
+  // запрос на кик юзера при недостатке средств для следующего хода
+  useEffect(() => {
+    const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
+    console.log(player);
+    if (data?.bet_type === "1") {
+      if (player?.money <= data?.bet) {
+        leaveRoomRequest(userId)
+          .then(res => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    } else if (data?.bet_type === "3") {
+      if (player?.tokens <= data?.bet) {
+        leaveRoomRequest(userId)
+          .then(res => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    }
+  }, [data])
 
   // хендлер готовности игрока
   const handleReady = () => {
@@ -272,7 +305,7 @@ const RockPaperScissors: FC = () => {
               )}
               {Number(player?.userid) === Number(userId) && (
                 <div className={styles.game__balance}>
-                  {data?.bet_type === "1" ? `🔰 ${userData?.tokens}` : `💵 ${userData?.coins}`}
+                  {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
                 </div>
               )}
               {player?.emoji !== "none" && (
@@ -317,7 +350,6 @@ const RockPaperScissors: FC = () => {
               )
             )}
           </div> */}
-
           <div className={styles.game__hands}>
             {(
               data?.players_count === "2"

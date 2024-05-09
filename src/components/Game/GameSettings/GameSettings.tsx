@@ -13,9 +13,10 @@ import SettingsSlider from '../SettingsSlider/SettingsSlider';
 
 interface IProps {
   data: any; // TODO типизировать
+  closeOverlay: () => void;
 }
 
-const GameSettings: FC<IProps> = ({ data }) => {
+const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
   // const userId = user?.id;
@@ -24,11 +25,12 @@ const GameSettings: FC<IProps> = ({ data }) => {
   const [currency, setCurrency] = useState(1);
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
+  const [insufficient, setInsufficient] = useState(false);
 
   const userTokens = useAppSelector(store => store.app.info?.tokens);
   const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);
-  
+
   const handleCurrencyChange = (newCurrency: number) => {
     setCurrency(newCurrency);
   };
@@ -37,7 +39,7 @@ const GameSettings: FC<IProps> = ({ data }) => {
     setBet(newBet);
   };
 
-  const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number) => {
+  const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number, closeOverlay: () => void) => {
     const data = {
       user_id: userIdValue,
       bet: bet,
@@ -54,12 +56,16 @@ const GameSettings: FC<IProps> = ({ data }) => {
     } else {
       postNewRoomRequest(data, userIdValue)
         .then((response: any) => {
-          console.log(response);
           if (response.message === 'success') {
             console.log('Room created successfully, room_id:', response.room_id);
             navigate(`/room/${response.room_id}`);
           } else if (response.message === 'not_enough_coins') {
+            setInsufficient(true);
             console.log('Insufficient funds')
+            setTimeout(() => {
+              closeOverlay();
+              setInsufficient(false);
+            }, 2000)
           }
         })
         .catch(error => {
@@ -73,6 +79,10 @@ const GameSettings: FC<IProps> = ({ data }) => {
       {messageShown ? (
         <div className={styles.game__notification}>
           {message}
+        </div>
+      ) : insufficient ? (
+        <div className={styles.game__notification}>
+          {translation?.insufficient_funds}
         </div>
       ) : (
         <>
@@ -96,13 +106,13 @@ const GameSettings: FC<IProps> = ({ data }) => {
               </div>
             </div>
             <div className={styles.game__buttonWrapper}>
-              <Button text={translation?.create_room_button} handleClick={() => handleCreateRoom(userId, bet, currency, data.id)} />
+              <Button text={translation?.create_room_button} handleClick={() => handleCreateRoom(userId, bet, currency, data.id, closeOverlay)} />
             </div>
           </div>
         </>
       )}
     </div>
-  )
+  );  
 };
 
 export default GameSettings;

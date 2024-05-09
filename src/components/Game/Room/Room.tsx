@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ManIcon from "../../../icons/Man/Man";
 import { useAppSelector } from "../../../services/reduxHooks";
 import useTelegram from "../../../hooks/useTelegram";
-import { joinRoomRequest } from "../../../api/gameApi";
+import { joinRoomRequest, leaveRoomRequest } from "../../../api/gameApi";
 import { userId } from "../../../api/requestData";
 
 interface IProps {
@@ -35,6 +35,13 @@ const Room: FC<IProps> = ({ room, openModal }) => {
         })
         .catch((error) => {
           console.error("Error joining room:", error);
+          leaveRoomRequest(userId)
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((error) => {
+              console.log(error);
+            })
         });
     }
   };
