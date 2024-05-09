@@ -4,6 +4,7 @@ import styles from './HandShake.module.scss';
 
 interface IProps {
   prevChoices: { player1: string; player2: string };
+  userId?: any;
 }
 
 const HandShake: FC<IProps> = ({ prevChoices }) => {

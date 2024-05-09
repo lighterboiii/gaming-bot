@@ -17,7 +17,8 @@
   }
 
   &__players {
-    @include indents(0, 16px 0 0 0);
+    position: relative;
+    @include indents();
     @include size(100%, auto);
     @include flex(row, space-between, center);
   }
@@ -26,16 +27,38 @@
     @include size(178px, 178px);
     @include position(relative);
     @include flex(row, center, center);
-  }
+    @include position(absolute, $right: 0, $top: 0);
 
+    &.game__playerLeft {
+      @include position(absolute, $left: 0);
+    }
+  }
+  
   &__playerName {
+    @include indents();
     @include size(152px, auto);
     @include ellipsis();
-    @include position(absolute, $left: 50%, $top: -15%);
+    @include position(absolute, $left: 50%, $top: 0);
     transform: translateX(-50%);
     color: $main-color;
     font-size: 16px;
     color: #ADC9FF;
+
+    &.game__playerLeft {
+      left: auto;
+      right: 50%;
+      transform: translateX(50%);
+    }
+  }
+  
+  &__balance {
+    @include indents(4px 8px, 0);
+    @include flex(row, center,center);
+    @include position(absolute, $bottom: 0, $left: 50%);
+    transform: translate(-50%);
+    color: #ADC9FF;
+    background-color: #140957;
+    border-radius: $radius-40;
   }
 
   &__icon {

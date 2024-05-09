@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-// /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -26,7 +25,10 @@ const RockPaperScissors: FC = () => {
   const { tg, user } = useTelegram();
   // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
+
   const translation = useAppSelector(store => store.app.languageSettings);
+  const userData = useAppSelector(store => store.app.info);
+  console.log(userData);
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   // const [loading, setLoading] = useState<boolean>(false);
@@ -259,7 +261,7 @@ const RockPaperScissors: FC = () => {
       <>
         <div className={styles.game__players}>
           {data?.players?.map((player: IRPSPlayer) => (
-            <div className={styles.game__player} key={player?.userid}>
+            <div className={`${styles.game__player} ${Number(player?.userid) === Number(userId) ? styles.game__playerLeft : ''}`}>
               <p className={styles.game__playerName}>{player?.publicname}</p>
               <UserAvatar item={player} avatar={player?.avatar} key={player?.userid} />
               {player?.choice === 'ready' && (
@@ -268,6 +270,11 @@ const RockPaperScissors: FC = () => {
                   alt="ready icon"
                   className={styles.game__readyIcon}
                 />
+              )}
+              {Number(player?.userid) === Number(userId) && (
+                <div className={styles.game__balance}>
+                  {data?.bet_type === Number(1) ? `🔰 ${userData?.tokens}` : `💵 ${userData?.coins}`}
+                </div>
               )}
               {player?.emoji !== "none" && (
                 <motion.img
@@ -316,7 +323,10 @@ const RockPaperScissors: FC = () => {
             {(
               data?.players_count === "2"
             ) ? (
-              <HandShake prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }} />
+              <HandShake
+                userId={userId}
+                prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }}
+              />
             ) : (
               data?.players_count === "1"
             ) ? (
