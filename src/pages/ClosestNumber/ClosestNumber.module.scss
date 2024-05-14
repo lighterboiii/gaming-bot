@@ -1,0 +1,82 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.game {
+  @include indents(16px, 0);
+  @include size(100%, 100vh);
+  @include position(relative);
+  background-image: url('../../images/closest-number/layer.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: $closest-color;
+
+  &__text {
+    @include indents();
+    color: $main-color;
+    font-size: 16px;
+
+    @media screen and (min-height: 691px) {
+      font-weight: 900;
+      color: $main-color;
+      font-size: 19px;
+    }
+  }
+
+  &__betContainer {
+    @include flex(column, center, center);
+  }
+
+  &__bet {
+    @include indents(6px 16px, 0);
+    @include flex(row, center, center, 4px);
+    background-color: $closest-secondary-color;
+    color: $main-color;
+    border-radius: $radius-40;
+
+    @media screen and (min-height: 691px) {
+      @include size(100px, 48px);
+    }
+  }
+
+  .overlay {
+    @include indents(16px, 0);
+    @include size(100%, auto);
+    @include position(absolute, $bottom: 0, $left: 50%);
+    @include flex(row, center, center, 10px);
+    transform: translate(-50%);
+    background-color: $closest-secondary-color;
+    transition: height 0.3s ease-in-out;
+    border-top-left-radius: $radius-15;
+    border-top-right-radius: $radius-15;
+  }
+  
+  .overlay.expanded {
+    height: 45%;
+  }
+  
+  .input {
+    @include indents(10px, 0);
+    border-radius: $radius-40;
+    border: none;
+  }
+  
+  .keyboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .key {
+    width: 30%;
+    padding: 10px;
+    font-size: 24px;
+    margin: 5px;
+    background-color: #1b50b8;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+}

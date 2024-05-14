@@ -19,7 +19,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
@@ -47,12 +47,30 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       room_type: roomType
     };
     if (roomType === 2) {
-      setMessage("This game is not available now");
-      setMessageShown(true);
-      setTimeout(() => {
-        setMessage("");
-        setMessageShown(false);
-      }, 2000)
+      postNewRoomRequest(data, userIdValue)
+        .then((response: any) => {
+          console.log(response);
+          if (response.message === 'success') {
+            console.log('Room created successfully, room_id:', response.room_id);
+            navigate(`/closest/${response.room_id}`);
+          } else if (response.message === 'not_enough_coins') {
+            setInsufficient(true);
+            console.log('Insufficient funds')
+            setTimeout(() => {
+              closeOverlay();
+              setInsufficient(false);
+            }, 2000)
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        })
+      // setMessage("This game is not available now");
+      // setMessageShown(true);
+      // setTimeout(() => {
+      //   setMessage("");
+      //   setMessageShown(false);
+      // }, 2000)
     } else {
       postNewRoomRequest(data, userIdValue)
         .then((response: any) => {

@@ -34,13 +34,6 @@ export const postNewRoomRequest = (data: any, userIdValue: string) => {
     data: data
   });
 };
-// получить инфо о комнате по айди
-// export const getRoomInfoRequest = (roomId: string) => {
-//   return getReq({
-//     uri: getCurrentRoomInfo,
-//     userId: roomId,
-//   })
-// };
 // запрос на подключение к комнатеъ
 export const joinRoomRequest = (userIdValue: string, roomId: string) => {
   return putReq({
@@ -56,22 +49,6 @@ export const leaveRoomRequest = (userIdValue: string) => {
     userId: userIdValue,
   })
 };
-// запрос на отправку выбора 
-// export const setChoiceRequest = (userIdValue: string, roomId: string, choice: string) => {
-//   return putReq({
-//     uri: setUserChoiceUri,
-//     userId: userIdValue,
-//     endpoint: `${roomIdParamString}${roomId}${playerChoiceParamString}${choice}`,
-//   })
-// };
-// запрос на отправку эмодзи 
-// export const setEmojiRequest = (userIdValue: string, roomId: string, emoji: string) => {
-//   return putReq({
-//     uri: setEmojiUri,
-//     userId: userIdValue,
-//     endpoint: `${roomIdParamString}${roomId}${emojiIdParamString}${emoji}`,
-//   })
-// };
 // запрос на отправку определения победителя
 export const whoIsWinRequest = (roomId: string) => {
   return getReq({
