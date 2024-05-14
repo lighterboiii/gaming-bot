@@ -70,6 +70,15 @@ const ClosestNumber: FC = () => {
 
   return (
     <div className={styles.game}>
+      <div className={styles.game__betContainer}>
+        <p className={styles.game__bet}>
+          Ставка
+          <span className={styles.game__text}>
+            🔰
+          </span>
+          24
+        </p>
+      </div>
       <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
         <div className={styles.overlay__inputWrapper}>
           <div className={styles.overlay__avatarWrapper}>
