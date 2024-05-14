@@ -6,13 +6,18 @@ import { useNavigate } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { userId } from "../../api/requestData";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import smile from '../../images/closest-number/smile.png';
+import { useAppSelector } from "../../services/reduxHooks";
 
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
+  // const userId = user?.id;
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const overlayRef = useRef<HTMLDivElement>(null);
+
+  const userData = useAppSelector(store => store.app.info);
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -54,7 +59,7 @@ const ClosestNumber: FC = () => {
   const handleInputFocus = () => {
     setShowOverlay(true);
   };
-
+  console.log(user);
   const handleKeyPress = (key: number) => {
     setInputValue((prevValue) => prevValue + key.toString());
   };
@@ -67,6 +72,22 @@ const ClosestNumber: FC = () => {
     console.log(`Choice: ${inputValue}`);
   };
 
+  const handleButtonClick = (key: number | string) => {
+    if (typeof key === 'number') {
+      handleKeyPress(key);
+    } else {
+      switch (key) {
+        case 'Стереть':
+          handleDeleteNumber();
+          break;
+        case 'Готово':
+          handleSubmit();
+          break;
+        default:
+          break;
+      }
+    }
+  };
 
   return (
     <div className={styles.game}>
@@ -83,40 +104,39 @@ const ClosestNumber: FC = () => {
         <div className={styles.overlay__inputWrapper}>
           <div className={styles.overlay__avatarWrapper}>
             <UserAvatar />
+            <p className={styles.overlay__name}>
+            {userData && userData?.publicname}
+            </p>
           </div>
-          <input
-            type="number"
-            placeholder="Ваше число"
-            className={styles.overlay__input}
-            value={inputValue}
-            onFocus={handleInputFocus}
-            readOnly
-          />
-          <button>ж</button>
+          <div className={styles.overlay__inputContainer}>
+            <input
+              type="number"
+              placeholder="Ваше число"
+              className={styles.overlay__input}
+              value={inputValue}
+              onFocus={handleInputFocus}
+              readOnly
+            />
+            <p className={styles.overlay__inputText}>Ваше число от 1 до 100</p>
+          </div>
+          <button className={styles.overlay__emojiButton}>
+            <img src={smile} alt="smile_icon" className={styles.overlay__smile} />
+          </button>
         </div>
         {showOverlay && (
           <div className={styles.overlay__keyboard}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((key) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 'Стереть', 0, 'Готово'].map((key) => (
               <button
                 key={key}
-                className={styles.overlay__key}
-                onClick={() => handleKeyPress(key)}>
+                className={key === 'Стереть'
+                  ? styles.overlay__bottomLeftButton
+                  : key === 'Готово'
+                    ? styles.overlay__bottomRightButton
+                    : styles.overlay__key}
+                onClick={() => handleButtonClick(key)}>
                 {key}
               </button>
             ))}
-            <button
-              disabled={inputValue === ''}
-              className={`${styles.overlay__key}  ${styles.overlay__bottomLeftButton}`}
-              onClick={() => handleDeleteNumber()}>
-              Стереть
-            </button>
-            <button
-              disabled={inputValue === ''}
-              className={`${styles.overlay__key} ${styles.overlay__bottomRightButton}`}
-              onClick={() => handleSubmit()}>
-              Готово
-            </button>
-
           </div>
         )}
       </div>

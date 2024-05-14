@@ -4,17 +4,20 @@
 .game {
   @include indents(16px, 0);
   @include size(100%, 100vh);
+  @include flex(column, flex-start, center);
   @include position(relative);
   background-image: url('../../images/closest-number/layer.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   background-color: $closest-color;
+  font-family: 'Rubik', sans-serif;
 
   &__text {
     @include indents();
     color: $main-color;
     font-size: 16px;
+    font-weight: 700;
 
     @media screen and (min-height: 691px) {
       font-weight: 900;
@@ -24,15 +27,18 @@
   }
 
   &__betContainer {
+    @include size(auto, 28px);
     @include flex(column, center, center);
   }
 
   &__bet {
-    @include indents(6px 16px, 0);
+    @include min-size(124px, 28px);
+    @include indents(4px 16px, 0);
     @include flex(row, center, center, 4px);
     background-color: $closest-secondary-color;
     color: $main-color;
     border-radius: $radius-40;
+    font-weight: 700;
 
     @media screen and (min-height: 691px) {
       @include size(100px, 48px);
@@ -41,48 +47,101 @@
 }
 
 .overlay {
-  @include indents(8px 16px 0, 0);
+  @include indents(16px, 0);
   @include size(100%, unset);
+  @include min-size(100%, 135px);
   @include position(absolute, $bottom: 0, $left: 50%);
-  @include flex(column, flex-start, center);
+  @include flex(column, flex-start, center, 10px);
   transform: translate(-50%);
   background-color: $closest-secondary-color;
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
-  height: auto;
+  height: 20%;
   transition: height 1s ease-in-out;
-  font-family: 'Rubik', sans-serif;
+
+  @media screen and (min-height: 691px) {
+    height: 15%;
+  }
 
   &__inputWrapper {
     @include size(100%, auto);
-    @include flex(row, space-between, center, 10px);
+    @include flex(row, space-between, center);
   }
 
   &__avatarWrapper {
+    @include position(relative);
     @include size(103px, 103px);
   }
 
+  &__name {
+    @include indents(2px 8px, 0);
+    @include size(100%, auto);
+    @include position(absolute, $bottom: 0, $left: 50%);
+    transform: translate(-50%);
+    color: $black-color;
+    background-color: $main-color;
+    border-radius: $radius-10;
+    z-index: 5;
+    font-weight: 900;
+    @include ellipsis();
+  }
+
+  &__inputContainer {
+    @include size(auto, auto);
+    @include position(relative);
+    @include flex(column, center, center, 6px);
+  }
+
   &__input {
+    @include size(auto, 38px);
     @include indents(10px, 0);
     border: none;
     border-radius: $radius-40;
     flex-grow: 1;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 30px;
+    box-sizing: border-box;
+  }
+
+  &__inputText {
+    @include indents();
+    @include size(100%, auto);
+    @include position(absolute, $bottom: -45%, $left: 50%);
+    transform: translate(-50%);
+    font-size: 14px;
+    color: $main-color;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .expanded &__input {
+    border: 1px solid black;
   }
 
   &.expanded {
     @include size(100%, unset);
-    height: 45%;
+    // @include min-size(100%, 298px);
+    height: 50%;
+    transition: height 1s ease-in-out;
+
+    @media screen and (min-height: 691px) {
+      height: 35%;
+    }
   }
 
   &__keyboard {
     @include position(relative);
-    @include size(105%, auto);
-    @include flex(row, center, center, 8px);
-    flex-wrap: wrap;
+    @include size(100%, auto);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    align-content: center;
   }
 
   &__key {
-    @include size(109px, 30px);
+    @include size(100%, auto);
+    @include min-size(100%, 34px);
     background-color: #FFE591;
     color: $black-color;
     border: none;
@@ -90,19 +149,35 @@
     font-weight: 900;
     font-size: 26px;
     cursor: pointer;
+
+    @media screen and (min-height: 691px) {
+      @include min-size(100%, 36px);
+    }
   }
 
   &__bottomLeftButton {
-    @include position(absolute, $bottom: 0, $left: 10px);
+    @extend .overlay__key;
     background: #FF9188;
     font-size: 1em;
     border: .5px black solid;
   }
 
   &__bottomRightButton {
-    @include position(absolute, $bottom: 0, $right: 10px);
+    @extend .overlay__key;
     background: #66FF6C;
     border: .5px black solid;
     font-size: 1em;
+  }
+
+  &__emojiButton {
+    @include size(56px, 38px);
+    @include button-style-reset();
+    @include flex(row, center, center);
+    background-color: $main-color;
+    border-radius: 19px;
+  }
+
+  &__smile {
+    @include size(28px, 28px);
   }
 }
