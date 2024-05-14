@@ -51,7 +51,7 @@
   @include size(100%, unset);
   @include min-size(100%, 135px);
   @include position(absolute, $bottom: 0, $left: 50%);
-  @include flex(column, flex-start, center, 10px);
+  @include flex(column, flex-start, center, 16px);
   transform: translate(-50%);
   background-color: $closest-secondary-color;
   border-top-left-radius: 32px;
@@ -61,6 +61,10 @@
 
   @media screen and (min-height: 691px) {
     height: 15%;
+  }
+
+  @media screen and (max-height: 600px) {
+    gap: 6px;
   }
 
   &__inputWrapper {
@@ -121,7 +125,6 @@
 
   &.expanded {
     @include size(100%, unset);
-    // @include min-size(100%, 298px);
     height: 50%;
     transition: height 1s ease-in-out;
 
@@ -152,6 +155,10 @@
 
     @media screen and (min-height: 691px) {
       @include min-size(100%, 36px);
+    }
+
+    @media screen and (max-height: 600px) {
+      @include min-size(100%, 32px);
     }
   }
 

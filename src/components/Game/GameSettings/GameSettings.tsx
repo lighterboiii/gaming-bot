@@ -39,58 +39,40 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     setBet(newBet);
   };
 
-  const handleCreateRoom = (userIdValue: string, bet: number, betType: number, roomType: number, closeOverlay: () => void) => {
+  const handleCreateRoom = (
+    userIdValue: string,
+    bet: number,
+    betType: number,
+    roomType: number,
+    closeOverlay: () => void) => {
     const data = {
       user_id: userIdValue,
       bet: bet,
       bet_type: betType,
       room_type: roomType
     };
-    if (roomType === 2) {
-      postNewRoomRequest(data, userIdValue)
-        .then((response: any) => {
-          console.log(response);
-          if (response.message === 'success') {
-            console.log('Room created successfully, room_id:', response.room_id);
-            navigate(`/closest/${response.room_id}`);
-          } else if (response.message === 'not_enough_coins') {
-            setInsufficient(true);
-            console.log('Insufficient funds')
-            setTimeout(() => {
-              closeOverlay();
-              setInsufficient(false);
-            }, 2000)
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
-      // setMessage("This game is not available now");
-      // setMessageShown(true);
-      // setTimeout(() => {
-      //   setMessage("");
-      //   setMessageShown(false);
-      // }, 2000)
-    } else {
-      postNewRoomRequest(data, userIdValue)
-        .then((response: any) => {
-          if (response.message === 'success') {
-            console.log('Room created successfully, room_id:', response.room_id);
-            navigate(`/room/${response.room_id}`);
-          } else if (response.message === 'not_enough_coins') {
-            setInsufficient(true);
-            console.log('Insufficient funds')
-            setTimeout(() => {
-              closeOverlay();
-              setInsufficient(false);
-            }, 2000)
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    }
+
+    const handleResponse = (response: any) => {
+      if (response.message === 'success') {
+        console.log('Room created successfully, room_id:', response.room_id);
+        navigate(roomType === 2 ? `/closest/${response.room_id}` : `/room/${response.room_id}`);
+      } else if (response.message === 'not_enough_coins') {
+        setInsufficient(true);
+        console.log('Insufficient funds')
+        setTimeout(() => {
+          closeOverlay();
+          setInsufficient(false);
+        }, 2000)
+      }
+    };
+
+    postNewRoomRequest(data, userIdValue)
+      .then(handleResponse)
+      .catch(error => {
+        console.log(error);
+      });
   };
+
 
   return (
     <div className={styles.game + 'scrollable'}>
@@ -124,17 +106,17 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
               </div>
             </div>
             <div className={styles.game__buttonWrapper}>
-              <Button 
-              disabled={bet === 0}
-              text={translation?.create_room_button} 
-              handleClick={() => handleCreateRoom(userId, bet, currency, data.id, closeOverlay)} 
+              <Button
+                disabled={bet === 0}
+                text={translation?.create_room_button}
+                handleClick={() => handleCreateRoom(userId, bet, currency, data.id, closeOverlay)}
               />
             </div>
           </div>
         </>
       )}
     </div>
-  );  
+  );
 };
 
 export default GameSettings;
