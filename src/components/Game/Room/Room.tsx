@@ -19,34 +19,39 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
-  
-  const handleJoinRoom = () => {
-    if (userInfo?.user_energy === 0 && room?.bet_type === 3) {
+
+  const handleJoinRoom = (roomType: number) => {
+    if ((userInfo?.user_energy === 0 && room?.bet_type === 3) || roomType === 0) {
       openModal();
-    } else {
-      joinRoomRequest(userId, room.room_id)
-        .then((res) => {
-          console.log("Joined successfully:", res);
-          navigate(`/room/${room.room_id}`);
-        })
-        .catch((error) => {
-          console.error("Error joining room:", error);
-          leaveRoomRequest(userId)
-            .then((data) => {
-              console.log(data);
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-        });
+      return;
     }
+    
+    joinRoomRequest(userId, room.room_id)
+      .then((res) => {
+        console.log("Joined successfully:", res);
+        navigate(roomType === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
+      })
+      .catch((error) => {
+        console.error("Error joining room:", error);
+        handleLeaveRoom();
+      });
+  };
+
+  const handleLeaveRoom = () => {
+    leaveRoomRequest(userId)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
-    <div className={styles.room} onClick={handleJoinRoom} key={room?.id}>
+    <div className={styles.room} onClick={() => handleJoinRoom(room.room_type)} key={room?.id}>
       <div className={styles.room__game}>
         <p className={styles.room__gameName}>
           {room?.room_type === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}

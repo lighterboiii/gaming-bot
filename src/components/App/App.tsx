@@ -2,6 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Routes, Route } from 'react-router-dom';
 import { FC, useEffect, useState } from 'react';
+import { anyUrl, closestNumberRoomUrl, createRoomUrl, indexUrl, leaderboardUrl, roomUrl, roomsUrl, shopUrl } from '../../utils/routes';
+import { userId } from '../../api/requestData';
+import { useAppDispatch } from '../../services/reduxHooks';
+import { setBannerData, setDailyBonus, setLanguageSettings, setShopAvailable, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
+import { setProductsArchive } from '../../services/appSlice';
+import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 import styles from './App.module.scss';
 import CreateRoom from '../../pages/CreateRoom/CreateRoom';
 import Main from '../../pages/Main/Main';
@@ -11,17 +17,12 @@ import useTelegram from '../../hooks/useTelegram';
 import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
 import Loader from '../Loader/Loader';
 import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
-import { anyUrl, createRoomUrl, indexUrl, leaderboardUrl, roomUrl, roomsUrl, shopUrl } from '../../utils/routes';
-import { userId } from '../../api/requestData';
-import { useAppDispatch } from '../../services/reduxHooks';
-import { setBannerData, setDailyBonus, setLanguageSettings, setShopAvailable, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
-import { setProductsArchive } from '../../services/appSlice';
-import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
 import RockPaperScissors from '../../pages/RockPaperScissors/RockPaperScissors';
+import ClosestNumber from '../../pages/ClosestNumber/ClosestNumber';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -89,6 +90,7 @@ const App: FC = () => {
           <Route path={shopUrl} element={<Shop />} />
           <Route path={leaderboardUrl} element={<LeaderBoard />} />
           <Route path={roomUrl} element={<RockPaperScissors />} />
+          <Route path={closestNumberRoomUrl} element={<ClosestNumber />} />
           <Route path={anyUrl} element={<NotFoundPage />} />
         </Routes>
       )}

@@ -13,7 +13,7 @@
   background-repeat: no-repeat;
 
   &__heading {
-    color: #FFF;
+    color: $main-color;
   }
 
   &__players {
@@ -42,7 +42,7 @@
     transform: translateX(-50%);
     color: $main-color;
     font-size: 16px;
-    color: #ADC9FF;
+    color: $rps-text-color;
 
     &.game__playerLeft {
       left: auto;
@@ -56,8 +56,8 @@
     @include flex(row, center,center);
     @include position(absolute, $bottom: -8%, $left: 50%);
     transform: translate(-50%);
-    color: #ADC9FF;
-    background-color: #140957;
+    color: $rps-text-color;
+    background-color: $rps-background-color;
     border-radius: $radius-40;
     font-size: 14px;
   }
@@ -102,7 +102,7 @@
     @include size(auto, auto);
     @include indents(6px 16px, 0);
     @include flex(row, center, center, 10px);
-    background-color: #140957;
+    background-color: $rps-background-color;
     color: $main-color;
     border-radius: $radius-40;
     opacity: .5;
