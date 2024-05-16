@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import styles from './UserAvatar.module.scss';
 import { useAppSelector } from "../../../services/reduxHooks";
@@ -7,7 +8,8 @@ import { IMember } from "../../../utils/types/memberTypes";
 import { IRPSPlayer } from "../../../utils/types/gameTypes";
 
 interface IProps {
-  item?: ItemData | IMember | IRPSPlayer;
+  // item?: ItemData | IMember | IRPSPlayer;
+  item?: any;
   avatar?: string;
 }
 
