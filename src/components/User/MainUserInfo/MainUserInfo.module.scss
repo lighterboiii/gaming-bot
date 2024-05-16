@@ -39,7 +39,6 @@
     @include indents();
     @include ellipsis();
     @include size(140px, auto);
-    // @include max-size(146px, auto);
     @include flex(row, flex-start, center, 6px);
     color: $main-color;
     font-weight: 900;
@@ -48,7 +47,7 @@
   }
 
   &__overflow {
-    @include size(120px, auto);
+    @include size(110px, auto);
     overflow-x: hidden;
   }
 
@@ -56,8 +55,7 @@
     @include indents();
     @include size(120px, auto);
     text-align: left;
-    // animation: scrollText 5s linear infinite alternate;
-
+    
     &.animateOverflow {
       animation: scrollText 5s linear infinite alternate;
     }

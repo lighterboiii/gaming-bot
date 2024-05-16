@@ -56,12 +56,12 @@
   background-color: $closest-secondary-color;
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
-  height: 20%;
+  height: 20vh;
   transition: height 1s ease-in-out;
 
-  @media screen and (min-height: 691px) {
-    height: 15%;
-  }
+  // @media screen and (min-height: 691px) {
+  //   height: 20vh;
+  // }
 
   @media screen and (max-height: 600px) {
     gap: 6px;
@@ -125,11 +125,11 @@
 
   &.expanded {
     @include size(100%, unset);
-    height: 50%;
+    height: 50vh;
     transition: height 1s ease-in-out;
 
     @media screen and (min-height: 691px) {
-      height: 35%;
+      height: 35vh;
     }
   }
 
@@ -140,6 +140,7 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
     align-content: center;
+    flex-grow: 1;
   }
 
   &__key {
