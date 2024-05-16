@@ -20,7 +20,7 @@ const ClosestNumber: FC = () => {
   const userData = useAppSelector(store => store.app.info);
 
   useEffect(() => {
-    tg.setHeaderColor('#1b50b8');
+    tg.setHeaderColor('#FEC42C');
     tg.BackButton.show().onClick(() => {
       leaveRoomRequest(userId)
         .then((data) => {
