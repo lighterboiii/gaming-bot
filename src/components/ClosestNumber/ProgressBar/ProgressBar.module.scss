@@ -1,0 +1,29 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.bar {
+  @include size(120px, 120px);
+  overflow: visible;
+
+  @media screen and (max-height: 691px) {
+    @include size(100px, 100px);
+  }
+  
+  &__innerCircle {
+    fill: $main-color;
+  }
+  
+  &__outerCircle {
+    fill: transparent;
+    stroke: $black-color;
+    stroke-width: 6px;
+  }
+  
+  &__progressPoint {
+    fill: $closest-secondary-color;
+    transition: transform 5s linear;
+    z-index: 666;
+    stroke: $black-color;
+    stroke-width: 5px;
+  }
+}

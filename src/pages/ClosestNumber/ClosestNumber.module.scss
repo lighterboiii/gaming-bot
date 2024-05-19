@@ -50,7 +50,7 @@
     @include position(absolute, $left: 50%, $top: 45%);
     transform: translate(-50%, -50%);
     @include flex(row, center, center, 10px);
-
+    overflow: visible;
 
     @media screen and (max-height: 691px) {
       @include position(absolute, $left: 50%, $top: 38%);
@@ -74,8 +74,10 @@
   &__centralText,
   &__centralTimer {
     @include indents();
-    @include position(absolute, $top: -10%);
+    @include position(absolute, $top: 50%);
     transform: translate(-50%, -50%);
+    font-weight: 900;
+    font-size: 20px;
   }
 
   &__centralText {

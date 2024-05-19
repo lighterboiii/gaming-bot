@@ -19,6 +19,7 @@ import CaseEight from "../../components/ClosestNumber/Eight/Eight";
 import { users } from '../../utils/mockData';
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import { getActiveEmojiPack } from "../../api/mainApi";
+import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
 
 interface IProps {
   users: any[];
@@ -155,7 +156,7 @@ const ClosestNumber: FC = () => {
       </div>
       <div className={styles.game__centralContainer}>
         <p className={styles.game__centralText}>4/5</p>
-        <div className={styles.game__round}>Round DIV</div>
+        <CircularProgressBar progress={0} />
         <p className={styles.game__centralTimer}>00:10</p>
       </div>
       <RenderComponent users={users} />
