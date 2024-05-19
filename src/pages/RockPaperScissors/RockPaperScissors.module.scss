@@ -53,6 +53,7 @@
   
   &__balance {
     @include indents(4px 8px, 0);
+    @include size(auto, unset);
     @include flex(row, center,center);
     @include position(absolute, $bottom: -8%, $left: 50%);
     transform: translate(-50%);

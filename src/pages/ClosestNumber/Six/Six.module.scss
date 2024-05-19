@@ -14,6 +14,10 @@
   &__player {
     @include size(55px, 55px);
     @include flex(row, center, center);
+
+    @media screen and (min-height: 691px) {
+      @include size(70px, 70px);
+    }
   }
   
   &__player:nth-child(1) {

@@ -14,25 +14,29 @@
   &__player {
     @include size(55px, 55px);
     @include flex(row, center, center);
+
+    @media screen and (min-height: 691px) {
+      @include size(70px, 70px);
+    }
   }
   
   &__player:nth-child(1) {
-    @include position(absolute, $top: 0, $left: 35%);
+    @include position(absolute, $top: 5%, $left: 35%);
     transform: translateX(-50%);
   }
   
   &__player:nth-child(2) {
-    @include position(absolute, $top: 0, $left: 65%);
+    @include position(absolute, $top: 5%, $left: 65%);
     transform: translateX(-50%);
   }
   
   &__player:nth-child(3) {
-    @include position(absolute, $top: 15%, $left: 25%);
+    @include position(absolute, $top: 20%, $left: 25%);
     transform: translateX(-50%);
   }
   
   &__player:nth-child(4) {
-    @include position(absolute, $top: 15%, $left: 75%);
+    @include position(absolute, $top: 20%, $left: 75%);
     transform: translateX(-50%);
   }
   

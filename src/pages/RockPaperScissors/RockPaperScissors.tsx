@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPollingRequest, leaveRoomRequest, whoIsWinRequest } from "../../api/gameApi";
@@ -39,7 +39,7 @@ const RockPaperScissors: FC = () => {
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
-
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -148,6 +148,11 @@ const RockPaperScissors: FC = () => {
                     setMessage(translation?.draw);
                   }
                   setMessageVisible(true);
+                  setTimeout(() => {
+                    setMessageVisible(false);
+                    setTimerStarted(true);
+                    setTimer(15);
+                  }, 2000)
                 }, animationTime);
               }
             })
@@ -161,30 +166,30 @@ const RockPaperScissors: FC = () => {
     fetchData();
   }, [data]);
   // запрос на кик юзера при недостатке средств для следующего хода
-  // useEffect(() => {
-  //   const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
-  //   if (data?.bet_type === "1") {
-  //     if (player?.money <= data?.bet) {
-  //       leaveRoomRequest(userId)
-  //         .then(res => {
-  //           console.log(res);
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //         })
-  //     }
-  //   } else if (data?.bet_type === "3") {
-  //     if (player?.tokens <= data?.bet) {
-  //       leaveRoomRequest(userId)
-  //         .then(res => {
-  //           console.log(res);
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //         })
-  //     }
-  //   }
-  // }, [data])
+  useEffect(() => {
+    const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
+    if (data?.bet_type === "1") {
+      if (player?.money <= data?.bet) {
+        leaveRoomRequest(userId)
+          .then(res => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    } else if (data?.bet_type === "3") {
+      if (player?.tokens <= data?.bet) {
+        leaveRoomRequest(userId)
+          .then(res => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    }
+  }, [data])
   // хендлер готовности игрока
   const handleReady = () => {
     setMessageVisible(false);
@@ -270,42 +275,49 @@ const RockPaperScissors: FC = () => {
         })
     }, 3000)
   };
+  // Таймер
+  useEffect(() => {
+    if (data?.players_count === "2"
+      && data?.players?.every((player: IRPSPlayer) => player.choice === 'none')
+      // && data?.win?.users === 'none'
+    ) {
+      setTimerStarted(true);
+      setTimer(15);
+    } else {
+      setTimerStarted(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    }
+  }, [data]);
 
-  // useEffect(() => {
-  //   if (data && data?.players_count === '2' && !timerStarted) {
-  //     setTimerStarted(true);
-  //     setTimer(15);
-  //   } else if (data && data?.players_count !== '2') {
-  //     setTimerStarted(false);
-  //     setTimer(15);
-  //   }
-  //   if (data?.players.every((player: any) => player.choice === 'ready')) {
-  //     setTimerStarted(false);
-  //     setTimer(15);
-  //   }
-  // }, [data]);
-
-  // useEffect(() => {
-  //   if (timerStarted && timer > 0) {
-  //     const ticker = setInterval(() => {
-  //       setTimer(prevTimer => prevTimer - 1);
-  //     }, 1000);
-  //     return () => clearInterval(ticker);
-  //   } else if (timer === 0) {
-  //     const hasPlayerWithChoiceNone = data?.players.some((player: any) => player.choice === 'none');
-  //     if (hasPlayerWithChoiceNone) {
-  //       leaveRoomRequest(userId)
-  //         .then((data) => {
-  //           console.log(data);
-  //         })
-  //         .catch((error) => {
-  //           console.error(error);
-  //         });
-  //     }
-  //     setTimerStarted(false);
-  //     setTimer(15);
-  //   }
-  // }, [timerStarted, timer]);
+  useEffect(() => {
+    if (timerStarted && timer > 0) {
+      timerRef.current = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      const player = data?.players.find((player: IRPSPlayer) => player.choice === 'none');
+      if (player) {
+        leaveRoomRequest(player.userid)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      setTimerStarted(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    }
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [timer, timerStarted, data]);
 
   return (
     <div className={styles.game}>
@@ -354,22 +366,15 @@ const RockPaperScissors: FC = () => {
             data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready') &&
             <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
           }
-          {messageVisible && (
+          {messageVisible ? (
             <p className={styles.game__resultMessage}>
               {message}
             </p>
+          ) : (
+            <p className={styles.game__notify}>
+              {timerStarted && timer}
+            </p>
           )}
-          {/* <div className={styles.game__hands}>
-            {data?.players_count === "2" ? (
-              <HandShake prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }} />
-            ) : data?.players_count === "1" ? (
-              <p className={styles.game__notify}>Ожидание игроков...</p>
-            ) : (
-              data?.players.some((player: any) => player.choice === 'none') && timer && (
-                <p className={styles.game__notify}>{timer}</p>
-              )
-            )}
-          </div> */}
           <div className={styles.game__hands}>
             {(
               data?.players_count === "2"
@@ -382,14 +387,8 @@ const RockPaperScissors: FC = () => {
               data?.players_count === "1"
             ) ? (
               <p className={styles.game__notify}>Ожидание игроков...</p>
-            ) : (
-              <p className={styles.game__notify}>
-                {
-                  data?.players?.some((player: any) => player.choice === 'none') &&
-                  timer
-                }
-              </p>
-            )}
+            ) :
+              ''}
           </div>
           <div className={styles.game__lowerContainer}>
             <div className={styles.game__betContainer}>

@@ -62,21 +62,11 @@
   }
 
   &__text {
-    @include indents();
-    font-family: 'Rubik', sans-serif;
-    font-weight: 400;
-    color: $black-color;
-    text-align: left;
-    font-size: 14px;
-  }
-
-  &__text {
     @include size(calc(100% - 32px), unset);
     @include indents();
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
     font-size: 14px;
-    color: $main-color;
     text-align: center;
     text-overflow: ellipsis;
     white-space: wrap;

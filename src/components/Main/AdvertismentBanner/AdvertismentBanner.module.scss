@@ -12,7 +12,6 @@
   box-sizing: border-box;
   transition: background-image .7s ease-in-out;
 
-
   @media screen and (min-height: 691px) {
     height: 124px;
   }
@@ -51,11 +50,6 @@
     border-radius: $radius-round;
   }
 
-  &__text {
-    @include indents(30px, 0);
-    color: $main-color;
-  }
-
   &__indicators {
     @include indents(4px 6px, 0);
     @include flex(row, $gap: 2px);
@@ -85,7 +79,6 @@
     @include indents();
     font-family: 'Rubik', sans-serif;
     font-weight: 900;
-    color: $black-color;
     text-align: left;
   }
 
@@ -93,7 +86,6 @@
     @include indents();
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
-    color: $black-color;
     text-align: left;
     font-size: 14px;
   }

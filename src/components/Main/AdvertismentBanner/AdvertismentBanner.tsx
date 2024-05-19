@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import styles from "./AdvertismentBanner.module.scss";
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
-import { postEvent } from "@tma.js/sdk";
+// import { postEvent } from "@tma.js/sdk";
 import { IBannerData } from "../../../utils/types/mainTypes";
 
 interface IProps {
@@ -17,7 +17,7 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
 
   const handleBannerClick = () => {
     const currentBannerData = bannersData[currentIndex];
-    postEvent("web_app_trigger_haptic_feedback", { type: "impact", impact_style: "soft" });
+    // postEvent("web_app_trigger_haptic_feedback", { type: "impact", impact_style: "soft" });
     onBannerClick(currentBannerData);
   };
 
@@ -28,8 +28,18 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
         style={{ backgroundImage: `url(${bannersData[currentIndex]?.pic})` }}
       >
         <div className={styles.banner__info}>
-          <h3 className={styles.banner__picHeader}>{bannersData[currentIndex]?.pic_header}</h3>
-          <p className={styles.banner__text}>{bannersData[currentIndex]?.pic_text}</p>
+          <h3
+            className={styles.banner__picHeader}
+            style={{ color: `${bannersData[currentIndex]?.pic_text_color}` }}
+          >
+            {bannersData[currentIndex]?.pic_header}
+          </h3>
+          <p
+            className={styles.banner__text}
+            style={{ color: `${bannersData[currentIndex]?.pic_text_color}` }}
+          >
+            {bannersData[currentIndex]?.pic_text}
+          </p>
         </div>
         <button
           className={`${styles.banner__sliderButton} ${styles.banner__leftButton}`}

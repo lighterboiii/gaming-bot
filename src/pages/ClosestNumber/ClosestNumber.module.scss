@@ -107,6 +107,7 @@
   border-top-right-radius: 32px;
   height: 20vh;
   transition: height 1s ease-in-out;
+  box-sizing: border-box;
 
   @media screen and (max-height: 600px) {
     gap: 6px;
@@ -114,15 +115,17 @@
 
   &__inputWrapper {
     @include size(100%, auto);
-    @include flex(row, space-between, center);
+    @include flex(row, space-between, center, 4px);
   }
 
   &__avatarWrapper {
     @include position(relative);
     @include size(103px, 103px);
+    aspect-ratio: 1;
   }
 
   &__name {
+    @include ellipsis();
     @include indents(2px 8px, 0);
     @include size(100%, auto);
     @include position(absolute, $bottom: 0, $left: 50%);
@@ -132,7 +135,7 @@
     border-radius: $radius-10;
     z-index: 5;
     font-weight: 900;
-    @include ellipsis();
+    font-size: 14px;
   }
 
   &__inputContainer {
@@ -142,7 +145,7 @@
   }
 
   &__input {
-    @include size(auto, 38px);
+    @include size(100%, 38px);
     @include indents(10px, 0);
     border: none;
     border-radius: $radius-40;
@@ -165,7 +168,7 @@
   }
 
   .expanded &__input {
-    border: 1px solid black;
+    border: 1.5px solid black;
   }
 
   &.expanded {
@@ -175,7 +178,7 @@
     overflow: visible;
 
     @media screen and (min-height: 691px) {
-      @include size(100%, calc(100% - 60vh));
+      @include size(100%, calc(100% - 55vh));
     }
   }
 
