@@ -8,9 +8,14 @@ interface IProps {
 
 const Case: FC<IProps> = ({ users }) => {
   return (
-    <div className={styles.players}>
+    <div 
+    className={styles.players}
+    style={users?.length <= 2 ? { width: '180%' } : {}}
+    >
       {users?.map((user: any) => (
-        <div className={styles.players__player} style={users?.length <= 2 ? { width: '90px', height: '90px' } : {}}>
+        <div 
+        className={styles.players__player} 
+        style={users?.length <= 2 ? { width: '90px', height: '90px' } : {}}>
           <UserAvatar item={user} avatar={user?.avatar} key={user?.userid} />
         </div>
       ))}

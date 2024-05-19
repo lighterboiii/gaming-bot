@@ -3,11 +3,11 @@
 
 .players {
   @include position(relative);
-  @include min-size(100%, calc(100% - 25vh));
+  @include size(100%, calc(100% - 25vh));
 
   @media screen and (min-height: 691px) {
     @include position(relative);
-    @include min-size(100%, calc(100% - 20vh));
+    @include size(100%, calc(100% - 20vh));
     margin-top: 20px;
   }
 
@@ -17,38 +17,29 @@
   }
   
   &__player:nth-child(1) {
-    position: absolute;
-    top: 0;
-    left: 35%;
+    @include position(absolute, $top: 0, $left: 35%);
     transform: translateX(-50%);
   }
   
   &__player:nth-child(2) {
-    position: absolute;
-    top: 0;
-    left: 65%;
+    @include position(absolute, $top: 0, $left: 65%);
     transform: translateX(-50%);
   }
   
   &__player:nth-child(3) {
-    position: absolute;
-    top: 15%;
-    left: 25%;
+    @include position(absolute, $top: 15%, $left: 25%);
     transform: translateX(-50%);
   }
   
   &__player:nth-child(4) {
-    position: absolute;
-    top: 15%;
-    left: 75%;
+    @include position(absolute, $top: 15%, $left: 75%);
     transform: translateX(-50%);
   }
   
   &__player:nth-child(5),
   &__player:nth-child(6),
   &__player:nth-child(7) {
-    position: absolute;
-    bottom: 25%;
+    @include position(absolute, $bottom: 25%, $left: 35%);
     transform: translateX(-50%);
   }
   
@@ -66,8 +57,7 @@
   
   &__player:nth-child(8),
   &__player:nth-child(9) {
-    position: absolute;
-    bottom: 10%;
+    @include position(absolute, $bottom: 10%);
     transform: translateX(-50%);
   }
   

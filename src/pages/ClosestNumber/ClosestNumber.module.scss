@@ -45,86 +45,54 @@
     }
   }
 
-
-  // &__players {
-  //   @include size(100%, calc(100% - 20vh));
-  //   @include position(relative);
-  // }
-
-  // &__twoPlayers {
-  //   @include position(relative);
-  //   @include size(160%, calc(100% - 20vh));
-  //   margin-top: 20px;
-  // }
-
-  // &__player {
-  //   @include size(55px, 55px);
-  //   @include flex(row, center, center);
-  // }
-
-  // &__player:nth-child(1) {
-  //   position: absolute;
-  //   top: 0;
-  //   left: 35%;
-  //   transform: translateX(-50%);
-  // }
-
-  // &__player:nth-child(2) {
-  //   position: absolute;
-  //   top: 0;
-  //   left: 65%;
-  //   transform: translateX(-50%);
-  // }
-  
-  // &__player:nth-child(3) {
-  //   position: absolute;
-  //   top: 15%;
-  //   left: 25%;
-  //   transform: translateX(-50%);
-  // }
-
-  // &__player:nth-child(4) {
-  //   position: absolute;
-  //   top: 15%;
-  //   left: 75%;
-  //   transform: translateX(-50%);
-  // }
-  
-  // &__player:nth-child(5),
-  // &__player:nth-child(6),
-  // &__player:nth-child(7) {
-  //   position: absolute;
-  //   top: 58%;
-  //   transform: translateX(-50%);
-  // }
-
-  // &__player:nth-child(5) {
-  //   left: 20%;
-  // }
-
-  // &__player:nth-child(6) {
-  //   left: 50%;
-  // }
-
-  // &__player:nth-child(7) {
-  //   left: 80%;
-  // }
+  &__centralContainer {
+    @include size(100%, auto);
+    @include position(absolute, $left: 50%, $top: 45%);
+    transform: translate(-50%, -50%);
+    @include flex(row, center, center, 10px);
 
 
-  // &__player:nth-child(8),
-  // &__player:nth-child(9) {
-  //   position: absolute;
-  //   bottom: 15%;
-  //   transform: translateX(-50%);
-  // }
+    @media screen and (max-height: 691px) {
+      @include position(absolute, $left: 50%, $top: 38%);
+    }
+  }
 
-  // &__player:nth-child(8) {
-  //   left: 35%;
-  // }
+  &__round {
+    @include size(120px, 120px);
+    @include position(absolute, $left: 50%, $top: 50%);
+    transform: translate(-50%, -50%);
+    @include flex(row, center, center);
+    background-color: $main-color;
+    border-radius: $radius-round;
+    border: 2px black solid;
 
-  // &__player:nth-child(9) {
-  //   left: 65%;
-  // }
+    @media screen and (max-height: 691px) {
+      @include size(96px, 96px);
+    }
+  }
+
+  &__centralText,
+  &__centralTimer {
+    @include indents();
+    @include position(absolute, $top: -10%);
+    transform: translate(-50%, -50%);
+  }
+
+  &__centralText {
+    left: 25%;
+
+    @media screen and (max-height: 691px) {
+      left: 30%;
+    }
+  }
+
+  &__centralTimer {
+    left: 80%;
+
+    @media screen and (max-height: 691px) {
+      left: 72%;
+    }
+  }
 }
 
 .overlay {

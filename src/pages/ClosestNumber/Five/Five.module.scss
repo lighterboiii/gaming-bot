@@ -3,11 +3,11 @@
 
 .players {
   @include position(relative);
-  @include min-size(100%, calc(100% - 25vh));
+  @include size(100%, calc(100% - 25vh));
 
   @media screen and (min-height: 691px) {
     @include position(relative);
-    @include min-size(100%, calc(100% - 20vh));
+    @include size(100%, calc(100% - 20vh));
     margin-top: 20px;
   }
 

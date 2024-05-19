@@ -10,7 +10,6 @@ import Overlay from "../../components/Overlay/Overlay";
 import Referral from "../../components/Main/Referral/Referral";
 import BannerData from "../../components/Main/BannerData/BannerData";
 import gowinLogo from '../../images/gowin.png';
-import { bannersData } from "../../utils/mockData";
 import DailyBonus from "../../components/Main/Bonus/Bonus";
 import { useAppSelector } from "../../services/reduxHooks";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
@@ -25,7 +24,7 @@ const Main: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);
 
-  const [currentBanner, setCurrentBanner] = useState(bannersData[0]);
+  const [currentBanner, setCurrentBanner] = useState(banners[0]);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
