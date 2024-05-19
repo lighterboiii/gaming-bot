@@ -9,6 +9,7 @@ interface IProps {
 const BannerData: FC<IProps> = ({ data }) => {
 
   return (
+    data && (
     <div className={styles.banner}>
       <div className={styles.banner__content}>
         <div className={styles.banner__header}>
@@ -30,6 +31,7 @@ const BannerData: FC<IProps> = ({ data }) => {
         <Button text={data?.button_text} handleClick={() => { }} />
       </div>
     </div>
+    )
   )
 };
 

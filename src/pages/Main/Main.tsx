@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from "react"
+import { FC, useState } from "react";
 import styles from './Main.module.scss';
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
 import AdvertisementBanner from "../../components/Main/AdvertismentBanner/AdvertismentBanner";
@@ -24,7 +23,7 @@ const Main: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);
 
-  const [currentBanner, setCurrentBanner] = useState(banners[0]);
+  const [currentBanner, setCurrentBanner] = useState(banners?.length ? banners[0] : null);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
@@ -32,7 +31,7 @@ const Main: FC = () => {
 
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
-    setShowBannerOverlay(!showBannerOverlay)
+    setShowBannerOverlay(!showBannerOverlay);
     setShowReferralOverlay(false);
   };
 
@@ -66,7 +65,9 @@ const Main: FC = () => {
       </div>
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
         <div >
-          <AdvertisementBanner bannersData={banners} onBannerClick={handleBannerClick} />
+          {banners?.length > 0 && (
+            <AdvertisementBanner bannersData={banners} onBannerClick={handleBannerClick} />
+          )}
         </div>
         <div className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
