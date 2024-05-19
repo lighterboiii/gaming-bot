@@ -1,3 +1,4 @@
+/* eslint-disable no-fallthrough */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState, useRef } from "react";
 import styles from './ClosestNumber.module.scss';
@@ -8,6 +9,39 @@ import { userId } from "../../api/requestData";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import smile from '../../images/closest-number/smile.png';
 import { useAppSelector } from "../../services/reduxHooks";
+import Case from './One/CaseOne';
+import CaseTwo from "./Three/Three";
+import CaseThree from "./Four/Four";
+import CaseFour from "./Five/Five";
+import CaseSix from "./Six/Six";
+import CaseSeven from "./Seven/Seven";
+import CaseEight from "./Eight/Eight";
+import { users } from '../../utils/mockData';
+
+interface IProps {
+  users: any[];
+}
+
+const RenderComponent: FC<IProps> = ({ users }) => {
+  switch (users?.length) {
+    case 1:
+    // return <CaseOne users={users} />;
+    case 3:
+      return <CaseTwo users={users} />;
+    case 4:
+      return <CaseThree users={users} />;
+    case 5:
+    return <CaseFour users={users} />;
+    case 6:
+    return <CaseSix users={users} />;
+    case 7:
+    return <CaseSeven users={users} />;
+    case 8:
+    return <CaseEight users={users} />;
+    default:
+      return <Case users={users} />
+  }
+};
 
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
@@ -18,7 +52,7 @@ const ClosestNumber: FC = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   const userData = useAppSelector(store => store.app.info);
-
+  console.log(userData);
   useEffect(() => {
     tg.setHeaderColor('#FEC42C');
     tg.BackButton.show().onClick(() => {
@@ -59,7 +93,7 @@ const ClosestNumber: FC = () => {
   const handleInputFocus = () => {
     setShowOverlay(true);
   };
-  console.log(user);
+
   const handleKeyPress = (key: number) => {
     setInputValue((prevValue) => prevValue + key.toString());
   };
@@ -70,6 +104,8 @@ const ClosestNumber: FC = () => {
 
   const handleSubmit = () => {
     console.log(`Choice: ${inputValue}`);
+    setShowOverlay(false);
+    setInputValue('');
   };
 
   const handleButtonClick = (key: number | string) => {
@@ -100,12 +136,18 @@ const ClosestNumber: FC = () => {
           24
         </p>
       </div>
+      <div className={styles.game__centralContainer}>
+        <p className={styles.game__centralText}>4/5</p>
+        <div className={styles.game__round}>Round DIV</div>
+        <p className={styles.game__centralTimer}>00:10</p>
+      </div>
+      <RenderComponent users={users} />
       <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
         <div className={styles.overlay__inputWrapper}>
           <div className={styles.overlay__avatarWrapper}>
             <UserAvatar />
             <p className={styles.overlay__name}>
-            {userData && userData?.publicname}
+              {userData && userData?.publicname}
             </p>
           </div>
           <div className={styles.overlay__inputContainer}>

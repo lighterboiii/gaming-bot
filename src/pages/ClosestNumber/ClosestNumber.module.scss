@@ -44,12 +44,61 @@
       @include size(100px, 48px);
     }
   }
+
+  &__centralContainer {
+    @include size(100%, auto);
+    @include position(absolute, $left: 50%, $top: 45%);
+    transform: translate(-50%, -50%);
+    @include flex(row, center, center, 10px);
+
+
+    @media screen and (max-height: 691px) {
+      @include position(absolute, $left: 50%, $top: 38%);
+    }
+  }
+
+  &__round {
+    @include size(120px, 120px);
+    @include position(absolute, $left: 50%, $top: 50%);
+    transform: translate(-50%, -50%);
+    @include flex(row, center, center);
+    background-color: $main-color;
+    border-radius: $radius-round;
+    border: 2px black solid;
+
+    @media screen and (max-height: 691px) {
+      @include size(96px, 96px);
+    }
+  }
+
+  &__centralText,
+  &__centralTimer {
+    @include indents();
+    @include position(absolute, $top: -10%);
+    transform: translate(-50%, -50%);
+  }
+
+  &__centralText {
+    left: 25%;
+
+    @media screen and (max-height: 691px) {
+      left: 30%;
+    }
+  }
+
+  &__centralTimer {
+    left: 80%;
+
+    @media screen and (max-height: 691px) {
+      left: 72%;
+    }
+  }
 }
 
 .overlay {
   @include indents(16px, 0);
   @include size(100%, unset);
-  @include min-size(100%, 135px);
+  @include min-size(100%, 146px);
   @include position(absolute, $bottom: 0, $left: 50%);
   @include flex(column, flex-start, center, 16px);
   transform: translate(-50%);
@@ -58,10 +107,6 @@
   border-top-right-radius: 32px;
   height: 20vh;
   transition: height 1s ease-in-out;
-
-  // @media screen and (min-height: 691px) {
-  //   height: 20vh;
-  // }
 
   @media screen and (max-height: 600px) {
     gap: 6px;
@@ -124,12 +169,13 @@
   }
 
   &.expanded {
-    @include size(100%, unset);
-    height: 50vh;
+    @include size(100%, calc(100% - 45vh));
     transition: height 1s ease-in-out;
+    z-index: 666;
+    overflow: visible;
 
     @media screen and (min-height: 691px) {
-      height: 35vh;
+      @include size(100%, calc(100% - 60vh));
     }
   }
 
@@ -156,10 +202,6 @@
 
     @media screen and (min-height: 691px) {
       @include min-size(100%, 36px);
-    }
-
-    @media screen and (max-height: 600px) {
-      @include min-size(100%, 32px);
     }
   }
 
