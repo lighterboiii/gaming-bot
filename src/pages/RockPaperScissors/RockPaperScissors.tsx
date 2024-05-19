@@ -167,7 +167,7 @@ const RockPaperScissors: FC = () => {
   }, [data]);
   // запрос на кик юзера при недостатке средств для следующего хода
   useEffect(() => {
-    const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
+    const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
     if (data?.bet_type === "1") {
       if (player?.money <= data?.bet) {
         leaveRoomRequest(userId)

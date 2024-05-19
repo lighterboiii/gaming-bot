@@ -9,14 +9,16 @@ import { userId } from "../../api/requestData";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import smile from '../../images/closest-number/smile.png';
 import { useAppSelector } from "../../services/reduxHooks";
-import Case from './One/CaseOne';
-import CaseTwo from "./Three/Three";
-import CaseThree from "./Four/Four";
-import CaseFour from "./Five/Five";
-import CaseSix from "./Six/Six";
-import CaseSeven from "./Seven/Seven";
-import CaseEight from "./Eight/Eight";
+import Case from '../../components/ClosestNumber/One/CaseOne';
+import CaseTwo from "../../components/ClosestNumber/Three/Three";
+import CaseThree from "../../components/ClosestNumber/Four/Four";
+import CaseFour from "../../components/ClosestNumber/Five/Five";
+import CaseSix from "../../components/ClosestNumber/Six/Six";
+import CaseSeven from "../../components/ClosestNumber/Seven/Seven";
+import CaseEight from "../../components/ClosestNumber/Eight/Eight";
 import { users } from '../../utils/mockData';
+import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
+import { getActiveEmojiPack } from "../../api/mainApi";
 
 interface IProps {
   users: any[];
@@ -31,13 +33,13 @@ const RenderComponent: FC<IProps> = ({ users }) => {
     case 4:
       return <CaseThree users={users} />;
     case 5:
-    return <CaseFour users={users} />;
+      return <CaseFour users={users} />;
     case 6:
-    return <CaseSix users={users} />;
+      return <CaseSix users={users} />;
     case 7:
-    return <CaseSeven users={users} />;
+      return <CaseSeven users={users} />;
     case 8:
-    return <CaseEight users={users} />;
+      return <CaseEight users={users} />;
     default:
       return <Case users={users} />
   }
@@ -47,8 +49,12 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   // const userId = user?.id;
+  const [emojis, setEmojis] = useState<any>(null);
+  const [name, setName] = useState<string>("");
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
+  const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
+
   const overlayRef = useRef<HTMLDivElement>(null);
 
   const userData = useAppSelector(store => store.app.info);
@@ -125,6 +131,17 @@ const ClosestNumber: FC = () => {
     }
   };
 
+  useEffect(() => {
+    getActiveEmojiPack(userId)
+      .then((res: any) => {
+        setName(res.user_emoji_pack.name);
+        setEmojis(res.user_emoji_pack.user_emoji_pack);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div className={styles.game}>
       <div className={styles.game__betContainer}>
@@ -161,24 +178,38 @@ const ClosestNumber: FC = () => {
             />
             <p className={styles.overlay__inputText}>Ваше число от 1 до 100</p>
           </div>
-          <button className={styles.overlay__emojiButton}>
+          <button className={styles.overlay__emojiButton} onClick={() => setShowEmojiOverlay(!showEmojiOverlay)}>
             <img src={smile} alt="smile_icon" className={styles.overlay__smile} />
           </button>
         </div>
         {showOverlay && (
-          <div className={styles.overlay__keyboard}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 'Стереть', 0, 'Готово'].map((key) => (
-              <button
-                key={key}
-                className={key === 'Стереть'
-                  ? styles.overlay__bottomLeftButton
-                  : key === 'Готово'
-                    ? styles.overlay__bottomRightButton
-                    : styles.overlay__key}
-                onClick={() => handleButtonClick(key)}>
-                {key}
-              </button>
-            ))}
+          <div className={showEmojiOverlay ? styles.overlay__emojis : styles.overlay__keyboard}>
+            {showEmojiOverlay ?
+              (<>
+                {emojis && emojis?.map((emoji: string, index: number) => (
+                  <img
+                    key={index}
+                    src={emoji}
+                    alt={`Emoji ${index}`}
+                    className={styles.overlay__emoji}
+                  // onClick={() => onEmojiSelect(String(index + 1))}
+                  />
+                ))}
+              </>
+              ) : (
+                [1, 2, 3, 4, 5, 6, 7, 8, 9, 'Стереть', 0, 'Готово'].map((key) => (
+                  <button
+                    key={key}
+                    className={key === 'Стереть'
+                      ? styles.overlay__bottomLeftButton
+                      : key === 'Готово'
+                        ? styles.overlay__bottomRightButton
+                        : styles.overlay__key}
+                    onClick={() => handleButtonClick(key)}>
+                    {key}
+                  </button>
+                )
+                ))}
           </div>
         )}
       </div>

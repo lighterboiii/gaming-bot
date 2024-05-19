@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styles from './CaseOne.module.scss';
-import UserAvatar from "../../../components/User/UserAvatar/UserAvatar";
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 interface IProps {
   users: any;

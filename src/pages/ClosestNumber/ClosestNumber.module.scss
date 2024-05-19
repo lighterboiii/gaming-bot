@@ -153,7 +153,6 @@
     font-weight: 900;
     text-transform: uppercase;
     line-height: 30px;
-    box-sizing: border-box;
   }
 
   &__inputText {
@@ -173,7 +172,7 @@
 
   &.expanded {
     @include size(100%, calc(100% - 45vh));
-    transition: height 1s ease-in-out;
+    transition: height .5s ease-in-out;
     z-index: 666;
     overflow: visible;
 
@@ -232,5 +231,23 @@
 
   &__smile {
     @include size(28px, 28px);
+  }
+
+  &__emojis {
+    @include indents(10px, 0);
+    @include size(100%, 100%);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-content:  space-between;
+    justify-items: center;
+    overflow-y: auto;
+    background-color: $closest-color;
+    border-radius: $radius-15;
+  }
+
+  &__emoji {
+    @include size(48px, 48px);
+    aspect-ratio: 1;
+    cursor: pointer;
   }
 }

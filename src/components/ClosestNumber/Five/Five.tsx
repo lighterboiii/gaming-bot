@@ -1,12 +1,12 @@
 import { FC } from "react";
-import styles from './Four.module.scss';
-import UserAvatar from "../../../components/User/UserAvatar/UserAvatar";
+import styles from './Five.module.scss';
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 interface IProps {
   users: any;
 }
 
-const CaseThree: FC<IProps> = ({ users }) => {
+const CaseFour: FC<IProps> = ({ users }) => {
   return (
     <div className={styles.players}>
       {users?.map((user: any) => (
@@ -18,4 +18,4 @@ const CaseThree: FC<IProps> = ({ users }) => {
   )
 };
 
-export default CaseThree;
+export default CaseFour;
