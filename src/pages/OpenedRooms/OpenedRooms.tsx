@@ -30,8 +30,13 @@ const OpenedRooms: FC = () => {
   const [sortByBetAsc, setSortByBetAsc] = useState(false);
   const [sortByType, setSortByType] = useState(false);
   const [sortByCurr, setSortByCurr] = useState(false);
+  const [typeClickCount, setTypeClickCount] = useState(0);
+  const [currencyClickCount, setCurrencyClickCount] = useState(0);
+  const [betClickCount, setBetClickCount] = useState(0);
+
   const [loading, setLoading] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState<IGameCardData | null>(null); 
+  
+  const [selectedRoom, setSelectedRoom] = useState<IGameCardData | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -74,28 +79,66 @@ const OpenedRooms: FC = () => {
 
   const toggleSort = (sortBy: string) => {
     let sortedRooms;
+  
     switch (sortBy) {
       case 'type':
-        sortedRooms = sortRooms(rooms as any, 'gameType', sortByType);
-        setSortByType(!sortByType);
-        setTypeValue(sortByType ? `${translation?.closest_number}` : `${translation?.rock_paper_scissors}`);
+        setTypeClickCount((prevCount) => {
+          const newCount = (prevCount + 1) % 3;
+          if (newCount === 0) {
+            sortedRooms = rooms;
+            setTypeValue(`${translation?.sort_all}`);
+            setSortByType(false);
+          } else {
+            sortedRooms = sortRooms(rooms as any, 'gameType', sortByType);
+            setSortByType(!sortByType);
+            setTypeValue(sortByType ? `${translation?.closest_number}` : `${translation?.rock_paper_scissors}`);
+          }
+          setRooms(sortedRooms);
+          return newCount;
+        });
         break;
+  
       case 'currency':
-        sortedRooms = sortRooms(rooms as any, 'currency', sortByCurr);
-        setSortByCurr(!sortByCurr);
-        setCurrencyValue(sortByCurr ? '💵' : '🔰');
+        setCurrencyClickCount((prevCount) => {
+          const newCount = (prevCount + 1) % 3;
+          if (newCount === 0) {
+            sortedRooms = rooms;
+            setCurrencyValue(`${translation?.sort_all}`);
+            setSortByCurr(false);
+          } else {
+            sortedRooms = sortRooms(rooms as any, 'currency', sortByCurr);
+            setSortByCurr(!sortByCurr);
+            setCurrencyValue(sortByCurr ? '💵' : '🔰');
+          }
+          setRooms(sortedRooms);
+          return newCount;
+        });
         break;
+  
       case 'bet':
-        sortedRooms = sortRooms(rooms as any, 'bet', sortByBetAsc);
-        setSortByBetAsc(!sortByBetAsc);
-        setBetValue(sortByBetAsc ? `${translation?.sort_ascending}` : `${translation?.sort_descending}`);
+        setBetClickCount((prevCount) => {
+          const newCount = (prevCount + 1) % 3;
+          if (newCount === 0) {
+            sortedRooms = rooms;
+            setBetValue(`${translation?.sort_all}`);
+            setSortByBetAsc(false);
+          } else {
+            sortedRooms = sortRooms(rooms as any, 'bet', sortByBetAsc);
+            setSortByBetAsc(!sortByBetAsc);
+            setBetValue(sortByBetAsc ? `${translation?.sort_ascending}` : `${translation?.sort_descending}`);
+          }
+          setRooms(sortedRooms);
+          return newCount;
+        });
         break;
+  
       default:
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
         sortedRooms = rooms;
     }
-    setRooms(sortedRooms);
   };
+  
+  
 
   const handleRoomClick = (room: any) => {
     setSelectedRoom(room);
@@ -125,7 +168,7 @@ const OpenedRooms: FC = () => {
           </div>
           <div className={styles.rooms__roomList + " scrollable"}>
             {rooms && rooms.length > 0 ? rooms?.map((room: any, index: number) => (
-              <Room room={room} key={index} openModal={() => handleRoomClick(room)}  />
+              <Room room={room} key={index} openModal={() => handleRoomClick(room)} />
             )) : (
               <div className={styles.rooms__createNew}>
                 <p className={styles.rooms__notify}>{translation?.no_open_rooms}</p>
@@ -139,7 +182,7 @@ const OpenedRooms: FC = () => {
           </div>
         </>
       )}
-      {rooms &&rooms?.length > 0 && <CreateRoomFooter />}
+      {rooms && rooms?.length > 0 && <CreateRoomFooter />}
       {isModalOpen && (
         <Modal title={translation?.energy_depleted} closeModal={() => setModalOpen(false)}>
           <JoinRoomPopup handleClick={() => setModalOpen(false)} room={selectedRoom} />
