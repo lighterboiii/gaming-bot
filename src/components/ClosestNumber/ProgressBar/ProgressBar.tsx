@@ -6,21 +6,42 @@ interface IProps {
 }
 
 const CircularProgressBar: FC<IProps> = ({ progress }) => {
-  const [offset, setOffset] = useState({ x: 0, y: 95 });
+  const [offset, setOffset] = useState({ x: 50, y: 5 });
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     const limitedProgress = Math.max(0, Math.min(100, progress));
-    const angle = ((limitedProgress * 3.6) + 90) * (Math.PI / 180);
+    const angle = ((limitedProgress * 3.6) - 90) * (Math.PI / 180);
     const x = 50 + 45 * Math.cos(angle);
     const y = 50 + 45 * Math.sin(angle);
-    setOffset({ x, y });
+
+    setIsAnimating(true);
+    const animationTimeout = setTimeout(() => {
+      setOffset({ x, y });
+      setIsAnimating(false);
+    }, 6000);
+
+    return () => clearTimeout(animationTimeout);
   }, [progress]);
-  
+
   return (
     <svg className={styles.bar} viewBox="0 0 100 100">
       <circle className={styles.bar__innerCircle} cx="50" cy="50" r="45"></circle>
       <circle className={styles.bar__outerCircle} cx="50" cy="50" r="45"></circle>
-      <circle className={styles.bar__progressPoint} cx={offset.x} cy={offset.y} r="10"></circle>
+      <circle
+        className={`${styles.bar__progressPoint} ${isAnimating ? styles.bar__animated : ''}`}
+        cx={offset.x}
+        cy={offset.y}
+        r="10"
+      >
+      </circle>
+      <foreignObject x="25" y="40" width="50" height="20" className={styles.bar__textContainer}>
+        <div className={styles.bar__textWrapper}>
+          <div className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}>
+            {progress}
+          </div>
+        </div>
+      </foreignObject>
     </svg>
   );
 };

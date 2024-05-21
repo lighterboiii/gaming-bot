@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState, useRef } from "react";
 import styles from './ClosestNumber.module.scss';
-import { leaveRoomRequest } from "../../api/gameApi";
-import { useNavigate } from "react-router-dom";
+import { getPollingRequest, leaveRoomRequest } from "../../api/gameApi";
+import { useNavigate, useParams } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { userId } from "../../api/requestData";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
@@ -50,7 +50,9 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
+  const { roomId } = useParams<{ roomId: string }>();
   // const userId = user?.id;
+  const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
   const [name, setName] = useState<string>("");
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
@@ -79,7 +81,7 @@ const ClosestNumber: FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tg, navigate]);
-
+  // свернуть клавиатуру по клику за ее границами
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (overlayRef.current && !overlayRef.current.contains(event.target as Node)) {
@@ -97,21 +99,72 @@ const ClosestNumber: FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showOverlay]);
+  // long polling
+  useEffect(() => {
+    let isMounted = true;
 
+    const fetchRoomInfo = async () => {
+      if (!roomId || !isMounted) {
+        return;
+      }
+      const data = {
+        user_id: userId,
+        room_id: roomId,
+        type: 'wait'
+      };
+      getPollingRequest(userId, data)
+        .then((res: any) => {
+          console.log(res);
+          setData(res);
+          if (res?.message === 'None') {
+            leaveRoomRequest(userId);
+            isMounted = false;
+            navigate(-1);
+          }
+
+          if (res?.message === 'timeout') {
+            fetchRoomInfo();
+          }
+
+          if (isMounted) {
+            fetchRoomInfo();
+          }
+        })
+        .catch((error) => {
+          console.error('Room data request error', error);
+          leaveRoomRequest(userId)
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+        });
+    };
+
+    fetchRoomInfo();
+
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // показать оверлей при фокусе в инпуте
   const handleInputFocus = () => {
     setShowOverlay(true);
   };
-
+  // внести значение кнопки в инпут
   const handleKeyPress = (key: number) => {
     setInputValue((prevValue) => prevValue + key.toString());
   };
-
+  // стереть 1 символ из импута
   const handleDeleteNumber = () => {
     setInputValue((prevValue) => prevValue.slice(0, -1));
   };
-
+  // отправить выбор (доработать)
   const handleSubmit = () => {
     console.log(`Choice: ${inputValue}`);
+    handleChoice(inputValue);
     setShowOverlay(false);
     setInputValue('');
   };
@@ -132,7 +185,7 @@ const ClosestNumber: FC = () => {
       }
     }
   };
-
+  // получить эмодзи пользователя
   useEffect(() => {
     getActiveEmojiPack(userId)
       .then((res: any) => {
@@ -143,6 +196,82 @@ const ClosestNumber: FC = () => {
         console.log(error);
       });
   }, []);
+  // хендлер выбора хода
+  const handleChoice = (value: string) => {
+    const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
+    if (data?.bet_type === "1") {
+      if (player?.money <= data?.bet) {
+        leaveRoomRequest(userId)
+          .then(res => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    } else if (data?.bet_type === "3") {
+      if (player?.tokens <= data?.bet) {
+        leaveRoomRequest(userId)
+          .then(res => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    }
+    const choice = {
+      user_id: userId,
+      room_id: roomId,
+      type: 'setchoice',
+      choice: value
+    };
+    getPollingRequest(userId, choice)
+      .then((res: any) => {
+        setData(res);
+        console.log(res);
+      })
+      .catch((error) => {
+        console.error('Set choice error:', error);
+      });
+  };
+  // хендлер отпрвки эмодзи
+  const handleEmojiSelect = (emoji: string) => {
+    const setEmojiData = {
+      user_id: userId,
+      room_id: roomId,
+      type: 'setemoji',
+      emoji: emoji
+    }
+    getPollingRequest(userId, setEmojiData)
+      .then(res => {
+        setData(res);
+        // setShowEmojiOverlay(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    setTimeout(() => {
+      const empty = {
+        user_id: userId,
+        room_id: roomId,
+        type: 'setemoji',
+        emoji: 'none'
+      }
+      getPollingRequest(userId, empty)
+        .then(res => {
+          setData(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }, 3000)
+  };
+// обработчик клика на иконку эмодзи
+  const handleClickEmojiEbalo = () => {
+    setShowOverlay(true);
+    showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
+  };
 
   return (
     <div className={styles.game}>
@@ -150,14 +279,14 @@ const ClosestNumber: FC = () => {
         <p className={styles.game__bet}>
           Ставка
           <span className={styles.game__text}>
-            🔰
+            {data?.bet_type === "1" ? "💵" : "🔰"}
           </span>
-          24
+          {data?.bet}
         </p>
       </div>
       <div className={styles.game__centralContainer}>
         <p className={styles.game__centralText}>4/5</p>
-        <CircularProgressBar progress={0} />
+        <CircularProgressBar progress={100} />
         <p className={styles.game__centralTimer}>00:10</p>
       </div>
       <RenderComponent users={users} />
@@ -180,7 +309,7 @@ const ClosestNumber: FC = () => {
             />
             <p className={styles.overlay__inputText}>Ваше число от 1 до 100</p>
           </div>
-          <button className={styles.overlay__emojiButton} onClick={() => setShowEmojiOverlay(!showEmojiOverlay)}>
+          <button className={styles.overlay__emojiButton} onClick={handleClickEmojiEbalo}>
             <img src={smile} alt="smile_icon" className={styles.overlay__smile} />
           </button>
         </div>
@@ -194,7 +323,7 @@ const ClosestNumber: FC = () => {
                     src={emoji}
                     alt={`Emoji ${index}`}
                     className={styles.overlay__emoji}
-                  // onClick={() => onEmojiSelect(String(index + 1))}
+                    onClick={() => handleEmojiSelect(emoji)}
                   />
                 ))}
               </>

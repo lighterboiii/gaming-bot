@@ -1,6 +1,18 @@
 @use '../../../stylesheets/mixins' as *;
 @use '../../../stylesheets/variables' as *;
 
+@mixin textScrollAnimation {
+  $steps: 80;
+  @for $i from 0 through $steps {
+    $percentage: $i * (100 / $steps);
+    $direction: if($i % 2 == 0, 1, -1);
+    #{$percentage}% {
+      transform: translateY($direction * 100%);
+      filter: blur(3px);
+    }
+  }
+}
+
 .bar {
   @include size(120px, 120px);
   overflow: visible;
@@ -25,5 +37,49 @@
     z-index: 666;
     stroke: $black-color;
     stroke-width: 5px;
+  }
+
+  &__animated {
+    animation: spin 6s linear forwards;
+  }
+
+  &__textContainer {
+    overflow: hidden;
+  }
+
+  &__textWrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 100px;
+  }
+
+  &__text {
+    fill: $black-color;
+    font-size: 16px;
+    transition: transform 0s;
+    font-weight: 900;
+    font-size: 24px;
+    transform-origin: 50% 50%;
+  }
+
+  &__textAnimated {
+    animation: textScroll 6s linear;
+  }
+
+  @keyframes spin {
+    0% {
+      transform-origin: 50px 50px;
+      transform: rotate(0deg);
+    }
+    100% {
+      transform-origin: 50px 50px;
+      transform: rotate(8640deg);
+    }
+  }
+
+  @keyframes textScroll {
+    @include textScrollAnimation;
   }
 }
