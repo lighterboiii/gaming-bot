@@ -52,7 +52,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
 
@@ -159,6 +159,11 @@ const ClosestNumber: FC = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const count = data?.players?.reduce((total: number, player: any) => {
+    return total + (player?.choice !== "none" ? 1 : 0);
+  }, 0);
+
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
@@ -333,7 +338,7 @@ const ClosestNumber: FC = () => {
         </p>
       </div>
       <div className={styles.game__centralContainer}>
-        <p className={styles.game__centralText}>4/5</p>
+        <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
         <CircularProgressBar progress={0} />
         <p className={styles.game__centralTimer}>00:10</p>
       </div>

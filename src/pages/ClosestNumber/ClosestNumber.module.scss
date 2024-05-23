@@ -78,22 +78,26 @@
     transform: translate(-50%, -50%);
     font-weight: 900;
     font-size: 20px;
+
+    @media screen and (min-height: 691px) {
+      font-size: 24px;
+    }
   }
 
   &__centralText {
-    left: 25%;
+    left: 15%;
 
     @media screen and (max-height: 691px) {
-      left: 30%;
+      left: 15%;
     }
   }
 
   &__centralTimer {
-    left: 80%;
+    left: 85%;
 
-    @media screen and (max-height: 691px) {
-      left: 72%;
-    }
+    // @media screen and (max-height: 691px) {
+    //   left: 85%;
+    // }
   }
 }
 
