@@ -7,7 +7,7 @@ import { userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
 import { setBannerData, setDailyBonus, setLanguageSettings, setShopAvailable, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
 import { setProductsArchive } from '../../services/appSlice';
-import { getAppData, getUserAvatarRequest } from '../../api/mainApi';
+import { getAppData } from '../../api/mainApi';
 import styles from './App.module.scss';
 import CreateRoom from '../../pages/CreateRoom/CreateRoom';
 import Main from '../../pages/Main/Main';
@@ -22,7 +22,7 @@ import ClosestNumber from '../../pages/ClosestNumber/ClosestNumber';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -48,7 +48,7 @@ const App: FC = () => {
     tg.enableClosingConfirmation();
     tg.ready();
     window.scrollTo(0, 0);
-  }, []);
+  }, [tg]);
 
   useEffect(() => {
     setLoading(true);
@@ -58,23 +58,17 @@ const App: FC = () => {
           console.log(res);
           dispatch(setLanguageSettings(res.translate));
           dispatch(setUserData(res.user_info));
-          dispatch(setDailyBonus(res.daily_bonus));
           dispatch(setProductsArchive(res.collectibles_data));
           dispatch(setShopAvailable(res.shop_available));
           dispatch(setTaskList(res.tasks_available));
           dispatch(setBannerData(res.ad_info));
-          const userPhotoResponse = getUserAvatarRequest(userId);
-          return userPhotoResponse;
-        })
-        .then((userPhotoResponse) => {
-          if (userPhotoResponse) {
-            dispatch(setUserPhoto(userPhotoResponse?.info));
-            setLoading(false);
-          }
+          dispatch(setDailyBonus(res.daily_bonus));
+          dispatch(setUserPhoto(res.avatar));
+          setLoading(false);
         })
         .catch((error) => {
           console.error('Get user data error:', error);
-        });
+        })
     };
 
     fetchUserData();

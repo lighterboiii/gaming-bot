@@ -11,4 +11,5 @@ export interface IAppData {
   translate: any;
   tasks_available: any;
   ad_info: any;
+  avatar: string;
 }

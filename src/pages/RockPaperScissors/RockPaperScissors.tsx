@@ -23,7 +23,7 @@ import { useAppSelector } from "../../services/reduxHooks";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
 
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -128,7 +128,7 @@ const RockPaperScissors: FC = () => {
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+        if (data?.players?.some((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
           whoIsWinRequest(roomId!)
             .then((res: any) => {
               console.log(res);
@@ -141,9 +141,9 @@ const RockPaperScissors: FC = () => {
               if (res?.message === "success") {
                 setTimeout(() => {
                   if (Number(res?.winner) === Number(userId)) {
-                    setMessage(translation?.you_won);
+                    setMessage(`${translation?.you_won} ${data?.win?.winner_value !== 'none' && data?.win?.winner_value}`);
                   } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                    setMessage(translation?.you_lost);
+                    setMessage(`${translation?.you_lost} ${data?.bet}`);
                   } else if (res?.winner === 'draw') {
                     setMessage(translation?.draw);
                   }

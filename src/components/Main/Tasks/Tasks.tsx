@@ -13,9 +13,8 @@ const Tasks: FC = () => {
     setSelectedTask(task);
   };
 
-  console.log(selectedTask);
-
   useEffect(() => {
+    
     return(() => {
       setSelectedTask(null);
     })

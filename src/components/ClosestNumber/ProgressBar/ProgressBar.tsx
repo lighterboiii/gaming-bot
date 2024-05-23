@@ -10,18 +10,21 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    const limitedProgress = Math.max(0, Math.min(100, progress));
-    const angle = ((limitedProgress * 3.6) - 90) * (Math.PI / 180);
-    const x = 50 + 45 * Math.cos(angle);
-    const y = 50 + 45 * Math.sin(angle);
+    if (progress !== 0) {
+      const limitedProgress = Math.max(0, Math.min(100, progress));
+      const angle = ((limitedProgress * 3.6) - 90) * (Math.PI / 180);
+      const x = 50 + 45 * Math.cos(angle);
+      const y = 50 + 45 * Math.sin(angle);
+  
+      setIsAnimating(true);
+      const animationTimeout = setTimeout(() => {
+        setOffset({ x, y });
+        setIsAnimating(false);
+      }, 6000);
+  
+      return () => clearTimeout(animationTimeout);
+    }
 
-    setIsAnimating(true);
-    const animationTimeout = setTimeout(() => {
-      setOffset({ x, y });
-      setIsAnimating(false);
-    }, 6000);
-
-    return () => clearTimeout(animationTimeout);
   }, [progress]);
 
   return (

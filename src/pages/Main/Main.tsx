@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from './Main.module.scss';
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
 import AdvertisementBanner from "../../components/Main/AdvertismentBanner/AdvertismentBanner";
@@ -53,6 +53,12 @@ const Main: FC = () => {
     setShowReferralOverlay(false);
     setShowBannerOverlay(false);
   };
+  
+  useEffect(() => {
+    if (dailyBonusData && dailyBonusData !== "no") {
+      setShowBonusOverlay(true);
+    }
+  }, [dailyBonusData]);
 
   return (
     <div className={styles.main}>

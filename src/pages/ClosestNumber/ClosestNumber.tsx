@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState, useRef } from "react";
 import styles from './ClosestNumber.module.scss';
-import { getPollingRequest, leaveRoomRequest } from "../../api/gameApi";
+import { getPollingRequest, leaveRoomRequest, whoIsWinRequest } from "../../api/gameApi";
 import { useNavigate, useParams } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { userId } from "../../api/requestData";
@@ -18,9 +18,9 @@ import CaseSix from "../../components/ClosestNumber/Six/Six";
 import CaseSeven from "../../components/ClosestNumber/Seven/Seven";
 import CaseEight from "../../components/ClosestNumber/Eight/Eight";
 import { users } from '../../utils/mockData';
-import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import { getActiveEmojiPack } from "../../api/mainApi";
 import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
+import { IRPSPlayer } from "../../utils/types/gameTypes";
 
 interface IProps {
   users: any[];
@@ -51,9 +51,10 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
+
   const [name, setName] = useState<string>("");
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
@@ -149,6 +150,44 @@ const ClosestNumber: FC = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    let timeoutId: any;
+    const fetchData = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (data?.players?.some((player: IRPSPlayer) => player?.choice !== 'none')) {
+          whoIsWinRequest(roomId!)
+            .then((res: any) => {
+              console.log(res);
+              // const animationTime = 3000;
+
+              // if (res?.message === "success") {
+              //   setTimeout(() => {
+              //     if (Number(res?.winner) === Number(userId)) {
+              //       setMessage(`${translation?.you_won} ${data?.win?.winner_value !== 'none' && data?.win?.winner_value}`);
+              //     } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
+              //       setMessage(`${translation?.you_lost} ${data?.bet}`);
+              //     } else if (res?.winner === 'draw') {
+              //       setMessage(translation?.draw);
+              //     }
+              //     setMessageVisible(true);
+              //     setTimeout(() => {
+              //       setMessageVisible(false);
+              //       setTimerStarted(true);
+              //       setTimer(15);
+              //     }, 2000)
+              //   }, animationTime);
+              // }
+            })
+            .catch((error) => {
+              console.error('Data request error:', error);
+            });
+        }
+      }, 1500);
+    };
+
+    fetchData();
+  }, [data]);
   // показать оверлей при фокусе в инпуте
   const handleInputFocus = () => {
     setShowOverlay(true);
@@ -286,7 +325,7 @@ const ClosestNumber: FC = () => {
       </div>
       <div className={styles.game__centralContainer}>
         <p className={styles.game__centralText}>4/5</p>
-        <CircularProgressBar progress={100} />
+        <CircularProgressBar progress={0} />
         <p className={styles.game__centralTimer}>00:10</p>
       </div>
       <RenderComponent users={users} />
