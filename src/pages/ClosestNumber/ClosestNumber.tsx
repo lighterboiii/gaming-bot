@@ -21,6 +21,7 @@ import { users } from '../../utils/mockData';
 import { getActiveEmojiPack } from "../../api/mainApi";
 import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
 import { IRPSPlayer } from "../../utils/types/gameTypes";
+import OneByOne from "../../components/ClosestNumber/Single/Single";
 
 interface IProps {
   users: any[];
@@ -29,7 +30,7 @@ interface IProps {
 const RenderComponent: FC<IProps> = ({ users }) => {
   switch (users?.length) {
     case 1:
-    // return <CaseOne users={users} />;
+    return <OneByOne users={users} />;
     case 3:
       return <CaseTwo users={users} />;
     case 4:
@@ -51,7 +52,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
 
@@ -59,11 +60,19 @@ const ClosestNumber: FC = () => {
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
+  const [filteredPlayers, setFilteredPlayers] = useState<any[]>([]);
 
   const overlayRef = useRef<HTMLDivElement>(null);
 
   const userData = useAppSelector(store => store.app.info);
   console.log(userData);
+  useEffect(() => {
+    if (data?.players) {
+      const filtered = data.players.filter((player: any) => Number(player.userid) !== Number(data.creator_id));
+      setFilteredPlayers(filtered);
+    }
+  }, [data]);
+
   useEffect(() => {
     tg.setHeaderColor('#FEC42C');
     tg.BackButton.show().onClick(() => {
@@ -311,7 +320,7 @@ const ClosestNumber: FC = () => {
     setShowOverlay(true);
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
-
+  console.log(filteredPlayers);
   return (
     <div className={styles.game}>
       <div className={styles.game__betContainer}>

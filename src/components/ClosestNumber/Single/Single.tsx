@@ -1,12 +1,12 @@
 import { FC } from "react";
-import styles from './Seven.module.scss';
+import styles from './Single.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 interface IProps {
   users: any;
 }
 
-const CaseSeven: FC<IProps> = ({ users }) => {
+const OneByOne: FC<IProps> = ({ users }) => {
   return (
     <div className={styles.players}>
       {users?.map((user: any) => (
@@ -21,4 +21,4 @@ const CaseSeven: FC<IProps> = ({ users }) => {
   )
 };
 
-export default CaseSeven;
+export default OneByOne;
