@@ -23,7 +23,7 @@ import { useAppSelector } from "../../services/reduxHooks";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
@@ -326,7 +326,7 @@ const RockPaperScissors: FC = () => {
 
   return (
     <div className={styles.game}>
-      {loading ? <Loader /> : (
+      {/* {loading ? <Loader /> : ( */}
         <>
           <div className={styles.game__players}>
             {data?.players?.map((player: IRPSPlayer) => (
@@ -417,7 +417,6 @@ const RockPaperScissors: FC = () => {
                   />
                   <label htmlFor="ready" className={styles.game__label}></label>
                 </div>
-
               )}
               <button
                 type="button"
@@ -429,7 +428,7 @@ const RockPaperScissors: FC = () => {
             </div>
           </>
         </>
-      )}
+      {/* )} */}
       <EmojiOverlay
         show={showEmojiOverlay}
         onClose={() => setShowEmojiOverlay(!showEmojiOverlay)}

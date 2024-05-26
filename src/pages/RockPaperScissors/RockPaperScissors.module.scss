@@ -157,13 +157,13 @@
 
   &__selectedEmoji {
     @include size(60px, 60px);
-    @include position(absolute, $bottom: 0, $left: 0);
+    @include position(absolute, $bottom: -20%, $left: 0);
     z-index: 3;
   }
 
   &__selectedEmojiRight {
     @include size(60px, 60px);
-    @include position(absolute, $bottom: 0, $right: 0);
+    @include position(absolute, $bottom: -20%, $right: 0);
     z-index: 3;
   }
   
