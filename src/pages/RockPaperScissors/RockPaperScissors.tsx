@@ -37,7 +37,7 @@ const RockPaperScissors: FC = () => {
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
+  const [showTimer, setShowTimer] = useState(true);
   const userData = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
   // установка первоначального вида рук при старте игры
@@ -128,6 +128,7 @@ const RockPaperScissors: FC = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+          setShowTimer(false);
           whoIsWinRequest(roomId!)
             .then((res: any) => {
               console.log(res);
@@ -154,6 +155,7 @@ const RockPaperScissors: FC = () => {
                   setMessageVisible(true);
                   setTimeout(() => {
                     setMessageVisible(false);
+                    setShowTimer(true);
                     setTimerStarted(true);
                     setTimer(15);
                   }, 2000)
@@ -375,7 +377,7 @@ const RockPaperScissors: FC = () => {
               </p>
             ) : (
               <p className={styles.game__notify}>
-                {timerStarted && timer}
+                {showTimer && timerStarted && timer}
               </p>
             )}
             <div className={styles.game__hands}>
