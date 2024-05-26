@@ -4,42 +4,53 @@ export const users = [
     item_pic: "https://gamebottggw.ngrok.app/get_item_image/0",
     userid: 12,
     publicname: "Сергей Задница",
-    avatar: "https://gamebottggw.ngrok.app/avatar/172359056"
+    avatar: "https://gamebottggw.ngrok.app/avatar/172359056",
+    emoji: "none",
+    choice: '21'
   },
   {
     item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/3",
     item_pic: "https://gamebottggw.ngrok.app/get_item_image/3",
     userid: 14,
     avatar: "https://gamebottggw.ngrok.app/avatar/172359056",
-    publicname: "Колбаска"
+    publicname: "Колбаска",
+    emoji: "none",
+    choice: 'none'
   },
   {
     item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/15",
     item_pic: "https://gamebottggw.ngrok.app/get_item_image/15",
     userid: 2,
     publicname: "me",
-    avatar: "https://gamebottggw.ngrok.app/avatar/172359056"
+    avatar: "https://gamebottggw.ngrok.app/avatar/172359056",
+    emoji: "https://gamebottggw.ngrok.app/emoji/25/4",
+    choice: '99'
   },
-  // {
-  //   item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/6",
-  //   item_pic: "https://gamebottggw.ngrok.app/get_item_image/6",
-  //   userid: 32,
-  //   avatar: "https://gamebottggw.ngrok.app/avatar/172359056",
-  //   publicname: "ilikecats"
-  // },
-  // {
-  //   item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/7",
-  //   item_pic: "https://gamebottggw.ngrok.app/get_item_image/7",
-  //   userid: 42,
-  //   avatar: "https://gamebottggw.ngrok.app/avatar/172359056",
-  //   publicname: "Development"
-  // },
+  {
+    item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/6",
+    item_pic: "https://gamebottggw.ngrok.app/get_item_image/6",
+    userid: 32,
+    avatar: "https://gamebottggw.ngrok.app/avatar/172359056",
+    publicname: "ilikecats",
+    emoji: "https://gamebottggw.ngrok.app/emoji/25/4",
+    choice: 'none'
+  },
+  {
+    item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/7",
+    item_pic: "https://gamebottggw.ngrok.app/get_item_image/7",
+    userid: 42,
+    avatar: "https://gamebottggw.ngrok.app/avatar/172359056",
+    publicname: "Development",
+    emoji: "https://gamebottggw.ngrok.app/emoji/25/4",
+    choice: 'none'
+  },
   // {
   //   item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/9",
   //   item_pic: "https://gamebottggw.ngrok.app/get_item_image/9",
   //   userid: 11222,
   //   avatar: "https://gamebottggw.ngrok.app/avatar/172359056",
-  //   publicname: "You"
+  //   publicname: "You",
+  //   emoji: "none",
   // },
   // {
   //   item_mask: "https://gamebottggw.ngrok.app/get_item_image_mask/5",

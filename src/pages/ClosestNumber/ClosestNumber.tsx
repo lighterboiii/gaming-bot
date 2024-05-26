@@ -52,7 +52,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
 
@@ -325,7 +325,6 @@ const ClosestNumber: FC = () => {
     setShowOverlay(true);
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
-  console.log(filteredPlayers);
   return (
     <div className={styles.game}>
       <div className={styles.game__betContainer}>

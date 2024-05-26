@@ -24,7 +24,7 @@
     @include ellipsis();
     @include indents(1px 2px, 0);
     @include size(100%, auto);
-    @include position(absolute, $bottom: 0, $left: 50%);
+    @include position(absolute, $bottom: -10%, $left: 50%);
     transform: translate(-50%);
     color: $black-color;
     background-color: $main-color;
@@ -36,7 +36,7 @@
 
   &__player:nth-child(1),
   &__player:nth-child(2) {
-    @include position(absolute, $top: 0, $left: 35%);
+    @include position(absolute, $top: 2%, $left: 35%);
     transform: translateX(-50%);
   }
 
@@ -47,7 +47,7 @@
 
   &__player:nth-child(3),
   &__player:nth-child(4) {
-    @include position(absolute, $top: 15%);
+    @include position(absolute, $top: 20%);
     transform: translateX(-50%);
   }
 
@@ -61,7 +61,7 @@
 
   &__player:nth-child(5),
   &__player:nth-child(6) {
-    @include position(absolute, $bottom: 20%);
+    @include position(absolute, $bottom: 30%);
     transform: translateX(-50%);
   }
 
@@ -74,12 +74,74 @@
   }
 
   &__player:nth-child(7) {
-    @include position(absolute, $bottom: 5%, $left: 35%);
+    @include position(absolute, $bottom: 10%, $left: 35%);
     transform: translateX(-50%);
   }
 
   &__player:nth-child(8) {
-    @include position(absolute, $bottom: 5%, $left: 65%);
+    @include position(absolute, $bottom: 10%, $left: 65%);
     transform: translateX(-50%);
+  }
+  
+  &__emoji {
+    @include indents();
+    @include size(50px, 36px);
+    @include flex(row, center, center);
+    @include position(absolute, $top: 0, $left: -50%);
+    background-color: $main-color;
+    border-radius: $radius-10;
+    z-index: 5;
+
+    @media screen and (max-width: 700px) {
+      @include size(38px, 26px);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      right: 10%;
+      transform: translateX(-50%);
+      border-width: 12px 6px 0;
+      border-style: solid;
+      border-color: $main-color transparent;
+      display: block;
+      transform: rotate(-30deg);
+      width: 0;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: $radius-10;
+      // box-shadow: 0 0 0 1px black;
+      pointer-events: none;
+    }
+  }
+
+  &__choice {
+    @include indents();
+    @include size(40px, 40px);
+    @include flex(row, center, center);
+    @include position(absolute, $top: 0, $right: -30%);
+    background-color: $main-color;
+    border-radius: $radius-round;
+    z-index: 5;
+
+    @media screen and (max-width: 700px) {
+      @include size(30px, 30px);
+    }
+  }
+
+  &__emojiImage {
+    @include size(26px, 26px);
+
+    @media screen and (max-width: 700px) {
+      @include size(20px, 20px);
+    }
   }
 }

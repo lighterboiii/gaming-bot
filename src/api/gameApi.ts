@@ -3,14 +3,9 @@ import { getReq, postReq, putReq } from "./api";
 import {
   addPlayerUri,
   createRoomUri,
-  emojiIdParamString,
-  getCurrentRoomInfo,
   getRoomsUri,
   kickPlayerUri,
-  playerChoiceParamString,
   roomIdParamString,
-  setEmojiUri,
-  setUserChoiceUri,
   whoIsWinUri
 } from "./requestData";
 
@@ -53,7 +48,6 @@ export const leaveRoomRequest = (userIdValue: string) => {
 export const whoIsWinRequest = (roomId: string) => {
   return getReq({
     uri: whoIsWinUri,
-    // userId: userId,
     endpoint: `${roomIdParamString}${roomId}`,
   })
 };
