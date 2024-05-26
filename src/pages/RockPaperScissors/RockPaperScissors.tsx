@@ -146,24 +146,24 @@ const RockPaperScissors: FC = () => {
               if (res?.message === "success") {
                 setTimeout(() => {
                   if (Number(res?.winner) === Number(userId)) {
-                    setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
-                      ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
-                        : `🔰`}`
-                      : ''}`);
                     if (Number(data?.creator_id) === Number(res?.winner)) {
                       setAnimation(lWinAnim)
                     } else {
                       setAnimation(rWinAnim)
                     }
+                    setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
+                    ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
+                      : `🔰`}`
+                    : ''}`);
                   } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                    setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
-                      ? `💵`
-                      : `🔰`}`);
                     if (Number(data?.creator_id) === Number(res?.winner)) {
                       setAnimation(rLoseAnim)
                     } else {
                       setAnimation(lLoseAnim)
                     }
+                    setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+                      ? `💵`
+                      : `🔰`}`);
                   } else if (res?.winner === 'draw') {
                     setMessage(translation?.draw);
                   }
@@ -174,7 +174,7 @@ const RockPaperScissors: FC = () => {
                     setShowTimer(true);
                     setTimerStarted(true);
                     setTimer(15);
-                  }, 4000)
+                  }, 5000)
                 }, animationTime);
               }
             })
@@ -252,6 +252,7 @@ const RockPaperScissors: FC = () => {
           })
       }
     }
+    setShowTimer(false);
     const reqData = {
       user_id: userId,
       room_id: roomId,
