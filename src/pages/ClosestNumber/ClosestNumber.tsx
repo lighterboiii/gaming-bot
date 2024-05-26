@@ -52,7 +52,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
 
@@ -192,15 +192,33 @@ const ClosestNumber: FC = () => {
     setInputValue((prevValue) => {
       const newValue = prevValue + key.toString();
       const numValue = parseInt(newValue, 10);
-      if (numValue >= 1 && numValue <= 100) {
+      
+      if (newValue.length > 1 && newValue.startsWith('0')) {
+        setInputError(true);
+      } else if (numValue >= 1 && numValue <= 100) {
+        setInputError(false);
+      } else {
         setInputError(true);
       }
+
       return newValue;
     });
   };
 
   const handleDeleteNumber = () => {
-    setInputValue((prevValue) => prevValue.slice(0, -1));
+    setInputValue((prevValue) => {
+     const newValue = prevValue.slice(0, -1);
+     console.log(newValue);
+     const numValue = parseInt(newValue, 10);
+     if (newValue.startsWith('0')) {
+      setInputError(true);
+    } else if (newValue === '' || (numValue >= 1 && numValue <= 100)) {
+      setInputError(false);
+    } else {
+      setInputError(true);
+    }
+     return newValue;
+    });
   };
 
   const handleSubmit = () => {
