@@ -23,14 +23,14 @@ import { useAppSelector } from "../../services/reduxHooks";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
 
   const translation = useAppSelector(store => store.app.languageSettings);
   const userData = useAppSelector(store => store.app.info);
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
-  // const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [leftRockImage, setLeftRockImage] = useState<string>('');
@@ -106,7 +106,11 @@ const RockPaperScissors: FC = () => {
             })
         });
     };
-
+    if (!isMounted) {
+      setLoading(true);
+    } else  {
+      setLoading(false);
+    }
     fetchRoomInfo();
 
     return () => {
@@ -114,14 +118,6 @@ const RockPaperScissors: FC = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // показать/скрыть лоадер
-  // useEffect(() => {
-  //   if (data) {
-  //     setLoading(false);
-  //   } else if (data) {
-  //     setLoading(true);
-  //   }
-  // }, [data])
   // запрос результата хода
   useEffect(() => {
     let timeoutId: any;
@@ -325,7 +321,7 @@ const RockPaperScissors: FC = () => {
       <>
         <div className={styles.game__players}>
           {data?.players?.map((player: IRPSPlayer) => (
-            <div className={`${styles.game__player} ${Number(player?.userid) === Number(userId) ? styles.game__playerLeft : ''}`}>
+            <div className={styles.game__player}>
               <p className={styles.game__playerName}>{player?.publicname}</p>
               <UserAvatar item={player} avatar={player?.avatar} key={player?.userid} />
               {player?.choice === 'ready' && (

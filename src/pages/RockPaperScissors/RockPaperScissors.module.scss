@@ -27,11 +27,6 @@
     @include size(178px, 178px);
     @include position(relative);
     @include flex(row, center, center);
-    @include position(absolute, $right: 0, $top: 0);
-
-    &.game__playerLeft {
-      @include position(absolute, $left: 0);
-    }
   }
   
   &__playerName {
@@ -43,12 +38,6 @@
     color: $main-color;
     font-size: 16px;
     color: $rps-text-color;
-
-    &.game__playerLeft {
-      left: auto;
-      right: 50%;
-      transform: translateX(50%);
-    }
   }
   
   &__balance {
