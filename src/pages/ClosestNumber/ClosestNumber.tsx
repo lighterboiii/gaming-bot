@@ -52,7 +52,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
 
@@ -61,7 +61,7 @@ const ClosestNumber: FC = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [filteredPlayers, setFilteredPlayers] = useState<any[]>([]);
-
+  const [inputError, setInputError] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
 
   const userData = useAppSelector(store => store.app.info);
@@ -173,25 +173,6 @@ const ClosestNumber: FC = () => {
           whoIsWinRequest(roomId!)
             .then((res: any) => {
               console.log(res);
-              // const animationTime = 3000;
-
-              // if (res?.message === "success") {
-              //   setTimeout(() => {
-              //     if (Number(res?.winner) === Number(userId)) {
-              //       setMessage(`${translation?.you_won} ${data?.win?.winner_value !== 'none' && data?.win?.winner_value}`);
-              //     } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-              //       setMessage(`${translation?.you_lost} ${data?.bet}`);
-              //     } else if (res?.winner === 'draw') {
-              //       setMessage(translation?.draw);
-              //     }
-              //     setMessageVisible(true);
-              //     setTimeout(() => {
-              //       setMessageVisible(false);
-              //       setTimerStarted(true);
-              //       setTimer(15);
-              //     }, 2000)
-              //   }, animationTime);
-              // }
             })
             .catch((error) => {
               console.error('Data request error:', error);
@@ -208,18 +189,30 @@ const ClosestNumber: FC = () => {
   };
   // внести значение кнопки в инпут
   const handleKeyPress = (key: number) => {
-    setInputValue((prevValue) => prevValue + key.toString());
+    setInputValue((prevValue) => {
+      const newValue = prevValue + key.toString();
+      const numValue = parseInt(newValue, 10);
+      if (numValue >= 1 && numValue <= 100) {
+        setInputError(true);
+      }
+      return newValue;
+    });
   };
-  // стереть 1 символ из импута
+
   const handleDeleteNumber = () => {
     setInputValue((prevValue) => prevValue.slice(0, -1));
   };
-  // отправить выбор (доработать)
+
   const handleSubmit = () => {
-    console.log(`Choice: ${inputValue}`);
-    handleChoice(inputValue);
-    setShowOverlay(false);
-    setInputValue('');
+    const numValue = parseInt(inputValue, 10);
+    if (numValue >= 1 && numValue <= 100) {
+      console.log(`Choice: ${inputValue}`);
+      handleChoice(inputValue);
+      setShowOverlay(false);
+      setInputValue('');
+    } else {
+      setInputError(true);
+    }
   };
 
   const handleButtonClick = (key: number | string) => {
@@ -299,7 +292,7 @@ const ClosestNumber: FC = () => {
     getPollingRequest(userId, setEmojiData)
       .then(res => {
         setData(res);
-        // setShowEmojiOverlay(false);
+        setShowEmojiOverlay(false);
       })
       .catch((error) => {
         console.log(error);
@@ -354,7 +347,7 @@ const ClosestNumber: FC = () => {
             <input
               type="number"
               placeholder="Ваше число"
-              className={styles.overlay__input}
+              className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
               value={inputValue}
               onFocus={handleInputFocus}
               readOnly
@@ -382,6 +375,7 @@ const ClosestNumber: FC = () => {
               ) : (
                 [1, 2, 3, 4, 5, 6, 7, 8, 9, 'Стереть', 0, 'Готово'].map((key) => (
                   <button
+                    disabled={key === 'Готово' && inputError}
                     key={key}
                     className={key === 'Стереть'
                       ? styles.overlay__bottomLeftButton

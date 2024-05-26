@@ -197,6 +197,11 @@
     flex-grow: 1;
   }
 
+  
+  &__invalidInput {
+    background-color: #FF5C4F;
+  }
+
   &__key {
     @include size(100%, auto);
     @include min-size(100%, 34px);
