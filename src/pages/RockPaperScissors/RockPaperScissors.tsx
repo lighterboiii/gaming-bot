@@ -25,9 +25,6 @@ const RockPaperScissors: FC = () => {
   const { tg, user } = useTelegram();
   // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
-
-  const translation = useAppSelector(store => store.app.languageSettings);
-  const userData = useAppSelector(store => store.app.info);
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,6 +37,9 @@ const RockPaperScissors: FC = () => {
   const [timer, setTimer] = useState<number>(15);
   const [timerStarted, setTimerStarted] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const userData = useAppSelector(store => store.app.info);
+  const translation = useAppSelector(store => store.app.languageSettings);
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -106,11 +106,6 @@ const RockPaperScissors: FC = () => {
             })
         });
     };
-    if (!isMounted) {
-      setLoading(true);
-    } else  {
-      setLoading(false);
-    }
     fetchRoomInfo();
 
     return () => {
@@ -118,13 +113,21 @@ const RockPaperScissors: FC = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // loader
+  useEffect(() => {
+    if (!data) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [data]);
   // запрос результата хода
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (data?.players?.some((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
           whoIsWinRequest(roomId!)
             .then((res: any) => {
               console.log(res);
@@ -137,9 +140,14 @@ const RockPaperScissors: FC = () => {
               if (res?.message === "success") {
                 setTimeout(() => {
                   if (Number(res?.winner) === Number(userId)) {
-                    setMessage(`${translation?.you_won} ${data?.win?.winner_value !== 'none' && data?.win?.winner_value}`);
+                    setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
+                      ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
+                        : `🔰`}`
+                      : ''}`);
                   } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                    setMessage(`${translation?.you_lost} ${data?.bet}`);
+                    setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+                      ? `💵`
+                      : `🔰`}`);
                   } else if (res?.winner === 'draw') {
                     setMessage(translation?.draw);
                   }
@@ -271,21 +279,20 @@ const RockPaperScissors: FC = () => {
         })
     }, 3000)
   };
-  // Таймер
+// Таймер
   useEffect(() => {
     if (data?.players_count === "2"
-      && data?.players?.every((player: IRPSPlayer) => player.choice === 'none')
-      // && data?.win?.users === 'none'
+      && data?.players?.some((player: IRPSPlayer) => player.choice === 'none')
     ) {
       setTimerStarted(true);
-      setTimer(15);
-    } else {
+    } else if (data?.players?.every((player: IRPSPlayer) => player.choice !== 'none')) {
       setTimerStarted(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
     }
   }, [data]);
+
 
   useEffect(() => {
     if (timerStarted && timer > 0) {
@@ -317,110 +324,110 @@ const RockPaperScissors: FC = () => {
 
   return (
     <div className={styles.game}>
-      {/* {loading ? <Loader /> : ( */}
-      <>
-        <div className={styles.game__players}>
-          {data?.players?.map((player: IRPSPlayer) => (
-            <div className={styles.game__player}>
-              <p className={styles.game__playerName}>{player?.publicname}</p>
-              <UserAvatar item={player} avatar={player?.avatar} key={player?.userid} />
-              {player?.choice === 'ready' && (
-                <img
-                  src={readyIcon}
-                  alt="ready icon"
-                  className={styles.game__readyIcon}
-                />
-              )}
-              {Number(player?.userid) === Number(userId) && (
-                <div className={styles.game__balance}>
-                  {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
-                </div>
-              )}
-              {player?.emoji !== "none" && (
-                <motion.img
-                  src={player.emoji}
-                  alt="player emoji"
-                  className={Number(player?.userid) === Number(data?.players[0]?.userid)
-                    ? styles.game__selectedEmojiRight
-                    : styles.game__selectedEmoji
-                  }
-                  initial={{ scale: 0.1 }}
-                  animate={{
-                    scale: [0.1, 1.5, 1],
-                    transition: {
-                      duration: 1,
-                      times: [0, 0.5, 1],
-                    },
-                  }}
-                />
-              )}
-            </div>
-          ))}
-        </div>
+      {loading ? <Loader /> : (
         <>
-          {data?.players_count === "2" &&
-            data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready') &&
-            <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
-          }
-          {messageVisible ? (
-            <p className={styles.game__resultMessage}>
-              {message}
-            </p>
-          ) : (
-            <p className={styles.game__notify}>
-              {timerStarted && timer}
-            </p>
-          )}
-          <div className={styles.game__hands}>
-            {(
-              data?.players_count === "2"
-            ) ? (
-              <HandShake
-                userId={userId}
-                prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }}
-              />
-            ) : (
-              data?.players_count === "1"
-            ) ? (
-              <p className={styles.game__notify}>Ожидание игроков...</p>
-            ) :
-              ''}
+          <div className={styles.game__players}>
+            {data?.players?.map((player: IRPSPlayer) => (
+              <div className={styles.game__player}>
+                <p className={styles.game__playerName}>{player?.publicname}</p>
+                <UserAvatar item={player} avatar={player?.avatar} key={player?.userid} />
+                {player?.choice === 'ready' && (
+                  <img
+                    src={readyIcon}
+                    alt="ready icon"
+                    className={styles.game__readyIcon}
+                  />
+                )}
+                {Number(player?.userid) === Number(userId) && player?.choice !== 'ready' && (
+                  <div className={styles.game__balance}>
+                    {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
+                  </div>
+                )}
+                {player?.emoji !== "none" && (
+                  <motion.img
+                    src={player.emoji}
+                    alt="player emoji"
+                    className={Number(player?.userid) === Number(data?.players[0]?.userid)
+                      ? styles.game__selectedEmojiRight
+                      : styles.game__selectedEmoji
+                    }
+                    initial={{ scale: 0.1 }}
+                    animate={{
+                      scale: [0.1, 1.5, 1],
+                      transition: {
+                        duration: 1,
+                        times: [0, 0.5, 1],
+                      },
+                    }}
+                  />
+                )}
+              </div>
+            ))}
           </div>
-          <div className={styles.game__lowerContainer}>
-            <div className={styles.game__betContainer}>
-              <p className={styles.game__text}>Ставка</p>
-              <div className={styles.game__bet}>
-                <p className={styles.game__text}>{data?.bet_type === "1" ? "💵" : "🔰"}</p>
-                <p className={styles.game__text}>{data?.bet}</p>
-              </div>
-            </div>
-            {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')) ? (
-              <div className={styles.game__buttonsWrapper}>
-                <ChoiceBox choice={choice} handleChoice={handleChoice} />
-              </div>
+          <>
+            {data?.players_count === "2" &&
+              data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready') &&
+              <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
+            }
+            {messageVisible ? (
+              <p className={styles.game__resultMessage}>
+                {message}
+              </p>
             ) : (
-              <div>
-                <input
-                  type="checkbox"
-                  id="ready"
-                  onChange={handleReady}
-                  className={styles.game__checkbox}
-                />
-                <label htmlFor="ready" className={styles.game__label}></label>
-              </div>
-
+              <p className={styles.game__notify}>
+                {timerStarted && timer}
+              </p>
             )}
-            <button
-              type="button"
-              className={`${styles.game__button} ${styles.game__emojiButton}`}
-              onClick={() => setShowEmojiOverlay(true)}
-            >
-              <img src={emoji_icon} alt="emoji icon" className={styles.game__iconEmoji} />
-            </button>
-          </div>
+            <div className={styles.game__hands}>
+              {(
+                data?.players_count === "2"
+              ) ? (
+                <HandShake
+                  userId={userId}
+                  prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }}
+                />
+              ) : (
+                data?.players_count === "1"
+              ) ? (
+                <p className={styles.game__notify}>Ожидание игроков...</p>
+              ) :
+                ''}
+            </div>
+            <div className={styles.game__lowerContainer}>
+              <div className={styles.game__betContainer}>
+                <p className={styles.game__text}>Ставка</p>
+                <div className={styles.game__bet}>
+                  <p className={styles.game__text}>{data?.bet_type === "1" ? "💵" : "🔰"}</p>
+                  <p className={styles.game__text}>{data?.bet}</p>
+                </div>
+              </div>
+              {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')) ? (
+                <div className={styles.game__buttonsWrapper}>
+                  <ChoiceBox choice={choice} handleChoice={handleChoice} />
+                </div>
+              ) : (
+                <div>
+                  <input
+                    type="checkbox"
+                    id="ready"
+                    onChange={handleReady}
+                    className={styles.game__checkbox}
+                  />
+                  <label htmlFor="ready" className={styles.game__label}></label>
+                </div>
+
+              )}
+              <button
+                type="button"
+                className={`${styles.game__button} ${styles.game__emojiButton}`}
+                onClick={() => setShowEmojiOverlay(true)}
+              >
+                <img src={emoji_icon} alt="emoji icon" className={styles.game__iconEmoji} />
+              </button>
+            </div>
+          </>
         </>
-      </>
-      {/* )} */}
+      )}
       <EmojiOverlay
         show={showEmojiOverlay}
         onClose={() => setShowEmojiOverlay(!showEmojiOverlay)}
