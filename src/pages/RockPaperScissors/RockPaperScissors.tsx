@@ -46,6 +46,7 @@ const RockPaperScissors: FC = () => {
   const [showTimer, setShowTimer] = useState(true);
   const userData = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
+  const [waitingForResult, setWaitingForResult] = useState(false); // попытка номер 934984747474
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -121,74 +122,131 @@ const RockPaperScissors: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // loader
-  useEffect(() => {
-    if (!data) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (!data) {
+  //     setLoading(true);
+  //   } else {
+  //     setLoading(false);
+  //   }
+  // }, [data]);
   // запрос результата хода
   useEffect(() => {
-    let timeoutId: any;
-    const fetchData = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-          setShowTimer(false);
-          whoIsWinRequest(roomId!)
-            .then((res: any) => {
-              console.log(res);
-              setPlayersAnim({
-                firstAnim: res?.f_anim,
-                secondAnim: res?.s_anim,
-              });
-              const animationTime = 3000;
-              setAnimationKey(prevKey => prevKey + 1);
-              if (res?.message === "success") {
-                setTimeout(() => {
-                  if (Number(res?.winner) === Number(userId)) {
-                    if (Number(data?.creator_id) === Number(res?.winner)) {
-                      setAnimation(lWinAnim)
-                    } else {
-                      setAnimation(rWinAnim)
-                    }
-                    setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
-                      ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
-                        : `🔰`}`
-                      : ''}`);
-                  } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                    if (Number(data?.creator_id) === Number(res?.winner)) {
-                      setAnimation(rLoseAnim)
-                    } else {
-                      setAnimation(lLoseAnim)
-                    }
-                    setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
-                      ? `💵`
-                      : `🔰`}`);
-                  } else if (res?.winner === 'draw') {
-                    setMessage(translation?.draw);
-                  }
-                  setMessageVisible(true);
-                  setTimeout(() => {
-                    setMessageVisible(false);
-                    setAnimation(null);
-                    setShowTimer(true);
-                    setTimerStarted(true);
-                    setTimer(15);
-                  }, 3500)
-                }, animationTime);
+    if (!data || waitingForResult) return;
+  
+    if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+      setWaitingForResult(true);
+      whoIsWinRequest(roomId!)
+        .then((res: any) => {
+          console.log(res);
+          setPlayersAnim({
+            firstAnim: res?.f_anim,
+            secondAnim: res?.s_anim,
+          });
+          const animationTime = 3000;
+          setAnimationKey(prevKey => prevKey + 1);
+          if (res?.message === "success") {
+            setTimeout(() => {
+              if (Number(res?.winner) === Number(userId)) {
+                if (Number(data?.creator_id) === Number(res?.winner)) {
+                  setAnimation(lWinAnim)
+                } else {
+                  setAnimation(rWinAnim)
+                }
+                setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
+                  ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
+                    : `🔰`}`
+                  : ''}`);
+              } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
+                if (Number(data?.creator_id) === Number(res?.winner)) {
+                  setAnimation(rLoseAnim)
+                } else {
+                  setAnimation(lLoseAnim)
+                }
+                setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+                  ? `💵`
+                  : `🔰`}`);
+              } else if (res?.winner === 'draw') {
+                setMessage(translation?.draw);
               }
-            })
-            .catch((error) => {
-              console.error('Data request error:', error);
-            });
-        }
-      }, 1500);
-    };
+              setMessageVisible(true);
+              setTimeout(() => {
+                setMessageVisible(false);
+                setAnimation(null);
+                setShowTimer(true);
+                setTimerStarted(true);
+                setTimer(15);
+              }, 3500)
+            }, animationTime);
+          }
+        })
+        .catch((error) => {
+          console.error('Data request error:', error);
+        })
+        .finally(() => {
+          setWaitingForResult(false);
+        });
+    }
+  }, [data, roomId, waitingForResult]);
+  // useEffect(() => {
+  //   let timeoutId: any;
+  //   const fetchData = () => {
+  //     clearTimeout(timeoutId);
+  //     timeoutId = setTimeout(() => {
+  //       if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+  //         setShowTimer(false);
+  //         whoIsWinRequest(roomId!)
+  //           .then((res: any) => {
+  //             console.log(res);
+  //             setPlayersAnim({
+  //               firstAnim: res?.f_anim,
+  //               secondAnim: res?.s_anim,
+  //             });
+  //             const animationTime = 3000;
+  //             setAnimationKey(prevKey => prevKey + 1);
+  //             if (res?.message === "success") {
+  //               setTimeout(() => {
+  //                 if (Number(res?.winner) === Number(userId)) {
+  //                   if (Number(data?.creator_id) === Number(res?.winner)) {
+  //                     setAnimation(lWinAnim)
+  //                   } else {
+  //                     setAnimation(rWinAnim)
+  //                   }
+  //                   setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
+  //                     ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
+  //                       : `🔰`}`
+  //                     : ''}`);
+  //                 } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
+  //                   if (Number(data?.creator_id) === Number(res?.winner)) {
+  //                     setAnimation(rLoseAnim)
+  //                   } else {
+  //                     setAnimation(lLoseAnim)
+  //                   }
+  //                   setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+  //                     ? `💵`
+  //                     : `🔰`}`);
+  //                 } else if (res?.winner === 'draw') {
+  //                   setMessage(translation?.draw);
+  //                 }
+  //                 setMessageVisible(true);
+  //                 setTimeout(() => {
+  //                   setMessageVisible(false);
+  //                   setAnimation(null);
+  //                   setShowTimer(true);
+  //                   setTimerStarted(true);
+  //                   setTimer(15);
+  //                 }, 3500)
+  //               }, animationTime);
+  //             }
+  //           })
+  //           .catch((error) => {
+  //             console.error('Data request error:', error);
+  //           });
+  //       }
+  //     }, 1500);
+  //   };
 
-    fetchData();
-  }, [data]);
+  //   fetchData();
+  // }, [data]);
   // запрос на кик юзера при недостатке средств для следующего хода
   useEffect(() => {
     const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
@@ -408,7 +466,6 @@ const RockPaperScissors: FC = () => {
                 data?.players_count === "2"
               ) ? (
                 <HandShake
-                  userId={userId}
                   prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }}
                 />
               ) : (
