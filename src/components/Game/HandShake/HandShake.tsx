@@ -1,4 +1,5 @@
-import { FC, useEffect, useState, useRef } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { FC, useEffect, useState } from 'react';
 import styles from './HandShake.module.scss';
 
 interface IProps {
@@ -13,24 +14,12 @@ const HandShake: FC<IProps> = ({ prevChoices }) => {
     rightHandImage: '',
   });
 
-  const handImagesRef = useRef({
-    leftHandImage: '',
-    rightHandImage: '',
-  });
-
   useEffect(() => {
-    handImagesRef.current.leftHandImage = player1;
-    handImagesRef.current.rightHandImage = player2;
-
-    const timeoutId = setTimeout(() => {
-      setHandImages({
-        leftHandImage: handImagesRef.current.leftHandImage,
-        rightHandImage: handImagesRef.current.rightHandImage,
-      });
-    }, 0);
-
-    return () => clearTimeout(timeoutId);
-  }, [player1, player2]);
+    setHandImages({
+      leftHandImage: player1,
+      rightHandImage: player2,
+    });
+  }, [prevChoices]);
 
   return (
     <div className={styles.hands}>

@@ -27,13 +27,14 @@ import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [animation, setAnimation] = useState<any>(null);
+  const [animationKey, setAnimationKey] = useState(0);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [leftRockImage, setLeftRockImage] = useState<string>('');
   const [rightRockImage, setRightRockImage] = useState<string>('');
@@ -69,6 +70,7 @@ const RockPaperScissors: FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tg, navigate]);
+  console.log(animation);
   // long polling
   useEffect(() => {
     let isMounted = true;
@@ -142,7 +144,7 @@ const RockPaperScissors: FC = () => {
                 secondAnim: res?.s_anim,
               });
               const animationTime = 3000;
-
+              setAnimationKey(prevKey => prevKey + 1);
               if (res?.message === "success") {
                 setTimeout(() => {
                   if (Number(res?.winner) === Number(userId)) {
@@ -152,9 +154,9 @@ const RockPaperScissors: FC = () => {
                       setAnimation(rWinAnim)
                     }
                     setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
-                    ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
-                      : `🔰`}`
-                    : ''}`);
+                      ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
+                        : `🔰`}`
+                      : ''}`);
                   } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
                     if (Number(data?.creator_id) === Number(res?.winner)) {
                       setAnimation(rLoseAnim)
@@ -170,11 +172,11 @@ const RockPaperScissors: FC = () => {
                   setMessageVisible(true);
                   setTimeout(() => {
                     setMessageVisible(false);
-                    // setAnimation('');
+                    setAnimation(null);
                     setShowTimer(true);
                     setTimerStarted(true);
                     setTimer(15);
-                  }, 2000)
+                  }, 3500)
                 }, animationTime);
               }
             })
@@ -308,6 +310,9 @@ const RockPaperScissors: FC = () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
+    } else if (data?.players_count === "1") {
+      setTimerStarted(false);
+      setTimer(15);
     }
   }, [data]);
   useEffect(() => {
@@ -340,8 +345,9 @@ const RockPaperScissors: FC = () => {
 
   return (
     <div className={styles.game}>
-      <div className={styles.game__result}
-        style={{ backgroundImage: `url(${animation})` }}
+      <div
+        className={styles.game__result}
+        style={{ backgroundImage: `url(${animation}?key=${animationKey})` }}
       >
         {/* {loading ? <Loader /> : ( */}
         <>
