@@ -1,6 +1,7 @@
 export interface IGameCardData {
   id: number;
   room_type: number;
+  bet_type: number;
   url: string;
   users: string;
 }

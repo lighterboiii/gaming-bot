@@ -19,6 +19,10 @@ import leftRock from '../../images/rock-paper-scissors/left_rock.png';
 import rightRock from '../../images/rock-paper-scissors/right_rock.png';
 import { IRPSPlayer } from "../../utils/types/gameTypes";
 import { useAppSelector } from "../../services/reduxHooks";
+import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
+import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
+import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
+import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
@@ -29,6 +33,7 @@ const RockPaperScissors: FC = () => {
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
+  const [animation, setAnimation] = useState<any>(null);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [leftRockImage, setLeftRockImage] = useState<string>('');
   const [rightRockImage, setRightRockImage] = useState<string>('');
@@ -145,20 +150,31 @@ const RockPaperScissors: FC = () => {
                       ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
                         : `🔰`}`
                       : ''}`);
+                    if (Number(data?.creator_id) === Number(res?.winner)) {
+                      setAnimation(lWinAnim)
+                    } else {
+                      setAnimation(rWinAnim)
+                    }
                   } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
                     setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                       ? `💵`
                       : `🔰`}`);
+                    if (Number(data?.creator_id) === Number(res?.winner)) {
+                      setAnimation(rLoseAnim)
+                    } else {
+                      setAnimation(lLoseAnim)
+                    }
                   } else if (res?.winner === 'draw') {
                     setMessage(translation?.draw);
                   }
                   setMessageVisible(true);
                   setTimeout(() => {
                     setMessageVisible(false);
+                    setAnimation('');
                     setShowTimer(true);
                     setTimerStarted(true);
                     setTimer(15);
-                  }, 2000)
+                  }, 4000)
                 }, animationTime);
               }
             })
@@ -171,6 +187,7 @@ const RockPaperScissors: FC = () => {
 
     fetchData();
   }, [data]);
+  console.log(animation);
   // запрос на кик юзера при недостатке средств для следующего хода
   useEffect(() => {
     const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
@@ -281,7 +298,7 @@ const RockPaperScissors: FC = () => {
         })
     }, 3000)
   };
-// Таймер
+  // Таймер
   useEffect(() => {
     if (data?.players_count === "2"
       && data?.players?.some((player: IRPSPlayer) => player.choice === 'none')
@@ -294,8 +311,6 @@ const RockPaperScissors: FC = () => {
       }
     }
   }, [data]);
-
-
   useEffect(() => {
     if (timerStarted && timer > 0) {
       timerRef.current = setInterval(() => {
@@ -326,7 +341,10 @@ const RockPaperScissors: FC = () => {
 
   return (
     <div className={styles.game}>
-      {/* {loading ? <Loader /> : ( */}
+      <div className={styles.game__result}
+        style={{ backgroundImage: `url(${animation})` }}
+      >
+        {/* {loading ? <Loader /> : ( */}
         <>
           <div className={styles.game__players}>
             {data?.players?.map((player: IRPSPlayer) => (
@@ -403,7 +421,7 @@ const RockPaperScissors: FC = () => {
                   <p className={styles.game__text}>{data?.bet}</p>
                 </div>
               </div>
-              {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')) ? (
+              {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none') && data?.players_count === "2") ? (
                 <div className={styles.game__buttonsWrapper}>
                   <ChoiceBox choice={choice} handleChoice={handleChoice} />
                 </div>
@@ -428,12 +446,13 @@ const RockPaperScissors: FC = () => {
             </div>
           </>
         </>
-      {/* )} */}
-      <EmojiOverlay
-        show={showEmojiOverlay}
-        onClose={() => setShowEmojiOverlay(!showEmojiOverlay)}
-        onEmojiSelect={handleEmojiSelect}
-      />
+        {/* )} */}
+        <EmojiOverlay
+          show={showEmojiOverlay}
+          onClose={() => setShowEmojiOverlay(!showEmojiOverlay)}
+          onEmojiSelect={handleEmojiSelect}
+        />
+      </div>
     </div>
   );
 }

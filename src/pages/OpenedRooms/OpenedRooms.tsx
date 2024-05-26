@@ -77,6 +77,19 @@ const OpenedRooms: FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  const applySort = (rooms: IGameCardData[]) => {
+    if (typeClickCount > 0) {
+      rooms = sortRooms(rooms, 'gameType', sortByType);
+    }
+    if (currencyClickCount > 0) {
+      rooms = sortRooms(rooms, 'currency', sortByCurr);
+    }
+    if (betClickCount > 0) {
+      rooms = sortRooms(rooms, 'bet', sortByBetAsc);
+    }
+    setRooms(rooms);
+  };
+
   const toggleSort = (sortBy: string) => {
     let sortedRooms;
   
@@ -85,15 +98,14 @@ const OpenedRooms: FC = () => {
         setTypeClickCount((prevCount) => {
           const newCount = (prevCount + 1) % 3;
           if (newCount === 0) {
-            sortedRooms = rooms;
             setTypeValue(`${translation?.sort_all}`);
             setSortByType(false);
           } else {
             sortedRooms = sortRooms(rooms as any, 'gameType', sortByType);
             setSortByType(!sortByType);
-            setTypeValue(sortByType ? `${translation?.closest_number}` : `${translation?.rock_paper_scissors}`);
+            setTypeValue(sortByType ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`);
+            setRooms(sortedRooms);
           }
-          setRooms(sortedRooms);
           return newCount;
         });
         break;
@@ -102,15 +114,14 @@ const OpenedRooms: FC = () => {
         setCurrencyClickCount((prevCount) => {
           const newCount = (prevCount + 1) % 3;
           if (newCount === 0) {
-            sortedRooms = rooms;
             setCurrencyValue(`${translation?.sort_all}`);
             setSortByCurr(false);
           } else {
             sortedRooms = sortRooms(rooms as any, 'currency', sortByCurr);
             setSortByCurr(!sortByCurr);
-            setCurrencyValue(sortByCurr ? '💵' : '🔰');
+            setCurrencyValue(sortByCurr ? '🔰' : '💵');
+            setRooms(sortedRooms);
           }
-          setRooms(sortedRooms);
           return newCount;
         });
         break;
@@ -119,15 +130,14 @@ const OpenedRooms: FC = () => {
         setBetClickCount((prevCount) => {
           const newCount = (prevCount + 1) % 3;
           if (newCount === 0) {
-            sortedRooms = rooms;
             setBetValue(`${translation?.sort_all}`);
             setSortByBetAsc(false);
           } else {
             sortedRooms = sortRooms(rooms as any, 'bet', sortByBetAsc);
             setSortByBetAsc(!sortByBetAsc);
-            setBetValue(sortByBetAsc ? `${translation?.sort_ascending}` : `${translation?.sort_descending}`);
+            setBetValue(sortByBetAsc ? `${translation?.sort_descending}` : `${translation?.sort_ascending}`);
+            setRooms(sortedRooms);
           }
-          setRooms(sortedRooms);
           return newCount;
         });
         break;
@@ -137,8 +147,6 @@ const OpenedRooms: FC = () => {
         sortedRooms = rooms;
     }
   };
-  
-  
 
   const handleRoomClick = (room: any) => {
     setSelectedRoom(room);

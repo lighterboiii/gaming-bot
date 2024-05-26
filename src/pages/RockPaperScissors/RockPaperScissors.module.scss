@@ -11,6 +11,16 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  z-index: 1;
+
+  &__result {
+    @include size(100%, 100%);
+    @include position(relative);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 2;
+  }
 
   &__heading {
     color: $main-color;
@@ -44,6 +54,7 @@
     @include indents(4px 8px, 0);
     @include size(auto, unset);
     @include flex(row, center,center);
+    flex-wrap: nowrap;
     @include position(absolute, $bottom: -8%, $left: 50%);
     transform: translate(-50%);
     color: $rps-text-color;

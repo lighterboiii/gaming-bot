@@ -12,4 +12,3 @@ export const sortRooms = (rooms: any[], sortBy: string, ascending: boolean) => {
     }
   });
 };
-
