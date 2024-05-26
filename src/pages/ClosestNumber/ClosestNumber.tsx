@@ -52,7 +52,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
 
@@ -341,7 +341,7 @@ const ClosestNumber: FC = () => {
         <CircularProgressBar progress={0} />
         <p className={styles.game__centralTimer}>00:10</p>
       </div>
-      <RenderComponent users={users} />
+      <RenderComponent users={filteredPlayers} />
       <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
         <div className={styles.overlay__inputWrapper}>
           <div className={styles.overlay__avatarWrapper}>

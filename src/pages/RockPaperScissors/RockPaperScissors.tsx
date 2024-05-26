@@ -27,7 +27,7 @@ import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
@@ -170,11 +170,11 @@ const RockPaperScissors: FC = () => {
                   setMessageVisible(true);
                   setTimeout(() => {
                     setMessageVisible(false);
-                    setAnimation('');
+                    // setAnimation('');
                     setShowTimer(true);
                     setTimerStarted(true);
                     setTimer(15);
-                  }, 5000)
+                  }, 2000)
                 }, animationTime);
               }
             })
@@ -300,10 +300,9 @@ const RockPaperScissors: FC = () => {
   };
   // Таймер
   useEffect(() => {
-    if (data?.players_count === "2"
-      && data?.players?.some((player: IRPSPlayer) => player.choice === 'none')
-    ) {
+    if (data?.players_count === "2" && data?.players?.some((player: IRPSPlayer) => player.choice === 'none')) {
       setTimerStarted(true);
+      setTimer(15);
     } else if (data?.players?.every((player: IRPSPlayer) => player.choice !== 'none')) {
       setTimerStarted(false);
       if (timerRef.current) {
