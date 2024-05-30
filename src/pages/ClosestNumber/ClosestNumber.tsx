@@ -52,7 +52,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
 
@@ -68,7 +68,8 @@ const ClosestNumber: FC = () => {
   console.log(userData);
   useEffect(() => {
     if (data?.players) {
-      const filtered = data.players.filter((player: any) => Number(player.userid) !== Number(data.creator_id));
+      const filtered = data.players.filter((player: any) => Number(player.userid) !== Number(userId));
+      console.log(filtered);
       setFilteredPlayers(filtered);
     }
   }, [data]);
@@ -301,6 +302,7 @@ const ClosestNumber: FC = () => {
   };
   // хендлер отпрвки эмодзи
   const handleEmojiSelect = (emoji: string) => {
+    console.log(emoji);
     const setEmojiData = {
       user_id: userId,
       room_id: roomId,
@@ -311,6 +313,7 @@ const ClosestNumber: FC = () => {
       .then(res => {
         setData(res);
         setShowEmojiOverlay(false);
+        setShowOverlay(false);
       })
       .catch((error) => {
         console.log(error);
@@ -386,7 +389,7 @@ const ClosestNumber: FC = () => {
                     src={emoji}
                     alt={`Emoji ${index}`}
                     className={styles.overlay__emoji}
-                    onClick={() => handleEmojiSelect(emoji)}
+                    onClick={() => handleEmojiSelect(String(index + 1))}
                   />
                 ))}
               </>

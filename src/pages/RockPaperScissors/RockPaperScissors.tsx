@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPollingRequest, leaveRoomRequest, whoIsWinRequest } from "../../api/gameApi";
@@ -23,11 +23,12 @@ import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
 import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
 import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
 import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
+import { roomsUrl } from "../../utils/routes";
 
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
@@ -46,7 +47,6 @@ const RockPaperScissors: FC = () => {
   const [showTimer, setShowTimer] = useState(true);
   const userData = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
-  const [waitingForResult, setWaitingForResult] = useState(false); // попытка номер 934984747474
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -71,7 +71,6 @@ const RockPaperScissors: FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tg, navigate]);
-  console.log(animation);
   // long polling
   useEffect(() => {
     let isMounted = true;
@@ -130,6 +129,15 @@ const RockPaperScissors: FC = () => {
   //   }
   // }, [data]);
   // запрос результата хода
+  const updateAnimation = useCallback((newAnimation: any) => {
+    setAnimation((prevAnimation: any) => {
+      if (prevAnimation !== newAnimation) {
+        setAnimationKey((prevKey) => prevKey + 1);
+        return newAnimation;
+      }
+      return prevAnimation;
+    });
+  }, []);
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
@@ -149,21 +157,23 @@ const RockPaperScissors: FC = () => {
               if (res?.message === "success") {
                 setTimeout(() => {
                   if (Number(res?.winner) === Number(userId)) {
-                    if (Number(data?.creator_id) === Number(res?.winner)) {
-                      setAnimation(lWinAnim)
-                    } else {
-                      setAnimation(rWinAnim)
-                    }
+                    // if (Number(data?.creator_id) === Number(res?.winner)) {
+                    //   setAnimation(lWinAnim)
+                    // } else {
+                    //   setAnimation(rWinAnim)
+                    // }
+                    updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
                     setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
                       ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
                         : `🔰`}`
                       : ''}`);
                   } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                    if (Number(data?.creator_id) === Number(res?.winner)) {
-                      setAnimation(rLoseAnim)
-                    } else {
-                      setAnimation(lLoseAnim)
-                    }
+                    // if (Number(data?.creator_id) === Number(res?.winner)) {
+                    //   setAnimation(rLoseAnim)
+                    // } else {
+                    //   setAnimation(lLoseAnim)
+                    // }
+                    updateAnimation(Number(data.creator_id) === Number(res.winner) ? rLoseAnim : lLoseAnim);
                     setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                       ? `💵`
                       : `🔰`}`
@@ -327,6 +337,7 @@ const RockPaperScissors: FC = () => {
       if (player) {
         leaveRoomRequest(player.userid)
           .then((res) => {
+            navigate(roomsUrl);
             console.log(res);
           })
           .catch((error) => {
@@ -355,7 +366,7 @@ const RockPaperScissors: FC = () => {
         <>
           <div className={styles.game__players}>
             {data?.players?.map((player: IRPSPlayer) => (
-              <div className={styles.game__player}>
+              <div className={styles.game__player} key={player.userid}>
                 <p className={styles.game__playerName}>{player?.publicname}</p>
                 <UserAvatar item={player} avatar={player?.avatar} key={player?.userid} />
                 {player?.choice === 'ready' && (
