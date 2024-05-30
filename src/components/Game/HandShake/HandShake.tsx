@@ -38,51 +38,24 @@
 // };
 
 // export default HandShake;
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import styles from './HandShake.module.scss';
 
 interface IProps {
-  prevChoices: { player1: string; player2: string };
+  player1: string;
+  player2: string;
 }
 
-const HandShake: FC<IProps> = ({ prevChoices }) => {
-  const { player1, player2 } = prevChoices;
-  const [handImages, setHandImages] = useState({
-    leftHandImage: '',
-    rightHandImage: '',
-  });
-  const [prevHandImages, setPrevHandImages] = useState({
-    leftHandImage: '',
-    rightHandImage: '',
-  });
-
-  useEffect(() => {
-    if (player1 !== prevHandImages.leftHandImage || player2 !== prevHandImages.rightHandImage) {
-      setPrevHandImages({
-        leftHandImage: player1,
-        rightHandImage: player2,
-      });
-    }
-  }, [player1, player2, prevHandImages]);
-
-  useEffect(() => {
-    if (prevHandImages.leftHandImage !== prevChoices.player1 || prevHandImages.rightHandImage !== prevChoices.player2) {
-      setHandImages({
-        leftHandImage: prevChoices.player1,
-        rightHandImage: prevChoices.player2,
-      });
-    }
-  }, [prevChoices, prevHandImages]);
-
+const HandShake: FC<IProps> = ( { player1, player2 }) => {
   return (
     <div className={styles.hands}>
       <img
-        src={handImages.leftHandImage}
+        src={player1}
         alt="left hand"
         className={`${styles.hands__mainImage} ${styles.hands__leftMainImage}`}
       />
       <img
-        src={handImages.rightHandImage}
+        src={player2}
         alt="right hand"
         className={`${styles.hands__mainImage} ${styles.hands__rightMainImage}`}
       />
