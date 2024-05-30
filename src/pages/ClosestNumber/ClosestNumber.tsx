@@ -356,7 +356,7 @@ const ClosestNumber: FC = () => {
       </div>
       <div className={styles.game__centralContainer}>
         <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
-        <CircularProgressBar progress={roomValue} />
+        <CircularProgressBar progress={roomValue ? roomValue : 0} />
         <p className={styles.game__centralTimer}>00:10</p>
       </div>
       <RenderComponent users={filteredPlayers} />
