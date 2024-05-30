@@ -10,6 +10,7 @@ import { userId } from "../../api/requestData";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import smile from '../../images/closest-number/smile.png';
 import { useAppSelector } from "../../services/reduxHooks";
+import OneByOne from "../../components/ClosestNumber/Single/Single";
 import Case from '../../components/ClosestNumber/One/CaseOne';
 import CaseTwo from "../../components/ClosestNumber/Three/Three";
 import CaseThree from "../../components/ClosestNumber/Four/Four";
@@ -21,7 +22,8 @@ import { users } from '../../utils/mockData';
 import { getActiveEmojiPack } from "../../api/mainApi";
 import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
 import { IRPSPlayer } from "../../utils/types/gameTypes";
-import OneByOne from "../../components/ClosestNumber/Single/Single";
+import approveIcon from '../../images/closest-number/Approve.png';
+import deleteIcon from '../../images/closest-number/Delete.png';
 
 interface IProps {
   users: any[];
@@ -30,7 +32,7 @@ interface IProps {
 const RenderComponent: FC<IProps> = ({ users }) => {
   switch (users?.length) {
     case 1:
-    return <OneByOne users={users} />;
+      return <OneByOne users={users} />;
     case 3:
       return <CaseTwo users={users} />;
     case 4:
@@ -63,7 +65,8 @@ const ClosestNumber: FC = () => {
   const [filteredPlayers, setFilteredPlayers] = useState<any[]>([]);
   const [inputError, setInputError] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
-
+  const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
+  console.log(currentPlayer);
   const userData = useAppSelector(store => store.app.info);
   console.log(userData);
   useEffect(() => {
@@ -164,7 +167,7 @@ const ClosestNumber: FC = () => {
   const count = data?.players?.reduce((total: number, player: any) => {
     return total + (player?.choice !== "none" ? 1 : 0);
   }, 0);
-
+// запрос результата кона
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
@@ -194,7 +197,7 @@ const ClosestNumber: FC = () => {
     setInputValue((prevValue) => {
       const newValue = prevValue + key.toString();
       const numValue = parseInt(newValue, 10);
-      
+
       if (newValue.length > 1 && newValue.startsWith('0')) {
         setInputError(true);
       } else if (numValue >= 1 && numValue <= 100) {
@@ -206,23 +209,23 @@ const ClosestNumber: FC = () => {
       return newValue;
     });
   };
-
+// стереть символ из инпута
   const handleDeleteNumber = () => {
     setInputValue((prevValue) => {
-     const newValue = prevValue.slice(0, -1);
-     console.log(newValue);
-     const numValue = parseInt(newValue, 10);
-     if (newValue.startsWith('0')) {
-      setInputError(true);
-    } else if (newValue === '' || (numValue >= 1 && numValue <= 100)) {
-      setInputError(false);
-    } else {
-      setInputError(true);
-    }
-     return newValue;
+      const newValue = prevValue.slice(0, -1);
+      console.log(newValue);
+      const numValue = parseInt(newValue, 10);
+      if (newValue.startsWith('0')) {
+        setInputError(true);
+      } else if (newValue === '' || (numValue >= 1 && numValue <= 100)) {
+        setInputError(false);
+      } else {
+        setInputError(true);
+      }
+      return newValue;
     });
   };
-
+// подтвердить введенное число
   const handleSubmit = () => {
     const numValue = parseInt(inputValue, 10);
     if (numValue >= 1 && numValue <= 100) {
@@ -234,7 +237,7 @@ const ClosestNumber: FC = () => {
       setInputError(true);
     }
   };
-
+// обработчик кликов по кнопкам клавиатуры оверлея
   const handleButtonClick = (key: number | string) => {
     if (typeof key === 'number') {
       handleKeyPress(key);
@@ -333,10 +336,10 @@ const ClosestNumber: FC = () => {
         .catch((error) => {
           console.log(error);
         })
-    }, 3000)
+    }, 4000)
   };
-// обработчик клика на иконку эмодзи
-  const handleClickEmojiEbalo = () => {
+  // обработчик клика на иконку эмодзи
+  const handleClickEmoji = () => {
     setShowOverlay(true);
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
@@ -360,6 +363,11 @@ const ClosestNumber: FC = () => {
       <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
         <div className={styles.overlay__inputWrapper}>
           <div className={styles.overlay__avatarWrapper}>
+            {currentPlayer?.emoji && currentPlayer?.emoji !== 'none' && (
+              <div className={styles.overlay__playerEmoji}>
+                <img src={currentPlayer?.emoji} alt="emoji" className={styles.overlay__emojiImage} />
+              </div>
+            )}
             <UserAvatar />
             <p className={styles.overlay__name}>
               {userData && userData?.publicname}
@@ -376,7 +384,7 @@ const ClosestNumber: FC = () => {
             />
             <p className={styles.overlay__inputText}>Ваше число от 1 до 100</p>
           </div>
-          <button className={styles.overlay__emojiButton} onClick={handleClickEmojiEbalo}>
+          <button className={styles.overlay__emojiButton} onClick={handleClickEmoji}>
             <img src={smile} alt="smile_icon" className={styles.overlay__smile} />
           </button>
         </div>
@@ -396,18 +404,35 @@ const ClosestNumber: FC = () => {
               </>
               ) : (
                 [1, 2, 3, 4, 5, 6, 7, 8, 9, 'Стереть', 0, 'Готово'].map((key) => (
-                  <button
-                    disabled={key === 'Готово' && inputError}
-                    key={key}
-                    className={key === 'Стереть'
-                      ? styles.overlay__bottomLeftButton
-                      : key === 'Готово'
-                        ? styles.overlay__bottomRightButton
-                        : styles.overlay__key}
-                    onClick={() => handleButtonClick(key)}>
-                    {key}
-                  </button>
-                )
+                  typeof key === 'number' ? (
+                    <button
+                      key={key}
+                      className={styles.overlay__key}
+                      onClick={() => handleButtonClick(key)}
+                    >
+                      {key}
+                    </button>
+                  ) : (
+                    <div
+                      key={key}
+                      className={key === 'Стереть'
+                        ? styles.overlay__bottomLeftButton
+                        : styles.overlay__bottomRightButton}
+                      onClick={() => handleButtonClick(key)}
+                    >
+                      {key === 'Стереть' ? (
+                        <>
+                          <img src={deleteIcon} alt="delete icon" className={styles.overlay__icon} />
+                          <span>Стереть</span>
+                        </>
+                      ) : (
+                        <>
+                          <img src={approveIcon} alt="done icon" className={styles.overlay__icon} />
+                          <span>Готово</span>
+                        </>
+                      )}
+                    </div>
+                  ))
                 ))}
           </div>
         )}

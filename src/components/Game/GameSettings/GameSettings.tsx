@@ -73,7 +73,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       });
   };
 
-
   return (
     <div className={styles.game + 'scrollable'}>
       {messageShown ? (

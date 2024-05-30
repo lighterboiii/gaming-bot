@@ -40,7 +40,7 @@
   }
 
   &__animated {
-    animation: spin 6s linear forwards;
+    animation: spin 4s linear forwards;
   }
 
   &__textContainer {
@@ -65,7 +65,7 @@
   }
 
   &__textAnimated {
-    animation: textScroll 6s linear;
+    animation: textScroll 4s linear;
   }
 
   @keyframes spin {

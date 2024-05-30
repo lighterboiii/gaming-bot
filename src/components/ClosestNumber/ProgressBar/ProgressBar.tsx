@@ -20,7 +20,7 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
       const animationTimeout = setTimeout(() => {
         setOffset({ x, y });
         setIsAnimating(false);
-      }, 6000);
+      }, 4000);
   
       return () => clearTimeout(animationTimeout);
     }

@@ -221,6 +221,11 @@
     }
   }
 
+  &__bottomLeftButton,
+  &__bottomRightButton {
+    @include flex(row, center, center, 8px);
+  }
+
   &__bottomLeftButton {
     @extend .overlay__key;
     background: #FF9188;
@@ -263,5 +268,56 @@
     @include size(48px, 48px);
     aspect-ratio: 1;
     cursor: pointer;
+  }
+
+  &__playerEmoji {
+    @include indents();
+    @include size(50px, 36px);
+    @include flex(row, center, center);
+    @include position(absolute, $top: 0, $right: -12%);
+    background-color: $main-color;
+    border-radius: $radius-10;
+    z-index: 5;
+
+    @media screen and (max-width: 700px) {
+      @include size(38px, 26px);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      transform: translateX(-50%);
+      border-width: 12px 6px 0;
+      border-style: solid;
+      border-color: $main-color transparent;
+      display: block;
+      transform: rotate(30deg);
+      width: 0;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: $radius-10;
+      pointer-events: none;
+    }
+  }
+
+  &__emojiImage {
+    @include size(26px, 26px);
+
+    @media screen and (max-width: 700px) {
+      @include size(20px, 20px);
+    }
+  }
+
+  &__icon {
+    @include size(28px, 28px);
   }
 }
