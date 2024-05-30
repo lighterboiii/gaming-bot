@@ -27,7 +27,7 @@ import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
