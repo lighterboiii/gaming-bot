@@ -52,10 +52,10 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
-
+  const [roomValue, setRoomValue] = useState<number>(0);
   const [name, setName] = useState<string>("");
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
@@ -174,6 +174,7 @@ const ClosestNumber: FC = () => {
           whoIsWinRequest(roomId!)
             .then((res: any) => {
               console.log(res);
+              setRoomValue(Number(res?.room_value));
             })
             .catch((error) => {
               console.error('Data request error:', error);
@@ -352,7 +353,7 @@ const ClosestNumber: FC = () => {
       </div>
       <div className={styles.game__centralContainer}>
         <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
-        <CircularProgressBar progress={0} />
+        <CircularProgressBar progress={roomValue} />
         <p className={styles.game__centralTimer}>00:10</p>
       </div>
       <RenderComponent users={filteredPlayers} />
