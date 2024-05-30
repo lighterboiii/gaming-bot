@@ -410,7 +410,8 @@ const RockPaperScissors: FC = () => {
                 data?.players_count === "2"
               ) ? (
                 <HandShake
-                  prevChoices={{ player1: playersAnim.firstAnim || leftRockImage, player2: playersAnim.secondAnim || rightRockImage }}
+                player1={playersAnim.firstAnim || leftRockImage}
+                player2={playersAnim.secondAnim || rightRockImage}
                 />
               ) : (
                 data?.players_count === "1"
