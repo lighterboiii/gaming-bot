@@ -37,12 +37,13 @@
     @include flex(row, center, center, 10px);
     @include size(auto, 32vh);
     background-color: $black-color;
-    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: hidden; 
     border-radius: 50% 50% 0 0 / 10% 10% 0 0;
 
-    @media screen and (min-height: 691px) {
-      @include size(auto, 25vh);
-    }
+    // @media screen and (min-height: 691px) {
+    //   @include size(auto, 25vh);
+    // }
   }
 
   &__item {

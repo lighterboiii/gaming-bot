@@ -47,15 +47,16 @@
     overflow: hidden;
   }
 
-  &__textWrapper {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 100px;
-  }
+  // &__textWrapper {
+    // height: 100%;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // perspective: 100px;
+  // }
 
   &__text {
+    @include indents();
     fill: $black-color;
     font-size: 16px;
     transition: transform 0s;
@@ -75,7 +76,7 @@
     }
     100% {
       transform-origin: 50px 50px;
-      transform: rotate(8640deg);
+      transform: rotate(4320deg);
     }
   }
 

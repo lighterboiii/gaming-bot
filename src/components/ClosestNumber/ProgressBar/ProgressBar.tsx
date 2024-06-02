@@ -38,12 +38,15 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
         r="10"
       >
       </circle>
+      {/* <text x="50" y="55" textAnchor="middle" className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}>
+        {progress}
+      </text> */}
       <foreignObject x="25" y="40" width="50" height="20" className={styles.bar__textContainer}>
-        <div className={styles.bar__textWrapper}>
-          <div className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}>
+        {/* <div className={styles.bar__textWrapper}> */}
+          <p className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}>
             {progress}
-          </div>
-        </div>
+          </p>
+        {/* </div> */}
       </foreignObject>
     </svg>
   );
