@@ -6,18 +6,21 @@ import ModalOverlay from "../ModalOverlay/ModalOverlay";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import { leaveRoomRequest } from "../../../api/gameApi";
 import useTelegram from "../../../hooks/useTelegram";
+import { userId } from "../../../api/requestData";
+import { useNavigate } from "react-router-dom";
+import { roomsUrl } from "../../../utils/routes";
 
 interface IProps {
-  title?: string;
   closeModal: () => void;
   winValue?: string;
-  player?: any;
   number?: string;
+  winner?: any;
 }
 
-export const ClosestModal: FC<IProps> = ({ title, closeModal }) => {
+export const ClosestModal: FC<IProps> = ({ closeModal, winner }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  const navigate = useNavigate();
+  // const userId = user?.id;
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {
       if (evt.key === 'Escape') {
@@ -33,7 +36,8 @@ export const ClosestModal: FC<IProps> = ({ title, closeModal }) => {
   const leaveRoom = () => {
     leaveRoomRequest(userId)
       .then(res => {
-        console.log(res)
+        console.log(res);
+        navigate(roomsUrl);
       })
       .catch((error) => {
         console.log(error);
@@ -43,24 +47,24 @@ export const ClosestModal: FC<IProps> = ({ title, closeModal }) => {
   return ReactDOM.createPortal(
     <>
       <div className={styles.modal}>
-        {<>
+        {Number(winner?.userid) === Number(userId) ? (
+        <>
           <h3 className={styles.modal__title}>Победитель</h3>
           <div className={styles.modal__content}>
             <p className={styles.modal__text}>24</p>
             <div className={styles.modal__avatar}>
-              <UserAvatar />
+              <UserAvatar item={winner} />
               <p className={styles.modal__name}>Имя пользователя</p>
             </div>
             <div className={styles.modal__winnerValue}>+ 500</div>
           </div>
-        </>}
+        </>) : (
+          <div>Hello Guys</div>
+        )}
         <div className={styles.modal__buttons}>
           <button onClick={leaveRoom} className={styles.modal__button}>Выход</button>
           <button onClick={closeModal} className={styles.modal__button} style={{ backgroundColor: '#FFFFFF' }}>Играть снова</button>
         </div>
-        {/* <button className={styles.close} onClick={closeModal}>
-          <CrossIcon color="#000" width={12} height={12} />
-        </button> */}
       </div>
       <ModalOverlay closeModal={closeModal} />
     </>,

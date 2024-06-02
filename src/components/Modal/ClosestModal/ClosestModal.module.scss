@@ -19,6 +19,7 @@
     @include indents();
     color: $main-color;
     text-align: center;
+    text-transform: uppercase;
   }
 
   &__buttons {

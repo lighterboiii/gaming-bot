@@ -25,7 +25,6 @@ import { IRPSPlayer } from "../../utils/types/gameTypes";
 import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';
 import { roomsUrl } from "../../utils/routes";
-import { Modal } from "../../components/Modal/Modal";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
 
 interface IProps {
@@ -65,12 +64,14 @@ const ClosestNumber: FC = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [filteredPlayers, setFilteredPlayers] = useState<any[]>([]);
-  const [inputError, setInputError] = useState(false);
+  const [inputError, setInputError] = useState<boolean>(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [timer, setTimer] = useState<number>(15);
-  const [timerStarted, setTimerStarted] = useState(false);
-  const [isModalOpen, setModalOpen] = useState(true);
-
+  const [timerStarted, setTimerStarted] = useState<boolean>(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [winnerId, setWinnerId] = useState<number | null>(null);
+  const currentWinner = data?.players?.find((player: any) => Number(player?.userid) === Number(winnerId));
+  console.log(currentWinner);
   const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const userData = useAppSelector(store => store.app.info);
@@ -184,6 +185,7 @@ const ClosestNumber: FC = () => {
             .then((res: any) => {
               console.log(res);
               setRoomValue(Number(res?.room_value));
+              setWinnerId(Number(res?.winner));
               if (res?.message === "success") {
                 setTimeout(() => {
                   setModalOpen(true);
@@ -491,7 +493,7 @@ const ClosestNumber: FC = () => {
         )}
       </div>
       {isModalOpen && (
-        <ClosestModal title="go" closeModal={() => setModalOpen(false)} />
+        <ClosestModal closeModal={() => setModalOpen(false)} winner={currentWinner} />
       )}
     </div>
   );
