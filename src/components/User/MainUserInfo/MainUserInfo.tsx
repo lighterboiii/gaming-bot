@@ -15,10 +15,10 @@ import tasks from '../../../images/tasks.png';
 
 interface IProps {
   toggleOverlay: () => void;
-  isOverlayOpen?: boolean;
+  setWheelOverlayOpen: () => void;
 }
 
-const MainUserInfo: FC<IProps> = ({ toggleOverlay }) => {
+const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -79,7 +79,7 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay }) => {
         </div>
       </div>
       <div className={styles.userInfo__linkContainer}>
-        <button className={styles.userInfo__button}>
+        <button className={styles.userInfo__button} onClick={setWheelOverlayOpen}>
           <CircleButton
             shadow
             isWhiteBackground

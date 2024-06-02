@@ -54,7 +54,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
   const [roomValue, setRoomValue] = useState<number>(0);
@@ -66,9 +66,9 @@ const ClosestNumber: FC = () => {
   const [inputError, setInputError] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
-  console.log(currentPlayer);
+
   const userData = useAppSelector(store => store.app.info);
-  console.log(userData);
+
   useEffect(() => {
     if (data?.players) {
       const filtered = data.players.filter((player: any) => Number(player.userid) !== Number(userId));

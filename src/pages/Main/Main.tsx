@@ -16,6 +16,7 @@ import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
 import { useNavigate } from "react-router-dom";
 import Tasks from "../../components/Main/Tasks/Tasks";
+import WheelOfLuck from "../../components/Main/WheelOfLuck/WheelOfLuck";
 
 const Main: FC = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const Main: FC = () => {
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showTasksOverlay, setShowTasksOverlay] = useState(false);
+  const [showWheelOverlay, setShowWheelOverlay] = useState(false);
 
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
@@ -52,8 +54,15 @@ const Main: FC = () => {
     setShowTasksOverlay(!showTasksOverlay);
     setShowReferralOverlay(false);
     setShowBannerOverlay(false);
+    setShowWheelOverlay(false);
   };
-  
+  const toggleWheelOverlay = () => {
+    setShowWheelOverlay(!showWheelOverlay);
+    setShowReferralOverlay(false);
+    setShowBannerOverlay(false);
+    setShowTasksOverlay(false);
+  }
+
   useEffect(() => {
     if (dailyBonusData && dailyBonusData !== "no") {
       setShowBonusOverlay(true);
@@ -66,7 +75,7 @@ const Main: FC = () => {
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
         <MainUserInfo
           toggleOverlay={toggleTasksOverlay}
-          isOverlayOpen={showReferralOverlay}
+          setWheelOverlayOpen={toggleWheelOverlay}
         />
       </div>
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
@@ -170,6 +179,16 @@ const Main: FC = () => {
               closeOverlay={toggleBonusOverlay}
             />}
         />}
+      <Overlay
+        children={
+          <WheelOfLuck />
+        }
+        show={showWheelOverlay}
+        onClose={() => { }}
+        closeButton
+        buttonColor="#FFF"
+        crossColor="#ac1a44"
+      />
     </div>
   )
 }

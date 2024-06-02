@@ -74,3 +74,26 @@ export const users = [
   //   publicname: "Девятый"
   // },
 ];
+
+export const wheelItems = [
+  {
+    image: "https://gamebottggw.ngrok.app/avatar/172359056",
+    text: "Скин для аватара"
+  },
+  {
+    image: "https://gamebottggw.ngrok.app/avatar/172359056",
+    text: "Скин для аватара"
+  },
+  {
+    image: "https://gamebottggw.ngrok.app/avatar/172359056",
+    text: "Скин для аватара"
+  },
+  {
+    image: "https://gamebottggw.ngrok.app/avatar/172359056",
+    text: "Скин для аватара"
+  },
+  {
+    image: "https://gamebottggw.ngrok.app/avatar/172359056",
+    text: "Скин для аватара"
+  }
+];

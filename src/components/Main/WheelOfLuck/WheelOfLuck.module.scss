@@ -1,0 +1,70 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+.wheel {
+  @include children-layout();
+  gap: 10px;
+  justify-content: flex-start;
+
+  &__title {
+    @include indents();
+    font-weight: 900;
+    color: $main-color;
+    font-size: 32px;
+    text-align: center;
+  }
+
+  &__blackContainer {
+    @include indents(16px 6px, 0);
+    @include size(100%, auto);
+    @include flex(columns, center, center);
+    background-color: $black-color;
+  }
+
+  &__text {
+    @include size(100%, auto);
+    @include indents();
+    @include flex(row, center, center, 10px);
+    font-weight: 700;
+    font-size: 17px;
+    color: $main-color;
+    line-height: 1.2;
+  }
+
+  &__background {
+    @include indents(24px 0 16px, 0);
+    @include position(absolute, $bottom: 16px, $left: -10%, $right: -10%);
+    @include flex(row, center, center, 10px);
+    @include size(auto, 32vh);
+    background-color: $black-color;
+    overflow: scroll;
+    border-radius: 50% 50% 0 0 / 10% 10% 0 0;
+
+    @media screen and (min-height: 691px) {
+      @include size(auto, 25vh);
+    }
+  }
+
+  &__item {
+    @include size(92px, 85%);
+    @include flex(column, center, center, 10px);
+    color: $black-color;
+    border-radius: $radius-15;
+
+    &:nth-child(odd) {
+      background-color: #FBD94E;
+    }
+
+    &:nth-child(even) {
+      background-color: #FFFFFF;
+    }
+  }
+
+  &__itemImg {
+    @include size(66px, 66px);
+  }
+
+  &__itemText {
+    @include indents();
+  }
+}
