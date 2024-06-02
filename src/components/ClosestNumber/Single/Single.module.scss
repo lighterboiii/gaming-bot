@@ -8,12 +8,15 @@
   @media screen and (min-height: 691px) {
     @include position(relative);
     @include size(100%, calc(100% - 20vh));
-    margin-top: 20px;
   }
 
   &__player {
     @include size(90px, 90px);
     @include flex(row, center, center);
+
+    @media screen and (min-height: 700px) {
+      @include size(116px, 116px);
+    }
   }
 
   &__name {
@@ -28,6 +31,10 @@
     z-index: 5;
     font-weight: 900;
     font-size: 12px;
+
+    @media screen and (min-height: 700px) {
+      @include position(absolute, $bottom: 5%, $left: 50%);
+    }
   }
   
   &__player:nth-child(1) {
@@ -44,7 +51,7 @@
     border-radius: $radius-10;
     z-index: 5;
 
-    @media screen and (max-width: 700px) {
+    @media screen and (max-height: 700px) {
       @include size(38px, 26px);
     }
 
@@ -84,15 +91,15 @@
     border-radius: $radius-round;
     z-index: 5;
 
-    @media screen and (max-width: 700px) {
+    @media screen and (max-height: 700px) {
       @include size(30px, 30px);
     }
   }
 
   &__emojiImage {
-    @include size(26px, 26px);
+    @include size(28px, 28px);
 
-    @media screen and (max-width: 700px) {
+    @media screen and (max-height: 700px) {
       @include size(20px, 20px);
     }
   }

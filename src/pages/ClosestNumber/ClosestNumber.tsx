@@ -24,6 +24,9 @@ import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/Prog
 import { IRPSPlayer } from "../../utils/types/gameTypes";
 import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';
+import { roomsUrl } from "../../utils/routes";
+import { Modal } from "../../components/Modal/Modal";
+import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
 
 interface IProps {
   users: any[];
@@ -54,19 +57,22 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [emojis, setEmojis] = useState<any>(null);
   const [roomValue, setRoomValue] = useState<number>(0);
-  const [name, setName] = useState<string>("");
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [filteredPlayers, setFilteredPlayers] = useState<any[]>([]);
   const [inputError, setInputError] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
-  const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
+  const [timer, setTimer] = useState<number>(15);
+  const [timerStarted, setTimerStarted] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(true);
 
+  const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const userData = useAppSelector(store => store.app.info);
 
   useEffect(() => {
@@ -167,23 +173,28 @@ const ClosestNumber: FC = () => {
   const count = data?.players?.reduce((total: number, player: any) => {
     return total + (player?.choice !== "none" ? 1 : 0);
   }, 0);
-// запрос результата кона
+  // запрос результата кона
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (data?.players?.some((player: IRPSPlayer) => player?.choice !== 'none')) {
+        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')) {
           whoIsWinRequest(roomId!)
             .then((res: any) => {
               console.log(res);
               setRoomValue(Number(res?.room_value));
+              if (res?.message === "success") {
+                setTimeout(() => {
+                  setModalOpen(true);
+                }, 5000)
+              }
             })
             .catch((error) => {
               console.error('Data request error:', error);
             });
         }
-      }, 1500);
+      }, 2500);
     };
 
     fetchData();
@@ -209,7 +220,7 @@ const ClosestNumber: FC = () => {
       return newValue;
     });
   };
-// стереть символ из инпута
+  // стереть символ из инпута
   const handleDeleteNumber = () => {
     setInputValue((prevValue) => {
       const newValue = prevValue.slice(0, -1);
@@ -225,7 +236,7 @@ const ClosestNumber: FC = () => {
       return newValue;
     });
   };
-// подтвердить введенное число
+  // подтвердить введенное число
   const handleSubmit = () => {
     const numValue = parseInt(inputValue, 10);
     if (numValue >= 1 && numValue <= 100) {
@@ -237,7 +248,7 @@ const ClosestNumber: FC = () => {
       setInputError(true);
     }
   };
-// обработчик кликов по кнопкам клавиатуры оверлея
+  // обработчик кликов по кнопкам клавиатуры оверлея
   const handleButtonClick = (key: number | string) => {
     if (typeof key === 'number') {
       handleKeyPress(key);
@@ -258,7 +269,6 @@ const ClosestNumber: FC = () => {
   useEffect(() => {
     getActiveEmojiPack(userId)
       .then((res: any) => {
-        setName(res.user_emoji_pack.name);
         setEmojis(res.user_emoji_pack.user_emoji_pack);
       })
       .catch((error) => {
@@ -306,7 +316,6 @@ const ClosestNumber: FC = () => {
   };
   // хендлер отпрвки эмодзи
   const handleEmojiSelect = (emoji: string) => {
-    console.log(emoji);
     const setEmojiData = {
       user_id: userId,
       room_id: roomId,
@@ -343,6 +352,50 @@ const ClosestNumber: FC = () => {
     setShowOverlay(true);
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
+  // Таймер
+  useEffect(() => {
+    if (data?.players_count === "2" && data?.players?.every((player: IRPSPlayer) => player.choice === 'none')) {
+      setTimerStarted(true);
+      setTimer(20);
+    } else if (data?.players?.every((player: IRPSPlayer) => player.choice !== 'none')) {
+      setTimerStarted(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    } else if (data?.players_count === "1") {
+      setTimerStarted(false);
+      setTimer(20);
+    }
+  }, [data]);
+  useEffect(() => {
+    if (timerStarted && timer > 0) {
+      timerRef.current = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      const player = data?.players.find((player: IRPSPlayer) => player.choice === 'none');
+      // if (player) {
+      //   leaveRoomRequest(player.userid)
+      //     .then((res) => {
+      //       navigate(roomsUrl);
+      //       console.log(res);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     });
+      // }
+      setTimerStarted(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    }
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [timer, timerStarted, data]);
+
   return (
     <div className={styles.game}>
       <div className={styles.game__betContainer}>
@@ -357,7 +410,7 @@ const ClosestNumber: FC = () => {
       <div className={styles.game__centralContainer}>
         <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
         <CircularProgressBar progress={roomValue ? roomValue : 0} />
-        <p className={styles.game__centralTimer}>00:10</p>
+        <p className={styles.game__centralTimer}>{timer}</p>
       </div>
       <RenderComponent users={filteredPlayers} />
       <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
@@ -437,6 +490,9 @@ const ClosestNumber: FC = () => {
           </div>
         )}
       </div>
+      {isModalOpen && (
+        <ClosestModal title="go" closeModal={() => setModalOpen(false)} />
+      )}
     </div>
   );
 };

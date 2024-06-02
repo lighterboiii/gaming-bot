@@ -8,9 +8,10 @@ interface IModal {
   title?: string;
   children: ReactNode;
   closeModal: () => void;
+  className?: string;
 }
 
-export const Modal: FC<IModal> = ({ title, children, closeModal }) => {
+export const Modal: FC<IModal> = ({ title, children, closeModal, className }) => {
 
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {
