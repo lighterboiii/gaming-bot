@@ -17,7 +17,7 @@ interface IProps {
   winner?: any;
 }
 
-export const ClosestModal: FC<IProps> = ({ closeModal, winner }) => {
+export const ClosestModal: FC<IProps> = ({ closeModal, winner, winValue, number }) => {
   const { user } = useTelegram();
   const navigate = useNavigate();
   // const userId = user?.id;
@@ -59,7 +59,10 @@ export const ClosestModal: FC<IProps> = ({ closeModal, winner }) => {
             <div className={styles.modal__winnerValue}>+ 500</div>
           </div>
         </>) : (
-          <div>Hello Guys</div>
+          <div>
+            <p>24</p>
+            <p>Вы выиграли</p>
+          </div>
         )}
         <div className={styles.modal__buttons}>
           <button onClick={leaveRoom} className={styles.modal__button}>Выход</button>
