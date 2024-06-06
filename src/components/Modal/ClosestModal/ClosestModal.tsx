@@ -12,14 +12,15 @@ import { roomsUrl } from "../../../utils/routes";
 
 interface IProps {
   closeModal: () => void;
-  winValue?: string;
-  number?: string;
+  gameValue?: number;
+  winnerValue?: number;
   winner?: any;
 }
 
-export const ClosestModal: FC<IProps> = ({ closeModal, winner, winValue, number }) => {
+export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, gameValue }) => {
   const { user } = useTelegram();
   const navigate = useNavigate();
+  console.log(winnerValue);
   // const userId = user?.id;
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {
@@ -43,26 +44,28 @@ export const ClosestModal: FC<IProps> = ({ closeModal, winner, winValue, number 
         console.log(error);
       })
   }
-
+  console.log(winner);
   return ReactDOM.createPortal(
     <>
       <div className={styles.modal}>
-        {Number(winner?.userid) === Number(userId) ? (
+        {Number(winner?.userid) !== Number(userId) ? (
         <>
           <h3 className={styles.modal__title}>Победитель</h3>
           <div className={styles.modal__content}>
-            <p className={styles.modal__text}>24</p>
+            <p className={styles.modal__text}>{gameValue}</p>
             <div className={styles.modal__avatar}>
               <UserAvatar item={winner} />
-              <p className={styles.modal__name}>Имя пользователя</p>
+              <p className={styles.modal__name}>{winner?.publicname}</p>
             </div>
-            <div className={styles.modal__winnerValue}>+ 500</div>
+            <div className={styles.modal__winnerValue}>+ {winnerValue}</div>
           </div>
-        </>) : (
-          <div>
-            <p>24</p>
-            <p>Вы выиграли</p>
-          </div>
+        </>
+        ) : (
+        <div className={styles.modal__columnContent}>
+          <p className={styles.modal__text}>{gameValue}</p>
+          <h3 className={styles.modal__title}>Вы выиграли!</h3>
+          <div className={styles.modal__winnerValue}>+ {winnerValue}</div>
+        </div>
         )}
         <div className={styles.modal__buttons}>
           <button onClick={leaveRoom} className={styles.modal__button}>Выход</button>

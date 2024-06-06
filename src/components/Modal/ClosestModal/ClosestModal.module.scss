@@ -48,6 +48,12 @@
     @include flex(row, space-between, center);
   }
 
+  &__columnContent {
+    @include position(relative);
+    @include size(100%, 100%);
+    @include flex(column, space-between, center);
+  }
+
   &__avatar {
     @include position(absolute, $top: 45%, $left: 50%);
     transform: translate(-50%, -50%);
@@ -65,7 +71,7 @@
 
   &__text {
     @include indents();
-    margin-left: 32px;
+    // margin-left: 32px;
     color: $main-color;
     font-size: 36px;
   }

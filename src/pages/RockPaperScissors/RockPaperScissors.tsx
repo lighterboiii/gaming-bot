@@ -74,7 +74,7 @@ const RockPaperScissors: FC = () => {
   // long polling
   useEffect(() => {
     let isMounted = true;
-
+    setLoading(true);
     const fetchRoomInfo = async () => {
       if (!roomId || !isMounted) {
         return;
@@ -88,6 +88,7 @@ const RockPaperScissors: FC = () => {
         .then((res: any) => {
           console.log(res);
           setData(res);
+          setLoading(false);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;

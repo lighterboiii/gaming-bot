@@ -26,6 +26,7 @@ import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';
 import { roomsUrl } from "../../utils/routes";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
+import Loader from "../../components/Loader/Loader";
 
 interface IProps {
   users: any[];
@@ -58,6 +59,7 @@ const ClosestNumber: FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
   // const userId = user?.id;
   const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [emojis, setEmojis] = useState<any>(null);
   const [roomValue, setRoomValue] = useState<number>(0);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
@@ -70,6 +72,7 @@ const ClosestNumber: FC = () => {
   const [timerStarted, setTimerStarted] = useState<boolean>(false);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [winnerId, setWinnerId] = useState<number | null>(null);
+  const [winSum, setWinSum] = useState<any>(null);
   const currentWinner = data?.players?.find((player: any) => Number(player?.userid) === Number(winnerId));
   console.log(currentWinner);
   const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
@@ -123,7 +126,7 @@ const ClosestNumber: FC = () => {
   // long polling
   useEffect(() => {
     let isMounted = true;
-
+    setLoading(true);
     const fetchRoomInfo = async () => {
       if (!roomId || !isMounted) {
         return;
@@ -137,6 +140,7 @@ const ClosestNumber: FC = () => {
         .then((res: any) => {
           console.log(res);
           setData(res);
+          setLoading(false);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
@@ -186,6 +190,7 @@ const ClosestNumber: FC = () => {
               console.log(res);
               setRoomValue(Number(res?.room_value));
               setWinnerId(Number(res?.winner));
+              setWinSum(Number(res?.winner_value));
               if (res?.message === "success") {
                 setTimeout(() => {
                   setModalOpen(true);
@@ -269,9 +274,11 @@ const ClosestNumber: FC = () => {
   };
   // получить эмодзи пользователя
   useEffect(() => {
+    // setLoading(true);
     getActiveEmojiPack(userId)
       .then((res: any) => {
         setEmojis(res.user_emoji_pack.user_emoji_pack);
+        // setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -400,100 +407,104 @@ const ClosestNumber: FC = () => {
 
   return (
     <div className={styles.game}>
-      <div className={styles.game__betContainer}>
-        <p className={styles.game__bet}>
-          Ставка
-          <span className={styles.game__text}>
-            {data?.bet_type === "1" ? "💵" : "🔰"}
-          </span>
-          {data?.bet}
-        </p>
-      </div>
-      <div className={styles.game__centralContainer}>
-        <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
-        <CircularProgressBar progress={roomValue ? roomValue : 0} />
-        <p className={styles.game__centralTimer}>{timer}</p>
-      </div>
-      <RenderComponent users={filteredPlayers} />
-      <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
-        <div className={styles.overlay__inputWrapper}>
-          <div className={styles.overlay__avatarWrapper}>
-            {currentPlayer?.emoji && currentPlayer?.emoji !== 'none' && (
-              <div className={styles.overlay__playerEmoji}>
-                <img src={currentPlayer?.emoji} alt="emoji" className={styles.overlay__emojiImage} />
-              </div>
-            )}
-            <UserAvatar />
-            <p className={styles.overlay__name}>
-              {userData && userData?.publicname}
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <div className={styles.game__betContainer}>
+            <p className={styles.game__bet}>
+              Ставка
+              <span className={styles.game__text}>
+                {data?.bet_type === "1" ? "💵" : "🔰"}
+              </span>
+              {data?.bet}
             </p>
           </div>
-          <div className={styles.overlay__inputContainer}>
-            <input
-              type="number"
-              placeholder="Ваше число"
-              className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
-              value={inputValue}
-              onFocus={handleInputFocus}
-              readOnly
-            />
-            <p className={styles.overlay__inputText}>Ваше число от 1 до 100</p>
+          <div className={styles.game__centralContainer}>
+            <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
+            <CircularProgressBar progress={roomValue ? roomValue : 0} />
+            <p className={styles.game__centralTimer}>{timer}</p>
           </div>
-          <button className={styles.overlay__emojiButton} onClick={handleClickEmoji}>
-            <img src={smile} alt="smile_icon" className={styles.overlay__smile} />
-          </button>
-        </div>
-        {showOverlay && (
-          <div className={showEmojiOverlay ? styles.overlay__emojis : styles.overlay__keyboard}>
-            {showEmojiOverlay ?
-              (<>
-                {emojis && emojis?.map((emoji: string, index: number) => (
-                  <img
-                    key={index}
-                    src={emoji}
-                    alt={`Emoji ${index}`}
-                    className={styles.overlay__emoji}
-                    onClick={() => handleEmojiSelect(String(index + 1))}
-                  />
-                ))}
-              </>
-              ) : (
-                [1, 2, 3, 4, 5, 6, 7, 8, 9, 'Стереть', 0, 'Готово'].map((key) => (
-                  typeof key === 'number' ? (
-                    <button
-                      key={key}
-                      className={styles.overlay__key}
-                      onClick={() => handleButtonClick(key)}
-                    >
-                      {key}
-                    </button>
+          <RenderComponent users={filteredPlayers} /><div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
+            <div className={styles.overlay__inputWrapper}>
+              <div className={styles.overlay__avatarWrapper}>
+                {currentPlayer?.emoji && currentPlayer?.emoji !== 'none' && (
+                  <div className={styles.overlay__playerEmoji}>
+                    <img src={currentPlayer?.emoji} alt="emoji" className={styles.overlay__emojiImage} />
+                  </div>
+                )}
+                <UserAvatar />
+                <p className={styles.overlay__name}>
+                  {userData && userData?.publicname}
+                </p>
+              </div>
+              <div className={styles.overlay__inputContainer}>
+                <input
+                  type="number"
+                  placeholder="Ваше число"
+                  className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
+                  value={inputValue}
+                  onFocus={handleInputFocus}
+                  readOnly />
+                <p className={styles.overlay__inputText}>Ваше число от 1 до 100</p>
+              </div>
+              <button className={styles.overlay__emojiButton} onClick={handleClickEmoji}>
+                <img src={smile} alt="smile_icon" className={styles.overlay__smile} />
+              </button>
+            </div>
+            {showOverlay && (
+              <div className={showEmojiOverlay ? styles.overlay__emojis : styles.overlay__keyboard}>
+                {showEmojiOverlay ?
+                  (<>
+                    {emojis && emojis?.map((emoji: string, index: number) => (
+                      <img
+                        key={index}
+                        src={emoji}
+                        alt={`Emoji ${index}`}
+                        className={styles.overlay__emoji}
+                        onClick={() => handleEmojiSelect(String(index + 1))} />
+                    ))}
+                  </>
                   ) : (
-                    <div
-                      key={key}
-                      className={key === 'Стереть'
-                        ? styles.overlay__bottomLeftButton
-                        : styles.overlay__bottomRightButton}
-                      onClick={() => handleButtonClick(key)}
-                    >
-                      {key === 'Стереть' ? (
-                        <>
-                          <img src={deleteIcon} alt="delete icon" className={styles.overlay__icon} />
-                          <span>Стереть</span>
-                        </>
+                    [1, 2, 3, 4, 5, 6, 7, 8, 9, 'Стереть', 0, 'Готово'].map((key) => (
+                      typeof key === 'number' ? (
+                        <button
+                          key={key}
+                          className={styles.overlay__key}
+                          onClick={() => handleButtonClick(key)}
+                        >
+                          {key}
+                        </button>
                       ) : (
-                        <>
-                          <img src={approveIcon} alt="done icon" className={styles.overlay__icon} />
-                          <span>Готово</span>
-                        </>
-                      )}
-                    </div>
-                  ))
-                ))}
+                        <div
+                          key={key}
+                          className={key === 'Стереть'
+                            ? styles.overlay__bottomLeftButton
+                            : styles.overlay__bottomRightButton}
+                          onClick={() => handleButtonClick(key)}
+                        >
+                          {key === 'Стереть' ? (
+                            <>
+                              <img src={deleteIcon} alt="delete icon" className={styles.overlay__icon} />
+                              <span>Стереть</span>
+                            </>
+                          ) : (
+                            <>
+                              <img src={approveIcon} alt="done icon" className={styles.overlay__icon} />
+                              <span>Готово</span>
+                            </>
+                          )}
+                        </div>
+                      ))
+                    ))}
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      )}
+
       {isModalOpen && (
-        <ClosestModal closeModal={() => setModalOpen(false)} winner={currentWinner} />
+        <ClosestModal gameValue={roomValue} closeModal={() => setModalOpen(false)} winner={currentWinner} winnerValue={winSum} />
       )}
     </div>
   );
