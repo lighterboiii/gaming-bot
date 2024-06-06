@@ -30,7 +30,7 @@ const WheelOfLuck: FC<IProps> = ({ data }) => {
     }, 100);
 
     setTimeout(() => {
-      setSpinning(false);
+      // setSpinning(false);
       clearInterval(spinInterval);
       const prizeItem = data?.fortune_prize_info[0];
       const randomIndex = getRandomIndex(allItems.length);

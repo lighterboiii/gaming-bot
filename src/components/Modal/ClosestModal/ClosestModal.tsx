@@ -21,7 +21,8 @@ export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, game
   const { user } = useTelegram();
   const navigate = useNavigate();
   console.log(winnerValue);
-  // const userId = user?.id;
+  const userId = user?.id;
+  
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {
       if (evt.key === 'Escape') {
@@ -43,34 +44,34 @@ export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, game
       .catch((error) => {
         console.log(error);
       })
-  }
+  };
   console.log(winner);
   return ReactDOM.createPortal(
     <>
       <div className={styles.modal}>
-        {Number(winner?.userid) !== Number(userId) ? (
+        {/* {Number(winner?.userid) !== Number(userId) ? ( */}
         <>
           <h3 className={styles.modal__title}>Победитель</h3>
           <div className={styles.modal__content}>
             <p className={styles.modal__text}>{gameValue}</p>
             <div className={styles.modal__avatar}>
-              <UserAvatar item={winner} />
+              <UserAvatar item={winner} avatar={winner?.avatar} />
               <p className={styles.modal__name}>{winner?.publicname}</p>
             </div>
             <div className={styles.modal__winnerValue}>+ {winnerValue}</div>
           </div>
         </>
-        ) : (
+        {/* ) : (
         <div className={styles.modal__columnContent}>
           <p className={styles.modal__text}>{gameValue}</p>
           <h3 className={styles.modal__title}>Вы выиграли!</h3>
           <div className={styles.modal__winnerValue}>+ {winnerValue}</div>
         </div>
-        )}
-        <div className={styles.modal__buttons}>
+        )} */}
+        {/* <div className={styles.modal__buttons}>
           <button onClick={leaveRoom} className={styles.modal__button}>Выход</button>
           <button onClick={closeModal} className={styles.modal__button} style={{ backgroundColor: '#FFFFFF' }}>Играть снова</button>
-        </div>
+        </div> */}
       </div>
       <ModalOverlay closeModal={closeModal} />
     </>,

@@ -115,8 +115,7 @@
     z-index: 7;
 
     @media screen and (max-height: 700px) {
-      @include size(52px, 70px);
-      top: -12%;
+      @include size(46px, 60px);
     }
   }
 }

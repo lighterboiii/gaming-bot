@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import styles from './Main.module.scss';
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
@@ -19,13 +20,15 @@ import Tasks from "../../components/Main/Tasks/Tasks";
 import WheelOfLuck from "../../components/Main/WheelOfLuck/WheelOfLuck";
 import { getLuckInfo } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
+import useTelegram from "../../hooks/useTelegram";
 
 const Main: FC = () => {
   const navigate = useNavigate();
+  const { user } = useTelegram();
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);
-
+  const userId = user?.id;
   const [currentBanner, setCurrentBanner] = useState(banners?.length ? banners[0] : null);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);

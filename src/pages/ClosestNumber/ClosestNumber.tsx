@@ -57,7 +57,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [emojis, setEmojis] = useState<any>(null);
@@ -193,6 +193,7 @@ const ClosestNumber: FC = () => {
               setWinSum(Number(res?.winner_value));
               if (res?.message === "success") {
                 setTimeout(() => {
+                  setInputValue('');
                   setModalOpen(true);
                 }, 5000)
               }
@@ -250,7 +251,7 @@ const ClosestNumber: FC = () => {
       console.log(`Choice: ${inputValue}`);
       handleChoice(inputValue);
       setShowOverlay(false);
-      setInputValue('');
+      // setInputValue('');
     } else {
       setInputError(true);
     }
@@ -403,7 +404,7 @@ const ClosestNumber: FC = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [timer, timerStarted, data]);
+  }, [timer, timerStarted]);
 
   return (
     <div className={styles.game}>
