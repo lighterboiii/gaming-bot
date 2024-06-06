@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useRef, useState } from 'react';
 import styles from './WheelOfLuck.module.scss';
 import Button from '../../ui/Button/Button';
+import wheelPointer from '../../../images/closest-number/wheelPoint.png';
 
 interface IProps {
   data: any;
@@ -11,9 +10,8 @@ interface IProps {
 const WheelOfLuck: FC<IProps> = ({ data }) => {
   const [visibleItems, setVisibleItems] = useState<any>(data?.fortune_start_data);
   const [spinning, setSpinning] = useState(false);
-  const backgroundRef = useRef<HTMLDivElement>(null);
+  const spinnerRef = useRef<HTMLDivElement>(null);
   const getRandomIndex = (length: number) => Math.floor(Math.random() * length);
-  console.log(visibleItems);
 
   useEffect(() => {
     if (data) {
@@ -24,7 +22,7 @@ const WheelOfLuck: FC<IProps> = ({ data }) => {
   const startSpin = () => {
     setSpinning(true);
     const allItems = [...data?.fortune_all_items];
-
+    setVisibleItems(allItems);
     const spinInterval = setInterval(() => {
       const firstItem = allItems.shift();
       allItems.push(firstItem!);
@@ -32,6 +30,7 @@ const WheelOfLuck: FC<IProps> = ({ data }) => {
     }, 100);
 
     setTimeout(() => {
+      setSpinning(false);
       clearInterval(spinInterval);
       const prizeItem = data?.fortune_prize_info[0];
       const randomIndex = getRandomIndex(allItems.length);
@@ -39,7 +38,9 @@ const WheelOfLuck: FC<IProps> = ({ data }) => {
       allItems.splice(2, 0, prizeItem);
 
       setVisibleItems(allItems.slice(0, 4));
-      setSpinning(false);
+      setTimeout(() => {
+        setSpinning(false);
+      }, 1000)
     }, 5000);
   };
 
@@ -53,13 +54,21 @@ const WheelOfLuck: FC<IProps> = ({ data }) => {
           Попытайте удачу и выиграйте эксклюзивные скины, наборы эмодзи или 💵 10000
         </p>
       </div>
-      <div className={`${styles.wheel__background} ${spinning ? styles.spinning : ''}`} ref={backgroundRef}>
-        {visibleItems?.map((item: any, index: number) => (
-          <div key={index} className={styles.wheel__item}>
-            <img src={item?.fortune_item_pic} alt="item" className={styles.wheel__itemImg} />
-            <p className={styles.wheel__itemText}>{item?.fortune_item_name}</p>
-          </div>
-        ))}
+      <div className={styles.wheel__background}>
+        <img src={wheelPointer} alt="wheel pointer" className={styles.wheel__pointer} />
+        <div ref={spinnerRef} className={`${styles.wheel__spinner} ${spinning ? styles.wheel__spin : ''}`}>
+          {visibleItems?.map((item: any, index: number) => (
+            <div key={index} className={styles.wheel__item}>
+              <img
+                src={item?.fortune_item_pic}
+                alt="item"
+                className={styles.wheel__itemImg}
+                style={item?.fortune_type !== "skin" ? { width: '16px', height: '16px' } : {}}
+              />
+              <p className={styles.wheel__itemText}>{item?.fortune_item_name}</p>
+            </div>
+          ))}
+        </div>
       </div>
       <div className={styles.wheel__buttonWrapper}>
         <Button text="Крутить" handleClick={startSpin} />
@@ -69,6 +78,7 @@ const WheelOfLuck: FC<IProps> = ({ data }) => {
 };
 
 export default WheelOfLuck;
+
 
 
 // /* eslint-disable react-hooks/exhaustive-deps */

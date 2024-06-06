@@ -1,6 +1,18 @@
 @use '../../../stylesheets/mixins' as *;
 @use '../../../stylesheets/variables' as *;
 
+@mixin spin {
+  $steps: 70;
+  @for $i from 0 through $steps {
+    $percentage: $i * (100 / $steps);
+    $direction: if($i % 2 == 0, 1, -1);
+    #{$percentage}% {
+      transform: translateX($direction * 100%);
+      filter: blur(2px);
+    }
+  }
+}
+
 .wheel {
   @include children-layout();
   gap: 10px;
@@ -37,23 +49,23 @@
     @include flex(row, center, center, 10px);
     @include size(auto, 32vh);
     background-color: $black-color;
-    overflow: hidden;
     border-radius: 50% 50% 0 0 / 10% 10% 0 0;
     transition: transform 0.1s linear;
+    z-index: 5;
 
     @media screen and (min-height: 691px) {
-      @include size(auto, 25vh);
+      @include size(auto, 296px);
     }
   }
 
   &__item {
-    @include size(92px, 85%);
+    @include size(92px, 207px);
     @include flex(column, center, center, 10px);
     color: $black-color;
     border-radius: $radius-15;
 
     @media screen and (max-height: 691px) {
-      @include size(80px, 85%);
+      @include size(80px, 114px);
     }
 
     &:nth-child(odd) {
@@ -71,6 +83,9 @@
 
   &__itemText {
     @include indents();
+    font-size: 12px;
+    font-weight: 900;
+
   }
 
   &__buttonWrapper {
@@ -84,28 +99,28 @@
     }
   }
 
-  &.spinning .wheel__background {
-    animation: spin 4s linear infinite;
+  &__spinner {
+    @include flex(row, center, center, 10px);
+    @include size(100%, auto);
+  }
+
+  &__spin {
+    animation: spin 5s infinite linear;
+  }
+
+  &__pointer {
+    @include size(74px, 98px);
+    @include position(absolute, $top: -10%, $left: 50%);
+    transform: translate(-50%);
+    z-index: 7;
+
+    @media screen and (max-height: 700px) {
+      @include size(52px, 70px);
+      top: -12%;
+    }
   }
 }
 
 @keyframes spin {
-  0% {
-    transform-origin: 50px 50px;
-    transform: rotate(0deg);
-  }
-  100% {
-    transform-origin: 50px 50px;
-    transform: rotate(4320deg);
-  }
+  @include spin();
 }
-
-
-// @keyframes spin {
-//   0% {
-//     transform: translateX(0);
-//   }
-//   100% {
-//     transform: translateX(-60%);
-//   }
-// }
