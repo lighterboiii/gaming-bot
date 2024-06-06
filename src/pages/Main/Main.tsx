@@ -17,6 +17,8 @@ import PlayIcon from "../../icons/Play/PlayIcon";
 import { useNavigate } from "react-router-dom";
 import Tasks from "../../components/Main/Tasks/Tasks";
 import WheelOfLuck from "../../components/Main/WheelOfLuck/WheelOfLuck";
+import { getLuckInfo } from "../../api/mainApi";
+import { userId } from "../../api/requestData";
 
 const Main: FC = () => {
   const navigate = useNavigate();
@@ -30,6 +32,7 @@ const Main: FC = () => {
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showTasksOverlay, setShowTasksOverlay] = useState(false);
   const [showWheelOverlay, setShowWheelOverlay] = useState(false);
+  const [luckData, setLuckData] = useState<any>(null);
 
   const handleBannerClick = (bannerData: any) => {
     setCurrentBanner(bannerData);
@@ -63,6 +66,15 @@ const Main: FC = () => {
     setShowTasksOverlay(false);
   }
 
+  const openWheelOfLuckOverlay = () => {
+    getLuckInfo(userId)
+      .then((res: any) => {
+        console.log(res);
+        setLuckData(res);
+      })
+    setShowWheelOverlay(!showWheelOverlay);
+  };
+
   useEffect(() => {
     if (dailyBonusData && dailyBonusData !== "no") {
       setShowBonusOverlay(true);
@@ -75,7 +87,7 @@ const Main: FC = () => {
         <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
         <MainUserInfo
           toggleOverlay={toggleTasksOverlay}
-          setWheelOverlayOpen={toggleWheelOverlay}
+          setWheelOverlayOpen={openWheelOfLuckOverlay}
         />
       </div>
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
@@ -181,10 +193,10 @@ const Main: FC = () => {
         />}
       <Overlay
         children={
-          <WheelOfLuck />
+          <WheelOfLuck data={luckData} />
         }
         show={showWheelOverlay}
-        onClose={() => { }}
+        onClose={toggleWheelOverlay}
         closeButton
         buttonColor="#FFF"
         crossColor="#ac1a44"

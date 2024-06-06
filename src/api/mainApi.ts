@@ -44,3 +44,10 @@ export const getActiveEmojiPack = (userIdValue: string) => {
     userId: userIdValue,
   })
 };
+
+export const getLuckInfo = (userIdValue: string) => {
+  return getReq({
+    uri: 'fortune_get_info?user_id=',
+    userId: userIdValue,
+  })
+};
