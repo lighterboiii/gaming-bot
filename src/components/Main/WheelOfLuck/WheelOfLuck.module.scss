@@ -53,13 +53,14 @@
     transition: transform 0.1s linear;
     z-index: 5;
 
+
     @media screen and (min-height: 691px) {
       @include size(auto, 296px);
     }
   }
 
   &__item {
-    @include size(92px, 207px);
+    @include size(92px, 186px);
     @include flex(column, center, center, 10px);
     color: $black-color;
     border-radius: $radius-15;
@@ -75,6 +76,10 @@
     &:nth-child(even) {
       background-color: #FFFFFF;
     }
+  }
+
+  &__specialItem {
+    border: 8px #D61846 solid;
   }
 
   &__itemImg {
@@ -116,6 +121,40 @@
 
     @media screen and (max-height: 700px) {
       @include size(46px, 60px);
+    }
+  }
+
+  &__lights {
+    @include position(absolute, $top: 0, $bottom: 0, $left: 0, $right: 0);
+    width: 100%;
+    z-index: 6;
+  }
+
+  &__light {
+    @include size(20px, 20px);
+    position: absolute;
+    transform: translate(-50%);
+
+    &.light1 { top: 12%; left: 10%; }
+    &.light2 { top: 0; left: 30%; width: 55px; height: 55px; }
+    &.light3 { top: 0; left: 70%; width: 55px; height: 55px; }
+    &.light4 { top: 12%; left: 90%; }
+    &.light5 { bottom: 3%; left: 10%; }
+    &.light6 { bottom: -1%; left: 30%; width: 55px; height: 55px; }
+    &.light7 { bottom: 5%; left: 50%;}
+    &.light8 { bottom: -1%; left: 70%; width: 55px; height: 55px; }
+    &.light9 { bottom: 3%; left: 90%; }
+
+    @media screen and (max-height: 700px) {
+      &.light1 { top: 8%; left: 10%; }
+      &.light2 { top: -4%; left: 30%; width: 55px; height: 55px; }
+      &.light3 { top: -4%; left: 70%; width: 55px; height: 55px; }
+      &.light4 { top: 8%; left: 90%; }
+      &.light5 { bottom: 2%; left: 10%; }
+      &.light6 { bottom: -7%; left: 30%; width: 55px; height: 55px; }
+      &.light7 { bottom: 2%; left: 50%;}
+      &.light8 { bottom: -8%; left: 70%; width: 55px; height: 55px; }
+      &.light9 { bottom: 2%; left: 90%; }
     }
   }
 }

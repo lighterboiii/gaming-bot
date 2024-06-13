@@ -2,25 +2,37 @@ import { FC, useEffect, useRef, useState } from 'react';
 import styles from './WheelOfLuck.module.scss';
 import Button from '../../ui/Button/Button';
 import wheelPointer from '../../../images/closest-number/wheelPoint.png';
+import lamp from '../../../images/closest-number/lamp.png';
+import light from '../../../images/closest-number/lamp2.png';
 
 interface IProps {
   data: any;
+  closeOverlay: () => void;
 }
 
-const WheelOfLuck: FC<IProps> = ({ data }) => {
-  const [visibleItems, setVisibleItems] = useState<any>(data?.fortune_start_data);
-  const [spinning, setSpinning] = useState(false);
+const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
+  const [prize, setPrize] = useState<boolean>(false);
+  const [visibleItems, setVisibleItems] = useState<any>([]);
+  const [spinning, setSpinning] = useState<boolean>(false);
   const spinnerRef = useRef<HTMLDivElement>(null);
   const getRandomIndex = (length: number) => Math.floor(Math.random() * length);
 
   useEffect(() => {
-    if (data) {
-      setVisibleItems(data?.fortune_start_data);
-    }
+    const loadData = () => {
+      if (data) {
+        const max = data?.fortune_all_items.length - 4;
+        const randomIndex = Math.floor(Math.random() * max);
+        setVisibleItems(data?.fortune_all_items.slice(randomIndex, randomIndex + 4));
+      }
+    };
+
+    loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const startSpin = () => {
     setSpinning(true);
+    setPrize(false);
     const allItems = [...data?.fortune_all_items];
     setVisibleItems(allItems);
     const spinInterval = setInterval(() => {
@@ -30,7 +42,6 @@ const WheelOfLuck: FC<IProps> = ({ data }) => {
     }, 100);
 
     setTimeout(() => {
-      // setSpinning(false);
       clearInterval(spinInterval);
       const prizeItem = data?.fortune_prize_info[0];
       const randomIndex = getRandomIndex(allItems.length);
@@ -40,9 +51,21 @@ const WheelOfLuck: FC<IProps> = ({ data }) => {
       setVisibleItems(allItems.slice(0, 4));
       setTimeout(() => {
         setSpinning(false);
+        setPrize(true);
       }, 1000)
     }, 5000);
   };
+
+  const claimPrize = () => {
+    closeOverlay();
+    setPrize(false);
+  }
+
+  useEffect(() => {
+    return () => {
+      setPrize(false);
+    }
+  }, [])
 
   return (
     <div className={styles.wheel}>
@@ -55,10 +78,21 @@ const WheelOfLuck: FC<IProps> = ({ data }) => {
         </p>
       </div>
       <div className={styles.wheel__background}>
+        <div className={styles.wheel__lights}>
+          <img src={lamp} alt='lamp' className={`${styles.wheel__light} ${styles.light1}`}></img>
+          <img src={light} alt='lamp'  className={`${styles.wheel__light} ${styles.light2}`}></img>
+          <img src={light} alt='lamp'  className={`${styles.wheel__light} ${styles.light3}`}></img>
+          <img src={lamp} alt='lamp'  className={`${styles.wheel__light} ${styles.light4}`}></img>
+          <img src={lamp} alt='lamp'  className={`${styles.wheel__light} ${styles.light5}`}></img>
+          <img src={light} alt='lamp'  className={`${styles.wheel__light} ${styles.light6}`}></img>
+          <img src={lamp} alt='lamp'  className={`${styles.wheel__light} ${styles.light7}`}></img>
+          <img src={light} alt='lamp'  className={`${styles.wheel__light} ${styles.light8}`}></img>
+          <img src={lamp} alt='lamp'  className={`${styles.wheel__light} ${styles.light9}`}></img>
+        </div>
         <img src={wheelPointer} alt="wheel pointer" className={styles.wheel__pointer} />
         <div ref={spinnerRef} className={`${styles.wheel__spinner} ${spinning ? styles.wheel__spin : ''}`}>
           {visibleItems?.map((item: any, index: number) => (
-            <div key={index} className={styles.wheel__item}>
+            <div key={index} className={`${styles.wheel__item} ${index === 2 && prize ? styles.wheel__specialItem : ''}`}>
               <img
                 src={item?.fortune_item_pic}
                 alt="item"
@@ -71,59 +105,11 @@ const WheelOfLuck: FC<IProps> = ({ data }) => {
         </div>
       </div>
       <div className={styles.wheel__buttonWrapper}>
-        <Button text="Крутить" handleClick={startSpin} />
+        {!spinning && !prize && <Button text="Крутить" handleClick={startSpin} />}
+        {prize && !spinning && <Button text="Забрать приз" handleClick={claimPrize} />}
       </div>
     </div>
   );
 };
 
 export default WheelOfLuck;
-
-
-
-// /* eslint-disable react-hooks/exhaustive-deps */
-// /* eslint-disable @typescript-eslint/no-unused-vars */
-// import { FC, useEffect, useRef, useState } from 'react';
-// import styles from './WheelOfLuck.module.scss';
-// import { wheelItems } from '../../../utils/mockData';
-// import Button from '../../ui/Button/Button';
-
-// interface IProps {
-//   data: any;
-// }
-
-// const WheelOfLuck: FC<IProps> = ({ data }) => {
-//   const [visibleItems, setVisibleItems] = useState(wheelItems.slice(0, 4));
-//   const backgroundRef = useRef<HTMLDivElement>(null);
-//   console.log(data);
-//   useEffect(() => {
-//     setVisibleItems(data?.fortune_start_data);
-//   }, [data]);
-
-//   return (
-//     <div className={styles.wheel}>
-//       <h3 className={styles.wheel__title}>
-//         Колесо удачи
-//       </h3>
-//       <div className={styles.wheel__blackContainer}>
-//         <p className={styles.wheel__text}>
-//           Попытайте удачу и выиграйте эксклюзивны скины, наборы эмодзи или 💵 10000
-//         </p>
-//       </div>
-//       <div className={styles.wheel__background} ref={backgroundRef}>
-//         {visibleItems?.map((item: any, index: number) => (
-//           <div key={index} className={styles.wheel__item}>
-//             <img src={item?.fortune_item_pic} alt="item" className={styles.wheel__itemImg} />
-//             <p className={styles.wheel__itemText}>{item?.fortune_item_name}</p>
-//           </div>
-//         ))
-//         }
-//       </div>
-//       <div className={styles.wheel__buttonWrapper}>
-//         <Button text="Крутить" handleClick={() => { }} />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default WheelOfLuck;

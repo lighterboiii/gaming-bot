@@ -20,9 +20,9 @@ interface IProps {
 export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, gameValue }) => {
   const { user } = useTelegram();
   const navigate = useNavigate();
-  console.log(winnerValue);
-  const userId = user?.id;
-  
+
+  // const userId = user?.id;
+
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {
       if (evt.key === 'Escape') {

@@ -57,18 +57,18 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [emojis, setEmojis] = useState<any>(null);
-  const [roomValue, setRoomValue] = useState<number>(0);
+  const [roomValue, setRoomValue] = useState<number>(25);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [filteredPlayers, setFilteredPlayers] = useState<any[]>([]);
   const [inputError, setInputError] = useState<boolean>(false);
   const overlayRef = useRef<HTMLDivElement>(null);
-  const [timer, setTimer] = useState<number>(15);
+  const [timer, setTimer] = useState<number | null>(null);
   const [timerStarted, setTimerStarted] = useState<boolean>(false);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [winnerId, setWinnerId] = useState<number | null>(null);
@@ -364,9 +364,9 @@ const ClosestNumber: FC = () => {
   };
   // Таймер
   useEffect(() => {
-    if (data?.players_count === "2" && data?.players?.every((player: IRPSPlayer) => player.choice === 'none')) {
+    if (data?.players_count !== "1" && data?.players?.every((player: IRPSPlayer) => player.choice === 'none')) {
       setTimerStarted(true);
-      setTimer(20);
+      setTimer(25);
     } else if (data?.players?.every((player: IRPSPlayer) => player.choice !== 'none')) {
       setTimerStarted(false);
       if (timerRef.current) {
@@ -374,26 +374,27 @@ const ClosestNumber: FC = () => {
       }
     } else if (data?.players_count === "1") {
       setTimerStarted(false);
-      setTimer(20);
+      setTimer(25);
     }
   }, [data]);
+
   useEffect(() => {
-    if (timerStarted && timer > 0) {
+    if (timerStarted && timer! > 0) {
       timerRef.current = setInterval(() => {
-        setTimer((prev) => prev - 1);
+        setTimer((prev) => prev! - 1);
       }, 1000);
     } else if (timer === 0) {
       const player = data?.players.find((player: IRPSPlayer) => player.choice === 'none');
-      // if (player) {
-      //   leaveRoomRequest(player.userid)
-      //     .then((res) => {
-      //       navigate(roomsUrl);
-      //       console.log(res);
-      //     })
-      //     .catch((error) => {
-      //       console.log(error);
-      //     });
-      // }
+      if (player) {
+        leaveRoomRequest(player.userid)
+          .then((res) => {
+            navigate(roomsUrl);
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
       setTimerStarted(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -404,7 +405,7 @@ const ClosestNumber: FC = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [timer, timerStarted]);
+  }, [timer, timerStarted, data]);
 
   return (
     <div className={styles.game}>
