@@ -53,8 +53,7 @@
     transition: transform 0.1s linear;
     z-index: 5;
 
-
-    @media screen and (min-height: 691px) {
+    @media screen and (min-height: 700px) {
       @include size(auto, 296px);
     }
   }
@@ -94,7 +93,7 @@
   }
 
   &__buttonWrapper {
-    @include position(absolute, $bottom: 1%);
+    @include position(absolute, $bottom: 2%);
     @include size(100%, 40px);
     @include max-size(312px, auto);
     z-index: 5;

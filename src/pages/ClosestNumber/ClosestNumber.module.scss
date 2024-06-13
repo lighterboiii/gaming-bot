@@ -122,7 +122,7 @@
 
   &__inputWrapper {
     @include size(100%, auto);
-    @include flex(row, space-between, center, 4px);
+    @include flex(row, space-between, flex-start, 4px);
   }
 
   &__avatarWrapper {
@@ -170,12 +170,26 @@
   &__inputText {
     @include indents();
     @include size(100%, auto);
-    @include position(absolute, $bottom: -45%, $left: 50%);
-    transform: translate(-50%);
+    // @include position(absolute, $bottom: -45%, $left: 50%);
+    // transform: translate(-50%);
     font-size: 14px;
     color: $main-color;
     font-weight: 900;
     line-height: 1;
+  }
+
+  &__userMoney {
+    background-color: rgba(0, 0, 0, 0.2);
+    @include size(95%, 38px);
+    @include indents(10px, 0);
+    text-align: center;
+    border-radius: $radius-40;
+  }
+
+  &__text {
+    @include indents();
+    color: $black-color;
+    opacity: 1;
   }
 
   .expanded &__input {

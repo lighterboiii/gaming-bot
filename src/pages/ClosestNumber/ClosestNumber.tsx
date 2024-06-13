@@ -57,11 +57,11 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [emojis, setEmojis] = useState<any>(null);
-  const [roomValue, setRoomValue] = useState<number>(25);
+  const [roomValue, setRoomValue] = useState<number>(0);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
@@ -74,7 +74,6 @@ const ClosestNumber: FC = () => {
   const [winnerId, setWinnerId] = useState<number | null>(null);
   const [winSum, setWinSum] = useState<any>(null);
   const currentWinner = data?.players?.find((player: any) => Number(player?.userid) === Number(winnerId));
-  console.log(currentWinner);
   const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const userData = useAppSelector(store => store.app.info);
@@ -126,7 +125,7 @@ const ClosestNumber: FC = () => {
   // long polling
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
+    // setLoading(true);
     const fetchRoomInfo = async () => {
       if (!roomId || !isMounted) {
         return;
@@ -140,7 +139,7 @@ const ClosestNumber: FC = () => {
         .then((res: any) => {
           console.log(res);
           setData(res);
-          setLoading(false);
+          // setLoading(false);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
@@ -447,8 +446,14 @@ const ClosestNumber: FC = () => {
                   className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
                   value={inputValue}
                   onFocus={handleInputFocus}
-                  readOnly />
+                  readOnly
+                />
                 <p className={styles.overlay__inputText}>Ваше число от 1 до 100</p>
+                <div className={styles.overlay__userMoney}>
+                  <span className={styles.overlay__text}>
+                    {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
+                  </span>
+                </div>
               </div>
               <button className={styles.overlay__emojiButton} onClick={handleClickEmoji}>
                 <img src={smile} alt="smile_icon" className={styles.overlay__smile} />
@@ -506,7 +511,13 @@ const ClosestNumber: FC = () => {
       )}
 
       {isModalOpen && (
-        <ClosestModal gameValue={roomValue} closeModal={() => setModalOpen(false)} winner={currentWinner} winnerValue={winSum} />
+        <ClosestModal
+          betType={data?.bet_type}
+          gameValue={roomValue}
+          closeModal={() => setModalOpen(false)}
+          winner={currentWinner}
+          winnerValue={winSum}
+        />
       )}
     </div>
   );

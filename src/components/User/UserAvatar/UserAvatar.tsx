@@ -8,7 +8,6 @@ import { IMember } from "../../../utils/types/memberTypes";
 import { IRPSPlayer } from "../../../utils/types/gameTypes";
 
 interface IProps {
-  // item?: ItemData | IMember | IRPSPlayer;
   item?: any;
   avatar?: string;
 }

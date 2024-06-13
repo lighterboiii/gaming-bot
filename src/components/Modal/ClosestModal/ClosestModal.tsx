@@ -15,13 +15,14 @@ interface IProps {
   gameValue?: number;
   winnerValue?: number;
   winner?: any;
+  betType: string;
 }
 
-export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, gameValue }) => {
+export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, gameValue, betType }) => {
   const { user } = useTelegram();
   const navigate = useNavigate();
 
-  // const userId = user?.id;
+  const userId = user?.id;
 
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {
@@ -45,11 +46,10 @@ export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, game
         console.log(error);
       })
   };
-  console.log(winner);
+
   return ReactDOM.createPortal(
     <>
       <div className={styles.modal}>
-        {/* {Number(winner?.userid) !== Number(userId) ? ( */}
         <>
           <h3 className={styles.modal__title}>Победитель</h3>
           <div className={styles.modal__content}>
@@ -58,20 +58,9 @@ export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, game
               <UserAvatar item={winner} avatar={winner?.avatar} />
               <p className={styles.modal__name}>{winner?.publicname}</p>
             </div>
-            <div className={styles.modal__winnerValue}>+ {winnerValue}</div>
+            <div className={styles.modal__winnerValue}>+ {winnerValue}   {betType === "1" ? `💵` : `🔰`}</div>
           </div>
         </>
-        {/* ) : (
-        <div className={styles.modal__columnContent}>
-          <p className={styles.modal__text}>{gameValue}</p>
-          <h3 className={styles.modal__title}>Вы выиграли!</h3>
-          <div className={styles.modal__winnerValue}>+ {winnerValue}</div>
-        </div>
-        )} */}
-        {/* <div className={styles.modal__buttons}>
-          <button onClick={leaveRoom} className={styles.modal__button}>Выход</button>
-          <button onClick={closeModal} className={styles.modal__button} style={{ backgroundColor: '#FFFFFF' }}>Играть снова</button>
-        </div> */}
       </div>
       <ModalOverlay closeModal={closeModal} />
     </>,
