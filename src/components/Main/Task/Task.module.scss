@@ -4,17 +4,27 @@
 .task {
   @include indents(8px 12px, 0);
   @include size(100%, 48px);
-  @include flex(row, space-between, center, 10px);
+  @include flex(row, space-between, center);
   background-color: $main-color;
   border-radius: $radius-12;
   text-decoration: none;
 
   &__name {
     @include indents();
+    @include ellipsis();
     color: $secondary-color;
     font-weight: 700;
-    font-size: 15px;
-    line-height: 1.2;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  &__container {
+    @include flex(row, flex-start, center, 6px);
+  }
+
+  &__textWrapper {
+    @include size(100%, 100%);
+    @include flex(column, space-between, flex-start);
   }
 
   &__text {
@@ -28,8 +38,13 @@
 
   &__button {
     @include button-style-reset();
-    @include size(44px, 30px);
+    @include min-size(44px, 30px);
     border-radius: 21px;
     background-color: $mustard-color;
+    justify-self: flex-end;
+  }
+
+  &__image {
+    @include size(30px, 30px);
   }
 }

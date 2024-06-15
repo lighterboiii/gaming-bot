@@ -25,6 +25,11 @@ export const kickPlayerUri = `kickplayer?user_id=`;
 export const setUserChoiceUri = `setchoice?user_id=`;
 export const setEmojiUri = `setemoji?user_id=`;
 export const whoIsWinUri = `whoiswin?user_id=`;
+export const getEmojiPhUri = 'getemojiphoto';
+export const pollingUri = 'polling?user_id=';
+export const getGamesUri = 'get_existing_games';
+export const activeEmojiPackUri = 'user_emoji?user_id=';
+export const fortuneWheelUri = 'fortune_get_info?user_id=';
 // links
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
@@ -43,3 +48,5 @@ export const nftIdParamString = '&nft_id=';
 export const playerChoiceParamString = '&choice=';
 export const activeEmojiParamString = '&active_emoji=';
 export const emojiIdParamString = '&emoji_id=';
+export const emotionIdParamString = '&emotion_id=';
+export const packIdParamString = '&pack_id=';

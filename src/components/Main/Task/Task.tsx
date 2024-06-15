@@ -11,9 +11,12 @@ const Task: FC<IProps> = ({ task, onClick }) => {
 
   return (
     <div onClick={onClick} className={styles.task}>
-      <div>
-      <h2 className={styles.task__name}>{task?.desc_locale_key}</h2>
-      <p className={styles.task__text}>Награда: скин</p>
+      <div className={styles.task__container}>
+        <img src={task?.task_img} alt="prize" className={styles?.task__image} />
+        <div className={styles.task__textWrapper}>
+          <h2 className={styles.task__name}>{task?.desc_locale_key}</h2>
+          <p className={styles.task__text}>Награда: скин</p>
+        </div>
       </div>
       <button type='button' className={styles.task__button}>
         <ChevronIcon color='#000' width={20} height={20} />

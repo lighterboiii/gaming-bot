@@ -1,7 +1,7 @@
 import { IAppData } from "../utils/types/appType";
 import { IUserPhoto } from "../utils/types/mainTypes";
 import { getReq, putReq } from "./api";
-import { getLeadersUri, getRefsUri, getUserAvatarUri, mainAppDataUri, setTransferCoinsUri } from "./requestData";
+import { activeEmojiPackUri, fortuneWheelUri, getLeadersUri, getRefsUri, getUserAvatarUri, mainAppDataUri, setTransferCoinsUri } from "./requestData";
 
 // получить все данные юзера
 export const getAppData = (userIdValue: string) => {
@@ -40,14 +40,29 @@ export const transferCoinsToBalanceReq = (userIdValue: string) => {
 // получить активный пак эмодзи
 export const getActiveEmojiPack = (userIdValue: string) => {
   return getReq({
-    uri: 'user_emoji?user_id=',
+    uri: activeEmojiPackUri,
     userId: userIdValue,
   })
 };
-
+// получить инфу о колесе удачи
 export const getLuckInfo = (userIdValue: string) => {
   return getReq({
-    uri: 'fortune_get_info?user_id=',
+    uri: fortuneWheelUri,
     userId: userIdValue,
+  })
+};
+// прокрутка колеса удачи
+export const spinWheelRequest = (userIdValue: string) => {
+  return getReq({
+    uri: 'fortune_button?user_id=',
+    userId: userIdValue,
+  })
+};
+// забрать приз
+export const getWheelPrizeRequest = (userIdValue: string, itemId: number, count: number) => {
+  return getReq({
+    uri: 'fortune_prize?user_id=',
+    userId: userIdValue,
+    endpoint: `&fortune_item_id=${itemId}&fortune_item_count=${count}`
   })
 };

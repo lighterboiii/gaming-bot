@@ -3,8 +3,13 @@ import { getReq, postReq, putReq } from "./api";
 import {
   addPlayerUri,
   createRoomUri,
+  emotionIdParamString,
+  getEmojiPhUri,
+  getGamesUri,
   getRoomsUri,
   kickPlayerUri,
+  packIdParamString,
+  pollingUri,
   roomIdParamString,
   whoIsWinUri
 } from "./requestData";
@@ -18,7 +23,7 @@ export const getOpenedRoomsRequest = () => {
 // получить список доступных игр
 export const getExistingGamesRequest = () => {
   return getReq({
-    uri: 'get_existing_games',
+    uri: getGamesUri,
   })
 };
 // создать игру 
@@ -54,15 +59,15 @@ export const whoIsWinRequest = (roomId: string) => {
 // получить активный пак эмодзи пользователя
 export const getEmojiRequest = (packId: string, emojiId: string) => {
   return getReq({
-    uri: 'getemojiphoto',
-    endpoint: `&pack_id=${packId}&emotion_id=${emojiId}`,
+    uri: getEmojiPhUri,
+    endpoint: `${packIdParamString}${packId}${emotionIdParamString}${emojiId}`,
   })
 };
 
 // запрос на получение данных внутри игры 
 export const getPollingRequest = (userIdValue: string, data: any) => {
   return postReq({
-    uri: 'polling?user_id=',
+    uri: pollingUri,
     userId: userIdValue,
     data: data,
   })
