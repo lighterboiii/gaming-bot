@@ -14,7 +14,6 @@ interface IProps {
 const TaskInfo: FC<IProps> = ({ task }) => {
   const { tg } = useTelegram();
   const [showReward, setShowReward] = useState<boolean>(false);
-  console.log(task);
 
   const handleClickTask = (step: any) => {
     if (step.step_type === "link") {
@@ -40,7 +39,7 @@ const TaskInfo: FC<IProps> = ({ task }) => {
             <h2 className={styles.info__title}>
               {task?.desc_locale_key}
             </h2>
-            <p className={styles.info__reward}>Награда: скин</p>
+            <p className={styles.info__reward}>{task?.text_locale_key}</p>
           </div>
           <div className={styles.info__steps}>
             {task.steps.map((step: any) => (
@@ -59,7 +58,7 @@ const TaskInfo: FC<IProps> = ({ task }) => {
         </>
       ) : (
         <div className={styles.reward}>
-          <h3>Награда: скин</h3>
+          <h2 className={styles.info__title}>{task?.text_locale_key}</h2>
           <img src={task?.task_img} alt="reward" className={styles.reward__img} />
         </div>
       )

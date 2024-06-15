@@ -94,9 +94,11 @@
 
 .reward {
   @include size(100%, 100%);
-  @include flex(column, center, center);
+  @include flex(column, flex-start, center);
 
   &__img {
+    @include position(absolute, $left: 50%, $top: 50%);
+    transform: translate(-50%, -50%);
     @include size(210px, 210px);
   }
 }
