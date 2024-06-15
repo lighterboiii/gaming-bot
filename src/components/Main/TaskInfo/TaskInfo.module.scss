@@ -91,3 +91,12 @@
     pointer-events: none;
   }
 }
+
+.reward {
+  @include size(100%, 100%);
+  @include flex(column, center, center);
+
+  &__img {
+    @include size(210px, 210px);
+  }
+}

@@ -22,7 +22,7 @@ export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, game
   const { user } = useTelegram();
   const navigate = useNavigate();
 
-  // const userId = user?.id;
+  const userId = user?.id;
 
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {
