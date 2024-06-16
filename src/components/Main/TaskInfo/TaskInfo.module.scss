@@ -17,12 +17,13 @@
   }
 
   &__titleWrapper {
-    @include flex(column, center, flex-start, 12px);
+    @include flex(column, flex-start, center, 12px);
     @include size(100%, auto);
   }
 
   &__title {
     @include indents();
+    @include size(90%, auto);
     font-family: Rubik;
     font-size: 28px;
     font-style: italic;
@@ -88,7 +89,6 @@
     border-radius: 40px;
     background-color: $black-color;
     z-index: 4;
-    pointer-events: none;
   }
 }
 

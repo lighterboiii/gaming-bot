@@ -6,16 +6,22 @@ import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import useTelegram from "../../../hooks/useTelegram";
 import { postEvent } from "@tma.js/sdk";
 import CrossIcon from "../../../icons/Cross/Cross";
+import { taskResultRequest, taskStepRequest } from "../../../api/mainApi";
+import { userId } from "../../../api/requestData";
 
 interface IProps {
   task: any;
+  setSelectedTask: any;
 }
 
-const TaskInfo: FC<IProps> = ({ task }) => {
-  const { tg } = useTelegram();
+const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
+  const { tg, user } = useTelegram();
+  // const userId = user?.id;
   const [showReward, setShowReward] = useState<boolean>(false);
-
-  const handleClickTask = (step: any) => {
+  const [incomplete, setIncomplete] = useState<boolean>(false);
+  const [rewardResult, setRewardResult] = useState<boolean>(false);
+  console.log(task);
+  const handleClickTaskStep = (step: any) => {
     if (step.step_type === "link") {
       window.open(step.target, '_blank');
     } else if (step.step_type === "instruction") {
@@ -23,12 +29,33 @@ const TaskInfo: FC<IProps> = ({ task }) => {
     } else if (step.step_type === "subscribe") {
       tg.openTelegramLink(step.target);
     }
-    postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
+    taskStepRequest(userId, task?.task_id, step?.step_id)
+      .then((res: any) => {
+        console.log(res);
+      })
   };
 
   const handleClaimReward = () => {
     console.log('reward Claimed');
     setShowReward(true);
+    taskResultRequest(userId, task?.task_id)
+      .then((res: any) => {
+        console.log(res);
+        if (res?.message === 'incomplete') {
+          setIncomplete(true);
+        } else if (res?.message === 'success') {
+          setRewardResult(true);
+        }
+      });
+  };
+
+  const handleClickBack = () => {
+   if (showReward) {
+    setShowReward(false) 
+   } else {
+    setSelectedTask(null);
+   }
   };
 
   return (
@@ -43,7 +70,7 @@ const TaskInfo: FC<IProps> = ({ task }) => {
           </div>
           <div className={styles.info__steps}>
             {task.steps.map((step: any) => (
-              <div key={step.step_id} className={styles.info__step} onClick={() => handleClickTask(step)}>
+              <div key={step.step_id} className={styles.info__step} onClick={() => handleClickTaskStep(step)}>
                 <img src={step.img} alt={step.step_type} className={styles.info__icon} />
                 <h3 className={styles.info__text}>{step.h_key}</h3>
                 <button type='button' className={styles.info__button}>
@@ -58,12 +85,15 @@ const TaskInfo: FC<IProps> = ({ task }) => {
         </>
       ) : (
         <div className={styles.reward}>
-          <h2 className={styles.info__title}>{task?.text_locale_key}</h2>
+          <h2 className={styles.info__title}>
+            {task?.text_locale_key}
+          </h2>
+          <p>{incomplete ? "Задания не выполнены" : rewardResult ? "Награда ваша!" :  ''}</p>
           <img src={task?.task_img} alt="reward" className={styles.reward__img} />
         </div>
       )
       }
-      <button className={styles.info__closeBtn}>
+      <button className={styles.info__closeBtn} onClick={handleClickBack} >
         <CrossIcon width={12} height={12} color='#FFF' />
       </button>
     </div>

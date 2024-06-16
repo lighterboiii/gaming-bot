@@ -66,3 +66,19 @@ export const getWheelPrizeRequest = (userIdValue: string, itemId: number, count:
     endpoint: `&fortune_item_id=${itemId}&fortune_item_count=${count}`
   })
 };
+// проверка выполнения таска
+export const taskStepRequest = (userIdValue: string, taskId: number, stepId: number) => {
+  return getReq({
+    uri: 'task_step_button?user_id=',
+    userId: userIdValue,
+    endpoint: `&task_id=${taskId}&step_id=${stepId}`
+  })
+};
+// забрать награду за таск
+export const taskResultRequest = (userIdValue: string, taskId: number) => {
+  return getReq({
+    uri: 'task_result_button?user_id=',
+    userId: userIdValue,
+    endpoint: `&task_id=${taskId}`
+  })
+};

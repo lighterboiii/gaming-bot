@@ -40,7 +40,7 @@ const Tasks: FC = () => {
         </div>
       </>
     ) : (
-      <TaskInfo task={selectedTask} />
+      <TaskInfo task={selectedTask} setSelectedTask={() => setSelectedTask(null)} />
     )
   );
 };
