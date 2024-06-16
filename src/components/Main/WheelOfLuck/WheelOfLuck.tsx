@@ -6,6 +6,8 @@ import lamp from '../../../images/closest-number/lamp.png';
 import light from '../../../images/closest-number/lamp2.png';
 import { getWheelPrizeRequest, spinWheelRequest } from '../../../api/mainApi';
 import { userId } from '../../../api/requestData';
+import { useAppDispatch } from '../../../services/reduxHooks';
+import { setTokensValueAfterBuy } from '../../../services/appSlice';
 
 interface IProps {
   data: any;
@@ -13,6 +15,8 @@ interface IProps {
 }
 
 const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
+
+  const dispatch = useAppDispatch();
   const [prize, setPrize] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [visibleItems, setVisibleItems] = useState<any>([]);
@@ -42,6 +46,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
       .then((res: any) => {
         console.log(res);
         if (res?.message === 'ok') {
+          dispatch(setTokensValueAfterBuy(100));
           setSpinning(true);
           setPrize(false);
           const allItems = [...data?.fortune_all_items];
@@ -75,6 +80,9 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
     getWheelPrizeRequest(userId, prizeItem?.fortune_item_id, prizeItem?.fortune_item_count)
       .then((res: any) => {
         console.log(res)
+        if (res?.message === "ok") {
+
+        }
       })
     closeOverlay();
     setPrize(false);
@@ -83,7 +91,8 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   return (
     <div className={styles.wheel}>
       {loading ?
-        (<>
+        (
+        <>
           <h3 className={styles.wheel__title}>
             Колесо удачи
           </h3>
@@ -92,7 +101,8 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
               Загрузка...
             </p>
           </div>
-        </>) : (
+        </>
+        ) : (
           <>
             <h3 className={styles.wheel__title}>
               Колесо удачи
@@ -129,7 +139,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
               </div>
             </div>
             <div className={styles.wheel__buttonWrapper}>
-              {!spinning && !prize && <Button text="Крутить" handleClick={startSpin} />}
+              {!spinning && !prize && <Button text="Крутить 🔰 100" handleClick={startSpin} />}
               {prize && !spinning && <Button text="Забрать приз" handleClick={claimPrize} />}
             </div>
           </>)}

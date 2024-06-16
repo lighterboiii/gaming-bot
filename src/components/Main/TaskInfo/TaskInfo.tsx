@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import styles from './TaskInfo.module.scss';
 import Button from "../../ui/Button/Button";
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
@@ -8,6 +8,8 @@ import { postEvent } from "@tma.js/sdk";
 import CrossIcon from "../../../icons/Cross/Cross";
 import { taskResultRequest, taskStepRequest } from "../../../api/mainApi";
 import { userId } from "../../../api/requestData";
+import { useAppDispatch } from "../../../services/reduxHooks";
+import { setNewTokensValue } from "../../../services/appSlice";
 
 interface IProps {
   task: any;
@@ -16,11 +18,23 @@ interface IProps {
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const dispatch = useAppDispatch();
   const [showReward, setShowReward] = useState<boolean>(false);
   const [incomplete, setIncomplete] = useState<boolean>(false);
   const [rewardResult, setRewardResult] = useState<boolean>(false);
-  console.log(task);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+
+  useEffect(() => {
+    const storedSteps = localStorage.getItem('completedSteps');
+    if (storedSteps) {
+      setCompletedSteps(JSON.parse(storedSteps));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('completedSteps', JSON.stringify(completedSteps));
+  }, [completedSteps]);
+
   const handleClickTaskStep = (step: any) => {
     if (step.step_type === "link") {
       window.open(step.target, '_blank');
@@ -29,15 +43,16 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
     } else if (step.step_type === "subscribe") {
       tg.openTelegramLink(step.target);
     }
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
     taskStepRequest(userId, task?.task_id, step?.step_id)
       .then((res: any) => {
         console.log(res);
-      })
+        if (res.message === 'ok') {
+          setCompletedSteps(prevSteps => [...prevSteps, step.step_id]);
+        }
+      });
   };
 
   const handleClaimReward = () => {
-    console.log('reward Claimed');
     setShowReward(true);
     taskResultRequest(userId, task?.task_id)
       .then((res: any) => {
@@ -46,16 +61,18 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
           setIncomplete(true);
         } else if (res?.message === 'success') {
           setRewardResult(true);
+          console.log(res?.prise);
+          dispatch(setNewTokensValue(res?.new_value));
         }
       });
   };
 
   const handleClickBack = () => {
-   if (showReward) {
-    setShowReward(false) 
-   } else {
-    setSelectedTask(null);
-   }
+    if (showReward) {
+      setShowReward(false);
+    } else {
+      setSelectedTask(null);
+    }
   };
 
   return (
@@ -73,9 +90,13 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
               <div key={step.step_id} className={styles.info__step} onClick={() => handleClickTaskStep(step)}>
                 <img src={step.img} alt={step.step_type} className={styles.info__icon} />
                 <h3 className={styles.info__text}>{step.h_key}</h3>
-                <button type='button' className={styles.info__button}>
-                  <ChevronIcon color='#000' width={20} height={20} />
-                </button>
+                {completedSteps.includes(step.step_id) ? (
+                  <div className={styles.completedStep}>Завершено</div>
+                ) : (
+                  <button type='button' className={styles.info__button}>
+                    <ChevronIcon color='#000' width={20} height={20} />
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -88,16 +109,15 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
           <h2 className={styles.info__title}>
             {task?.text_locale_key}
           </h2>
-          <p>{incomplete ? "Задания не выполнены" : rewardResult ? "Награда ваша!" :  ''}</p>
+          <p>{incomplete ? "Задания не выполнены" : rewardResult ? "Награда ваша!" : ''}</p>
           <img src={task?.task_img} alt="reward" className={styles.reward__img} />
         </div>
-      )
-      }
-      <button className={styles.info__closeBtn} onClick={handleClickBack} >
+      )}
+      <button className={styles.info__closeBtn} onClick={handleClickBack}>
         <CrossIcon width={12} height={12} color='#FFF' />
       </button>
     </div>
-  )
+  );
 };
 
 export default TaskInfo;

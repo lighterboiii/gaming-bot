@@ -78,12 +78,12 @@
 
   &__picHeader {
     @include indents();
-    @include size(70%, auto);
+    @include size(60%, auto);
     @include position(absolute, $left: 0, $top: 0);
     font-family: 'Rubik', sans-serif;
     font-weight: 900;
     text-align: left;
-    text-wrap: balance;
+    text-wrap: wrap;
     font-size: 13px;
   }
 
@@ -93,7 +93,7 @@
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
     text-align: left;
-    text-wrap: balance;
+    text-wrap: nowrap;
     font-size: 12px;
     z-index: 1;
   }
