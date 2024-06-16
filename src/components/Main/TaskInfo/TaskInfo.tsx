@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import styles from './TaskInfo.module.scss';
 import Button from "../../ui/Button/Button";
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
@@ -18,22 +18,12 @@ interface IProps {
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
   const { tg, user } = useTelegram();
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [showReward, setShowReward] = useState<boolean>(false);
   const [incomplete, setIncomplete] = useState<boolean>(false);
   const [rewardResult, setRewardResult] = useState<boolean>(false);
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-
-  useEffect(() => {
-    const storedSteps = localStorage.getItem('completedSteps');
-    if (storedSteps) {
-      setCompletedSteps(JSON.parse(storedSteps));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('completedSteps', JSON.stringify(completedSteps));
-  }, [completedSteps]);
+  console.log(task);
 
   const handleClickTaskStep = (step: any) => {
     if (step.step_type === "link") {
@@ -46,9 +36,6 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
     taskStepRequest(userId, task?.task_id, step?.step_id)
       .then((res: any) => {
         console.log(res);
-        if (res.message === 'ok') {
-          setCompletedSteps(prevSteps => [...prevSteps, step.step_id]);
-        }
       });
   };
 
@@ -63,6 +50,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
           setRewardResult(true);
           console.log(res?.prise);
           dispatch(setNewTokensValue(res?.new_value));
+          postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         }
       });
   };
@@ -90,13 +78,9 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
               <div key={step.step_id} className={styles.info__step} onClick={() => handleClickTaskStep(step)}>
                 <img src={step.img} alt={step.step_type} className={styles.info__icon} />
                 <h3 className={styles.info__text}>{step.h_key}</h3>
-                {completedSteps.includes(step.step_id) ? (
-                  <div className={styles.completedStep}>Завершено</div>
-                ) : (
                   <button type='button' className={styles.info__button}>
                     <ChevronIcon color='#000' width={20} height={20} />
                   </button>
-                )}
               </div>
             ))}
           </div>
@@ -109,7 +93,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
           <h2 className={styles.info__title}>
             {task?.text_locale_key}
           </h2>
-          <p>{incomplete ? "Задания не выполнены" : rewardResult ? "Награда ваша!" : ''}</p>
+          <p>{incomplete ? "Вы не выполнили задания для получения награды" : rewardResult ? "Награда ваша!" : ''}</p>
           <img src={task?.task_img} alt="reward" className={styles.reward__img} />
         </div>
       )}

@@ -86,6 +86,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
       })
     closeOverlay();
     setPrize(false);
+    setVisibleItems(null);
   };
 
   return (

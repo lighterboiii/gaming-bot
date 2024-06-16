@@ -57,7 +57,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const { roomId } = useParams<{ roomId: string }>();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [emojis, setEmojis] = useState<any>(null);
