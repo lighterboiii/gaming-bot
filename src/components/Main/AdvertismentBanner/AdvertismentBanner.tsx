@@ -1,4 +1,5 @@
-import { FC, useState, useRef, useEffect } from "react";
+import { FC, useState } from "react";
+import { useSwipeable } from "react-swipeable";
 import styles from "./AdvertismentBanner.module.scss";
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import { postEvent } from "@tma.js/sdk";
@@ -11,8 +12,6 @@ interface IProps {
 
 const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const startX = useRef<number>(0);
-  const startY = useRef<number>(0);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
@@ -32,50 +31,17 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
     goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length);
   };
 
-  const handleTouchStart = (e: TouchEvent) => {
-    startX.current = e.touches[0].clientX;
-    startY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchMove = (e: TouchEvent) => {
-    if (!startX.current || !startY.current) {
-      return;
-    }
-
-    const diffX = e.touches[0].clientX - startX.current;
-    const diffY = e.touches[0].clientY - startY.current;
-
-    if (Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX > 0) {
-        handlePrevSlide();
-      } else {
-        handleNextSlide();
-      }
-    }
-
-    startX.current = 0;
-    startY.current = 0;
-  };
-
-  useEffect(() => {
-    const banner = document.getElementById("banner");
-
-    if (banner) {
-      banner.addEventListener("touchstart", handleTouchStart);
-      banner.addEventListener("touchmove", handleTouchMove);
-
-      return () => {
-        banner.removeEventListener("touchstart", handleTouchStart);
-        banner.removeEventListener("touchmove", handleTouchMove);
-      };
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handlers = useSwipeable({
+    onSwipedLeft: handleNextSlide,
+    onSwipedRight: handlePrevSlide,
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  });
 
   return (
     bannersData && (
       <div
-        id="banner"
+        {...handlers}
         className={styles.banner}
         style={{ backgroundImage: `url(${bannersData[currentIndex]?.pic})` }}
       >
