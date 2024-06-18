@@ -70,3 +70,37 @@ export interface IBannerData {
   pic_text: string;
   pic_text_color: string;
 }
+
+export interface ITaskStep {
+  h_key: string;
+  img: string;
+  step_id: number;
+  step_order: number;
+  step_type: "subscribe" | "instruction" | "link";
+  target: string;
+}
+
+export interface ITask {
+  desc_locale_key: string;
+  prise_count: number;
+  prise_item_id: number;
+  steps: ITaskStep[];
+  task_done: number;
+  task_id: number;
+  task_img: string;
+  task_type: string;
+  text_locale_key: string;
+}
+
+export interface IFortuneItem {
+  fortune_item_count: number;
+  fortune_item_id: number;
+  fortune_item_name: string;
+  fortune_item_pic: string;
+  fortune_type: string;
+}
+
+export interface IFortuneData {
+  fortune_all_items: IFortuneItem[];
+  fortune_prize_info: IFortuneItem[];
+}

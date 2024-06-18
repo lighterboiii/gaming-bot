@@ -10,9 +10,10 @@ import { useAppSelector } from "../../../services/reduxHooks";
 import useTelegram from "../../../hooks/useTelegram";
 import { joinRoomRequest, leaveRoomRequest } from "../../../api/gameApi";
 import { userId } from "../../../api/requestData";
+import { IRPSGameData } from "../../../utils/types/gameTypes";
 
 interface IProps {
-  room: any;
+  room: IRPSGameData | any;
   openModal: () => void;
 }
 
@@ -22,14 +23,14 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
-
+  console.log(room);
   const handleJoinRoom = (roomType: number) => {
-    if ((userInfo?.user_energy === 0 && room?.bet_type === 3) || roomType === 0) {
+    if ((userInfo?.user_energy === 0 && Number(room?.bet_type) === 3) || roomType === 0) {
       openModal();
       return;
     }
     
-    joinRoomRequest(userId, room.room_id)
+    joinRoomRequest(userId, String(room.room_id))
       .then((res) => {
         console.log("Joined successfully:", res);
         navigate(roomType === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
@@ -51,19 +52,19 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   };
 
   return (
-    <div className={styles.room} onClick={() => handleJoinRoom(room.room_type)} key={room?.id}>
+    <div className={styles.room} onClick={() => handleJoinRoom(Number(room.room_type))} key={room?.room_id}>
       <div className={styles.room__game}>
         <p className={styles.room__gameName}>
-          {room?.room_type === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
+          {Number(room?.room_type) === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
         </p>
-        <img src={room?.room_type === 1 ? hand : whoCloser} alt="game-logo" className={styles.room__image} />
+        <img src={Number(room?.room_type) === 1 ? hand : whoCloser} alt="game-logo" className={styles.room__image} />
       </div>
       <p className={styles.room__creator}>{room?.players[0].public_name}</p>
       <p className={styles.room__number}>
         <ManIcon width={12} height={12} /> {room.players_count}/{room.free_places + room.players_count}
       </p>
       <p className={`${styles.room__number} ${styles.room__bet}`}>
-        {room.bet_type === 1 ? `💵 ${room.bet}` : `🔰 ${room.bet}`}
+        {Number(room.bet_type) === 1 ? `💵 ${room.bet}` : `🔰 ${room.bet}`}
       </p>
     </div>
   )

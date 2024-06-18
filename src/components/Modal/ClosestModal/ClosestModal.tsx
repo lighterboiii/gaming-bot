@@ -9,12 +9,13 @@ import useTelegram from "../../../hooks/useTelegram";
 import { userId } from "../../../api/requestData";
 import { useNavigate } from "react-router-dom";
 import { roomsUrl } from "../../../utils/routes";
+import { IRPSPlayer } from "../../../utils/types/gameTypes";
 
 interface IProps {
   closeModal: () => void;
   gameValue?: number;
   winnerValue?: number;
-  winner?: any;
+  winner?: IRPSPlayer;
   betType: string;
 }
 

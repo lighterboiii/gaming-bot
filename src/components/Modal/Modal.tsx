@@ -11,7 +11,7 @@ interface IModal {
   className?: string;
 }
 
-export const Modal: FC<IModal> = ({ title, children, closeModal, className }) => {
+export const Modal: FC<IModal> = ({ title, children, closeModal }) => {
 
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {

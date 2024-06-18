@@ -13,7 +13,6 @@ import { getExistingGamesRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import { IGameCardData } from "../../utils/types/gameTypes";
 
-// TODO типизировать
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();

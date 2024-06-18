@@ -10,10 +10,11 @@ import { taskResultRequest, taskStepRequest } from "../../../api/mainApi";
 import { userId } from "../../../api/requestData";
 import { useAppDispatch } from "../../../services/reduxHooks";
 import { setNewTokensValue } from "../../../services/appSlice";
+import { ITask } from "../../../utils/types/mainTypes";
 
 interface IProps {
-  task: any;
-  setSelectedTask: any;
+  task: ITask;
+  setSelectedTask: (task: ITask | null) => void;
 }
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {

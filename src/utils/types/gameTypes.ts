@@ -31,3 +31,22 @@ export interface IRPSGameData {
   room_id: string;
   room_type: string;
 }
+
+export interface IPlayerInfo {
+  choice: string;
+  emoji: string;
+  money: number;
+  prev_choice: string;
+  public_name: string;
+  tokens: number;
+  userid: number;
+  username: string;
+  username_lang: string;
+}
+
+export interface IGameSettingsData {
+  id: number;
+  room_type: number;
+  url: string;
+  users: string;
+}

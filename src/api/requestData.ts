@@ -34,6 +34,7 @@ export const fortuneWheelUri = 'fortune_get_info?user_id=';
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
 export const inviteLink = 'https://t.me/lighterboygamebot';
+export const groupLink = 'https://t.me/gowinclub';
 // endpoints
 export const itemIdParamString = '&item_id=';
 export const itemCountParamString = '&count=';

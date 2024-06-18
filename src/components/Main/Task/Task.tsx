@@ -2,9 +2,10 @@ import { FC } from 'react';
 import styles from './Task.module.scss';
 import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
 import checkIcon from '../../../images/check-icon.png';
+import { ITask } from '../../../utils/types/mainTypes';
 
 interface IProps {
-  task: any;
+  task: ITask;
   onClick: () => void;
 }
 

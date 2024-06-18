@@ -8,7 +8,7 @@ import { useAppSelector } from "../../../services/reduxHooks";
 import CircleButton from "../../ui/CircleButton/CircleButton";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
-import { inviteLink } from "../../../api/requestData";
+import { groupLink, inviteLink } from "../../../api/requestData";
 import WalletIcon from "../../../icons/Wallet/WalletIcon";
 import LevelIcon from "../../../icons/Level/LevelIcon";
 import tasks from '../../../images/tasks.png';
@@ -73,7 +73,7 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
               />
               {translation?.webapp_balance}
             </button>
-            <Link to={'/go'} className={styles.userInfo__tasksButton}>
+            <Link to={groupLink} className={styles.userInfo__tasksButton}>
               <CommunityIcon width={16} height={14} color="#FFF" />
             </Link>
           </div>
@@ -95,8 +95,6 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
             shadow
             isWhiteBackground
             iconType="tasks"
-            width={22}
-            height={22}
           />
         </button>
       </div>

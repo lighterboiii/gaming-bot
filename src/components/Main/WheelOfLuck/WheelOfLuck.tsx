@@ -10,13 +10,15 @@ import { userId } from '../../../api/requestData';
 import { useAppDispatch } from '../../../services/reduxHooks';
 import { setTokensValueAfterBuy } from '../../../services/appSlice';
 import useTelegram from '../../../hooks/useTelegram';
+import { IFortuneData } from '../../../utils/types/mainTypes';
 
 interface IProps {
-  data: any;
+  data: IFortuneData;
   closeOverlay: () => void;
 }
 
 const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
+  console.log(data);
   const { user } = useTelegram();
   // const userId = user?.id;
   const dispatch = useAppDispatch();

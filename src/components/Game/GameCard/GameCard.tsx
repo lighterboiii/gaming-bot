@@ -6,13 +6,14 @@ import game1 from '../../../images/main_hand_1_tiny.png';
 import game2 from '../../../images/gameSec.png';
 import ManIcon from '../../../icons/Man/Man';
 import { useAppSelector } from '../../../services/reduxHooks';
+import { IGameCardData } from '../../../utils/types/gameTypes';
 
 interface IProps {
-  game: any;
+  game: IGameCardData;
   imagePosition: "left" | "right";
   users: number;
   extraClass?: string;
-  handleClickGame: (game: any) => void;
+  handleClickGame: (game: IGameCardData) => void;
 }
 
 const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass }) => {

@@ -10,13 +10,15 @@ import { userId } from '../../../api/requestData';
 import { postNewRoomRequest } from '../../../api/gameApi';
 import useTelegram from '../../../hooks/useTelegram';
 import SettingsSlider from '../SettingsSlider/SettingsSlider';
+import { IGameSettingsData } from '../../../utils/types/gameTypes';
 
 interface IProps {
-  data: any; // TODO типизировать
+  data: IGameSettingsData | null;
   closeOverlay: () => void;
 }
 
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
+  console.log(data);
   const navigate = useNavigate();
   const { user } = useTelegram();
   // const userId = user?.id;
@@ -108,7 +110,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
               <Button
                 disabled={bet === 0}
                 text={translation?.create_room_button}
-                handleClick={() => handleCreateRoom(userId, bet, currency, data.id, closeOverlay)}
+                handleClick={() => handleCreateRoom(userId, bet, currency, data!.id, closeOverlay)}
               />
             </div>
           </div>

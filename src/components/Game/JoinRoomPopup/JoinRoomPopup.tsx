@@ -6,10 +6,11 @@ import energy from '../../../images/energy-drink.png';
 import Button from "../../ui/Button/Button";
 import { joinRoomRequest } from "../../../api/gameApi";
 import { userId } from "../../../api/requestData";
+import { IRPSGameData } from "../../../utils/types/gameTypes";
 
 interface IProps {
   handleClick: () => void;
-  room: any;
+  room: IRPSGameData;
 }
 
 const JoinRoomPopup: FC<IProps> = ({ handleClick, room }) => {
