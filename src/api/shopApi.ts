@@ -74,4 +74,4 @@ export const setActiveEmojiRequest = async (userIdValue: string, activeEmoji: nu
     userId: userIdValue,
     endpoint: `${activeEmojiParamString}${activeEmoji}`
   })
-}
+};

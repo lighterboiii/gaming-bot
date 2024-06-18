@@ -1,12 +1,10 @@
 import { FC } from "react";
 import styles from './CaseOne.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
+import { IPropsForClosestNumberComponent } from "../../../utils/types/gameTypes";
 
-interface IProps {
-  users: any;
-}
 
-const Case: FC<IProps> = ({ users }) => {
+const Case: FC<IPropsForClosestNumberComponent> = ({ users }) => {
   return (
     <div
       className={styles.players}

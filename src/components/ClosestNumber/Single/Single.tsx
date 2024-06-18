@@ -1,12 +1,9 @@
 import { FC } from "react";
 import styles from './Single.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
+import { IPropsForClosestNumberComponent } from "../../../utils/types/gameTypes";
 
-interface IProps {
-  users: any;
-}
-
-const OneByOne: FC<IProps> = ({ users }) => {
+const OneByOne: FC<IPropsForClosestNumberComponent> = ({ users }) => {
   return (
     <div className={styles.players}>
       {users?.map((user: any) => (

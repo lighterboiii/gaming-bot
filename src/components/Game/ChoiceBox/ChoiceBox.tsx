@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react";
 import styles from './ChoiceBox.module.scss';
-// import emoji_icon from '../../../images/rock-paper-scissors/emoji_icon.png';
 import rock from '../../../images/rock-paper-scissors/hands-icons/rock.png'
 import rockDeselect from '../../../images/rock-paper-scissors/hands-icons/rock_deselect.png'
 import rockSelect from '../../../images/rock-paper-scissors/hands-icons/rock_select.png'

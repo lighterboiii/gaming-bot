@@ -1,12 +1,9 @@
 import { FC } from "react";
 import styles from './Three.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
+import { IPropsForClosestNumberComponent } from "../../../utils/types/gameTypes";
 
-interface IProps {
-  users: any;
-}
-
-const CaseTwo: FC<IProps> = ({ users }) => {
+const CaseTwo: FC<IPropsForClosestNumberComponent> = ({ users }) => {
   return (
     <div className={styles.players}>
       {users?.map((user: any) => (

@@ -30,6 +30,10 @@ export const pollingUri = 'polling?user_id=';
 export const getGamesUri = 'get_existing_games';
 export const activeEmojiPackUri = 'user_emoji?user_id=';
 export const fortuneWheelUri = 'fortune_get_info?user_id=';
+export const fortuneUri = 'fortune_button?user_id=';
+export const getFortunePrizeUri = 'fortune_prize?user_id=';
+export const taskStepButtonUri = 'task_step_button?user_id=';
+export const taskResultUri = 'task_result_button?user_id=';
 // links
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
@@ -51,3 +55,7 @@ export const activeEmojiParamString = '&active_emoji=';
 export const emojiIdParamString = '&emoji_id=';
 export const emotionIdParamString = '&emotion_id=';
 export const packIdParamString = '&pack_id=';
+export const taskIdParamString = '&task_id=';
+export const stepIdParamString = '&step_id=';
+export const fortuneIdParamString = '&fortune_item_id=';
+export const fortuneItemCountParamString = '&fortune_item_count=';

@@ -63,7 +63,6 @@ export const getEmojiRequest = (packId: string, emojiId: string) => {
     endpoint: `${packIdParamString}${packId}${emotionIdParamString}${emojiId}`,
   })
 };
-
 // запрос на получение данных внутри игры 
 export const getPollingRequest = (userIdValue: string, data: any) => {
   return postReq({

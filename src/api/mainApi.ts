@@ -1,7 +1,24 @@
 import { IAppData } from "../utils/types/appType";
 import { IUserPhoto } from "../utils/types/mainTypes";
 import { getReq, putReq } from "./api";
-import { activeEmojiPackUri, fortuneWheelUri, getLeadersUri, getRefsUri, getUserAvatarUri, mainAppDataUri, setTransferCoinsUri } from "./requestData";
+import {
+  activeEmojiPackUri,
+  fortuneIdParamString,
+  fortuneItemCountParamString,
+  fortuneUri,
+  fortuneWheelUri,
+  getFortunePrizeUri,
+  getLeadersUri,
+  getRefsUri,
+  getUserAvatarUri,
+  mainAppDataUri,
+  setTransferCoinsUri,
+  stepIdParamString,
+  taskIdParamString,
+  taskResultUri,
+  taskStepButtonUri
+
+} from "./requestData";
 
 // получить все данные юзера
 export const getAppData = (userIdValue: string) => {
@@ -54,31 +71,32 @@ export const getLuckInfo = (userIdValue: string) => {
 // прокрутка колеса удачи
 export const spinWheelRequest = (userIdValue: string) => {
   return getReq({
-    uri: 'fortune_button?user_id=',
+
+    uri: fortuneUri,
     userId: userIdValue,
   })
 };
 // забрать приз
 export const getWheelPrizeRequest = (userIdValue: string, itemId: number, count: number) => {
   return getReq({
-    uri: 'fortune_prize?user_id=',
+    uri: getFortunePrizeUri,
     userId: userIdValue,
-    endpoint: `&fortune_item_id=${itemId}&fortune_item_count=${count}`
+    endpoint: `${fortuneIdParamString}${itemId}${fortuneItemCountParamString}${count}`
   })
 };
 // проверка выполнения таска
 export const taskStepRequest = (userIdValue: string, taskId: number, stepId: number) => {
   return getReq({
-    uri: 'task_step_button?user_id=',
+    uri: taskStepButtonUri,
     userId: userIdValue,
-    endpoint: `&task_id=${taskId}&step_id=${stepId}`
+    endpoint: `${taskIdParamString}${taskId}${stepIdParamString}${stepId}`
   })
 };
 // забрать награду за таск
 export const taskResultRequest = (userIdValue: string, taskId: number) => {
   return getReq({
-    uri: 'task_result_button?user_id=',
+    uri: taskResultUri,
     userId: userIdValue,
-    endpoint: `&task_id=${taskId}`
+    endpoint: `${taskIdParamString}${taskId}`
   })
 };

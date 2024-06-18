@@ -1,12 +1,9 @@
 import { FC } from "react";
 import styles from './Eight.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
+import { IPropsForClosestNumberComponent } from "../../../utils/types/gameTypes";
 
-interface IProps {
-  users: any;
-}
-
-const CaseEight: FC<IProps> = ({ users }) => {
+const CaseEight: FC<IPropsForClosestNumberComponent> = ({ users }) => {
   return (
     <div className={styles.players}>
       {users?.map((user: any) => (

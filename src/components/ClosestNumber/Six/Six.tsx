@@ -1,12 +1,9 @@
 import { FC } from "react";
 import styles from './Six.module.scss';
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
+import { IPropsForClosestNumberComponent } from "../../../utils/types/gameTypes";
 
-interface IProps {
-  users: any;
-}
-
-const CaseSix: FC<IProps> = ({ users }) => {
+const CaseSix: FC<IPropsForClosestNumberComponent> = ({ users }) => {
   return (
     <div className={styles.players}>
       {users?.map((user: any) => (
