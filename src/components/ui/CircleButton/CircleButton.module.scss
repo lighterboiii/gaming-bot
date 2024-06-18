@@ -6,6 +6,10 @@
   @include flex(row, center, center);
   background-color: $main-color;
   border-radius: $radius-round;
+
+  &__tasks {
+    @include size(50%, 35%);
+  }
 }
 
 .whiteButton {

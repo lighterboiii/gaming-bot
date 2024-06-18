@@ -12,6 +12,7 @@ import { inviteLink } from "../../../api/requestData";
 import WalletIcon from "../../../icons/Wallet/WalletIcon";
 import LevelIcon from "../../../icons/Level/LevelIcon";
 import tasks from '../../../images/tasks.png';
+import CommunityIcon from "../../../icons/Community/CommunityIcon";
 
 interface IProps {
   toggleOverlay: () => void;
@@ -52,7 +53,7 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
               <div className={styles.userInfo__overflow}>
                 <p className={styles.userInfo__userName} ref={userNameRef}>
                   {userData && userData?.publicname}
-                  </p>
+                </p>
               </div>
             </div>
             <p className={styles.userInfo__text}>
@@ -72,14 +73,14 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
               />
               {translation?.webapp_balance}
             </button>
-            <button type="button" className={styles.userInfo__tasksButton} onClick={toggleOverlay}>
-              <img src={tasks} alt="task_png" className={styles.userInfo__tasksImg} />
-            </button>
+            <Link to={'/go'} className={styles.userInfo__tasksButton}>
+              <CommunityIcon width={16} height={14} color="#FFF" />
+            </Link>
           </div>
         </div>
       </div>
       <div className={styles.userInfo__linkContainer}>
-        <button className={styles.userInfo__button} onClick={setWheelOverlayOpen}>
+        <button type="button" className={styles.userInfo__button} onClick={setWheelOverlayOpen}>
           <CircleButton
             shadow
             isWhiteBackground
@@ -89,15 +90,15 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
             color="#d51845"
           />
         </button>
-        <Link to={'/go'} className={styles.userInfo__tgLink}>
+        <button type="button" className={styles.userInfo__button} onClick={toggleOverlay}>
           <CircleButton
             shadow
             isWhiteBackground
-            iconType="community"
+            iconType="tasks"
             width={22}
             height={22}
           />
-        </Link>
+        </button>
       </div>
     </div >
   )

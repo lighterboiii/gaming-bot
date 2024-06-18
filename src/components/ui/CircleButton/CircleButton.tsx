@@ -7,6 +7,7 @@ import CrossIcon from "../../../icons/Cross/Cross";
 import { postEvent } from "@tma.js/sdk";
 import FortuneWheelIcon from "../../../icons/FortuneWheel/FortuneWheel";
 import CommunityIcon from "../../../icons/Community/CommunityIcon";
+import tasksIcon from '../../../images/tasks_3.png';
 
 interface IProps {
   chevronPosition?: string;
@@ -15,7 +16,7 @@ interface IProps {
   color?: string;
   shadow?: boolean;
   isWhiteBackground?: boolean;
-  iconType: 'community' | 'chevron' | 'cross' | 'ref' | 'fortune';
+  iconType: 'community' | 'chevron' | 'cross' | 'ref' | 'fortune' | 'tasks';
 }
 
 const CircleButton: FC<IProps> = ({
@@ -44,6 +45,7 @@ const CircleButton: FC<IProps> = ({
       {iconType === 'cross' && <CrossIcon color={color} />}
       {iconType === 'fortune' && <FortuneWheelIcon />}
       {iconType === 'community' && <CommunityIcon />}
+      {iconType === 'tasks' && <img src={tasksIcon} alt="tasks icon" className={styles.button__tasks} /> }
     </div>
   )
 }

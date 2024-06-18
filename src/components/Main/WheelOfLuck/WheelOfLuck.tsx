@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useRef, useState } from 'react';
 import styles from './WheelOfLuck.module.scss';
 import Button from '../../ui/Button/Button';
@@ -8,6 +9,7 @@ import { getWheelPrizeRequest, spinWheelRequest } from '../../../api/mainApi';
 import { userId } from '../../../api/requestData';
 import { useAppDispatch } from '../../../services/reduxHooks';
 import { setTokensValueAfterBuy } from '../../../services/appSlice';
+import useTelegram from '../../../hooks/useTelegram';
 
 interface IProps {
   data: any;
@@ -15,7 +17,8 @@ interface IProps {
 }
 
 const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
-
+  const { user } = useTelegram();
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [prize, setPrize] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
