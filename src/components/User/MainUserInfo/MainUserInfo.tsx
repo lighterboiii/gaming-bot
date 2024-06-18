@@ -85,8 +85,8 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
             shadow
             isWhiteBackground
             iconType="fortune"
-            width={22}
-            height={22}
+            width={24}
+            height={24}
             color="#d51845"
           />
         </button>

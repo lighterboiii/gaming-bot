@@ -18,9 +18,8 @@ interface IProps {
 }
 
 const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
-  console.log(data);
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [prize, setPrize] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
