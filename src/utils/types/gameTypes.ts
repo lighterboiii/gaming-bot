@@ -50,3 +50,7 @@ export interface IGameSettingsData {
   url: string;
   users: string;
 }
+
+export interface IPropsForClosestNumberComponent {
+  users: IRPSPlayer[];
+}
