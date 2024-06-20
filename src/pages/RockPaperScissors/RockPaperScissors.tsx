@@ -28,7 +28,7 @@ import { roomsUrl } from "../../utils/routes";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
@@ -63,7 +63,7 @@ const RockPaperScissors: FC = () => {
         .catch((error) => {
           console.log(error);
         })
-      navigate(-1);
+      navigate('/create-room');
     });
     return () => {
       tg.BackButton.hide();
@@ -422,8 +422,8 @@ const RockPaperScissors: FC = () => {
                 data?.players_count === "2"
               ) ? (
                 <HandShake
-                player1={playersAnim.firstAnim || leftRockImage}
-                player2={playersAnim.secondAnim || rightRockImage}
+                  player1={playersAnim.firstAnim || leftRockImage}
+                  player2={playersAnim.secondAnim || rightRockImage}
                 />
               ) : (
                 data?.players_count === "1"

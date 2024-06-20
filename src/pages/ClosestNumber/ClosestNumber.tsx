@@ -56,7 +56,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -143,7 +143,7 @@ const ClosestNumber: FC = () => {
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
-            navigate(-1);
+            navigate('/create-room');
           }
 
           if (res?.message === 'timeout') {
@@ -412,21 +412,29 @@ const ClosestNumber: FC = () => {
         <Loader />
       ) : (
         <>
-          <div className={styles.game__betContainer}>
-            <p className={styles.game__bet}>
-              Ставка
-              <span className={styles.game__text}>
-                {data?.bet_type === "1" ? "💵" : "🔰"}
-              </span>
-              {data?.bet}
+          {data?.players?.length !== 1 ?
+            <>
+              <div className={styles.game__betContainer}>
+                <p className={styles.game__bet}>
+                  Ставка
+                  <span className={styles.game__text}>
+                    {data?.bet_type === "1" ? "💵" : "🔰"}
+                  </span>
+                  {data?.bet}
+                </p>
+              </div><div className={styles.game__centralContainer}>
+                <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
+                <CircularProgressBar progress={roomValue ? roomValue : 0} />
+                <p className={styles.game__centralTimer}>{timer}</p>
+              </div><RenderComponent users={filteredPlayers} />
+            </> :
+            <p
+              className={styles.game__text}
+              style={{ position: 'absolute', top: '45%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%' }}>
+              Ожидание игроков...
             </p>
-          </div>
-          <div className={styles.game__centralContainer}>
-            <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
-            <CircularProgressBar progress={roomValue ? roomValue : 0} />
-            <p className={styles.game__centralTimer}>{timer}</p>
-          </div>
-          <RenderComponent users={filteredPlayers} /><div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
+          }
+          <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
             <div className={styles.overlay__inputWrapper}>
               <div className={styles.overlay__avatarWrapper}>
                 {currentPlayer?.emoji && currentPlayer?.emoji !== 'none' && (
