@@ -16,6 +16,7 @@ import { IGameCardData, IRPSGameData } from "../../utils/types/gameTypes";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
 import { Modal } from "../../components/Modal/Modal";
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
+import { indexUrl } from "../../utils/routes";
 
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
@@ -54,7 +55,7 @@ const OpenedRooms: FC = () => {
 
     fetchRoomsData();
     tg.BackButton.show().onClick(() => {
-      navigate(-1);
+      navigate(indexUrl);
     });
     return () => {
       tg.BackButton.hide();

@@ -12,22 +12,21 @@ import { useAppSelector } from "../../services/reduxHooks";
 import { getExistingGamesRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import { IGameCardData } from "../../utils/types/gameTypes";
+import { indexUrl } from "../../utils/routes";
 
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
-
   const [games, setGames] = useState<IGameCardData[] | null>(null);
   const [gameData, setGameData] = useState(null);
   const [settingsOverlay, setSettingsOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const translation = useAppSelector(store => store.app.languageSettings);
 
   useEffect(() => {
     setLoading(true);
     tg.BackButton.show().onClick(() => {
-      navigate(-1);
+      navigate(indexUrl);
     });
     getExistingGamesRequest()
       .then((res: any) => {

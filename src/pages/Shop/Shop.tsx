@@ -13,6 +13,7 @@ import { CombinedItemData, GoodsItem, ItemData, LavkaResponse } from "../../util
 import { getLavkaAvailableRequest } from "../../api/shopApi";
 import { setLavkaAvailable } from "../../services/appSlice";
 import { postEvent } from "@tma.js/sdk";
+import { indexUrl } from "../../utils/routes";
 
 const Shop: FC = () => {
   const { tg } = useTelegram();
@@ -25,7 +26,6 @@ const Shop: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const [goods, setGoods] = useState<GoodsItem[]>([]);
   const [activeButton, setActiveButton] = useState<string>(`${translation?.shop}`);
-
   const [showOverlay, setShowOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CombinedItemData | null>(null);
@@ -58,7 +58,7 @@ const Shop: FC = () => {
     shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
     tg.BackButton.show().onClick(() => {
-      navigate(-1);
+      navigate(indexUrl);
     });
     return () => {
       tg.BackButton.hide();

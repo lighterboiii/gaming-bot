@@ -28,7 +28,7 @@ import { roomsUrl } from "../../utils/routes";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
@@ -121,14 +121,6 @@ const RockPaperScissors: FC = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // loader
-  // useEffect(() => {
-  //   if (!data) {
-  //     setLoading(true);
-  //   } else {
-  //     setLoading(false);
-  //   }
-  // }, [data]);
   // запрос результата хода
   const updateAnimation = useCallback((newAnimation: any) => {
     setAnimation((prevAnimation: any) => {
@@ -158,22 +150,12 @@ const RockPaperScissors: FC = () => {
               if (res?.message === "success") {
                 setTimeout(() => {
                   if (Number(res?.winner) === Number(userId)) {
-                    // if (Number(data?.creator_id) === Number(res?.winner)) {
-                    //   setAnimation(lWinAnim)
-                    // } else {
-                    //   setAnimation(rWinAnim)
-                    // }
                     updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
                     setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
                       ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
                         : `🔰`}`
                       : ''}`);
                   } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                    // if (Number(data?.creator_id) === Number(res?.winner)) {
-                    //   setAnimation(rLoseAnim)
-                    // } else {
-                    //   setAnimation(lLoseAnim)
-                    // }
                     updateAnimation(Number(data.creator_id) === Number(res.winner) ? rLoseAnim : lLoseAnim);
                     setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                       ? `💵`
@@ -226,7 +208,7 @@ const RockPaperScissors: FC = () => {
           })
       }
     }
-  }, [data])
+  }, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
     setMessageVisible(false);
@@ -363,7 +345,7 @@ const RockPaperScissors: FC = () => {
         className={styles.game__result}
         style={{ backgroundImage: `url(${animation}?key=${animationKey})` }}
       >
-        {/* {loading ? <Loader /> : ( */}
+        {loading ? <Loader /> : (
         <>
           <div className={styles.game__players}>
             {data?.players?.map((player: IRPSPlayer) => (
@@ -465,7 +447,7 @@ const RockPaperScissors: FC = () => {
             </div>
           </>
         </>
-        {/* )} */}
+        )}
         <EmojiOverlay
           show={showEmojiOverlay}
           onClose={() => setShowEmojiOverlay(!showEmojiOverlay)}

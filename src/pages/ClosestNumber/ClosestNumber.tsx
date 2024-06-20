@@ -18,7 +18,6 @@ import CaseFour from "../../components/ClosestNumber/Five/Five";
 import CaseSix from "../../components/ClosestNumber/Six/Six";
 import CaseSeven from "../../components/ClosestNumber/Seven/Seven";
 import CaseEight from "../../components/ClosestNumber/Eight/Eight";
-import { users } from '../../utils/mockData';
 import { getActiveEmojiPack } from "../../api/mainApi";
 import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
 import { IRPSPlayer } from "../../utils/types/gameTypes";
@@ -56,7 +55,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -125,7 +124,7 @@ const ClosestNumber: FC = () => {
   // long polling
   useEffect(() => {
     let isMounted = true;
-    // setLoading(true);
+    setLoading(true);
     const fetchRoomInfo = async () => {
       if (!roomId || !isMounted) {
         return;
@@ -139,7 +138,7 @@ const ClosestNumber: FC = () => {
         .then((res: any) => {
           console.log(res);
           setData(res);
-          // setLoading(false);
+          setLoading(false);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
@@ -250,7 +249,6 @@ const ClosestNumber: FC = () => {
       console.log(`Choice: ${inputValue}`);
       handleChoice(inputValue);
       setShowOverlay(false);
-      // setInputValue('');
     } else {
       setInputError(true);
     }
