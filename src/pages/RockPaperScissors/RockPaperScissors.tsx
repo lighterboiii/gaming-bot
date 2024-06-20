@@ -63,7 +63,7 @@ const RockPaperScissors: FC = () => {
         .catch((error) => {
           console.log(error);
         })
-      navigate('/create-room');
+        navigate(roomsUrl);
     });
     return () => {
       tg.BackButton.hide();

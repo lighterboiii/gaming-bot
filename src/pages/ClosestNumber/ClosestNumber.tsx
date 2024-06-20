@@ -143,7 +143,7 @@ const ClosestNumber: FC = () => {
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
-            navigate('/create-room');
+            navigate(roomsUrl);
           }
 
           if (res?.message === 'timeout') {
@@ -385,7 +385,7 @@ const ClosestNumber: FC = () => {
     } else if (timer === 0) {
       const player = data?.players.find((player: IRPSPlayer) => player.choice === 'none');
       if (player) {
-        leaveRoomRequest(player.userid)
+        leaveRoomRequest(userId)
           .then((res) => {
             navigate(roomsUrl);
             console.log(res);
