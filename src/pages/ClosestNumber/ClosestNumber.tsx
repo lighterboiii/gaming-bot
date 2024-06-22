@@ -55,7 +55,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -383,9 +383,11 @@ const ClosestNumber: FC = () => {
     } else if (timer === 0) {
       const player = data?.players.find((player: IRPSPlayer) => player.choice === 'none');
       if (player) {
-        leaveRoomRequest(userId)
+        leaveRoomRequest(player?.userid)
           .then((res) => {
-            navigate(roomsUrl);
+            if (player?.userid === userId) {
+              navigate(roomsUrl);
+            }
             console.log(res);
           })
           .catch((error) => {

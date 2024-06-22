@@ -28,7 +28,7 @@ import { roomsUrl } from "../../utils/routes";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
@@ -320,7 +320,9 @@ const RockPaperScissors: FC = () => {
       if (player) {
         leaveRoomRequest(player.userid)
           .then((res) => {
-            navigate(roomsUrl);
+            if (player?.userid === userId) {
+              navigate(roomsUrl);
+            }
             console.log(res);
           })
           .catch((error) => {

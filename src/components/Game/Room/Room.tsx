@@ -20,7 +20,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
   console.log(room);
