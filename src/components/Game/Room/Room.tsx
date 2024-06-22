@@ -23,13 +23,20 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
+  console.log(userInfo);
   console.log(room);
   const handleJoinRoom = (roomType: number) => {
     if ((userInfo?.user_energy === 0 && Number(room?.bet_type) === 3) || roomType === 0) {
       openModal();
       return;
     }
-    
+
+    if (userInfo && room?.bet_type === 3 && (room?.bet > userInfo?.tokens)) {
+      return;
+    } else if (userInfo && room?.bet_type === 1 && (room?.bet > userInfo?.coins)) {
+      return;
+    }
+
     joinRoomRequest(userId, String(room.room_id))
       .then((res) => {
         console.log("Joined successfully:", res);
