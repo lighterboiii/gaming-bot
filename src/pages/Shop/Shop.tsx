@@ -25,7 +25,7 @@ const Shop: FC = () => {
   const lavkaShop = useAppSelector(store => store.app.lavka);
   const translation = useAppSelector(store => store.app.languageSettings);
   const [goods, setGoods] = useState<GoodsItem[]>([]);
-  const [activeButton, setActiveButton] = useState<string>(`${translation?.shop}`);
+  const [activeButton, setActiveButton] = useState<string>(`${translation?.shop_button}`);
   const [showOverlay, setShowOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CombinedItemData | null>(null);
@@ -54,7 +54,7 @@ const Shop: FC = () => {
   };
   // при монтировании компонента
   useEffect(() => {
-    setActiveButton(`${translation?.shop_menu}`);
+    setActiveButton(`${translation?.shop_button}`);
     shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
     tg.BackButton.show().onClick(() => {
@@ -78,7 +78,7 @@ const Shop: FC = () => {
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
-    setActiveButton(`${translation?.shop_menu}`);
+    setActiveButton(`${translation?.shop_button}`);
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
@@ -108,9 +108,9 @@ const Shop: FC = () => {
         <div className={styles.shop__buttons}>
           <div className={styles.shop__leftButtonsContainer}>
             <button
-              className={`${styles.shop__button} ${activeButton === `${translation?.shop_menu}` ? styles.activeButton : ''}`}
+              className={`${styles.shop__button} ${activeButton === `${translation?.shop_button}` ? styles.activeButton : ''}`}
               onClick={handleClickShop}>
-              {translation?.shop_menu}
+              {translation?.shop_button}
             </button>
             <button
               className={`${styles.shop__button} ${activeButton === `${translation?.marketplace}` ? styles.activeButton : ''}`}
