@@ -28,7 +28,7 @@ import { roomsUrl } from "../../utils/routes";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
@@ -189,26 +189,33 @@ const RockPaperScissors: FC = () => {
     const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
     if (data?.bet_type === "1") {
       if (player?.money <= data?.bet) {
-        leaveRoomRequest(player?.userid)
-          .then(res => {
-            console.log(res);
-            if (player?.userid === userId) {
-              navigate(roomsUrl);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+        setTimeout(() => {
+          leaveRoomRequest(player?.userid)
+            .then(res => {
+              console.log(res);
+              if (player?.userid === userId) {
+                navigate(roomsUrl);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+        }, 2000)
       }
     } else if (data?.bet_type === "3") {
       if (player?.tokens <= data?.bet) {
-        leaveRoomRequest(userId)
-          .then(res => {
-            console.log(res);
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+        setTimeout(() => {
+          leaveRoomRequest(player?.userid)
+            .then(res => {
+              console.log(res);
+              if (player?.userid === userId) {
+                navigate(roomsUrl);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+        }, 2000)
       }
     }
   }, [data]);

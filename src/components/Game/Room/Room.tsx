@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
+import { FC, useState } from "react";
 import styles from './Room.module.scss';
 import hand from '../../../images/main_hand_1_tiny.png';
 import whoCloser from '../../../images/gameSec.png';
@@ -20,10 +20,12 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
+  const [isMessage, setIsMessage] = useState(false);
+  const [message, setMessage] = useState('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
-  
+
   const handleJoinRoom = (roomType: number) => {
     if ((userInfo?.user_energy === 0 && Number(room?.bet_type) === 3) || roomType === 0) {
       openModal();
@@ -31,8 +33,18 @@ const Room: FC<IProps> = ({ room, openModal }) => {
     }
 
     if (userInfo && room?.bet_type === 3 && (room?.bet > userInfo?.tokens)) {
+      setIsMessage(true);
+      setMessage(translation?.insufficient_tokens || "Недостаточно средств");
+      setTimeout(() => {
+        setIsMessage(false);
+      }, 1500)
       return;
     } else if (userInfo && room?.bet_type === 1 && (room?.bet > userInfo?.coins)) {
+      setIsMessage(true);
+      setMessage(translation?.insufficient_coins || "Недостаточно средств");
+      setTimeout(() => {
+        setIsMessage(false);
+      }, 1500)
       return;
     }
 
@@ -65,7 +77,11 @@ const Room: FC<IProps> = ({ room, openModal }) => {
         </p>
         <img src={Number(room?.room_type) === 1 ? hand : whoCloser} alt="game-logo" className={styles.room__image} />
       </div>
-      <p className={styles.room__creator}>{room?.players[0].public_name}</p>
+      {isMessage ? (
+        <p className={styles.room__creator}>{message}</p>
+      ) : (
+        <p className={styles.room__creator}>{room?.players[0].public_name}</p>
+      )}
       <p className={styles.room__number}>
         <ManIcon width={12} height={12} /> {room.players_count}/{room.free_places + room.players_count}
       </p>
