@@ -19,7 +19,7 @@ interface IProps {
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [showReward, setShowReward] = useState<boolean>(false);
   const [incomplete, setIncomplete] = useState<boolean>(false);
