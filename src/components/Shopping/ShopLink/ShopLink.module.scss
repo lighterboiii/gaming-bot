@@ -33,9 +33,9 @@
   }
 
   &__char {
-    @include size(110%, auto);
-    @include position(absolute, $left: 48%, $top: 50%);
-    transform: translate(-50%, -50%);
+    @include position(absolute, $top: 0, $left: 0, $right: 0, $bottom: 0);  
+    @include size(100%, 100%);
+    object-fit: cover;
     z-index: 1;
   }
 }
