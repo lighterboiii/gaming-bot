@@ -21,7 +21,7 @@ import { indexUrl } from "../../utils/routes";
 const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [rooms, setRooms] = useState<IGameCardData[] | null>(null);
   const [typeValue, setTypeValue] = useState(`${translation?.sort_all}`);
@@ -78,24 +78,19 @@ const OpenedRooms: FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const applySort = (rooms: IGameCardData[]) => {
-    if (typeClickCount > 0) {
-      rooms = sortRooms(rooms, 'gameType', sortByType);
-    }
-    if (currencyClickCount > 0) {
-      rooms = sortRooms(rooms, 'currency', sortByCurr);
-    }
-    if (betClickCount > 0) {
-      rooms = sortRooms(rooms, 'bet', sortByBetAsc);
-    }
-    setRooms(rooms);
-  };
-
   const toggleSort = (sortBy: string) => {
     let sortedRooms;
-  
+
     switch (sortBy) {
       case 'type':
+        setCurrencyClickCount(0);
+        setCurrencyValue(`${translation?.sort_all}`);
+        setSortByCurr(false);
+
+        setBetClickCount(0);
+        setBetValue(`${translation?.sort_all}`);
+        setSortByBetAsc(false);
+
         setTypeClickCount((prevCount) => {
           const newCount = (prevCount + 1) % 3;
           if (newCount === 0) {
@@ -110,8 +105,16 @@ const OpenedRooms: FC = () => {
           return newCount;
         });
         break;
-  
+
       case 'currency':
+        setTypeClickCount(0);
+        setTypeValue(`${translation?.sort_all}`);
+        setSortByType(false);
+
+        setBetClickCount(0);
+        setBetValue(`${translation?.sort_all}`);
+        setSortByBetAsc(false);
+
         setCurrencyClickCount((prevCount) => {
           const newCount = (prevCount + 1) % 3;
           if (newCount === 0) {
@@ -120,14 +123,22 @@ const OpenedRooms: FC = () => {
           } else {
             sortedRooms = sortRooms(rooms as any, 'currency', sortByCurr);
             setSortByCurr(!sortByCurr);
-            setCurrencyValue(sortByCurr ? '🔰' : '💵');
+            setCurrencyValue(sortByCurr ? '💵' : '🔰');
             setRooms(sortedRooms);
           }
           return newCount;
         });
         break;
-  
+
       case 'bet':
+        setTypeClickCount(0);
+        setTypeValue(`${translation?.sort_all}`);
+        setSortByType(false);
+
+        setCurrencyClickCount(0);
+        setCurrencyValue(`${translation?.sort_all}`);
+        setSortByCurr(false);
+
         setBetClickCount((prevCount) => {
           const newCount = (prevCount + 1) % 3;
           if (newCount === 0) {
@@ -142,7 +153,7 @@ const OpenedRooms: FC = () => {
           return newCount;
         });
         break;
-  
+
       default:
         postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
         sortedRooms = rooms;

@@ -18,9 +18,7 @@ const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
   // const userId = user?.id;
-  const referralCoinsAmount = useAppSelector(store => store.app.info?.referrer_all_coins);
   const translation = useAppSelector(store => store.app.languageSettings);
-
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
   const [message, setMessage] = useState('');
@@ -31,6 +29,7 @@ const Referral: FC = () => {
     const fetchData = () => {
       getReferralsData(userId)
         .then((res: any) => {
+          console.log(res);
           setRefsBoard(res.result_data.refs_info);
           setTotalBalance(res.result_data.total_balance);
         })
@@ -52,14 +51,15 @@ const Referral: FC = () => {
   const handleTransferCoins = () => {
     transferCoinsToBalanceReq(userId)
       .then((res: any) => {
+        console.log(res);
         setMessageShown(true);
         switch (res.transfered) {
           case "small":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
             setMessage(`${translation?.claim_minimum}`);
             break;
           default:
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
             setMessage(`${translation?.funds_transferred}`);
             dispatch(setCoinsNewValue(Number(res.new_coins)));
             setTotalBalance(0);
@@ -92,7 +92,7 @@ const Referral: FC = () => {
         <p className={styles.referral__text}>
           <span className={styles.referral__earn}>{translation?.earned_now}</span>
           <span className={styles.referral__sumSpan}>
-            💵 {referralCoinsAmount && formatNumber(referralCoinsAmount)}$
+            💵 {totalBalance}$
           </span>
         </p>
       </div>
@@ -100,7 +100,7 @@ const Referral: FC = () => {
         <Button
           text={translation?.claim}
           handleClick={handleTransferCoins}
-          disabled={referralCoinsAmount === 0}
+          disabled={totalBalance === 0}
         />
       </div>
       <div className={styles.referral__weekly}>
