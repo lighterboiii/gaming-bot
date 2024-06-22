@@ -55,7 +55,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -272,11 +272,9 @@ const ClosestNumber: FC = () => {
   };
   // получить эмодзи пользователя
   useEffect(() => {
-    // setLoading(true);
     getActiveEmojiPack(userId)
       .then((res: any) => {
         setEmojis(res.user_emoji_pack.user_emoji_pack);
-        // setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -284,28 +282,28 @@ const ClosestNumber: FC = () => {
   }, []);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
-    const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
-    if (data?.bet_type === "1") {
-      if (player?.money <= data?.bet) {
-        leaveRoomRequest(userId)
-          .then(res => {
-            console.log(res);
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-      }
-    } else if (data?.bet_type === "3") {
-      if (player?.tokens <= data?.bet) {
-        leaveRoomRequest(userId)
-          .then(res => {
-            console.log(res);
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-      }
-    }
+    // const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
+    // if (data?.bet_type === "1") {
+    //   if (player?.money <= data?.bet) {
+    //     leaveRoomRequest(player?.userid)
+    //       .then(res => {
+    //         console.log(res);
+    //       })
+    //       .catch((error) => {
+    //         console.log(error);
+    //       })
+    //   }
+    // } else if (data?.bet_type === "3") {
+    //   if (player?.tokens <= data?.bet) {
+    //     leaveRoomRequest(userId)
+    //       .then(res => {
+    //         console.log(res);
+    //       })
+    //       .catch((error) => {
+    //         console.log(error);
+    //       })
+    //   }
+    // }
     const choice = {
       user_id: userId,
       room_id: roomId,
@@ -374,7 +372,7 @@ const ClosestNumber: FC = () => {
       setTimer(25);
     }
   }, [data]);
-
+  // кик игрока, если он не прожал готовность
   useEffect(() => {
     if (timerStarted && timer! > 0) {
       timerRef.current = setInterval(() => {
@@ -405,6 +403,34 @@ const ClosestNumber: FC = () => {
       }
     };
   }, [timer, timerStarted, data]);
+  // запрос на кик юзера при недостатке средств для следующего хода
+  useEffect(() => {
+    const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
+    if (data?.bet_type === "1") {
+      if (player?.money <= data?.bet) {
+        leaveRoomRequest(player?.userid)
+          .then(res => {
+            console.log(res);
+            if (player?.userid === userId) {
+              navigate(roomsUrl);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    } else if (data?.bet_type === "3") {
+      if (player?.tokens <= data?.bet) {
+        leaveRoomRequest(userId)
+          .then(res => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    }
+  }, [data]);
 
   return (
     <div className={styles.game}>
