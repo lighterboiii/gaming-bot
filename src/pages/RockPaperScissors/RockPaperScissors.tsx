@@ -221,46 +221,46 @@ const RockPaperScissors: FC = () => {
   }, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
+    const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
+    if (data?.bet_type === "1") {
+      if (player?.money <= data?.bet) {
+        leaveRoomRequest(player?.userid)
+          .then(res => {
+    if (player?.userid === userId) {
+      navigate(roomsUrl);
+    }
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    } else if (data?.bet_type === "3") {
+      if (player?.tokens <= data?.bet) {
+        leaveRoomRequest(userId)
+          .then(res => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      }
+    }
     setMessageVisible(false);
     setMessage('');
-    const data = {
+    const reqData = {
       user_id: userId,
       room_id: roomId,
       type: 'setchoice',
       choice: 'ready'
     };
-    getPollingRequest(userId, data)
+    getPollingRequest(userId, reqData)
       .then(res => {
         setData(res);
       })
   };
   // хендлер выбора хода
   const handleChoice = (value: string) => {
-    // const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
-    // if (data?.bet_type === "1") {
-    //   if (player?.money <= data?.bet) {
-    //     leaveRoomRequest(player?.userid)
-    //       .then(res => {
-    // if (player?.userid === userId) {
-    //   navigate(roomsUrl);
-    // }
-    //         console.log(res);
-    //       })
-    //       .catch((error) => {
-    //         console.log(error);
-    //       })
-    //   }
-    // } else if (data?.bet_type === "3") {
-    //   if (player?.tokens <= data?.bet) {
-    //     leaveRoomRequest(userId)
-    //       .then(res => {
-    //         console.log(res);
-    //       })
-    //       .catch((error) => {
-    //         console.log(error);
-    //       })
-    //   }
-    // }
     setShowTimer(false);
     const reqData = {
       user_id: userId,
@@ -324,36 +324,36 @@ const RockPaperScissors: FC = () => {
     }
   }, [data]);
   // кик игрока, если он не прожал готовность
-  useEffect(() => {
-    if (timerStarted && timer > 0) {
-      timerRef.current = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      const player = data?.players.find((player: IRPSPlayer) => player.choice === 'none');
-      if (player) {
-        leaveRoomRequest(player.userid)
-          .then((res) => {
-            if (player?.userid === userId) {
-              navigate(roomsUrl);
-            }
-            console.log(res);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-      setTimerStarted(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    }
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, [timer, timerStarted, data]);
+  // useEffect(() => {
+  //   if (timerStarted && timer > 0) {
+  //     timerRef.current = setInterval(() => {
+  //       setTimer((prev) => prev - 1);
+  //     }, 1000);
+  //   } else if (timer === 0) {
+  //     const player = data?.players.find((player: IRPSPlayer) => player?.choice === 'none');
+  //     if (player) {
+  //       leaveRoomRequest(player.userid)
+  //         .then((res) => {
+  //           console.log(res);
+  //           if (player?.userid === userId) {
+  //             navigate(roomsUrl);
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           console.log(error);
+  //         });
+  //     }
+  //     setTimerStarted(false);
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   }
+  //   return () => {
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   };
+  // }, [timer, timerStarted, data]);
 
   return (
     <div className={styles.game}>
