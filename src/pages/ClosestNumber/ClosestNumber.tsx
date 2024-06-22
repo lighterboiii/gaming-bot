@@ -55,7 +55,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);

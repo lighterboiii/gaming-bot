@@ -185,40 +185,40 @@ const RockPaperScissors: FC = () => {
     fetchData();
   }, [data]);
   // запрос на кик юзера при недостатке средств для следующего хода
-  useEffect(() => {
-    const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
-    if (data?.bet_type === "1") {
-      if (player?.money <= data?.bet) {
-        setTimeout(() => {
-          leaveRoomRequest(player?.userid)
-            .then(res => {
-              console.log(res);
-              if (player?.userid === userId) {
-                navigate(roomsUrl);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-        }, 2000)
-      }
-    } else if (data?.bet_type === "3") {
-      if (player?.tokens <= data?.bet) {
-        setTimeout(() => {
-          leaveRoomRequest(player?.userid)
-            .then(res => {
-              console.log(res);
-              if (player?.userid === userId) {
-                navigate(roomsUrl);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-        }, 2000)
-      }
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
+  //   if (data?.bet_type === "1") {
+  //     if (player?.money <= data?.bet) {
+  //       setTimeout(() => {
+  //         leaveRoomRequest(player?.userid)
+  //           .then(res => {
+  //             console.log(res);
+  //             if (player?.userid === userId) {
+  //               navigate(roomsUrl);
+  //             }
+  //           })
+  //           .catch((error) => {
+  //             console.log(error);
+  //           })
+  //       }, 2000)
+  //     }
+  //   } else if (data?.bet_type === "3") {
+  //     if (player?.tokens <= data?.bet) {
+  //       setTimeout(() => {
+  //         leaveRoomRequest(player?.userid)
+  //           .then(res => {
+  //             console.log(res);
+  //             if (player?.userid === userId) {
+  //               navigate(roomsUrl);
+  //             }
+  //           })
+  //           .catch((error) => {
+  //             console.log(error);
+  //           })
+  //       }, 2000)
+  //     }
+  //   }
+  // }, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
@@ -324,36 +324,36 @@ const RockPaperScissors: FC = () => {
     }
   }, [data]);
   // кик игрока, если он не прожал готовность
-  // useEffect(() => {
-  //   if (timerStarted && timer > 0) {
-  //     timerRef.current = setInterval(() => {
-  //       setTimer((prev) => prev - 1);
-  //     }, 1000);
-  //   } else if (timer === 0) {
-  //     const player = data?.players.find((player: IRPSPlayer) => player?.choice === 'none');
-  //     if (player) {
-  //       leaveRoomRequest(player.userid)
-  //         .then((res) => {
-  //           console.log(res);
-  //           if (player?.userid === userId) {
-  //             navigate(roomsUrl);
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //         });
-  //     }
-  //     setTimerStarted(false);
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //   }
-  //   return () => {
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //   };
-  // }, [timer, timerStarted, data]);
+  useEffect(() => {
+    if (timerStarted && timer > 0) {
+      timerRef.current = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      const player = data?.players.find((player: IRPSPlayer) => player?.choice === 'none');
+      if (player) {
+        leaveRoomRequest(player.userid)
+          .then((res) => {
+            console.log(res);
+            if (player?.userid === userId) {
+              navigate(roomsUrl);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      setTimerStarted(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    }
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [timer, timerStarted, data]);
 
   return (
     <div className={styles.game}>
