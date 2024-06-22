@@ -13,12 +13,14 @@ import {
   setActiveSkin,
   setCoinsValueAfterBuy,
   setCollectibles,
+  setShopAvailable,
   setTokensValueAfterBuy
 } from "../../../services/appSlice";
 import {
   buyItemRequest,
   buyLavkaRequest,
   cancelLavkaRequest,
+  getShopAvailableRequest,
   setActiveEmojiRequest,
   setActiveSkinRequest
 } from "../../../api/shopApi";
@@ -32,9 +34,10 @@ interface ProductProps {
   onClose: () => void;
   isCollectible?: boolean;
   activeButton?: string;
+  updateItemCount: (itemId: number) => void;
 }
 
-const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton }) => {
+const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton, updateItemCount }) => {
   const { user, tg } = useTelegram();
   // const userId = user?.id;
   const dispatch = useAppDispatch();
@@ -93,6 +96,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton 
           case "ok":
             setMessage(`${translation?.successful_purchase}`);
             handlePurchaseItemTypes(item);
+            updateItemCount(item.item_id);
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
             break;
           default:

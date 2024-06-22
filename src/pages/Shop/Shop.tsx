@@ -98,6 +98,14 @@ const Shop: FC = () => {
     }
   }, [lavkaShop, activeButton])
 
+  const updateItemCount = (itemId: number) => {
+    setGoods((prevGoods: GoodsItem[]) => 
+      prevGoods.map((item: any) =>
+        item.item_id === itemId ? { ...item, item_count: item.item_count - 1 } : item
+      )
+    );
+  };  
+
   return (
     <div className={styles.shop}>
       <div className={styles.shop__header}>
@@ -160,6 +168,7 @@ const Shop: FC = () => {
             item={selectedItem}
             onClose={toggleOverlay}
             isCollectible={selectedItem?.isCollectible}
+            updateItemCount={updateItemCount}
           />}
       />}
     </div >
