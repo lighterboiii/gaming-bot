@@ -1,33 +1,68 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import { useAppSelector } from "../../../services/reduxHooks";
 import { useNavigate } from "react-router-dom";
 import styles from './JoinRoomPopup.module.scss';
 import energy from '../../../images/energy-drink.png';
 import Button from "../../ui/Button/Button";
-import { joinRoomRequest } from "../../../api/gameApi";
+import { joinRoomRequest, postNewRoomRequest } from "../../../api/gameApi";
 import { userId } from "../../../api/requestData";
 import { IRPSGameData } from "../../../utils/types/gameTypes";
+import useTelegram from "../../../hooks/useTelegram";
 
 interface IProps {
   handleClick: () => void;
-  room: IRPSGameData;
+  // room: IRPSGameData;
+  fromGameSettings?: boolean;
+  roomId: any;
+  bet?: any;
+  betType?: any;
+  roomType?: any;
 }
 
-const JoinRoomPopup: FC<IProps> = ({ handleClick, room }) => {
+const JoinRoomPopup: FC<IProps> = ({ handleClick, roomId, bet, betType, roomType, fromGameSettings = false }) => {
+  const { user } = useTelegram();
+  // const userId = user?.id;
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
-
+  
   const handleJoinRoom = () => {
-      joinRoomRequest(userId, room.room_id)
+    if (fromGameSettings) {
+      postNewRoomRequest({
+        user_id: userId,
+        bet: bet,
+        bet_type: betType,
+        room_type: roomType
+      }, userId)
+        .then((res: any) => {
+          console.log("Room created successfully:", res);
+          navigate(Number(roomType) === 2 ? `/closest/${res.room_id}` : `/room/${res.room_id}`);
+        })
+        .catch((error) => {
+          console.error("Error creating room:", error);
+        });
+    } else {
+      joinRoomRequest(userId, roomId)
         .then((res) => {
           console.log("Joined successfully:", res);
-          navigate(`/room/${room.room_id}`);
+          navigate(`/room/${roomId}`);
         })
         .catch((error) => {
           console.error("Error joining room:", error);
         });
+    }
   };
+  // const handleJoinRoom = () => {
+  //     joinRoomRequest(userId, room.room_id)
+  //       .then((res) => {
+  //         console.log("Joined successfully:", res);
+  //         navigate(`/room/${room.room_id}`);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error joining room:", error);
+  //       });
+  // };
 
   return (
     <div className={styles.popup}>

@@ -11,6 +11,8 @@ import { postNewRoomRequest } from '../../../api/gameApi';
 import useTelegram from '../../../hooks/useTelegram';
 import SettingsSlider from '../SettingsSlider/SettingsSlider';
 import { IGameSettingsData } from '../../../utils/types/gameTypes';
+import { Modal } from '../../Modal/Modal';
+import JoinRoomPopup from '../JoinRoomPopup/JoinRoomPopup';
 
 interface IProps {
   data: IGameSettingsData | null;
@@ -21,17 +23,19 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
   // const userId = user?.id;
+  console.log(data);
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
   const [insufficient, setInsufficient] = useState(false);
-
+  const [isPopupOpen, setPopupOpen] = useState(false);
+  const [selectedRoomId, setSelectedRoomId] = useState<any | null>(null);
   const userTokens = useAppSelector(store => store.app.info?.tokens);
   const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);
-
+  const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const handleCurrencyChange = (newCurrency: number) => {
     setCurrency(newCurrency);
   };
@@ -56,9 +60,11 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       bet_type: betType,
       room_type: roomType
     };
-
+    console.log(selectedRoomId);
     const handleResponse = (response: any) => {
+      console.log(response);
       if (response.message === 'success') {
+        setSelectedRoomId(response.room_id);
         console.log('Room created successfully, room_id:', response.room_id);
         navigate(roomType === 2 ? `/closest/${response.room_id}` : `/room/${response.room_id}`);
       } else if (response.message === 'not_enough_coins') {
@@ -76,6 +82,14 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       .catch(error => {
         console.log(error);
       });
+  };
+  console.log(userEnergy);
+  const handleEnergyCheck = () => {
+    if (userEnergy === 0 && currency === 3) {
+      setPopupOpen(true);
+    } else {
+      handleCreateRoom(userId, bet, currency, data!.id, closeOverlay);
+    }
   };
 
   return (
@@ -119,13 +133,26 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
             </div>
             <div className={styles.game__buttonWrapper}>
               <Button
-                 disabled={isNaN(bet) || bet <= 0}
+                disabled={isNaN(bet) || bet <= 0}
                 text={translation?.create_room_button}
-                handleClick={() => handleCreateRoom(userId, bet, currency, data!.id, closeOverlay)}
+                // handleClick={() => handleCreateRoom(userId, bet, currency, data!.id, closeOverlay)}
+                handleClick={handleEnergyCheck}
               />
             </div>
           </div>
         </>
+      )}
+      {isPopupOpen && (
+        <Modal title={translation?.energy_depleted} closeModal={() => setPopupOpen(false)}>
+          <JoinRoomPopup
+            handleClick={() => setPopupOpen(false)}
+            roomId={selectedRoomId}
+            bet={bet}
+            betType={currency}
+            roomType={data?.room_type}
+            fromGameSettings
+          />
+        </Modal>
       )}
     </div>
   );
