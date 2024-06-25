@@ -9,12 +9,14 @@ interface IProps {
   isCurrency?: boolean;
   onBetChange?: (newBet: number) => void;
   onCurrencyChange?: (newCurrency: number) => void;
+  onInputChange?: (bet: string) => void;
 }
 
 const SettingsSlider: FC<IProps> = ({
   isCurrency = false,
   onBetChange = () => {},
   onCurrencyChange = () => {},
+  onInputChange,
 }) => {
   const [bet, setBet] = useState('0');
   const [currency, setCurrency] = useState(1);
@@ -23,6 +25,7 @@ const SettingsSlider: FC<IProps> = ({
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
     setBet(prevBet => {
       const newBet = (parseFloat(prevBet) + 0.1).toFixed(1);
+      onInputChange && onInputChange(newBet);
       return newBet;
     });
   };
@@ -33,6 +36,7 @@ const SettingsSlider: FC<IProps> = ({
       const currentBet = parseFloat(prevBet);
       if (currentBet > 0.1) {
         const newBet = (currentBet - 0.1).toFixed(1);
+        onInputChange && onInputChange(newBet);
         return newBet;
       }
       return prevBet;
@@ -52,6 +56,8 @@ const SettingsSlider: FC<IProps> = ({
     if (!isNaN(newBetValue)) {
       onBetChange(newBetValue);
     }
+
+    onInputChange && onInputChange(value);
   };
 
   useEffect(() => {
