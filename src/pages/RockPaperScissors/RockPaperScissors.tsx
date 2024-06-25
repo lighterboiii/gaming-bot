@@ -106,8 +106,11 @@ const RockPaperScissors: FC = () => {
         .catch((error) => {
           console.error('Room data request error', error);
           leaveRoomRequest(userId)
-            .then((data) => {
-              console.log(data);
+            .then((res: any) => {
+              console.log(res);
+              if (res?.message === 'success') {
+                navigate(roomsUrl);
+              }
             })
             .catch((error) => {
               console.log(error);
@@ -226,9 +229,9 @@ const RockPaperScissors: FC = () => {
       if (player?.money <= data?.bet) {
         leaveRoomRequest(player?.userid)
           .then(res => {
-    if (player?.userid === userId) {
-      navigate(roomsUrl);
-    }
+            if (player?.userid === userId) {
+              navigate(roomsUrl);
+            }
             console.log(res);
           })
           .catch((error) => {

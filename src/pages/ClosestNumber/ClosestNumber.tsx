@@ -156,8 +156,11 @@ const ClosestNumber: FC = () => {
         .catch((error) => {
           console.error('Room data request error', error);
           leaveRoomRequest(userId)
-            .then((data) => {
-              console.log(data);
+            .then((res: any) => {
+              console.log(res);
+              if (res?.message === 'success') {
+                navigate(roomsUrl);
+              }
             })
             .catch((error) => {
               console.log(error);
