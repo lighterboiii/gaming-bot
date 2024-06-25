@@ -20,6 +20,7 @@ interface IProps {
 }
 
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
+  console.log(data);
   const navigate = useNavigate();
   const { user } = useTelegram();
   const userId = user?.id;
@@ -35,6 +36,8 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
+  const userInfo = useAppSelector(store => store.app.info);
+
   const handleCurrencyChange = (newCurrency: number) => {
     setCurrency(newCurrency);
   };
@@ -82,7 +85,12 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   };
 
   const handleEnergyCheck = () => {
-    if (userEnergy === 0 && currency === 3) {
+    if ((userInfo && currency === 1 && bet > userCoins!) || (userInfo && currency === 3 && bet > userTokens!)) {
+      setInsufficient(true);
+      setTimeout(() => {
+        setInsufficient(false);
+      }, 2000)
+    } else if (userEnergy === 0 && currency === 3) {
       setPopupOpen(true);
     } else {
       handleCreateRoom(userId, bet, currency, data!.id, closeOverlay);
