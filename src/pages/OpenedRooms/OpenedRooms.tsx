@@ -37,7 +37,7 @@ const OpenedRooms: FC = () => {
 
   const [loading, setLoading] = useState(false);
   
-  const [selectedRoomId, setSelectedRoomId] = useState<IRPSGameData | null>(null);
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);

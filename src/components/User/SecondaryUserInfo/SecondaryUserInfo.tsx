@@ -6,7 +6,7 @@ import useTelegram from "../../../hooks/useTelegram";
 import { useAppSelector } from "../../../services/reduxHooks";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
-import { balanceLink, inviteLink } from "../../../api/requestData";
+import { balanceLink } from "../../../api/requestData";
 import WalletIcon from "../../../icons/Wallet/WalletIcon";
 
 const UserInfo: FC = () => {

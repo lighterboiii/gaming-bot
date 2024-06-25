@@ -7,22 +7,20 @@ import energy from '../../../images/energy-drink.png';
 import Button from "../../ui/Button/Button";
 import { joinRoomRequest, postNewRoomRequest } from "../../../api/gameApi";
 import { userId } from "../../../api/requestData";
-import { IRPSGameData } from "../../../utils/types/gameTypes";
 import useTelegram from "../../../hooks/useTelegram";
 
 interface IProps {
   handleClick: () => void;
-  // room: IRPSGameData;
   fromGameSettings?: boolean;
-  roomId: any;
-  bet?: any;
-  betType?: any;
-  roomType?: any;
+  roomId: string;
+  bet?: number;
+  betType?: number;
+  roomType?: number;
 }
 
 const JoinRoomPopup: FC<IProps> = ({ handleClick, roomId, bet, betType, roomType, fromGameSettings = false }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -53,16 +51,6 @@ const JoinRoomPopup: FC<IProps> = ({ handleClick, roomId, bet, betType, roomType
         });
     }
   };
-  // const handleJoinRoom = () => {
-  //     joinRoomRequest(userId, room.room_id)
-  //       .then((res) => {
-  //         console.log("Joined successfully:", res);
-  //         navigate(`/room/${room.room_id}`);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error joining room:", error);
-  //       });
-  // };
 
   return (
     <div className={styles.popup}>

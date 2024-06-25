@@ -12,12 +12,11 @@ import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { setCoinsNewValue } from "../../../services/appSlice";
 import { postEvent } from "@tma.js/sdk";
 import { IMember } from "../../../utils/types/memberTypes";
-import { formatNumber } from "../../../utils/additionalFunctions";
 
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
@@ -55,11 +54,11 @@ const Referral: FC = () => {
         setMessageShown(true);
         switch (res.transfered) {
           case "small":
-            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
             setMessage(`${translation?.claim_minimum}`);
             break;
           default:
-            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
             setMessage(`${translation?.funds_transferred}`);
             dispatch(setCoinsNewValue(Number(res.new_coins)));
             setTotalBalance(0);

@@ -22,8 +22,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
-  console.log(data);
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
@@ -60,7 +59,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       bet_type: betType,
       room_type: roomType
     };
-    console.log(selectedRoomId);
     const handleResponse = (response: any) => {
       console.log(response);
       if (response.message === 'success') {
@@ -76,14 +74,13 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         }, 2000)
       }
     };
-
     postNewRoomRequest(data, userIdValue)
       .then(handleResponse)
       .catch(error => {
         console.log(error);
       });
   };
-  console.log(userEnergy);
+
   const handleEnergyCheck = () => {
     if (userEnergy === 0 && currency === 3) {
       setPopupOpen(true);
@@ -135,7 +132,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
               <Button
                 disabled={isNaN(bet) || bet <= 0}
                 text={translation?.create_room_button}
-                // handleClick={() => handleCreateRoom(userId, bet, currency, data!.id, closeOverlay)}
                 handleClick={handleEnergyCheck}
               />
             </div>

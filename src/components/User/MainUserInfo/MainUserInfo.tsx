@@ -8,10 +8,9 @@ import { useAppSelector } from "../../../services/reduxHooks";
 import CircleButton from "../../ui/CircleButton/CircleButton";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
-import { balanceLink, groupLink, inviteLink } from "../../../api/requestData";
+import { balanceLink, groupLink } from "../../../api/requestData";
 import WalletIcon from "../../../icons/Wallet/WalletIcon";
 import LevelIcon from "../../../icons/Level/LevelIcon";
-import tasks from '../../../images/tasks.png';
 import CommunityIcon from "../../../icons/Community/CommunityIcon";
 
 interface IProps {

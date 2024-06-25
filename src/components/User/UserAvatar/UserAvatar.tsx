@@ -3,9 +3,6 @@ import { FC, useEffect, useState } from "react";
 import styles from './UserAvatar.module.scss';
 import { useAppSelector } from "../../../services/reduxHooks";
 import { getImageLink, getImageMaskLink } from "../../../api/requestData";
-import { ItemData } from "../../../utils/types/shopTypes";
-import { IMember } from "../../../utils/types/memberTypes";
-import { IRPSPlayer } from "../../../utils/types/gameTypes";
 
 interface IProps {
   item?: any;
