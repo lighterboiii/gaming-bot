@@ -8,7 +8,7 @@ import { useAppSelector } from "../../../services/reduxHooks";
 import CircleButton from "../../ui/CircleButton/CircleButton";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
-import { groupLink, inviteLink } from "../../../api/requestData";
+import { balanceLink, groupLink, inviteLink } from "../../../api/requestData";
 import WalletIcon from "../../../icons/Wallet/WalletIcon";
 import LevelIcon from "../../../icons/Level/LevelIcon";
 import tasks from '../../../images/tasks.png';
@@ -35,7 +35,7 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
   }, [userData]);
 
   const handleClickBalance = () => {
-    tg.openTelegramLink(inviteLink);
+    tg.openTelegramLink(balanceLink);
     postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
     tg.close();
   };

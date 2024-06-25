@@ -39,6 +39,7 @@ export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
 export const inviteLink = 'https://t.me/gowinclub_bot';
 export const groupLink = 'https://t.me/gowinclub';
+export const balanceLink = 'https://t.me/gowinclub_bot?start=balance';
 // endpoints
 export const itemIdParamString = '&item_id=';
 export const itemCountParamString = '&count=';

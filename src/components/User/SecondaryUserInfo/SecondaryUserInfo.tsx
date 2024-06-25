@@ -6,7 +6,7 @@ import useTelegram from "../../../hooks/useTelegram";
 import { useAppSelector } from "../../../services/reduxHooks";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
-import { inviteLink } from "../../../api/requestData";
+import { balanceLink, inviteLink } from "../../../api/requestData";
 import WalletIcon from "../../../icons/Wallet/WalletIcon";
 
 const UserInfo: FC = () => {
@@ -15,7 +15,7 @@ const UserInfo: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   
   const handleClickBalance = () => {
-    tg.openTelegramLink(inviteLink);
+    tg.openTelegramLink(balanceLink);
     postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
     tg.close();
   };
