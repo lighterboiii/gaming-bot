@@ -186,7 +186,8 @@
 
   &__text {
     @include indents();
-    color: $black-color;
+    color: $main-color;
+    font-weight: 900;
     opacity: 1;
   }
 

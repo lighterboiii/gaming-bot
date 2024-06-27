@@ -55,7 +55,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -143,9 +143,9 @@ const ClosestNumber: FC = () => {
             leaveRoomRequest(userId);
             isMounted = false;
             navigate(roomsUrl);
-          }
-
-          if (res?.message === 'timeout') {
+          } else if (res?.message === 'timeout') {
+            setTimeout(fetchRoomInfo, 1000);
+          } else {
             fetchRoomInfo();
           }
 
@@ -186,6 +186,7 @@ const ClosestNumber: FC = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')) {
+          setTimerStarted(false);
           whoIsWinRequest(roomId!)
             .then((res: any) => {
               console.log(res);
@@ -409,39 +410,6 @@ const ClosestNumber: FC = () => {
       }
     };
   }, [timer, timerStarted, data]);
-  // запрос на кик юзера при недостатке средств для следующего хода
-  // useEffect(() => {
-  //   const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
-  //   if (data?.bet_type === "1") {
-  //     if (player?.money <= data?.bet) {
-  //       setTimeout(() => {
-  //         leaveRoomRequest(player?.userid)
-  //           .then(res => {
-  //             console.log(res);
-  //             if (player?.userid === userId) {
-  //               navigate(roomsUrl);
-  //             }
-  //           })
-  //           .catch((error) => {
-  //             console.log(error);
-  //           })
-  //       }, 2000)
-  //     }
-  //   } else if (data?.bet_type === "3") {
-  //     setTimeout(() => {
-  //       leaveRoomRequest(player?.userid)
-  //         .then(res => {
-  //           console.log(res);
-  //           if (player?.userid === userId) {
-  //             navigate(roomsUrl);
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //         })
-  //     }, 2000)
-  //   }
-  // }, [data]);
 
   return (
     <div className={styles.game}>

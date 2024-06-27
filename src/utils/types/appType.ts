@@ -1,4 +1,4 @@
-import { IBonus, IUserData } from "./mainTypes";
+import { IBannerData, IBonus, ITask, IUserData } from "./mainTypes";
 import { ItemData, ILavkaData } from "./shopTypes";
 
 
@@ -8,9 +8,9 @@ export interface IAppData {
   shop_available: ItemData[];
   user_info: IUserData;
   lavka_available: ILavkaData[];
-  translate: any;
-  tasks_available: any;
-  ad_info: any;
+  translate: string[];
+  tasks_available: ITask[] | any;
+  ad_info: IBannerData[];
   avatar: string;
   shop_image_url: string;
 }

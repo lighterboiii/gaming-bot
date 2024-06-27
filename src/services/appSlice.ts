@@ -1,17 +1,18 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IBonus, IUserData } from "../utils/types/mainTypes";
+import { IBannerData, IBonus, ITask, IUserData } from "../utils/types/mainTypes";
 import { ItemData, ILavkaData } from "../utils/types/shopTypes";
-
+import { IRPSGameData } from "../utils/types/gameTypes";
+// костыльнулся с any
 interface AppState {
   info: IUserData | null;
   products: ItemData[] | null;
   archive: ItemData[] | null;
   bonus: IBonus | any | null;
   lavka: ILavkaData[] | null;
-  openedRooms: any | null;
-  languageSettings: any | null,
-  tasks: any | null,
-  bannerData: any | null;
+  openedRooms: IRPSGameData | null;
+  languageSettings: string[] | null | any,
+  tasks: ITask[] | null | any,
+  bannerData: IBannerData[] | null | any;
   shopImage: string | null;
 }
 

@@ -26,7 +26,6 @@
   }
 
   &__info {
-    // @include position(absolute, $left: 16px, $top: 20%);
     @include flex(column, space-between, flex-start);
     @include ellipsis();
     position: relative;
@@ -35,7 +34,7 @@
 
   &__picHeader {
     @include indents();
-    @include size(70%, auto);
+    @include size(60%, auto);
     @include position(absolute, $left: 12px, $top: 20%);
     font-family: 'Rubik', sans-serif;
     font-weight: 900;

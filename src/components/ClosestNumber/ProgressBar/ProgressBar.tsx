@@ -28,7 +28,7 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
   }, [progress]);
 
   return (
-    <svg className={styles.bar} viewBox="0 0 100 100">
+    <svg className={styles.bar} viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
       <circle className={styles.bar__innerCircle} cx="50" cy="50" r="45"></circle>
       <circle className={styles.bar__outerCircle} cx="50" cy="50" r="45"></circle>
       <circle
@@ -38,15 +38,10 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
         r="10"
       >
       </circle>
-      {/* <text x="50" y="55" textAnchor="middle" className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}>
-        {progress}
-      </text> */}
       <foreignObject x="25" y="40" width="50" height="20" className={styles.bar__textContainer}>
-        {/* <div className={styles.bar__textWrapper}> */}
           <p className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}>
             {progress}
           </p>
-        {/* </div> */}
       </foreignObject>
     </svg>
   );
