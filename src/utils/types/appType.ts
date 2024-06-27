@@ -12,4 +12,5 @@ export interface IAppData {
   tasks_available: any;
   ad_info: any;
   avatar: string;
+  shop_image_url: string;
 }

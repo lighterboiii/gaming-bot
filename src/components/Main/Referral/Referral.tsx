@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 import styles from './Referral.module.scss';
 import Button from "../../ui/Button/Button";
 import UserContainer from "../../User/UserContainer/UserContainer";
-import { userId } from "../../../api/requestData";
+import { inviteLink, userId } from "../../../api/requestData";
 import { useNavigate } from "react-router-dom";
 import useTelegram from "../../../hooks/useTelegram";
 import { getReferralsData, transferCoinsToBalanceReq } from "../../../api/mainApi";
@@ -16,7 +16,7 @@ import { IMember } from "../../../utils/types/memberTypes";
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
@@ -50,7 +50,6 @@ const Referral: FC = () => {
   const handleTransferCoins = () => {
     transferCoinsToBalanceReq(userId)
       .then((res: any) => {
-        console.log(res);
         setMessageShown(true);
         switch (res.transfered) {
           case "small":
@@ -78,8 +77,8 @@ const Referral: FC = () => {
   };
 
   const handleInviteClick = () => {
-    navigate('https://t.me/lighterboygamebot?start=invite_link');
-    tg.onClose();
+    navigate(inviteLink);
+    tg.close();
   }
 
   return (

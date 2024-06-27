@@ -37,7 +37,7 @@ export const taskResultUri = 'task_result_button?user_id=';
 // links
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
-export const inviteLink = 'https://t.me/gowinclub_bot';
+export const inviteLink = 'https://t.me/gowinclub_bot?start=invite_link';
 export const groupLink = 'https://t.me/gowinclub';
 export const balanceLink = 'https://t.me/gowinclub_bot?start=balance';
 // endpoints

@@ -12,6 +12,7 @@ interface AppState {
   languageSettings: any | null,
   tasks: any | null,
   bannerData: any | null;
+  shopImage: string | null;
 }
 
 const initialState: AppState = {
@@ -24,6 +25,7 @@ const initialState: AppState = {
   languageSettings: null,
   tasks: null,
   bannerData: null,
+  shopImage: null,
 }
 
 const appSlice = createSlice({
@@ -107,6 +109,9 @@ const appSlice = createSlice({
     setBannerData: (state, action: PayloadAction<any>) => {
       state.bannerData = action.payload;
     },
+    setShopImage: (state, action: PayloadAction<string>) => {
+      state.shopImage = action.payload;
+    },
     // daily bonus part
     setDailyBonus: (state, action: PayloadAction<IBonus>) => {
       state.bonus = action.payload;
@@ -170,6 +175,7 @@ export const {
   setActiveEmoji,
   setLanguageSettings,
   setBannerData,
+  setShopImage
 } = appSlice.actions;
 
 export default appSlice.reducer;

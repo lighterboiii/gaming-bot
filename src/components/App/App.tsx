@@ -5,7 +5,7 @@ import { FC, useEffect, useState } from 'react';
 import { anyUrl, closestNumberRoomUrl, createRoomUrl, indexUrl, leaderboardUrl, roomUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setBannerData, setDailyBonus, setLanguageSettings, setShopAvailable, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
+import { setBannerData, setDailyBonus, setLanguageSettings, setShopAvailable, setShopImage, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData } from '../../api/mainApi';
 import styles from './App.module.scss';
@@ -22,7 +22,7 @@ import ClosestNumber from '../../pages/ClosestNumber/ClosestNumber';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -62,6 +62,7 @@ const App: FC = () => {
           dispatch(setShopAvailable(res.shop_available));
           dispatch(setTaskList(res.tasks_available));
           dispatch(setBannerData(res.ad_info));
+          dispatch(setShopImage(res.shop_image_url));
           dispatch(setDailyBonus(res.daily_bonus));
           dispatch(setUserPhoto(res.avatar));
           setLoading(false);

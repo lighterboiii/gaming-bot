@@ -25,10 +25,11 @@ import useTelegram from "../../hooks/useTelegram";
 const Main: FC = () => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);
+  const shopImageUrl = useAppSelector(store => store.app.shopImage);
   const [currentBanner, setCurrentBanner] = useState(banners?.length ? banners[0] : null);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
@@ -148,7 +149,7 @@ const Main: FC = () => {
           />
         </div>
         <div>
-          <ShopLink />
+          <ShopLink shopImageUrl={shopImageUrl} />
         </div>
       </div>
       <Overlay

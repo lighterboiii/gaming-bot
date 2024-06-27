@@ -8,7 +8,11 @@ import girl from '../../../images/Shop_small_char.png';
 import { postEvent } from "@tma.js/sdk";
 import { useAppSelector } from "../../../services/reduxHooks";
 
-const ShopLink: FC = () => {
+interface IProps {
+  shopImageUrl: string | null;
+}
+
+const ShopLink: FC<IProps> = ({ shopImageUrl }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const handleGetHapticFeedback = () => {
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
@@ -23,7 +27,7 @@ const ShopLink: FC = () => {
       <div className={styles.shopLink__content}>
         <img src={gowinLogo} alt="main_logo" className={styles.shopLink__logo} />
         <h2 className={styles.shopLink__title}>{translation?.menu_shop}</h2>
-        <img src={girl} alt="character" className={styles.shopLink__char} />
+        <img src={shopImageUrl ? shopImageUrl : girl} alt="character" className={styles.shopLink__char} />
       </div>
     </Link>
   )
