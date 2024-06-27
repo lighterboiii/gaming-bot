@@ -11,6 +11,7 @@ import {
   packIdParamString,
   pollingUri,
   roomIdParamString,
+  useEnergyDrinkUri,
   whoIsWinUri
 } from "./requestData";
 
@@ -69,5 +70,12 @@ export const getPollingRequest = (userIdValue: string, data: any) => {
     uri: pollingUri,
     userId: userIdValue,
     data: data,
+  })
+};
+// использовать энергетик
+export const energyDrinkRequest = (userIdValue: string) => {
+  return getReq({
+    uri: useEnergyDrinkUri,
+    userId: userIdValue,
   })
 };
