@@ -5,7 +5,7 @@ import styles from './Referral.module.scss';
 import Button from "../../ui/Button/Button";
 import UserContainer from "../../User/UserContainer/UserContainer";
 import { inviteLink, userId } from "../../../api/requestData";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useTelegram from "../../../hooks/useTelegram";
 import { getReferralsData, transferCoinsToBalanceReq } from "../../../api/mainApi";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
@@ -77,7 +77,6 @@ const Referral: FC = () => {
   };
 
   const handleInviteClick = () => {
-    navigate(inviteLink);
     tg.close();
   }
 
@@ -105,11 +104,12 @@ const Referral: FC = () => {
         <p className={styles.referral__text}>
           {translation?.invite_friends_bonus}
         </p>
-        <div className={styles.referral__inviteButtonWrapper}>
-          <Button text={translation?.invite}
+        <Link to={inviteLink} className={styles.referral__inviteButtonWrapper}>
+          <Button
+            text={translation?.invite}
             handleClick={handleInviteClick}
             isWhiteBackground />
-        </div>
+        </Link>
       </div>
       {messageShown ? (
         <div className={styles.referral__notification}>
