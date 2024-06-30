@@ -75,8 +75,9 @@ const ClosestNumber: FC = () => {
   const currentWinner = data?.players?.find((player: any) => Number(player?.userid) === Number(winnerId));
   const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const userData = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
+  const [placeholder, setPlaceholder] = useState<string>(translation?.your_number_but);
+  const userData = useAppSelector(store => store.app.info);
 
   useEffect(() => {
     if (data?.players) {
@@ -287,14 +288,23 @@ const ClosestNumber: FC = () => {
   }, []);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
+    if (data?.players?.length === 1) {
+      setInputValue('');
+      setPlaceholder(translation?.waiting4players);
+      setTimeout(() => {
+        setPlaceholder(translation?.your_number_but);
+      }, 2000)
+      return;
+    }
+
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
     if (data?.bet_type === "1") {
       if (player?.money <= data?.bet) {
         leaveRoomRequest(player?.userid)
           .then(res => {
-    if (player?.userid === userId) {
-      navigate(roomsUrl);
-    }
+            if (player?.userid === userId) {
+              navigate(roomsUrl);
+            }
             console.log(res);
           })
           .catch((error) => {
@@ -456,7 +466,7 @@ const ClosestNumber: FC = () => {
               <div className={styles.overlay__inputContainer}>
                 <input
                   type="number"
-                  placeholder={translation?.your_number_but}
+                  placeholder={placeholder}
                   className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
                   value={inputValue}
                   onFocus={handleInputFocus}
@@ -499,7 +509,7 @@ const ClosestNumber: FC = () => {
                       ) : (
                         <div
                           key={key}
-                          className={key === `${translation?.game_but_erase}`
+                          className={key === `${translation?.game_but_erase}` || data?.players?.length === 1
                             ? styles.overlay__bottomLeftButton
                             : styles.overlay__bottomRightButton}
                           onClick={() => handleButtonClick(key)}
