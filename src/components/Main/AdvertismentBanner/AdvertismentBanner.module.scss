@@ -6,7 +6,7 @@
   @include size(100%, 106px);
   @include flex(row, space-between, center);
   border-radius: $radius-20;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   box-sizing: border-box;
@@ -16,9 +16,9 @@
     height: 124px;
   }
 
-  @media screen and (max-width: 380px) {
-    background-size: contain;
-  }
+  // @media screen and (max-width: 430px) {
+  //   background-size: contain;
+  // }
 
   &__link {
     @include size(100%, 100%);
