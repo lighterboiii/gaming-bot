@@ -52,6 +52,10 @@
   &::-webkit-scrollbar {
     display: none;
   }
+
+  &__addDiv {
+    @include size(100%, auto);
+  }
 }
 
 .hidden {

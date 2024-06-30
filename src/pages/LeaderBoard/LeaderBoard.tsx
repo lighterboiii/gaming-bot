@@ -28,7 +28,6 @@ const LeaderBoard: FC = () => {
   });
   const [type, setType] = useState<string>('');
   const [prizeCount, setPrizeCount] = useState<string>('');
-  console.log(leaderBoard);
   const isUserLeader = user?.id === topLeader;
 
   useEffect(() => {

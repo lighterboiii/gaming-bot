@@ -9,6 +9,7 @@
   z-index: 3;
 
   &__header {
+    @include position(relative);
     @include size(100%, 10vh);
     @include flex(column, center, center);
   }
@@ -126,5 +127,10 @@
     @include indents();
     color: $main-color;
     font-size: 14px;
+
+    @media screen and (min-height: 590px) {
+      @include position(absolute, $bottom: -40%, $left: 50%);
+      transform: translateX(-50%);
+    }
   }
 }

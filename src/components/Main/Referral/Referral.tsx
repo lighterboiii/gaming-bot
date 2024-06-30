@@ -16,7 +16,7 @@ import { IMember } from "../../../utils/types/memberTypes";
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
@@ -28,7 +28,6 @@ const Referral: FC = () => {
     const fetchData = () => {
       getReferralsData(userId)
         .then((res: any) => {
-          console.log(res);
           setRefsBoard(res.result_data.refs_info);
           setTotalBalance(res.result_data.total_balance);
         })
