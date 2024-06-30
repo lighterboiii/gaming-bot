@@ -28,7 +28,7 @@ import { roomsUrl } from "../../utils/routes";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
@@ -429,13 +429,13 @@ const RockPaperScissors: FC = () => {
                 ) : (
                   data?.players_count === "1"
                 ) ? (
-                  <p className={styles.game__notify}>Ожидание игроков...</p>
+                  <p className={styles.game__notify}>{translation?.waiting4players}</p>
                 ) :
                   ''}
               </div>
               <div className={styles.game__lowerContainer}>
                 <div className={styles.game__betContainer}>
-                  <p className={styles.game__text}>Ставка</p>
+                  <p className={styles.game__text}>{translation?.game_bet_text}</p>
                   <div className={styles.game__bet}>
                     <p className={styles.game__text}>{data?.bet_type === "1" ? "💵" : "🔰"}</p>
                     <p className={styles.game__text}>{data?.bet}</p>

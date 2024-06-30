@@ -20,7 +20,7 @@ interface IProps {
 
 const JoinRoomPopup: FC<IProps> = ({ handleClick, roomId, bet, betType, roomType, fromGameSettings = false }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [messageShown, setMessageShown] = useState(false);
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
@@ -68,13 +68,13 @@ const JoinRoomPopup: FC<IProps> = ({ handleClick, roomId, bet, betType, roomType
     <div className={styles.popup}>
       {messageShown ? (
         <p className={styles.popup__modalText}>
-          Недостаточно энергетических напитков для продолжения
+          {translation?.not_energy_drinks}
         </p>
       ) : (
         <>
           <div className={styles.popup__modalChildren}>
             <p className={styles.popup__modalText}>
-              Хотите использовать?
+              {translation?.want2use_energy_drink}
               <img src={energy} alt="drink" className={styles.popup__logoDrink} />
             </p>
             <p className={styles.popup__modalText}>(1/{userInfo?.user_energy_drinks})</p>

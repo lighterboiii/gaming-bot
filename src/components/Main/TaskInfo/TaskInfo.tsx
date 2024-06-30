@@ -8,7 +8,7 @@ import { postEvent } from "@tma.js/sdk";
 import CrossIcon from "../../../icons/Cross/Cross";
 import { taskResultRequest, taskStepRequest } from "../../../api/mainApi";
 import { userId } from "../../../api/requestData";
-import { useAppDispatch } from "../../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { setNewTokensValue } from "../../../services/appSlice";
 import { ITask } from "../../../utils/types/mainTypes";
 
@@ -19,8 +19,9 @@ interface IProps {
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
+  const translation = useAppSelector(store => store.app.languageSettings);
   const [showReward, setShowReward] = useState<boolean>(false);
   const [incomplete, setIncomplete] = useState<boolean>(false);
   const [rewardResult, setRewardResult] = useState<boolean>(false);
@@ -85,7 +86,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
             ))}
           </div>
           <div className={styles.info__buttonWrapper}>
-            <Button text="Получить награду" handleClick={handleClaimReward} />
+            <Button text={translation?.tasks_get_reward} handleClick={handleClaimReward} />
           </div>
         </>
       ) : (
@@ -93,7 +94,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
           <h2 className={styles.info__title}>
             {task?.text_locale_key}
           </h2>
-          <p>{incomplete ? "Вы не выполнили задания для получения награды" : rewardResult ? "Награда ваша!" : ''}</p>
+          <p>{incomplete ? `${translation?.tasks_not_done}` : rewardResult ? "Награда ваша!" : ''}</p>
           <img src={task?.task_img} alt="reward" className={styles.reward__img} />
         </div>
       )}

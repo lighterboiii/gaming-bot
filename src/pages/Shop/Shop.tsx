@@ -149,7 +149,7 @@ const Shop: FC = () => {
                   )}
                 </>
               ) : (
-                <p style={{ color: '#ffdb50', fontWeight: '900' }}>Ничего нет :с</p>
+                <p style={{ color: '#ffdb50', fontWeight: '900' }}>{translation?.empty_here}</p>
               )}
             </div>
           </>

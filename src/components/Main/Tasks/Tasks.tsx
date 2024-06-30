@@ -7,6 +7,7 @@ import TaskInfo from '../TaskInfo/TaskInfo';
 
 const Tasks: FC = () => {
   const currentTasks = useAppSelector(store => store.app.tasks);
+  const translation = useAppSelector(store => store.app.languageSettings);
   const [selectedTask, setSelectedTask] = useState(null);
 
   const handleTaskClick = (task: any) => {
@@ -25,11 +26,11 @@ const Tasks: FC = () => {
       <>
         <div className={styles.tasks}>
           <h3 className={styles.tasks__title}>
-            Задания
+            {translation?.tasks_menu}
           </h3>
           <div className={styles.tasks__blackContainer}>
             <p className={styles.tasks__text}>
-              Выполняйте задания, чтобы <br /> получить эксклюзивные предметы!
+              {translation?.tasks_menu_header}
             </p>
           </div>
           <div className={styles.tasks__board}>

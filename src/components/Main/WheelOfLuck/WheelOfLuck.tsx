@@ -7,7 +7,7 @@ import lamp from '../../../images/closest-number/lamp.png';
 import light from '../../../images/closest-number/lamp2.png';
 import { getWheelPrizeRequest, spinWheelRequest } from '../../../api/mainApi';
 import { userId } from '../../../api/requestData';
-import { useAppDispatch } from '../../../services/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
 import { setTokensValueAfterBuy } from '../../../services/appSlice';
 import useTelegram from '../../../hooks/useTelegram';
 import { IFortuneData } from '../../../utils/types/mainTypes';
@@ -19,8 +19,9 @@ interface IProps {
 
 const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
+  const translation = useAppSelector(store => store.app.languageSettings);
   const [prize, setPrize] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [visibleItems, setVisibleItems] = useState<any>([]);
@@ -97,24 +98,24 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
     <div className={styles.wheel}>
       {loading ?
         (
-        <>
-          <h3 className={styles.wheel__title}>
-            Колесо удачи
-          </h3>
-          <div className={styles.wheel__blackContainer}>
-            <p className={styles.wheel__text}>
-              Загрузка...
-            </p>
-          </div>
-        </>
-        ) : (
           <>
             <h3 className={styles.wheel__title}>
-              Колесо удачи
+              {translation?.fortune_wheel_menu}
             </h3>
             <div className={styles.wheel__blackContainer}>
               <p className={styles.wheel__text}>
-                Попытайте удачу и выиграйте эксклюзивные скины, наборы эмодзи или 💵 10000
+                {translation?.loading}
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <h3 className={styles.wheel__title}>
+              {translation?.fortune_wheel_menu}
+            </h3>
+            <div className={styles.wheel__blackContainer}>
+              <p className={styles.wheel__text}>
+                {translation?.fortune_wheel_menu_header}
               </p>
             </div>
             <div className={styles.wheel__background}>
@@ -144,8 +145,8 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
               </div>
             </div>
             <div className={styles.wheel__buttonWrapper}>
-              {!spinning && !prize && <Button text="Крутить 🔰 100" handleClick={startSpin} />}
-              {prize && !spinning && <Button text="Забрать приз" handleClick={claimPrize} />}
+              {!spinning && !prize && <Button text={translation?.fortune_wheel_spin_button} handleClick={startSpin} />}
+              {prize && !spinning && <Button text={translation?.fortune_wheel_get_button} handleClick={claimPrize} />}
             </div>
           </>)}
     </div>

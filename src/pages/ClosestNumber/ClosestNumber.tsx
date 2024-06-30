@@ -55,7 +55,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -76,6 +76,7 @@ const ClosestNumber: FC = () => {
   const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const userData = useAppSelector(store => store.app.info);
+  const translation = useAppSelector(store => store.app.languageSettings);
 
   useEffect(() => {
     if (data?.players) {
@@ -263,10 +264,10 @@ const ClosestNumber: FC = () => {
       handleKeyPress(key);
     } else {
       switch (key) {
-        case 'Стереть':
+        case `${translation?.game_but_erase}`:
           handleDeleteNumber();
           break;
-        case 'Готово':
+        case `${translation?.game_but_done}`:
           handleSubmit();
           break;
         default:
@@ -421,7 +422,7 @@ const ClosestNumber: FC = () => {
             <>
               <div className={styles.game__betContainer}>
                 <p className={styles.game__bet}>
-                  Ставка
+                  {translation?.game_bet_text}
                   <span className={styles.game__text}>
                     {data?.bet_type === "1" ? "💵" : "🔰"}
                   </span>
@@ -436,7 +437,7 @@ const ClosestNumber: FC = () => {
             <p
               className={styles.game__text}
               style={{ position: 'absolute', top: '45%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%' }}>
-              Ожидание игроков...
+              {translation?.waiting4players}
             </p>
           }
           <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
@@ -455,13 +456,13 @@ const ClosestNumber: FC = () => {
               <div className={styles.overlay__inputContainer}>
                 <input
                   type="number"
-                  placeholder="Ваше число"
+                  placeholder={translation?.your_number_but}
                   className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
                   value={inputValue}
                   onFocus={handleInputFocus}
                   readOnly
                 />
-                <p className={styles.overlay__inputText}>Ваше число от 1 до 100</p>
+                <p className={styles.overlay__inputText}>{translation?.your_number_text}</p>
                 <div className={styles.overlay__userMoney}>
                   <span className={styles.overlay__text}>
                     {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
@@ -486,7 +487,7 @@ const ClosestNumber: FC = () => {
                     ))}
                   </>
                   ) : (
-                    [1, 2, 3, 4, 5, 6, 7, 8, 9, 'Стереть', 0, 'Готово'].map((key) => (
+                    [1, 2, 3, 4, 5, 6, 7, 8, 9, `${translation?.game_but_erase}`, 0, `${translation?.game_but_done}`].map((key) => (
                       typeof key === 'number' ? (
                         <button
                           key={key}
@@ -498,20 +499,20 @@ const ClosestNumber: FC = () => {
                       ) : (
                         <div
                           key={key}
-                          className={key === 'Стереть'
+                          className={key === `${translation?.game_but_erase}`
                             ? styles.overlay__bottomLeftButton
                             : styles.overlay__bottomRightButton}
                           onClick={() => handleButtonClick(key)}
                         >
-                          {key === 'Стереть' ? (
+                          {key === `${translation?.game_but_erase}` ? (
                             <>
                               <img src={deleteIcon} alt="delete icon" className={styles.overlay__icon} />
-                              <span>Стереть</span>
+                              <span>{translation?.game_but_erase}</span>
                             </>
                           ) : (
                             <>
                               <img src={approveIcon} alt="done icon" className={styles.overlay__icon} />
-                              <span>Готово</span>
+                              <span>{translation?.game_but_done}</span>
                             </>
                           )}
                         </div>
