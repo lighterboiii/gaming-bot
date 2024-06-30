@@ -11,6 +11,7 @@
   background-repeat: no-repeat;
   font-family: 'Rubik', sans-serif;
   font-style: italic;
+  border-radius: $radius-20;
 
   &__content {
     @include flex(column, space-between, flex-start);

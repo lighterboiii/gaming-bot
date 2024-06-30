@@ -148,7 +148,7 @@ const Main: FC = () => {
             shadow
           />
         </div>
-        <div>
+        <div className={styles.main__shopDiv}>
           <ShopLink shopImageUrl={shopImageUrl} />
         </div>
       </div>
