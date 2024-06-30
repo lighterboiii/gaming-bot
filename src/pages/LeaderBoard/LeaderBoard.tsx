@@ -95,7 +95,7 @@ const LeaderBoard: FC = () => {
         <>
           <div className={styles.leaderBoard__header}>
             <h2 className={styles.leaderBoard__heading}>
-              Топ <br /> недели
+              {translation?.menu_weekly_top}
             </h2>
             <p className={styles.leaderBoard__type}>
               {type === 'spendtokens' && `${translation?.leaderboard_type_spendtokens}`}

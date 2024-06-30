@@ -51,11 +51,15 @@ const UserContainer: FC<IProps> = ({
             style={{ color: isUser ? "#d51845" : "" }}
           >
             {!leaderBoardType && `+ 💵 ${formatNumber(member.coins)}`}
-            {/* {leaderBoardType === 'spendtokens' && `- 🔰 ${formatNumber(member.tokens)}`} */}
+            {leaderBoardType === 'spendtokens' && `- 🔰 ${formatNumber(member.coins)}`}
             {leaderBoardType === 'spendcoins' && `- 💵 ${formatNumber(member.coins)}`}
             {leaderBoardType === 'coins' && `+ 💵 ${formatNumber(member.coins)}`}
-            {/* {leaderBoardType === 'tokens' && `+ 🔰 ${formatNumber(member.tokens)}`} */}
-            {leaderBoardType === 'friends' && <FriendsIcon width={16} height={16} />}
+            {leaderBoardType === 'tokens' && `+ 🔰 ${formatNumber(member.coins)}`}
+            {leaderBoardType === 'friends' && (
+              <>
+               + {member.coins} <FriendsIcon width={16} height={16} />
+              </>
+            )}
           </p>
         </div>
       </div>

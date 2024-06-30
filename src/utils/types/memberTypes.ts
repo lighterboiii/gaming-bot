@@ -6,6 +6,7 @@ export interface IMember {
   item_pic: string;
   public_name: string;
   user_id: number;
+  friends: any;
 }
 
 export interface IMemberDataResponse {
