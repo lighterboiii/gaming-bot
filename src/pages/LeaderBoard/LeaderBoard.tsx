@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import styles from './LeaderBoard.module.scss';
 import { useNavigate } from "react-router-dom";
@@ -20,15 +19,35 @@ const LeaderBoard: FC = () => {
   const [loading, setLoading] = useState(false);
   const [leaderBoard, setLeaderBoard] = useState<IMember[] | null>(null);
   const [topLeader, setTopLeader] = useState<IMember | null>(null);
+  const [prizePhoto, setPrizePhoto] = useState<string>('');
+  const [time, setTime] = useState<any>({
+    days: '',
+    hours: '',
+    minutes: '',
+  });
+  const [type, setType] = useState<string>('');
+  const [prizeCount, setPrizeCount] = useState<string>('');
+
   const isUserLeader = user?.id === topLeader;
 
   useEffect(() => {
-    setLoading(true);
+    let intervalId: NodeJS.Timeout;
+
     const fetchLeadersData = () => {
+      setLoading(true);
       getTopUsers()
         .then((leaders: any) => {
+          console.log(leaders);
           setTopLeader(leaders?.top_users[0]);
           setLeaderBoard(leaders?.top_users.slice(1));
+          setPrizePhoto(leaders?.top_prize_photo_url);
+          setTime({
+            days: leaders?.days,
+            hours: leaders?.hours,
+            minutes: leaders?.minutes
+          });
+          setType(leaders?.top_type);
+          setPrizeCount(leaders?.top_prize_count)
         })
         .catch((error) => {
           console.log(error);
@@ -37,13 +56,17 @@ const LeaderBoard: FC = () => {
           setLoading(false);
         });
     };
+
     window.scrollTo(0, 0);
     tg.BackButton.show().onClick(() => {
       navigate(-1);
     });
+
     fetchLeadersData();
-  
+    intervalId = setInterval(fetchLeadersData, 60000);
+
     return () => {
+      clearInterval(intervalId);
       tg.BackButton.hide();
     };
   }, []);
@@ -61,11 +84,12 @@ const LeaderBoard: FC = () => {
             <div className={styles.leaderBoard__timeWrapper}>
               <div className={styles.leaderBoard__prize}>
                 <TimerIcon />
-                <Timer />
+                <Timer days={time?.days} hours={time?.hours} minutes={time?.minutes} />
               </div>
               <div className={styles.leaderBoard__prize}>
                 <span>{translation?.leaders_prize}</span>
-                <span>💵 25</span>
+                {prizeCount === '' && <img src={prizePhoto} alt="prize" className={styles.leaderBoard__prizePhoto} />}
+                {prizeCount !== '' &&<span>{translation?.top_prize_count}</span>}
               </div>
             </div>
             <div className={styles.leaderBoard__background}>
@@ -98,7 +122,6 @@ const LeaderBoard: FC = () => {
       )}
     </div>
   )
-
-}
+};
 
 export default LeaderBoard;

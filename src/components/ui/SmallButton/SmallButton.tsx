@@ -16,7 +16,7 @@ interface IProps {
 const SmallButton: FC<IProps> = ({ text, secondaryText, isWhiteBackground, chevronPosition, shadow, handleClick }) => {
   
   const handleGetHapticFeedback = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
     handleClick();
   };
 

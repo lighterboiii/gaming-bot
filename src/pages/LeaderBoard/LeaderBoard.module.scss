@@ -112,4 +112,8 @@
     color: $main-color;
     font-size: 14px;
   }
+
+  &__prizePhoto {
+    @include size(40px, 40px);
+  }
 }
