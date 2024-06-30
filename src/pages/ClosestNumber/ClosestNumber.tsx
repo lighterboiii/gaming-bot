@@ -191,7 +191,6 @@ const ClosestNumber: FC = () => {
           setTimerStarted(false);
           whoIsWinRequest(roomId!)
             .then((res: any) => {
-              console.log(res);
               setRoomValue(Number(res?.room_value));
               setWinnerId(Number(res?.winner));
               setWinSum(Number(res?.winner_value));
@@ -236,7 +235,6 @@ const ClosestNumber: FC = () => {
   const handleDeleteNumber = () => {
     setInputValue((prevValue) => {
       const newValue = prevValue.slice(0, -1);
-      console.log(newValue);
       const numValue = parseInt(newValue, 10);
       if (newValue.startsWith('0')) {
         setInputError(true);
@@ -305,7 +303,6 @@ const ClosestNumber: FC = () => {
             if (player?.userid === userId) {
               navigate(roomsUrl);
             }
-            console.log(res);
           })
           .catch((error) => {
             console.log(error);
@@ -404,7 +401,6 @@ const ClosestNumber: FC = () => {
             if (player?.userid === userId) {
               navigate(roomsUrl);
             }
-            console.log(res);
           })
           .catch((error) => {
             console.log(error);
@@ -421,6 +417,29 @@ const ClosestNumber: FC = () => {
       }
     };
   }, [timer, timerStarted, data]);
+
+  const resetPlayerChoice = () => {
+    const choiceData = {
+      user_id: userId,
+      room_id: roomId,
+      type: 'setchoice',
+      choice: 'none'
+    };
+    getPollingRequest(userId, choiceData)
+      .then((res: any) => {
+        setInputValue('');
+        console.log("Player choice has been reset", res);
+      })
+      .catch((error) => {
+        console.error('Reset choice error:', error);
+      });
+  };
+
+  useEffect(() => {
+    if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
+      resetPlayerChoice();
+    }
+  }, [data]);
 
   return (
     <div className={styles.game}>

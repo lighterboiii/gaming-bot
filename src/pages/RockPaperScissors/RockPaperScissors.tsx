@@ -187,41 +187,6 @@ const RockPaperScissors: FC = () => {
 
     fetchData();
   }, [data]);
-  // запрос на кик юзера при недостатке средств для следующего хода
-  // useEffect(() => {
-  //   const player = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
-  //   if (data?.bet_type === "1") {
-  //     if (player?.money <= data?.bet) {
-  //       setTimeout(() => {
-  //         leaveRoomRequest(player?.userid)
-  //           .then(res => {
-  //             console.log(res);
-  //             if (player?.userid === userId) {
-  //               navigate(roomsUrl);
-  //             }
-  //           })
-  //           .catch((error) => {
-  //             console.log(error);
-  //           })
-  //       }, 2000)
-  //     }
-  //   } else if (data?.bet_type === "3") {
-  //     if (player?.tokens <= data?.bet) {
-  //       setTimeout(() => {
-  //         leaveRoomRequest(player?.userid)
-  //           .then(res => {
-  //             console.log(res);
-  //             if (player?.userid === userId) {
-  //               navigate(roomsUrl);
-  //             }
-  //           })
-  //           .catch((error) => {
-  //             console.log(error);
-  //           })
-  //       }, 2000)
-  //     }
-  //   }
-  // }, [data]);
   // хендлер готовности игрока
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
@@ -357,6 +322,28 @@ const RockPaperScissors: FC = () => {
       }
     };
   }, [timer, timerStarted, data]);
+
+  const resetPlayerChoice = () => {
+    const choiceData = {
+      user_id: userId,
+      room_id: roomId,
+      type: 'setchoice',
+      choice: 'none'
+    };
+    getPollingRequest(userId, choiceData)
+      .then((res: any) => {
+        console.log("Player choice has been reset", res);
+      })
+      .catch((error) => {
+        console.error('Reset choice error:', error);
+      });
+  };
+
+  useEffect(() => {
+    if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
+      resetPlayerChoice();
+    }
+  }, [data]);
 
   return (
     <div className={styles.game}>
