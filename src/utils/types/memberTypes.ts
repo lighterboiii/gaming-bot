@@ -1,6 +1,7 @@
 export interface IMember {
   avatar: string;
   coins: number;
+  tokens: any;
   item_mask: string;
   item_pic: string;
   public_name: string;

@@ -95,7 +95,7 @@ const Main: FC = () => {
         />
       </div>
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
-        <div >
+        <div>
           {banners?.length > 0 && (
             <AdvertisementBanner bannersData={banners} onBannerClick={handleBannerClick} />
           )}

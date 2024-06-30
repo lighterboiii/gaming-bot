@@ -85,7 +85,7 @@
   &__picHeader {
     @include indents();
     @include size(60%, auto);
-    @include position(absolute, $left: 20px, $top: 20%);
+    @include position(absolute, $left: 8%, $top: 20%);
     font-family: 'Rubik', sans-serif;
     font-weight: 900;
     text-align: left;
@@ -93,13 +93,13 @@
     font-size: 13px;
 
     @media screen and (min-width: 420px) {
-      @include position(absolute, $left: 20px, $top: 15%);
+      @include position(absolute, $left: 8%, $top: 15%);
     }
   }
 
   &__text {
     @include indents();
-    @include position(absolute, $left: 20px, $bottom: 10%);
+    @include position(absolute, $left: 8%, $bottom: 10%);
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
     text-align: left;
@@ -108,7 +108,7 @@
     z-index: 5;
 
     @media screen and (min-width: 420px) {
-      @include position(absolute, $left: 20px, $bottom: 5%);
+      @include position(absolute, $left: 8%, $bottom: 5%);
     }
   }
 }
