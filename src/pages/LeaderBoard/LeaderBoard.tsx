@@ -79,17 +79,25 @@ const LeaderBoard: FC = () => {
             <h2 className={styles.leaderBoard__heading}>
               Топ <br /> недели
             </h2>
+            <p className={styles.leaderBoard__type}>
+              {type === 'spendtokens' && `${translation?.leaderboard_type_spendtokens}`}
+              {type === 'spendcoins' && `${translation?.leaderboard_type_spendcoins}`}
+              {type === 'coins' && `${translation?.leaderboard_type_coins}`}
+              {type === 'tokens' && `${translation?.leaderboard_type_tokens}`}
+              {type === 'friends' && `${translation?.leaderboard_type_friends}`}
+            </p>
           </div>
           <div className={styles.leaderBoard__leader}>
             <div className={styles.leaderBoard__timeWrapper}>
               <div className={styles.leaderBoard__prize}>
+                <span className={styles.leaderBoard__text}>{translation?.leaders_restart_in}</span>
                 <TimerIcon />
                 <Timer days={time?.days} hours={time?.hours} minutes={time?.minutes} />
               </div>
               <div className={styles.leaderBoard__prize}>
                 <span>{translation?.leaders_prize}</span>
                 {prizeCount === '' && <img src={prizePhoto} alt="prize" className={styles.leaderBoard__prizePhoto} />}
-                {prizeCount !== '' &&<span>{translation?.top_prize_count}</span>}
+                {prizeCount !== '' && <span>{translation?.top_prize_count}</span>}
               </div>
             </div>
             <div className={styles.leaderBoard__background}>
