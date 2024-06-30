@@ -11,6 +11,7 @@ import { IMember } from "../../utils/types/memberTypes";
 import { useAppSelector } from "../../services/reduxHooks";
 import TimerIcon from "../../icons/Timer/TimerIcon";
 import Timer from "../../components/Timer/Timer";
+import FriendsIcon from "../../icons/Friends/FriendsIcon";
 
 const LeaderBoard: FC = () => {
   const { user, tg } = useTelegram();
@@ -31,23 +32,15 @@ const LeaderBoard: FC = () => {
   const isUserLeader = user?.id === topLeader;
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
     const fetchLeadersData = () => {
       setLoading(true);
       getTopUsers()
         .then((leaders: any) => {
-          console.log(leaders);
           setTopLeader(leaders?.top_users[0]);
           setLeaderBoard(leaders?.top_users.slice(1));
           setPrizePhoto(leaders?.top_prize_photo_url);
-          setTime({
-            days: leaders?.days,
-            hours: leaders?.hours,
-            minutes: leaders?.minutes
-          });
           setType(leaders?.top_type);
-          setPrizeCount(leaders?.top_prize_count)
+          setPrizeCount(leaders?.top_prize_count);
         })
         .catch((error) => {
           console.log(error);
@@ -56,20 +49,45 @@ const LeaderBoard: FC = () => {
           setLoading(false);
         });
     };
-
     window.scrollTo(0, 0);
+
+    fetchLeadersData();
+  }, []);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    const fetchTime = () => {
+      getTopUsers()
+        .then((leaders: any) => {
+          setTime({
+            days: leaders?.days,
+            hours: leaders?.hours,
+            minutes: leaders?.minutes
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    fetchTime();
+    intervalId = setInterval(fetchTime, 60000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
     tg.BackButton.show().onClick(() => {
       navigate(-1);
     });
 
-    fetchLeadersData();
-    intervalId = setInterval(fetchLeadersData, 60000);
-
     return () => {
-      clearInterval(intervalId);
       tg.BackButton.hide();
     };
-  }, []);
+  }, [tg, navigate]);
 
   return (
     <div className={styles.leaderBoard}>
@@ -109,7 +127,14 @@ const LeaderBoard: FC = () => {
                     {topLeader?.public_name}
                   </p>
                   <p className={styles.leaderBoard__leaderText}>
-                    <span>+ 💵 </span> {topLeader?.coins}
+                    <span>
+                      {type === 'spendtokens' && '- 🔰 '}
+                      {type === 'spendcoins' && '- 💵 '}
+                      {type === 'coins' && '+ 💵 '}
+                      {type === 'tokens' && '+ 🔰 '}
+                      {type === 'friends' && <FriendsIcon width={16} height={16} />}
+                    </span>
+                    {topLeader?.coins}
                   </p>
                 </div>
               </div>
