@@ -13,6 +13,7 @@ import { getExistingGamesRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import { IGameCardData } from "../../utils/types/gameTypes";
 import { indexUrl } from "../../utils/routes";
+import { postEvent } from "@tma.js/sdk";
 
 const CreateRoom: FC = () => {
   const { tg } = useTelegram();
@@ -43,7 +44,8 @@ const CreateRoom: FC = () => {
 
   const handleGameClick = (game: any) => {
     setGameData(game);
-    setSettingsOverlay(!settingsOverlay)
+    setSettingsOverlay(!settingsOverlay);
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   return (

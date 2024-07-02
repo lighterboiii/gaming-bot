@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
 import { setTokensValueAfterBuy } from '../../../services/appSlice';
 import useTelegram from '../../../hooks/useTelegram';
 import { IFortuneData } from '../../../utils/types/mainTypes';
+import { postEvent } from '@tma.js/sdk';
 
 interface IProps {
   data: IFortuneData;
@@ -52,6 +53,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
         console.log(res);
         if (res?.message === 'ok') {
           dispatch(setTokensValueAfterBuy(100));
+          postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
           setSpinning(true);
           setPrize(false);
           const allItems = [...data?.fortune_all_items];
@@ -86,7 +88,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
       .then((res: any) => {
         console.log(res)
         if (res?.message === "ok") {
-
+          postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         }
       })
     closeOverlay();

@@ -163,7 +163,12 @@ const OpenedRooms: FC = () => {
   const handleRoomClick = (room: any) => {
     setSelectedRoomId(room?.room_id);
     setModalOpen(true);
-  }
+  };
+
+  const handleCreateClick = () => {
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    navigate('/create-room')
+  };
 
   return (
     <div className={styles.rooms}>
@@ -193,7 +198,7 @@ const OpenedRooms: FC = () => {
               <div className={styles.rooms__createNew}>
                 <p className={styles.rooms__notify}>{translation?.no_open_rooms}</p>
                 <div className={styles.rooms__buttonWrapper}>
-                  <Button handleClick={() => navigate('/create-room')} text={translation?.create_room_button} />
+                  <Button handleClick={handleCreateClick} text={translation?.create_room_button} />
                 </div>
               </div>
 
