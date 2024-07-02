@@ -169,6 +169,7 @@ const Main: FC = () => {
         children={
           <BannerData
             data={currentBanner}
+            closeOverlay={() => setShowBannerOverlay(false)}
           />
         }
         show={showBannerOverlay}

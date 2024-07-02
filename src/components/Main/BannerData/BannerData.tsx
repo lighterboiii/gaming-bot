@@ -5,9 +5,10 @@ import { IBannerData } from "../../../utils/types/mainTypes";
 
 interface IProps {
   data: IBannerData;
+  closeOverlay: () => void;
 }
 
-const BannerData: FC<IProps> = ({ data }) => {
+const BannerData: FC<IProps> = ({ data, closeOverlay }) => {
 
   return (
     data && (
@@ -39,7 +40,7 @@ const BannerData: FC<IProps> = ({ data }) => {
           </p>
         </div>
         <div className={styles.banner__button}>
-          <Button text={data?.button_text} handleClick={() => { }} />
+          <Button text={data?.button_text} handleClick={closeOverlay} />
         </div>
       </div>
     )

@@ -11,6 +11,7 @@
   &__header {
     @include size(100%, 30vh);
     @include flex(column, center, center);
+    z-index: 2;
 
     @media screen and (max-height: 690px) {
       @include size(100%, 35vh);
@@ -24,7 +25,8 @@
   &__content {
     @include flex(column, flex-start, unset, 24px);
     @include size(100%, 75vh);
-    overflow-y: scroll;
+    overflow-y: visible;
+    z-index: 3;
 
     @media screen and (max-height: 690px) {
       @include size(100%, calc(65vh - 16px));
