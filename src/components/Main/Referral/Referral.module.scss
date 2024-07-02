@@ -67,9 +67,13 @@
   &__board {
     @include indents(6px 16px 0, 0 12px 0 0);
     @include flex(column, unset, flex-end, 10px);
-    @include size(100%, auto);
-    overflow: auto;
+    @include size(100%, 60%);
+    overflow: scroll;
     z-index: 3;
+
+    @media screen and (min-height: 744px) {
+      @include size(100%, 65%);
+    }
   }
 
   &__notification {

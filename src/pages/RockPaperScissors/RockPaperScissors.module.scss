@@ -48,11 +48,12 @@
     color: $main-color;
     font-size: 16px;
     color: $rps-text-color;
+    z-index: 7;
   }
   
   &__balance {
     @include indents(4px 8px, 0);
-    @include size(auto, unset);
+    @include size(60%, unset);
     @include flex(row, center,center);
     flex-wrap: nowrap;
     @include position(absolute, $bottom: -8%, $left: 50%);
@@ -61,6 +62,7 @@
     background-color: $rps-background-color;
     border-radius: $radius-40;
     font-size: 14px;
+    z-index: 7;
   }
 
   &__icon {

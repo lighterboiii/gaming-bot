@@ -168,10 +168,22 @@ const appSlice = createSlice({
     setSecondGameRulesState: (state, action: PayloadAction<boolean>) => {
       state.secondGameRulesState = action.payload;
     },
+    addCoins: (state, action: PayloadAction<number>) => {
+      if (state.info) {
+        state.info.coins += action.payload;
+      }
+    },
+    addTokens: (state, action: PayloadAction<number>) => {
+      if (state.info) {
+        state.info.tokens += action.payload;
+      }
+    },
   }
 })
 
 export const {
+  addTokens,
+  addCoins,
   setUserData,
   setCoinsValueAfterBuy,
   setTokensValueAfterBuy,

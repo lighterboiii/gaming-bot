@@ -53,13 +53,11 @@
     @include flex(row, center, center, 10px);
     @include size(auto, 32vh);
     background-color: $black-color;
-    // border-radius: 50% 50% 0 0 / 10% 10% 0 0;
-    // transition: transform 0.1s linear;
     z-index: 5;
 
-    // @media screen and (min-height: 691px) {
-    //   @include size(auto, 32vh);
-    // }
+    @media screen and (min-height: 744px) {
+      @include size(auto, 38vh);
+    }
   }
 
   &__item {
@@ -68,7 +66,7 @@
     color: $black-color;
     border-radius: $radius-15;
 
-    @media screen and (max-height: 691px) {
+    @media screen and (max-height: 678px) {
       @include size(80px, 114px);
     }
 
