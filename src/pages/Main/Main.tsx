@@ -25,7 +25,7 @@ import useTelegram from "../../hooks/useTelegram";
 const Main: FC = () => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);

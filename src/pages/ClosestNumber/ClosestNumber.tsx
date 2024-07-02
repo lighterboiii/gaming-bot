@@ -201,6 +201,7 @@ const ClosestNumber: FC = () => {
               setRoomValue(Number(res?.room_value));
               setWinnerId(Number(res?.winner));
               setWinSum(Number(res?.winner_value));
+              postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy'});
               if (res?.message === "success") {
                 setTimeout(() => {
                   setInputValue('');

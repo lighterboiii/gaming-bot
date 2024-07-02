@@ -159,18 +159,21 @@ const RockPaperScissors: FC = () => {
                 setTimeout(() => {
                   if (Number(res?.winner) === Number(userId)) {
                     updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
+                    postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success'});
                     setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
                       ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
                         : `🔰`}`
                       : ''}`);
                   } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
                     updateAnimation(Number(data.creator_id) === Number(res.winner) ? rLoseAnim : lLoseAnim);
+                    postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
                     setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                       ? `💵`
                       : `🔰`}`
                     );
                   } else if (res?.winner === 'draw') {
                     setMessage(translation?.draw);
+                    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft'});
                   }
                   setMessageVisible(true);
                   setTimeout(() => {
@@ -265,7 +268,7 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, data)
       .then(res => {
         setData(res);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
         setShowEmojiOverlay(false);
       })
       .catch((error) => {
@@ -369,6 +372,11 @@ const RockPaperScissors: FC = () => {
     }, 1000);
   };
 
+  const handleShowEmojiOverlay = () => {
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light'});
+    setShowEmojiOverlay(true);
+  };
+
   return (
     <div className={styles.game}>
       <div
@@ -465,7 +473,7 @@ const RockPaperScissors: FC = () => {
                     <button
                       type="button"
                       className={`${styles.game__button} ${styles.game__emojiButton}`}
-                      onClick={() => setShowEmojiOverlay(true)}
+                      onClick={handleShowEmojiOverlay}
                     >
                       <img src={emoji_icon} alt="emoji icon" className={styles.game__iconEmoji} />
                     </button>
