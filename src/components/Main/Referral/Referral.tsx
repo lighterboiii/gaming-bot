@@ -82,7 +82,7 @@ const Referral: FC = () => {
   return (
     <div className={styles.referral}>
       <h3 className={styles.referral__h3}>
-        Друзья
+        {translation?.menu_friends}
       </h3>
       <div className={styles.referral__amount}>
         <p className={styles.referral__text}>

@@ -16,7 +16,7 @@
     height: 124px;
   }
 
-  @media screen and (max-width: 381px) {
+  @media screen and (max-width: 430px) {
     background-size: contain;
   }
 
@@ -25,6 +25,7 @@
     @include position(absolute, $top: 0, $left: 0);
     cursor: pointer;
     overflow: visible;
+    z-index: 666;
   }
 
   &__sliderButton {

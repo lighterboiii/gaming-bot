@@ -137,11 +137,11 @@ const Main: FC = () => {
                   height={16}
                 />
                 <span>
-                  Играть!
+                  {translation?.menu_play}
                 </span>
               </>
             }
-            secondaryText="Онлайн игры против других"
+            secondaryText={translation?.main_menu_play_desk}
             chevronPosition="right"
             isWhiteBackground
             circleIconColor="#FFF"
