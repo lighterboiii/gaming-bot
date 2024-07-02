@@ -5,6 +5,7 @@
   @include children-layout();
   gap: 10px;
   justify-content: flex-start;
+  z-index: 3;
 
   &__title {
     @include indents();
