@@ -56,7 +56,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -455,7 +455,7 @@ const ClosestNumber: FC = () => {
         <Loader />
       ) : (
         <>
-          {data?.players?.length !== 1 ?
+          {data?.players?.length === 1 ?
             <>
               <div className={styles.game__betContainer}>
                 <p className={styles.game__bet}>
@@ -469,7 +469,8 @@ const ClosestNumber: FC = () => {
                 <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
                 <CircularProgressBar progress={roomValue ? roomValue : 0} />
                 <p className={styles.game__centralTimer}>{timer}</p>
-              </div><RenderComponent users={filteredPlayers} />
+              </div>
+              <RenderComponent users={filteredPlayers} />
             </> :
             <p
               className={styles.game__text}

@@ -7,8 +7,8 @@
     $percentage: $i * (100 / $steps);
     $direction: if($i % 2 == 0, 1, -1);
     #{$percentage}% {
-      transform: translateY($direction * 100%);
-      filter: blur(4px);
+      transform: translateY($direction * 15%);
+      filter: blur(5px);
     }
   }
 }
@@ -43,26 +43,14 @@
     animation: spin 4s linear forwards;
   }
 
-  &__textContainer {
-    overflow: hidden;
-  }
-
-  // &__textWrapper {
-    // height: 100%;
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
-    // perspective: 100px;
-  // }
-
   &__text {
     @include indents();
     fill: $black-color;
-    font-size: 16px;
-    transition: transform 0s;
-    font-weight: 900;
     font-size: 20px;
+    font-weight: 900;
+    transition: transform 0s;
     transform-origin: 50% 50%;
+    overflow: visible;
   }
 
   &__textAnimated {
