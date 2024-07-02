@@ -13,6 +13,7 @@ import { useAppSelector } from "../../services/reduxHooks";
 import TimerIcon from "../../icons/Timer/TimerIcon";
 import Timer from "../../components/Timer/Timer";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
+import { indexUrl } from "../../utils/routes";
 
 const LeaderBoard: FC = () => {
   const { user, tg } = useTelegram();
@@ -31,6 +32,9 @@ const LeaderBoard: FC = () => {
   const [prizeCount, setPrizeCount] = useState<string>('');
   const isUserLeader = user?.id === topLeader;
   useEffect(() => {
+    tg.BackButton.show().onClick(() => {
+      navigate(indexUrl);
+    });
     const fetchLeadersData = () => {
       setLoading(true);
       getTopUsers()
@@ -49,8 +53,12 @@ const LeaderBoard: FC = () => {
         });
     };
     window.scrollTo(0, 0);
+    
 
     fetchLeadersData();
+    return () => {
+      tg.BackButton.hide();
+    };
   }, []);
 
   useEffect(() => {
@@ -77,16 +85,6 @@ const LeaderBoard: FC = () => {
       clearInterval(intervalId);
     };
   }, []);
-
-  useEffect(() => {
-    tg.BackButton.show().onClick(() => {
-      navigate(-1);
-    });
-
-    return () => {
-      tg.BackButton.hide();
-    };
-  }, [tg, navigate]);
 
   return (
     <div className={styles.leaderBoard}>
