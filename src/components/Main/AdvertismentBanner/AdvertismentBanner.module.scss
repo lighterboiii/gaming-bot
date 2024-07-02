@@ -20,6 +20,10 @@
     background-size: contain;
   }
 
+  @media screen and (min-width: 381px) and (max-width: 430px) {
+    background-size: 100% auto;
+  }
+
   &__link {
     @include size(100%, 100%);
     @include position(absolute, $top: 0, $left: 0);
