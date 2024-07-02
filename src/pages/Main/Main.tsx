@@ -73,7 +73,6 @@ const Main: FC = () => {
   const openWheelOfLuckOverlay = () => {
     getLuckInfo(userId)
       .then((res: any) => {
-        console.log(res);
         setLuckData(res);
       })
     setShowWheelOverlay(!showWheelOverlay);

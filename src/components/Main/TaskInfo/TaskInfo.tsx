@@ -36,7 +36,6 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
     }
     taskStepRequest(userId, task?.task_id, step?.step_id)
       .then((res: any) => {
-        console.log(res);
       });
   };
 
@@ -44,12 +43,10 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
     setShowReward(true);
     taskResultRequest(userId, task?.task_id)
       .then((res: any) => {
-        console.log(res);
         if (res?.message === 'incomplete') {
           setIncomplete(true);
         } else if (res?.message === 'success') {
           setRewardResult(true);
-          console.log(res?.prise);
           res?.new_value && dispatch(setNewTokensValue(res?.new_value));
           postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         }

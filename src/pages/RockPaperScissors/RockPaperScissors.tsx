@@ -55,8 +55,6 @@ const RockPaperScissors: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
-  console.log(ruleImage);
-  console.log(isRulesShown);
   // установка первоначального вида рук и правил при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
@@ -69,7 +67,6 @@ const RockPaperScissors: FC = () => {
     tg.BackButton.show().onClick(() => {
       leaveRoomRequest(userId)
         .then((data) => {
-          console.log(data);
         })
         .catch((error) => {
           console.log(error);
@@ -97,7 +94,6 @@ const RockPaperScissors: FC = () => {
       };
       getPollingRequest(userId, data)
         .then((res: any) => {
-          console.log(res);
           setData(res);
           setLoading(false);
           if (res?.message === 'None') {
@@ -118,7 +114,6 @@ const RockPaperScissors: FC = () => {
           console.error('Room data request error', error);
           leaveRoomRequest(userId)
             .then((res: any) => {
-              console.log(res);
               if (res?.message === 'success') {
                 navigate(roomsUrl);
               }
@@ -154,7 +149,6 @@ const RockPaperScissors: FC = () => {
           setShowTimer(false);
           whoIsWinRequest(roomId!)
             .then((res: any) => {
-              console.log(res);
               setPlayersAnim({
                 firstAnim: res?.f_anim,
                 secondAnim: res?.s_anim,
@@ -319,7 +313,6 @@ const RockPaperScissors: FC = () => {
       if (player) {
         leaveRoomRequest(player.userid)
           .then((res) => {
-            console.log(res);
             if (player?.userid === userId) {
               navigate(roomsUrl);
             }
@@ -349,7 +342,6 @@ const RockPaperScissors: FC = () => {
     };
     getPollingRequest(userId, choiceData)
       .then((res: any) => {
-        console.log("Player choice has been reset", res);
       })
       .catch((error) => {
         console.error('Reset choice error:', error);

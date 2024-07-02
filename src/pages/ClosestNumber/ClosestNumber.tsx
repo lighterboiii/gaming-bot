@@ -93,7 +93,6 @@ const ClosestNumber: FC = () => {
   useEffect(() => {
     if (data?.players) {
       const filtered = data.players.filter((player: any) => Number(player.userid) !== Number(userId));
-      console.log(filtered);
       setFilteredPlayers(filtered);
     }
   }, [data]);
@@ -103,7 +102,6 @@ const ClosestNumber: FC = () => {
     tg.BackButton.show().onClick(() => {
       leaveRoomRequest(userId)
         .then((data) => {
-          console.log(data);
         })
         .catch((error) => {
           console.log(error);
@@ -149,7 +147,6 @@ const ClosestNumber: FC = () => {
       };
       getPollingRequest(userId, data)
         .then((res: any) => {
-          console.log(res);
           setData(res);
           setLoading(false);
           if (res?.message === 'None') {
@@ -170,7 +167,6 @@ const ClosestNumber: FC = () => {
           console.error('Room data request error', error);
           leaveRoomRequest(userId)
             .then((res: any) => {
-              console.log(res);
               if (res?.message === 'success') {
                 navigate(roomsUrl);
               }
@@ -326,7 +322,6 @@ const ClosestNumber: FC = () => {
       if (player?.tokens <= data?.bet) {
         leaveRoomRequest(userId)
           .then(res => {
-            console.log(res);
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
@@ -344,7 +339,6 @@ const ClosestNumber: FC = () => {
       .then((res: any) => {
         setData(res);
         postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-        console.log(res);
       })
       .catch((error) => {
         console.error('Set choice error:', error);
@@ -444,9 +438,8 @@ const ClosestNumber: FC = () => {
       choice: 'none'
     };
     getPollingRequest(userId, choiceData)
-      .then((res: any) => {
+      .then(res => {
         setInputValue('');
-        console.log("Player choice has been reset", res);
       })
       .catch((error) => {
         console.error('Reset choice error:', error);
@@ -466,7 +459,6 @@ const ClosestNumber: FC = () => {
     setTimeout(() => {
       getAppData(userId)
         .then((res) => {
-          console.log(res);
           dispatch(setSecondGameRulesState(res.game_rule_2_show));
         })
         .catch((error) => {

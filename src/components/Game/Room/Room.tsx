@@ -50,7 +50,6 @@ const Room: FC<IProps> = ({ room, openModal }) => {
 
     joinRoomRequest(userId, String(room.room_id))
       .then((res) => {
-        console.log("Joined successfully:", res);
         navigate(roomType === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
       })
       .catch((error) => {
@@ -62,7 +61,6 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const handleLeaveRoom = () => {
     leaveRoomRequest(userId)
       .then((data) => {
-        console.log(data);
       })
       .catch((error) => {
         console.log(error);

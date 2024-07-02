@@ -25,10 +25,12 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
 
   const handleNextSlide = () => {
     goToSlide((currentIndex + 1) % bannersData.length);
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   const handlePrevSlide = () => {
     goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length);
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   const handlers = useSwipeable({

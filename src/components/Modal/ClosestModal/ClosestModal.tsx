@@ -39,7 +39,6 @@ export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, game
   const leaveRoom = () => {
     leaveRoomRequest(userId)
       .then(res => {
-        console.log(res);
         navigate(roomsUrl);
       })
       .catch((error) => {

@@ -29,7 +29,6 @@ const JoinRoomPopup: FC<IProps> = ({ handleClick, roomId, bet, betType, roomType
   const handleJoinRoom = () => {
     energyDrinkRequest(userId)
       .then((res: any) => {
-        console.log(res);
         if (res?.message === 'ok') {
           if (fromGameSettings) {
             postNewRoomRequest({
@@ -39,7 +38,6 @@ const JoinRoomPopup: FC<IProps> = ({ handleClick, roomId, bet, betType, roomType
               room_type: roomType
             }, userId)
               .then((res: any) => {
-                console.log("Room created successfully:", res);
                 navigate(Number(roomType) === 2 ? `/closest/${res.room_id}` : `/room/${res.room_id}`);
               })
               .catch((error) => {
@@ -48,7 +46,6 @@ const JoinRoomPopup: FC<IProps> = ({ handleClick, roomId, bet, betType, roomType
           } else {
             joinRoomRequest(userId, roomId)
               .then((res) => {
-                console.log("Joined successfully:", res);
                 navigate(`/room/${roomId}`);
               })
               .catch((error) => {
