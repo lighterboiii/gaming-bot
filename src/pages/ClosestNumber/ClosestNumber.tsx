@@ -26,6 +26,7 @@ import deleteIcon from '../../images/closest-number/Delete.png';
 import { roomsUrl } from "../../utils/routes";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
 import Loader from "../../components/Loader/Loader";
+import { postEvent } from "@tma.js/sdk";
 
 interface IProps {
   users: any[];
@@ -55,7 +56,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -227,7 +228,7 @@ const ClosestNumber: FC = () => {
       } else {
         setInputError(true);
       }
-
+      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       return newValue;
     });
   };
@@ -243,6 +244,7 @@ const ClosestNumber: FC = () => {
       } else {
         setInputError(true);
       }
+      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
       return newValue;
     });
   };
@@ -250,7 +252,6 @@ const ClosestNumber: FC = () => {
   const handleSubmit = () => {
     const numValue = parseInt(inputValue, 10);
     if (numValue >= 1 && numValue <= 100) {
-      console.log(`Choice: ${inputValue}`);
       handleChoice(inputValue);
       setShowOverlay(false);
     } else {
@@ -270,6 +271,7 @@ const ClosestNumber: FC = () => {
           handleSubmit();
           break;
         default:
+          postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
           break;
       }
     }
@@ -289,6 +291,7 @@ const ClosestNumber: FC = () => {
     if (data?.players?.length === 1) {
       setInputValue('');
       setPlaceholder(translation?.waiting4players);
+      postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
       setTimeout(() => {
         setPlaceholder(translation?.your_number_but);
       }, 2000)
@@ -303,6 +306,7 @@ const ClosestNumber: FC = () => {
             if (player?.userid === userId) {
               navigate(roomsUrl);
             }
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -313,6 +317,7 @@ const ClosestNumber: FC = () => {
         leaveRoomRequest(userId)
           .then(res => {
             console.log(res);
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -328,6 +333,7 @@ const ClosestNumber: FC = () => {
     getPollingRequest(userId, choice)
       .then((res: any) => {
         setData(res);
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
         console.log(res);
       })
       .catch((error) => {
@@ -345,6 +351,7 @@ const ClosestNumber: FC = () => {
     getPollingRequest(userId, setEmojiData)
       .then(res => {
         setData(res);
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
         setShowEmojiOverlay(false);
         setShowOverlay(false);
       })
@@ -370,6 +377,7 @@ const ClosestNumber: FC = () => {
   // обработчик клика на иконку эмодзи
   const handleClickEmoji = () => {
     setShowOverlay(true);
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
   // Таймер

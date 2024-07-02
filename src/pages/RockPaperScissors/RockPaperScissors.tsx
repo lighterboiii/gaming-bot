@@ -24,11 +24,12 @@ import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
 import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
 import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 import { roomsUrl } from "../../utils/routes";
+import { postEvent } from "@tma.js/sdk";
 
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
@@ -197,7 +198,7 @@ const RockPaperScissors: FC = () => {
             if (player?.userid === userId) {
               navigate(roomsUrl);
             }
-            console.log(res);
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -207,7 +208,7 @@ const RockPaperScissors: FC = () => {
       if (player?.tokens <= data?.bet) {
         leaveRoomRequest(userId)
           .then(res => {
-            console.log(res);
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -225,7 +226,11 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, reqData)
       .then(res => {
         setData(res);
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   };
   // хендлер выбора хода
   const handleChoice = (value: string) => {
@@ -239,6 +244,7 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, reqData)
       .then((res: any) => {
         setData(res);
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       })
       .catch((error) => {
         console.error('Set choice error:', error);
@@ -255,6 +261,7 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, data)
       .then(res => {
         setData(res);
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
         setShowEmojiOverlay(false);
       })
       .catch((error) => {

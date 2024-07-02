@@ -12,7 +12,7 @@ import { postEvent } from "@tma.js/sdk";
 import Loader from "../../components/Loader/Loader";
 import { getOpenedRoomsRequest } from "../../api/gameApi";
 import Button from "../../components/ui/Button/Button";
-import { IGameCardData, IRPSGameData } from "../../utils/types/gameTypes";
+import { IGameCardData } from "../../utils/types/gameTypes";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
 import { Modal } from "../../components/Modal/Modal";
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
