@@ -3,13 +3,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState, useRef } from "react";
 import styles from './ClosestNumber.module.scss';
-import { getPollingRequest, leaveRoomRequest, whoIsWinRequest } from "../../api/gameApi";
+import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
 import { useNavigate, useParams } from "react-router-dom";
 import useTelegram from "../../hooks/useTelegram";
 import { userId } from "../../api/requestData";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import smile from '../../images/closest-number/smile.png';
-import { useAppSelector } from "../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import OneByOne from "../../components/ClosestNumber/Single/Single";
 import Case from '../../components/ClosestNumber/One/CaseOne';
 import CaseTwo from "../../components/ClosestNumber/Three/Three";
@@ -18,7 +18,7 @@ import CaseFour from "../../components/ClosestNumber/Five/Five";
 import CaseSix from "../../components/ClosestNumber/Six/Six";
 import CaseSeven from "../../components/ClosestNumber/Seven/Seven";
 import CaseEight from "../../components/ClosestNumber/Eight/Eight";
-import { getActiveEmojiPack } from "../../api/mainApi";
+import { getActiveEmojiPack, getAppData } from "../../api/mainApi";
 import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
 import { IRPSPlayer } from "../../utils/types/gameTypes";
 import approveIcon from '../../images/closest-number/Approve.png';
@@ -27,6 +27,8 @@ import { roomsUrl } from "../../utils/routes";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
 import Loader from "../../components/Loader/Loader";
 import { postEvent } from "@tma.js/sdk";
+import { setSecondGameRulesState } from "../../services/appSlice";
+import Button from "../../components/ui/Button/Button";
 
 interface IProps {
   users: any[];
@@ -57,6 +59,7 @@ const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   // const userId = user?.id;
+  const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -79,7 +82,14 @@ const ClosestNumber: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const [placeholder, setPlaceholder] = useState<string>(translation?.your_number_but);
   const userData = useAppSelector(store => store.app.info);
-
+  const [rules, setRulesShown] = useState<boolean | null>(false);
+  const isRulesShown = useAppSelector(store => store.app.secondGameRulesState);
+  const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
+  // установка правил при старте игры
+  useEffect(() => {
+    setRulesShown(isRulesShown);
+  }, []);
+// отображение игроков на поле за исключением пользователя
   useEffect(() => {
     if (data?.players) {
       const filtered = data.players.filter((player: any) => Number(player.userid) !== Number(userId));
@@ -87,7 +97,7 @@ const ClosestNumber: FC = () => {
       setFilteredPlayers(filtered);
     }
   }, [data]);
-
+// базовые установки на кнопку "Назад" и цвет хидера
   useEffect(() => {
     tg.setHeaderColor('#FEC42C');
     tg.BackButton.show().onClick(() => {
@@ -425,7 +435,7 @@ const ClosestNumber: FC = () => {
       }
     };
   }, [timer, timerStarted, data]);
-
+  // сброс выбор игрока, если он окаазался один в комнате после отправки выбора на сервер
   const resetPlayerChoice = () => {
     const choiceData = {
       user_id: userId,
@@ -442,123 +452,149 @@ const ClosestNumber: FC = () => {
         console.error('Reset choice error:', error);
       });
   };
-
+  // эффект к обработчику выше
   useEffect(() => {
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
   }, [data]);
-
+  // обработчик клика по кнопке "Ознакомился"
+  const handleRuleButtonClick = () => {
+    setGameRulesWatched(userId, '2');
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    setRulesShown(true);
+    setTimeout(() => {
+      getAppData(userId)
+        .then((res) => {
+          console.log(res);
+          dispatch(setSecondGameRulesState(res.game_rule_2_show));
+        })
+        .catch((error) => {
+          console.error('Get user data error:', error);
+        })
+    }, 1000);
+  };
   return (
     <div className={styles.game}>
       {loading ? (
         <Loader />
       ) : (
         <>
-          {data?.players?.length === 1 ?
+          {rules ? (
             <>
-              <div className={styles.game__betContainer}>
-                <p className={styles.game__bet}>
-                  {translation?.game_bet_text}
-                  <span className={styles.game__text}>
-                    {data?.bet_type === "1" ? "💵" : "🔰"}
-                  </span>
-                  {data?.bet}
+              {data?.players?.length !== 1 ?
+                <>
+                  <div className={styles.game__betContainer}>
+                    <p className={styles.game__bet}>
+                      {translation?.game_bet_text}
+                      <span className={styles.game__text}>
+                        {data?.bet_type === "1" ? "💵" : "🔰"}
+                      </span>
+                      {data?.bet}
+                    </p>
+                  </div><div className={styles.game__centralContainer}>
+                    <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
+                    <CircularProgressBar progress={roomValue ? roomValue : 0} />
+                    <p className={styles.game__centralTimer}>{timer}</p>
+                  </div>
+                  <RenderComponent users={filteredPlayers} />
+                </> :
+                <p
+                  className={styles.game__text}
+                  style={{ position: 'absolute', top: '45%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%' }}>
+                  {translation?.waiting4players}
                 </p>
-              </div><div className={styles.game__centralContainer}>
-                <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
-                <CircularProgressBar progress={roomValue ? roomValue : 0} />
-                <p className={styles.game__centralTimer}>{timer}</p>
-              </div>
-              <RenderComponent users={filteredPlayers} />
-            </> :
-            <p
-              className={styles.game__text}
-              style={{ position: 'absolute', top: '45%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%' }}>
-              {translation?.waiting4players}
-            </p>
-          }
-          <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
-            <div className={styles.overlay__inputWrapper}>
-              <div className={styles.overlay__avatarWrapper}>
-                {currentPlayer?.emoji && currentPlayer?.emoji !== 'none' && (
-                  <div className={styles.overlay__playerEmoji}>
-                    <img src={currentPlayer?.emoji} alt="emoji" className={styles.overlay__emojiImage} />
+              }
+              <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
+                <div className={styles.overlay__inputWrapper}>
+                  <div className={styles.overlay__avatarWrapper}>
+                    {currentPlayer?.emoji && currentPlayer?.emoji !== 'none' && (
+                      <div className={styles.overlay__playerEmoji}>
+                        <img src={currentPlayer?.emoji} alt="emoji" className={styles.overlay__emojiImage} />
+                      </div>
+                    )}
+                    <UserAvatar />
+                    <p className={styles.overlay__name}>
+                      {userData && userData?.publicname}
+                    </p>
+                  </div>
+                  <div className={styles.overlay__inputContainer}>
+                    <input
+                      type="number"
+                      placeholder={placeholder}
+                      className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
+                      value={inputValue}
+                      onFocus={handleInputFocus}
+                      readOnly
+                    />
+                    <p className={styles.overlay__inputText}>{translation?.your_number_text}</p>
+                    <div className={styles.overlay__userMoney}>
+                      <span className={styles.overlay__text}>
+                        {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
+                      </span>
+                    </div>
+                  </div>
+                  <button className={styles.overlay__emojiButton} onClick={handleClickEmoji}>
+                    <img src={smile} alt="smile_icon" className={styles.overlay__smile} />
+                  </button>
+                </div>
+                {showOverlay && (
+                  <div className={showEmojiOverlay ? styles.overlay__emojis : styles.overlay__keyboard}>
+                    {showEmojiOverlay ?
+                      (<>
+                        {emojis && emojis?.map((emoji: string, index: number) => (
+                          <img
+                            key={index}
+                            src={emoji}
+                            alt={`Emoji ${index}`}
+                            className={styles.overlay__emoji}
+                            onClick={() => handleEmojiSelect(String(index + 1))} />
+                        ))}
+                      </>
+                      ) : (
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, `${translation?.game_but_erase}`, 0, `${translation?.game_but_done}`].map((key) => (
+                          typeof key === 'number' ? (
+                            <button
+                              key={key}
+                              className={styles.overlay__key}
+                              onClick={() => handleButtonClick(key)}
+                            >
+                              {key}
+                            </button>
+                          ) : (
+                            <div
+                              key={key}
+                              className={key === `${translation?.game_but_erase}` || data?.players?.length === 1
+                                ? styles.overlay__bottomLeftButton
+                                : styles.overlay__bottomRightButton}
+                              onClick={() => handleButtonClick(key)}
+                            >
+                              {key === `${translation?.game_but_erase}` ? (
+                                <>
+                                  <img src={deleteIcon} alt="delete icon" className={styles.overlay__icon} />
+                                  <span>{translation?.game_but_erase}</span>
+                                </>
+                              ) : (
+                                <>
+                                  <img src={approveIcon} alt="done icon" className={styles.overlay__icon} />
+                                  <span>{translation?.game_but_done}</span>
+                                </>
+                              )}
+                            </div>
+                          ))
+                        ))}
                   </div>
                 )}
-                <UserAvatar />
-                <p className={styles.overlay__name}>
-                  {userData && userData?.publicname}
-                </p>
               </div>
-              <div className={styles.overlay__inputContainer}>
-                <input
-                  type="number"
-                  placeholder={placeholder}
-                  className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
-                  value={inputValue}
-                  onFocus={handleInputFocus}
-                  readOnly
-                />
-                <p className={styles.overlay__inputText}>{translation?.your_number_text}</p>
-                <div className={styles.overlay__userMoney}>
-                  <span className={styles.overlay__text}>
-                    {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
-                  </span>
+            </>
+            ) : (
+              <div className={styles.rules}>
+                <img src={ruleImage!} alt="game rules" className={styles.rules__image} />
+                <div className={styles.rules__button}>
+                  <Button text="Ознакомился" handleClick={handleRuleButtonClick} />
                 </div>
               </div>
-              <button className={styles.overlay__emojiButton} onClick={handleClickEmoji}>
-                <img src={smile} alt="smile_icon" className={styles.overlay__smile} />
-              </button>
-            </div>
-            {showOverlay && (
-              <div className={showEmojiOverlay ? styles.overlay__emojis : styles.overlay__keyboard}>
-                {showEmojiOverlay ?
-                  (<>
-                    {emojis && emojis?.map((emoji: string, index: number) => (
-                      <img
-                        key={index}
-                        src={emoji}
-                        alt={`Emoji ${index}`}
-                        className={styles.overlay__emoji}
-                        onClick={() => handleEmojiSelect(String(index + 1))} />
-                    ))}
-                  </>
-                  ) : (
-                    [1, 2, 3, 4, 5, 6, 7, 8, 9, `${translation?.game_but_erase}`, 0, `${translation?.game_but_done}`].map((key) => (
-                      typeof key === 'number' ? (
-                        <button
-                          key={key}
-                          className={styles.overlay__key}
-                          onClick={() => handleButtonClick(key)}
-                        >
-                          {key}
-                        </button>
-                      ) : (
-                        <div
-                          key={key}
-                          className={key === `${translation?.game_but_erase}` || data?.players?.length === 1
-                            ? styles.overlay__bottomLeftButton
-                            : styles.overlay__bottomRightButton}
-                          onClick={() => handleButtonClick(key)}
-                        >
-                          {key === `${translation?.game_but_erase}` ? (
-                            <>
-                              <img src={deleteIcon} alt="delete icon" className={styles.overlay__icon} />
-                              <span>{translation?.game_but_erase}</span>
-                            </>
-                          ) : (
-                            <>
-                              <img src={approveIcon} alt="done icon" className={styles.overlay__icon} />
-                              <span>{translation?.game_but_done}</span>
-                            </>
-                          )}
-                        </div>
-                      ))
-                    ))}
-              </div>
             )}
-          </div>
         </>
       )}
 

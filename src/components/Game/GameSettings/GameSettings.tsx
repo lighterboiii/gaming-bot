@@ -13,6 +13,7 @@ import SettingsSlider from '../SettingsSlider/SettingsSlider';
 import { IGameSettingsData } from '../../../utils/types/gameTypes';
 import { Modal } from '../../Modal/Modal';
 import JoinRoomPopup from '../JoinRoomPopup/JoinRoomPopup';
+import { postEvent } from '@tma.js/sdk';
 
 interface IProps {
   data: IGameSettingsData | null;
@@ -65,7 +66,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       console.log(response);
       if (response.message === 'success') {
         setSelectedRoomId(response.room_id);
-        console.log('Room created successfully, room_id:', response.room_id);
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         navigate(roomType === 2 ? `/closest/${response.room_id}` : `/room/${response.room_id}`);
       } else if (response.message === 'not_enough_coins') {
         setInsufficient(true);

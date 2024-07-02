@@ -51,17 +51,17 @@ const RockPaperScissors: FC = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [showTimer, setShowTimer] = useState(true);
   const userData = useAppSelector(store => store.app.info);
-  const [rules, setRulesShown] = useState(false);
+  const [rules, setRulesShown] = useState<boolean | null>(false);
   const translation = useAppSelector(store => store.app.languageSettings);
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   console.log(ruleImage);
   console.log(isRulesShown);
-  // установка первоначального вида рук при старте игры
+  // установка первоначального вида рук и правил при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
     setRightRockImage(rightRock);
-    setRulesShown(isRulesShown!);
+    setRulesShown(isRulesShown);
   }, []);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
@@ -361,9 +361,10 @@ const RockPaperScissors: FC = () => {
       resetPlayerChoice();
     }
   }, [data]);
-
+// обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)
