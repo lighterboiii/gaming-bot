@@ -29,12 +29,12 @@ const LeaderBoard: FC = () => {
   const [type, setType] = useState<string>('');
   const [prizeCount, setPrizeCount] = useState<string>('');
   const isUserLeader = user?.id === topLeader;
-
   useEffect(() => {
     const fetchLeadersData = () => {
       setLoading(true);
       getTopUsers()
         .then((leaders: any) => {
+          console.log(leaders);
           setTopLeader(leaders?.top_users[0]);
           setLeaderBoard(leaders?.top_users.slice(1));
           setPrizePhoto(leaders?.top_prize_photo_url);
@@ -113,8 +113,8 @@ const LeaderBoard: FC = () => {
               </div>
               <div className={styles.leaderBoard__prize}>
                 <span>{translation?.leaders_prize}</span>
-                {prizeCount === '' && <img src={prizePhoto} alt="prize" className={styles.leaderBoard__prizePhoto} />}
-                {prizeCount !== '' && <span>{translation?.top_prize_count}</span>}
+                {prizeCount !== '' && <span>{prizeCount}</span>}
+                <img src={prizePhoto} alt="prize" className={styles.leaderBoard__prizePhoto} />
               </div>
             </div>
             <div className={styles.leaderBoard__background}>
@@ -126,13 +126,11 @@ const LeaderBoard: FC = () => {
                     {topLeader?.public_name}
                   </p>
                   <p className={styles.leaderBoard__leaderText}>
-                    <span>
-                      {type === 'spendtokens' && '- 🔰 '}
-                      {type === 'spendcoins' && '- 💵 '}
-                      {type === 'coins' && '+ 💵 '}
-                      {type === 'tokens' && '+ 🔰 '}
-                      {type === 'friends' && <FriendsIcon width={16} height={16} />}
-                    </span>
+                    {type === 'spendtokens' && '- 🔰 '}
+                    {type === 'spendcoins' && '- 💵 '}
+                    {type === 'coins' && '+ 💵 '}
+                    {type === 'tokens' && '+ 🔰 '}
+                    {type === 'friends' && <FriendsIcon width={16} height={16} />}
                     {topLeader?.coins}
                   </p>
                 </div>

@@ -50,7 +50,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
         } else if (res?.message === 'success') {
           setRewardResult(true);
           console.log(res?.prise);
-          dispatch(setNewTokensValue(res?.new_value));
+          res?.new_value && dispatch(setNewTokensValue(res?.new_value));
           postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         }
       });

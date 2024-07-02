@@ -68,6 +68,7 @@
   &__leaderText {
     @include indents();
     @include ellipsis();
+    @include flex(row, center, center, 4px);
     color: $black-color;
     font-weight: 900;
     font-size: 18px;
@@ -114,7 +115,7 @@
   }
 
   &__prizePhoto {
-    @include size(40px, 40px);
+    @include size(20px, 20px);
   }
 
   &__text {
