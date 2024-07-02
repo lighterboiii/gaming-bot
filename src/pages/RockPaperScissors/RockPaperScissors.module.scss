@@ -183,3 +183,20 @@
     @include position(absolute, $top: 40%, $left: 50%);
   }
 }
+
+.rules {
+  @include size(100vw, 100vh);
+  @include flex(row, center, center);
+
+  &__image {
+    @include size(100vw, object-fit);
+    position: relative;
+  }
+
+  &__button {
+    @include size(100%, 42px);
+    @include max-size(312px, auto);
+    @include position(absolute, $bottom: 16px, $left: 50%);
+    transform: translateX(-50%);
+  }
+}

@@ -79,3 +79,11 @@ export const energyDrinkRequest = (userIdValue: string) => {
     userId: userIdValue,
   })
 };
+
+export const setGameRulesWatched = (userIdValue: string, gameId: string) => {
+  return putReq({
+    uri: 'game_rule_watched?user_id=',
+    userId: userIdValue,
+    endpoint: `&game_id=${gameId}`
+  })
+};

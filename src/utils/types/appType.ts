@@ -13,4 +13,8 @@ export interface IAppData {
   ad_info: IBannerData[];
   avatar: string;
   shop_image_url: string;
+  game_rule_1_url: string;
+  game_rule_2_url: string;
+  game_rule_1_show: boolean;
+  game_rule_2_show: boolean;
 }

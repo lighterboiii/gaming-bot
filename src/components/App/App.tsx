@@ -5,7 +5,7 @@ import { FC, useEffect, useState } from 'react';
 import { anyUrl, closestNumberRoomUrl, createRoomUrl, indexUrl, leaderboardUrl, roomUrl, roomsUrl, shopUrl } from '../../utils/routes';
 import { userId } from '../../api/requestData';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { setBannerData, setDailyBonus, setLanguageSettings, setShopAvailable, setShopImage, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
+import { setBannerData, setDailyBonus, setFirstGameRuleImage, setFirstGameRulesState, setLanguageSettings, setSecondGameRuleImage, setSecondGameRulesState, setShopAvailable, setShopImage, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
 import { setProductsArchive } from '../../services/appSlice';
 import { getAppData } from '../../api/mainApi';
 import styles from './App.module.scss';
@@ -65,6 +65,10 @@ const App: FC = () => {
           dispatch(setShopImage(res.shop_image_url));
           dispatch(setDailyBonus(res.daily_bonus));
           dispatch(setUserPhoto(res.avatar));
+          dispatch(setFirstGameRuleImage(res.game_rule_1_url));
+          dispatch(setSecondGameRuleImage(res.game_rule_2_url));
+          dispatch(setFirstGameRulesState(res.game_rule_1_show));
+          dispatch(setSecondGameRulesState(res.game_rule_2_show));
           setLoading(false);
         })
         .catch((error) => {

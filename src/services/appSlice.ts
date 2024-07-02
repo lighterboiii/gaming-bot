@@ -14,6 +14,10 @@ interface AppState {
   tasks: ITask[] | null | any,
   bannerData: IBannerData[] | null | any;
   shopImage: string | null;
+  RPSRuleImage: string | null;
+  closestNumberRuleImage: string | null;
+  firstGameRulesState: boolean | null;
+  secondGameRulesState: boolean | null
 }
 
 const initialState: AppState = {
@@ -27,6 +31,10 @@ const initialState: AppState = {
   tasks: null,
   bannerData: null,
   shopImage: null,
+  RPSRuleImage: null,
+  closestNumberRuleImage: null,
+  firstGameRulesState: null,
+  secondGameRulesState: null,
 }
 
 const appSlice = createSlice({
@@ -148,6 +156,18 @@ const appSlice = createSlice({
     getOpenedRooms: (state, action: PayloadAction<any>) => {
       state.openedRooms = action.payload;
     },
+    setFirstGameRuleImage: (state, action: PayloadAction<string>) => {
+      state.RPSRuleImage = action.payload;
+    },
+    setSecondGameRuleImage: (state, action: PayloadAction<string>) => {
+      state.closestNumberRuleImage = action.payload;
+    },
+    setFirstGameRulesState: (state, action: PayloadAction<boolean>) => {
+      state.firstGameRulesState = action.payload;
+    },
+    setSecondGameRulesState: (state, action: PayloadAction<boolean>) => {
+      state.secondGameRulesState = action.payload;
+    },
   }
 })
 
@@ -176,7 +196,11 @@ export const {
   setActiveEmoji,
   setLanguageSettings,
   setBannerData,
-  setShopImage
+  setShopImage,
+  setFirstGameRuleImage,
+  setSecondGameRuleImage,
+  setFirstGameRulesState,
+  setSecondGameRulesState
 } = appSlice.actions;
 
 export default appSlice.reducer;

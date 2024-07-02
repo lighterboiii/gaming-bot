@@ -57,7 +57,7 @@
     @include indents();
     @include ellipsis();
     @include size(80px, 100%);
-    @include flex(row, center, center, 2px);
+    @include flex(row, flex-start, center, 4px);
     text-align: left;
     color: $main-color;
     font-weight: 900;

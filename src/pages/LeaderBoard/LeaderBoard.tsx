@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useState } from "react";
 import styles from './LeaderBoard.module.scss';
@@ -117,25 +118,33 @@ const LeaderBoard: FC = () => {
                 <img src={prizePhoto} alt="prize" className={styles.leaderBoard__prizePhoto} />
               </div>
             </div>
-            <div className={styles.leaderBoard__background}>
-              <div className={styles.leaderBoard__avatarContainer}>
-                {topLeader && <UserAvatar avatar={topLeader.avatar} item={topLeader} />}
-                {isUserLeader && <p className={styles.leaderBoard__label}>Это вы!</p>}
-                <div className={styles.leaderBoard__leaderInfo}>
-                  <p className={styles.leaderBoard__leaderName}>
-                    {topLeader?.public_name}
-                  </p>
-                  <p className={styles.leaderBoard__leaderText}>
-                    {type === 'spendtokens' && '- 🔰 '}
-                    {type === 'spendcoins' && '- 💵 '}
-                    {type === 'coins' && '+ 💵 '}
-                    {type === 'tokens' && '+ 🔰 '}
-                    {type === 'friends' && <FriendsIcon width={16} height={16} />}
-                    {topLeader?.coins}
-                  </p>
+            {leaderBoard?.length !== 0 ? (
+              <div className={styles.leaderBoard__background}>
+                <div className={styles.leaderBoard__avatarContainer}>
+                  {topLeader && <UserAvatar avatar={topLeader.avatar} item={topLeader} />}
+                  {/* {isUserLeader && <p className={styles.leaderBoard__label}>Это вы!</p>} */}
+                  <div className={styles.leaderBoard__leaderInfo}>
+                    <>
+                      <p className={styles.leaderBoard__leaderName}>
+                        {topLeader?.public_name}
+                      </p>
+                      <p className={styles.leaderBoard__leaderText}>
+                        {type === 'spendtokens' && '- 🔰 '}
+                        {type === 'spendcoins' && '- 💵 '}
+                        {type === 'coins' && '+ 💵 '}
+                        {type === 'tokens' && '+ 🔰 '}
+                        {type === 'friends' && <FriendsIcon width={16} height={16} />}
+                        {topLeader?.coins}
+                      </p>
+                    </>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <p className={styles.leaderBoard__text} style={{ alignSelf: 'center', marginLeft: '30px' }} >
+                {translation?.leaderboard_empty}
+              </p>
+            )}
           </div>
           <div className={styles.leaderBoard__board + " scrollable"}>
             {leaderBoard?.filter((leader: any) => leader.id !== 1).map((leader: any, index: number) =>

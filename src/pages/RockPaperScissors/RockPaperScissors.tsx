@@ -3,7 +3,7 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPollingRequest, leaveRoomRequest, whoIsWinRequest } from "../../api/gameApi";
+import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
 import Loader from "../../components/Loader/Loader";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useTelegram from "../../hooks/useTelegram";
@@ -18,19 +18,23 @@ import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import leftRock from '../../images/rock-paper-scissors/left_rock.png';
 import rightRock from '../../images/rock-paper-scissors/right_rock.png';
 import { IRPSPlayer } from "../../utils/types/gameTypes";
-import { useAppSelector } from "../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
 import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
 import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
 import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 import { roomsUrl } from "../../utils/routes";
 import { postEvent } from "@tma.js/sdk";
+import Button from "../../components/ui/Button/Button";
+import { getAppData } from "../../api/mainApi";
+import { setFirstGameRulesState } from "../../services/appSlice";
 
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
+  const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -47,11 +51,17 @@ const RockPaperScissors: FC = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [showTimer, setShowTimer] = useState(true);
   const userData = useAppSelector(store => store.app.info);
+  const [rules, setRulesShown] = useState(false);
   const translation = useAppSelector(store => store.app.languageSettings);
+  const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
+  const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
+  console.log(ruleImage);
+  console.log(isRulesShown);
   // установка первоначального вида рук при старте игры
   useEffect(() => {
     setLeftRockImage(leftRock);
     setRightRockImage(rightRock);
+    setRulesShown(isRulesShown!);
   }, []);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
@@ -352,6 +362,20 @@ const RockPaperScissors: FC = () => {
     }
   }, [data]);
 
+  const handleRuleButtonClick = () => {
+    setGameRulesWatched(userId, '1');
+    setRulesShown(true);
+    setTimeout(() => {
+      getAppData(userId)
+        .then((res) => {
+          dispatch(setFirstGameRulesState(res.game_rule_1_show));
+        })
+        .catch((error) => {
+          console.error('Get user data error:', error);
+        })
+    }, 1000);
+  };
+
   return (
     <div className={styles.game}>
       <div
@@ -360,105 +384,109 @@ const RockPaperScissors: FC = () => {
       >
         {loading ? <Loader /> : (
           <>
-            <div className={styles.game__players}>
-              {data?.players?.map((player: IRPSPlayer) => (
-                <div className={styles.game__player} key={player.userid}>
-                  <p className={styles.game__playerName}>{player?.publicname}</p>
-                  <UserAvatar item={player} avatar={player?.avatar} key={player?.userid} />
-                  {player?.choice === 'ready' && (
-                    <img
-                      src={readyIcon}
-                      alt="ready icon"
-                      className={styles.game__readyIcon}
-                    />
-                  )}
-                  {Number(player?.userid) === Number(userId) && player?.choice !== 'ready' && (
-                    <div className={styles.game__balance}>
-                      {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
+            {rules ? (
+              <>
+                <div className={styles.game__players}>
+                  {data?.players?.map((player: IRPSPlayer) => (
+                    <div className={styles.game__player} key={player.userid}>
+                      <p className={styles.game__playerName}>{player?.publicname}</p>
+                      <UserAvatar item={player} avatar={player?.avatar} key={player?.userid} />
+                      {player?.choice === 'ready' && (
+                        <img
+                          src={readyIcon}
+                          alt="ready icon"
+                          className={styles.game__readyIcon} />
+                      )}
+                      {Number(player?.userid) === Number(userId) && player?.choice !== 'ready' && (
+                        <div className={styles.game__balance}>
+                          {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
+                        </div>
+                      )}
+                      {player?.emoji !== "none" && (
+                        <motion.img
+                          src={player.emoji}
+                          alt="player emoji"
+                          className={Number(player?.userid) === Number(data?.players[0]?.userid)
+                            ? styles.game__selectedEmojiRight
+                            : styles.game__selectedEmoji}
+                          initial={{ scale: 0.1 }}
+                          animate={{
+                            scale: [0.1, 1.5, 1],
+                            transition: {
+                              duration: 1,
+                              times: [0, 0.5, 1],
+                            },
+                          }} />
+                      )}
                     </div>
+                  ))}
+                </div><>
+                  {data?.players_count === "2" &&
+                    data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready') &&
+                    <img src={newVS} alt="versus icon" className={styles.game__versusImage} />}
+                  {messageVisible ? (
+                    <p className={styles.game__resultMessage}>
+                      {message}
+                    </p>
+                  ) : (
+                    <p className={styles.game__notify}>
+                      {showTimer && timerStarted && timer}
+                    </p>
                   )}
-                  {player?.emoji !== "none" && (
-                    <motion.img
-                      src={player.emoji}
-                      alt="player emoji"
-                      className={Number(player?.userid) === Number(data?.players[0]?.userid)
-                        ? styles.game__selectedEmojiRight
-                        : styles.game__selectedEmoji
-                      }
-                      initial={{ scale: 0.1 }}
-                      animate={{
-                        scale: [0.1, 1.5, 1],
-                        transition: {
-                          duration: 1,
-                          times: [0, 0.5, 1],
-                        },
-                      }}
-                    />
-                  )}
+                  <div className={styles.game__hands}>
+                    {(
+                      data?.players_count === "2"
+                    ) ? (
+                      <HandShake
+                        player1={playersAnim.firstAnim || leftRockImage}
+                        player2={playersAnim.secondAnim || rightRockImage} />
+                    ) : (
+                      data?.players_count === "1"
+                    ) ? (
+                      <p className={styles.game__notify}>{translation?.waiting4players}</p>
+                    ) :
+                      ''}
+                  </div>
+                  <div className={styles.game__lowerContainer}>
+                    <div className={styles.game__betContainer}>
+                      <p className={styles.game__text}>{translation?.game_bet_text}</p>
+                      <div className={styles.game__bet}>
+                        <p className={styles.game__text}>{data?.bet_type === "1" ? "💵" : "🔰"}</p>
+                        <p className={styles.game__text}>{data?.bet}</p>
+                      </div>
+                    </div>
+                    {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none') && data?.players_count === "2") ? (
+                      <div className={styles.game__buttonsWrapper}>
+                        <ChoiceBox choice={choice} handleChoice={handleChoice} />
+                      </div>
+                    ) : (
+                      <div>
+                        <input
+                          type="checkbox"
+                          id="ready"
+                          onChange={handleReady}
+                          className={styles.game__checkbox} />
+                        <label htmlFor="ready" className={styles.game__label}></label>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      className={`${styles.game__button} ${styles.game__emojiButton}`}
+                      onClick={() => setShowEmojiOverlay(true)}
+                    >
+                      <img src={emoji_icon} alt="emoji icon" className={styles.game__iconEmoji} />
+                    </button>
+                  </div>
+                </>
+              </>) : (
+              <div className={styles.rules}>
+                <img src={ruleImage!} alt="game rules" className={styles.rules__image} />
+                <div className={styles.rules__button}>
+                  <Button text="Ознакомился" handleClick={handleRuleButtonClick} />
                 </div>
-              ))}
-            </div>
-            <>
-              {data?.players_count === "2" &&
-                data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready') &&
-                <img src={newVS} alt="versus icon" className={styles.game__versusImage} />
-              }
-              {messageVisible ? (
-                <p className={styles.game__resultMessage}>
-                  {message}
-                </p>
-              ) : (
-                <p className={styles.game__notify}>
-                  {showTimer && timerStarted && timer}
-                </p>
-              )}
-              <div className={styles.game__hands}>
-                {(
-                  data?.players_count === "2"
-                ) ? (
-                  <HandShake
-                    player1={playersAnim.firstAnim || leftRockImage}
-                    player2={playersAnim.secondAnim || rightRockImage}
-                  />
-                ) : (
-                  data?.players_count === "1"
-                ) ? (
-                  <p className={styles.game__notify}>{translation?.waiting4players}</p>
-                ) :
-                  ''}
               </div>
-              <div className={styles.game__lowerContainer}>
-                <div className={styles.game__betContainer}>
-                  <p className={styles.game__text}>{translation?.game_bet_text}</p>
-                  <div className={styles.game__bet}>
-                    <p className={styles.game__text}>{data?.bet_type === "1" ? "💵" : "🔰"}</p>
-                    <p className={styles.game__text}>{data?.bet}</p>
-                  </div>
-                </div>
-                {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none') && data?.players_count === "2") ? (
-                  <div className={styles.game__buttonsWrapper}>
-                    <ChoiceBox choice={choice} handleChoice={handleChoice} />
-                  </div>
-                ) : (
-                  <div>
-                    <input
-                      type="checkbox"
-                      id="ready"
-                      onChange={handleReady}
-                      className={styles.game__checkbox}
-                    />
-                    <label htmlFor="ready" className={styles.game__label}></label>
-                  </div>
-                )}
-                <button
-                  type="button"
-                  className={`${styles.game__button} ${styles.game__emojiButton}`}
-                  onClick={() => setShowEmojiOverlay(true)}
-                >
-                  <img src={emoji_icon} alt="emoji icon" className={styles.game__iconEmoji} />
-                </button>
-              </div>
-            </>
+            )
+            }
           </>
         )}
         <EmojiOverlay
