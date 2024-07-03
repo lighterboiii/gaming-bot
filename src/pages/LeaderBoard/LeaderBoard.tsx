@@ -30,7 +30,7 @@ const LeaderBoard: FC = () => {
   });
   const [type, setType] = useState<string>('');
   const [prizeCount, setPrizeCount] = useState<string>('');
-  const isUserLeader = user?.id === topLeader;
+  // const isUserLeader = user?.id === topLeader;
   useEffect(() => {
     tg.BackButton.show().onClick(() => {
       navigate(indexUrl);
