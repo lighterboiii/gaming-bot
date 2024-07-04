@@ -61,11 +61,11 @@
   }
 
   &__winnerValue {
-    @include indents(8px 16px, 0);
+    @include indents(4px 8px, 0);
     @include flex(row, center, center);
     background-color: $main-color;
     border-radius: 32px;
-    margin-right: 12px;
+    margin-right: 10px;
     line-height: 1;
   }
 

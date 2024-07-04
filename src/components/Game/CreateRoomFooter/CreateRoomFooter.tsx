@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import styles from './CreateRoomFooter.module.scss';
 import Button from "../../ui/Button/Button";

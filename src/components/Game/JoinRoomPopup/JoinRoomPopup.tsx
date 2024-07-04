@@ -32,7 +32,6 @@ const JoinRoomPopup: FC<IProps> = ({
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
-
   const handleJoinRoom = () => {
     energyDrinkRequest(userId)
       .then((res: any) => {

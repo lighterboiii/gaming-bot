@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 import { IBonus } from "../../../utils/types/mainTypes";
 import styles from './Bonus.module.scss';
 import Button from "../../ui/Button/Button";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "../../../services/appSlice";
-// import { userId } from "../../../api/requestData";
+import { userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
 import { makeCollectibleRequest } from "../../../api/shopApi";
 import { postEvent } from '@tma.js/sdk';

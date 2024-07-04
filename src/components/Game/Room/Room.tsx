@@ -20,7 +20,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [isMessage, setIsMessage] = useState(false);
   const [message, setMessage] = useState('');
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -35,7 +35,7 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       }, 1500);
       return;
     }
-
+    console.log(room); 
     if ((userInfo?.user_energy === 0 && Number(room?.bet_type) === 3) || roomType === 0) {
       openModal();
       return;
