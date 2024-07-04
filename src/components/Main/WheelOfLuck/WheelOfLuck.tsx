@@ -8,7 +8,7 @@ import light from '../../../images/closest-number/lamp2.png';
 import { getWheelPrizeRequest, spinWheelRequest } from '../../../api/mainApi';
 import { userId } from '../../../api/requestData';
 import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
-import { setTokensValueAfterBuy } from '../../../services/appSlice';
+import { addTokens, setTokensValueAfterBuy } from '../../../services/appSlice';
 import useTelegram from '../../../hooks/useTelegram';
 import { IFortuneData } from '../../../utils/types/mainTypes';
 import { postEvent } from '@tma.js/sdk';
@@ -20,7 +20,7 @@ interface IProps {
 
 const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [prize, setPrize] = useState<boolean>(false);
@@ -46,7 +46,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
-  console.log(prizeItem);
+
   const startSpin = () => {
     spinWheelRequest(userId)
       .then((res: any) => {
@@ -85,9 +85,9 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const claimPrize = () => {
     getWheelPrizeRequest(userId, prizeItem?.fortune_item_id, prizeItem?.fortune_item_count)
       .then((res: any) => {
-                console.log(res);
         if (res?.message === "ok") {
           postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+          prizeItem?.fortune_type === 'tokens' && dispatch(addTokens(prizeItem?.fortune_item_count));
         }
       })
     closeOverlay();
