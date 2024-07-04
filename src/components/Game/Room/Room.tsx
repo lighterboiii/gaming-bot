@@ -27,6 +27,15 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const userInfo = useAppSelector(store => store.app.info);
 
   const handleJoinRoom = (roomType: number) => {
+    if (room.free_places === 0) {
+      setIsMessage(true);
+      setMessage(translation?.no_free_places || "Нет свободных мест");
+      setTimeout(() => {
+        setIsMessage(false);
+      }, 1500);
+      return;
+    }
+
     if ((userInfo?.user_energy === 0 && Number(room?.bet_type) === 3) || roomType === 0) {
       openModal();
       return;

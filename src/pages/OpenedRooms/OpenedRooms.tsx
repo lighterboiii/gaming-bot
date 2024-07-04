@@ -36,7 +36,7 @@ const OpenedRooms: FC = () => {
   const [betClickCount, setBetClickCount] = useState(0);
 
   const [loading, setLoading] = useState(false);
-  
+
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -163,12 +163,15 @@ const OpenedRooms: FC = () => {
   };
 
   const handleRoomClick = (room: any) => {
+    if (room?.free_places === 0) {
+      return;
+    }
     setSelectedRoomId(room?.room_id);
     setModalOpen(true);
   };
 
   const handleCreateClick = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     navigate('/create-room')
   };
 
@@ -212,7 +215,10 @@ const OpenedRooms: FC = () => {
       {rooms && rooms?.length > 0 && <CreateRoomFooter />}
       {isModalOpen && selectedRoomId && (
         <Modal title={translation?.energy_depleted} closeModal={() => setModalOpen(false)}>
-          <JoinRoomPopup handleClick={() => setModalOpen(false)} roomId={selectedRoomId} />
+          <JoinRoomPopup
+            handleClick={() => setModalOpen(false)}
+            roomId={selectedRoomId}
+          />
         </Modal>
       )}
     </div>

@@ -18,7 +18,14 @@ interface IProps {
   roomType?: number;
 }
 
-const JoinRoomPopup: FC<IProps> = ({ handleClick, roomId, bet, betType, roomType, fromGameSettings = false }) => {
+const JoinRoomPopup: FC<IProps> = ({ 
+  handleClick, 
+  roomId, 
+  bet, 
+  betType, 
+  roomType, 
+  fromGameSettings = false,
+ }) => {
   const { user } = useTelegram();
   // const userId = user?.id;
   const [messageShown, setMessageShown] = useState(false);
