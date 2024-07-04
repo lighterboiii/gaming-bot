@@ -5,7 +5,7 @@
   @include indents(16px 16px, 0);
   @include size(100%, 100%);
   min-height: calc(100vh + 1px);
-  @include flex(column, flex-start, center, 16px);
+  @include flex(column, flex-start, center);
   z-index: 1;
 
   &__heading {
@@ -77,12 +77,13 @@
 
   &__roomList {
     @include position(relative);
-    @include size(100%, calc(70vh - 124px));
+    @include size(100%, calc(68vh - 136px));
     @include flex(column, flex-start, center, 8px);
     overflow-y: scroll;
+    border-radius: $radius-10;
 
     @media screen and (min-height: 691px) {
-      @include size(100%, 75vh);
+      @include size(100%, 60vh);
     }
   }
 }
