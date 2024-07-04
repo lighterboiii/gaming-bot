@@ -52,8 +52,8 @@
   }
   
   &__balance {
-    @include indents(4px 8px, 0);
-    @include size(60%, unset);
+    @include indents(4px 4px, 0);
+    @include size(50%, unset);
     @include flex(row, center,center);
     flex-wrap: nowrap;
     @include position(absolute, $bottom: -8%, $left: 50%);
@@ -62,7 +62,7 @@
     background-color: $rps-background-color;
     border-radius: $radius-40;
     font-size: 14px;
-    z-index: 7;
+    z-index: 5;
   }
 
   &__icon {
@@ -171,13 +171,13 @@
   &__selectedEmoji {
     @include size(60px, 60px);
     @include position(absolute, $bottom: -20%, $left: 0);
-    z-index: 3;
+    z-index: 6;
   }
 
   &__selectedEmojiRight {
     @include size(60px, 60px);
     @include position(absolute, $bottom: -20%, $right: 0);
-    z-index: 3;
+    z-index: 6;
   }
   
   &__resultMessage {

@@ -177,6 +177,7 @@
   }
 
   &__userMoney {
+    @include flex(row, center, center);
     background-color: rgba(0, 0, 0, 0.2);
     @include size(95%, 38px);
     @include indents(10px, 0);
