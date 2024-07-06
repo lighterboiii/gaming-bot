@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import appReducer from './appSlice';
 import rpsReducer from './rockPaperScissorsSlice';
 

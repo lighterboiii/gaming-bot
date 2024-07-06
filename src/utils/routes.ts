@@ -8,4 +8,14 @@ const roomUrl = '/room/:roomId';
 const closestNumberRoomUrl = '/closest/:roomId';
 const anyUrl = '*';
 
-export { indexUrl, balanceUrl, createRoomUrl, roomsUrl, shopUrl, leaderboardUrl, roomUrl, closestNumberRoomUrl, anyUrl };
+export {
+    indexUrl,
+    balanceUrl,
+    createRoomUrl,
+    roomsUrl,
+    shopUrl,
+    leaderboardUrl,
+    roomUrl,
+    closestNumberRoomUrl,
+    anyUrl
+};

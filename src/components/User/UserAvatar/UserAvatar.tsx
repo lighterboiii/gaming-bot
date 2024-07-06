@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
+
+import { getImageLink, getImageMaskLink } from "API/requestData";
+import { useAppSelector } from "Services/reduxHooks";
+
 import styles from './UserAvatar.module.scss';
-import { useAppSelector } from "../../../services/reduxHooks";
-import { getImageLink, getImageMaskLink } from "../../../api/requestData";
 
 interface IProps {
   item?: any;
@@ -28,7 +29,7 @@ const UserAvatar: FC<IProps> = ({ item, avatar }) => {
       setSkin('');
       setMask('');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [activeSkin, userData, item]);
 
   return (

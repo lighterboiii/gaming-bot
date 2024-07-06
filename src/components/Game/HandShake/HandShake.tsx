@@ -1,4 +1,5 @@
 import { FC, memo } from 'react';
+
 import styles from './HandShake.module.scss';
 
 interface IProps {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { token } from "./requestData";
 
 /* eslint-disable import/no-anonymous-default-export */
@@ -10,7 +9,7 @@ type TOptions = {
 
 type TRequest = {
   uri: string;
-  userId?: string;
+  userId?: number;
   data?: any;
   endpoint?: string;
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
@@ -36,7 +35,7 @@ function getRequestParams({ uri, userId, method, data, endpoint }: TRequest) {
     params.body = JSON.stringify(data);
   }
   return { path, params };
-};
+}
 /**
  * @template T
  * @param {IResponse<T>} res объект с полученным от сервера ответом. Должен иметь метод .json()
@@ -47,7 +46,7 @@ function checkRes<T>(res: Response): Promise<T> {
     return res.json();
   }
   return Promise.reject(`Ошибка ${res.status}`)
-};
+}
 /**
  * @template T
  * @param {string} url добавочная строка `${BASE_URL}/${url}`
@@ -56,28 +55,28 @@ function checkRes<T>(res: Response): Promise<T> {
  */
 
 function request<T>(url: string, options: TOptions): Promise<T> {
-  return fetch(url, options).then(checkRes) as Promise<T>; 
-};
+  return fetch(url, options).then(checkRes) as Promise<T>;
+}
 
 export function getReq<T>(options: TRequest) {
   const { path, params } = getRequestParams({ ...options, method: 'GET' });
   return request<T>(path, params);
-};
+}
 
 export function postReq<T>(options: TRequest) {
   const { path, params } = getRequestParams({ ...options, method: 'POST' });
   return request<T>(path, params);
-};
+}
 
 export function putReq<T>(options: TRequest) {
   const { path, params } = getRequestParams({ ...options, method: 'PUT' });
   return request<T>(path, params);
-};
+}
 
 export function deleteReq<T>(options: TRequest) {
   const { path, params } = getRequestParams({ ...options, method: 'DELETE' });
   return request<T>(path, params);
-};
+}
 
 export default {
   getReq, postReq, putReq, deleteReq

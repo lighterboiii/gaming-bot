@@ -1,11 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
-import styles from './CreateRoomFooter.module.scss';
-import Button from "../../ui/Button/Button";
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../../services/reduxHooks";
-import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
+import { FC } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { useAppSelector } from "Services/reduxHooks";
+import { formatNumber } from "Utils/additionalFunctions";
+
+import Button from "../../ui/Button/Button";
+
+import styles from './CreateRoomFooter.module.scss';
 
 const CreateRoomFooter: FC = () => {
   const navigate = useNavigate();
@@ -25,7 +27,8 @@ const CreateRoomFooter: FC = () => {
         <p className={styles.footer__stats}>⚡ {userInfo?.user_energy}</p>
       </div>
       <div className={styles.footer__buttonWrapper}>
-        <Button text={translation?.create_room} handleClick={handleCreateClick} />
+        <Button text={translation?.create_room}
+handleClick={handleCreateClick} />
       </div>
     </div>
   )

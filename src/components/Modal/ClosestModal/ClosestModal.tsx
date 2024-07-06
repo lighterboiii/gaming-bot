@@ -1,15 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect } from "react";
 import ReactDOM from "react-dom";
-import styles from "./ClosestModal.module.scss";
-import ModalOverlay from "../ModalOverlay/ModalOverlay";
-import UserAvatar from "../../User/UserAvatar/UserAvatar";
-import { leaveRoomRequest } from "../../../api/gameApi";
-import useTelegram from "../../../hooks/useTelegram";
-import { userId } from "../../../api/requestData";
 import { useNavigate } from "react-router-dom";
-import { roomsUrl } from "../../../utils/routes";
-import { IRPSPlayer } from "../../../utils/types/gameTypes";
+
+import { leaveRoomRequest } from "API/gameApi";
+import { userId } from "API/requestData";
+import useTelegram from "Hooks/useTelegram";
+import { roomsUrl } from "Utils/routes";
+import { IRPSPlayer } from "Utils/types/gameTypes";
+
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
+import ModalOverlay from "../ModalOverlay/ModalOverlay";
+
+import styles from "./ClosestModal.module.scss";
 
 interface IProps {
   closeModal: () => void;
@@ -23,7 +25,7 @@ export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, game
   const { user } = useTelegram();
   const userId = user?.id;
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {
       if (evt.key === 'Escape') {
@@ -54,7 +56,8 @@ export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, game
           <div className={styles.modal__content}>
             <p className={styles.modal__text}>{gameValue}</p>
             <div className={styles.modal__avatar}>
-              <UserAvatar item={winner} avatar={winner?.avatar} />
+              <UserAvatar item={winner}
+avatar={winner?.avatar} />
               <p className={styles.modal__name}>{winner?.publicname}</p>
             </div>
             <div className={styles.modal__winnerValue}>+ {winnerValue}   {betType === "1" ? `💵` : `🔰`}</div>

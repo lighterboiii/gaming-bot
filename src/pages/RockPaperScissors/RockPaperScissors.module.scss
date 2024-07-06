@@ -1,5 +1,5 @@
-@use '../../stylesheets/mixins' as *;
-@use '../../stylesheets/variables' as *;
+@use 'Stylesheets/mixins' as *;
+@use 'Stylesheets/variables' as *;
 
 .game {
   @include size(100%, 100vh);
@@ -7,7 +7,7 @@
   @include flex(column, flex-start, center, 10px);
   font-family: 'Gilroy', sans-serif;
   font-weight: 900;
-  background-image: url('../../images/rock-paper-scissors/rps-bg.png');
+  background-image: url('../../Images/rock-paper-scissors/rps-bg.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -38,7 +38,7 @@
     @include position(relative);
     @include flex(row, center, center);
   }
-  
+
   &__playerName {
     @include indents();
     @include size(152px, auto);
@@ -50,11 +50,11 @@
     color: $rps-text-color;
     z-index: 7;
   }
-  
+
   &__balance {
     @include indents(4px 4px, 0);
     @include size(50%, unset);
-    @include flex(row, center,center);
+    @include flex(row, center, center);
     flex-wrap: nowrap;
     @include position(absolute, $bottom: -8%, $left: 50%);
     transform: translate(-50%);
@@ -147,7 +147,7 @@
   }
 
   &__label {
-    background-image: url('../../images/rock-paper-scissors/ready_image.png');
+    background-image: url('../../Images/rock-paper-scissors/ready_image.png');
     @include size(200px, 68px);
     @include position(relative);
     @include flex(row, center, center, 6px);
@@ -156,7 +156,7 @@
     background-repeat: no-repeat;
     cursor: pointer;
 
-    @media screen and (min-height: 691px) { 
+    @media screen and (min-height: 691px) {
       @include size(264px, 84px);
     }
   }
@@ -179,7 +179,7 @@
     @include position(absolute, $bottom: -20%, $right: 0);
     z-index: 6;
   }
-  
+
   &__resultMessage {
     @extend .game__notify;
     @include position(absolute, $top: 40%, $left: 50%);

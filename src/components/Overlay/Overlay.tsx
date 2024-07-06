@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
-import styles from './Overlay.module.scss';
-import CrossIcon from "../../icons/Cross/Cross";
 import { postEvent } from "@tma.js/sdk";
+import { FC } from "react";
+
+import CrossIcon from "Icons/Cross/Cross";
+
+import styles from './Overlay.module.scss';
 
 interface IProps {
   show: boolean;
@@ -23,7 +24,7 @@ const Overlay: FC<IProps> = ({
 }) => {
 
   const handleClose = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     onClose && onClose();
   }
 
@@ -38,7 +39,9 @@ const Overlay: FC<IProps> = ({
           className={styles.overlay__closeButton}
           style={{ backgroundColor: buttonColor }}
         >
-          <CrossIcon width={12} height={12} color={crossColor} />
+          <CrossIcon width={12}
+            height={12}
+            color={crossColor} />
         </button>
       }
     </div>

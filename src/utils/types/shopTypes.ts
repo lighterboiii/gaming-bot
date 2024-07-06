@@ -25,7 +25,7 @@ export interface ILavkaData {
 export type GoodsItem = ILavkaData | ItemData;
 
 export interface LavkaResponse {
-  lavka: ILavkaData[]; 
-};
+  lavka: ILavkaData[];
+}
 
-export interface CombinedItemData extends ItemData, ILavkaData {};
+export interface CombinedItemData extends ItemData, ILavkaData {}

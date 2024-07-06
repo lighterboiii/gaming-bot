@@ -1,11 +1,13 @@
-@use '../../../stylesheets/mixins' as *;
-@use '../../../stylesheets/variables' as *;
+@use 'Stylesheets/mixins' as *;
+@use 'Stylesheets/variables' as *;
 
 @mixin textScrollAnimation {
   $steps: 400;
+
   @for $i from 0 through $steps {
     $percentage: $i * (100 / $steps);
-    $direction: if($i % 2 == 0, 1, -1);
+    $direction: if($i % 2==0, 1, -1);
+
     #{$percentage}% {
       transform: translateY($direction * 20%);
       filter: blur(16px);
@@ -20,17 +22,17 @@
   @media screen and (max-height: 691px) {
     @include size(100px, 100px);
   }
-  
+
   &__innerCircle {
     fill: $main-color;
   }
-  
+
   &__outerCircle {
     fill: transparent;
     stroke: $black-color;
     stroke-width: 6px;
   }
-  
+
   &__progressPoint {
     fill: $closest-secondary-color;
     transition: transform 5s linear;
@@ -62,6 +64,7 @@
       transform-origin: 50px 50px;
       transform: rotate(0deg);
     }
+
     100% {
       transform-origin: 50px 50px;
       transform: rotate(4320deg);

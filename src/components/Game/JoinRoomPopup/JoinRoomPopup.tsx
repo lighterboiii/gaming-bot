@@ -1,13 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react";
-import { useAppSelector } from "../../../services/reduxHooks";
 import { useNavigate } from "react-router-dom";
-import styles from './JoinRoomPopup.module.scss';
-import energy from '../../../images/energy-drink.png';
+
+import { energyDrinkRequest, joinRoomRequest, postNewRoomRequest } from "API/gameApi";
+import { userId } from "API/requestData";
+import useTelegram from "Hooks/useTelegram";
+import energy from 'Images/energy-drink.png';
+import { useAppSelector } from "Services/reduxHooks";
+
 import Button from "../../ui/Button/Button";
-import { joinRoomRequest, postNewRoomRequest, energyDrinkRequest } from "../../../api/gameApi";
-import { userId } from "../../../api/requestData";
-import useTelegram from "../../../hooks/useTelegram";
+
+import styles from './JoinRoomPopup.module.scss';
 
 interface IProps {
   handleClick: () => void;
@@ -18,14 +20,14 @@ interface IProps {
   roomType?: number;
 }
 
-const JoinRoomPopup: FC<IProps> = ({ 
-  handleClick, 
-  roomId, 
-  bet, 
-  betType, 
-  roomType, 
+const JoinRoomPopup: FC<IProps> = ({
+  handleClick,
+  roomId,
+  bet,
+  betType,
+  roomType,
   fromGameSettings = false,
- }) => {
+}) => {
   const { user } = useTelegram();
   const userId = user?.id;
   const [messageShown, setMessageShown] = useState(false);
@@ -78,16 +80,20 @@ const JoinRoomPopup: FC<IProps> = ({
           <div className={styles.popup__modalChildren}>
             <p className={styles.popup__modalText}>
               {translation?.want2use_energy_drink}
-              <img src={energy} alt="drink" className={styles.popup__logoDrink} />
+              <img src={energy}
+                alt="drink"
+                className={styles.popup__logoDrink} />
             </p>
             <p className={styles.popup__modalText}>(1/{userInfo?.user_energy_drinks})</p>
           </div>
           <div className={styles.popup__buttons}>
             <div className={styles.popup__modalButtonWrapper}>
-              <Button text={translation?.no} handleClick={() => handleClick()} />
+              <Button text={translation?.no}
+                handleClick={() => handleClick()} />
             </div>
             <div className={styles.popup__modalButtonWrapper}>
-              <Button text={translation?.yes} handleClick={() => handleJoinRoom()} />
+              <Button text={translation?.yes}
+                handleClick={() => handleJoinRoom()} />
             </div>
           </div>
         </>

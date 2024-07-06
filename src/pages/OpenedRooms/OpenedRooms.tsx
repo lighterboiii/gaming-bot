@@ -1,24 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-import { FC, useEffect, useState } from "react";
-import styles from './OpenedRooms.module.scss';
-import useTelegram from "../../hooks/useTelegram";
-import { useNavigate } from "react-router-dom";
-import Room from "../../components/Game/Room/Room";
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import { getOpenedRooms } from "../../services/appSlice";
-import { sortRooms } from "../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
-import Loader from "../../components/Loader/Loader";
-import { getOpenedRoomsRequest } from "../../api/gameApi";
-import Button from "../../components/ui/Button/Button";
-import { IGameCardData } from "../../utils/types/gameTypes";
-import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
-import { Modal } from "../../components/Modal/Modal";
-import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
-import { indexUrl } from "../../utils/routes";
+import { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const OpenedRooms: FC = () => {
+import { getOpenedRoomsRequest } from "API/gameApi";
+import CreateRoomFooter from "Components/Game/CreateRoomFooter/CreateRoomFooter";
+import JoinRoomPopup from "Components/Game/JoinRoomPopup/JoinRoomPopup";
+import Room from "Components/Game/Room/Room";
+import Loader from "Components/Loader/Loader";
+import { Modal } from "Components/Modal/Modal";
+import Button from "Components/ui/Button/Button";
+import useTelegram from "Hooks/useTelegram";
+import { getOpenedRooms } from "Services/appSlice";
+import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { sortRooms } from "Utils/additionalFunctions";
+import { indexUrl } from "Utils/routes";
+import { IGameCardData } from "Utils/types/gameTypes";
+
+import styles from './OpenedRooms.module.scss';
+
+export const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -54,7 +54,8 @@ const OpenedRooms: FC = () => {
     };
 
     fetchRoomsData();
-    tg.BackButton.show().onClick(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
       navigate(indexUrl);
     });
     return () => {
@@ -186,7 +187,11 @@ const OpenedRooms: FC = () => {
                 <p className={styles.rooms__game}>{translation?.sort_game}</p>
                 <p className={styles.rooms__name}>{typeValue}</p>
               </button>
-              <button type="button" name="currency" className={styles.rooms__button} onClick={() => toggleSort('currency')}>
+              <button type="button"
+                name="currency"
+                className={styles.rooms__button}
+                onClick={() => toggleSort('currency')}
+              >
                 <p className={styles.rooms__game}>{translation?.sort_currency}</p>
                 <p className={styles.rooms__name}>{currencyValue}</p>
               </button>
@@ -225,4 +230,3 @@ const OpenedRooms: FC = () => {
   )
 };
 
-export default OpenedRooms;

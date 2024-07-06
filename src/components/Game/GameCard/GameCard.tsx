@@ -1,12 +1,15 @@
-import { FC } from 'react';
 import classNames from 'classnames';
-import styles from './GameCard.module.scss';
+import { FC } from 'react';
+
+import ManIcon from 'Icons/Man/Man';
+import game2 from 'Images/gameSec.png';
+import game1 from 'Images/main_hand_1_tiny.png';
+import { useAppSelector } from 'Services/reduxHooks';
+import { IGameCardData } from 'Utils/types/gameTypes';
+
 import CircleButton from '../../ui/CircleButton/CircleButton';
-import game1 from '../../../images/main_hand_1_tiny.png';
-import game2 from '../../../images/gameSec.png';
-import ManIcon from '../../../icons/Man/Man';
-import { useAppSelector } from '../../../services/reduxHooks';
-import { IGameCardData } from '../../../utils/types/gameTypes';
+
+import styles from './GameCard.module.scss';
 
 interface IProps {
   game: IGameCardData;
@@ -45,7 +48,9 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
       />
       <div className={styles.game__info}>
         <p className={styles.game__players}><ManIcon /> {game.users}</p>
-        <CircleButton chevronPosition="right" iconType="chevron" isWhiteBackground />
+        <CircleButton chevronPosition="right"
+          iconType="chevron"
+          isWhiteBackground />
       </div>
     </div>
   )

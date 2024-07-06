@@ -1,5 +1,5 @@
-@use '../../stylesheets/mixins' as *;
-@use '../../stylesheets/variables' as *;
+@use 'Stylesheets/mixins' as *;
+@use 'Stylesheets/variables' as *;
 
 .leaderBoard {
   @include min-size(100%, calc(100vh + 1px));
@@ -96,7 +96,7 @@
   &__background {
     @include position(relative);
     @include size(259px, 106px);
-    background-image: url('../../images/leader_bg.png');
+    background-image: url('../../Images/leader_bg.png');
     background-size: contain;
     background-repeat: no-repeat;
   }

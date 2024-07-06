@@ -1,7 +1,10 @@
 import { FC } from "react"
-import styles from './BannerData.module.scss';
+
+import { IBannerData } from "Utils/types/mainTypes";
+
 import Button from "../../ui/Button/Button";
-import { IBannerData } from "../../../utils/types/mainTypes";
+
+import styles from './BannerData.module.scss';
 
 interface IProps {
   data: IBannerData;
@@ -18,7 +21,8 @@ const BannerData: FC<IProps> = ({ data, closeOverlay }) => {
             <h3 className={styles.banner__title}>
               {data.main_header}
             </h3>
-            <div className={styles.banner__pic} style={{ backgroundImage: `url(${data.pic})` }}>
+            <div className={styles.banner__pic}
+style={{ backgroundImage: `url(${data.pic})` }}>
               <div className={styles.banner__info}>
                 <h3
                   className={styles.banner__picHeader}
@@ -40,7 +44,8 @@ const BannerData: FC<IProps> = ({ data, closeOverlay }) => {
           </p>
         </div>
         <div className={styles.banner__button}>
-          <Button text={data?.button_text} handleClick={closeOverlay} />
+          <Button text={data?.button_text}
+handleClick={closeOverlay} />
         </div>
       </div>
     )

@@ -1,19 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
-import styles from './SecondaryUserInfo.module.scss';
-import UserAvatar from "../UserAvatar/UserAvatar";
-import useTelegram from "../../../hooks/useTelegram";
-import { useAppSelector } from "../../../services/reduxHooks";
-import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
-import { balanceLink } from "../../../api/requestData";
-import WalletIcon from "../../../icons/Wallet/WalletIcon";
+import { FC } from "react";
+
+import { balanceLink } from "API/requestData";
+import useTelegram from "Hooks/useTelegram";
+import WalletIcon from "Icons/Wallet/WalletIcon";
+import { useAppSelector } from "Services/reduxHooks";
+import { formatNumber } from "Utils/additionalFunctions";
+
+import UserAvatar from "../UserAvatar/UserAvatar";
+
+import styles from './SecondaryUserInfo.module.scss';
 
 const UserInfo: FC = () => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
-  
+
   const handleClickBalance = () => {
     tg.openTelegramLink(balanceLink);
     postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
@@ -32,7 +34,9 @@ const UserInfo: FC = () => {
             <p className={styles.user__text}>💵 {userData ? formatNumber(userData?.coins) : '0'}</p>
             <p className={styles.user__text}>🔰 {userData ? formatNumber(userData?.tokens) : '0'}</p>
           </div>
-          <button type="button" className={styles.user__balance} onClick={handleClickBalance}>
+          <button type="button"
+            className={styles.user__balance}
+            onClick={handleClickBalance}>
             <WalletIcon
               width={12}
               height={12}

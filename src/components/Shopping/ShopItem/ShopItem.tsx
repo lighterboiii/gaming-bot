@@ -1,10 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
-import styles from './ShopItem.module.scss';
-import UserAvatar from "../../User/UserAvatar/UserAvatar";
-import { CombinedItemData } from "../../../utils/types/shopTypes";
 import { postEvent } from "@tma.js/sdk";
-import { useAppSelector } from "../../../services/reduxHooks";
+import { FC } from "react";
+
+import { useAppSelector } from "Services/reduxHooks";
+import { CombinedItemData } from "Utils/types/shopTypes";
+
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
+
+import styles from './ShopItem.module.scss';
 
 interface IProps {
   item: CombinedItemData;
@@ -20,7 +22,8 @@ const ShopItem: FC<IProps> = ({ item, onClick, activeButton }) => {
   };
 
   return (
-    <div className={styles.item} onClick={handleClick}>
+    <div className={styles.item}
+onClick={handleClick}>
       {activeButton !== `${translation?.purchased}` && item?.item_count !== -1 && activeButton !== `${translation?.marketplace}` &&
         <p className={styles.item__count}>
           {item?.item_count}/{item?.item_max}

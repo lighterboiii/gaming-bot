@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getReq, postReq, putReq } from "./api";
 import {
   addPlayerUri,
@@ -27,8 +26,8 @@ export const getExistingGamesRequest = () => {
     uri: getGamesUri,
   })
 };
-// создать игру 
-export const postNewRoomRequest = (data: any, userIdValue: string) => {
+// создать игру
+export const postNewRoomRequest = (data: any, userIdValue: number) => {
   return postReq({
     uri: createRoomUri,
     userId: userIdValue,
@@ -36,7 +35,7 @@ export const postNewRoomRequest = (data: any, userIdValue: string) => {
   });
 };
 // запрос на подключение к комнатеъ
-export const joinRoomRequest = (userIdValue: string, roomId: string) => {
+export const joinRoomRequest = (userIdValue: number, roomId: string) => {
   return putReq({
     uri: addPlayerUri,
     userId: userIdValue,
@@ -44,7 +43,7 @@ export const joinRoomRequest = (userIdValue: string, roomId: string) => {
   })
 };
 // запрос на отключение от комнаты
-export const leaveRoomRequest = (userIdValue: string) => {
+export const leaveRoomRequest = (userIdValue: number) => {
   return putReq({
     uri: kickPlayerUri,
     userId: userIdValue,
@@ -64,8 +63,8 @@ export const getEmojiRequest = (packId: string, emojiId: string) => {
     endpoint: `${packIdParamString}${packId}${emotionIdParamString}${emojiId}`,
   })
 };
-// запрос на получение данных внутри игры 
-export const getPollingRequest = (userIdValue: string, data: any) => {
+// запрос на получение данных внутри игры
+export const getPollingRequest = (userIdValue: number, data: any) => {
   return postReq({
     uri: pollingUri,
     userId: userIdValue,
@@ -73,14 +72,14 @@ export const getPollingRequest = (userIdValue: string, data: any) => {
   })
 };
 // использовать энергетик
-export const energyDrinkRequest = (userIdValue: string) => {
+export const energyDrinkRequest = (userIdValue: number) => {
   return getReq({
     uri: useEnergyDrinkUri,
     userId: userIdValue,
   })
 };
 
-export const setGameRulesWatched = (userIdValue: string, gameId: string) => {
+export const setGameRulesWatched = (userIdValue: number, gameId: string) => {
   return putReq({
     uri: 'game_rule_watched?user_id=',
     userId: userIdValue,

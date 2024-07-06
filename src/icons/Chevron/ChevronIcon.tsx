@@ -1,6 +1,8 @@
 import { FC } from 'react';
+
+import { ICommonIconProps } from 'Utils/types/mainTypes';
+
 import styles from './ChevronIcon.module.scss';
-import { ICommonIconProps } from '../../utils/types/mainTypes';
 
 export interface IChevronIcon extends ICommonIconProps {
   position?: string;
@@ -36,7 +38,8 @@ const ChevronIcon: FC<IChevronIcon> = ({
   }
 
   return (
-    <div style={{ transform: rotation }} className={styles.div}>
+    <div style={{ transform: rotation }}
+className={styles.div}>
       <svg
         width={width}
         height={height}

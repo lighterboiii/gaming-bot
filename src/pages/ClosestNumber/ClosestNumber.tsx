@@ -1,34 +1,34 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-fallthrough */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState, useRef } from "react";
-import styles from './ClosestNumber.module.scss';
-import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
-import { useNavigate, useParams } from "react-router-dom";
-import useTelegram from "../../hooks/useTelegram";
-import { userId } from "../../api/requestData";
-import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
-import smile from '../../images/closest-number/smile.png';
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import OneByOne from "../../components/ClosestNumber/Single/Single";
-import Case from '../../components/ClosestNumber/One/CaseOne';
-import CaseTwo from "../../components/ClosestNumber/Three/Three";
-import CaseThree from "../../components/ClosestNumber/Four/Four";
-import CaseFour from "../../components/ClosestNumber/Five/Five";
-import CaseSix from "../../components/ClosestNumber/Six/Six";
-import CaseSeven from "../../components/ClosestNumber/Seven/Seven";
-import CaseEight from "../../components/ClosestNumber/Eight/Eight";
-import { getActiveEmojiPack, getAppData } from "../../api/mainApi";
-import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
-import { IRPSPlayer } from "../../utils/types/gameTypes";
-import approveIcon from '../../images/closest-number/Approve.png';
-import deleteIcon from '../../images/closest-number/Delete.png';
-import { roomsUrl } from "../../utils/routes";
-import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
-import Loader from "../../components/Loader/Loader";
 import { postEvent } from "@tma.js/sdk";
-import { setSecondGameRulesState } from "../../services/appSlice";
-import Button from "../../components/ui/Button/Button";
+import { FC, useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "API/gameApi";
+import { getActiveEmojiPack, getAppData } from "API/mainApi";
+import { userId } from "API/requestData";
+import CaseEight from "Components/ClosestNumber/Eight/Eight";
+import CaseFour from "Components/ClosestNumber/Five/Five";
+import CaseThree from "Components/ClosestNumber/Four/Four";
+import Case from 'Components/ClosestNumber/One/CaseOne';
+import CircularProgressBar from "Components/ClosestNumber/ProgressBar/ProgressBar";
+import CaseSeven from "Components/ClosestNumber/Seven/Seven";
+import OneByOne from "Components/ClosestNumber/Single/Single";
+import CaseSix from "Components/ClosestNumber/Six/Six";
+import CaseTwo from "Components/ClosestNumber/Three/Three";
+import Loader from "Components/Loader/Loader";
+import { ClosestModal } from "Components/Modal/ClosestModal/ClosestModal";
+import Button from "Components/ui/Button/Button";
+import UserAvatar from "Components/User/UserAvatar/UserAvatar";
+import useTelegram from "Hooks/useTelegram";
+import approveIcon from 'Images/closest-number/Approve.png';
+import deleteIcon from 'Images/closest-number/Delete.png';
+import smile from 'Images/closest-number/smile.png';
+import { setSecondGameRulesState } from "Services/appSlice";
+import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { roomsUrl } from "Utils/routes";
+import { IRPSPlayer } from "Utils/types/gameTypes";
+
+import styles from './ClosestNumber.module.scss';
 
 interface IProps {
   users: any[];
@@ -55,7 +55,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
   }
 };
 
-const ClosestNumber: FC = () => {
+export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const userId = user?.id;
@@ -89,20 +89,20 @@ const ClosestNumber: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, []);
-// отображение игроков на поле за исключением пользователя
+  // отображение игроков на поле за исключением пользователя
   useEffect(() => {
     if (data?.players) {
       const filtered = data.players.filter((player: any) => Number(player.userid) !== Number(userId));
       setFilteredPlayers(filtered);
     }
   }, [data]);
-// базовые установки на кнопку "Назад" и цвет хидера
+  // базовые установки на кнопку "Назад" и цвет хидера
   useEffect(() => {
     tg.setHeaderColor('#FEC42C');
-    tg.BackButton.show().onClick(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
       leaveRoomRequest(userId)
-        .then((data) => {
-        })
+        .then((data) => { })
         .catch((error) => {
           console.log(error);
         })
@@ -112,7 +112,7 @@ const ClosestNumber: FC = () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [tg, navigate]);
   // свернуть клавиатуру по клику за ее границами
   useEffect(() => {
@@ -182,7 +182,7 @@ const ClosestNumber: FC = () => {
     return () => {
       isMounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const count = data?.players?.reduce((total: number, player: any) => {
@@ -201,7 +201,7 @@ const ClosestNumber: FC = () => {
               setRoomValue(Number(res?.room_value));
               setWinnerId(Number(res?.winner));
               setWinSum(Number(res?.winner_value));
-              postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy'});
+              postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
               if (res?.message === "success") {
                 setTimeout(() => {
                   setInputValue('');
@@ -494,16 +494,21 @@ const ClosestNumber: FC = () => {
                 </> :
                 <p
                   className={styles.game__text}
-                  style={{ position: 'absolute', top: '45%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%' }}>
+                  style={{
+                    position: 'absolute', top: '45%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%'
+                  }}>
                   {translation?.waiting4players}
                 </p>
               }
-              <div ref={overlayRef} className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
+              <div ref={overlayRef}
+                className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
                 <div className={styles.overlay__inputWrapper}>
                   <div className={styles.overlay__avatarWrapper}>
                     {currentPlayer?.emoji && currentPlayer?.emoji !== 'none' && (
                       <div className={styles.overlay__playerEmoji}>
-                        <img src={currentPlayer?.emoji} alt="emoji" className={styles.overlay__emojiImage} />
+                        <img src={currentPlayer?.emoji}
+                          alt="emoji"
+                          className={styles.overlay__emojiImage} />
                       </div>
                     )}
                     <UserAvatar />
@@ -527,8 +532,11 @@ const ClosestNumber: FC = () => {
                       </span>
                     </div>
                   </div>
-                  <button className={styles.overlay__emojiButton} onClick={handleClickEmoji}>
-                    <img src={smile} alt="smile_icon" className={styles.overlay__smile} />
+                  <button className={styles.overlay__emojiButton}
+                    onClick={handleClickEmoji}>
+                    <img src={smile}
+                      alt="smile_icon"
+                      className={styles.overlay__smile} />
                   </button>
                 </div>
                 {showOverlay && (
@@ -545,49 +553,56 @@ const ClosestNumber: FC = () => {
                         ))}
                       </>
                       ) : (
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, `${translation?.game_but_erase}`, 0, `${translation?.game_but_done}`].map((key) => (
-                          typeof key === 'number' ? (
-                            <button
-                              key={key}
-                              className={styles.overlay__key}
-                              onClick={() => handleButtonClick(key)}
-                            >
-                              {key}
-                            </button>
-                          ) : (
-                            <div
-                              key={key}
-                              className={key === `${translation?.game_but_erase}` || data?.players?.length === 1
-                                ? styles.overlay__bottomLeftButton
-                                : styles.overlay__bottomRightButton}
-                              onClick={() => handleButtonClick(key)}
-                            >
-                              {key === `${translation?.game_but_erase}` ? (
-                                <>
-                                  <img src={deleteIcon} alt="delete icon" className={styles.overlay__icon} />
-                                  <span>{translation?.game_but_erase}</span>
-                                </>
-                              ) : (
-                                <>
-                                  <img src={approveIcon} alt="done icon" className={styles.overlay__icon} />
-                                  <span>{translation?.game_but_done}</span>
-                                </>
-                              )}
-                            </div>
-                          ))
-                        ))}
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9,
+                          `${translation?.game_but_erase}`, 0, `${translation?.game_but_done}`].map((key) => (
+                            typeof key === 'number' ? (
+                              <button
+                                key={key}
+                                className={styles.overlay__key}
+                                onClick={() => handleButtonClick(key)}
+                              >
+                                {key}
+                              </button>
+                            ) : (
+                              <div
+                                key={key}
+                                className={key === `${translation?.game_but_erase}` || data?.players?.length === 1
+                                  ? styles.overlay__bottomLeftButton
+                                  : styles.overlay__bottomRightButton}
+                                onClick={() => handleButtonClick(key)}
+                              >
+                                {key === `${translation?.game_but_erase}` ? (
+                                  <>
+                                    <img src={deleteIcon}
+                                      alt="delete icon"
+                                      className={styles.overlay__icon} />
+                                    <span>{translation?.game_but_erase}</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <img src={approveIcon}
+                                      alt="done icon"
+                                      className={styles.overlay__icon} />
+                                    <span>{translation?.game_but_done}</span>
+                                  </>
+                                )}
+                              </div>
+                            ))))}
                   </div>
                 )}
               </div>
             </>
-            ) : (
-              <div className={styles.rules}>
-                <img src={ruleImage!} alt="game rules" className={styles.rules__image} />
-                <div className={styles.rules__button}>
-                  <Button text="Ознакомился" handleClick={handleRuleButtonClick} />
-                </div>
+          ) : (
+            <div className={styles.rules}>
+              <img src={ruleImage!}
+                alt="game rules"
+                className={styles.rules__image} />
+              <div className={styles.rules__button}>
+                <Button text="Ознакомился"
+                  handleClick={handleRuleButtonClick} />
               </div>
-            )}
+            </div>
+          )}
         </>
       )}
 
@@ -603,5 +618,3 @@ const ClosestNumber: FC = () => {
     </div>
   );
 };
-
-export default ClosestNumber;

@@ -1,19 +1,20 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from 'react';
-import styles from './GameSettings.module.scss';
-import Button from '../../ui/Button/Button';
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
-import { formatNumber } from '../../../utils/additionalFunctions';
-import { userId } from '../../../api/requestData';
-import { postNewRoomRequest } from '../../../api/gameApi';
-import useTelegram from '../../../hooks/useTelegram';
-import SettingsSlider from '../SettingsSlider/SettingsSlider';
-import { IGameSettingsData } from '../../../utils/types/gameTypes';
-import { Modal } from '../../Modal/Modal';
-import JoinRoomPopup from '../JoinRoomPopup/JoinRoomPopup';
 import { postEvent } from '@tma.js/sdk';
+import { FC, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { postNewRoomRequest } from 'API/gameApi';
+import { userId } from 'API/requestData';
+import useTelegram from 'Hooks/useTelegram';
+import { useAppDispatch, useAppSelector } from 'Services/reduxHooks';
+import { formatNumber } from 'Utils/additionalFunctions';
+import { IGameSettingsData } from 'Utils/types/gameTypes';
+
+import { Modal } from '../../Modal/Modal';
+import Button from '../../ui/Button/Button';
+import JoinRoomPopup from '../JoinRoomPopup/JoinRoomPopup';
+import SettingsSlider from '../SettingsSlider/SettingsSlider';
+
+import styles from './GameSettings.module.scss';
 
 interface IProps {
   data: IGameSettingsData | null;
@@ -51,11 +52,12 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   };
 
   const handleCreateRoom = (
-    userIdValue: string,
+    userIdValue: number,
     bet: number,
     betType: number,
     roomType: number,
-    closeOverlay: () => void) => {
+    closeOverlay: () => void
+  ) => {
     const data = {
       user_id: userIdValue,
       bet: bet,
@@ -107,7 +109,8 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         </div>
       ) : (
         <>
-          <div style={{ backgroundImage: `url(${data?.url})` }} className={styles.game__logo} />
+          <div style={{ backgroundImage: `url(${data?.url})` }}
+            className={styles.game__logo} />
           <div className={styles.game__content}>
             <h3 className={styles.game__title}>
               {data?.room_type === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
@@ -145,7 +148,8 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         </>
       )}
       {isPopupOpen && (
-        <Modal title={translation?.energy_depleted} closeModal={() => setPopupOpen(false)}>
+        <Modal title={translation?.energy_depleted}
+          closeModal={() => setPopupOpen(false)}>
           <JoinRoomPopup
             handleClick={() => setPopupOpen(false)}
             roomId={selectedRoomId}

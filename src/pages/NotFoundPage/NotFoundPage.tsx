@@ -1,18 +1,20 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect } from "react";
-import styles from './NotFoundPage.module.scss';
-import SmallButton from "../../components/ui/SmallButton/SmallButton";
-import useTelegram from "../../hooks/useTelegram";
 import { useNavigate } from "react-router-dom";
-import { indexUrl } from "../../utils/routes";
-import { useAppSelector } from "../../services/reduxHooks";
 
-const NotFoundPage: FC = () => {
+import SmallButton from "Components/ui/SmallButton/SmallButton";
+import useTelegram from "Hooks/useTelegram";
+import { useAppSelector } from "Services/reduxHooks";
+import { indexUrl } from "Utils/routes";
+
+import styles from './NotFoundPage.module.scss';
+
+export const NotFoundPage: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const translation = useAppSelector(store => store?.app.languageSettings);
   useEffect(() => {
-    tg.BackButton.show().onClick(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
       navigate(indexUrl);
     });
     return () => {
@@ -36,4 +38,3 @@ const NotFoundPage: FC = () => {
   )
 }
 
-export default NotFoundPage;

@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { ICommonIconProps } from '../../utils/types/mainTypes';
+
+import { ICommonIconProps } from 'Utils/types/mainTypes';
 
 const WalletIcon: FC<ICommonIconProps> = ({
   color = '#FFF',
@@ -7,7 +8,8 @@ const WalletIcon: FC<ICommonIconProps> = ({
   height = 20,
 }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+    <svg xmlns="http://www.w3.org/2000/svg"
+version="1.1"
       width={width}
       height={height}
       x="0"

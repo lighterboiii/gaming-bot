@@ -1,17 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
-import styles from './Referral.module.scss';
+import { Link, useNavigate } from "react-router-dom";
+
+import { getReferralsData, transferCoinsToBalanceReq } from "API/mainApi";
+import { inviteLink, userId } from "API/requestData";
+import useTelegram from "Hooks/useTelegram";
+import { setCoinsNewValue } from "Services/appSlice";
+import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { IMember } from "Utils/types/memberTypes";
+
 import Button from "../../ui/Button/Button";
 import UserContainer from "../../User/UserContainer/UserContainer";
-import { inviteLink, userId } from "../../../api/requestData";
-import { Link, useNavigate } from "react-router-dom";
-import useTelegram from "../../../hooks/useTelegram";
-import { getReferralsData, transferCoinsToBalanceReq } from "../../../api/mainApi";
-import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
-import { setCoinsNewValue } from "../../../services/appSlice";
-import { postEvent } from "@tma.js/sdk";
-import { IMember } from "../../../utils/types/memberTypes";
+
+import styles from './Referral.module.scss';
 
 const Referral: FC = () => {
   const navigate = useNavigate();
@@ -103,7 +104,8 @@ const Referral: FC = () => {
         <p className={styles.referral__text}>
           {translation?.invite_friends_bonus}
         </p>
-        <Link to={inviteLink} className={styles.referral__inviteButtonWrapper}>
+        <Link to={inviteLink}
+className={styles.referral__inviteButtonWrapper}>
           <Button
             text={translation?.invite}
             handleClick={handleInviteClick}
@@ -118,7 +120,10 @@ const Referral: FC = () => {
         <div className={styles.referral__board}>
           {refsBoard !== null && refsBoard !== undefined && refsBoard.length > 0 ? (
             refsBoard?.map((referral: any, index: number) => (
-              <UserContainer member={referral} index={index} length={refsBoard.length + 1} key={index} />
+              <UserContainer member={referral}
+index={index}
+length={refsBoard.length + 1}
+key={index} />
             ))) :
             <span className={styles.referral__emptyBoard}>
               {translation?.no_friends_played}

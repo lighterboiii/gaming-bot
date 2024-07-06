@@ -1,17 +1,19 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useRef, useState } from 'react';
-import styles from './WheelOfLuck.module.scss';
-import Button from '../../ui/Button/Button';
-import wheelPointer from '../../../images/closest-number/wheelPoint.png';
-import lamp from '../../../images/closest-number/lamp.png';
-import light from '../../../images/closest-number/lamp2.png';
-import { getWheelPrizeRequest, spinWheelRequest } from '../../../api/mainApi';
-import { userId } from '../../../api/requestData';
-import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
-import { addTokens, setTokensValueAfterBuy } from '../../../services/appSlice';
-import useTelegram from '../../../hooks/useTelegram';
-import { IFortuneData } from '../../../utils/types/mainTypes';
 import { postEvent } from '@tma.js/sdk';
+import { FC, useEffect, useRef, useState } from 'react';
+
+import { getWheelPrizeRequest, spinWheelRequest } from 'API/mainApi';
+import { userId } from 'API/requestData';
+import useTelegram from 'Hooks/useTelegram';
+import lamp from 'Images/closest-number/lamp.png';
+import light from 'Images/closest-number/lamp2.png';
+import wheelPointer from 'Images/closest-number/wheelPoint.png';
+import { addTokens, setTokensValueAfterBuy } from 'Services/appSlice';
+import { useAppDispatch, useAppSelector } from 'Services/reduxHooks';
+import { IFortuneData } from 'Utils/types/mainTypes';
+
+import Button from '../../ui/Button/Button';
+
+import styles from './WheelOfLuck.module.scss';
 
 interface IProps {
   data: IFortuneData;
@@ -44,7 +46,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
     };
 
     loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [data]);
 
   const startSpin = () => {
@@ -121,20 +123,42 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             </div>
             <div className={styles.wheel__background}>
               <div className={styles.wheel__lights}>
-                <img src={lamp} alt='lamp' className={`${styles.wheel__light} ${styles.light1}`}></img>
-                <img src={light} alt='lamp' className={`${styles.wheel__light} ${styles.light2}`}></img>
-                <img src={light} alt='lamp' className={`${styles.wheel__light} ${styles.light3}`}></img>
-                <img src={lamp} alt='lamp' className={`${styles.wheel__light} ${styles.light4}`}></img>
-                <img src={lamp} alt='lamp' className={`${styles.wheel__light} ${styles.light5}`}></img>
-                <img src={light} alt='lamp' className={`${styles.wheel__light} ${styles.light6}`}></img>
-                <img src={lamp} alt='lamp' className={`${styles.wheel__light} ${styles.light7}`}></img>
-                <img src={light} alt='lamp' className={`${styles.wheel__light} ${styles.light8}`}></img>
-                <img src={lamp} alt='lamp' className={`${styles.wheel__light} ${styles.light9}`}></img>
+                <img src={lamp}
+                  alt='lamp'
+                  className={`${styles.wheel__light} ${styles.light1}`}></img>
+                <img src={light}
+                  alt='lamp'
+                  className={`${styles.wheel__light} ${styles.light2}`}></img>
+                <img src={light}
+                  alt='lamp'
+                  className={`${styles.wheel__light} ${styles.light3}`}></img>
+                <img src={lamp}
+                  alt='lamp'
+                  className={`${styles.wheel__light} ${styles.light4}`}></img>
+                <img src={lamp}
+                  alt='lamp'
+                  className={`${styles.wheel__light} ${styles.light5}`}></img>
+                <img src={light}
+                  alt='lamp'
+                  className={`${styles.wheel__light} ${styles.light6}`}></img>
+                <img src={lamp}
+                  alt='lamp'
+                  className={`${styles.wheel__light} ${styles.light7}`}></img>
+                <img src={light}
+                  alt='lamp'
+                  className={`${styles.wheel__light} ${styles.light8}`}></img>
+                <img src={lamp}
+                  alt='lamp'
+                  className={`${styles.wheel__light} ${styles.light9}`}></img>
               </div>
-              <img src={wheelPointer} alt="wheel pointer" className={styles.wheel__pointer} />
-              <div ref={spinnerRef} className={`${styles.wheel__spinner} ${spinning ? styles.wheel__spin : ''}`}>
+              <img src={wheelPointer}
+                alt="wheel pointer"
+                className={styles.wheel__pointer} />
+              <div ref={spinnerRef}
+                className={`${styles.wheel__spinner} ${spinning ? styles.wheel__spin : ''}`}>
                 {visibleItems?.map((item: any, index: number) => (
-                  <div key={index} className={`${styles.wheel__item} ${index === 2 && prize ? styles.wheel__specialItem : ''}`}>
+                  <div key={index}
+                    className={`${styles.wheel__item} ${index === 2 && prize ? styles.wheel__specialItem : ''}`}>
                     <img
                       src={item?.fortune_item_pic}
                       alt="item"
@@ -146,8 +170,10 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
               </div>
             </div>
             <div className={styles.wheel__buttonWrapper}>
-              {!spinning && !prize && <Button text={translation?.fortune_wheel_spin_button} handleClick={startSpin} />}
-              {prize && !spinning && <Button text={translation?.fortune_wheel_get_button} handleClick={claimPrize} />}
+              {!spinning && !prize && <Button text={translation?.fortune_wheel_spin_button}
+                handleClick={startSpin} />}
+              {prize && !spinning && <Button text={translation?.fortune_wheel_get_button}
+                handleClick={claimPrize} />}
             </div>
           </>)}
     </div>

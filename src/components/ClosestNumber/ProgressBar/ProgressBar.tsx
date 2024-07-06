@@ -1,4 +1,5 @@
-import { useState, useEffect, FC } from "react";
+import { FC, useEffect, useState } from "react";
+
 import styles from './ProgressBar.module.scss';
 
 interface IProps {
@@ -27,14 +28,22 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
   }, [progress]);
 
   return (
-    <svg className={styles.bar} viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+    <svg className={styles.bar}
+viewBox="0 0 100 100"
+preserveAspectRatio="xMidYMid meet">
       {/* <defs>
         <mask id="text-mask" x="0" y="0" width="100" height="100">
           <rect x="15" y="40" width="70" height="20" fill="white" />
         </mask>
       </defs> */}
-      <circle className={styles.bar__innerCircle} cx="50" cy="50" r="45"></circle>
-      <circle className={styles.bar__outerCircle} cx="50" cy="50" r="45"></circle>
+      <circle className={styles.bar__innerCircle}
+cx="50"
+cy="50"
+r="45"></circle>
+      <circle className={styles.bar__outerCircle}
+cx="50"
+cy="50"
+r="45"></circle>
       <circle
         className={`${styles.bar__progressPoint} ${isAnimating ? styles.bar__animated : ''}`}
         cx={offset.x}

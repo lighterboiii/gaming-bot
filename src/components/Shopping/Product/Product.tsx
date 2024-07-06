@@ -1,11 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
-import useTelegram from "../../../hooks/useTelegram";
-import styles from './Product.module.scss';
-import UserAvatar from "../../User/UserAvatar/UserAvatar";
-import Button from "../../ui/Button/Button";
-import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
-import { CombinedItemData, ItemData, ILavkaData } from "../../../utils/types/shopTypes";
+
+import { userId } from "API/requestData";
+import {
+  buyItemRequest,
+  buyLavkaRequest,
+  cancelLavkaRequest,
+  setActiveEmojiRequest,
+  setActiveSkinRequest
+} from "API/shopApi";
+import useTelegram from "Hooks/useTelegram";
 import {
   addEnergyDrink,
   removeItemFromLavka,
@@ -14,18 +18,16 @@ import {
   setCoinsValueAfterBuy,
   setCollectibles,
   setTokensValueAfterBuy
-} from "../../../services/appSlice";
-import {
-  buyItemRequest,
-  buyLavkaRequest,
-  cancelLavkaRequest,
-  setActiveEmojiRequest,
-  setActiveSkinRequest
-} from "../../../api/shopApi";
-import { userId } from "../../../api/requestData";
+} from "Services/appSlice";
+import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { CombinedItemData, ILavkaData, ItemData } from "Utils/types/shopTypes";
+
 import { Modal } from "../../Modal/Modal";
+import Button from "../../ui/Button/Button";
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import SellForm from "../SellForm/SellForm";
-import { postEvent } from "@tma.js/sdk";
+
+import styles from './Product.module.scss';
 
 interface ProductProps {
   item: CombinedItemData;
@@ -63,20 +65,21 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   };
   // закрытие с задержкой
   function closeWithDelay(
-    onClose: () => void, 
-    setMessage: (arg: string) => void, 
-    setMessageShown: (arg: boolean) => void, 
-    closeDelay = 1000, 
-    messageResetDelay = 200) {
+    onClose: () => void,
+    setMessage: (arg: string) => void,
+    setMessageShown: (arg: boolean) => void,
+    closeDelay = 1000,
+    messageResetDelay = 200
+) {
     setTimeout(() => {
       onClose();
       setTimeout(() => {
         setMessage('');
         setMessageShown(false);
       }, messageResetDelay);
-  
+
     }, closeDelay);
-  };
+  }
   // хендлер покупки
   const handleBuyShopItem = (item: ItemData) => {
     buyItemRequest(item.item_id, 1, userId)
@@ -254,8 +257,12 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
         </>
       )}
       {isModalOpen && (
-        <Modal title={translation?.list_in_shop} closeModal={() => setModalOpen(false)}>
-          <SellForm item={item} setMessage={setMessage} setMessageShown={setMessageShown} onClose={handleCloseFormModal} />
+        <Modal title={translation?.list_in_shop}
+closeModal={() => setModalOpen(false)}>
+          <SellForm item={item}
+setMessage={setMessage}
+setMessageShown={setMessageShown}
+onClose={handleCloseFormModal} />
         </Modal>
       )}
     </div>

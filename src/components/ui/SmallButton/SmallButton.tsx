@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC } from "react";
-import styles from './SmallButton.module.scss';
-import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import { postEvent } from "@tma.js/sdk";
+import React, { FC } from "react";
+
+import ChevronIcon from "Icons/Chevron/ChevronIcon";
+
+import styles from './SmallButton.module.scss';
 
 interface IProps {
   text: string | React.ReactNode;
@@ -14,7 +15,7 @@ interface IProps {
 }
 
 const SmallButton: FC<IProps> = ({ text, secondaryText, isWhiteBackground, chevronPosition, shadow, handleClick }) => {
-  
+
   const handleGetHapticFeedback = () => {
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
     handleClick();

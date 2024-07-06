@@ -1,16 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useState } from "react";
-import styles from './TaskInfo.module.scss';
-import Button from "../../ui/Button/Button";
-import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
-import useTelegram from "../../../hooks/useTelegram";
 import { postEvent } from "@tma.js/sdk";
-import CrossIcon from "../../../icons/Cross/Cross";
-import { taskResultRequest, taskStepRequest } from "../../../api/mainApi";
-import { userId } from "../../../api/requestData";
-import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
-import { setNewTokensValue } from "../../../services/appSlice";
-import { ITask } from "../../../utils/types/mainTypes";
+import { FC, useState } from "react";
+
+import { taskResultRequest, taskStepRequest } from "API/mainApi";
+import { userId } from "API/requestData";
+import useTelegram from "Hooks/useTelegram";
+import ChevronIcon from "Icons/Chevron/ChevronIcon";
+import CrossIcon from "Icons/Cross/Cross";
+import { setNewTokensValue } from "Services/appSlice";
+import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { ITask } from "Utils/types/mainTypes";
+
+import Button from "../../ui/Button/Button";
+
+import styles from './TaskInfo.module.scss';
 
 interface IProps {
   task: ITask;
@@ -73,17 +75,25 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
           </div>
           <div className={styles.info__steps}>
             {task.steps.map((step: any) => (
-              <div key={step.step_id} className={styles.info__step} onClick={() => handleClickTaskStep(step)}>
-                <img src={step.img} alt={step.step_type} className={styles.info__icon} />
+              <div key={step.step_id}
+                className={styles.info__step}
+                onClick={() => handleClickTaskStep(step)}>
+                <img src={step.img}
+                  alt={step.step_type}
+                  className={styles.info__icon} />
                 <h3 className={styles.info__text}>{step.h_key}</h3>
-                  <button type='button' className={styles.info__button}>
-                    <ChevronIcon color='#000' width={20} height={20} />
-                  </button>
+                <button type='button'
+                  className={styles.info__button}>
+                  <ChevronIcon color='#000'
+                    width={20}
+                    height={20} />
+                </button>
               </div>
             ))}
           </div>
           <div className={styles.info__buttonWrapper}>
-            <Button text={translation?.tasks_get_reward} handleClick={handleClaimReward} />
+            <Button text={translation?.tasks_get_reward}
+              handleClick={handleClaimReward} />
           </div>
         </>
       ) : (
@@ -92,11 +102,16 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
             {task?.text_locale_key}
           </h2>
           <p>{incomplete ? `${translation?.tasks_not_done}` : rewardResult ? "Награда ваша!" : ''}</p>
-          <img src={task?.task_img} alt="reward" className={styles.reward__img} />
+          <img src={task?.task_img}
+            alt="reward"
+            className={styles.reward__img} />
         </div>
       )}
-      <button className={styles.info__closeBtn} onClick={handleClickBack}>
-        <CrossIcon width={12} height={12} color='#FFF' />
+      <button className={styles.info__closeBtn}
+        onClick={handleClickBack}>
+        <CrossIcon width={12}
+          height={12}
+          color='#FFF' />
       </button>
     </div>
   );

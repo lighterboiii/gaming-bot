@@ -1,14 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useState } from "react";
-import styles from './SellForm.module.scss';
-import Button from "../../ui/Button/Button";
-import { sellLavkaRequest } from "../../../api/shopApi";
-import { userId } from "../../../api/requestData";
-import useTelegram from "../../../hooks/useTelegram";
-import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
-import { ILavkaData } from "../../../utils/types/shopTypes";
-import { addItemToLavka } from "../../../services/appSlice";
 import { postEvent } from "@tma.js/sdk";
+import { FC, useState } from "react";
+
+import { userId } from "API/requestData";
+import { sellLavkaRequest } from "API/shopApi";
+import useTelegram from "Hooks/useTelegram";
+import { addItemToLavka } from "Services/appSlice";
+import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { ILavkaData } from "Utils/types/shopTypes";
+
+import Button from "../../ui/Button/Button";
+
+import styles from './SellForm.module.scss';
 
 interface IProps {
   item: ILavkaData;
