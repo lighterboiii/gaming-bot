@@ -36,7 +36,7 @@ const OpenedRooms: FC = () => {
   const [betClickCount, setBetClickCount] = useState(0);
 
   const [loading, setLoading] = useState(false);
-
+  console.log(rooms);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -84,7 +84,6 @@ const OpenedRooms: FC = () => {
     switch (sortBy) {
       case 'type':
         setCurrencyClickCount(0);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
         setCurrencyValue(`${translation?.sort_all}`);
         setSortByCurr(false);
 
@@ -98,7 +97,7 @@ const OpenedRooms: FC = () => {
             setTypeValue(`${translation?.sort_all}`);
             setSortByType(false);
           } else {
-            sortedRooms = sortRooms(rooms as any, 'gameType', sortByType);
+            sortedRooms = sortRooms(rooms as any, 'room_type', sortByType);
             setSortByType(!sortByType);
             setTypeValue(sortByType ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`);
             setRooms(sortedRooms);
@@ -109,7 +108,6 @@ const OpenedRooms: FC = () => {
 
       case 'currency':
         setTypeClickCount(0);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
         setTypeValue(`${translation?.sort_all}`);
         setSortByType(false);
 
@@ -123,9 +121,9 @@ const OpenedRooms: FC = () => {
             setCurrencyValue(`${translation?.sort_all}`);
             setSortByCurr(false);
           } else {
-            sortedRooms = sortRooms(rooms as any, 'currency', sortByCurr);
+            sortedRooms = sortRooms(rooms as any, 'bet_type', sortByCurr);
             setSortByCurr(!sortByCurr);
-            setCurrencyValue(sortByCurr ? '🔰' : '💵');
+            setCurrencyValue(sortByCurr ? '💵' : '🔰');
             setRooms(sortedRooms);
           }
           return newCount;
@@ -134,7 +132,6 @@ const OpenedRooms: FC = () => {
 
       case 'bet':
         setTypeClickCount(0);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
         setTypeValue(`${translation?.sort_all}`);
         setSortByType(false);
 
@@ -159,8 +156,10 @@ const OpenedRooms: FC = () => {
 
       default:
         sortedRooms = rooms;
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     }
   };
+
 
   const handleRoomClick = (room: any) => {
     if (room?.free_places === 0) {
@@ -171,7 +170,7 @@ const OpenedRooms: FC = () => {
   };
 
   const handleCreateClick = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     navigate('/create-room')
   };
 
