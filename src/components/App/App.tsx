@@ -22,7 +22,7 @@ import ClosestNumber from '../../pages/ClosestNumber/ClosestNumber';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -55,6 +55,7 @@ const App: FC = () => {
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
+          console.log(res);
           dispatch(setLanguageSettings(res.translate));
           dispatch(setUserData(res.user_info));
           dispatch(setProductsArchive(res.collectibles_data));

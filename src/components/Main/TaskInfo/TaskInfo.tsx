@@ -19,18 +19,26 @@ interface IProps {
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  console.log(task);
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [showReward, setShowReward] = useState<boolean>(false);
   const [incomplete, setIncomplete] = useState<boolean>(false);
   const [rewardResult, setRewardResult] = useState<boolean>(false);
+  const [showInstruction, setShowInstruction] = useState<boolean>(false);
+  const [target, setTarget] = useState('');
 
   const handleClickTaskStep = (step: any) => {
     if (step.step_type === "link") {
       window.open(step.target, '_blank');
     } else if (step.step_type === "instruction") {
       console.log("Instruction:", step.target);
+      setTarget(step.target);
+      setShowInstruction(true);
+      setTimeout(() => {
+        setShowInstruction(false);
+      }, 6000)
     } else if (step.step_type === "subscribe") {
       tg.openTelegramLink(step.target);
     }
@@ -71,27 +79,36 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
             </h2>
             <p className={styles.info__reward}>{task?.text_locale_key}</p>
           </div>
-          <div className={styles.info__steps}>
-            {task.steps.map((step: any) => (
-              <div key={step.step_id} className={styles.info__step} onClick={() => handleClickTaskStep(step)}>
-                <img src={step.img} alt={step.step_type} className={styles.info__icon} />
-                <h3 className={styles.info__text}>{step.h_key}</h3>
-                  <button type='button' className={styles.info__button}>
-                    <ChevronIcon color='#000' width={20} height={20} />
-                  </button>
-              </div>
-            ))}
-          </div>
-          <div className={styles.info__buttonWrapper}>
-            <Button text={translation?.tasks_get_reward} handleClick={handleClaimReward} />
-          </div>
+          {showInstruction ? (
+            <div className={styles.info__instruction}>
+              <h3 className={styles.info__textInstr}>{target}</h3>
+            </div>
+          ) : (
+            <div className={styles.info__steps}>
+              {task.steps.map((step: any) => (
+                <div key={step.step_id} className={styles.info__step} onClick={() => handleClickTaskStep(step)}>
+                  <>
+                    <img src={step.img} alt={step.step_type} className={styles.info__icon} />
+                    <h3 className={styles.info__text}>{step.h_key}</h3>
+                    <button type='button' className={styles.info__button}>
+                      <ChevronIcon color='#000' width={20} height={20} />
+                    </button>
+                  </>
+                </div>
+              ))}
+            </div>
+          )}
+          {!target &&
+            <div className={styles.info__buttonWrapper}>
+              <Button text={translation?.tasks_get_reward} handleClick={handleClaimReward} />
+            </div>}
         </>
       ) : (
         <div className={styles.reward}>
           <h2 className={styles.info__title}>
             {task?.text_locale_key}
           </h2>
-          <p>{incomplete ? `${translation?.tasks_not_done}` : rewardResult ? "Награда ваша!" : ''}</p>
+          <p>{incomplete ? `${translation?.tasks_not_done}` : rewardResult ? `${translation?.reward_yours}` : ''}</p>
           <img src={task?.task_img} alt="reward" className={styles.reward__img} />
         </div>
       )}

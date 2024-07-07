@@ -31,7 +31,7 @@ import { setSecondGameRulesState } from "../../services/appSlice";
 import Button from "../../components/ui/Button/Button";
 
 interface IProps {
-  users: any[];
+  users: IRPSPlayer[];
 }
 
 const RenderComponent: FC<IProps> = ({ users }) => {
@@ -58,7 +58,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -585,7 +585,7 @@ const ClosestNumber: FC = () => {
             <div className={styles.rules}>
               <img src={ruleImage!} alt="game rules" className={styles.rules__image} />
               <div className={styles.rules__button}>
-                <Button text="Ознакомился" handleClick={handleRuleButtonClick} />
+                <Button text={translation?.understood} handleClick={handleRuleButtonClick} />
               </div>
             </div>
           )}

@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const Task: FC<IProps> = ({ task, onClick }) => {
-  
+    console.log(task);
   const handleTaskClick = () => {
     task?.task_done === 0 ? onClick() : console.log('Task completed');
   };

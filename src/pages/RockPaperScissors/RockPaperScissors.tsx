@@ -31,7 +31,7 @@ import { setFirstGameRulesState } from "../../services/appSlice";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
@@ -498,7 +498,7 @@ const RockPaperScissors: FC = () => {
               <div className={styles.rules}>
                 <img src={ruleImage!} alt="game rules" className={styles.rules__image} />
                 <div className={styles.rules__button}>
-                  <Button text="Ознакомился" handleClick={handleRuleButtonClick} />
+                  <Button text={translation?.understood} handleClick={handleRuleButtonClick} />
                 </div>
               </div>
             )
