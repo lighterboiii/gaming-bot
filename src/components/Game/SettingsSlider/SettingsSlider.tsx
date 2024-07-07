@@ -45,7 +45,7 @@ const SettingsSlider: FC<IProps> = ({
 
   const toggleCurrency = () => {
     const newCurrency = currency === 3 ? 1 : 3;
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
     setCurrency(newCurrency);
   };
 

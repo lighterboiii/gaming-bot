@@ -13,10 +13,11 @@ const CaseSix: FC<IPropsForClosestNumberComponent> = ({ users }) => {
               <img src={user?.emoji} alt="emoji" className={styles.players__emojiImage} />
             </div>
           }
-          {user?.choice !== 'none' &&
+          {/* {user?.choice !== 'none' && */}
             <div className={styles.players__choice}>
               {user?.choice}
-            </div>}
+            </div>
+            {/* } */}
           <UserAvatar item={user} avatar={user?.avatar} key={user?.userid} />
           <p className={styles.players__name}>
             {user && user?.publicname}

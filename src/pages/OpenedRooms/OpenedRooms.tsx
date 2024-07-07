@@ -125,7 +125,7 @@ const OpenedRooms: FC = () => {
           } else {
             sortedRooms = sortRooms(rooms as any, 'currency', sortByCurr);
             setSortByCurr(!sortByCurr);
-            setCurrencyValue(sortByCurr ? '💵' : '🔰');
+            setCurrencyValue(sortByCurr ? '🔰' : '💵');
             setRooms(sortedRooms);
           }
           return newCount;
@@ -171,7 +171,7 @@ const OpenedRooms: FC = () => {
   };
 
   const handleCreateClick = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     navigate('/create-room')
   };
 

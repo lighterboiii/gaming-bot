@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import styles from './Referral.module.scss';
@@ -15,7 +16,7 @@ import { IMember } from "../../../utils/types/memberTypes";
 const Referral: FC = () => {
   const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);

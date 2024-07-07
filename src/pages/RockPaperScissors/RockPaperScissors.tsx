@@ -31,7 +31,7 @@ import { setFirstGameRulesState } from "../../services/appSlice";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
@@ -51,6 +51,7 @@ const RockPaperScissors: FC = () => {
   const [showTimer, setShowTimer] = useState(true);
   const userData = useAppSelector(store => store.app.info);
   const [rules, setRulesShown] = useState<boolean | null>(false);
+  const [anyPlayerReady, setAnyPlayerReady] = useState<boolean>(false);
   const translation = useAppSelector(store => store.app.languageSettings);
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
@@ -60,6 +61,15 @@ const RockPaperScissors: FC = () => {
     setRightRockImage(rightRock);
     setRulesShown(isRulesShown);
   }, [isRulesShown]);
+
+  useEffect(() => {
+    if (data?.players?.some((player: IRPSPlayer) => player.choice === 'ready')) {
+      setAnyPlayerReady(true);
+    } else {
+      setAnyPlayerReady(false);
+    }
+  }, [data]);
+  
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -76,7 +86,6 @@ const RockPaperScissors: FC = () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tg, navigate]);
   // long polling
   useEffect(() => {
@@ -93,16 +102,16 @@ const RockPaperScissors: FC = () => {
       };
       getPollingRequest(userId, data)
         .then((res: any) => {
-          setData(res);
-          setLoading(false);
+          console.log(res);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
-            navigate(-1);
-          }
-
-          if (res?.message === 'timeout') {
-            fetchRoomInfo();
+            navigate(roomsUrl);
+          } else if (res?.message === 'timeout') {
+            setTimeout(fetchRoomInfo, 500); 
+          } else {
+            setData(res);
+            setLoading(false);
           }
 
           if (isMounted) {
@@ -127,8 +136,7 @@ const RockPaperScissors: FC = () => {
     return () => {
       isMounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [navigate, roomId, userId]);
   // запрос результата хода
   const updateAnimation = useCallback((newAnimation: any) => {
     setAnimation((prevAnimation: any) => {
@@ -139,6 +147,7 @@ const RockPaperScissors: FC = () => {
       return prevAnimation;
     });
   }, []);
+
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
@@ -158,27 +167,28 @@ const RockPaperScissors: FC = () => {
                 setTimeout(() => {
                   if (Number(res?.winner) === Number(userId)) {
                     updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
-                    postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success'});
+                    // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success'});
                     setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
                       ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
                         : `🔰`}`
                       : ''}`);
                   } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
                     updateAnimation(Number(data.creator_id) === Number(res.winner) ? rLoseAnim : lLoseAnim);
-                    postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+                    // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
                     setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                       ? `💵`
                       : `🔰`}`
                     );
                   } else if (res?.winner === 'draw') {
                     setMessage(translation?.draw);
-                    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft'});
+                    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft'});
                   }
                   setMessageVisible(true);
                   setTimeout(() => {
                     setMessageVisible(false);
                     setAnimation(null);
                     setShowTimer(true);
+                    setAnyPlayerReady(true);
                     setTimerStarted(true);
                     setTimer(15);
                   }, 3500)
@@ -193,7 +203,7 @@ const RockPaperScissors: FC = () => {
     };
 
     fetchData();
-  }, [data, roomId, translation?.draw, translation?.you_lost, translation?.you_won, updateAnimation, userId]);
+  }, [data, roomId, translation?.draw, translation?.you_lost, translation?.you_won, updateAnimation]);
   // хендлер готовности игрока
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
@@ -204,7 +214,7 @@ const RockPaperScissors: FC = () => {
             if (player?.userid === userId) {
               navigate(roomsUrl);
             }
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -214,7 +224,7 @@ const RockPaperScissors: FC = () => {
       if (player?.tokens <= data?.bet) {
         leaveRoomRequest(userId)
           .then(_res => {
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -232,7 +242,8 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, reqData)
       .then(res => {
         setData(res);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        setAnyPlayerReady(true);
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -250,7 +261,11 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, reqData)
       .then((res: any) => {
         setData(res);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        setShowTimer(true);
+        setAnyPlayerReady(true);
+        setTimerStarted(true);
+        setTimer(15);
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       })
       .catch((error) => {
         console.error('Set choice error:', error);
@@ -267,7 +282,7 @@ const RockPaperScissors: FC = () => {
     getPollingRequest(userId, data)
       .then(res => {
         setData(res);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
         setShowEmojiOverlay(false);
       })
       .catch((error) => {
@@ -306,7 +321,7 @@ const RockPaperScissors: FC = () => {
   }, [data]);
   // кик игрока, если он не прожал готовность
   useEffect(() => {
-    if (timerStarted && timer > 0) {
+    if (anyPlayerReady && timerStarted && timer > 0) {
       timerRef.current = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
@@ -333,7 +348,37 @@ const RockPaperScissors: FC = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [timer, timerStarted, data, navigate, userId]);
+  }, [timer, timerStarted, anyPlayerReady, data, navigate]);
+  
+  // useEffect(() => {
+  //   if (timerStarted && timer > 0) {
+  //     timerRef.current = setInterval(() => {
+  //       setTimer((prev) => prev - 1);
+  //     }, 1000);
+  //   } else if (timer === 0) {
+  //     const player = data?.players.find((player: IRPSPlayer) => player?.choice === 'none');
+  //     if (player) {
+  //       leaveRoomRequest(player.userid)
+  //         .then((_res) => {
+  //           if (player?.userid === userId) {
+  //             navigate(roomsUrl);
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           console.log(error);
+  //         });
+  //     }
+  //     setTimerStarted(false);
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   }
+  //   return () => {
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   };
+  // }, [timer, timerStarted, data, navigate, userId]);
 
   useEffect(() => {
     const resetPlayerChoice = () => {
@@ -354,12 +399,12 @@ const RockPaperScissors: FC = () => {
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
-  }, [data, roomId, userId]);
+  }, [data, roomId]);
 
 // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)
@@ -373,7 +418,7 @@ const RockPaperScissors: FC = () => {
   };
 
   const handleShowEmojiOverlay = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light'});
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light'});
     setShowEmojiOverlay(true);
   };
 
@@ -431,7 +476,7 @@ const RockPaperScissors: FC = () => {
                     </p>
                   ) : (
                     <p className={styles.game__notify}>
-                      {showTimer && timerStarted && timer}
+                      {anyPlayerReady && showTimer && timerStarted && timer}
                     </p>
                   )}
                   <div className={styles.game__hands}>

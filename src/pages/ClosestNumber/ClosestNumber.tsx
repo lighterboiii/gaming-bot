@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-fallthrough */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState, useRef } from "react";
@@ -57,7 +58,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -146,16 +147,16 @@ const ClosestNumber: FC = () => {
       };
       getPollingRequest(userId, data)
         .then((res: any) => {
-          setData(res);
-          setLoading(false);
+          console.log(res);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
             navigate(roomsUrl);
           } else if (res?.message === 'timeout') {
-            setTimeout(fetchRoomInfo, 1000);
+            setTimeout(fetchRoomInfo, 500); 
           } else {
-            fetchRoomInfo();
+            setData(res);
+            setLoading(false);
           }
 
           if (isMounted) {
@@ -197,10 +198,11 @@ const ClosestNumber: FC = () => {
           setTimerStarted(false);
           whoIsWinRequest(roomId!)
             .then((res: any) => {
+              console.log(res);
               setRoomValue(Number(res?.room_value));
               setWinnerId(Number(res?.winner));
               setWinSum(Number(res?.winner_value));
-              postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy'});
+              // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy'});
               if (res?.message === "success") {
                 setTimeout(() => {
                   setInputValue('');
@@ -388,7 +390,7 @@ const ClosestNumber: FC = () => {
   useEffect(() => {
     if (data?.players_count !== "1" && data?.players?.every((player: IRPSPlayer) => player.choice === 'none')) {
       setTimerStarted(true);
-      setTimer(25);
+      setTimer(30);
     } else if (data?.players?.every((player: IRPSPlayer) => player.choice !== 'none')) {
       setTimerStarted(false);
       if (timerRef.current) {
@@ -396,7 +398,7 @@ const ClosestNumber: FC = () => {
       }
     } else if (data?.players_count === "1") {
       setTimerStarted(false);
-      setTimer(25);
+      setTimer(30);
     }
   }, [data]);
   // кик игрока, если он не прожал готовность

@@ -22,7 +22,9 @@ const Case: FC<IPropsForClosestNumberComponent> = ({ users }) => {
               <img src={user?.emoji} alt="emoji" className={styles.players__emojiImage} />
             </div>
           }
-          {user?.choice !== "none" && <div className={styles.players__choice} style={{ right: '-20%' }}>{user?.choice}</div>}
+          {/* {user?.choice !== "none" &&  */}
+          <div className={styles.players__choice} style={{ right: '-20%' }}>{user?.choice}</div>
+          {/* } */}
           <UserAvatar item={user} avatar={user?.avatar} key={user?.userid} />
           <p
             className={styles.players__name}
