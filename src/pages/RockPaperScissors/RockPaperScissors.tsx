@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -32,7 +31,7 @@ import { setFirstGameRulesState } from "../../services/appSlice";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
@@ -60,13 +59,13 @@ const RockPaperScissors: FC = () => {
     setLeftRockImage(leftRock);
     setRightRockImage(rightRock);
     setRulesShown(isRulesShown);
-  }, []);
+  }, [isRulesShown]);
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show().onClick(() => {
       leaveRoomRequest(userId)
-        .then((data) => {
+        .then((_data) => {
         })
         .catch((error) => {
           console.log(error);
@@ -194,14 +193,14 @@ const RockPaperScissors: FC = () => {
     };
 
     fetchData();
-  }, [data]);
+  }, [data, roomId, translation?.draw, translation?.you_lost, translation?.you_won, updateAnimation]);
   // хендлер готовности игрока
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
     if (data?.bet_type === "1") {
       if (player?.money <= data?.bet) {
         leaveRoomRequest(player?.userid)
-          .then(res => {
+          .then(_res => {
             if (player?.userid === userId) {
               navigate(roomsUrl);
             }
@@ -214,7 +213,7 @@ const RockPaperScissors: FC = () => {
     } else if (data?.bet_type === "3") {
       if (player?.tokens <= data?.bet) {
         leaveRoomRequest(userId)
-          .then(res => {
+          .then(_res => {
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
@@ -315,7 +314,7 @@ const RockPaperScissors: FC = () => {
       const player = data?.players.find((player: IRPSPlayer) => player?.choice === 'none');
       if (player) {
         leaveRoomRequest(player.userid)
-          .then((res) => {
+          .then((_res) => {
             if (player?.userid === userId) {
               navigate(roomsUrl);
             }
@@ -334,28 +333,29 @@ const RockPaperScissors: FC = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [timer, timerStarted, data]);
-
-  const resetPlayerChoice = () => {
-    const choiceData = {
-      user_id: userId,
-      room_id: roomId,
-      type: 'setchoice',
-      choice: 'none'
-    };
-    getPollingRequest(userId, choiceData)
-      .then((res: any) => {
-      })
-      .catch((error) => {
-        console.error('Reset choice error:', error);
-      });
-  };
+  }, [timer, timerStarted, data, navigate]);
 
   useEffect(() => {
+    const resetPlayerChoice = () => {
+      const choiceData = {
+        user_id: userId,
+        room_id: roomId,
+        type: 'setchoice',
+        choice: 'none'
+      };
+      getPollingRequest(userId, choiceData)
+        .then((_res: any) => {
+        })
+        .catch((error) => {
+          console.error('Reset choice error:', error);
+        });
+    };
+
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
-  }, [data]);
+  }, [data, roomId]);
+
 // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');

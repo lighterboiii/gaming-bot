@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-fallthrough */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState, useRef } from "react";
@@ -58,7 +57,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -88,7 +87,7 @@ const ClosestNumber: FC = () => {
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
-  }, []);
+  }, [isRulesShown]);
 // отображение игроков на поле за исключением пользователя
   useEffect(() => {
     if (data?.players) {
@@ -217,7 +216,7 @@ const ClosestNumber: FC = () => {
     };
 
     fetchData();
-  }, [data]);
+  }, [data, roomId]);
   // показать оверлей при фокусе в инпуте
   const handleInputFocus = () => {
     setShowOverlay(true);
@@ -429,8 +428,9 @@ const ClosestNumber: FC = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [timer, timerStarted, data]);
-  // сброс выбор игрока, если он окаазался один в комнате после отправки выбора на сервер
+  }, [timer, timerStarted, data, navigate]);
+  // эффект к обработчику выше
+  useEffect(() => {
   const resetPlayerChoice = () => {
     const choiceData = {
       user_id: userId,
@@ -446,12 +446,10 @@ const ClosestNumber: FC = () => {
         console.error('Reset choice error:', error);
       });
   };
-  // эффект к обработчику выше
-  useEffect(() => {
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
-  }, [data]);
+  }, [data, roomId]);
   // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '2');

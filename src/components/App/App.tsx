@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Routes, Route } from 'react-router-dom';
 import { FC, useEffect, useState } from 'react';
@@ -22,7 +21,7 @@ import ClosestNumber from '../../pages/ClosestNumber/ClosestNumber';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -76,7 +75,7 @@ const App: FC = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>
