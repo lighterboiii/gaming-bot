@@ -36,9 +36,6 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
       console.log("Instruction:", step.target);
       setTarget(step.target);
       setShowInstruction(true);
-      setTimeout(() => {
-        setShowInstruction(false);
-      }, 6000)
     } else if (step.step_type === "subscribe") {
       tg.openTelegramLink(step.target);
     }
@@ -64,9 +61,12 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
   const handleClickBack = () => {
     if (showReward) {
       setShowReward(false);
+    } else if (target) {
+      setShowInstruction(false);
+      setTarget('');
     } else {
       setSelectedTask(null);
-    }
+    } 
   };
 
   return (
