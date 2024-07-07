@@ -89,14 +89,14 @@ const ClosestNumber: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [isRulesShown]);
-// отображение игроков на поле за исключением пользователя
+  // отображение игроков на поле за исключением пользователя
   useEffect(() => {
     if (data?.players) {
       const filtered = data.players.filter((player: any) => Number(player.userid) !== Number(userId));
       setFilteredPlayers(filtered);
     }
   }, [data, userId]);
-// базовые установки на кнопку "Назад" и цвет хидера
+  // базовые установки на кнопку "Назад" и цвет хидера
   useEffect(() => {
     tg.setHeaderColor('#FEC42C');
     tg.BackButton.show().onClick(() => {
@@ -153,7 +153,7 @@ const ClosestNumber: FC = () => {
             isMounted = false;
             navigate(roomsUrl);
           } else if (res?.message === 'timeout') {
-            setTimeout(fetchRoomInfo, 500); 
+            setTimeout(fetchRoomInfo, 500);
           } else {
             setData(res);
             setLoading(false);
@@ -409,46 +409,46 @@ const ClosestNumber: FC = () => {
       }, 1000);
     } else if (timer === 0) {
       const currentPlayer = data?.players.find((player: IRPSPlayer) => Number(player.userid) === Number(userId));
-      if (currentPlayer?.choice === 'none') {
+      if (currentPlayer?.choice === 'none' && data?.win?.winner_id === "none") {
         leaveRoomRequest(userId)
           .then((res: any) => {
             if (res?.message === 'success') {
               navigate(roomsUrl);
-              setTimerStarted(false);
-              if (timerRef.current) {
-                clearInterval(timerRef.current);
-              }
             }
           })
           .catch((error) => {
             console.log(error);
           });
+        setTimerStarted(false);
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+        }
       }
     }
+    
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
     };
   }, [timer, timerStarted, data, navigate, userId]);
-  
-  // эффект к обработчику выше
+
   useEffect(() => {
-  const resetPlayerChoice = () => {
-    const choiceData = {
-      user_id: userId,
-      room_id: roomId,
-      type: 'setchoice',
-      choice: 'none'
+    const resetPlayerChoice = () => {
+      const choiceData = {
+        user_id: userId,
+        room_id: roomId,
+        type: 'setchoice',
+        choice: 'none'
+      };
+      getPollingRequest(userId, choiceData)
+        .then(res => {
+          setInputValue('');
+        })
+        .catch((error) => {
+          console.error('Reset choice error:', error);
+        });
     };
-    getPollingRequest(userId, choiceData)
-      .then(res => {
-        setInputValue('');
-      })
-      .catch((error) => {
-        console.error('Reset choice error:', error);
-      });
-  };
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
@@ -581,14 +581,14 @@ const ClosestNumber: FC = () => {
                 )}
               </div>
             </>
-            ) : (
-              <div className={styles.rules}>
-                <img src={ruleImage!} alt="game rules" className={styles.rules__image} />
-                <div className={styles.rules__button}>
-                  <Button text="Ознакомился" handleClick={handleRuleButtonClick} />
-                </div>
+          ) : (
+            <div className={styles.rules}>
+              <img src={ruleImage!} alt="game rules" className={styles.rules__image} />
+              <div className={styles.rules__button}>
+                <Button text="Ознакомился" handleClick={handleRuleButtonClick} />
               </div>
-            )}
+            </div>
+          )}
         </>
       )}
 
