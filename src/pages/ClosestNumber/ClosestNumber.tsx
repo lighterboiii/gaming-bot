@@ -58,7 +58,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -408,21 +408,21 @@ const ClosestNumber: FC = () => {
         setTimer((prev) => prev! - 1);
       }, 1000);
     } else if (timer === 0) {
-      const player = data?.players.find((player: IRPSPlayer) => player.choice === 'none');
-      if (player) {
-        leaveRoomRequest(player?.userid)
-          .then((res) => {
-            if (player?.userid === userId) {
+      const currentPlayer = data?.players.find((player: IRPSPlayer) => Number(player.userid) === Number(userId));
+      if (currentPlayer?.choice === 'none') {
+        leaveRoomRequest(userId)
+          .then((res: any) => {
+            if (res?.message === 'success') {
               navigate(roomsUrl);
+              setTimerStarted(false);
+              if (timerRef.current) {
+                clearInterval(timerRef.current);
+              }
             }
           })
           .catch((error) => {
             console.log(error);
           });
-      }
-      setTimerStarted(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
       }
     }
     return () => {
@@ -431,6 +431,7 @@ const ClosestNumber: FC = () => {
       }
     };
   }, [timer, timerStarted, data, navigate, userId]);
+  
   // эффект к обработчику выше
   useEffect(() => {
   const resetPlayerChoice = () => {

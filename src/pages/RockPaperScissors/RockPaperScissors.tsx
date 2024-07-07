@@ -31,7 +31,7 @@ import { setFirstGameRulesState } from "../../services/appSlice";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
@@ -326,11 +326,11 @@ const RockPaperScissors: FC = () => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      const player = data?.players.find((player: IRPSPlayer) => player?.choice === 'none');
-      if (player) {
-        leaveRoomRequest(player.userid)
-          .then((_res) => {
-            if (player?.userid === userId) {
+      const currentPlayer = data?.players.find((player: IRPSPlayer) => Number(player.userid) === Number(userId));
+      if (currentPlayer?.choice === 'none') {
+        leaveRoomRequest(userId)
+          .then((res: any) => {
+            if (res?.message === 'success') {
               navigate(roomsUrl);
             }
           })
