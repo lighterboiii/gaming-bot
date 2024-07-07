@@ -57,7 +57,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -94,7 +94,7 @@ const ClosestNumber: FC = () => {
       const filtered = data.players.filter((player: any) => Number(player.userid) !== Number(userId));
       setFilteredPlayers(filtered);
     }
-  }, [data]);
+  }, [data, userId]);
 // базовые установки на кнопку "Назад" и цвет хидера
   useEffect(() => {
     tg.setHeaderColor('#FEC42C');
@@ -291,7 +291,7 @@ const ClosestNumber: FC = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [userId]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
     if (data?.players?.length === 1) {
@@ -428,7 +428,7 @@ const ClosestNumber: FC = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [timer, timerStarted, data, navigate]);
+  }, [timer, timerStarted, data, navigate, userId]);
   // эффект к обработчику выше
   useEffect(() => {
   const resetPlayerChoice = () => {
@@ -449,7 +449,7 @@ const ClosestNumber: FC = () => {
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
-  }, [data, roomId]);
+  }, [data, roomId, userId]);
   // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '2');

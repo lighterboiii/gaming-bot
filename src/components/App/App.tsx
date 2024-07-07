@@ -21,7 +21,7 @@ import ClosestNumber from '../../pages/ClosestNumber/ClosestNumber';
 
 const App: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -75,7 +75,7 @@ const App: FC = () => {
     };
 
     fetchUserData();
-  }, [dispatch]);
+  }, [dispatch, userId]);
 
   return (
     <div className={styles.app}>
