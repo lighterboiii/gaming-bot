@@ -31,7 +31,7 @@ import { setFirstGameRulesState } from "../../services/appSlice";
 const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
@@ -86,7 +86,7 @@ const RockPaperScissors: FC = () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
     }
-  }, [tg, navigate]);
+  }, [tg, navigate, userId]);
   // long polling
   useEffect(() => {
     let isMounted = true;
@@ -203,7 +203,7 @@ const RockPaperScissors: FC = () => {
     };
 
     fetchData();
-  }, [data, roomId, translation?.draw, translation?.you_lost, translation?.you_won, updateAnimation]);
+  }, [data, roomId, translation?.draw, translation?.you_lost, translation?.you_won, updateAnimation, userId]);
   // хендлер готовности игрока
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
@@ -348,37 +348,7 @@ const RockPaperScissors: FC = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [timer, timerStarted, anyPlayerReady, data, navigate]);
-  
-  // useEffect(() => {
-  //   if (timerStarted && timer > 0) {
-  //     timerRef.current = setInterval(() => {
-  //       setTimer((prev) => prev - 1);
-  //     }, 1000);
-  //   } else if (timer === 0) {
-  //     const player = data?.players.find((player: IRPSPlayer) => player?.choice === 'none');
-  //     if (player) {
-  //       leaveRoomRequest(player.userid)
-  //         .then((_res) => {
-  //           if (player?.userid === userId) {
-  //             navigate(roomsUrl);
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //         });
-  //     }
-  //     setTimerStarted(false);
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //   }
-  //   return () => {
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //   };
-  // }, [timer, timerStarted, data, navigate, userId]);
+  }, [timer, timerStarted, anyPlayerReady, data, navigate, userId]);
 
   useEffect(() => {
     const resetPlayerChoice = () => {
@@ -399,7 +369,7 @@ const RockPaperScissors: FC = () => {
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
-  }, [data, roomId]);
+  }, [data, roomId, userId]);
 
 // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
