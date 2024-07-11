@@ -1,26 +1,28 @@
+/* А как вы сервите статические ресурсы и сам фронтэнд? У меня билд выдает ошибку и не могу понять как эти статические ресурсы раздаются */
+
 @font-face {
   font-family: 'Gillroy';
-  src: url('./fonts/Gillroy/Gilroy-BlackItalic.woff2') format('woff2'),
-       url('./fonts/Gillroy/Gilroy-Black.woff') format('woff'),
-       url('./fonts/Gillroy/Gilroy-BlackItalic.ttf') format('truetype');
+  src: url('Fonts/Gillroy/Gilroy-BlackItalic.woff2') format('woff2'),
+    url('Fonts/Gillroy/Gilroy-Black.woff') format('woff'),
+    url('Fonts/Gillroy/Gilroy-BlackItalic.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Rubik';
-  src: url('./fonts/Rubik/rubik_bold.woff2') format('woff2'),
-       url('./fonts/Rubik/rubik_bold.woff') format('woff'),
-       url('./fonts/Rubik/rubik_bold.ttf') format('truetype');
+  src: url('Fonts/Rubik/rubik_bold.woff2') format('woff2'),
+    url('Fonts/Rubik/rubik_bold.woff') format('woff'),
+    url('Fonts/Rubik/rubik_bold.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Rubik';
-  src: url('./fonts/Rubik/rubik_black_italic.woff2') format('woff2'),
-       url('./fonts/Rubik/rubik_black_italic.woff') format('woff'),
-       url('./fonts/Rubik/rubik_black_italic.ttf') format('truetype');
+  src: url('Fonts/Rubik/rubik_black_italic.woff2') format('woff2'),
+    url('Fonts/Rubik/rubik_black_italic.woff') format('woff'),
+    url('Fonts/Rubik/rubik_black_italic.ttf') format('truetype');
   font-weight: 900;
   font-style: italic;
 }
@@ -28,9 +30,9 @@
 
 @font-face {
   font-family: 'Rubik';
-  src: url('./fonts/Rubik/rubik_medium.woff2') format('woff2'),
-       url('./fonts/Rubik/rubik_medium.woff') format('woff'),
-       url('./fonts/Rubik/rubik_medium.ttf') format('truetype');
+  src: url('Fonts/Rubik/rubik_medium.woff2') format('woff2'),
+    url('Fonts/Rubik/rubik_medium.woff') format('woff'),
+    url('Fonts/Rubik/rubik_medium.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
 }
@@ -38,9 +40,9 @@
 
 @font-face {
   font-family: 'Rubik';
-  src: url('./fonts/Rubik/rubik_light.woff2') format('woff2'),
-       url('./fonts/Rubik/rubik_light.woff') format('woff'),
-       url('./fonts/Rubik/rubik_light.ttf') format('truetype');
+  src: url('Fonts/Rubik/rubik_light.woff2') format('woff2'),
+    url('Fonts/Rubik/rubik_light.woff') format('woff'),
+    url('Fonts/Rubik/rubik_light.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
@@ -49,14 +51,15 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Gillroy', 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #d51845;
+
   ::-webkit-scrollbar {
     display: none;
-}
+  }
 }
 
 code {
@@ -64,7 +67,8 @@ code {
     monospace;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   overflow: hidden;

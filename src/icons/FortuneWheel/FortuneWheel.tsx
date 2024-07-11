@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { ICommonIconProps } from '../../utils/types/mainTypes';
+
+import { ICommonIconProps } from 'Utils/types/mainTypes';
 
 const FortuneWheelIcon: FC<ICommonIconProps> = ({
   color = '#f50941',
@@ -30,7 +31,6 @@ const FortuneWheelIcon: FC<ICommonIconProps> = ({
         </path>
       </g>
     </svg>
-
 
   );
 };

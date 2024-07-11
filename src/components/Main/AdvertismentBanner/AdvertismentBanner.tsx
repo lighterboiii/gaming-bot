@@ -1,9 +1,11 @@
+import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 import { useSwipeable } from "react-swipeable";
+
+import ChevronIcon from "Icons/Chevron/ChevronIcon";
+import { IBannerData } from "Utils/types/mainTypes";
+
 import styles from "./AdvertismentBanner.module.scss";
-import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
-import { postEvent } from "@tma.js/sdk";
-import { IBannerData } from "../../../utils/types/mainTypes";
 
 interface IProps {
   bannersData: IBannerData[];
@@ -65,14 +67,21 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
           className={`${styles.banner__sliderButton} ${styles.banner__leftButton}`}
           onClick={handlePrevSlide}
         >
-          <ChevronIcon position="left" width={12} height={12} color="#d51845" />
+          <ChevronIcon position="left"
+            width={12}
+            height={12}
+            color="#d51845" />
         </button>
-        <div className={styles.banner__link} onClick={handleBannerClick}></div>
+        <div className={styles.banner__link}
+          onClick={handleBannerClick}></div>
         <button
           className={`${styles.banner__sliderButton} ${styles.banner__rightButton}`}
           onClick={handleNextSlide}
         >
-          <ChevronIcon position="right" width={12} height={12} color="#d51845" />
+          <ChevronIcon position="right"
+            width={12}
+            height={12}
+            color="#d51845" />
         </button>
         <div className={styles.banner__indicators}>
           {bannersData?.map((_, index) => (

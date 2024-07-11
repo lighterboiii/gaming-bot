@@ -1,9 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
-import styles from './Tasks.module.scss';
-import { useAppSelector } from '../../../services/reduxHooks';
+
+import { useAppSelector } from 'Services/reduxHooks';
+
 import Task from '../Task/Task';
 import TaskInfo from '../TaskInfo/TaskInfo';
+
+import styles from './Tasks.module.scss';
 
 const Tasks: FC = () => {
   const currentTasks = useAppSelector(store => store.app.tasks);
@@ -15,7 +17,7 @@ const Tasks: FC = () => {
   };
 
   useEffect(() => {
-    
+
     return(() => {
       setSelectedTask(null);
     })
@@ -35,13 +37,16 @@ const Tasks: FC = () => {
           </div>
           <div className={styles.tasks__board}>
             {currentTasks && currentTasks.map((task: any, index: number) => (
-              <Task task={task} key={index} onClick={() => handleTaskClick(task)} />
+              <Task task={task}
+key={index}
+onClick={() => handleTaskClick(task)} />
             ))}
           </div>
         </div>
       </>
     ) : (
-      <TaskInfo task={selectedTask} setSelectedTask={() => setSelectedTask(null)} />
+      <TaskInfo task={selectedTask}
+setSelectedTask={() => setSelectedTask(null)} />
     )
   );
 };

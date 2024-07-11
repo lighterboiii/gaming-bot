@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
-import styles from './CircleButton.module.scss';
-import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
-import RefIcon from "../../../icons/Referral/ReferralIcon";
-import CrossIcon from "../../../icons/Cross/Cross";
 import { postEvent } from "@tma.js/sdk";
-import FortuneWheelIcon from "../../../icons/FortuneWheel/FortuneWheel";
-import CommunityIcon from "../../../icons/Community/CommunityIcon";
-import tasksIcon from '../../../images/tasks_3.png';
+import { FC } from "react";
+
+import ChevronIcon from "Icons/Chevron/ChevronIcon";
+import CommunityIcon from "Icons/Community/CommunityIcon";
+import CrossIcon from "Icons/Cross/Cross";
+import FortuneWheelIcon from "Icons/FortuneWheel/FortuneWheel";
+import RefIcon from "Icons/Referral/ReferralIcon";
+import tasksIcon from 'Images/tasks_3.png';
+
+import styles from './CircleButton.module.scss';
 
 interface IProps {
   chevronPosition?: string;
@@ -40,12 +41,17 @@ const CircleButton: FC<IProps> = ({
       style={shadow ? { boxShadow: '2px 1px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
 
     >
-      {iconType === 'chevron' && <ChevronIcon position={chevronPosition} color={color} width={width} height={height} />}
+      {iconType === 'chevron' && <ChevronIcon position={chevronPosition}
+        color={color}
+        width={width}
+        height={height} />}
       {iconType === 'ref' && <RefIcon />}
       {iconType === 'cross' && <CrossIcon color={color} />}
       {iconType === 'fortune' && <FortuneWheelIcon />}
       {iconType === 'community' && <CommunityIcon />}
-      {iconType === 'tasks' && <img src={tasksIcon} alt="tasks icon" className={styles.button__tasks} /> }
+      {iconType === 'tasks' && <img src={tasksIcon}
+        alt="tasks icon"
+        className={styles.button__tasks} />}
     </div>
   )
 }

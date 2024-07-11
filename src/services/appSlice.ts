@@ -1,7 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IBannerData, IBonus, ITask, IUserData } from "../utils/types/mainTypes";
-import { ItemData, ILavkaData } from "../utils/types/shopTypes";
-import { IRPSGameData } from "../utils/types/gameTypes";
+
+import { IRPSGameData } from "Utils/types/gameTypes";
+import { IBannerData, IBonus, ITask, IUserData } from "Utils/types/mainTypes";
+import { ILavkaData, ItemData } from "Utils/types/shopTypes";
+
 // костыльнулся с any
 interface AppState {
   info: IUserData | null;

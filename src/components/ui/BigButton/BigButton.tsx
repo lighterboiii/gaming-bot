@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC } from "react";
-import styles from './BigButton.module.scss';
-import { Link } from "react-router-dom";
-import CircleButton from "../CircleButton/CircleButton";
 import { postEvent } from "@tma.js/sdk";
+import React, { FC } from "react";
+import { Link } from "react-router-dom";
+
+import CircleButton from "../CircleButton/CircleButton";
+
+import styles from './BigButton.module.scss';
 
 interface IProps {
   to: string;
@@ -15,7 +16,9 @@ interface IProps {
   shadow?: boolean;
 }
 
-const BigButton: FC<IProps> = ({ to, text, secondaryText, isWhiteBackground, chevronPosition, circleIconColor, shadow }) => {
+const BigButton: FC<IProps> = ({
+  to, text, secondaryText, isWhiteBackground, chevronPosition, circleIconColor, shadow
+}) => {
 
   const handleGetHapticFeedback = () => {
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });

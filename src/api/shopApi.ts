@@ -1,52 +1,54 @@
-import { ILavkaData } from "../utils/types/shopTypes";
+import { ILavkaData } from "Utils/types/shopTypes";
+
 import { getReq, putReq } from "./api";
-import { 
+import {
   activeEmojiParamString,
-  activeSkinParamString, 
-  addNewCollectibleParamString, 
-  buyLavkaUri, 
-  buyShopItemUri, 
-  cancelSellLavka, 
-  getLavkaUri, 
-  itemCountParamString, 
-  itemIdParamString, 
-  nftIdParamString, 
-  priceParamString, 
-  sellLavkaUri, 
-  setActiveEmojiUri, 
-  setActiveSkinUri, 
-  setCollectiblesUri 
+  activeSkinParamString,
+  addNewCollectibleParamString,
+  buyLavkaUri,
+  buyShopItemUri,
+  cancelSellLavka,
+  getLavkaUri,
+  itemCountParamString,
+  itemIdParamString,
+  nftIdParamString,
+  priceParamString,
+  sellLavkaUri,
+  setActiveEmojiUri,
+  setActiveSkinUri,
+  setCollectiblesUri
 } from "./requestData";
+
 // Product
-export const setActiveSkinRequest = async (itemId: number, userIdValue: string) => {
+export const setActiveSkinRequest = async (itemId: number, userIdValue: number) => {
   return await putReq({
     uri: setActiveSkinUri,
     userId: userIdValue,
     endpoint: `${activeSkinParamString}${itemId}`
   });
 };
-export const buyItemRequest = async (itemId: number, itemCount: number = 1, userIdValue: string) => {
+export const buyItemRequest = async (itemId: number, itemCount = 1, userIdValue: number) => {
   return await putReq({
     uri: buyShopItemUri,
     userId: userIdValue,
     endpoint: `${itemIdParamString}${itemId}${itemCountParamString}${itemCount}`
   });
 };
-export const sellLavkaRequest = async (itemId: number, price: number, userIdValue: string) => {
+export const sellLavkaRequest = async (itemId: number, price: number, userIdValue: number) => {
   return await putReq({
     uri: sellLavkaUri,
     userId: userIdValue,
     endpoint: `${itemIdParamString}${itemId}${priceParamString}${price}`,
   });
 };
-export const buyLavkaRequest = async (item: ILavkaData, userIdValue: string) => {
+export const buyLavkaRequest = async (item: ILavkaData, userIdValue: number) => {
   return await putReq({
     uri: buyLavkaUri,
     userId: userIdValue,
     endpoint: `${nftIdParamString}${item.nft_id}`,
   });
 };
-export const cancelLavkaRequest = async (itemId: number, userIdValue: string) => {
+export const cancelLavkaRequest = async (itemId: number, userIdValue: number) => {
   return await putReq({
     uri: cancelSellLavka,
     userId: userIdValue,
@@ -54,7 +56,7 @@ export const cancelLavkaRequest = async (itemId: number, userIdValue: string) =>
   })
 };
 // универсальная функция для запроссов collectible
-export const makeCollectibleRequest = async (itemId: number, itemCount: number, userIdValue: string) => {
+export const makeCollectibleRequest = async (itemId: number, itemCount: number, userIdValue: number) => {
   return await putReq<any>({
     uri: setCollectiblesUri,
     endpoint: `${addNewCollectibleParamString}${itemId}${itemCountParamString}${itemCount}`,
@@ -68,7 +70,7 @@ export const getLavkaAvailableRequest = async () => {
   })
 };
 // поставить активный эмодзи
-export const setActiveEmojiRequest = async (userIdValue: string, activeEmoji: number) => {
+export const setActiveEmojiRequest = async (userIdValue: number, activeEmoji: number) => {
   return await putReq({
     uri: setActiveEmojiUri,
     userId: userIdValue,

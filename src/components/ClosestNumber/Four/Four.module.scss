@@ -1,5 +1,5 @@
-@use '../../../stylesheets/mixins' as *;
-@use '../../../stylesheets/variables' as *;
+@use 'Stylesheets/mixins' as *;
+@use 'Stylesheets/variables' as *;
 
 .players {
   @include position(relative);
@@ -29,7 +29,7 @@
     font-weight: 900;
     font-size: 12px;
   }
-  
+
   &__player:nth-child(1),
   &__player:nth-child(2) {
     @include position(absolute, $top: 5%);
@@ -39,17 +39,17 @@
   &__player:nth-child(1) {
     left: 15%;
   }
-  
+
   &__player:nth-child(2),
   &__player:nth-child(4) {
     right: -10%;
   }
-  
+
   &__player:nth-child(3) {
     @include position(absolute, $bottom: 10%, $left: 15%);
     transform: translateX(-50%);
   }
-  
+
   &__player:nth-child(4) {
     @include position(absolute, $bottom: 10%);
     transform: translateX(-50%);
@@ -117,4 +117,3 @@
     }
   }
 }
-

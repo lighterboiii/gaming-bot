@@ -1,34 +1,34 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { useParams, useNavigate } from "react-router-dom";
-import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
-import Loader from "../../components/Loader/Loader";
-import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
-import useTelegram from "../../hooks/useTelegram";
-import { userId } from "../../api/requestData";
-import styles from "./RockPaperScissors.module.scss";
-import newVS from '../../images/rock-paper-scissors/VS_new.png';
-import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
-import HandShake from '../../components/Game/HandShake/HandShake';
-import ChoiceBox from "../../components/Game/ChoiceBox/ChoiceBox";
-import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
-import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
-import leftRock from '../../images/rock-paper-scissors/left_rock.png';
-import rightRock from '../../images/rock-paper-scissors/right_rock.png';
-import { IRPSPlayer } from "../../utils/types/gameTypes";
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
-import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
-import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
-import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
-import { roomsUrl } from "../../utils/routes";
 import { postEvent } from "@tma.js/sdk";
-import Button from "../../components/ui/Button/Button";
-import { getAppData } from "../../api/mainApi";
-import { setFirstGameRulesState } from "../../services/appSlice";
+import { motion } from "framer-motion";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "API/gameApi";
+import { getAppData } from "API/mainApi";
+import { userId } from "API/requestData";
+import EmojiOverlay from "Components/EmojiOverlay/EmojiOverlay";
+import ChoiceBox from "Components/Game/ChoiceBox/ChoiceBox";
+import HandShake from 'Components/Game/HandShake/HandShake';
+import Loader from "Components/Loader/Loader";
+import Button from "Components/ui/Button/Button";
+import UserAvatar from "Components/User/UserAvatar/UserAvatar";
+import useTelegram from "Hooks/useTelegram";
+import emoji_icon from 'Images/rock-paper-scissors/emoji_icon.png';
+import leftRock from 'Images/rock-paper-scissors/left_rock.png';
+import rightRock from 'Images/rock-paper-scissors/right_rock.png';
+import readyIcon from 'Images/rock-paper-scissors/user_ready_image.png';
+import newVS from 'Images/rock-paper-scissors/VS_new.png';
+import lLoseAnim from 'Images/rock-paper-scissors/winlose/l_lose.png';
+import lWinAnim from 'Images/rock-paper-scissors/winlose/l_win.png';
+import rLoseAnim from 'Images/rock-paper-scissors/winlose/r_lose.png';
+import rWinAnim from 'Images/rock-paper-scissors/winlose/r_win.png';
+import { setFirstGameRulesState } from "Services/appSlice";
+import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { roomsUrl } from "Utils/routes";
+import { IRPSPlayer } from "Utils/types/gameTypes";
 
-const RockPaperScissors: FC = () => {
+import styles from "./RockPaperScissors.module.scss";
+
+export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const userId = user?.id;
@@ -73,10 +73,10 @@ const RockPaperScissors: FC = () => {
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
-    tg.BackButton.show().onClick(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
       leaveRoomRequest(userId)
-        .then((_data) => {
-        })
+        .then((data) => { })
         .catch((error) => {
           console.log(error);
         })
@@ -136,7 +136,8 @@ const RockPaperScissors: FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [navigate, roomId, userId]);
+
+  }, []);
   // запрос результата хода
   const updateAnimation = useCallback((newAnimation: any) => {
     setAnimation((prevAnimation: any) => {
@@ -167,7 +168,10 @@ const RockPaperScissors: FC = () => {
                 setTimeout(() => {
                   if (Number(res?.winner) === Number(userId)) {
                     updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
-                    // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success'});
+                    postEvent(
+                      'web_app_trigger_haptic_feedback',
+                      { type: 'notification', notification_type: 'success' }
+                    );
                     setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
                       ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
                         : `🔰`}`
@@ -177,11 +181,10 @@ const RockPaperScissors: FC = () => {
                     // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
                     setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                       ? `💵`
-                      : `🔰`}`
-                    );
+                      : `🔰`}`);
                   } else if (res?.winner === 'draw') {
                     setMessage(translation?.draw);
-                    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft'});
+                    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
                   }
                   setMessageVisible(true);
                   setTimeout(() => {
@@ -369,9 +372,8 @@ const RockPaperScissors: FC = () => {
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
-  }, [data, roomId, userId]);
-
-// обработчик клика по кнопке "Ознакомился"
+  }, [data]);
+  // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
@@ -388,7 +390,7 @@ const RockPaperScissors: FC = () => {
   };
 
   const handleShowEmojiOverlay = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light'});
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     setShowEmojiOverlay(true);
   };
 
@@ -404,9 +406,12 @@ const RockPaperScissors: FC = () => {
               <>
                 <div className={styles.game__players}>
                   {data?.players?.map((player: IRPSPlayer) => (
-                    <div className={styles.game__player} key={player.userid}>
+                    <div className={styles.game__player}
+                      key={player.userid}>
                       <p className={styles.game__playerName}>{player?.publicname}</p>
-                      <UserAvatar item={player} avatar={player?.avatar} key={player?.userid} />
+                      <UserAvatar item={player}
+                        avatar={player?.avatar}
+                        key={player?.userid} />
                       {player?.choice === 'ready' && (
                         <img
                           src={readyIcon}
@@ -439,7 +444,9 @@ const RockPaperScissors: FC = () => {
                 </div><>
                   {data?.players_count === "2" &&
                     data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready') &&
-                    <img src={newVS} alt="versus icon" className={styles.game__versusImage} />}
+                    <img src={newVS}
+                      alt="versus icon"
+                      className={styles.game__versusImage} />}
                   {messageVisible ? (
                     <p className={styles.game__resultMessage}>
                       {message}
@@ -471,9 +478,11 @@ const RockPaperScissors: FC = () => {
                         <p className={styles.game__text}>{data?.bet}</p>
                       </div>
                     </div>
-                    {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none') && data?.players_count === "2") ? (
+                    {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')
+                      && data?.players_count === "2") ? (
                       <div className={styles.game__buttonsWrapper}>
-                        <ChoiceBox choice={choice} handleChoice={handleChoice} />
+                        <ChoiceBox choice={choice}
+                          handleChoice={handleChoice} />
                       </div>
                     ) : (
                       <div>
@@ -482,7 +491,8 @@ const RockPaperScissors: FC = () => {
                           id="ready"
                           onChange={handleReady}
                           className={styles.game__checkbox} />
-                        <label htmlFor="ready" className={styles.game__label}></label>
+                        <label htmlFor="ready"
+                          className={styles.game__label} />
                       </div>
                     )}
                     <button
@@ -490,13 +500,17 @@ const RockPaperScissors: FC = () => {
                       className={`${styles.game__button} ${styles.game__emojiButton}`}
                       onClick={handleShowEmojiOverlay}
                     >
-                      <img src={emoji_icon} alt="emoji icon" className={styles.game__iconEmoji} />
+                      <img src={emoji_icon}
+                        alt="emoji icon"
+                        className={styles.game__iconEmoji} />
                     </button>
                   </div>
                 </>
               </>) : (
               <div className={styles.rules}>
-                <img src={ruleImage!} alt="game rules" className={styles.rules__image} />
+                <img src={ruleImage!}
+                  alt="game rules"
+                  className={styles.rules__image} />
                 <div className={styles.rules__button}>
                   <Button text={translation?.understood} handleClick={handleRuleButtonClick} />
                 </div>
@@ -515,4 +529,3 @@ const RockPaperScissors: FC = () => {
   );
 }
 
-export default RockPaperScissors;

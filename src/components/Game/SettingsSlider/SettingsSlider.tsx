@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { ChangeEvent, FC, useEffect, useState } from 'react';
-import styles from './SettingsSlider.module.scss';
-import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
 import { postEvent } from '@tma.js/sdk';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
+
+import ChevronIcon from 'Icons/Chevron/ChevronIcon';
+
+import styles from './SettingsSlider.module.scss';
 
 interface IProps {
   betValue?: any;
@@ -14,15 +15,15 @@ interface IProps {
 
 const SettingsSlider: FC<IProps> = ({
   isCurrency = false,
-  onBetChange = () => {},
-  onCurrencyChange = () => {},
+  onBetChange = () => { },
+  onCurrencyChange = () => { },
   onInputChange,
 }) => {
   const [bet, setBet] = useState('0');
   const [currency, setCurrency] = useState(1);
 
   const increaseBet = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setBet(prevBet => {
       const newBet = (parseFloat(prevBet) + 0.1).toFixed(1);
       onInputChange && onInputChange(newBet);
@@ -31,7 +32,7 @@ const SettingsSlider: FC<IProps> = ({
   };
 
   const decreaseBet = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setBet(prevBet => {
       const currentBet = parseFloat(prevBet);
       if (currentBet > 0.1) {
@@ -45,7 +46,7 @@ const SettingsSlider: FC<IProps> = ({
 
   const toggleCurrency = () => {
     const newCurrency = currency === 3 ? 1 : 3;
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setCurrency(newCurrency);
   };
 
