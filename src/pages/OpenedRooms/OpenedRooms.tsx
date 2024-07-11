@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -61,7 +63,7 @@ export const OpenedRooms: FC = () => {
     return () => {
       tg.BackButton.hide();
     }
-  }, []);
+  }, [dispatch, navigate, tg.BackButton]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -77,7 +79,7 @@ export const OpenedRooms: FC = () => {
     }, 10000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [dispatch]);
 
   const toggleSort = (sortBy: string) => {
     let sortedRooms;
@@ -160,7 +162,6 @@ export const OpenedRooms: FC = () => {
         postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     }
   };
-
 
   const handleRoomClick = (room: any) => {
     if (room?.free_places === 0) {

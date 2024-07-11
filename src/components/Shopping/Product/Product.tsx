@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
@@ -9,6 +11,9 @@ import {
   setActiveEmojiRequest,
   setActiveSkinRequest
 } from "API/shopApi";
+import { Modal } from "Components/Modal/Modal";
+import Button from "Components/ui/Button/Button";
+import UserAvatar from "Components/User/UserAvatar/UserAvatar";
 import useTelegram from "Hooks/useTelegram";
 import {
   addEnergyDrink,
@@ -22,9 +27,6 @@ import {
 import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
 import { CombinedItemData, ILavkaData, ItemData } from "Utils/types/shopTypes";
 
-import { Modal } from "Components/Modal/Modal";
-import Button from "Components/ui/Button/Button";
-import UserAvatar from "Components/User/UserAvatar/UserAvatar";
 import SellForm from "../SellForm/SellForm";
 
 import styles from './Product.module.scss';

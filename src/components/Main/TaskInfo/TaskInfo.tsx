@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
+
 import { taskResultRequest, taskStepRequest } from "API/mainApi";
 import { userId } from "API/requestData";
+import Button from "Components/ui/Button/Button";
 import useTelegram from "Hooks/useTelegram";
 import ChevronIcon from "Icons/Chevron/ChevronIcon";
 import CrossIcon from "Icons/Cross/Cross";
 import { setNewTokensValue } from "Services/appSlice";
 import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
 import { ITask } from "Utils/types/mainTypes";
-
-import Button from "Components/ui/Button/Button";
 
 import styles from './TaskInfo.module.scss';
 
@@ -20,7 +22,7 @@ interface IProps {
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [showReward, setShowReward] = useState<boolean>(false);

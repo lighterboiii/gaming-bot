@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { postEvent } from '@tma.js/sdk';
 import { FC, useEffect, useRef, useState } from 'react';
 
 import { getWheelPrizeRequest, spinWheelRequest } from 'API/mainApi';
 import { userId } from 'API/requestData';
+import Button from 'Components/ui/Button/Button';
 import useTelegram from 'Hooks/useTelegram';
 import lamp from 'Images/closest-number/lamp.png';
 import light from 'Images/closest-number/lamp2.png';
@@ -10,8 +14,6 @@ import wheelPointer from 'Images/closest-number/wheelPoint.png';
 import { addTokens, setTokensValueAfterBuy } from 'Services/appSlice';
 import { useAppDispatch, useAppSelector } from 'Services/reduxHooks';
 import { IFortuneData } from 'Utils/types/mainTypes';
-
-import Button from 'Components/ui/Button/Button';
 
 import styles from './WheelOfLuck.module.scss';
 
@@ -22,7 +24,7 @@ interface IProps {
 
 const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [prize, setPrize] = useState<boolean>(false);

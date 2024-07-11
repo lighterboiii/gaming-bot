@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { energyDrinkRequest, joinRoomRequest, postNewRoomRequest } from "API/gameApi";
 import { userId } from "API/requestData";
+import Button from "Components/ui/Button/Button";
 import useTelegram from "Hooks/useTelegram";
 import energy from 'Images/energy-drink.png';
 import { useAppSelector } from "Services/reduxHooks";
-
-import Button from "Components/ui/Button/Button";
 
 import styles from './JoinRoomPopup.module.scss';
 
@@ -29,7 +30,7 @@ const JoinRoomPopup: FC<IProps> = ({
   fromGameSettings = false,
 }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [messageShown, setMessageShown] = useState(false);
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);

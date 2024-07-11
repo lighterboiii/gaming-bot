@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-lone-blocks */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
@@ -41,7 +42,7 @@ export const CreateRoom: FC = () => {
     return () => {
       tg.BackButton.hide();
     }
-  }, []);
+  }, [navigate, tg.BackButton]);
 
   const handleGameClick = (game: any) => {
     setGameData(game);

@@ -1,8 +1,7 @@
 import { FC } from "react"
 
-import { IBannerData } from "Utils/types/mainTypes";
-
 import Button from "Components/ui/Button/Button";
+import { IBannerData } from "Utils/types/mainTypes";
 
 import styles from './BannerData.module.scss';
 

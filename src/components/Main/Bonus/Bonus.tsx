@@ -3,12 +3,11 @@ import { FC } from "react";
 
 import { userId } from "API/requestData";
 import { makeCollectibleRequest } from "API/shopApi";
+import Button from "Components/ui/Button/Button";
 import useTelegram from "Hooks/useTelegram";
 import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "Services/appSlice";
 import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
 import { IBonus } from "Utils/types/mainTypes";
-
-import Button from "Components/ui/Button/Button";
 
 import styles from './Bonus.module.scss';
 
@@ -19,8 +18,9 @@ interface IProps {
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: IBonus) => {
@@ -68,7 +68,9 @@ className={styles.bonus__image} />
             <Button
               handleClick={() => handleGetBonus(bonus)}
               text={
-                `${(bonus?.bonus_type === "tokens" || bonus?.bonus_type === "exp" || bonus?.bonus_type === "energy_drink")
+                `${(bonus?.bonus_type === "tokens" || 
+                  bonus?.bonus_type === "exp" || 
+                  bonus?.bonus_type === "energy_drink")
                   ? `${translation?.claim} ${bonus?.bonus_count}`
                   : `${translation?.claim}`}`
               }

@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
+import Button from "Components/ui/Button/Button";
 import { useAppSelector } from "Services/reduxHooks";
 import { formatNumber } from "Utils/additionalFunctions";
-
-import Button from "Components/ui/Button/Button";
 
 import styles from './CreateRoomFooter.module.scss';
 

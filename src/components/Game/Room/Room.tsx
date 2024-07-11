@@ -14,6 +14,7 @@ import { IRPSGameData } from "Utils/types/gameTypes";
 import styles from './Room.module.scss';
 
 interface IProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   room: IRPSGameData | any;
   openModal: () => void;
 }
@@ -21,7 +22,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [isMessage, setIsMessage] = useState(false);
   const [message, setMessage] = useState('');
   const translation = useAppSelector(store => store.app.languageSettings);

@@ -1,15 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
 
 import { leaveRoomRequest } from "API/gameApi";
 import { userId } from "API/requestData";
+import ModalOverlay from "Components/Modal/ModalOverlay/ModalOverlay";
+import UserAvatar from "Components/User/UserAvatar/UserAvatar";
 import useTelegram from "Hooks/useTelegram";
 import { roomsUrl } from "Utils/routes";
 import { IRPSPlayer } from "Utils/types/gameTypes";
-
-import UserAvatar from "Components/User/UserAvatar/UserAvatar";
-import ModalOverlay from "Components/Modal/ModalOverlay/ModalOverlay";
 
 import styles from "./ClosestModal.module.scss";
 
@@ -23,7 +23,7 @@ interface IProps {
 
 export const ClosestModal: FC<IProps> = ({ closeModal, winner, winnerValue, gameValue, betType }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const navigate = useNavigate();
 
   useEffect(() => {

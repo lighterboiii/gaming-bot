@@ -1,23 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { getReferralsData, transferCoinsToBalanceReq } from "API/mainApi";
 import { inviteLink, userId } from "API/requestData";
+import Button from "Components/ui/Button/Button";
+import UserContainer from "Components/User/UserContainer/UserContainer";
 import useTelegram from "Hooks/useTelegram";
 import { setCoinsNewValue } from "Services/appSlice";
 import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
 import { IMember } from "Utils/types/memberTypes";
 
-import Button from "Components/ui/Button/Button";
-import UserContainer from "Components/User/UserContainer/UserContainer";
-
 import styles from './Referral.module.scss';
 
 const Referral: FC = () => {
-  const navigate = useNavigate();
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
@@ -45,6 +45,7 @@ const Referral: FC = () => {
     return () => {
       clearInterval(intervalId);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const handleTransferCoins = () => {

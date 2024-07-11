@@ -3,15 +3,14 @@ import { FC, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 import { balanceLink, groupLink } from "API/requestData";
+import CircleButton from "Components/ui/CircleButton/CircleButton";
+import UserAvatar from "Components/User/UserAvatar/UserAvatar";
 import useTelegram from "Hooks/useTelegram";
 import CommunityIcon from "Icons/Community/CommunityIcon";
 import LevelIcon from "Icons/Level/LevelIcon";
 import WalletIcon from "Icons/Wallet/WalletIcon";
 import { useAppSelector } from "Services/reduxHooks";
 import { formatNumber } from "Utils/additionalFunctions";
-
-import CircleButton from "Components/ui/CircleButton/CircleButton";
-import UserAvatar from "Components/User/UserAvatar/UserAvatar";
 
 import styles from './MainUserInfo.module.scss';
 

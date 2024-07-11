@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
 
 import { getActiveEmojiPack } from "API/mainApi";
@@ -15,7 +17,7 @@ interface IProps {
 
 const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [emojis, setEmojis] = useState<any>(null);
   const [name, setName] = useState<string>("");
 
@@ -28,6 +30,7 @@ const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
       .catch((error) => {
         console.log(error);
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   return (

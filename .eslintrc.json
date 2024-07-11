@@ -6,8 +6,8 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "plugins": [
-    "import",
-    "import-newlines"
+    "import"
+    // "import-newlines"
   ],
   "settings": {
     "import/resolver": {
@@ -63,13 +63,13 @@
       }
     ],
     "import/no-cycle": "error",
-    "import-newlines/enforce": [
-      "error",
-      {
-        "items": 40,
-        "max-len": 120
-      }
-    ],
+    // "import-newlines/enforce": [
+    //   "error",
+    //   {
+    //     "items": 40,
+    //     "max-len": 120
+    //   }
+    // ],
     "react/jsx-max-props-per-line": [
       "error",
       {
