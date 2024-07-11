@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
 import { userId } from "API/requestData";
 import { sellLavkaRequest } from "API/shopApi";
+import Button from "Components/ui/Button/Button";
 import useTelegram from "Hooks/useTelegram";
 import { addItemToLavka } from "Services/appSlice";
 import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
 import { ILavkaData } from "Utils/types/shopTypes";
-
-import Button from "Components/ui/Button/Button";
 
 import styles from './SellForm.module.scss';
 
@@ -21,7 +22,7 @@ interface IProps {
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [priceValue, setPriceValue] = useState('')

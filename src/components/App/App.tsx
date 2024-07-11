@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+
 import { getAppData } from 'API/mainApi';
 import { userId } from 'API/requestData';
+import Loader from "Components/Loader/Loader";
 import useTelegram from 'Hooks/useTelegram';
 import {
 ClosestNumber,
@@ -40,13 +43,11 @@ roomsUrl,
 shopUrl
 } from 'Utils/routes';
 
-import Loader from "Components/Loader/Loader";
-
 import styles from './App.module.scss';
 
 export const App: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -101,6 +102,7 @@ export const App: FC = () => {
     };
 
     fetchUserData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
 
   return (

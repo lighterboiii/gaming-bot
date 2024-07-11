@@ -1,18 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { postNewRoomRequest } from 'API/gameApi';
 import { userId } from 'API/requestData';
+import JoinRoomPopup from 'Components/Game/JoinRoomPopup/JoinRoomPopup';
+import SettingsSlider from 'Components/Game/SettingsSlider/SettingsSlider';
+import { Modal } from 'Components/Modal/Modal';
+import Button from 'Components/ui/Button/Button';
 import useTelegram from 'Hooks/useTelegram';
 import { useAppDispatch, useAppSelector } from 'Services/reduxHooks';
 import { formatNumber } from 'Utils/additionalFunctions';
 import { IGameSettingsData } from 'Utils/types/gameTypes';
-
-import { Modal } from 'Components/Modal/Modal';
-import Button from 'Components/ui/Button/Button';
-import JoinRoomPopup from 'Components/Game/JoinRoomPopup/JoinRoomPopup';
-import SettingsSlider from 'Components/Game/SettingsSlider/SettingsSlider';
 
 import styles from './GameSettings.module.scss';
 
@@ -24,7 +25,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);

@@ -22,6 +22,19 @@
     text-transform: uppercase;
   }
 
+  &__draw {
+    @include size(100%, 100%);
+    @include flex(row, center);
+  }
+
+  &__drawatar {
+    @include size(80px, 80px);
+  }
+
+  &__tieContainer {
+    @include flex(column, center, center, 6px);
+  }
+
   &__buttons {
     @include size(100%, auto);
     @include flex(row, center, center, 10px);

@@ -1,3 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-fallthrough */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useRef, useState } from "react";
@@ -58,7 +62,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -76,6 +80,8 @@ export const ClosestNumber: FC = () => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [winnerId, setWinnerId] = useState<number | null>(null);
   const [winSum, setWinSum] = useState<any>(null);
+  const [draw, setDraw] = useState(false);
+  const [drawWinners, setDrawWinners] = useState<any | null>(null);
   const currentWinner = data?.players?.find((player: any) => Number(player?.userid) === Number(winnerId));
   const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -199,10 +205,21 @@ export const ClosestNumber: FC = () => {
           whoIsWinRequest(roomId!)
             .then((res: any) => {
               console.log(res);
-              setRoomValue(Number(res?.room_value));
-              setWinnerId(Number(res?.winner));
-              setWinSum(Number(res?.winner_value));
-              postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
+              if (res.winner === "draw") {
+                setDraw(true);
+                setRoomValue(Number(res?.room_value));
+                const drawPlayerIds = res.draw_players;
+                const drawPlayers = data?.players?.filter((player: any) =>
+                  drawPlayerIds.includes(player.userid));
+                console.log(drawPlayers);
+                setDrawWinners(drawPlayers);
+                setWinSum(Number(res?.winner_value));
+              } else {
+                setRoomValue(Number(res?.room_value));
+                setWinnerId(Number(res?.winner));
+                setWinSum(Number(res?.winner_value));
+                // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
+              }
               if (res?.message === "success") {
                 setTimeout(() => {
                   setInputValue('');
@@ -296,6 +313,8 @@ export const ClosestNumber: FC = () => {
   }, [userId]);
   // хендлер выбора хода
   const handleChoice = (value: string) => {
+    setDrawWinners(null);
+    setDraw(false);
     if (data?.players?.length === 1) {
       setInputValue('');
       setPlaceholder(translation?.waiting4players);
@@ -425,7 +444,7 @@ export const ClosestNumber: FC = () => {
         }
       }
     }
-    
+
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -611,6 +630,8 @@ export const ClosestNumber: FC = () => {
           closeModal={() => setModalOpen(false)}
           winner={currentWinner}
           winnerValue={winSum}
+          isTie={draw && draw}
+          tieWinners={drawWinners && drawWinners}
         />
       )}
     </div>
