@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import gowinLogo from 'Images/gowin.png';
 import girl from 'Images/Shop_small_char.png';
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 import { shopUrl } from "Utils/routes";
 
 import styles from './ShopLink.module.scss';

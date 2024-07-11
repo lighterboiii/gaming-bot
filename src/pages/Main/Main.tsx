@@ -21,7 +21,7 @@ import FriendsIcon from "Icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "Icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "Icons/Play/PlayIcon";
 import gowinLogo from 'Images/gowin.png';
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 
 import styles from './Main.module.scss';
 

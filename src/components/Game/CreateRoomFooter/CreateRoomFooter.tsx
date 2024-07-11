@@ -5,7 +5,7 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Button from "Components/ui/Button/Button";
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 import { formatNumber } from "Utils/additionalFunctions";
 
 import styles from './CreateRoomFooter.module.scss';

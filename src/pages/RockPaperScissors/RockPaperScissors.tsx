@@ -26,8 +26,8 @@ import lLoseAnim from 'Images/rock-paper-scissors/winlose/l_lose.png';
 import lWinAnim from 'Images/rock-paper-scissors/winlose/l_win.png';
 import rLoseAnim from 'Images/rock-paper-scissors/winlose/r_lose.png';
 import rWinAnim from 'Images/rock-paper-scissors/winlose/r_win.png';
-import { setFirstGameRulesState } from "Services/appSlice";
-import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { setFirstGameRulesState } from "services/appSlice";
+import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { roomsUrl } from "Utils/routes";
 import { IRPSPlayer } from "Utils/types/gameTypes";
 

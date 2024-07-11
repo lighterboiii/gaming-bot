@@ -4,7 +4,7 @@ import { FC } from "react";
 import { balanceLink } from "API/requestData";
 import useTelegram from "Hooks/useTelegram";
 import WalletIcon from "Icons/Wallet/WalletIcon";
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 import { formatNumber } from "Utils/additionalFunctions";
 
 import UserAvatar from "../UserAvatar/UserAvatar";

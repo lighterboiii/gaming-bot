@@ -11,8 +11,8 @@ import useTelegram from 'Hooks/useTelegram';
 import lamp from 'Images/closest-number/lamp.png';
 import light from 'Images/closest-number/lamp2.png';
 import wheelPointer from 'Images/closest-number/wheelPoint.png';
-import { addTokens, setTokensValueAfterBuy } from 'Services/appSlice';
-import { useAppDispatch, useAppSelector } from 'Services/reduxHooks';
+import { addTokens, setTokensValueAfterBuy } from 'services/appSlice';
+import { useAppDispatch, useAppSelector } from 'services/reduxHooks';
 import { IFortuneData } from 'Utils/types/mainTypes';
 
 import styles from './WheelOfLuck.module.scss';

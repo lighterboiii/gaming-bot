@@ -6,8 +6,8 @@ import { userId } from "API/requestData";
 import { makeCollectibleRequest } from "API/shopApi";
 import Button from "Components/ui/Button/Button";
 import useTelegram from "Hooks/useTelegram";
-import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "Services/appSlice";
-import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "services/appSlice";
+import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { IBonus } from "Utils/types/mainTypes";
 
 import styles from './Bonus.module.scss';

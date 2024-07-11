@@ -16,7 +16,7 @@ OpenedRooms,
 RockPaperScissors,
 Shop
 } from 'Pages';
-import { setProductsArchive } from 'Services/appSlice';
+import { setProductsArchive } from 'services/appSlice';
 import {
 setBannerData,
 setDailyBonus,
@@ -30,8 +30,8 @@ setShopImage,
 setTaskList,
 setUserData,
 setUserPhoto
-} from 'Services/appSlice';
-import { useAppDispatch } from 'Services/reduxHooks';
+} from 'services/appSlice';
+import { useAppDispatch } from 'services/reduxHooks';
 import {
 anyUrl,
 closestNumberRoomUrl,

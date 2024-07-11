@@ -11,7 +11,7 @@ import SettingsSlider from 'Components/Game/SettingsSlider/SettingsSlider';
 import { Modal } from 'Components/Modal/Modal';
 import Button from 'Components/ui/Button/Button';
 import useTelegram from 'Hooks/useTelegram';
-import { useAppDispatch, useAppSelector } from 'Services/reduxHooks';
+import { useAppDispatch, useAppSelector } from 'services/reduxHooks';
 import { formatNumber } from 'Utils/additionalFunctions';
 import { IGameSettingsData } from 'Utils/types/gameTypes';
 

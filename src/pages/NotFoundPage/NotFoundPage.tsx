@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import SmallButton from "Components/ui/SmallButton/SmallButton";
 import useTelegram from "Hooks/useTelegram";
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 import { indexUrl } from "Utils/routes";
 
 import styles from './NotFoundPage.module.scss';

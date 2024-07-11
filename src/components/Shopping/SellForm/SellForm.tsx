@@ -7,8 +7,8 @@ import { userId } from "API/requestData";
 import { sellLavkaRequest } from "API/shopApi";
 import Button from "Components/ui/Button/Button";
 import useTelegram from "Hooks/useTelegram";
-import { addItemToLavka } from "Services/appSlice";
-import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { addItemToLavka } from "services/appSlice";
+import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { ILavkaData } from "Utils/types/shopTypes";
 
 import styles from './SellForm.module.scss';

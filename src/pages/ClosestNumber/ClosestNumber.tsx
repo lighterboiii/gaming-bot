@@ -27,8 +27,8 @@ import useTelegram from "Hooks/useTelegram";
 import approveIcon from 'Images/closest-number/Approve.png';
 import deleteIcon from 'Images/closest-number/Delete.png';
 import smile from 'Images/closest-number/smile.png';
-import { setSecondGameRulesState } from "Services/appSlice";
-import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { setSecondGameRulesState } from "services/appSlice";
+import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { roomsUrl } from "Utils/routes";
 import { IRPSPlayer } from "Utils/types/gameTypes";
 

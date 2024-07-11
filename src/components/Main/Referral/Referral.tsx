@@ -9,8 +9,8 @@ import { inviteLink, userId } from "API/requestData";
 import Button from "Components/ui/Button/Button";
 import UserContainer from "Components/User/UserContainer/UserContainer";
 import useTelegram from "Hooks/useTelegram";
-import { setCoinsNewValue } from "Services/appSlice";
-import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { setCoinsNewValue } from "services/appSlice";
+import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { IMember } from "Utils/types/memberTypes";
 
 import styles from './Referral.module.scss';

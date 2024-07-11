@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 
-import { useAppSelector } from 'Services/reduxHooks';
+import { useAppSelector } from 'services/reduxHooks';
 
 import Task from '../Task/Task';
 import TaskInfo from '../TaskInfo/TaskInfo';

@@ -9,8 +9,8 @@ import Button from "Components/ui/Button/Button";
 import useTelegram from "Hooks/useTelegram";
 import ChevronIcon from "Icons/Chevron/ChevronIcon";
 import CrossIcon from "Icons/Cross/Cross";
-import { setNewTokensValue } from "Services/appSlice";
-import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { setNewTokensValue } from "services/appSlice";
+import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { ITask } from "Utils/types/mainTypes";
 
 import styles from './TaskInfo.module.scss';

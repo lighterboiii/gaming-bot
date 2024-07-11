@@ -9,7 +9,7 @@ import useTelegram from "Hooks/useTelegram";
 import CommunityIcon from "Icons/Community/CommunityIcon";
 import LevelIcon from "Icons/Level/LevelIcon";
 import WalletIcon from "Icons/Wallet/WalletIcon";
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 import { formatNumber } from "Utils/additionalFunctions";
 
 import styles from './MainUserInfo.module.scss';

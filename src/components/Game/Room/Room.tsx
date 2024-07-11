@@ -8,7 +8,7 @@ import useTelegram from "Hooks/useTelegram";
 import ManIcon from "Icons/Man/Man";
 import whoCloser from 'Images/gameSec.png';
 import hand from 'Images/main_hand_1_tiny.png';
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 import { IRPSGameData } from "Utils/types/gameTypes";
 
 import styles from './Room.module.scss';

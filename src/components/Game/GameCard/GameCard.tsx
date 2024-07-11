@@ -5,7 +5,7 @@ import CircleButton from 'Components/ui/CircleButton/CircleButton';
 import ManIcon from 'Icons/Man/Man';
 import game2 from 'Images/gameSec.png';
 import game1 from 'Images/main_hand_1_tiny.png';
-import { useAppSelector } from 'Services/reduxHooks';
+import { useAppSelector } from 'services/reduxHooks';
 import { IGameCardData } from 'Utils/types/gameTypes';
 
 import styles from './GameCard.module.scss';

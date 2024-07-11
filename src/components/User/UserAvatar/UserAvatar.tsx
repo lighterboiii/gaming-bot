@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 
 import { getImageLink, getImageMaskLink } from "API/requestData";
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 
 import styles from './UserAvatar.module.scss';
 

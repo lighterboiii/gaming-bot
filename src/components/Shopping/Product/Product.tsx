@@ -23,8 +23,8 @@ import {
   setCoinsValueAfterBuy,
   setCollectibles,
   setTokensValueAfterBuy
-} from "Services/appSlice";
-import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+} from "services/appSlice";
+import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { CombinedItemData, ILavkaData, ItemData } from "Utils/types/shopTypes";
 
 import SellForm from "../SellForm/SellForm";

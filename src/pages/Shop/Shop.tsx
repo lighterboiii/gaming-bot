@@ -10,8 +10,8 @@ import Product from 'Components/Shopping/Product/Product';
 import ShopItem from "Components/Shopping/ShopItem/ShopItem";
 import UserInfo from "Components/User/SecondaryUserInfo/SecondaryUserInfo";
 import useTelegram from "Hooks/useTelegram";
-import { setLavkaAvailable } from "Services/appSlice";
-import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { setLavkaAvailable } from "services/appSlice";
+import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { indexUrl } from "Utils/routes";
 import { CombinedItemData, GoodsItem, ItemData, LavkaResponse } from "Utils/types/shopTypes";
 

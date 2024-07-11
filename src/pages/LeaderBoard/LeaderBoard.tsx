@@ -9,7 +9,7 @@ import UserContainer from "Components/User/UserContainer/UserContainer";
 import useTelegram from "Hooks/useTelegram";
 import FriendsIcon from "Icons/Friends/FriendsIcon";
 import TimerIcon from "Icons/Timer/TimerIcon";
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 import { indexUrl } from "Utils/routes";
 import { IMember } from "Utils/types/memberTypes";
 

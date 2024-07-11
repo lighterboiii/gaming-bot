@@ -10,7 +10,7 @@ import GameSettings from "Components/Game/GameSettings/GameSettings";
 import Loader from "Components/Loader/Loader";
 import Overlay from "Components/Overlay/Overlay";
 import useTelegram from "Hooks/useTelegram";
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 import { indexUrl } from "Utils/routes";
 import { IGameCardData } from "Utils/types/gameTypes";
 

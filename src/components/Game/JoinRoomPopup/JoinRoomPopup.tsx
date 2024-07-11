@@ -8,7 +8,7 @@ import { userId } from "API/requestData";
 import Button from "Components/ui/Button/Button";
 import useTelegram from "Hooks/useTelegram";
 import energy from 'Images/energy-drink.png';
-import { useAppSelector } from "Services/reduxHooks";
+import { useAppSelector } from "services/reduxHooks";
 
 import styles from './JoinRoomPopup.module.scss';
 
