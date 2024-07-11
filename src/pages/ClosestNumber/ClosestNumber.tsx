@@ -62,7 +62,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -217,7 +217,7 @@ export const ClosestNumber: FC = () => {
               } else {
                 setRoomValue(Number(res?.room_value));
                 setWinnerId(Number(res?.winner));
-                setWinSum(Number(res?.winner_value));
+                setWinSum(res?.winner_value);
                 // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
               }
               if (res?.message === "success") {

@@ -15,7 +15,7 @@ import styles from "./ClosestModal.module.scss";
 interface IProps {
   closeModal: () => void;
   gameValue?: number;
-  winnerValue?: number;
+  winnerValue?: string;
   winner?: IRPSPlayer;
   betType: string;
   isTie?: boolean;
@@ -59,7 +59,9 @@ export const ClosestModal: FC<IProps> = ({
   return ReactDOM.createPortal(
     <>
       <div className={styles.modal}>
-        <h3 className={styles.modal__title}>{isTie ? "Победители" : "Победитель"}</h3>
+        {winnerValue && winnerValue !== "0.0" 
+        ? <h3 className={styles.modal__title}>{isTie ? "Победители" : "Победитель"}</h3>
+        : <h3 className={styles.modal__title}>Ничья</h3>}
         <div className={styles.modal__content}>
           {isTie ? (
             <div className={styles.modal__draw}>

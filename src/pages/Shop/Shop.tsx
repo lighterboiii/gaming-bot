@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { postEvent } from "@tma.js/sdk";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getLavkaAvailableRequest } from "API/shopApi";
@@ -44,14 +46,14 @@ export const Shop: FC = () => {
     setGoods(inventoryDataWithCollectible);
   };
   // добавить флаг isCollectible жкаждому товару
-  const handleAddIsCollectible = (data: ItemData[]) => {
+  const handleAddIsCollectible = useCallback((data: ItemData[]) => {
     const collectibleIds = collectibles?.map(id => Number(id));
     const shopDataWithCollectible = data?.map((item: ItemData) => ({
       ...item,
       isCollectible: collectibleIds?.includes(item.item_id),
     }));
     setGoods(shopDataWithCollectible);
-  };
+  }, [collectibles]);
   // при монтировании компонента
   useEffect(() => {
     setActiveButton(`${translation?.shop_button}`);
@@ -64,7 +66,7 @@ export const Shop: FC = () => {
     return () => {
       tg.BackButton.hide();
     }
-  }, []);
+  }, [handleAddIsCollectible, navigate, shopData, tg.BackButton, translation?.shop_button]);
   // открыть страничку с данными скина
   const handleShowItemDetails = (item: CombinedItemData) => {
     setSelectedItem(item);
@@ -97,7 +99,7 @@ export const Shop: FC = () => {
     if (activeButton === `${translation?.marketplace}`) {
       lavkaShop && setGoods(lavkaShop);
     }
-  }, [lavkaShop, activeButton])
+  }, [lavkaShop, activeButton, translation?.marketplace])
 
   const updateItemCount = (itemId: number) => {
     setGoods((prevGoods: GoodsItem[]) =>
@@ -131,7 +133,9 @@ export const Shop: FC = () => {
           </div>
           <button
             className={
-              `${styles.shop__button} ${styles.shop__inventory} ${activeButton === `${translation?.purchased}` ? styles.activeButton : ''}`
+              `${styles.shop__button} 
+              ${styles.shop__inventory} 
+              ${activeButton === `${translation?.purchased}` ? styles.activeButton : ''}`
             }
             onClick={handleClickInventory}
           >
