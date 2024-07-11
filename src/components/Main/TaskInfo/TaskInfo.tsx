@@ -1,16 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useState } from "react";
-import styles from './TaskInfo.module.scss';
-import Button from "../../ui/Button/Button";
-import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
-import useTelegram from "../../../hooks/useTelegram";
 import { postEvent } from "@tma.js/sdk";
-import CrossIcon from "../../../icons/Cross/Cross";
-import { taskResultRequest, taskStepRequest } from "../../../api/mainApi";
-import { userId } from "../../../api/requestData";
-import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
-import { setNewTokensValue } from "../../../services/appSlice";
-import { ITask } from "../../../utils/types/mainTypes";
+import { FC, useState } from "react";
+import { taskResultRequest, taskStepRequest } from "API/mainApi";
+import { userId } from "API/requestData";
+import useTelegram from "Hooks/useTelegram";
+import ChevronIcon from "Icons/Chevron/ChevronIcon";
+import CrossIcon from "Icons/Cross/Cross";
+import { setNewTokensValue } from "Services/appSlice";
+import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { ITask } from "Utils/types/mainTypes";
+
+import Button from "Components/ui/Button/Button";
+
+import styles from './TaskInfo.module.scss';
 
 interface IProps {
   task: ITask;
@@ -108,12 +109,17 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
           <h2 className={styles.info__title}>
             {task?.text_locale_key}
           </h2>
-          <p>{incomplete ? `${translation?.tasks_not_done}` : rewardResult ? `${translation?.reward_yours}` : ''}</p>
-          <img src={task?.task_img} alt="reward" className={styles.reward__img} />
+          <p>{incomplete ? `${translation?.tasks_not_done}` : rewardResult ? "Награда ваша!" : ''}</p>
+          <img src={task?.task_img}
+            alt="reward"
+            className={styles.reward__img} />
         </div>
       )}
-      <button className={styles.info__closeBtn} onClick={handleClickBack}>
-        <CrossIcon width={12} height={12} color='#FFF' />
+      <button className={styles.info__closeBtn}
+        onClick={handleClickBack}>
+        <CrossIcon width={12}
+          height={12}
+          color='#FFF' />
       </button>
     </div>
   );

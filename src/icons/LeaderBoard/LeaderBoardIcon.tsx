@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { ICommonIconProps } from '../../utils/types/mainTypes';
+
+import { ICommonIconProps } from 'Utils/types/mainTypes';
 
 const LeaderBoardIcon: FC<ICommonIconProps> = ({
   color = '#ffdb50',

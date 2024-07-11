@@ -1,21 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useState } from "react";
-import styles from './LeaderBoard.module.scss';
 import { useNavigate } from "react-router-dom";
-import useTelegram from "../../hooks/useTelegram";
-import UserContainer from "../../components/User/UserContainer/UserContainer";
-import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
-import { getTopUsers } from "../../api/mainApi";
-import Loader from "../../components/Loader/Loader";
-import { IMember } from "../../utils/types/memberTypes";
-import { useAppSelector } from "../../services/reduxHooks";
-import TimerIcon from "../../icons/Timer/TimerIcon";
-import Timer from "../../components/Timer/Timer";
-import FriendsIcon from "../../icons/Friends/FriendsIcon";
-import { indexUrl } from "../../utils/routes";
 
-const LeaderBoard: FC = () => {
+import { getTopUsers } from "API/mainApi";
+import Loader from "Components/Loader/Loader";
+import Timer from "Components/Timer/Timer";
+import UserAvatar from "Components/User/UserAvatar/UserAvatar";
+import UserContainer from "Components/User/UserContainer/UserContainer";
+import useTelegram from "Hooks/useTelegram";
+import FriendsIcon from "Icons/Friends/FriendsIcon";
+import TimerIcon from "Icons/Timer/TimerIcon";
+import { useAppSelector } from "Services/reduxHooks";
+import { indexUrl } from "Utils/routes";
+import { IMember } from "Utils/types/memberTypes";
+
+import styles from './LeaderBoard.module.scss';
+
+export const LeaderBoard: FC = () => {
   const { user, tg } = useTelegram();
   const translation = useAppSelector(store => store.app.languageSettings);
   const navigate = useNavigate();
@@ -32,7 +32,8 @@ const LeaderBoard: FC = () => {
   const [prizeCount, setPrizeCount] = useState<string>('');
   // const isUserLeader = user?.id === topLeader;
   useEffect(() => {
-    tg.BackButton.show().onClick(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
       navigate(indexUrl);
     });
     const fetchLeadersData = () => {
@@ -53,7 +54,6 @@ const LeaderBoard: FC = () => {
         });
     };
     window.scrollTo(0, 0);
-    
 
     fetchLeadersData();
     return () => {
@@ -62,8 +62,6 @@ const LeaderBoard: FC = () => {
   }, []);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
     const fetchTime = () => {
       getTopUsers()
         .then((leaders: any) => {
@@ -79,7 +77,7 @@ const LeaderBoard: FC = () => {
     };
 
     fetchTime();
-    intervalId = setInterval(fetchTime, 60000);
+    const intervalId = setInterval(fetchTime, 60000);
 
     return () => {
       clearInterval(intervalId);
@@ -107,18 +105,23 @@ const LeaderBoard: FC = () => {
               <div className={styles.leaderBoard__prize}>
                 <span className={styles.leaderBoard__text}>{translation?.leaders_restart_in}</span>
                 <TimerIcon />
-                <Timer days={time?.days} hours={time?.hours} minutes={time?.minutes} />
+                <Timer days={time?.days}
+                  hours={time?.hours}
+                  minutes={time?.minutes} />
               </div>
               <div className={styles.leaderBoard__prize}>
                 <span>{translation?.leaders_prize}</span>
                 {prizeCount !== '' && <span>{prizeCount}</span>}
-                <img src={prizePhoto} alt="prize" className={styles.leaderBoard__prizePhoto} />
+                <img src={prizePhoto}
+                  alt="prize"
+                  className={styles.leaderBoard__prizePhoto} />
               </div>
             </div>
             {leaderBoard?.length !== 0 ? (
               <div className={styles.leaderBoard__background}>
                 <div className={styles.leaderBoard__avatarContainer}>
-                  {topLeader && <UserAvatar avatar={topLeader.avatar} item={topLeader} />}
+                  {topLeader && <UserAvatar avatar={topLeader.avatar}
+                    item={topLeader} />}
                   {/* {isUserLeader && <p className={styles.leaderBoard__label}>Это вы!</p>} */}
                   <div className={styles.leaderBoard__leaderInfo}>
                     <>
@@ -130,7 +133,8 @@ const LeaderBoard: FC = () => {
                         {type === 'spendcoins' && '- 💵 '}
                         {type === 'coins' && '+ 💵 '}
                         {type === 'tokens' && '+ 🔰 '}
-                        {type === 'friends' && <FriendsIcon width={16} height={16} />}
+                        {type === 'friends' && <FriendsIcon width={16}
+                          height={16} />}
                         {topLeader?.coins}
                       </p>
                     </>
@@ -138,7 +142,8 @@ const LeaderBoard: FC = () => {
                 </div>
               </div>
             ) : (
-              <p className={styles.leaderBoard__text} style={{ alignSelf: 'center', marginLeft: '30px' }} >
+              <p className={styles.leaderBoard__text}
+                style={{ alignSelf: 'center', marginLeft: '30px' }} >
                 {translation?.leaderboard_empty}
               </p>
             )}
@@ -152,8 +157,7 @@ const LeaderBoard: FC = () => {
                 length={leaderBoard.length + 1}
                 leaderBoardType={type}
                 darkBackground
-              />
-            )}
+              />)}
           </div>
         </>
       )}
@@ -161,4 +165,3 @@ const LeaderBoard: FC = () => {
   )
 };
 
-export default LeaderBoard;

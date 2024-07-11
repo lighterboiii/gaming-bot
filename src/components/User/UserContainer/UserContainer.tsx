@@ -1,12 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
+
+import { userId } from "API/requestData";
+import useTelegram from "Hooks/useTelegram";
+import FriendsIcon from "Icons/Friends/FriendsIcon";
+import { formatNumber } from "Utils/additionalFunctions";
+import { IMember } from "Utils/types/memberTypes";
+
+import UserAvatar from "Components/User/UserAvatar/UserAvatar";
+
 import styles from './UserContainer.module.scss';
-import useTelegram from "../../../hooks/useTelegram";
-import { userId } from "../../../api/requestData";
-import { IMember } from "../../../utils/types/memberTypes";
-import UserAvatar from "../UserAvatar/UserAvatar";
-import { formatNumber } from "../../../utils/additionalFunctions";
-import FriendsIcon from "../../../icons/Friends/FriendsIcon";
 
 interface IProps {
   member: IMember;
@@ -33,7 +35,8 @@ const UserContainer: FC<IProps> = ({
       style={{ backgroundColor: isUser ? '#FFF' : (darkBackground ? '#ac1a44' : '#d51845') }}
     >
       <div className={styles.userContainer__avatarWrapper}>
-        <UserAvatar avatar={member.avatar} item={member} />
+        <UserAvatar avatar={member.avatar}
+          item={member} />
       </div>
       <div className={styles.userContainer__container}>
         <h3 className={styles.userContainer__number}
@@ -57,7 +60,8 @@ const UserContainer: FC<IProps> = ({
             {leaderBoardType === 'tokens' && `+ 🔰 ${formatNumber(member.coins)}`}
             {leaderBoardType === 'friends' && (
               <>
-               + {member.coins} <FriendsIcon width={16} height={16} />
+                + {member.coins} <FriendsIcon width={16}
+                  height={16} />
               </>
             )}
           </p>

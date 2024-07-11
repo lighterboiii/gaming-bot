@@ -1,11 +1,13 @@
-@use '../../../stylesheets/mixins' as *;
-@use '../../../stylesheets/variables' as *;
+@use 'Stylesheets/mixins' as *;
+@use 'Stylesheets/variables' as *;
 
 @mixin spin {
   $steps: 70;
+
   @for $i from 0 through $steps {
     $percentage: $i * (100 / $steps);
-    $direction: if($i % 2 == 0, 1, -1);
+    $direction: if($i % 2==0, 1, -1);
+
     #{$percentage}% {
       transform: translateX($direction * 100%);
       filter: blur(2px);
@@ -137,15 +139,58 @@
     position: absolute;
     transform: translate(-50%);
 
-    &.light1 { top: 8px; left: 10%; }
-    &.light2 { top: -10px; left: 30%; width: 55px; height: 55px; }
-    &.light3 { top: -10px; left: 70%; width: 55px; height: 55px; }
-    &.light4 { top: 8px; left: 90%; }
-    &.light5 { bottom: 8px; left: 10%; }
-    &.light6 { bottom: -10px; left: 30%; width: 55px; height: 55px; }
-    &.light7 { bottom: 8px; left: 50%;}
-    &.light8 { bottom: -10px; left: 70%; width: 55px; height: 55px; }
-    &.light9 { bottom: 8px; left: 90%; }
+    &.light1 {
+      top: 8px;
+      left: 10%;
+    }
+
+    &.light2 {
+      top: -10px;
+      left: 30%;
+      width: 55px;
+      height: 55px;
+    }
+
+    &.light3 {
+      top: -10px;
+      left: 70%;
+      width: 55px;
+      height: 55px;
+    }
+
+    &.light4 {
+      top: 8px;
+      left: 90%;
+    }
+
+    &.light5 {
+      bottom: 8px;
+      left: 10%;
+    }
+
+    &.light6 {
+      bottom: -10px;
+      left: 30%;
+      width: 55px;
+      height: 55px;
+    }
+
+    &.light7 {
+      bottom: 8px;
+      left: 50%;
+    }
+
+    &.light8 {
+      bottom: -10px;
+      left: 70%;
+      width: 55px;
+      height: 55px;
+    }
+
+    &.light9 {
+      bottom: 8px;
+      left: 90%;
+    }
 
     // &.light1 { top: 12%; left: 10%; }
     // &.light2 { top: 0; left: 30%; width: 55px; height: 55px; }

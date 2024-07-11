@@ -1,21 +1,21 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from "react";
-import styles from './Shop.module.scss';
-import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
-import { useNavigate } from "react-router-dom";
-import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import Overlay from "../../components/Overlay/Overlay";
-import Product from '../../components/Shopping/Product/Product';
-import useTelegram from "../../hooks/useTelegram";
-import { CombinedItemData, GoodsItem, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
-import { getLavkaAvailableRequest } from "../../api/shopApi";
-import { setLavkaAvailable } from "../../services/appSlice";
 import { postEvent } from "@tma.js/sdk";
-import { indexUrl } from "../../utils/routes";
+import { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Shop: FC = () => {
+import { getLavkaAvailableRequest } from "API/shopApi";
+import Overlay from "Components/Overlay/Overlay";
+import Product from 'Components/Shopping/Product/Product';
+import ShopItem from "Components/Shopping/ShopItem/ShopItem";
+import UserInfo from "Components/User/SecondaryUserInfo/SecondaryUserInfo";
+import useTelegram from "Hooks/useTelegram";
+import { setLavkaAvailable } from "Services/appSlice";
+import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { indexUrl } from "Utils/routes";
+import { CombinedItemData, GoodsItem, ItemData, LavkaResponse } from "Utils/types/shopTypes";
+
+import styles from './Shop.module.scss';
+
+export const Shop: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -57,7 +57,8 @@ const Shop: FC = () => {
     setActiveButton(`${translation?.shop_button}`);
     shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
-    tg.BackButton.show().onClick(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
       navigate(indexUrl);
     });
     return () => {
@@ -71,20 +72,20 @@ const Shop: FC = () => {
   };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.purchased}`);
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.shop_button}`);
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact',impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
@@ -99,12 +100,10 @@ const Shop: FC = () => {
   }, [lavkaShop, activeButton])
 
   const updateItemCount = (itemId: number) => {
-    setGoods((prevGoods: GoodsItem[]) => 
+    setGoods((prevGoods: GoodsItem[]) =>
       prevGoods.map((item: any) =>
-        item.item_id === itemId ? { ...item, item_count: item.item_count - 1 } : item
-      )
-    );
-  };  
+        item.item_id === itemId ? { ...item, item_count: item.item_count - 1 } : item));
+  };
 
   return (
     <div className={styles.shop}>
@@ -116,24 +115,30 @@ const Shop: FC = () => {
         <div className={styles.shop__buttons}>
           <div className={styles.shop__leftButtonsContainer}>
             <button
-              className={`${styles.shop__button} ${activeButton === `${translation?.shop_button}` ? styles.activeButton : ''}`}
+              className={
+                `${styles.shop__button} ${activeButton === `${translation?.shop_button}` ? styles.activeButton : ''}`
+              }
               onClick={handleClickShop}>
               {translation?.shop_button}
             </button>
             <button
-              className={`${styles.shop__button} ${activeButton === `${translation?.marketplace}` ? styles.activeButton : ''}`}
+              className={
+                `${styles.shop__button} ${activeButton === `${translation?.marketplace}` ? styles.activeButton : ''}`
+              }
               onClick={handleClickLavka}>
               {translation?.marketplace}
             </button>
           </div>
           <button
-            className={`${styles.shop__button} ${styles.shop__inventory} ${activeButton === `${translation?.purchased}` ? styles.activeButton : ''}`}
+            className={
+              `${styles.shop__button} ${styles.shop__inventory} ${activeButton === `${translation?.purchased}` ? styles.activeButton : ''}`
+            }
             onClick={handleClickInventory}
           >
             {translation?.purchased}
           </button>
         </div>
-        {loading ?  <p style={{ color: '#ffdb50', fontWeight: '900' }}>{translation?.loading}...</p>: (
+        {loading ? <p style={{ color: '#ffdb50', fontWeight: '900' }}>{translation?.loading}...</p> : (
           <>
             <div className={styles.shop__goods + ' scrollable'}>
               {goods?.length > 0 ? (
@@ -145,17 +150,16 @@ const Shop: FC = () => {
                       onClick={() => handleShowItemDetails(item)}
                       activeButton={activeButton}
                     />
-                  )
-                  )}
+                  ))}
                 </>
               ) : (
                 <p style={{ color: '#ffdb50', fontWeight: '900' }}>{translation?.empty_here}</p>
               )}
             </div>
           </>
-            )
-          }
-          </div>
+        )
+        }
+      </div>
       {selectedItem && <Overlay
         buttonColor="#FFF"
         crossColor="#ac1a44"
@@ -175,4 +179,3 @@ const Shop: FC = () => {
   )
 };
 
-export default Shop;

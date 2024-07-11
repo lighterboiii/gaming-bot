@@ -1,6 +1,5 @@
 import { IBannerData, IBonus, ITask, IUserData } from "./mainTypes";
-import { ItemData, ILavkaData } from "./shopTypes";
-
+import { ILavkaData, ItemData } from "./shopTypes";
 
 export interface IAppData {
   collectibles_data: ItemData[];

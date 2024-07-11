@@ -1,26 +1,50 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Routes, Route } from 'react-router-dom';
 import { FC, useEffect, useState } from 'react';
-import { anyUrl, closestNumberRoomUrl, createRoomUrl, indexUrl, leaderboardUrl, roomUrl, roomsUrl, shopUrl } from '../../utils/routes';
-import { userId } from '../../api/requestData';
-import { useAppDispatch } from '../../services/reduxHooks';
-import { setBannerData, setDailyBonus, setFirstGameRuleImage, setFirstGameRulesState, setLanguageSettings, setSecondGameRuleImage, setSecondGameRulesState, setShopAvailable, setShopImage, setTaskList, setUserData, setUserPhoto } from '../../services/appSlice';
-import { setProductsArchive } from '../../services/appSlice';
-import { getAppData } from '../../api/mainApi';
-import styles from './App.module.scss';
-import CreateRoom from '../../pages/CreateRoom/CreateRoom';
-import Main from '../../pages/Main/Main';
-import NotFoundPage from '../../pages/NotFoundPage/NotFoundPage';
-import Shop from '../../pages/Shop/Shop';
-import useTelegram from '../../hooks/useTelegram';
-import LeaderBoard from '../../pages/LeaderBoard/LeaderBoard';
-import Loader from '../Loader/Loader';
-import OpenedRooms from '../../pages/OpenedRooms/OpenedRooms';
-import RockPaperScissors from '../../pages/RockPaperScissors/RockPaperScissors';
-import ClosestNumber from '../../pages/ClosestNumber/ClosestNumber';
+import { Route, Routes } from 'react-router-dom';
+import { getAppData } from 'API/mainApi';
+import { userId } from 'API/requestData';
+import useTelegram from 'Hooks/useTelegram';
+import {
+ClosestNumber,
+CreateRoom,
+LeaderBoard,
+Main,
+NotFoundPage,
+OpenedRooms,
+RockPaperScissors,
+Shop
+} from 'Pages';
+import { setProductsArchive } from 'Services/appSlice';
+import {
+setBannerData,
+setDailyBonus,
+setFirstGameRuleImage,
+setFirstGameRulesState,
+setLanguageSettings,
+setSecondGameRuleImage,
+setSecondGameRulesState,
+setShopAvailable,
+setShopImage,
+setTaskList,
+setUserData,
+setUserPhoto
+} from 'Services/appSlice';
+import { useAppDispatch } from 'Services/reduxHooks';
+import {
+anyUrl,
+closestNumberRoomUrl,
+createRoomUrl,
+indexUrl,
+leaderboardUrl,
+roomUrl,
+roomsUrl,
+shopUrl
+} from 'Utils/routes';
 
-const App: FC = () => {
+import Loader from "Components/Loader/Loader";
+
+import styles from './App.module.scss';
+
+export const App: FC = () => {
   const { tg, user } = useTelegram();
   const userId = user?.id;
   const [loading, setLoading] = useState(false);
@@ -83,18 +107,24 @@ const App: FC = () => {
     <div className={styles.app}>
       {loading ? <Loader /> : (
         <Routes>
-          <Route path={indexUrl} element={<Main />} />
-          <Route path={roomsUrl} element={<OpenedRooms />} />
-          <Route path={createRoomUrl} element={<CreateRoom />} />
-          <Route path={shopUrl} element={<Shop />} />
-          <Route path={leaderboardUrl} element={<LeaderBoard />} />
-          <Route path={roomUrl} element={<RockPaperScissors />} />
-          <Route path={closestNumberRoomUrl} element={<ClosestNumber />} />
-          <Route path={anyUrl} element={<NotFoundPage />} />
+          <Route path={indexUrl}
+element={<Main />} />
+          <Route path={roomsUrl}
+element={<OpenedRooms />} />
+          <Route path={createRoomUrl}
+element={<CreateRoom />} />
+          <Route path={shopUrl}
+element={<Shop />} />
+          <Route path={leaderboardUrl}
+element={<LeaderBoard />} />
+          <Route path={roomUrl}
+element={<RockPaperScissors />} />
+          <Route path={closestNumberRoomUrl}
+element={<ClosestNumber />} />
+          <Route path={anyUrl}
+element={<NotFoundPage />} />
         </Routes>
       )}
     </div>
   );
 };
-
-export default App;

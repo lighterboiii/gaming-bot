@@ -1,21 +1,21 @@
 /* eslint-disable no-lone-blocks */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from "react";
-import styles from './CreateRoom.module.scss';
-import { useNavigate } from "react-router-dom";
-import useTelegram from "../../hooks/useTelegram";
-import GameCard from "../../components/Game/GameCard/GameCard";
-import Overlay from "../../components/Overlay/Overlay";
-import GameSettings from "../../components/Game/GameSettings/GameSettings";
-import { useAppSelector } from "../../services/reduxHooks";
-import { getExistingGamesRequest } from "../../api/gameApi";
-import Loader from "../../components/Loader/Loader";
-import { IGameCardData } from "../../utils/types/gameTypes";
-import { indexUrl } from "../../utils/routes";
 import { postEvent } from "@tma.js/sdk";
+import { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const CreateRoom: FC = () => {
+import { getExistingGamesRequest } from "API/gameApi";
+import GameCard from "Components/Game/GameCard/GameCard";
+import GameSettings from "Components/Game/GameSettings/GameSettings";
+import Loader from "Components/Loader/Loader";
+import Overlay from "Components/Overlay/Overlay";
+import useTelegram from "Hooks/useTelegram";
+import { useAppSelector } from "Services/reduxHooks";
+import { indexUrl } from "Utils/routes";
+import { IGameCardData } from "Utils/types/gameTypes";
+
+import styles from './CreateRoom.module.scss';
+
+export const CreateRoom: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const [games, setGames] = useState<IGameCardData[] | null>(null);
@@ -26,7 +26,8 @@ const CreateRoom: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    tg.BackButton.show().onClick(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
       navigate(indexUrl);
     });
     getExistingGamesRequest()
@@ -63,7 +64,7 @@ const CreateRoom: FC = () => {
                 imagePosition={game.id === 1 ? 'left' : 'right'}
                 users={game.users}
                 extraClass={
-                  `${styles['create__game-card']} 
+                  `${styles['create__game-card']}
                 ${index % 2 === 0 ? styles['create__game-card--even'] : styles['create__game-card--odd']}`
                 }
                 handleClickGame={handleGameClick} />
@@ -87,5 +88,3 @@ const CreateRoom: FC = () => {
   );
 };
 
-
-export default CreateRoom;

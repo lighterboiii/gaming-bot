@@ -1,5 +1,5 @@
-@use '../../../stylesheets/mixins' as *;
-@use '../../../stylesheets/variables' as *;
+@use 'Stylesheets/mixins' as *;
+@use 'Stylesheets/variables' as *;
 
 .banner {
   @include position(relative);

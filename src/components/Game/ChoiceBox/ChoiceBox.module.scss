@@ -1,11 +1,11 @@
-@use '../../../stylesheets/mixins' as *;
-@use '../../../stylesheets/variables' as *;
+@use 'Stylesheets/mixins' as *;
+@use 'Stylesheets/variables' as *;
 
 .choiceBox {
   @include size(200px, 68px);
   @include position(relative);
   @include flex(row, center, center, 4px);
-  background-image: url('../../../images/rock-paper-scissors/choise-plate.png');
+  background-image: url('../../../Images/rock-paper-scissors/choise-plate.png');
   background-position: center;
   background-size: 80%;
   background-repeat: no-repeat;

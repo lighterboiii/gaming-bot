@@ -1,5 +1,5 @@
-@use '../../../stylesheets/mixins' as *;
-@use '../../../stylesheets/variables' as *;
+@use 'Stylesheets/mixins' as *;
+@use 'Stylesheets/variables' as *;
 
 .game {
   @include position(relative);
@@ -32,7 +32,8 @@
     font-weight: 900;
   }
 
-  &__image, &__imageRight {
+  &__image,
+  &__imageRight {
     @include indents();
     @include max-size(136px, auto);
   }

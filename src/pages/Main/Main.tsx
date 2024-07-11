@@ -1,28 +1,29 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
-import styles from './Main.module.scss';
-import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
-import AdvertisementBanner from "../../components/Main/AdvertismentBanner/AdvertismentBanner";
-import SmallButton from "../../components/ui/SmallButton/SmallButton";
-import BigButton from "../../components/ui/BigButton/BigButton";
-import ShopLink from "../../components/Shopping/ShopLink/ShopLink";
-import Overlay from "../../components/Overlay/Overlay";
-import Referral from "../../components/Main/Referral/Referral";
-import BannerData from "../../components/Main/BannerData/BannerData";
-import gowinLogo from '../../images/gowin.png';
-import DailyBonus from "../../components/Main/Bonus/Bonus";
-import { useAppSelector } from "../../services/reduxHooks";
-import FriendsIcon from "../../icons/Friends/FriendsIcon";
-import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
-import PlayIcon from "../../icons/Play/PlayIcon";
 import { useNavigate } from "react-router-dom";
-import Tasks from "../../components/Main/Tasks/Tasks";
-import WheelOfLuck from "../../components/Main/WheelOfLuck/WheelOfLuck";
-import { getLuckInfo } from "../../api/mainApi";
-import { userId } from "../../api/requestData";
-import useTelegram from "../../hooks/useTelegram";
 
-const Main: FC = () => {
+import { getLuckInfo } from "API/mainApi";
+import { userId } from "API/requestData";
+import AdvertisementBanner from "Components/Main/AdvertismentBanner/AdvertismentBanner";
+import BannerData from "Components/Main/BannerData/BannerData";
+import DailyBonus from "Components/Main/Bonus/Bonus";
+import Referral from "Components/Main/Referral/Referral";
+import Tasks from "Components/Main/Tasks/Tasks";
+import WheelOfLuck from "Components/Main/WheelOfLuck/WheelOfLuck";
+import Overlay from "Components/Overlay/Overlay";
+import ShopLink from "Components/Shopping/ShopLink/ShopLink";
+import BigButton from "Components/ui/BigButton/BigButton";
+import SmallButton from "Components/ui/SmallButton/SmallButton";
+import MainUserInfo from "Components/User/MainUserInfo/MainUserInfo";
+import useTelegram from "Hooks/useTelegram";
+import FriendsIcon from "Icons/Friends/FriendsIcon";
+import LeaderBoardIcon from "Icons/LeaderBoard/LeaderBoardIcon";
+import PlayIcon from "Icons/Play/PlayIcon";
+import gowinLogo from 'Images/gowin.png';
+import { useAppSelector } from "Services/reduxHooks";
+
+import styles from './Main.module.scss';
+
+export const Main: FC = () => {
   const navigate = useNavigate();
   const { user } = useTelegram();
   const userId = user?.id;
@@ -87,7 +88,9 @@ const Main: FC = () => {
   return (
     <div className={styles.main}>
       <div className={styles.main__header}>
-        <img src={gowinLogo} alt="main_logo" className={styles.main__logo} />
+        <img src={gowinLogo}
+          alt="main_logo"
+          className={styles.main__logo} />
         <MainUserInfo
           toggleOverlay={toggleTasksOverlay}
           setWheelOverlayOpen={openWheelOfLuckOverlay}
@@ -96,7 +99,8 @@ const Main: FC = () => {
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
         <div className={styles.main__addDiv}>
           {banners?.length > 0 && (
-            <AdvertisementBanner bannersData={banners} onBannerClick={handleBannerClick} />
+            <AdvertisementBanner bannersData={banners}
+              onBannerClick={handleBannerClick} />
           )}
         </div>
         <div className={styles.main__centralButtonsContainer}>
@@ -105,7 +109,8 @@ const Main: FC = () => {
               handleClick={() => toggleRefOverlay()}
               text={
                 <>
-                  <FriendsIcon width={12} height={12} />
+                  <FriendsIcon width={12}
+                    height={12} />
                   <span>
                     {translation?.menu_friends}
                   </span>
@@ -117,7 +122,8 @@ const Main: FC = () => {
               handleClick={() => navigate('/leaderboard')}
               text={
                 <>
-                  <LeaderBoardIcon width={12} height={12} />
+                  <LeaderBoardIcon width={12}
+                    height={12} />
                   <span>
                     {translation?.menu_weekly_top}
                   </span>
@@ -197,7 +203,8 @@ const Main: FC = () => {
         />}
       <Overlay
         children={
-          <WheelOfLuck data={luckData} closeOverlay={() => setShowWheelOverlay(false)} />
+          <WheelOfLuck data={luckData}
+            closeOverlay={() => setShowWheelOverlay(false)} />
         }
         show={showWheelOverlay}
         onClose={toggleWheelOverlay}

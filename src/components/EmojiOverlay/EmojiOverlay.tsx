@@ -1,11 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
+
+import { getActiveEmojiPack } from "API/mainApi";
+import { userId } from "API/requestData";
+import useTelegram from "Hooks/useTelegram";
+import CrossIcon from "Icons/Cross/Cross";
+
 import styles from './EmojiOverlay.module.scss';
-import CrossIcon from "../../icons/Cross/Cross";
-import { getActiveEmojiPack } from "../../api/mainApi";
-import { userId } from "../../api/requestData";
-import useTelegram from "../../hooks/useTelegram";
 
 interface IProps {
   show: boolean;
@@ -50,7 +50,9 @@ const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
         onClick={onClose}
         className={styles.overlay__closeButton}
       >
-        <CrossIcon width={12} height={12} color="#0D2759" />
+        <CrossIcon width={12}
+          height={12}
+          color="#0D2759" />
       </button>
     </div>
   )

@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, useEffect, FC } from 'react';
+import { FC, useEffect, useState } from 'react';
+
 import styles from './Timer.module.scss';
 
 interface IProps {

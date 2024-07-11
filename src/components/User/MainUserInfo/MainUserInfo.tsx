@@ -1,17 +1,19 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useRef } from "react";
-import styles from './MainUserInfo.module.scss';
-import { Link } from "react-router-dom";
-import useTelegram from "../../../hooks/useTelegram";
-import UserAvatar from "../UserAvatar/UserAvatar";
-import { useAppSelector } from "../../../services/reduxHooks";
-import CircleButton from "../../ui/CircleButton/CircleButton";
-import { formatNumber } from "../../../utils/additionalFunctions";
 import { postEvent } from "@tma.js/sdk";
-import { balanceLink, groupLink } from "../../../api/requestData";
-import WalletIcon from "../../../icons/Wallet/WalletIcon";
-import LevelIcon from "../../../icons/Level/LevelIcon";
-import CommunityIcon from "../../../icons/Community/CommunityIcon";
+import { FC, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+
+import { balanceLink, groupLink } from "API/requestData";
+import useTelegram from "Hooks/useTelegram";
+import CommunityIcon from "Icons/Community/CommunityIcon";
+import LevelIcon from "Icons/Level/LevelIcon";
+import WalletIcon from "Icons/Wallet/WalletIcon";
+import { useAppSelector } from "Services/reduxHooks";
+import { formatNumber } from "Utils/additionalFunctions";
+
+import CircleButton from "Components/ui/CircleButton/CircleButton";
+import UserAvatar from "Components/User/UserAvatar/UserAvatar";
+
+import styles from './MainUserInfo.module.scss';
 
 interface IProps {
   toggleOverlay: () => void;
@@ -48,9 +50,12 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
         <div className={styles.userInfo__info}>
           <div className={styles.userInfo__textElements}>
             <div className={styles.userInfo__name}>
-              <LevelIcon level={userData?.user_exp} width={24} height={24} />
+              <LevelIcon level={userData?.user_exp}
+                width={24}
+                height={24} />
               <div className={styles.userInfo__overflow}>
-                <p className={styles.userInfo__userName} ref={userNameRef}>
+                <p className={styles.userInfo__userName}
+                  ref={userNameRef}>
                   {userData && userData?.publicname}
                 </p>
               </div>
@@ -65,21 +70,28 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
             </p>
           </div>
           <div className={styles.userInfo__buttons}>
-            <button type="button" className={styles.userInfo__balance} onClick={handleClickBalance}>
+            <button type="button"
+              className={styles.userInfo__balance}
+              onClick={handleClickBalance}>
               <WalletIcon
                 width={12}
                 height={12}
               />
               {translation?.webapp_balance}
             </button>
-            <Link to={groupLink} className={styles.userInfo__tasksButton}>
-              <CommunityIcon width={16} height={14} color="#FFF" />
+            <Link to={groupLink}
+              className={styles.userInfo__tasksButton}>
+              <CommunityIcon width={16}
+                height={14}
+                color="#FFF" />
             </Link>
           </div>
         </div>
       </div>
       <div className={styles.userInfo__linkContainer}>
-        <button type="button" className={styles.userInfo__button} onClick={setWheelOverlayOpen}>
+        <button type="button"
+          className={styles.userInfo__button}
+          onClick={setWheelOverlayOpen}>
           <CircleButton
             shadow
             isWhiteBackground
@@ -89,7 +101,9 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
             color="#d51845"
           />
         </button>
-        <button type="button" className={styles.userInfo__button} onClick={toggleOverlay}>
+        <button type="button"
+          className={styles.userInfo__button}
+          onClick={toggleOverlay}>
           <CircleButton
             shadow
             isWhiteBackground

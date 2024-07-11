@@ -1,15 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react";
+
+import paper from 'Images/rock-paper-scissors/hands-icons/paper.png'
+import paperDeselect from 'Images/rock-paper-scissors/hands-icons/paper_deselect.png'
+import paperSelect from 'Images/rock-paper-scissors/hands-icons/paper_select.png'
+import rock from 'Images/rock-paper-scissors/hands-icons/rock.png'
+import rockDeselect from 'Images/rock-paper-scissors/hands-icons/rock_deselect.png'
+import rockSelect from 'Images/rock-paper-scissors/hands-icons/rock_select.png'
+import scissors from 'Images/rock-paper-scissors/hands-icons/scissors.png'
+import scissorsDeselect from 'Images/rock-paper-scissors/hands-icons/scissors_deselect.png'
+import scissorsSelect from 'Images/rock-paper-scissors/hands-icons/scissors_select.png'
+
 import styles from './ChoiceBox.module.scss';
-import rock from '../../../images/rock-paper-scissors/hands-icons/rock.png'
-import rockDeselect from '../../../images/rock-paper-scissors/hands-icons/rock_deselect.png'
-import rockSelect from '../../../images/rock-paper-scissors/hands-icons/rock_select.png'
-import paper from '../../../images/rock-paper-scissors/hands-icons/paper.png'
-import paperDeselect from '../../../images/rock-paper-scissors/hands-icons/paper_deselect.png'
-import paperSelect from '../../../images/rock-paper-scissors/hands-icons/paper_select.png'
-import scissors from '../../../images/rock-paper-scissors/hands-icons/scissors.png'
-import scissorsDeselect from '../../../images/rock-paper-scissors/hands-icons/scissors_deselect.png'
-import scissorsSelect from '../../../images/rock-paper-scissors/hands-icons/scissors_select.png'
 
 interface IProps {
   handleChoice: (value: string) => void;
@@ -22,7 +23,7 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
   const onChoiceClick = (choice: string) => {
     handleChoice(choice);
     setChoiceItem(choice);
-    
+
   };
 
   const getIconPath = (choice: string): string => {
@@ -47,7 +48,8 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
       >
         <img
           src={getIconPath('rock')}
-          alt="rock icon" className={styles.choiceBox__icon}
+          alt="rock icon"
+          className={styles.choiceBox__icon}
         />
       </button>
       <button

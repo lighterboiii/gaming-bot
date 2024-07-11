@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react";
-import styles from './Room.module.scss';
-import hand from '../../../images/main_hand_1_tiny.png';
-import whoCloser from '../../../images/gameSec.png';
 import { useNavigate } from "react-router-dom";
-import ManIcon from "../../../icons/Man/Man";
-import { useAppSelector } from "../../../services/reduxHooks";
-import useTelegram from "../../../hooks/useTelegram";
-import { joinRoomRequest, leaveRoomRequest } from "../../../api/gameApi";
-import { userId } from "../../../api/requestData";
-import { IRPSGameData } from "../../../utils/types/gameTypes";
+
+import { joinRoomRequest, leaveRoomRequest } from "API/gameApi";
+import { userId } from "API/requestData";
+import useTelegram from "Hooks/useTelegram";
+import ManIcon from "Icons/Man/Man";
+import whoCloser from 'Images/gameSec.png';
+import hand from 'Images/main_hand_1_tiny.png';
+import { useAppSelector } from "Services/reduxHooks";
+import { IRPSGameData } from "Utils/types/gameTypes";
+
+import styles from './Room.module.scss';
 
 interface IProps {
   room: IRPSGameData | any;
@@ -34,7 +36,7 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       }, 1500);
       return;
     }
-    console.log(room); 
+    console.log(room);
     if ((userInfo?.user_energy === 0 && Number(room?.bet_type) === 3) || roomType === 0) {
       openModal();
       return;
@@ -76,12 +78,16 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   };
 
   return (
-    <div className={styles.room} onClick={() => handleJoinRoom(Number(room.room_type))} key={room?.room_id}>
+    <div className={styles.room}
+      onClick={() => handleJoinRoom(Number(room.room_type))}
+      key={room?.room_id}>
       <div className={styles.room__game}>
         <p className={styles.room__gameName}>
           {Number(room?.room_type) === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
         </p>
-        <img src={Number(room?.room_type) === 1 ? hand : whoCloser} alt="game-logo" className={styles.room__image} />
+        <img src={Number(room?.room_type) === 1 ? hand : whoCloser}
+          alt="game-logo"
+          className={styles.room__image} />
       </div>
       {isMessage ? (
         <p className={styles.room__creator}>{message}</p>
@@ -89,7 +95,8 @@ const Room: FC<IProps> = ({ room, openModal }) => {
         <p className={styles.room__creator}>{room?.players[0].public_name}</p>
       )}
       <p className={styles.room__number}>
-        <ManIcon width={12} height={12} /> {room.players_count}/{Number(room.free_places) + Number(room.players_count)}
+        <ManIcon width={12}
+          height={12} /> {room.players_count}/{room.free_places + room.players_count}
       </p>
       <p className={`${styles.room__number} ${styles.room__bet}`}>
         {Number(room.bet_type) === 1 ? `💵 ${room.bet}` : `🔰 ${room.bet}`}

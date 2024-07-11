@@ -1,14 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC } from "react";
-import { IBonus } from "../../../utils/types/mainTypes";
-import styles from './Bonus.module.scss';
-import Button from "../../ui/Button/Button";
-import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
-import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "../../../services/appSlice";
-import { userId } from "../../../api/requestData";
-import useTelegram from "../../../hooks/useTelegram";
-import { makeCollectibleRequest } from "../../../api/shopApi";
 import { postEvent } from '@tma.js/sdk';
+import { FC } from "react";
+
+import { userId } from "API/requestData";
+import { makeCollectibleRequest } from "API/shopApi";
+import useTelegram from "Hooks/useTelegram";
+import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "Services/appSlice";
+import { useAppDispatch, useAppSelector } from "Services/reduxHooks";
+import { IBonus } from "Utils/types/mainTypes";
+
+import Button from "Components/ui/Button/Button";
+
+import styles from './Bonus.module.scss';
 
 interface IProps {
   bonus: IBonus;
@@ -50,14 +52,17 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   };
 
   return (
-    <div key={bonus?.bonus_item_id} className={styles.bonus}>
+    <div key={bonus?.bonus_item_id}
+className={styles.bonus}>
       <div className={styles.bonus__layout}>
         <div className={styles.bonus__titleContainer}>
           <h2 className={styles.bonus__title}>{translation?.daily_reward}</h2>
           <p className={styles.bonus__text}>{translation?.come_back_tomorrow}</p>
         </div>
         <div className={styles.bonus__content}>
-          <img src={bonus?.bonus_image} alt="bonus_image" className={styles.bonus__image} />
+          <img src={bonus?.bonus_image}
+alt="bonus_image"
+className={styles.bonus__image} />
           <p className={styles.bonus__text}>{bonus?.bonus_type}</p>
           <div className={styles.bonus__button}>
             <Button
