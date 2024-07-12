@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
 
 import { getActiveEmojiPack } from "API/mainApi";
 import { userId } from "API/requestData";
 import useTelegram from "Hooks/useTelegram";
 import CrossIcon from "Icons/Cross/Cross";
+import { IEmojiResponse } from "Utils/types/responseTypes";
 
 import styles from './EmojiOverlay.module.scss';
 
@@ -18,12 +18,14 @@ interface IProps {
 const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
   const { user } = useTelegram();
   // const userId = user?.id;
-  const [emojis, setEmojis] = useState<any>(null);
+  const [emojis, setEmojis] = useState<string[] | null>(null);
   const [name, setName] = useState<string>("");
 
   useEffect(() => {
     getActiveEmojiPack(userId)
-      .then((res: any) => {
+      .then((response) => {
+        const res = response as IEmojiResponse;
+        console.log(res);
         setName(res.user_emoji_pack.name);
         setEmojis(res.user_emoji_pack.user_emoji_pack);
       })

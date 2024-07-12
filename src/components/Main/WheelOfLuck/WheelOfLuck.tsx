@@ -18,7 +18,7 @@ import { IFortuneData } from 'Utils/types/mainTypes';
 import styles from './WheelOfLuck.module.scss';
 
 interface IProps {
-  data: IFortuneData;
+  data: IFortuneData | null;
   closeOverlay: () => void;
 }
 
@@ -59,7 +59,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
           postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
           setSpinning(true);
           setPrize(false);
-          const allItems = [...data?.fortune_all_items];
+          const allItems = [...data!.fortune_all_items];
           setVisibleItems(allItems);
           const spinInterval = setInterval(() => {
             const firstItem = allItems.shift();
@@ -72,7 +72,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             const prizeItem = data?.fortune_prize_info[0];
             const randomIndex = getRandomIndex(allItems.length);
             allItems.splice(randomIndex, 1);
-            allItems.splice(2, 0, prizeItem);
+            allItems.splice(2, 0, prizeItem!);
 
             setVisibleItems(allItems.slice(0, 4));
             setTimeout(() => {

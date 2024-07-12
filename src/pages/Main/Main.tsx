@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +21,7 @@ import LeaderBoardIcon from "Icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "Icons/Play/PlayIcon";
 import gowinLogo from 'Images/gowin.png';
 import { useAppSelector } from "services/reduxHooks";
+import { IBannerData, IFortuneData } from "Utils/types";
 
 import styles from './Main.module.scss';
 
@@ -39,9 +39,9 @@ export const Main: FC = () => {
   const [showReferralOverlay, setShowReferralOverlay] = useState(false);
   const [showTasksOverlay, setShowTasksOverlay] = useState(false);
   const [showWheelOverlay, setShowWheelOverlay] = useState(false);
-  const [luckData, setLuckData] = useState<any>(null);
+  const [luckData, setLuckData] = useState<IFortuneData | null>(null);
 
-  const handleBannerClick = (bannerData: any) => {
+  const handleBannerClick = (bannerData: IBannerData) => {
     setCurrentBanner(bannerData);
     setShowBannerOverlay(!showBannerOverlay);
     setShowReferralOverlay(false);
@@ -75,8 +75,9 @@ export const Main: FC = () => {
 
   const openWheelOfLuckOverlay = () => {
     getLuckInfo(userId)
-      .then((res: any) => {
-        setLuckData(res);
+      .then((res) => {
+        const response = res as IFortuneData;
+        setLuckData(response);
       })
     setShowWheelOverlay(!showWheelOverlay);
   };
@@ -205,7 +206,8 @@ export const Main: FC = () => {
         />}
       <Overlay
         children={
-          <WheelOfLuck data={luckData}
+          <WheelOfLuck
+            data={luckData}
             closeOverlay={() => setShowWheelOverlay(false)} />
         }
         show={showWheelOverlay}

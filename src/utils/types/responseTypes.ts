@@ -25,3 +25,10 @@ export interface ITransferCoinsToBalanceResponse {
   transfered: string;
   new_coins: number;
 }
+
+export interface IEmojiResponse {
+  user_emoji_pack: {
+    name: string;
+    user_emoji_pack: string[];
+  }
+}
