@@ -37,3 +37,17 @@ export interface IClaimRewardResponse {
   message: string;
   new_value: number;
 }
+
+export interface IGetPrizeResponse {
+  message: string;
+  item_id: number;
+}
+
+export interface ISpinWheelResponse {
+  message: string;
+  tokens: string;
+}
+
+export interface CollectibleResponse {
+  message: number;
+}

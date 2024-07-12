@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -38,6 +37,7 @@ const JoinRoomPopup: FC<IProps> = ({
   const handleJoinRoom = () => {
     energyDrinkRequest(userId)
       .then((res: any) => {
+        console.log(res);
         if (res?.message === 'ok') {
           if (fromGameSettings) {
             postNewRoomRequest({
@@ -47,6 +47,7 @@ const JoinRoomPopup: FC<IProps> = ({
               room_type: roomType
             }, userId)
               .then((res: any) => {
+                console.log(res);
                 navigate(Number(roomType) === 2 ? `/closest/${res.room_id}` : `/room/${res.room_id}`);
               })
               .catch((error) => {
@@ -54,7 +55,7 @@ const JoinRoomPopup: FC<IProps> = ({
               });
           } else {
             joinRoomRequest(userId, roomId)
-              .then((res) => {
+              .then(res => {
                 navigate(`/room/${roomId}`);
               })
               .catch((error) => {

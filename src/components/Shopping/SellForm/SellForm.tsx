@@ -9,12 +9,12 @@ import useTelegram from "Hooks/useTelegram";
 import { addItemToLavka } from "services/appSlice";
 import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { ISellLavkaRes } from "Utils/types/responseTypes";
-import { ILavkaData } from "Utils/types/shopTypes";
+import { CombinedItemData } from "Utils/types/shopTypes";
 
 import styles from './SellForm.module.scss';
 
 interface IProps {
-  item: ILavkaData;
+  item: CombinedItemData;
   setMessageShown: (value: boolean) => void;
   setMessage: (value: string) => void;
   onClose: () => void;

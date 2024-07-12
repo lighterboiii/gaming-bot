@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import { IRPSGameData } from "Utils/types/gameTypes";
 import { IBannerData, IBonus, ITask, IUserData } from "Utils/types/mainTypes";
-import { ILavkaData, ItemData } from "Utils/types/shopTypes";
+import { ItemData } from "Utils/types/shopTypes";
 
 // костыльнулся с any
 interface AppState {
@@ -11,7 +11,7 @@ interface AppState {
   products: ItemData[] | null;
   archive: ItemData[] | null;
   bonus: IBonus | any | null;
-  lavka: ILavkaData[] | null;
+  lavka: ItemData[] | null;
   openedRooms: IRPSGameData | null;
   languageSettings: string[] | null | any,
   tasks: ITask[] | null | any,
@@ -138,17 +138,17 @@ const appSlice = createSlice({
     setProductsArchive: (state, action: PayloadAction<ItemData[]>) => {
       state.archive = action.payload;
     },
-    setLavkaAvailable: (state, action: PayloadAction<ILavkaData[]>) => {
+    setLavkaAvailable: (state, action: PayloadAction<ItemData[]>) => {
       state.lavka = action.payload;
     },
-    addItemToLavka: (state, action: PayloadAction<ILavkaData>) => {
+    addItemToLavka: (state, action: PayloadAction<ItemData>) => {
       if (state.lavka) {
         state.lavka.push(action.payload);
       }
     },
     removeItemFromLavka: (state, action: PayloadAction<number>) => {
       if (state.lavka) {
-        const updatedLavka = state.lavka.filter((item: ILavkaData) => item.item_id !== action.payload);
+        const updatedLavka = state.lavka.filter((item: ItemData) => item.item_id !== action.payload);
         state.lavka = updatedLavka;
       }
     },

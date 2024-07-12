@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +12,7 @@ import useTelegram from "Hooks/useTelegram";
 import { setLavkaAvailable } from "services/appSlice";
 import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { indexUrl } from "Utils/routes";
-import { CombinedItemData, GoodsItem, ItemData, LavkaResponse } from "Utils/types/shopTypes";
+import { CombinedItemData, ItemData, LavkaResponse } from "Utils/types/shopTypes";
 
 import styles from './Shop.module.scss';
 
@@ -26,7 +25,7 @@ export const Shop: FC = () => {
   const archiveData = useAppSelector(store => store.app.archive);
   const lavkaShop = useAppSelector(store => store.app.lavka);
   const translation = useAppSelector(store => store.app.languageSettings);
-  const [goods, setGoods] = useState<GoodsItem[]>([]);
+  const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState<string>(`${translation?.shop_button}`);
   const [showOverlay, setShowOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,8 +36,11 @@ export const Shop: FC = () => {
   };
   // функция отрисовки предметов инвентаря
   const handleRenderInventoryData = () => {
+    if (!archiveData) {
+      return;
+    }
     const collectibleIds = collectibles?.map(id => Number(id));
-    const inventoryItems = archiveData!.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
+    const inventoryItems = archiveData.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
     const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
       ...item,
       isCollectible: collectibleIds?.includes(item.item_id),
@@ -102,9 +104,14 @@ export const Shop: FC = () => {
   }, [lavkaShop, activeButton, translation?.marketplace])
 
   const updateItemCount = (itemId: number) => {
-    setGoods((prevGoods: GoodsItem[]) =>
-      prevGoods.map((item: any) =>
-        item.item_id === itemId ? { ...item, item_count: item.item_count - 1 } : item));
+    setGoods((prevGoods: ItemData[]) =>
+      prevGoods.map((item: ItemData) => {
+        if (item.item_id === itemId) {
+          const itemCount = item.item_count ?? 0;
+          return { ...item, item_count: itemCount > 0 ? itemCount - 1 : 0 };
+        }
+        return item;
+      }));
   };
 
   return (
@@ -147,7 +154,7 @@ export const Shop: FC = () => {
             <div className={styles.shop__goods + ' scrollable'}>
               {goods?.length > 0 ? (
                 <>
-                  {goods.map((item: any, index: number) => (
+                  {goods.map((item: ItemData, index: number) => (
                     <ShopItem
                       key={index}
                       item={item}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ItemData {
   isCollectible?: boolean;
   item_count?: number;
@@ -7,25 +8,16 @@ export interface ItemData {
   item_price_coins: number;
   item_price_tokens: number;
   item_type: string;
-  item_max: number;
+  item_max?: number;
 }
-
-export interface ILavkaData {
-  item_id: number;
-  item_mask: string;
-  item_pic: string;
-  item_type: string;
-  nft_id?: number;
-  seller_id?: number;
-  seller_publicname?: string;
-  item_price_coins: number;
-  item_price_tokens: number;
-}
-
-export type GoodsItem = ILavkaData | ItemData;
 
 export interface LavkaResponse {
-  lavka: ILavkaData[];
+  lavka: ItemData[];
 }
 
-export interface CombinedItemData extends ItemData, ILavkaData {}
+export interface CombinedItemData extends ItemData {
+  isCollectible?: any;
+  seller_id?: any;
+  seller_publicname?: string;
+  nft_id?: number;
+}

@@ -25,7 +25,7 @@ import {
 } from "services/appSlice";
 import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { IBuyItemRes } from "Utils/types/responseTypes";
-import { CombinedItemData, ILavkaData, ItemData } from "Utils/types/shopTypes";
+import { CombinedItemData, ItemData } from "Utils/types/shopTypes";
 
 import SellForm from "../SellForm/SellForm";
 
@@ -50,7 +50,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   const isUserSeller = Number(userId) === Number(item?.seller_id);
   const translation = useAppSelector(store => store.app.languageSettings);
   // функция для фильтрации купленных товаров
-  const handlePurchaseItemTypes = async (item: ILavkaData | ItemData) => {
+  const handlePurchaseItemTypes = async (item: ItemData) => {
     item?.item_price_coins !== 0
       ? dispatch(setCoinsValueAfterBuy(item.item_price_coins))
       : dispatch(setTokensValueAfterBuy(item.item_price_tokens));
@@ -72,7 +72,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
     setMessageShown: (arg: boolean) => void,
     closeDelay = 1000,
     messageResetDelay = 200
-) {
+  ) {
     setTimeout(() => {
       onClose();
       setTimeout(() => {
@@ -91,11 +91,11 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
         switch (res.message) {
           case "out":
             setMessage(`${translation?.out_of_stock}`);
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
             break;
           case "money":
             setMessage(`${translation?.insufficient_funds}`);
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
             break;
           case "ok":
             setMessage(`${translation?.successful_purchase}`);
@@ -126,15 +126,15 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   };
   // хендлер установки активного пака эмодзи
   const handleSetActiveEmoji = (itemId: number) => {
-      setActiveEmojiRequest(userId, item?.item_id)
-        .then(() => {
-          // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
-          dispatch(setActiveEmoji(String(itemId)));
-          onClose();
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+    setActiveEmojiRequest(userId, item?.item_id)
+      .then(() => {
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        dispatch(setActiveEmoji(String(itemId)));
+        onClose();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   };
   // хендлер снятия товара с продажи
   const handleCancelSelling = (itemId: number) => {
@@ -160,22 +160,22 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
     }, 1000);
   };
   // хендлер покупки в лавке
-  const handleBuyLavkaitem = (item: ILavkaData) => {
+  const handleBuyLavkaitem = (item: ItemData) => {
     buyLavkaRequest(item, userId)
       .then((response) => {
         const res = response as IBuyItemRes;
         setMessageShown(true);
         switch (res.message) {
           case "sold":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
             setMessage(`${translation?.already_sold}`);
             break;
           case "money":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
             setMessage(`${translation?.insufficient_funds}`);
             break;
           case "break":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification',notification_type: 'error' });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
             setMessage(`${translation?.item_already_owned}`);
             break;
           case "ok":
@@ -262,11 +262,12 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
       )}
       {isModalOpen && (
         <Modal title={translation?.list_in_shop}
-closeModal={() => setModalOpen(false)}>
-          <SellForm item={item}
-setMessage={setMessage}
-setMessageShown={setMessageShown}
-onClose={handleCloseFormModal} />
+          closeModal={() => setModalOpen(false)}>
+          <SellForm
+            item={item}
+            setMessage={setMessage}
+            setMessageShown={setMessageShown}
+            onClose={handleCloseFormModal} />
         </Modal>
       )}
     </div>

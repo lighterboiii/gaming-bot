@@ -1,4 +1,5 @@
-import { ILavkaData } from "Utils/types/shopTypes";
+import { CollectibleResponse } from "Utils/types/responseTypes";
+import { CombinedItemData } from "Utils/types/shopTypes";
 
 import { getReq, putReq } from "./api";
 import {
@@ -41,7 +42,8 @@ export const sellLavkaRequest = async (itemId: number, price: number, userIdValu
     endpoint: `${itemIdParamString}${itemId}${priceParamString}${price}`,
   });
 };
-export const buyLavkaRequest = async (item: ILavkaData, userIdValue: number) => {
+
+export const buyLavkaRequest = async (item: CombinedItemData, userIdValue: number) => {
   return await putReq({
     uri: buyLavkaUri,
     userId: userIdValue,
@@ -57,7 +59,7 @@ export const cancelLavkaRequest = async (itemId: number, userIdValue: number) =>
 };
 // универсальная функция для запроссов collectible
 export const makeCollectibleRequest = async (itemId: number, itemCount: number, userIdValue: number) => {
-  return await putReq<any>({
+  return await putReq<CollectibleResponse>({
     uri: setCollectiblesUri,
     endpoint: `${addNewCollectibleParamString}${itemId}${itemCountParamString}${itemCount}`,
     userId: userIdValue,

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IBannerData, IBonus, ITask, IUserData } from "./mainTypes";
-import { ILavkaData, ItemData } from "./shopTypes";
+import { ItemData } from "./shopTypes";
 
 export interface IAppData {
   collectibles_data: ItemData[];
   daily_bonus: IBonus;
   shop_available: ItemData[];
   user_info: IUserData;
-  lavka_available: ILavkaData[];
+  lavka_available: ItemData[];
   translate: string[];
   tasks_available: ITask[] | any;
   ad_info: IBannerData[];
