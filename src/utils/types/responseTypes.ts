@@ -32,3 +32,8 @@ export interface IEmojiResponse {
     user_emoji_pack: string[];
   }
 }
+
+export interface IClaimRewardResponse {
+  message: string;
+  new_value: number;
+}

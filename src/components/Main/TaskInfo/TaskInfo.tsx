@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
@@ -11,7 +10,8 @@ import ChevronIcon from "Icons/Chevron/ChevronIcon";
 import CrossIcon from "Icons/Cross/Cross";
 import { setNewTokensValue } from "services/appSlice";
 import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { ITask } from "Utils/types/mainTypes";
+import { ITask, ITaskStep } from "Utils/types/mainTypes";
+import { IClaimRewardResponse } from "Utils/types/responseTypes";
 
 import styles from './TaskInfo.module.scss';
 
@@ -31,7 +31,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
   const [showInstruction, setShowInstruction] = useState<boolean>(false);
   const [target, setTarget] = useState('');
 
-  const handleClickTaskStep = (step: any) => {
+  const handleClickTaskStep = (step: ITaskStep) => {
     if (step.step_type === "link") {
       window.open(step.target, '_blank');
     } else if (step.step_type === "instruction") {
@@ -42,20 +42,21 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
       tg.openTelegramLink(step.target);
     }
     taskStepRequest(userId, task?.task_id, step?.step_id)
-      .then((res: any) => {
-      });
+      .then(res => {});
   };
 
   const handleClaimReward = () => {
     setShowReward(true);
     taskResultRequest(userId, task?.task_id)
-      .then((res: any) => {
-        if (res?.message === 'incomplete') {
+      .then((res) => {
+        const response = res as IClaimRewardResponse;
+        console.log(res);
+        if (response?.message === 'incomplete') {
           setIncomplete(true);
-        } else if (res?.message === 'success') {
+        } else if (response?.message === 'success') {
           setRewardResult(true);
-          res?.new_value && dispatch(setNewTokensValue(res?.new_value));
-          postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+          response?.new_value && dispatch(setNewTokensValue(response?.new_value));
+          // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         }
       });
   };
@@ -69,7 +70,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
     } else {
       setSelectedTask(null);
     }
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   return (
@@ -88,7 +89,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
             </div>
           ) : (
             <div className={styles.info__steps}>
-              {task.steps.map((step: any) => (
+              {task.steps.map((step: ITaskStep) => (
                 <div key={step.step_id} className={styles.info__step} onClick={() => handleClickTaskStep(step)}>
                   <>
                     <img src={step.img} alt={step.step_type} className={styles.info__icon} />
