@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
@@ -21,7 +22,7 @@ const BigButton: FC<IProps> = ({
 }) => {
 
   const handleGetHapticFeedback = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
   };
 
   return (

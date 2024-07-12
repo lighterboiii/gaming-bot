@@ -54,7 +54,7 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
 
   return (
     <div key={bonus?.bonus_item_id}
-className={styles.bonus}>
+      className={styles.bonus}>
       <div className={styles.bonus__layout}>
         <div className={styles.bonus__titleContainer}>
           <h2 className={styles.bonus__title}>{translation?.daily_reward}</h2>
@@ -62,15 +62,15 @@ className={styles.bonus}>
         </div>
         <div className={styles.bonus__content}>
           <img src={bonus?.bonus_image}
-alt="bonus_image"
-className={styles.bonus__image} />
+            alt="bonus_image"
+            className={styles.bonus__image} />
           <p className={styles.bonus__text}>{bonus?.bonus_type}</p>
           <div className={styles.bonus__button}>
             <Button
               handleClick={() => handleGetBonus(bonus)}
               text={
-                `${(bonus?.bonus_type === "tokens" || 
-                  bonus?.bonus_type === "exp" || 
+                `${(bonus?.bonus_type === "tokens" ||
+                  bonus?.bonus_type === "exp" ||
                   bonus?.bonus_type === "energy_drink")
                   ? `${translation?.claim} ${bonus?.bonus_count}`
                   : `${translation?.claim}`}`

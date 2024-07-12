@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 
@@ -31,7 +32,7 @@ const CircleButton: FC<IProps> = ({
 }) => {
 
   const handleClick = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   }
 
   return (

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import useTelegram from "Hooks/useTelegram";
 import { setCoinsNewValue } from "services/appSlice";
 import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { IMember } from "Utils/types/memberTypes";
+import { IResultDataResponse, ITransferCoinsToBalanceResponse } from "Utils/types/responseTypes";
 
 import styles from './Referral.module.scss';
 
@@ -28,9 +28,10 @@ const Referral: FC = () => {
   useEffect(() => {
     const fetchData = () => {
       getReferralsData(userId)
-        .then((res: any) => {
-          setRefsBoard(res.result_data.refs_info);
-          setTotalBalance(res.result_data.total_balance);
+        .then((res) => {
+          const response = res as IResultDataResponse;
+          setRefsBoard(response.result_data.refs_info);
+          setTotalBalance(response.result_data.total_balance);
         })
         .catch((error) => {
           console.log(error);
@@ -45,12 +46,13 @@ const Referral: FC = () => {
     return () => {
       clearInterval(intervalId);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const handleTransferCoins = () => {
     transferCoinsToBalanceReq(userId)
-      .then((res: any) => {
+      .then((response) => {
+        const res = response as ITransferCoinsToBalanceResponse;
         setMessageShown(true);
         switch (res.transfered) {
           case "small":
@@ -106,7 +108,7 @@ const Referral: FC = () => {
           {translation?.invite_friends_bonus}
         </p>
         <Link to={inviteLink}
-className={styles.referral__inviteButtonWrapper}>
+          className={styles.referral__inviteButtonWrapper}>
           <Button
             text={translation?.invite}
             handleClick={handleInviteClick}
@@ -120,11 +122,11 @@ className={styles.referral__inviteButtonWrapper}>
       ) : (
         <div className={styles.referral__board}>
           {refsBoard !== null && refsBoard !== undefined && refsBoard.length > 0 ? (
-            refsBoard?.map((referral: any, index: number) => (
+            refsBoard?.map((referral: IMember, index: number) => (
               <UserContainer member={referral}
-index={index}
-length={refsBoard.length + 1}
-key={index} />
+                index={index}
+                length={refsBoard.length + 1}
+                key={index} />
             ))) :
             <span className={styles.referral__emptyBoard}>
               {translation?.no_friends_played}

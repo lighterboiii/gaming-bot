@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
@@ -25,6 +24,7 @@ import {
   setTokensValueAfterBuy
 } from "services/appSlice";
 import { useAppDispatch, useAppSelector } from "services/reduxHooks";
+import { IBuyItemRes } from "Utils/types/responseTypes";
 import { CombinedItemData, ILavkaData, ItemData } from "Utils/types/shopTypes";
 
 import SellForm from "../SellForm/SellForm";
@@ -85,7 +85,8 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   // хендлер покупки
   const handleBuyShopItem = (item: ItemData) => {
     buyItemRequest(item.item_id, 1, userId)
-      .then((res: any) => {
+      .then((response) => {
+        const res = response as IBuyItemRes;
         setMessageShown(true);
         switch (res.message) {
           case "out":
@@ -161,7 +162,8 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   // хендлер покупки в лавке
   const handleBuyLavkaitem = (item: ILavkaData) => {
     buyLavkaRequest(item, userId)
-      .then((res: any) => {
+      .then((response) => {
+        const res = response as IBuyItemRes;
         setMessageShown(true);
         switch (res.message) {
           case "sold":

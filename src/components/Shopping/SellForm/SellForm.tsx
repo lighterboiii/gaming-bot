@@ -8,7 +8,7 @@ import Button from "Components/ui/Button/Button";
 import useTelegram from "Hooks/useTelegram";
 import { addItemToLavka } from "services/appSlice";
 import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { ISellLavkaReq } from "Utils/types/responseTypes";
+import { ISellLavkaRes } from "Utils/types/responseTypes";
 import { ILavkaData } from "Utils/types/shopTypes";
 
 import styles from './SellForm.module.scss';
@@ -30,7 +30,7 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
   const handleSellToLavka = (itemId: number, price: number) => {
     sellLavkaRequest(itemId, price, userId)
       .then((response) => {
-        const res = response as ISellLavkaReq;
+        const res = response as ISellLavkaRes;
         console.log(res);
         const itemWithPrice = {
           ...item,
