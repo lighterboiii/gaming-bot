@@ -13,6 +13,7 @@ export interface IUserData {
   loses: number;
   publicname: string;
   referrer_all_coins: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   referrer_coins: any;
   referrer_id: string;
   room_id: string;

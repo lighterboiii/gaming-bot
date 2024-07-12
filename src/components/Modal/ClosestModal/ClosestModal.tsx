@@ -1,13 +1,8 @@
 import { FC, useEffect } from "react";
 import ReactDOM from "react-dom";
-// import { useNavigate } from "react-router-dom";
 
-// import { leaveRoomRequest } from "API/gameApi";
-// import { userId } from "API/requestData";
 import ModalOverlay from "Components/Modal/ModalOverlay/ModalOverlay";
 import UserAvatar from "Components/User/UserAvatar/UserAvatar";
-// import useTelegram from "Hooks/useTelegram";
-// import { roomsUrl } from "Utils/routes";
 import { IRPSPlayer } from "Utils/types/gameTypes";
 
 import styles from "./ClosestModal.module.scss";
@@ -31,8 +26,6 @@ export const ClosestModal: FC<IProps> = ({
   isTie,
   tieWinners
 }) => {
-  // const { user } = useTelegram();
-  // const navigate = useNavigate();
 
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {
@@ -46,16 +39,6 @@ export const ClosestModal: FC<IProps> = ({
     };
   }, [closeModal]);
 
-  // const leaveRoom = () => {
-  //   leaveRoomRequest(userId)
-  //     .then(res => {
-  //       navigate(roomsUrl);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-  console.log(tieWinners);
   return ReactDOM.createPortal(
     <>
       <div className={styles.modal}>

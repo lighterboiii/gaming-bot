@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IBannerData, IBonus, ITask, IUserData } from "./mainTypes";
 import { ILavkaData, ItemData } from "./shopTypes";
 
