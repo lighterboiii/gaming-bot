@@ -6,7 +6,7 @@ import { IBannerData } from "Utils/types/mainTypes";
 import styles from './BannerData.module.scss';
 
 interface IProps {
-  data: IBannerData;
+  data: IBannerData | null;
   closeOverlay: () => void;
 }
 

@@ -9,7 +9,7 @@ export interface IAppData {
   user_info: IUserData;
   lavka_available: ItemData[];
   translate: string[];
-  tasks_available: ITask[] | any;
+  tasks_available: ITask[];
   ad_info: IBannerData[];
   avatar: string;
   shop_image_url: string;

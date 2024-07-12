@@ -13,6 +13,7 @@ interface IProps {
 }
 
 const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
+
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const goToSlide = (index: number) => {
@@ -34,7 +35,8 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
     goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length);
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
-
+  
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const handlers = useSwipeable({
     onSwipedLeft: handleNextSlide,
     onSwipedRight: handlePrevSlide,

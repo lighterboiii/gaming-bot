@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import { IRPSGameData } from "Utils/types/gameTypes";
@@ -10,12 +9,14 @@ interface AppState {
   info: IUserData | null;
   products: ItemData[] | null;
   archive: ItemData[] | null;
-  bonus: IBonus | any | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  bonus: IBonus | null | any;
   lavka: ItemData[] | null;
   openedRooms: IRPSGameData | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   languageSettings: string[] | null | any,
-  tasks: ITask[] | null | any,
-  bannerData: IBannerData[] | null | any;
+  tasks: ITask[] | null,
+  bannerData: IBannerData[] | null;
   shopImage: string | null;
   RPSRuleImage: string | null;
   closestNumberRuleImage: string | null;
@@ -113,12 +114,12 @@ const appSlice = createSlice({
         state.info.user_active_emoji = action.payload;
       }
     },
-    setTaskList: (state, action: PayloadAction<string>) => {
+    setTaskList: (state, action: PayloadAction<ITask[]>) => {
       if (state.info) {
         state.tasks = action.payload;
       }
     },
-    setBannerData: (state, action: PayloadAction<any>) => {
+    setBannerData: (state, action: PayloadAction<IBannerData[]>) => {
       state.bannerData = action.payload;
     },
     setShopImage: (state, action: PayloadAction<string>) => {
@@ -152,11 +153,11 @@ const appSlice = createSlice({
         state.lavka = updatedLavka;
       }
     },
-    setLanguageSettings: (state, action: PayloadAction<any>) => {
+    setLanguageSettings: (state, action: PayloadAction<string[]>) => {
       state.languageSettings = action.payload;
     },
     // rooms & game part
-    getOpenedRooms: (state, action: PayloadAction<any>) => {
+    getOpenedRooms: (state, action: PayloadAction<IRPSGameData>) => {
       state.openedRooms = action.payload;
     },
     setFirstGameRuleImage: (state, action: PayloadAction<string>) => {
