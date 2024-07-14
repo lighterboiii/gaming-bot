@@ -40,7 +40,7 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
       >
         <defs>
           <filter id="blurFilter">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="8" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
           </filter>
         </defs>
       </circle>
@@ -51,9 +51,10 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
         ${isAnimating ? styles.bar__textAnimated : ''}`}
         dominantBaseline="middle"
         textAnchor="middle"
-        filter={isAnimating ? 'url(#blurFilter)' : 'none'}
       >
-        <tspan>{progress}</tspan>
+        <tspan
+          filter={isAnimating ? 'url(#blurFilter)' : 'none'}
+        >{progress}</tspan>
       </text>
     </svg>
   );
