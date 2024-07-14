@@ -56,9 +56,10 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
       }
         dominantBaseline="middle"
         textAnchor="middle"
-        initial={{ rotateZ: '0deg' }}
-        animate={{ rotateZ: '360deg' }}
+        initial={{ rotateZ: '0deg', filter: "blur(0px)" }}
+        animate={{ rotateZ: '10080deg', filter: "blur(8px)" }}
         transition={{ duration: 4, ease: 'linear', loop: Infinity }}
+        style={{ transformOrigin: "50% 53%" }}
       >
         {progress}
       </motion.text>
