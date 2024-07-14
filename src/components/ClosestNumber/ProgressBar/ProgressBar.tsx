@@ -8,7 +8,7 @@ interface IProps {
 
 const CircularProgressBar: FC<IProps> = ({ progress }) => {
   const [offset, setOffset] = useState({ x: 50, y: 5 });
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(true);
 
   useEffect(() => {
     if (progress !== 0) {
