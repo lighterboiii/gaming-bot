@@ -1,5 +1,5 @@
-@use 'Stylesheets/mixins' as *;
-@use 'Stylesheets/variables' as *;
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
 
 .overlay {
   @include position(fixed, 0, 0, 0, 0);
