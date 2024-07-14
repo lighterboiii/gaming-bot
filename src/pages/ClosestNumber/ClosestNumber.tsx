@@ -62,7 +62,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -495,7 +495,7 @@ export const ClosestNumber: FC = () => {
         <>
           {rules ? (
             <>
-              {data?.players?.length === 1 ?
+              {data?.players?.length !== 1 ?
                 <>
                   <div className={styles.game__betContainer}>
                     <p className={styles.game__bet}>

@@ -1,17 +1,17 @@
 @use '../../../stylesheets/mixins' as *;
 @use '../../../stylesheets/variables' as *;
 
-@mixin textScrollAnimation {
-  $steps: 180;
-  @for $i from 0 through $steps {
-    $percentage: $i * (100 / $steps);
-    $direction: if($i % 2 == 0, 1, -1);
-    #{$percentage}% {
-      transform: translateY($direction * 90%);
-      // filter: blur(10px);
-    }
-  }
-}
+// @mixin textScrollAnimation {
+//   $steps: 180;
+//   @for $i from 0 through $steps {
+//     $percentage: $i * (100 / $steps);
+//     $direction: if($i % 2 == 0, 1, -1);
+//     #{$percentage}% {
+//       transform: translateY($direction * 90%);
+//       // filter: blur(10px);
+//     }
+//   }
+// }
 
 .bar {
   @include size(120px, 120px);
@@ -60,16 +60,17 @@
     // transition: filter 0.5s ease-in-out;
   }
 
-  &__blurText {
-    filter: url('#blurFilter');
-  }
+  // &__blurText {
+  //   filter: url('#blurFilter');
+  // }
 
-  &__noBlur {
-    filter: none;
-  }
+  // &__noBlur {
+  //   filter: none;
+  // }
 
   &__textAnimated {
-    animation: textScroll 4s linear;
+    // animation: textScroll 4s linear;
+    animation: none;
   }
 
   @keyframes spin {
@@ -79,11 +80,11 @@
     }
     100% {
       transform-origin: 50px 50px;
-      transform: rotate(4320deg);
+      transform: rotate(3600deg);
     }
   }
 
-  @keyframes textScroll {
-    @include textScrollAnimation;
-  }
+  // @keyframes textScroll {
+  //   @include textScrollAnimation;
+  // }
 }

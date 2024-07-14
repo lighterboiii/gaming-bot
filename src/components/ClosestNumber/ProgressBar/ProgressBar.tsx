@@ -8,7 +8,7 @@ interface IProps {
 
 const CircularProgressBar: FC<IProps> = ({ progress }) => {
   const [offset, setOffset] = useState({ x: 50, y: 5 });
-  const [isAnimating, setIsAnimating] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (progress !== 0) {
@@ -38,23 +38,18 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
         cy={offset.y}
         r="10"
       >
-        <defs>
-          <filter id="blurFilter">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
-          </filter>
-        </defs>
       </circle>
       <text
         x="50%"
         y="55%"
-        className={`${styles.bar__text} 
-        ${isAnimating ? styles.bar__textAnimated : ''}`}
+        className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}
         dominantBaseline="middle"
         textAnchor="middle"
       >
-        <tspan
-          filter={isAnimating ? 'url(#blurFilter)' : 'none'}
-        >{progress}</tspan>
+        {!isAnimating &&
+          <tspan>
+            {progress}
+          </tspan>}
       </text>
     </svg>
   );

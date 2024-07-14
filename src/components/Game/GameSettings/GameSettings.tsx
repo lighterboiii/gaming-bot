@@ -23,8 +23,8 @@ interface IProps {
 
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
-  const { user } = useTelegram();
-  const dispatch = useAppDispatch();
+  // const { user } = useTelegram();
+  // const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
   const [message, setMessage] = useState('');
@@ -37,7 +37,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const userInfo = useAppSelector(store => store.app.info);
-  console.log(selectedRoomId);
+
   const handleCurrencyChange = (newCurrency: number) => {
     setCurrency(newCurrency);
   };
