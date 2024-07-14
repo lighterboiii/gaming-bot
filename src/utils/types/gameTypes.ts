@@ -54,3 +54,9 @@ export interface IGameSettingsData {
 export interface IPropsForClosestNumberComponent {
   users: IRPSPlayer[];
 }
+
+export interface ITime {
+  days: number | string;
+  hours: number | string;
+  minutes: number | string;
+}

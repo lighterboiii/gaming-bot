@@ -51,3 +51,24 @@ export interface ISpinWheelResponse {
 export interface CollectibleResponse {
   message: number;
 }
+
+export interface ILeaderResponse {
+  avatar: string;
+  coins: number;
+  item_mask: string;
+  item_pic: string;
+  public_name: string;
+  user_id: number;
+}
+
+export interface ITopUsersRes {
+  days: number;
+  hours: number;
+  minutes: number;
+  top_old_winner_photo_url: string;
+  top_old_winner_username: string;
+  top_prize_count: string;
+  top_prize_photo_url: string;
+  top_type: string;
+  top_users: ILeaderResponse[];
+}

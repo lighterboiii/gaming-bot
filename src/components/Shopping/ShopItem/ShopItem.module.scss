@@ -1,5 +1,5 @@
-@use 'Stylesheets/mixins' as *;
-@use 'Stylesheets/variables' as *;
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
 
 .item {
   @include max-size(116px, 116px);

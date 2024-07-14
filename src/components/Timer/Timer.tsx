@@ -3,9 +3,9 @@ import { FC } from 'react';
 import styles from './Timer.module.scss';
 
 interface IProps {
-  days: number;
-  hours: number;
-  minutes: number;
+  days: string;
+  hours: string;
+  minutes: string;
 }
 
 const Timer: FC<IProps> = ({ days, hours, minutes }) => {

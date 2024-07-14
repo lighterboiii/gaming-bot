@@ -1,5 +1,5 @@
-@use 'Stylesheets/mixins' as *;
-@use 'Stylesheets/variables' as *;
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
 
 .loader {
   @include size(100%, 100vh);

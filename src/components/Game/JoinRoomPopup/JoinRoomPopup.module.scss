@@ -1,5 +1,5 @@
-@use 'Stylesheets/variables' as *;
-@use 'Stylesheets/mixins' as *;
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
 
 .popup {
   @include indents();

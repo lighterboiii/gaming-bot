@@ -1,5 +1,5 @@
-@use 'Stylesheets/mixins' as *;
-@use 'Stylesheets/variables' as *;
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
 
 .choiceBox {
   @include size(200px, 68px);

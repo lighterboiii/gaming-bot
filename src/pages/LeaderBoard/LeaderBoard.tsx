@@ -12,7 +12,9 @@ import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import TimerIcon from "../../icons/Timer/TimerIcon";
 import { useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
+import { ITime } from '../../utils/types/gameTypes';
 import { IMember } from "../../utils/types/memberTypes";
+import { ILeaderResponse, ITopUsersRes } from '../../utils/types/responseTypes';
 
 import styles from './LeaderBoard.module.scss';
 
@@ -24,14 +26,14 @@ export const LeaderBoard: FC = () => {
   const [leaderBoard, setLeaderBoard] = useState<IMember[] | null>(null);
   const [topLeader, setTopLeader] = useState<IMember | null>(null);
   const [prizePhoto, setPrizePhoto] = useState<string>('');
-  const [time, setTime] = useState<any>({
+  const [time, setTime] = useState<ITime>({
     days: '',
     hours: '',
     minutes: '',
   });
   const [type, setType] = useState<string>('');
   const [prizeCount, setPrizeCount] = useState<string>('');
-  // const isUserLeader = user?.id === topLeader;
+
   useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
@@ -40,8 +42,8 @@ export const LeaderBoard: FC = () => {
     const fetchLeadersData = () => {
       setLoading(true);
       getTopUsers()
-        .then((leaders: any) => {
-          console.log(leaders);
+        .then((response) => {
+          const leaders = response as ITopUsersRes;
           setTopLeader(leaders?.top_users[0]);
           setLeaderBoard(leaders?.top_users.slice(1));
           setPrizePhoto(leaders?.top_prize_photo_url);
@@ -61,12 +63,13 @@ export const LeaderBoard: FC = () => {
     return () => {
       tg.BackButton.hide();
     };
-  }, []);
+  }, [navigate, tg.BackButton]);
 
   useEffect(() => {
     const fetchTime = () => {
       getTopUsers()
-        .then((leaders: any) => {
+        .then((response) => {
+          const leaders = response as ITopUsersRes;
           setTime({
             days: leaders?.days,
             hours: leaders?.hours,
@@ -107,9 +110,10 @@ export const LeaderBoard: FC = () => {
               <div className={styles.leaderBoard__prize}>
                 <span className={styles.leaderBoard__text}>{translation?.leaders_restart_in}</span>
                 <TimerIcon />
-                <Timer days={time?.days}
-                  hours={time?.hours}
-                  minutes={time?.minutes} />
+                <Timer
+                  days={String(time?.days)}
+                  hours={String(time?.hours)}
+                  minutes={String(time?.minutes)} />
               </div>
               <div className={styles.leaderBoard__prize}>
                 <span>{translation?.leaders_prize}</span>
@@ -151,15 +155,16 @@ export const LeaderBoard: FC = () => {
             )}
           </div>
           <div className={styles.leaderBoard__board + " scrollable"}>
-            {leaderBoard?.filter((leader: any) => leader.id !== 1).map((leader: any, index: number) =>
-              <UserContainer
-                member={leader}
-                key={leader.user_id}
-                index={index}
-                length={leaderBoard.length + 1}
-                leaderBoardType={type}
-                darkBackground
-              />)}
+            {leaderBoard?.filter((leader: ILeaderResponse) =>
+              leader.user_id !== 1).map((leader: ILeaderResponse, index: number) =>
+                <UserContainer
+                  member={leader}
+                  key={leader.user_id}
+                  index={index}
+                  length={leaderBoard.length + 1}
+                  leaderBoardType={type}
+                  darkBackground
+                />)}
           </div>
         </>
       )}

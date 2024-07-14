@@ -1,5 +1,5 @@
-@use 'Stylesheets/mixins' as *;
-@use 'Stylesheets/variables' as *;
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
 
 .leaderBoard {
   @include min-size(100%, calc(100vh + 1px));
