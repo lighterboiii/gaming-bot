@@ -7,8 +7,8 @@
     $percentage: $i * (100 / $steps);
     $direction: if($i % 2 == 0, 1, -1);
     #{$percentage}% {
-      transform: translateY($direction * 100%);
-      filter: blur(10px);
+      transform: translateY($direction * 80%);
+      // filter: blur(10px);
     }
   }
 }
@@ -56,12 +56,16 @@
     font-size: 20px;
     transform-origin: 50% 50%;
     text-align: center; 
-    filter: blur(0);
-    transition: filter 0.5s ease-in-out;
+    // filter: blur(0);
+    // transition: filter 0.5s ease-in-out;
   }
 
   &__blurText {
-    filter: blur(4px);
+    filter: blur(8px);
+  }
+
+  &__noBlur {
+    filter: blur(0);
   }
 
   &__textAnimated {

@@ -46,7 +46,7 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
       ${isAnimating ? styles.bar__textAnimated : ''}`} 
       dominantBaseline="middle" 
       textAnchor="middle">
-        <tspan>{progress}</tspan>
+        <tspan className={`${isAnimating ? styles.blurText : styles.noBlur}`}>{progress}</tspan>
       </text>
     </svg>
   );
