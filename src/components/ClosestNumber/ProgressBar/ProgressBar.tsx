@@ -41,7 +41,7 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
       </circle>
       <text 
       x="50%" 
-      y="53%" 
+      y="55%" 
       className={`${styles.bar__text} 
       ${isAnimating ? styles.bar__textAnimated : ''}`} 
       dominantBaseline="middle" 
