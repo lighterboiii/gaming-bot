@@ -52,12 +52,13 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
       <motion.text
         x="50%"
         y="53%"
-        className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}
+        className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`
+      }
         dominantBaseline="middle"
         textAnchor="middle"
-        // initial={{ translateY: '0%' }}
-        // animate={{ translateY: '-100%' }}
-        transition={{ duration: 4, ease: 'linear' }}
+        initial={{ rotateZ: '0deg' }}
+        animate={{ rotateZ: '360deg' }}
+        transition={{ duration: 4, ease: 'linear', loop: Infinity }}
       >
         {progress}
       </motion.text>

@@ -56,7 +56,8 @@
   }
 
   &__textAnimated {
-    animation: textScroll 4s linear;
+    // animation: textScroll 4s linear;
+    animation: none;
   }
 
   @keyframes spin {

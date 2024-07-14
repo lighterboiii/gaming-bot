@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-len
 export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoieW91cl91c2VyX2lkIiwiZXhwIjoxNzEyNjk0MDQwfQ.Yj9qWHJZMSl6yg-Xb5tnZeZniCK0FsNwBa1MS4VynxE';
-// export const userId = 172359056;
-export const userId = 5858080651;
+export const userId = 172359056;
+// export const userId = 5858080651;
 // uri
 export const mainAppDataUri = `get_start_info?user_id=`;
 export const getUserAvatarUri = `getuserphoto?user_id=`;
