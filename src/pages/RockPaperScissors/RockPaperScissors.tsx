@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { motion } from "framer-motion";
@@ -26,7 +28,7 @@ import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
 import { setFirstGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { roomsUrl } from "../../utils/routes";
-import { IRPSPlayer } from "../../utils/types/gameTypes";
+import { IRPSGameData, IRPSPlayer } from "../../utils/types/gameTypes";
 
 import styles from "./RockPaperScissors.module.scss";
 
@@ -37,6 +39,7 @@ export const RockPaperScissors: FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
+  console.log(data);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
@@ -71,7 +74,7 @@ export const RockPaperScissors: FC = () => {
       setAnyPlayerReady(false);
     }
   }, [data]);
-  
+
   // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -110,7 +113,7 @@ export const RockPaperScissors: FC = () => {
             isMounted = false;
             navigate(roomsUrl);
           } else if (res?.message === 'timeout') {
-            setTimeout(fetchRoomInfo, 500); 
+            setTimeout(fetchRoomInfo, 500);
           } else {
             setData(res);
             setLoading(false);
@@ -158,51 +161,53 @@ export const RockPaperScissors: FC = () => {
       timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
           setShowTimer(false);
-          whoIsWinRequest(roomId!)
-            .then((res: any) => {
-              setPlayersAnim({
-                firstAnim: res?.f_anim,
-                secondAnim: res?.s_anim,
-              });
-              const animationTime = 3000;
-              setAnimationKey(prevKey => prevKey + 1);
-              if (res?.message === "success") {
-                setTimeout(() => {
-                  if (Number(res?.winner) === Number(userId)) {
-                    updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
-                    postEvent(
-                      'web_app_trigger_haptic_feedback',
-                      { type: 'notification', notification_type: 'success' }
-                    );
-                    setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
-                      ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
-                        : `🔰`}`
-                      : ''}`);
-                  } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                    updateAnimation(Number(data.creator_id) === Number(res.winner) ? rLoseAnim : lLoseAnim);
-                    // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
-                    setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
-                      ? `💵`
-                      : `🔰`}`);
-                  } else if (res?.winner === 'draw') {
-                    setMessage(translation?.draw);
-                    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-                  }
-                  setMessageVisible(true);
+          if (roomId) {
+            whoIsWinRequest(roomId)
+              .then((res: any) => {
+                setPlayersAnim({
+                  firstAnim: res?.f_anim,
+                  secondAnim: res?.s_anim,
+                });
+                const animationTime = 3000;
+                setAnimationKey(prevKey => prevKey + 1);
+                if (res?.message === "success") {
                   setTimeout(() => {
-                    setMessageVisible(false);
-                    setAnimation(null);
-                    setShowTimer(true);
-                    setAnyPlayerReady(true);
-                    setTimerStarted(true);
-                    setTimer(15);
-                  }, 3500)
-                }, animationTime);
-              }
-            })
-            .catch((error) => {
-              console.error('Data request error:', error);
-            });
+                    if (Number(res?.winner) === Number(userId)) {
+                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
+                      postEvent(
+                        'web_app_trigger_haptic_feedback',
+                        { type: 'notification', notification_type: 'success' }
+                      );
+                      setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
+                        ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
+                          : `🔰`}`
+                        : ''}`);
+                    } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
+                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? rLoseAnim : lLoseAnim);
+                      // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+                      setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+                        ? `💵`
+                        : `🔰`}`);
+                    } else if (res?.winner === 'draw') {
+                      setMessage(translation?.draw);
+                      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+                    }
+                    setMessageVisible(true);
+                    setTimeout(() => {
+                      setMessageVisible(false);
+                      setAnimation(null);
+                      setShowTimer(true);
+                      setAnyPlayerReady(true);
+                      setTimerStarted(true);
+                      setTimer(15);
+                    }, 3500)
+                  }, animationTime);
+                }
+              })
+              .catch((error) => {
+                console.error('Data request error:', error);
+              });
+          }
         }
       }, 1500);
     };
@@ -510,7 +515,7 @@ export const RockPaperScissors: FC = () => {
                 </>
               </>) : (
               <div className={styles.rules}>
-                <img src={ruleImage!}
+                <img src={ruleImage ? ruleImage : ''}
                   alt="game rules"
                   className={styles.rules__image} />
                 <div className={styles.rules__button}>

@@ -495,7 +495,7 @@ export const ClosestNumber: FC = () => {
         <>
           {rules ? (
             <>
-              {data?.players?.length !== 1 ?
+              {data?.players?.length === 1 ?
                 <>
                   <div className={styles.game__betContainer}>
                     <p className={styles.game__bet}>
@@ -505,7 +505,8 @@ export const ClosestNumber: FC = () => {
                       </span>
                       {data?.bet}
                     </p>
-                  </div><div className={styles.game__centralContainer}>
+                  </div>
+                  <div className={styles.game__centralContainer}>
                     <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
                     <CircularProgressBar progress={roomValue ? roomValue : 0} />
                     <p className={styles.game__centralTimer}>{timer}</p>
