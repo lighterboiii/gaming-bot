@@ -2,7 +2,7 @@
 @use '../../../stylesheets/variables' as *;
 
 @mixin textScrollAnimation {
-  $steps: 180;
+  $steps: 120;
 
   @for $i from 0 through $steps {
     $percentage: $i * (100 / $steps);
@@ -10,7 +10,7 @@
 
     #{$percentage}% {
       transform: translateY($direction * 20%);
-      filter: blur(36px);
+      filter: blur(12px);
     }
   }
 }

@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { FC, useEffect, useState } from "react";
 
 import styles from './ProgressBar.module.scss';
@@ -35,31 +36,31 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
         cx="50"
         cy="50"
         r="45">
-
-        </circle>
+      </circle>
       <circle className={styles.bar__outerCircle}
         cx="50"
         cy="50"
         r="45">
-
-        </circle>
+      </circle>
       <circle
         className={`${styles.bar__progressPoint} ${isAnimating ? styles.bar__animated : ''}`}
         cx={offset.x}
         cy={offset.y}
         r="10"
       >
-
       </circle>
-      <text
+      <motion.text
         x="50%"
         y="53%"
         className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}
         dominantBaseline="middle"
         textAnchor="middle"
+        // initial={{ translateY: '0%' }}
+        // animate={{ translateY: '-100%' }}
+        transition={{ duration: 4, ease: 'linear' }}
       >
-       <tspan>{progress}</tspan>
-      </text>
+        {progress}
+      </motion.text>
     </svg>
   );
 };
