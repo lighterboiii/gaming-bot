@@ -2,14 +2,14 @@
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { joinRoomRequest, leaveRoomRequest } from "API/gameApi";
-import { userId } from "API/requestData";
-import useTelegram from "Hooks/useTelegram";
-import ManIcon from "Icons/Man/Man";
-import whoCloser from 'Images/gameSec.png';
-import hand from 'Images/main_hand_1_tiny.png';
-import { useAppSelector } from "services/reduxHooks";
-import { IRPSGameData } from "Utils/types/gameTypes";
+import { joinRoomRequest, leaveRoomRequest } from "../../../api/gameApi";
+import { userId } from "../../../api/requestData";
+import useTelegram from "../../../hooks/useTelegram";
+import ManIcon from "../../../icons/Man/Man";
+import whoCloser from '../../../images/gameSec.png';
+import hand from '../../../images/main_hand_1_tiny.png';
+import { useAppSelector } from "../../../services/reduxHooks";
+import { IRPSGameData } from "../../../utils/types/gameTypes";
 
 import styles from './Room.module.scss';
 

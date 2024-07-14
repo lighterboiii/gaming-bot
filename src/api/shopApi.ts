@@ -1,5 +1,5 @@
-import { CollectibleResponse } from "Utils/types/responseTypes";
-import { CombinedItemData } from "Utils/types/shopTypes";
+import { CollectibleResponse } from "utils/types/responseTypes";
+import { CombinedItemData } from "utils/types/shopTypes";
 
 import { getReq, putReq } from "./api";
 import {

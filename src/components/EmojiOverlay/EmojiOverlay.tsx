@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 
-import { getActiveEmojiPack } from "API/mainApi";
-import { userId } from "API/requestData";
-import useTelegram from "Hooks/useTelegram";
-import CrossIcon from "Icons/Cross/Cross";
-import { IEmojiResponse } from "Utils/types/responseTypes";
+import { getActiveEmojiPack } from "../../api/mainApi";
+import { userId } from '../../api/requestData';
+import useTelegram from "../../hooks/useTelegram";
+import CrossIcon from '../../icons/Cross/Cross';
+import { IEmojiResponse } from "../../utils/types/responseTypes";
 
 import styles from './EmojiOverlay.module.scss';
 

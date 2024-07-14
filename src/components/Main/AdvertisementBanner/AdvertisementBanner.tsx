@@ -2,8 +2,8 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
-import ChevronIcon from "Icons/Chevron/ChevronIcon";
-import { IBannerData } from "Utils/types/mainTypes";
+import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
+import { IBannerData } from "../../../utils/types/mainTypes";
 
 import styles from "./AdvertismentBanner.module.scss";
 

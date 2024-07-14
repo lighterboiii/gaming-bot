@@ -3,15 +3,15 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { getReferralsData, transferCoinsToBalanceReq } from "API/mainApi";
-import { inviteLink, userId } from "API/requestData";
-import Button from "Components/ui/Button/Button";
-import UserContainer from "Components/User/UserContainer/UserContainer";
-import useTelegram from "Hooks/useTelegram";
-import { setCoinsNewValue } from "services/appSlice";
-import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { IMember } from "Utils/types/memberTypes";
-import { IResultDataResponse, ITransferCoinsToBalanceResponse } from "Utils/types/responseTypes";
+import UserContainer from "../..//User/UserContainer/UserContainer";
+import { getReferralsData, transferCoinsToBalanceReq } from "../../../api/mainApi";
+import { inviteLink, userId } from "../../../api/requestData";
+import useTelegram from "../../../hooks/useTelegram";
+import { setCoinsNewValue } from "../../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { IMember } from "../../../utils/types/memberTypes";
+import { IResultDataResponse, ITransferCoinsToBalanceResponse } from "../../../utils/types/responseTypes";
+import Button from "../../ui/Button/Button";
 
 import styles from './Referral.module.scss';
 

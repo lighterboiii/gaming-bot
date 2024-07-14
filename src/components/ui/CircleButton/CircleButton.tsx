@@ -2,12 +2,12 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 
-import ChevronIcon from "Icons/Chevron/ChevronIcon";
-import CommunityIcon from "Icons/Community/CommunityIcon";
-import CrossIcon from "Icons/Cross/Cross";
-import FortuneWheelIcon from "Icons/FortuneWheel/FortuneWheel";
-import RefIcon from "Icons/Referral/ReferralIcon";
-import tasksIcon from 'Images/tasks_3.png';
+import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
+import CommunityIcon from "../../../icons/Community/CommunityIcon";
+import CrossIcon from "../../../icons/Cross/Cross";
+import FortuneWheelIcon from "../../../icons/FortuneWheel/FortuneWheel";
+import RefIcon from "../../../icons/Referral/ReferralIcon";
+import tasksIcon from '../../images/tasks_3.png';
 
 import styles from './CircleButton.module.scss';
 

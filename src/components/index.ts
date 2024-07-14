@@ -1,6 +1,0 @@
-export * from './App'
-// export * from './Game'
-// export * from './User'
-// export * from './Main'
-// export * from './Shopping'
-// export * from './ui'

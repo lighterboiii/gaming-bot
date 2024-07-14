@@ -2,17 +2,17 @@
 import { postEvent } from '@tma.js/sdk';
 import { FC, useEffect, useRef, useState } from 'react';
 
-import { getWheelPrizeRequest, spinWheelRequest } from 'API/mainApi';
-import { userId } from 'API/requestData';
-import Button from 'Components/ui/Button/Button';
-import useTelegram from 'Hooks/useTelegram';
-import lamp from 'Images/closest-number/lamp.png';
-import light from 'Images/closest-number/lamp2.png';
-import wheelPointer from 'Images/closest-number/wheelPoint.png';
-import { addTokens, setTokensValueAfterBuy } from 'services/appSlice';
-import { useAppDispatch, useAppSelector } from 'services/reduxHooks';
-import { IFortuneData, IFortuneItem } from 'Utils/types/mainTypes';
-import { IGetPrizeResponse, ISpinWheelResponse } from 'Utils/types/responseTypes';
+import Button from '../..//ui/Button/Button';
+import { getWheelPrizeRequest, spinWheelRequest } from '../../../api/mainApi';
+import { userId } from '../../../api/requestData';
+import useTelegram from '../../../hooks/useTelegram';
+import light from '../../../images/closest-number/lamp2.png';
+import wheelPointer from '../../../images/closest-number/wheelPoint.png';
+import lamp from '../../../images../../..//closest-number/lamp.png';
+import { addTokens, setTokensValueAfterBuy } from '../../../services/appSlice';
+import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
+import { IFortuneData, IFortuneItem } from '../../../utils/types/mainTypes';
+import { IGetPrizeResponse, ISpinWheelResponse } from '../../../utils/types/responseTypes';
 
 import styles from './WheelOfLuck.module.scss';
 

@@ -1,7 +1,6 @@
 import { FC } from "react";
 
-import { IPropsForClosestNumberComponent } from "Utils/types/gameTypes";
-
+import { IPropsForClosestNumberComponent, IRPSPlayer } from "../../../utils/types/gameTypes";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from './Seven.module.scss';
@@ -9,7 +8,7 @@ import styles from './Seven.module.scss';
 const CaseSeven: FC<IPropsForClosestNumberComponent> = ({ users }) => {
   return (
     <div className={styles.players}>
-      {users?.map((user: any) => (
+      {users?.map((user: IRPSPlayer) => (
         <div className={styles.players__player}>
           {user?.emoji !== 'none' &&
             <div className={styles.players__emoji}>

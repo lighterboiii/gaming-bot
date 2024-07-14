@@ -1,4 +1,4 @@
-import { IAppData, IUserPhoto } from "Utils/types";
+import { IAppData, IUserPhoto } from "utils/types";
 
 import { getReq, putReq } from "./api";
 import {

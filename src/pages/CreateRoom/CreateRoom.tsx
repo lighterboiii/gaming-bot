@@ -4,15 +4,15 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getExistingGamesRequest } from "API/gameApi";
-import GameCard from "Components/Game/GameCard/GameCard";
-import GameSettings from "Components/Game/GameSettings/GameSettings";
-import Loader from "Components/Loader/Loader";
-import Overlay from "Components/Overlay/Overlay";
-import useTelegram from "Hooks/useTelegram";
-import { useAppSelector } from "services/reduxHooks";
-import { indexUrl } from "Utils/routes";
-import { IGameCardData } from "Utils/types/gameTypes";
+import { getExistingGamesRequest } from "../../api/gameApi";
+import GameCard from "../../components/Game/GameCard/GameCard";
+import GameSettings from "../../components/Game/GameSettings/GameSettings";
+import Loader from "../../components/Loader/Loader";
+import Overlay from "../../components/Overlay/Overlay";
+import useTelegram from "../../hooks/useTelegram";
+import { useAppSelector } from "../../services/reduxHooks";
+import { indexUrl } from "../../utils/routes";
+import { IGameCardData } from "../../utils/types/gameTypes";
 
 import styles from './CreateRoom.module.scss';
 

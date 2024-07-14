@@ -1,9 +1,9 @@
 import { FC, useEffect } from "react";
 import ReactDOM from "react-dom";
 
-import ModalOverlay from "Components/Modal/ModalOverlay/ModalOverlay";
-import UserAvatar from "Components/User/UserAvatar/UserAvatar";
-import { IRPSPlayer } from "Utils/types/gameTypes";
+import { IRPSPlayer } from "../../../utils/types/gameTypes";
+import ModalOverlay from "../../Modal/ModalOverlay/ModalOverlay";
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from "./ClosestModal.module.scss";
 

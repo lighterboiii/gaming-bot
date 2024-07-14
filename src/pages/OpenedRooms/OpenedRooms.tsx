@@ -4,19 +4,19 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getOpenedRoomsRequest } from "API/gameApi";
-import CreateRoomFooter from "Components/Game/CreateRoomFooter/CreateRoomFooter";
-import JoinRoomPopup from "Components/Game/JoinRoomPopup/JoinRoomPopup";
-import Room from "Components/Game/Room/Room";
-import Loader from "Components/Loader/Loader";
-import { Modal } from "Components/Modal/Modal";
-import Button from "Components/ui/Button/Button";
-import useTelegram from "Hooks/useTelegram";
-import { getOpenedRooms } from "services/appSlice";
-import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { sortRooms } from "Utils/additionalFunctions";
-import { indexUrl } from "Utils/routes";
-import { IGameCardData } from "Utils/types/gameTypes";
+import { getOpenedRoomsRequest } from "../../api/gameApi";
+import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
+import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
+import Room from "../../components/Game/Room/Room";
+import Loader from "../../components/Loader/Loader";
+import { Modal } from "../../components/Modal/Modal";
+import Button from "../../components/ui/Button/Button";
+import useTelegram from "../../hooks/useTelegram";
+import { getOpenedRooms } from "../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { sortRooms } from "../../utils/additionalFunctions";
+import { indexUrl } from "../../utils/routes";
+import { IGameCardData } from "../../utils/types/gameTypes";
 
 import styles from './OpenedRooms.module.scss';
 

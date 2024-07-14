@@ -1,12 +1,11 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 
-import { balanceLink } from "API/requestData";
-import useTelegram from "Hooks/useTelegram";
-import WalletIcon from "Icons/Wallet/WalletIcon";
-import { useAppSelector } from "services/reduxHooks";
-import { formatNumber } from "Utils/additionalFunctions";
-
+import { balanceLink } from "../../../api/requestData";
+import useTelegram from "../../../hooks/useTelegram";
+import WalletIcon from "../../../icons/Wallet/WalletIcon";
+import { useAppSelector } from "../../../services/reduxHooks";
+import { formatNumber } from "../../../utils/additionalFunctions";
 import UserAvatar from "../UserAvatar/UserAvatar";
 
 import styles from './SecondaryUserInfo.module.scss';

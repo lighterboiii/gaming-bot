@@ -1,8 +1,8 @@
+import checkIcon from 'i../../../mages/check-icon.png';
 import { FC } from 'react';
 
-import ChevronIcon from 'Icons/Chevron/ChevronIcon';
-import checkIcon from 'Images/check-icon.png';
-import { ITask } from 'Utils/types/mainTypes';
+import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
+import { ITask } from '../../../utils/types/mainTypes';
 
 import styles from './Task.module.scss';
 

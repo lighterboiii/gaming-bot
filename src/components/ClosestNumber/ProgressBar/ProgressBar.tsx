@@ -16,34 +16,34 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
       const angle = ((limitedProgress * 3.6) - 90) * (Math.PI / 180);
       const x = 50 + 45 * Math.cos(angle);
       const y = 50 + 45 * Math.sin(angle);
-  
+
       setIsAnimating(true);
       const animationTimeout = setTimeout(() => {
         setOffset({ x, y });
         setIsAnimating(false);
       }, 4000);
-  
+
       return () => clearTimeout(animationTimeout);
     }
   }, [progress]);
 
   return (
     <svg className={styles.bar}
-viewBox="0 0 100 100"
-preserveAspectRatio="xMidYMid meet">
+      viewBox="0 0 100 100"
+      preserveAspectRatio="xMidYMid meet">
       {/* <defs>
         <mask id="text-mask" x="0" y="0" width="100" height="100">
           <rect x="15" y="40" width="70" height="20" fill="white" />
         </mask>
       </defs> */}
       <circle className={styles.bar__innerCircle}
-cx="50"
-cy="50"
-r="45"></circle>
+        cx="50"
+        cy="50"
+        r="45"></circle>
       <circle className={styles.bar__outerCircle}
-cx="50"
-cy="50"
-r="45"></circle>
+        cx="50"
+        cy="50"
+        r="45"></circle>
       <circle
         className={`${styles.bar__progressPoint} ${isAnimating ? styles.bar__animated : ''}`}
         cx={offset.x}
@@ -51,15 +51,15 @@ r="45"></circle>
         r="10"
       ></circle>
       {/* <g mask="url(#text-mask)"> */}
-        <text
-          x="50%"
-          y="52%"
-          className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}
-          dominantBaseline="middle"
-          textAnchor="middle"
-        >
-          {progress}
-        </text>
+      <text
+        x="50%"
+        y="52%"
+        className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}
+        dominantBaseline="middle"
+        textAnchor="middle"
+      >
+        {progress}
+      </text>
       {/* </g> */}
     </svg>
   );

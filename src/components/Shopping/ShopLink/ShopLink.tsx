@@ -2,10 +2,10 @@ import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 
-import gowinLogo from 'Images/gowin.png';
-import girl from 'Images/Shop_small_char.png';
-import { useAppSelector } from "services/reduxHooks";
-import { shopUrl } from "Utils/routes";
+import gowinLogo from '../../../images/gowin.png';
+import girl from '../../../images/Shop_small_char.png';
+import { useAppSelector } from "../../../services/reduxHooks";
+import { shopUrl } from "../../../utils/routes";
 
 import styles from './ShopLink.module.scss';
 

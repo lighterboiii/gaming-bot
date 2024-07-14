@@ -1,47 +1,48 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { FC, useEffect, useState } from 'react';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { getAppData } from 'API/mainApi';
-import { userId } from 'API/requestData';
-import Loader from "Components/Loader/Loader";
-import useTelegram from 'Hooks/useTelegram';
+import { getAppData } from '../../api/mainApi';
+import { userId } from '../../api/requestData';
+import useTelegram from '../../hooks/useTelegram';
+import { ClosestNumber } from '../../pages/ClosestNumber/ClosestNumber';
+import { CreateRoom } from '../../pages/CreateRoom/CreateRoom';
+import { LeaderBoard } from '../../pages/LeaderBoard/LeaderBoard';
+import Main from '../../pages/Main/Main';
+import { NotFoundPage } from '../../pages/NotFoundPage/NotFoundPage';
+import { OpenedRooms } from '../../pages/OpenedRooms/OpenedRooms';
+import { RockPaperScissors } from '../../pages/RockPaperScissors/RockPaperScissors';
+import { Shop } from '../../pages/shop/Shop';
 import {
-ClosestNumber,
-CreateRoom,
-LeaderBoard,
-Main,
-NotFoundPage,
-OpenedRooms,
-RockPaperScissors,
-Shop
-} from 'Pages';
-import { setProductsArchive } from 'services/appSlice';
+  setBannerData,
+  setDailyBonus,
+  setFirstGameRuleImage,
+  setFirstGameRulesState,
+  setLanguageSettings,
+  setSecondGameRuleImage,
+  setSecondGameRulesState,
+  setShopAvailable,
+  setShopImage,
+  setTaskList,
+  setUserData,
+  setUserPhoto,
+  setProductsArchive
+} from '../../services/appSlice';
+import { useAppDispatch } from '../../services/reduxHooks';
 import {
-setBannerData,
-setDailyBonus,
-setFirstGameRuleImage,
-setFirstGameRulesState,
-setLanguageSettings,
-setSecondGameRuleImage,
-setSecondGameRulesState,
-setShopAvailable,
-setShopImage,
-setTaskList,
-setUserData,
-setUserPhoto
-} from 'services/appSlice';
-import { useAppDispatch } from 'services/reduxHooks';
-import {
-anyUrl,
-closestNumberRoomUrl,
-createRoomUrl,
-indexUrl,
-leaderboardUrl,
-roomUrl,
-roomsUrl,
-shopUrl
-} from 'Utils/routes';
+  indexUrl,
+  roomsUrl,
+  createRoomUrl,
+  shopUrl,
+  leaderboardUrl,
+  roomUrl,
+  closestNumberRoomUrl,
+  anyUrl
+
+} from '../../utils/routes';
+import Loader from '../Loader/Loader';
 
 import styles from './App.module.scss';
 
@@ -102,7 +103,7 @@ export const App: FC = () => {
     };
 
     fetchUserData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
 
   return (
@@ -110,21 +111,21 @@ export const App: FC = () => {
       {loading ? <Loader /> : (
         <Routes>
           <Route path={indexUrl}
-element={<Main />} />
+            element={<Main />} />
           <Route path={roomsUrl}
-element={<OpenedRooms />} />
+            element={<OpenedRooms />} />
           <Route path={createRoomUrl}
-element={<CreateRoom />} />
+            element={<CreateRoom />} />
           <Route path={shopUrl}
-element={<Shop />} />
+            element={<Shop />} />
           <Route path={leaderboardUrl}
-element={<LeaderBoard />} />
+            element={<LeaderBoard />} />
           <Route path={roomUrl}
-element={<RockPaperScissors />} />
+            element={<RockPaperScissors />} />
           <Route path={closestNumberRoomUrl}
-element={<ClosestNumber />} />
+            element={<ClosestNumber />} />
           <Route path={anyUrl}
-element={<NotFoundPage />} />
+            element={<NotFoundPage />} />
         </Routes>
       )}
     </div>

@@ -1,7 +1,6 @@
 import { FC } from "react";
 
-import { IPropsForClosestNumberComponent } from "Utils/types/gameTypes";
-
+import { IPropsForClosestNumberComponent, IRPSPlayer } from "../../../utils/types/gameTypes";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from './CaseOne.module.scss';
@@ -12,25 +11,25 @@ const Case: FC<IPropsForClosestNumberComponent> = ({ users }) => {
       className={styles.players}
       style={users?.length <= 2 ? { width: '180%' } : {}}
     >
-      {users?.map((user: any) => (
+      {users?.map((user: IRPSPlayer) => (
         <div
           className={styles.players__player}
           style={users?.length <= 2 ? { width: '90px', height: '90px' } : {}}>
           {user?.emoji !== 'none' &&
             <div
-            className={styles.players__emoji}
-            style={{ left: '-25%' }}
+              className={styles.players__emoji}
+              style={{ left: '-25%' }}
             >
               <img src={user?.emoji}
-alt="emoji"
-className={styles.players__emojiImage} />
+                alt="emoji"
+                className={styles.players__emojiImage} />
             </div>
           }
           {user?.choice !== "none" && <div className={styles.players__choice}
-style={{ right: '-20%' }}>{user?.choice}</div>}
+            style={{ right: '-20%' }}>{user?.choice}</div>}
           <UserAvatar item={user}
-avatar={user?.avatar}
-key={user?.userid} />
+            avatar={user?.avatar}
+            key={user?.userid} />
           <p
             className={styles.players__name}
             style={users?.length > 2 ? { padding: '1px 2px', fontSize: '10px' } : {}}

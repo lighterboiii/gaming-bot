@@ -2,7 +2,7 @@
 import { postEvent } from "@tma.js/sdk";
 import React, { FC } from "react";
 
-import ChevronIcon from "Icons/Chevron/ChevronIcon";
+import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 
 import styles from './SmallButton.module.scss';
 

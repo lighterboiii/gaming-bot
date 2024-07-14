@@ -1,7 +1,6 @@
 import { FC } from "react";
 
-import { IPropsForClosestNumberComponent } from "Utils/types/gameTypes";
-
+import { IPropsForClosestNumberComponent, IRPSPlayer } from "../../../utils/types/gameTypes";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from './Four.module.scss';
@@ -9,13 +8,13 @@ import styles from './Four.module.scss';
 const CaseThree: FC<IPropsForClosestNumberComponent> = ({ users }) => {
   return (
     <div className={styles.players}>
-      {users?.map((user: any) => (
+      {users?.map((user: IRPSPlayer) => (
         <div className={styles.players__player}>
           {user?.emoji !== 'none' &&
             <div className={styles.players__emoji}>
               <img src={user?.emoji}
-alt="emoji"
-className={styles.players__emojiImage} />
+                alt="emoji"
+                className={styles.players__emojiImage} />
             </div>
           }
           {user?.choice !== 'none' &&
@@ -23,8 +22,8 @@ className={styles.players__emojiImage} />
               {user?.choice}
             </div>}
           <UserAvatar item={user}
-avatar={user?.avatar}
-key={user?.userid} />
+            avatar={user?.avatar}
+            key={user?.userid} />
           <p className={styles.players__name}>
             {user && user?.publicname}
           </p>

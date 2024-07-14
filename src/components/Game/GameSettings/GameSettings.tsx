@@ -2,17 +2,17 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { postNewRoomRequest } from 'API/gameApi';
-import { userId } from 'API/requestData';
-import JoinRoomPopup from 'Components/Game/JoinRoomPopup/JoinRoomPopup';
-import SettingsSlider from 'Components/Game/SettingsSlider/SettingsSlider';
-import { Modal } from 'Components/Modal/Modal';
-import Button from 'Components/ui/Button/Button';
-import useTelegram from 'Hooks/useTelegram';
-import { useAppDispatch, useAppSelector } from 'services/reduxHooks';
-import { formatNumber } from 'Utils/additionalFunctions';
-import { IGameSettingsData } from 'Utils/types/gameTypes';
-import { ICreateRoomResponse } from 'Utils/types/responseTypes';
+import { postNewRoomRequest } from '../../../api/gameApi';
+import { userId } from '../../../api/requestData';
+import useTelegram from '../../../hooks/useTelegram';
+import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
+import { formatNumber } from '../../../utils/additionalFunctions';
+import { IGameSettingsData } from '../../../utils/types/gameTypes';
+import { ICreateRoomResponse } from '../../../utils/types/responseTypes';
+import { Modal } from '../../Modal/Modal';
+import Button from '../../ui/Button/Button';
+import JoinRoomPopup from '../JoinRoomPopup/JoinRoomPopup';
+import SettingsSlider from '../SettingsSlider/SettingsSlider';
 
 import styles from './GameSettings.module.scss';
 

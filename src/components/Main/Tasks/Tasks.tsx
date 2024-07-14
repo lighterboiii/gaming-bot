@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 
-import { useAppSelector } from 'services/reduxHooks';
-
+import { useAppSelector } from '../../../services/reduxHooks';
+import { ITask } from '../../../utils/types';
 import Task from '../Task/Task';
 import TaskInfo from '../TaskInfo/TaskInfo';
 
@@ -10,15 +10,15 @@ import styles from './Tasks.module.scss';
 const Tasks: FC = () => {
   const currentTasks = useAppSelector(store => store.app.tasks);
   const translation = useAppSelector(store => store.app.languageSettings);
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
 
-  const handleTaskClick = (task: any) => {
+  const handleTaskClick = (task: ITask) => {
     setSelectedTask(task);
   };
 
   useEffect(() => {
 
-    return(() => {
+    return (() => {
       setSelectedTask(null);
     })
   }, [])
@@ -36,17 +36,17 @@ const Tasks: FC = () => {
             </p>
           </div>
           <div className={styles.tasks__board}>
-            {currentTasks && currentTasks.map((task: any, index: number) => (
+            {currentTasks && currentTasks.map((task: ITask, index: number) => (
               <Task task={task}
-key={index}
-onClick={() => handleTaskClick(task)} />
+                key={index}
+                onClick={() => handleTaskClick(task)} />
             ))}
           </div>
         </div>
       </>
     ) : (
       <TaskInfo task={selectedTask}
-setSelectedTask={() => setSelectedTask(null)} />
+        setSelectedTask={() => setSelectedTask(null)} />
     )
   );
 };

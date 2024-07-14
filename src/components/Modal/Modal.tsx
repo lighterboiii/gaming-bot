@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect } from "react";
 import ReactDOM from "react-dom";
 
-import CrossIcon from "Icons/Cross/Cross";
+import CrossIcon from "../../icons/Cross/Cross";
 
 import styles from './Modal.module.scss'
 import ModalOverlay from "./ModalOverlay/ModalOverlay";

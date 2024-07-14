@@ -2,14 +2,14 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
-import { userId } from "API/requestData";
-import { sellLavkaRequest } from "API/shopApi";
-import Button from "Components/ui/Button/Button";
-import useTelegram from "Hooks/useTelegram";
-import { addItemToLavka } from "services/appSlice";
-import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { ISellLavkaRes } from "Utils/types/responseTypes";
-import { CombinedItemData } from "Utils/types/shopTypes";
+import { userId } from "../../../api/requestData";
+import { sellLavkaRequest } from "../../../api/shopApi";
+import useTelegram from "../../../hooks/useTelegram";
+import { addItemToLavka } from "../../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { ISellLavkaRes } from "../../../utils/types/responseTypes";
+import { CombinedItemData } from "../../../utils/types/shopTypes";
+import Button from "../../ui/Button/Button";
 
 import styles from './SellForm.module.scss';
 

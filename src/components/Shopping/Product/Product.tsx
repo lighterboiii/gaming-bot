@@ -2,18 +2,15 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
-import { userId } from "API/requestData";
+import { userId } from "../../../api/requestData";
 import {
   buyItemRequest,
   buyLavkaRequest,
   cancelLavkaRequest,
   setActiveEmojiRequest,
   setActiveSkinRequest
-} from "API/shopApi";
-import { Modal } from "Components/Modal/Modal";
-import Button from "Components/ui/Button/Button";
-import UserAvatar from "Components/User/UserAvatar/UserAvatar";
-import useTelegram from "Hooks/useTelegram";
+} from "../../../api/shopApi";
+import useTelegram from "../../../hooks/useTelegram";
 import {
   addEnergyDrink,
   removeItemFromLavka,
@@ -22,11 +19,13 @@ import {
   setCoinsValueAfterBuy,
   setCollectibles,
   setTokensValueAfterBuy
-} from "services/appSlice";
-import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { IBuyItemRes } from "Utils/types/responseTypes";
-import { CombinedItemData, ItemData } from "Utils/types/shopTypes";
-
+} from "../../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { IBuyItemRes } from "../../../utils/types/responseTypes";
+import { CombinedItemData, ItemData } from "../../../utils/types/shopTypes";
+import { Modal } from "../../Modal/Modal";
+import Button from "../../ui/Button/Button";
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
 import SellForm from "../SellForm/SellForm";
 
 import styles from './Product.module.scss';

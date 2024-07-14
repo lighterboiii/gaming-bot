@@ -1,7 +1,7 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 
-import CrossIcon from "Icons/Cross/Cross";
+import CrossIcon from "../../icons/Cross/Cross";
 
 import styles from './Overlay.module.scss';
 

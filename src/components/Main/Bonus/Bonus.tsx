@@ -2,13 +2,14 @@
 import { postEvent } from '@tma.js/sdk';
 import { FC } from "react";
 
-import { userId } from "API/requestData";
-import { makeCollectibleRequest } from "API/shopApi";
-import Button from "Components/ui/Button/Button";
-import useTelegram from "Hooks/useTelegram";
-import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "services/appSlice";
-import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { IBonus } from "Utils/types/mainTypes";
+import useTelegram from "hooks/useTelegram";
+
+import Button from "../..//ui/Button/Button";
+import { userId } from "../../../api/requestData";
+import { makeCollectibleRequest } from "../../../api/shopApi";
+import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "../../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { IBonus } from "../../../utils/types/mainTypes";
 
 import styles from './Bonus.module.scss';
 

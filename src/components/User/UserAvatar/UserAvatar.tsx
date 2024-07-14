@@ -1,11 +1,12 @@
 import { FC, useEffect, useState } from "react";
 
-import { getImageLink, getImageMaskLink } from "API/requestData";
-import { useAppSelector } from "services/reduxHooks";
+import { getImageLink, getImageMaskLink } from "../../../api/requestData";
+import { useAppSelector } from "../../../services/reduxHooks";
 
 import styles from './UserAvatar.module.scss';
 
 interface IProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item?: any;
   avatar?: string;
 }

@@ -3,12 +3,12 @@
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { energyDrinkRequest, joinRoomRequest, postNewRoomRequest } from "API/gameApi";
-import { userId } from "API/requestData";
-import Button from "Components/ui/Button/Button";
-import useTelegram from "Hooks/useTelegram";
-import energy from 'Images/energy-drink.png';
-import { useAppSelector } from "services/reduxHooks";
+import { energyDrinkRequest, joinRoomRequest, postNewRoomRequest } from "../../../api/gameApi";
+import { userId } from '../../../api/requestData';
+import useTelegram from "../../../hooks/useTelegram";
+import energy from '../../../images/energy-drink.png';
+import { useAppSelector } from "../../../services/reduxHooks";
+import Button from "../../ui/Button/Button";
 
 import styles from './JoinRoomPopup.module.scss';
 

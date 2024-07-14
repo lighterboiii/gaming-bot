@@ -2,26 +2,26 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getLuckInfo } from "API/mainApi";
-import { userId } from "API/requestData";
-import AdvertisementBanner from "Components/Main/AdvertismentBanner/AdvertismentBanner";
-import BannerData from "Components/Main/BannerData/BannerData";
-import DailyBonus from "Components/Main/Bonus/Bonus";
-import Referral from "Components/Main/Referral/Referral";
-import Tasks from "Components/Main/Tasks/Tasks";
-import WheelOfLuck from "Components/Main/WheelOfLuck/WheelOfLuck";
-import Overlay from "Components/Overlay/Overlay";
-import ShopLink from "Components/Shopping/ShopLink/ShopLink";
-import BigButton from "Components/ui/BigButton/BigButton";
-import SmallButton from "Components/ui/SmallButton/SmallButton";
-import MainUserInfo from "Components/User/MainUserInfo/MainUserInfo";
-import useTelegram from "Hooks/useTelegram";
-import FriendsIcon from "Icons/Friends/FriendsIcon";
-import LeaderBoardIcon from "Icons/LeaderBoard/LeaderBoardIcon";
-import PlayIcon from "Icons/Play/PlayIcon";
-import gowinLogo from 'Images/gowin.png';
-import { useAppSelector } from "services/reduxHooks";
-import { IBannerData, IFortuneData } from "Utils/types";
+import { getLuckInfo } from "../../api/mainApi";
+import { userId } from "../../api/requestData";
+import AdvertisementBanner from '../../components/Main/AdvertisementBanner/AdvertisementBanner';
+import BannerData from "../../components/Main/BannerData/BannerData";
+import DailyBonus from "../../components/Main/Bonus/Bonus";
+import Referral from "../../components/Main/Referral/Referral";
+import Tasks from "../../components/Main/Tasks/Tasks";
+import WheelOfLuck from "../../components/Main/WheelOfLuck/WheelOfLuck";
+import Overlay from "../../components/Overlay/Overlay";
+import ShopLink from "../../components/Shopping/ShopLink/ShopLink";
+import BigButton from "../../components/ui/BigButton/BigButton";
+import SmallButton from "../../components/ui/SmallButton/SmallButton";
+import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
+import useTelegram from "../../hooks/useTelegram";
+import FriendsIcon from "../../icons/Friends/FriendsIcon";
+import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
+import PlayIcon from "../../icons/Play/PlayIcon";
+import gowinLogo from '../../images/gowin.png';
+import { useAppSelector } from "../../services/reduxHooks";
+import { IBannerData, IFortuneData } from "../../utils/types";
 
 import styles from './Main.module.scss';
 

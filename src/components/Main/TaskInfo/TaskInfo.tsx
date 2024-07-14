@@ -2,16 +2,16 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
-import { taskResultRequest, taskStepRequest } from "API/mainApi";
-import { userId } from "API/requestData";
-import Button from "Components/ui/Button/Button";
-import useTelegram from "Hooks/useTelegram";
-import ChevronIcon from "Icons/Chevron/ChevronIcon";
-import CrossIcon from "Icons/Cross/Cross";
-import { setNewTokensValue } from "services/appSlice";
-import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { ITask, ITaskStep } from "Utils/types/mainTypes";
-import { IClaimRewardResponse } from "Utils/types/responseTypes";
+import { taskResultRequest, taskStepRequest } from "../../../api/mainApi";
+import { userId } from "../../../api/requestData";
+import useTelegram from "../../../hooks/useTelegram";
+import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
+import CrossIcon from "../../../icons/Cross/Cross";
+import { setNewTokensValue } from "../../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { ITask, ITaskStep } from "../../../utils/types/mainTypes";
+import { IClaimRewardResponse } from "../../../utils/types/responseTypes";
+import Button from "../../ui/Button/Button";
 
 import styles from './TaskInfo.module.scss';
 

@@ -3,16 +3,16 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getLavkaAvailableRequest } from "API/shopApi";
-import Overlay from "Components/Overlay/Overlay";
-import Product from 'Components/Shopping/Product/Product';
-import ShopItem from "Components/Shopping/ShopItem/ShopItem";
-import UserInfo from "Components/User/SecondaryUserInfo/SecondaryUserInfo";
-import useTelegram from "Hooks/useTelegram";
-import { setLavkaAvailable } from "services/appSlice";
-import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { indexUrl } from "Utils/routes";
-import { CombinedItemData, ItemData, LavkaResponse } from "Utils/types/shopTypes";
+import { getLavkaAvailableRequest } from "../../api/shopApi";
+import Overlay from "../../components/Overlay/Overlay";
+import Product from '../../components/Shopping/Product/Product';
+import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
+import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
+import useTelegram from "../../hooks/useTelegram";
+import { setLavkaAvailable } from "../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { indexUrl } from "../../utils/routes";
+import { CombinedItemData, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
 
 import styles from './Shop.module.scss';
 

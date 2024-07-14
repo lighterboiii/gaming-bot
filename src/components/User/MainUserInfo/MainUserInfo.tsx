@@ -2,15 +2,15 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-import { balanceLink, groupLink } from "API/requestData";
-import CircleButton from "Components/ui/CircleButton/CircleButton";
-import UserAvatar from "Components/User/UserAvatar/UserAvatar";
-import useTelegram from "Hooks/useTelegram";
-import CommunityIcon from "Icons/Community/CommunityIcon";
-import LevelIcon from "Icons/Level/LevelIcon";
-import WalletIcon from "Icons/Wallet/WalletIcon";
-import { useAppSelector } from "services/reduxHooks";
-import { formatNumber } from "Utils/additionalFunctions";
+import { balanceLink, groupLink } from "../../../api/requestData";
+import useTelegram from "../../../hooks/useTelegram";
+import CommunityIcon from "../../../icons/Community/CommunityIcon";
+import LevelIcon from "../../../icons/Level/LevelIcon";
+import WalletIcon from "../../../icons/Wallet/WalletIcon";
+import { useAppSelector } from "../../../services/reduxHooks";
+import { formatNumber } from "../../../utils/additionalFunctions";
+import CircleButton from "../../ui/CircleButton/CircleButton";
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from './MainUserInfo.module.scss';
 

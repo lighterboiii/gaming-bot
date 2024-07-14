@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { ICommonIconProps } from 'Utils/types/mainTypes';
+import { ICommonIconProps } from '../../utils/types/mainTypes';
 
 const PlayIcon: FC<ICommonIconProps> = ({
   color = '#f50941',

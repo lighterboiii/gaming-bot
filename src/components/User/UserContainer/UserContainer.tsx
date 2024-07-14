@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 
-import { userId } from "API/requestData";
-import UserAvatar from "Components/User/UserAvatar/UserAvatar";
-import useTelegram from "Hooks/useTelegram";
-import FriendsIcon from "Icons/Friends/FriendsIcon";
-import { formatNumber } from "Utils/additionalFunctions";
-import { IMember } from "Utils/types/memberTypes";
+import { userId } from "../../../api/requestData";
+import useTelegram from "../../../hooks/useTelegram";
+import FriendsIcon from "../../../icons/Friends/FriendsIcon";
+import { formatNumber } from "../../../utils/additionalFunctions";
+import { IMember } from "../../../utils/types/memberTypes";
+import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from './UserContainer.module.scss';
 

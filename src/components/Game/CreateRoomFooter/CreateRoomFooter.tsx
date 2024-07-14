@@ -4,9 +4,9 @@ import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Button from "Components/ui/Button/Button";
-import { useAppSelector } from "services/reduxHooks";
-import { formatNumber } from "Utils/additionalFunctions";
+import { useAppSelector } from "../../../services/reduxHooks";
+import { formatNumber } from '../../../utils/additionalFunctions'
+import Button from '../../ui/Button/Button'
 
 import styles from './CreateRoomFooter.module.scss';
 
@@ -29,7 +29,7 @@ const CreateRoomFooter: FC = () => {
       </div>
       <div className={styles.footer__buttonWrapper}>
         <Button text={translation?.create_room}
-handleClick={handleCreateClick} />
+          handleClick={handleCreateClick} />
       </div>
     </div>
   )

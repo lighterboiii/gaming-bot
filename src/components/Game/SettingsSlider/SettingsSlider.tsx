@@ -1,11 +1,12 @@
 import { postEvent } from '@tma.js/sdk';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 
-import ChevronIcon from 'Icons/Chevron/ChevronIcon';
+import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
 
 import styles from './SettingsSlider.module.scss';
 
 interface IProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   betValue?: any;
   isCurrency?: boolean;
   onBetChange?: (newBet: number) => void;

@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getTopUsers } from "API/mainApi";
-import Loader from "Components/Loader/Loader";
-import Timer from "Components/Timer/Timer";
-import UserAvatar from "Components/User/UserAvatar/UserAvatar";
-import UserContainer from "Components/User/UserContainer/UserContainer";
-import useTelegram from "Hooks/useTelegram";
-import FriendsIcon from "Icons/Friends/FriendsIcon";
-import TimerIcon from "Icons/Timer/TimerIcon";
-import { useAppSelector } from "services/reduxHooks";
-import { indexUrl } from "Utils/routes";
-import { IMember } from "Utils/types/memberTypes";
+import { getTopUsers } from "../../api/mainApi";
+import Loader from "../../components/Loader/Loader";
+import Timer from "../../components/Timer/Timer";
+import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import UserContainer from "../../components/User/UserContainer/UserContainer";
+import useTelegram from "../../hooks/useTelegram";
+import FriendsIcon from "../../icons/Friends/FriendsIcon";
+import TimerIcon from "../../icons/Timer/TimerIcon";
+import { useAppSelector } from "../../services/reduxHooks";
+import { indexUrl } from "../../utils/routes";
+import { IMember } from "../../utils/types/memberTypes";
 
 import styles from './LeaderBoard.module.scss';
 

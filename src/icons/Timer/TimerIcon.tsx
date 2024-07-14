@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { ICommonIconProps } from 'Utils/types/mainTypes';
+import { ICommonIconProps } from '../../utils/types/mainTypes';
 
 const TimerIcon: FC<ICommonIconProps> = ({
   color = '#FFF',

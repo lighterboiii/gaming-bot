@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import { FC } from 'react';
 
-import CircleButton from 'Components/ui/CircleButton/CircleButton';
-import ManIcon from 'Icons/Man/Man';
-import game2 from 'Images/gameSec.png';
-import game1 from 'Images/main_hand_1_tiny.png';
-import { useAppSelector } from 'services/reduxHooks';
-import { IGameCardData } from 'Utils/types/gameTypes';
+import ManIcon from '../../../icons/Man/Man';
+import game2 from '../../../images/gameSec.png';
+import game1 from '../../../images/main_hand_1_tiny.png';
+import { useAppSelector } from '../../../services/reduxHooks';
+import { IGameCardData } from '../../../utils/types/gameTypes';
+import CircleButton from '../../ui/CircleButton/CircleButton';
 
 import styles from './GameCard.module.scss';
 

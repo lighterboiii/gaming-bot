@@ -1,9 +1,8 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 
-import { useAppSelector } from "services/reduxHooks";
-import { ItemData } from "Utils/types/shopTypes";
-
+import { useAppSelector } from "../../../services/reduxHooks";
+import { ItemData } from "../../../utils/types/shopTypes";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from './ShopItem.module.scss';

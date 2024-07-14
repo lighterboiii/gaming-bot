@@ -1,35 +1,32 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { motion } from "framer-motion";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "API/gameApi";
-import { getAppData } from "API/mainApi";
-import { userId } from "API/requestData";
-import EmojiOverlay from "Components/EmojiOverlay/EmojiOverlay";
-import ChoiceBox from "Components/Game/ChoiceBox/ChoiceBox";
-import HandShake from 'Components/Game/HandShake/HandShake';
-import Loader from "Components/Loader/Loader";
-import Button from "Components/ui/Button/Button";
-import UserAvatar from "Components/User/UserAvatar/UserAvatar";
-import useTelegram from "Hooks/useTelegram";
-import emoji_icon from 'Images/rock-paper-scissors/emoji_icon.png';
-import leftRock from 'Images/rock-paper-scissors/left_rock.png';
-import rightRock from 'Images/rock-paper-scissors/right_rock.png';
-import readyIcon from 'Images/rock-paper-scissors/user_ready_image.png';
-import newVS from 'Images/rock-paper-scissors/VS_new.png';
-import lLoseAnim from 'Images/rock-paper-scissors/winlose/l_lose.png';
-import lWinAnim from 'Images/rock-paper-scissors/winlose/l_win.png';
-import rLoseAnim from 'Images/rock-paper-scissors/winlose/r_lose.png';
-import rWinAnim from 'Images/rock-paper-scissors/winlose/r_win.png';
-import { setFirstGameRulesState } from "services/appSlice";
-import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { roomsUrl } from "Utils/routes";
-import { IRPSPlayer } from "Utils/types/gameTypes";
+import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
+import { getAppData } from "../../api/mainApi";
+import { userId } from "../../api/requestData";
+import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
+import ChoiceBox from "../../components/Game/ChoiceBox/ChoiceBox";
+import HandShake from '../../components/Game/HandShake/HandShake';
+import Loader from "../../components/Loader/Loader";
+import Button from "../../components/ui/Button/Button";
+import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import useTelegram from "../../hooks/useTelegram";
+import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
+import leftRock from '../../images/rock-paper-scissors/left_rock.png';
+import rightRock from '../../images/rock-paper-scissors/right_rock.png';
+import readyIcon from '../../images/rock-paper-scissors/user_ready_image.png';
+import newVS from '../../images/rock-paper-scissors/VS_new.png';
+import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
+import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
+import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
+import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
+import { setFirstGameRulesState } from "../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { roomsUrl } from "../../utils/routes";
+import { IRPSPlayer } from "../../utils/types/gameTypes";
 
 import styles from "./RockPaperScissors.module.scss";
 
