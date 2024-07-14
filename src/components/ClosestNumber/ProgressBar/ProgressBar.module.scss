@@ -7,7 +7,7 @@
     $percentage: $i * (100 / $steps);
     $direction: if($i % 2 == 0, 1, -1);
     #{$percentage}% {
-      transform: translateY($direction * 80%);
+      transform: translateY($direction * 90%);
       // filter: blur(10px);
     }
   }
@@ -61,11 +61,11 @@
   }
 
   &__blurText {
-    filter: blur(8px);
+    filter: url('#blurFilter');
   }
 
   &__noBlur {
-    filter: blur(0);
+    filter: none;
   }
 
   &__textAnimated {
