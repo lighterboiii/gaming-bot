@@ -14,7 +14,7 @@ import Main from '../../pages/Main/Main';
 import { NotFoundPage } from '../../pages/NotFoundPage/NotFoundPage';
 import { OpenedRooms } from '../../pages/OpenedRooms/OpenedRooms';
 import { RockPaperScissors } from '../../pages/RockPaperScissors/RockPaperScissors';
-import { Shop } from '../../pages/shop/Shop';
+import { Shop } from '../../pages/Shop/Shop';
 import {
   setBannerData,
   setDailyBonus,

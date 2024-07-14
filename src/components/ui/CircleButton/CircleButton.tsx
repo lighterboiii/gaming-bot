@@ -7,7 +7,7 @@ import CommunityIcon from "../../../icons/Community/CommunityIcon";
 import CrossIcon from "../../../icons/Cross/Cross";
 import FortuneWheelIcon from "../../../icons/FortuneWheel/FortuneWheel";
 import RefIcon from "../../../icons/Referral/ReferralIcon";
-import tasksIcon from '../../images/tasks_3.png';
+import tasksIcon from '../../../images/tasks_3.png';
 
 import styles from './CircleButton.module.scss';
 

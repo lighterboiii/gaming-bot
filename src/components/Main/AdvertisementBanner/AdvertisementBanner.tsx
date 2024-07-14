@@ -5,7 +5,7 @@ import { useSwipeable } from "react-swipeable";
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import { IBannerData } from "../../../utils/types/mainTypes";
 
-import styles from "./AdvertismentBanner.module.scss";
+import styles from "./AdvertisementBanner.module.scss";
 
 interface IProps {
   bannersData: IBannerData[];

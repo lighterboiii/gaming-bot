@@ -2,17 +2,17 @@
 import { postEvent } from '@tma.js/sdk';
 import { FC, useEffect, useRef, useState } from 'react';
 
-import Button from '../..//ui/Button/Button';
 import { getWheelPrizeRequest, spinWheelRequest } from '../../../api/mainApi';
 import { userId } from '../../../api/requestData';
 import useTelegram from '../../../hooks/useTelegram';
+import lamp from '../../../images/closest-number/lamp.png';
 import light from '../../../images/closest-number/lamp2.png';
 import wheelPointer from '../../../images/closest-number/wheelPoint.png';
-import lamp from '../../../images../../..//closest-number/lamp.png';
 import { addTokens, setTokensValueAfterBuy } from '../../../services/appSlice';
 import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
 import { IFortuneData, IFortuneItem } from '../../../utils/types/mainTypes';
 import { IGetPrizeResponse, ISpinWheelResponse } from '../../../utils/types/responseTypes';
+import Button from '../../ui/Button/Button';
 
 import styles from './WheelOfLuck.module.scss';
 

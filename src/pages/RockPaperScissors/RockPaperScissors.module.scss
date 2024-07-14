@@ -7,7 +7,7 @@
   @include flex(column, flex-start, center, 10px);
   font-family: 'Gilroy', sans-serif;
   font-weight: 900;
-  background-image: url('../../Images/rock-paper-scissors/rps-bg.png');
+  background-image: url('../../images/rock-paper-scissors/rps-bg.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -147,7 +147,7 @@
   }
 
   &__label {
-    background-image: url('../../Images/rock-paper-scissors/ready_image.png');
+    background-image: url('../../images/rock-paper-scissors/ready_image.png');
     @include size(200px, 68px);
     @include position(relative);
     @include flex(row, center, center, 6px);

@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import logoAnimated from '../../../images/loader.png';
+import logoAnimated from '../../images/loader.png';
 
 import styles from './Loader.module.scss';
 

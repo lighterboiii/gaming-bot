@@ -41,6 +41,7 @@ export const LeaderBoard: FC = () => {
       setLoading(true);
       getTopUsers()
         .then((leaders: any) => {
+          console.log(leaders);
           setTopLeader(leaders?.top_users[0]);
           setLeaderBoard(leaders?.top_users.slice(1));
           setPrizePhoto(leaders?.top_prize_photo_url);
