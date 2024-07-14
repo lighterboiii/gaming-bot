@@ -3,14 +3,12 @@
 
 @mixin textScrollAnimation {
   $steps: 120;
-
   @for $i from 0 through $steps {
     $percentage: $i * (100 / $steps);
-    $direction: if($i % 2==0, 1, -1);
-
+    $direction: if($i % 2 == 0, 1, -1);
     #{$percentage}% {
-      transform: translateY($direction * 20%);
-      filter: blur(186px);
+      transform: translateY($direction * 100%);
+      filter: blur(8px);
     }
   }
 }
@@ -22,17 +20,17 @@
   @media screen and (max-height: 691px) {
     @include size(100px, 100px);
   }
-
+  
   &__innerCircle {
     fill: $main-color;
   }
-
+  
   &__outerCircle {
     fill: transparent;
     stroke: $black-color;
     stroke-width: 6px;
   }
-
+  
   &__progressPoint {
     fill: $closest-secondary-color;
     transition: transform 5s linear;
@@ -45,19 +43,30 @@
     animation: spin 4s linear forwards;
   }
 
+  &__textContainer {
+    overflow: hidden;
+  }
+
+  // &__textWrapper {
+    // height: 100%;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // perspective: 100px;
+  // }
+
   &__text {
     @include indents();
     fill: $black-color;
-    font-size: 20px;
-    font-weight: 900;
+    font-size: 16px;
     transition: transform 0s;
+    font-weight: 900;
+    font-size: 20px;
     transform-origin: 50% 50%;
-    overflow: visible;
   }
 
   &__textAnimated {
-    // animation: textScroll 4s linear;
-    animation: none;
+    animation: textScroll 4s linear;
   }
 
   @keyframes spin {
@@ -65,7 +74,6 @@
       transform-origin: 50px 50px;
       transform: rotate(0deg);
     }
-
     100% {
       transform-origin: 50px 50px;
       transform: rotate(4320deg);

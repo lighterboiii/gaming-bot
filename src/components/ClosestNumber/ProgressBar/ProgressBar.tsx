@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { FC, useEffect, useState } from "react";
+import { useState, useEffect, FC } from "react";
 
 import styles from './ProgressBar.module.scss';
 
@@ -9,7 +8,7 @@ interface IProps {
 
 const CircularProgressBar: FC<IProps> = ({ progress }) => {
   const [offset, setOffset] = useState({ x: 50, y: 5 });
-  const [isAnimating, setIsAnimating] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (progress !== 0) {
@@ -17,31 +16,22 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
       const angle = ((limitedProgress * 3.6) - 90) * (Math.PI / 180);
       const x = 50 + 45 * Math.cos(angle);
       const y = 50 + 45 * Math.sin(angle);
-
+  
       setIsAnimating(true);
       const animationTimeout = setTimeout(() => {
         setOffset({ x, y });
         setIsAnimating(false);
       }, 4000);
-
+  
       return () => clearTimeout(animationTimeout);
     }
+
   }, [progress]);
 
   return (
-    <svg className={styles.bar}
-      viewBox="0 0 100 100"
-      preserveAspectRatio="xMidYMid meet">
-      <circle className={styles.bar__innerCircle}
-        cx="50"
-        cy="50"
-        r="45">
-      </circle>
-      <circle className={styles.bar__outerCircle}
-        cx="50"
-        cy="50"
-        r="45">
-      </circle>
+    <svg className={styles.bar} viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <circle className={styles.bar__innerCircle} cx="50" cy="50" r="45"></circle>
+      <circle className={styles.bar__outerCircle} cx="50" cy="50" r="45"></circle>
       <circle
         className={`${styles.bar__progressPoint} ${isAnimating ? styles.bar__animated : ''}`}
         cx={offset.x}
@@ -49,20 +39,11 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
         r="10"
       >
       </circle>
-      <motion.text
-        x="50%"
-        y="53%"
-        className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`
-      }
-        dominantBaseline="middle"
-        textAnchor="middle"
-        initial={{ rotateZ: '0deg', filter: "blur(0px)" }}
-        animate={{ rotateZ: '10080deg', filter: "blur(8px)" }}
-        transition={{ duration: 4, ease: 'linear', loop: Infinity }}
-        style={{ transformOrigin: "50% 53%" }}
-      >
-        {progress}
-      </motion.text>
+      <foreignObject x="25" y="40" width="50" height="20" className={styles.bar__textContainer}>
+          <text className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}>
+            {progress}
+          </text>
+      </foreignObject>
     </svg>
   );
 };
