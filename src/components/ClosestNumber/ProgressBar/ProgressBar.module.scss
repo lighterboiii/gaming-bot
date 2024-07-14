@@ -47,14 +47,6 @@
     overflow: hidden;
   }
 
-  // &__textWrapper {
-    // height: 100%;
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
-    // perspective: 100px;
-  // }
-
   &__text {
     @include indents();
     fill: $black-color;
@@ -63,6 +55,7 @@
     font-weight: 900;
     font-size: 20px;
     transform-origin: 50% 50%;
+    text-align: center; 
   }
 
   &__textAnimated {
