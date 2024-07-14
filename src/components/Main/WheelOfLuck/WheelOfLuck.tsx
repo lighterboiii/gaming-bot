@@ -23,7 +23,7 @@ interface IProps {
 
 const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [prize, setPrize] = useState<boolean>(false);
@@ -57,7 +57,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
         const response = res as ISpinWheelResponse;
         if (response?.message === 'ok') {
           dispatch(setTokensValueAfterBuy(100));
-          // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+          postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
           setSpinning(true);
           setPrize(false);
           const allItems = [...data.fortune_all_items];
@@ -98,7 +98,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
       .then((res) => {
         const response = res as IGetPrizeResponse;
         if (response?.message === "ok") {
-          // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+          postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
           if (prizeItem.fortune_type === 'tokens') {
             dispatch(addTokens(prizeItem.fortune_item_count));
           }

@@ -28,7 +28,7 @@ import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
 import { setFirstGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { roomsUrl } from "../../utils/routes";
-import { IRPSGameData, IRPSPlayer } from "../../utils/types/gameTypes";
+import { IRPSPlayer } from "../../utils/types/gameTypes";
 
 import styles from "./RockPaperScissors.module.scss";
 

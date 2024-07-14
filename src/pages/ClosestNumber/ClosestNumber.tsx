@@ -218,7 +218,7 @@ export const ClosestNumber: FC = () => {
                 setRoomValue(Number(res?.room_value));
                 setWinnerId(Number(res?.winner));
                 setWinSum(res?.winner_value);
-                // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
+                postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
               }
               if (res?.message === "success") {
                 setTimeout(() => {
@@ -253,7 +253,7 @@ export const ClosestNumber: FC = () => {
       } else {
         setInputError(true);
       }
-      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       return newValue;
     });
   };

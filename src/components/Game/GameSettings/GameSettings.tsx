@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { postEvent } from '@tma.js/sdk';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +24,8 @@ interface IProps {
 
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
-  // const { user } = useTelegram();
+  const { user } = useTelegram();
+  const userId = user?.id;
   // const dispatch = useAppDispatch();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
@@ -67,7 +69,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       console.log(response);
       if (response.message === 'success') {
         setSelectedRoomId(String(response.room_id));
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         navigate(roomType === 2 ? `/closest/${response.room_id}` : `/room/${response.room_id}`);
       } else if (response.message === 'not_enough_coins') {
         setInsufficient(true);

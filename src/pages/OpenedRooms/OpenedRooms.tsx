@@ -36,9 +36,7 @@ export const OpenedRooms: FC = () => {
   const [typeClickCount, setTypeClickCount] = useState(0);
   const [currencyClickCount, setCurrencyClickCount] = useState(0);
   const [betClickCount, setBetClickCount] = useState(0);
-
   const [loading, setLoading] = useState(false);
-  console.log(rooms);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
   useEffect(() => {

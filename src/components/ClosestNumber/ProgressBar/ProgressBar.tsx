@@ -9,6 +9,7 @@ interface IProps {
 const CircularProgressBar: FC<IProps> = ({ progress }) => {
   const [offset, setOffset] = useState({ x: 50, y: 5 });
   const [isAnimating, setIsAnimating] = useState(false);
+  const [randomNumber, setRandomNumber] = useState(0);
 
   useEffect(() => {
     if (progress !== 0) {
@@ -18,14 +19,21 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
       const y = 50 + 45 * Math.sin(angle);
 
       setIsAnimating(true);
+      const interval = setInterval(() => {
+        setRandomNumber(Math.floor(Math.random() * 100));
+      }, 50);
+
       const animationTimeout = setTimeout(() => {
         setOffset({ x, y });
         setIsAnimating(false);
+        clearInterval(interval);
       }, 4000);
 
-      return () => clearTimeout(animationTimeout);
+      return () => {
+        clearTimeout(animationTimeout);
+        clearInterval(interval);
+      };
     }
-
   }, [progress]);
 
   return (
@@ -37,8 +45,7 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
         cx={offset.x}
         cy={offset.y}
         r="10"
-      >
-      </circle>
+      ></circle>
       <text
         x="50%"
         y="55%"
@@ -46,10 +53,15 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
         dominantBaseline="middle"
         textAnchor="middle"
       >
-        {!isAnimating &&
+        {isAnimating ? (
+          <tspan>
+            {randomNumber}
+          </tspan>
+        ) : (
           <tspan>
             {progress}
-          </tspan>}
+          </tspan>
+        )}
       </text>
     </svg>
   );

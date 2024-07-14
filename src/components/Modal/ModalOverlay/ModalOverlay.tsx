@@ -7,9 +7,10 @@ interface IProps {
 }
 
 const ModalOverlay: FC<IProps> = ({ closeModal }) => {
-  return(
+  return (
     <div className={styles.overlay}
-onClick={closeModal} ></div>
+      onClick={closeModal}>
+    </div>
   )
 };
 
