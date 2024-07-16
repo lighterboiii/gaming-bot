@@ -2,7 +2,7 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getLuckInfo } from "../../api/mainApi";
+import { getAppData, getLuckInfo } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
 import AdvertisementBanner from '../../components/Main/AdvertisementBanner/AdvertisementBanner';
 import BannerData from "../../components/Main/BannerData/BannerData";
@@ -20,7 +20,15 @@ import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
 import gowinLogo from '../../images/gowin.png';
-import { useAppSelector } from "../../services/reduxHooks";
+import { 
+  setBannerData, 
+  setDailyBonus, 
+  setShopImage, 
+  setUserData, 
+  setUserPhoto 
+
+} from "../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { IBannerData, IFortuneData } from "../../utils/types";
 
 import styles from './Main.module.scss';
@@ -28,8 +36,9 @@ import styles from './Main.module.scss';
 export const Main: FC = () => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dailyBonusData = useAppSelector(store => store.app.bonus);
+  const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);
   const shopImageUrl = useAppSelector(store => store.app.shopImage);
@@ -40,6 +49,26 @@ export const Main: FC = () => {
   const [showTasksOverlay, setShowTasksOverlay] = useState(false);
   const [showWheelOverlay, setShowWheelOverlay] = useState(false);
   const [luckData, setLuckData] = useState<IFortuneData | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      getAppData(userId)
+        .then((res) => {
+          console.log(res);
+          dispatch(setUserData(res.user_info));
+          dispatch(setBannerData(res.ad_info));
+          dispatch(setShopImage(res.shop_image_url));
+          dispatch(setDailyBonus(res.daily_bonus));
+          dispatch(setUserPhoto(res.avatar));
+        })
+        .catch((error) => {
+          console.error('Get user data error:', error);
+        })
+    };
+
+    fetchUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, userId]);
 
   const handleBannerClick = (bannerData: IBannerData) => {
     setCurrentBanner(bannerData);

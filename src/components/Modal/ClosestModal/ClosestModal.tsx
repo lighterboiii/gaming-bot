@@ -1,6 +1,8 @@
 import { FC, useEffect } from "react";
 import ReactDOM from "react-dom";
 
+import { useAppSelector } from "services/reduxHooks";
+
 import { IRPSPlayer } from "../../../utils/types/gameTypes";
 import ModalOverlay from "../../Modal/ModalOverlay/ModalOverlay";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
@@ -26,7 +28,7 @@ export const ClosestModal: FC<IProps> = ({
   isTie,
   tieWinners
 }) => {
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   useEffect(() => {
     const handleEscClose = (evt: KeyboardEvent) => {
       if (evt.key === 'Escape') {
@@ -44,7 +46,7 @@ export const ClosestModal: FC<IProps> = ({
       <div className={styles.modal}>
         {winnerValue && winnerValue !== "0.0" 
         ? <h3 className={styles.modal__title}>{isTie ? "Победители" : "Победитель"}</h3>
-        : <h3 className={styles.modal__title}>Ничья</h3>}
+        : <h3 className={styles.modal__title}>{translation?.draw}</h3>}
         <div className={styles.modal__content}>
           {isTie ? (
             <div className={styles.modal__draw}>

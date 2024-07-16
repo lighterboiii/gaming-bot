@@ -7,6 +7,8 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { formatNumber } from "utils/additionalFunctions";
+
 import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
 import { getActiveEmojiPack, getAppData } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
@@ -27,7 +29,13 @@ import useTelegram from "../../hooks/useTelegram";
 import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';
 import smile from '../../images/closest-number/smile.png';
-import { setSecondGameRulesState } from "../../services/appSlice";
+import {
+  addCoins,
+  addTokens,
+  setCoinsValueAfterBuy,
+  setTokensValueAfterBuy,
+  setSecondGameRulesState,
+} from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { roomsUrl } from "../../utils/routes";
 import { IRPSPlayer } from "../../utils/types/gameTypes";
@@ -62,7 +70,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -194,6 +202,7 @@ export const ClosestNumber: FC = () => {
   const count = data?.players?.reduce((total: number, player: any) => {
     return total + (player?.choice !== "none" ? 1 : 0);
   }, 0);
+  console.log(data);
   // запрос результата кона
   useEffect(() => {
     let timeoutId: any;
@@ -218,14 +227,28 @@ export const ClosestNumber: FC = () => {
                 setRoomValue(Number(res?.room_value));
                 setWinnerId(Number(res?.winner));
                 setWinSum(res?.winner_value);
-                postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
+                // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
               }
               if (res?.message === "success") {
                 setTimeout(() => {
+                  if (res?.winner === userId) {
+                    if (data?.bet_type === "1") {
+                      dispatch(addCoins(Number(res?.winner_value)));
+                    } else {
+                      dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
+                    }
+                  } else {
+                    if (data?.bet_type === "3") {
+                      dispatch(addTokens(Number(res?.winner_value)));
+                    } else {
+                      dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
+                    }
+                  }
                   setInputValue('');
                   setModalOpen(true);
                 }, 5000)
               }
+
             })
             .catch((error) => {
               console.error('Data request error:', error);
@@ -253,7 +276,7 @@ export const ClosestNumber: FC = () => {
       } else {
         setInputError(true);
       }
-      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       return newValue;
     });
   };
@@ -269,7 +292,7 @@ export const ClosestNumber: FC = () => {
       } else {
         setInputError(true);
       }
-      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
       return newValue;
     });
   };
@@ -296,7 +319,7 @@ export const ClosestNumber: FC = () => {
           handleSubmit();
           break;
         default:
-          postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+          // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
           break;
       }
     }
@@ -318,7 +341,7 @@ export const ClosestNumber: FC = () => {
     if (data?.players?.length === 1) {
       setInputValue('');
       setPlaceholder(translation?.waiting4players);
-      postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+      // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
       setTimeout(() => {
         setPlaceholder(translation?.your_number_but);
       }, 2000)
@@ -333,7 +356,7 @@ export const ClosestNumber: FC = () => {
             if (player?.userid === userId) {
               navigate(roomsUrl);
             }
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -343,7 +366,7 @@ export const ClosestNumber: FC = () => {
       if (player?.tokens <= data?.bet) {
         leaveRoomRequest(userId)
           .then(res => {
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -359,7 +382,7 @@ export const ClosestNumber: FC = () => {
     getPollingRequest(userId, choice)
       .then((res: any) => {
         setData(res);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       })
       .catch((error) => {
         console.error('Set choice error:', error);
@@ -376,7 +399,7 @@ export const ClosestNumber: FC = () => {
     getPollingRequest(userId, setEmojiData)
       .then(res => {
         setData(res);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
         setShowEmojiOverlay(false);
         setShowOverlay(false);
       })
@@ -402,7 +425,7 @@ export const ClosestNumber: FC = () => {
   // обработчик клика на иконку эмодзи
   const handleClickEmoji = () => {
     setShowOverlay(true);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
   // Таймер
@@ -475,7 +498,7 @@ export const ClosestNumber: FC = () => {
   // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '2');
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)
@@ -549,7 +572,9 @@ export const ClosestNumber: FC = () => {
                     <p className={styles.overlay__inputText}>{translation?.your_number_text}</p>
                     <div className={styles.overlay__userMoney}>
                       <span className={styles.overlay__text}>
-                        {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
+                        {data?.bet_type === "1" 
+                        ? `💵 ${userData?.coins && formatNumber(userData?.coins)}` 
+                        : `🔰 ${userData?.tokens && formatNumber(userData?.tokens)}`}
                       </span>
                     </div>
                   </div>

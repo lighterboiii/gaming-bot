@@ -30,7 +30,7 @@ const JoinRoomPopup: FC<IProps> = ({
   fromGameSettings = false,
 }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [messageShown, setMessageShown] = useState(false);
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
@@ -83,9 +83,11 @@ const JoinRoomPopup: FC<IProps> = ({
           <div className={styles.popup__modalChildren}>
             <p className={styles.popup__modalText}>
               {translation?.want2use_energy_drink}
-              <img src={energy}
+              <img
+                src={energy}
                 alt="drink"
-                className={styles.popup__logoDrink} />
+                className={styles.popup__logoDrink}
+              />
             </p>
             <p className={styles.popup__modalText}>(1/{userInfo?.user_energy_drinks})</p>
           </div>

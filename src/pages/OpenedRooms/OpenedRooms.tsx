@@ -21,7 +21,8 @@ import { IGameCardData } from "../../utils/types/gameTypes";
 import styles from './OpenedRooms.module.scss';
 
 export const OpenedRooms: FC = () => {
-  const { tg } = useTelegram();
+  const { tg, user } = useTelegram();
+  // const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
