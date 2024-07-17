@@ -45,6 +45,8 @@ export const RockPaperScissors: FC = () => {
   const [animation, setAnimation] = useState<any>(null);
   const [animationKey, setAnimationKey] = useState(0);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
+
+  // leftRockImage и rightRockImage устанавливаются и больше не меняются никогда. Зачем они как стейт сделаны?
   const [leftRockImage, setLeftRockImage] = useState<string>('');
   const [rightRockImage, setRightRockImage] = useState<string>('');
   const [messageVisible, setMessageVisible] = useState(false);
@@ -74,23 +76,8 @@ export const RockPaperScissors: FC = () => {
     }
   }, [data]);
 
-  // эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
-  useEffect(() => {
-    tg.setHeaderColor('#1b50b8');
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      leaveRoomRequest(userId)
-        .then((data) => { })
-        .catch((error) => {
-          console.log(error);
-        })
-      navigate(roomsUrl);
-    });
-    return () => {
-      tg.BackButton.hide();
-      tg.setHeaderColor('#d51845');
-    }
-  }, [tg, navigate, userId]);
+  useSetTelegramInterface(userId);
+
   // long polling
   useEffect(() => {
     let isMounted = true;
@@ -535,3 +522,25 @@ export const RockPaperScissors: FC = () => {
   );
 }
 
+// эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
+const useSetTelegramInterface = (userId: number) => {
+  const navigate = useNavigate();
+  const { tg } = useTelegram();
+
+  useEffect(() => {
+    tg.setHeaderColor('#1b50b8');
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      leaveRoomRequest(userId)
+        .then((data) => { })
+        .catch((error) => {
+          console.log(error);
+        })
+      navigate(roomsUrl);
+    });
+    return () => {
+      tg.BackButton.hide();
+      tg.setHeaderColor('#d51845');
+    }
+  }, [tg, navigate, userId]);
+}
