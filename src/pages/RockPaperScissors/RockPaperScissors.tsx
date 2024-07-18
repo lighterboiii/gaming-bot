@@ -147,10 +147,6 @@ export const RockPaperScissors: FC = () => {
 
   useEffect(() => {
     let timeoutId: any;
-    setPlayersAnim({
-      firstAnim: null,
-      secondAnim: null,
-    });
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
@@ -204,6 +200,10 @@ export const RockPaperScissors: FC = () => {
                       setAnimation(null);
                       setShowTimer(true);
                       setAnyPlayerReady(true);
+                      setPlayersAnim({
+                        firstAnim: null,
+                        secondAnim: null,
+                      });
                       setTimerStarted(true);
                       setTimer(15);
                     }, 3500)
