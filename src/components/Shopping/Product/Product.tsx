@@ -7,6 +7,7 @@ import {
   buyItemRequest,
   buyLavkaRequest,
   cancelLavkaRequest,
+  getShopItemsRequest,
   setActiveEmojiRequest,
   setActiveSkinRequest
 } from "../../../api/shopApi";
@@ -97,9 +98,13 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
             break;
           case "ok":
+            updateItemCount(item.item_id);
+            getShopItemsRequest()
+              .then(res => {
+                console.log(res);
+              })
             setMessage(`${translation?.successful_purchase}`);
             handlePurchaseItemTypes(item);
-            updateItemCount(item.item_id);
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
             break;
           default:

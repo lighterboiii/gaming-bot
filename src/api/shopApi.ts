@@ -10,6 +10,7 @@ import {
   buyShopItemUri,
   cancelSellLavka,
   getLavkaUri,
+  getShopUri,
   itemCountParamString,
   itemIdParamString,
   nftIdParamString,
@@ -79,9 +80,9 @@ export const setActiveEmojiRequest = async (userIdValue: number, activeEmoji: nu
     endpoint: `${activeEmojiParamString}${activeEmoji}`
   })
 };
-
-// export const getShopItemsRequest = async () => {
-//   return await getReq({
-//     uri: 'get_shop_available?='
-//   })
-// }
+// запрос товаров в магазине
+export const getShopItemsRequest = async () => {
+  return await getReq({
+    uri: getShopUri
+  })
+};

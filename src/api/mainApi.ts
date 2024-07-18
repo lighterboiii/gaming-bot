@@ -70,7 +70,6 @@ export const getLuckInfo = (userIdValue: number) => {
 // прокрутка колеса удачи
 export const spinWheelRequest = (userIdValue: number) => {
   return getReq({
-
     uri: fortuneUri,
     userId: userIdValue,
   })

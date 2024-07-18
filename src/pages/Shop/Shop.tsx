@@ -4,7 +4,7 @@ import { FC, useCallback, useEffect, useState } from "react";
 
 import useSetTelegramInterface from "hooks/useSetTelegramInterface";
 
-import { getLavkaAvailableRequest } from "../../api/shopApi";
+import { getLavkaAvailableRequest, getShopItemsRequest } from "../../api/shopApi";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
@@ -59,7 +59,12 @@ export const Shop: FC = () => {
   // при монтировании компонента
   useEffect(() => {
     setActiveButton(`${translation?.shop_button}`);
-    shopData && setGoods(shopData);
+    getShopItemsRequest()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .then((res: any) => {
+      setGoods(res.shop);
+    })
+    // shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
   }, [handleAddIsCollectible, shopData, translation?.shop_button]);
   // открыть страничку с данными скина
@@ -75,14 +80,14 @@ export const Shop: FC = () => {
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.shop_button}`);
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
@@ -96,15 +101,12 @@ export const Shop: FC = () => {
     }
   }, [lavkaShop, activeButton, translation?.marketplace])
 
-  const updateItemCount = (itemId: number) => {
-    setGoods((prevGoods: ItemData[]) =>
-      prevGoods.map((item: ItemData) => {
-        if (item.item_id === itemId) {
-          const itemCount = item.item_count ?? 0;
-          return { ...item, item_count: itemCount > 0 ? itemCount - 1 : 0 };
-        }
-        return item;
-      }));
+  const updateItemCount = () => {
+    getShopItemsRequest()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((res: any) => {
+        setGoods(res.shop);
+      })
   };
 
   return (
