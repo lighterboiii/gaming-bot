@@ -7,6 +7,7 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import useSetTelegramInterface from "hooks/useSetTelegramInterface";
 import { formatNumber } from "utils/additionalFunctions";
 
 import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
@@ -113,21 +114,8 @@ export const ClosestNumber: FC = () => {
   // базовые установки на кнопку "Назад" и цвет хидера
   useEffect(() => {
     tg.setHeaderColor('#FEC42C');
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      leaveRoomRequest(userId)
-        .then((data) => { })
-        .catch((error) => {
-          console.log(error);
-        })
-      navigate(roomsUrl);
-    });
-    return () => {
-      tg.BackButton.hide();
-      tg.setHeaderColor('#d51845');
-    }
-
-  }, [tg, navigate]);
+  }, []);
+  useSetTelegramInterface(roomsUrl, userId);
   // свернуть клавиатуру по клику за ее границами
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

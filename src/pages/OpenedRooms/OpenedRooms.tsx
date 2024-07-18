@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { getAppData } from "api/mainApi";
 import { userId } from "api/requestData";
+import useSetTelegramInterface from "hooks/useSetTelegramInterface";
 
 import { getOpenedRoomsRequest } from "../../api/gameApi";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
@@ -14,7 +15,6 @@ import Room from "../../components/Game/Room/Room";
 import Loader from "../../components/Loader/Loader";
 import { Modal } from "../../components/Modal/Modal";
 import Button from "../../components/ui/Button/Button";
-import useTelegram from "../../hooks/useTelegram";
 import { getOpenedRooms, setUserData, setUserPhoto } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { sortRooms } from "../../utils/additionalFunctions";
@@ -24,7 +24,6 @@ import { IGameCardData } from "../../utils/types/gameTypes";
 import styles from './OpenedRooms.module.scss';
 
 export const OpenedRooms: FC = () => {
-  const { tg, user } = useTelegram();
   // const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -60,6 +59,8 @@ export const OpenedRooms: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
 
+  useSetTelegramInterface(indexUrl);
+
   useEffect(() => {
     setLoading(true);
     const fetchRoomsData = () => {
@@ -75,14 +76,7 @@ export const OpenedRooms: FC = () => {
     };
 
     fetchRoomsData();
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      navigate(indexUrl);
-    });
-    return () => {
-      tg.BackButton.hide();
-    }
-  }, [dispatch, navigate, tg.BackButton]);
+  }, [dispatch]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+import useSetTelegramInterface from "hooks/useSetTelegramInterface";
 
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
 import Timer from "../../components/Timer/Timer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import UserContainer from "../../components/User/UserContainer/UserContainer";
-import useTelegram from "../../hooks/useTelegram";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import TimerIcon from "../../icons/Timer/TimerIcon";
 import { useAppSelector } from "../../services/reduxHooks";
@@ -19,9 +19,7 @@ import { ILeaderResponse, ITopUsersRes } from '../../utils/types/responseTypes';
 import styles from './LeaderBoard.module.scss';
 
 export const LeaderBoard: FC = () => {
-  const { user, tg } = useTelegram();
   const translation = useAppSelector(store => store.app.languageSettings);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [leaderBoard, setLeaderBoard] = useState<IMember[] | null>(null);
   const [topLeader, setTopLeader] = useState<IMember | null>(null);
@@ -34,11 +32,9 @@ export const LeaderBoard: FC = () => {
   const [type, setType] = useState<string>('');
   const [prizeCount, setPrizeCount] = useState<string>('');
 
+  useSetTelegramInterface(indexUrl);
+
   useEffect(() => {
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      navigate(indexUrl);
-    });
     const fetchLeadersData = () => {
       setLoading(true);
       getTopUsers()
@@ -60,10 +56,7 @@ export const LeaderBoard: FC = () => {
     window.scrollTo(0, 0);
 
     fetchLeadersData();
-    return () => {
-      tg.BackButton.hide();
-    };
-  }, [navigate, tg.BackButton]);
+  }, []);
 
   useEffect(() => {
     const fetchTime = () => {

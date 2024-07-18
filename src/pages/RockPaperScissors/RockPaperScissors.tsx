@@ -17,6 +17,7 @@ import HandShake from '../../components/Game/HandShake/HandShake';
 import Loader from "../../components/Loader/Loader";
 import Button from "../../components/ui/Button/Button";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import useSetTelegramInterface from "../../hooks/useSetTelegramInterface";
 import useTelegram from "../../hooks/useTelegram";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import leftRock from '../../images/rock-paper-scissors/left_rock.png';
@@ -32,9 +33,8 @@ import {
   addTokens,
   setCoinsValueAfterBuy,
   setTokensValueAfterBuy,
-  setSecondGameRulesState,
+  setFirstGameRulesState
 } from "../../services/appSlice";
-import { setFirstGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { roomsUrl } from "../../utils/routes";
 import { IRPSPlayer } from "../../utils/types/gameTypes";
@@ -43,7 +43,7 @@ import styles from "./RockPaperScissors.module.scss";
 
 export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
-  // const { tg, user } = useTelegram();
+  const { tg } = useTelegram();
   // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
@@ -55,9 +55,6 @@ export const RockPaperScissors: FC = () => {
   const [animationKey, setAnimationKey] = useState(0);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
 
-  // leftRockImage и rightRockImage устанавливаются и больше не меняются никогда. Зачем они как стейт сделаны?
-  // const [leftRockImage, setLeftRockImage] = useState<string>('');
-  // const [rightRockImage, setRightRockImage] = useState<string>('');
   const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
   const [timer, setTimer] = useState<number>(15);
@@ -72,8 +69,6 @@ export const RockPaperScissors: FC = () => {
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   // установка первоначального вида рук и правил при старте игры
   useEffect(() => {
-    // setLeftRockImage(leftRock);
-    // setRightRockImage(rightRock);
     setRulesShown(isRulesShown);
   }, [isRulesShown]);
 
@@ -85,10 +80,11 @@ export const RockPaperScissors: FC = () => {
     }
   }, [data]);
 
-  useSetTelegramInterface(userId);
+  useSetTelegramInterface(roomsUrl, userId);
 
   // long polling
   useEffect(() => {
+    tg.setHeaderColor('#1b50b8');
     let isMounted = true;
     setLoading(true);
     const fetchRoomInfo = async () => {
@@ -177,7 +173,7 @@ export const RockPaperScissors: FC = () => {
                       if (data?.bet_type === "1") {
                         dispatch(addCoins(Number(res?.winner_value)));
                       } else {
-                        dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
+                        dispatch(addTokens(Number(res?.winner_value)));
                       }
                       // postEvent(
                       //   'web_app_trigger_haptic_feedback',
@@ -190,9 +186,9 @@ export const RockPaperScissors: FC = () => {
                     } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
                       updateAnimation(Number(data.creator_id) === Number(res.winner) ? rLoseAnim : lLoseAnim);
                       if (data?.bet_type === "3") {
-                        dispatch(addTokens(Number(res?.winner_value)));
-                      } else {
                         dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
+                      } else {
+                        dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
                       }
                       // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
                       setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
@@ -547,27 +543,4 @@ export const RockPaperScissors: FC = () => {
       </div>
     </div>
   );
-}
-
-// эффект при запуске для задания цвета хидера и слушателя события на кнопку "назад"
-const useSetTelegramInterface = (userId: number) => {
-  const navigate = useNavigate();
-  const { tg } = useTelegram();
-
-  useEffect(() => {
-    tg.setHeaderColor('#1b50b8');
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      leaveRoomRequest(userId)
-        .then((data) => { })
-        .catch((error) => {
-          console.log(error);
-        })
-      navigate(roomsUrl);
-    });
-    return () => {
-      tg.BackButton.hide();
-      tg.setHeaderColor('#d51845');
-    }
-  }, [tg, navigate, userId]);
 }

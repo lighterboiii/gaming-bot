@@ -2,14 +2,14 @@
 /* eslint-disable no-lone-blocks */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+import useSetTelegramInterface from "hooks/useSetTelegramInterface";
 
 import { getExistingGamesRequest } from "../../api/gameApi";
 import GameCard from "../../components/Game/GameCard/GameCard";
 import GameSettings from "../../components/Game/GameSettings/GameSettings";
 import Loader from "../../components/Loader/Loader";
 import Overlay from "../../components/Overlay/Overlay";
-import useTelegram from "../../hooks/useTelegram";
 import { useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
 import { IGameCardData } from "../../utils/types/gameTypes";
@@ -17,20 +17,14 @@ import { IGameCardData } from "../../utils/types/gameTypes";
 import styles from './CreateRoom.module.scss';
 
 export const CreateRoom: FC = () => {
-  const { tg } = useTelegram();
-  const navigate = useNavigate();
   const [games, setGames] = useState<IGameCardData[] | null>(null);
   const [gameData, setGameData] = useState(null);
   const [settingsOverlay, setSettingsOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
   const translation = useAppSelector(store => store.app.languageSettings);
-
+  useSetTelegramInterface(indexUrl);
   useEffect(() => {
     setLoading(true);
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      navigate(indexUrl);
-    });
     getExistingGamesRequest()
       .then((res: any) => {
         setGames(res);
@@ -39,10 +33,7 @@ export const CreateRoom: FC = () => {
       .catch((error) => {
         console.log(error);
       });
-    return () => {
-      tg.BackButton.hide();
-    }
-  }, [navigate, tg.BackButton]);
+  }, []);
 
   const handleGameClick = (game: any) => {
     setGameData(game);

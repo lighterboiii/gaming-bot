@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+import useSetTelegramInterface from "hooks/useSetTelegramInterface";
 
 import { getLavkaAvailableRequest } from "../../api/shopApi";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
-import useTelegram from "../../hooks/useTelegram";
 import { setLavkaAvailable } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
@@ -17,8 +17,6 @@ import { CombinedItemData, ItemData, LavkaResponse } from "../../utils/types/sho
 import styles from './Shop.module.scss';
 
 export const Shop: FC = () => {
-  const { tg } = useTelegram();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
@@ -61,14 +59,8 @@ export const Shop: FC = () => {
     setActiveButton(`${translation?.shop_button}`);
     shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      navigate(indexUrl);
-    });
-    return () => {
-      tg.BackButton.hide();
-    }
-  }, [handleAddIsCollectible, navigate, shopData, tg.BackButton, translation?.shop_button]);
+  }, [handleAddIsCollectible, shopData, translation?.shop_button]);
+  useSetTelegramInterface(indexUrl);
   // открыть страничку с данными скина
   const handleShowItemDetails = (item: CombinedItemData) => {
     setSelectedItem(item);
