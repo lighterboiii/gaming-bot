@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { formatNumber } from "utils/additionalFunctions";
+
 import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
@@ -25,6 +27,13 @@ import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
 import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
 import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
+import {
+  addCoins,
+  addTokens,
+  setCoinsValueAfterBuy,
+  setTokensValueAfterBuy,
+  setSecondGameRulesState,
+} from "../../services/appSlice";
 import { setFirstGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { roomsUrl } from "../../utils/routes";
@@ -34,7 +43,7 @@ import styles from "./RockPaperScissors.module.scss";
 
 export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
-  const { tg, user } = useTelegram();
+  // const { tg, user } = useTelegram();
   // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
@@ -47,8 +56,8 @@ export const RockPaperScissors: FC = () => {
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
 
   // leftRockImage и rightRockImage устанавливаются и больше не меняются никогда. Зачем они как стейт сделаны?
-  const [leftRockImage, setLeftRockImage] = useState<string>('');
-  const [rightRockImage, setRightRockImage] = useState<string>('');
+  // const [leftRockImage, setLeftRockImage] = useState<string>('');
+  // const [rightRockImage, setRightRockImage] = useState<string>('');
   const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
   const [timer, setTimer] = useState<number>(15);
@@ -63,8 +72,8 @@ export const RockPaperScissors: FC = () => {
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   // установка первоначального вида рук и правил при старте игры
   useEffect(() => {
-    setLeftRockImage(leftRock);
-    setRightRockImage(rightRock);
+    // setLeftRockImage(leftRock);
+    // setRightRockImage(rightRock);
     setRulesShown(isRulesShown);
   }, [isRulesShown]);
 
@@ -142,6 +151,10 @@ export const RockPaperScissors: FC = () => {
 
   useEffect(() => {
     let timeoutId: any;
+    setPlayersAnim({
+      firstAnim: null,
+      secondAnim: null,
+    });
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
@@ -150,6 +163,7 @@ export const RockPaperScissors: FC = () => {
           if (roomId) {
             whoIsWinRequest(roomId)
               .then((res: any) => {
+                console.log(res);
                 setPlayersAnim({
                   firstAnim: res?.f_anim,
                   secondAnim: res?.s_anim,
@@ -158,18 +172,28 @@ export const RockPaperScissors: FC = () => {
                 setAnimationKey(prevKey => prevKey + 1);
                 if (res?.message === "success") {
                   setTimeout(() => {
-                    if (Number(res?.winner) === Number(userId)) {
+                    if (res?.winner === userId) {
                       updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
-                      postEvent(
-                        'web_app_trigger_haptic_feedback',
-                        { type: 'notification', notification_type: 'success' }
-                      );
+                      if (data?.bet_type === "1") {
+                        dispatch(addCoins(Number(res?.winner_value)));
+                      } else {
+                        dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
+                      }
+                      // postEvent(
+                      //   'web_app_trigger_haptic_feedback',
+                      //   { type: 'notification', notification_type: 'success' }
+                      // );
                       setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
                         ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
                           : `🔰`}`
                         : ''}`);
                     } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
                       updateAnimation(Number(data.creator_id) === Number(res.winner) ? rLoseAnim : lLoseAnim);
+                      if (data?.bet_type === "3") {
+                        dispatch(addTokens(Number(res?.winner_value)));
+                      } else {
+                        dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
+                      }
                       // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
                       setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                         ? `💵`
@@ -413,7 +437,10 @@ export const RockPaperScissors: FC = () => {
                       )}
                       {Number(player?.userid) === Number(userId) && player?.choice !== 'ready' && (
                         <div className={styles.game__balance}>
-                          {data?.bet_type === "1" ? `💵 ${userData?.coins}` : `🔰 ${userData?.tokens}`}
+                          {data?.bet_type === "1"
+                            ? `💵 ${userData?.coins && formatNumber(userData?.coins)}`
+                            : `🔰 ${userData?.tokens && formatNumber(userData?.tokens)}`
+                          }
                         </div>
                       )}
                       {player?.emoji !== "none" && (
@@ -454,8 +481,8 @@ export const RockPaperScissors: FC = () => {
                       data?.players_count === "2"
                     ) ? (
                       <HandShake
-                        player1={playersAnim.firstAnim || leftRockImage}
-                        player2={playersAnim.secondAnim || rightRockImage} />
+                        player1={playersAnim.firstAnim || leftRock}
+                        player2={playersAnim.secondAnim || rightRock} />
                     ) : (
                       data?.players_count === "1"
                     ) ? (

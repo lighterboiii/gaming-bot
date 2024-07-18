@@ -4,6 +4,9 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { getAppData } from "api/mainApi";
+import { userId } from "api/requestData";
+
 import { getOpenedRoomsRequest } from "../../api/gameApi";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
@@ -12,7 +15,7 @@ import Loader from "../../components/Loader/Loader";
 import { Modal } from "../../components/Modal/Modal";
 import Button from "../../components/ui/Button/Button";
 import useTelegram from "../../hooks/useTelegram";
-import { getOpenedRooms } from "../../services/appSlice";
+import { getOpenedRooms, setUserData, setUserPhoto } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { sortRooms } from "../../utils/additionalFunctions";
 import { indexUrl } from "../../utils/routes";
@@ -39,6 +42,23 @@ export const OpenedRooms: FC = () => {
   const [betClickCount, setBetClickCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      getAppData(userId)
+        .then((res) => {
+          console.log(res);
+          dispatch(setUserData(res.user_info));
+          dispatch(setUserPhoto(res.avatar));
+        })
+        .catch((error) => {
+          console.error('Get user data error:', error);
+        })
+    };
+
+    fetchUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, userId]);
 
   useEffect(() => {
     setLoading(true);
