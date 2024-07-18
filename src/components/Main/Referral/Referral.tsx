@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import UserContainer from "../..//User/UserContainer/UserContainer";
 import { getReferralsData, transferCoinsToBalanceReq } from "../../../api/mainApi";
@@ -17,13 +17,13 @@ import styles from './Referral.module.scss';
 
 const Referral: FC = () => {
   const { user, tg } = useTelegram();
-  // const userId = user?.id;
+  const dispatch = useAppDispatch();
+  const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchData = () => {

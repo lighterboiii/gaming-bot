@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { getAppData } from "api/mainApi";
 import { userId } from "api/requestData";
 import useSetTelegramInterface from "hooks/useSetTelegramInterface";
+import useTelegram from "hooks/useTelegram";
 
 import { getOpenedRoomsRequest } from "../../api/gameApi";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
@@ -24,7 +25,8 @@ import { IGameCardData } from "../../utils/types/gameTypes";
 import styles from './OpenedRooms.module.scss';
 
 export const OpenedRooms: FC = () => {
-  // const userId = user?.id;
+  const { user } = useTelegram();
+  const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -185,7 +187,7 @@ export const OpenedRooms: FC = () => {
   };
 
   const handleCreateClick = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     navigate('/create-room')
   };
 

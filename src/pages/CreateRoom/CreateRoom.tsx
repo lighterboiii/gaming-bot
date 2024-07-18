@@ -22,7 +22,9 @@ export const CreateRoom: FC = () => {
   const [settingsOverlay, setSettingsOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
   const translation = useAppSelector(store => store.app.languageSettings);
+
   useSetTelegramInterface(indexUrl);
+
   useEffect(() => {
     setLoading(true);
     getExistingGamesRequest()

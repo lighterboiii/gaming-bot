@@ -29,6 +29,8 @@ export const Shop: FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CombinedItemData | null>(null);
 
+  useSetTelegramInterface(indexUrl);
+
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
@@ -60,7 +62,6 @@ export const Shop: FC = () => {
     shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
   }, [handleAddIsCollectible, shopData, translation?.shop_button]);
-  useSetTelegramInterface(indexUrl);
   // открыть страничку с данными скина
   const handleShowItemDetails = (item: CombinedItemData) => {
     setSelectedItem(item);
@@ -68,7 +69,7 @@ export const Shop: FC = () => {
   };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.purchased}`);
     handleRenderInventoryData();
   };

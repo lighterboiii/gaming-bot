@@ -119,9 +119,11 @@ export const LeaderBoard: FC = () => {
             {leaderBoard?.length !== 0 ? (
               <div className={styles.leaderBoard__background}>
                 <div className={styles.leaderBoard__avatarContainer}>
-                  {topLeader && <UserAvatar avatar={topLeader.avatar}
-                    item={topLeader} />}
-                  {/* {isUserLeader && <p className={styles.leaderBoard__label}>Это вы!</p>} */}
+                  {topLeader &&
+                    <UserAvatar
+                      avatar={topLeader.avatar}
+                      item={topLeader}
+                    />}
                   <div className={styles.leaderBoard__leaderInfo}>
                     <>
                       <p className={styles.leaderBoard__leaderName}>
@@ -132,8 +134,11 @@ export const LeaderBoard: FC = () => {
                         {type === 'spendcoins' && '- 💵 '}
                         {type === 'coins' && '+ 💵 '}
                         {type === 'tokens' && '+ 🔰 '}
-                        {type === 'friends' && <FriendsIcon width={16}
-                          height={16} />}
+                        {type === 'friends' &&
+                          <FriendsIcon
+                            width={16}
+                            height={16}
+                          />}
                         {topLeader?.coins}
                       </p>
                     </>

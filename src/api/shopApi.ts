@@ -79,3 +79,9 @@ export const setActiveEmojiRequest = async (userIdValue: number, activeEmoji: nu
     endpoint: `${activeEmojiParamString}${activeEmoji}`
   })
 };
+
+// export const getShopItemsRequest = async () => {
+//   return await getReq({
+//     uri: 'get_shop_available?='
+//   })
+// }
