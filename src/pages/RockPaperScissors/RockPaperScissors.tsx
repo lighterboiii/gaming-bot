@@ -189,7 +189,7 @@ export const RockPaperScissors: FC = () => {
                         : `🔰`}`);
                     } else if (res?.winner === 'draw') {
                       setMessage(translation?.draw);
-                      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+                      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
                     }
                     setMessageVisible(true);
                     setTimeout(() => {
