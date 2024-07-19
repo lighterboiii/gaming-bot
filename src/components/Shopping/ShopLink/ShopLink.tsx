@@ -16,7 +16,7 @@ interface IProps {
 const ShopLink: FC<IProps> = ({ shopImageUrl }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const handleGetHapticFeedback = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
   };
 
   return (
