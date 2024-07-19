@@ -58,7 +58,7 @@ export const Main: FC = () => {
           dispatch(setUserData(res.user_info));
           dispatch(setBannerData(res.ad_info));
           dispatch(setShopImage(res.shop_image_url));
-          dispatch(setDailyBonus(res.daily_bonus));
+          // dispatch(setDailyBonus(res.daily_bonus));
           dispatch(setUserPhoto(res.avatar));
         })
         .catch((error) => {
