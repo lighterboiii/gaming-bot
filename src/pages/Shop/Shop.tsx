@@ -2,14 +2,17 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useState } from "react";
 
+import { getAppData } from "api/mainApi";
+import { userId } from "api/requestData";
 import useSetTelegramInterface from "hooks/useSetTelegramInterface";
+import useTelegram from "hooks/useTelegram";
 
 import { getLavkaAvailableRequest, getShopItemsRequest } from "../../api/shopApi";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
-import { setLavkaAvailable } from "../../services/appSlice";
+import { setLavkaAvailable, setProductsArchive } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
 import { CombinedItemData, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
@@ -18,6 +21,8 @@ import styles from './Shop.module.scss';
 
 export const Shop: FC = () => {
   const dispatch = useAppDispatch();
+  const { user } = useTelegram();
+  const userId = user?.id;
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const archiveData = useAppSelector(store => store.app.archive);
@@ -30,6 +35,22 @@ export const Shop: FC = () => {
   const [selectedItem, setSelectedItem] = useState<CombinedItemData | null>(null);
 
   useSetTelegramInterface(indexUrl);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      getAppData(userId)
+        .then((res) => {
+          console.log(res);
+          dispatch(setProductsArchive(res.collectibles_data));
+        })
+        .catch((error) => {
+          console.error('Get user data error:', error);
+        })
+    };
+
+    fetchUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, userId]);
 
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
@@ -62,12 +83,12 @@ export const Shop: FC = () => {
   useEffect(() => {
     setLoading(true);
     setActiveButton(`${translation?.shop_button}`);
-    getShopItemsRequest()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .then((res: any) => {
-      setGoods(res.shop);
-    })
-    // shopData && setGoods(shopData);
+    // getShopItemsRequest()
+    // // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // .then((res: any) => {
+    //   setGoods(res.shop);
+    // })
+    shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
     setTimeout(() => {
       setLoading(false);

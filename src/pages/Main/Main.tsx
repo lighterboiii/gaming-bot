@@ -22,11 +22,10 @@ import PlayIcon from "../../icons/Play/PlayIcon";
 import gowinLogo from '../../images/gowin.png';
 import { 
   setBannerData, 
-  setDailyBonus, 
+  setProductsArchive, 
   setShopImage, 
   setUserData, 
   setUserPhoto 
-
 } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { IBannerData, IFortuneData } from "../../utils/types";
@@ -58,8 +57,8 @@ export const Main: FC = () => {
           dispatch(setUserData(res.user_info));
           dispatch(setBannerData(res.ad_info));
           dispatch(setShopImage(res.shop_image_url));
-          // dispatch(setDailyBonus(res.daily_bonus));
           dispatch(setUserPhoto(res.avatar));
+          dispatch(setProductsArchive(res.collectibles_data));
         })
         .catch((error) => {
           console.error('Get user data error:', error);
