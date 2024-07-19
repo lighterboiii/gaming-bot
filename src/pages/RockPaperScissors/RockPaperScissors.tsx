@@ -171,31 +171,31 @@ export const RockPaperScissors: FC = () => {
                       } else {
                         dispatch(addTokens(Number(res?.winner_value)));
                       }
-                      postEvent(
-                        'web_app_trigger_haptic_feedback',
-                        { type: 'notification', notification_type: 'success' }
-                      );
+                      // postEvent(
+                      //   'web_app_trigger_haptic_feedback',
+                      //   { type: 'notification', notification_type: 'success' }
+                      // );
                       setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
                         ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
                           : `🔰`}`
                         : ''}`);
                     } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? rLoseAnim : lLoseAnim);
+                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? lLoseAnim : rLoseAnim);
                       if (data?.bet_type === "3") {
                         dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
                       } else {
                         dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
                       }
-                      postEvent(
-                        'web_app_trigger_haptic_feedback',
-                        { type: 'notification', notification_type: 'error', }
-                      );
+                      // postEvent(
+                      //   'web_app_trigger_haptic_feedback',
+                      //   { type: 'notification', notification_type: 'error', }
+                      // );
                       setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                         ? `💵`
                         : `🔰`}`);
                     } else if (res?.winner === 'draw') {
                       setMessage(translation?.draw);
-                      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+                      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
                     }
                     setMessageVisible(true);
                     setTimeout(() => {
@@ -203,13 +203,13 @@ export const RockPaperScissors: FC = () => {
                       setAnimation(null);
                       setShowTimer(true);
                       setAnyPlayerReady(true);
+                      setTimerStarted(true);
+                      setTimer(15);
                       setPlayersAnim({
                         firstAnim: null,
                         secondAnim: null,
                       });
-                      setTimerStarted(true);
-                      setTimer(15);
-                    }, 3500)
+                    }, 4000)
                   }, animationTime);
                 }
               })
@@ -233,7 +233,7 @@ export const RockPaperScissors: FC = () => {
             if (player?.userid === userId) {
               navigate(roomsUrl);
             }
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -243,7 +243,7 @@ export const RockPaperScissors: FC = () => {
       if (player?.tokens <= data?.bet) {
         leaveRoomRequest(userId)
           .then(_res => {
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -262,7 +262,7 @@ export const RockPaperScissors: FC = () => {
       .then(res => {
         setData(res);
         setAnyPlayerReady(true);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -284,7 +284,7 @@ export const RockPaperScissors: FC = () => {
         setAnyPlayerReady(true);
         setTimerStarted(true);
         setTimer(15);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       })
       .catch((error) => {
         console.error('Set choice error:', error);
@@ -301,7 +301,7 @@ export const RockPaperScissors: FC = () => {
     getPollingRequest(userId, data)
       .then(res => {
         setData(res);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
         setShowEmojiOverlay(false);
       })
       .catch((error) => {
@@ -345,18 +345,20 @@ export const RockPaperScissors: FC = () => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      const currentPlayer = data?.players.find((player: IRPSPlayer) => Number(player.userid) === Number(userId));
-      if (currentPlayer?.choice === 'none') {
-        leaveRoomRequest(userId)
-          .then((res: any) => {
-            if (res?.message === 'success') {
-              navigate(roomsUrl);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+      data?.players.forEach((player: IRPSPlayer) => {
+        if (player.choice === 'none') {
+          // Если игрок не сделал выбор (choice === 'none'), отправляем запрос на его исключение из комнаты
+          leaveRoomRequest(player.userid)
+            .then((res: any) => {
+              if (res?.message === 'success' && player.userid === userId) {
+                navigate(roomsUrl);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      });
       setTimerStarted(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -368,7 +370,7 @@ export const RockPaperScissors: FC = () => {
       }
     };
   }, [timer, timerStarted, anyPlayerReady, data, navigate, userId]);
-
+  // сброс выбора игрока, когда он единственный в комнате
   useEffect(() => {
     const resetPlayerChoice = () => {
       const choiceData = {
