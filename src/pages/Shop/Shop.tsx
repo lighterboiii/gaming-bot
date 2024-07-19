@@ -39,6 +39,7 @@ export const Shop: FC = () => {
     if (!archiveData) {
       return;
     }
+    setLoading(true);
     const collectibleIds = collectibles?.map(id => Number(id));
     const inventoryItems = archiveData.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
     const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
@@ -46,6 +47,7 @@ export const Shop: FC = () => {
       isCollectible: collectibleIds?.includes(item.item_id),
     }));
     setGoods(inventoryDataWithCollectible);
+    setLoading(false);
   };
   // добавить флаг isCollectible жкаждому товару
   const handleAddIsCollectible = useCallback((data: ItemData[]) => {
@@ -58,6 +60,7 @@ export const Shop: FC = () => {
   }, [collectibles]);
   // при монтировании компонента
   useEffect(() => {
+    setLoading(true);
     setActiveButton(`${translation?.shop_button}`);
     getShopItemsRequest()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,6 +69,9 @@ export const Shop: FC = () => {
     })
     // shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
+    setTimeout(() => {
+      setLoading(false);
+    }, 800);
   }, [handleAddIsCollectible, shopData, translation?.shop_button]);
   // открыть страничку с данными скина
   const handleShowItemDetails = (item: CombinedItemData) => {
@@ -74,20 +80,20 @@ export const Shop: FC = () => {
   };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.purchased}`);
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.shop_button}`);
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
@@ -122,14 +128,18 @@ export const Shop: FC = () => {
               className={
                 `${styles.shop__button} ${activeButton === `${translation?.shop_button}` ? styles.activeButton : ''}`
               }
-              onClick={handleClickShop}>
+              onClick={handleClickShop}
+              disabled={loading}
+              >
               {translation?.shop_button}
             </button>
             <button
               className={
                 `${styles.shop__button} ${activeButton === `${translation?.marketplace}` ? styles.activeButton : ''}`
               }
-              onClick={handleClickLavka}>
+              onClick={handleClickLavka}
+              disabled={loading}
+              >
               {translation?.marketplace}
             </button>
           </div>
@@ -140,6 +150,7 @@ export const Shop: FC = () => {
               ${activeButton === `${translation?.purchased}` ? styles.activeButton : ''}`
             }
             onClick={handleClickInventory}
+            disabled={loading}
           >
             {translation?.purchased}
           </button>
