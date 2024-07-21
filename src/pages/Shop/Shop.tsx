@@ -25,6 +25,7 @@ export const Shop: FC = () => {
   const { user } = useTelegram();
   const userId = user?.id;
   const shopData = useAppSelector(store => store.app.products);
+  const archiveData = useAppSelector(store => store.app.archive);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const lavkaShop = useAppSelector(store => store.app.lavka);
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -40,8 +41,18 @@ export const Shop: FC = () => {
   };
   // функция отрисовки предметов инвентаря
   const handleRenderInventoryData = () => {
+    // if (!archiveData) {
+    //   return;
+    // }
     setLoading(true);
+    const collectibleIds = collectibles?.map(id => Number(id));
     setGoods(inventoryItems);
+    // const inventory = archiveData.filter((item: ItemData) => collectibleIds?.includes(item.item_id));
+    const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
+      ...item,
+      isCollectible: collectibleIds?.includes(item.item_id),
+    }));
+    setGoods(inventoryDataWithCollectible);
     setLoading(false);
   };
   // добавить флаг isCollectible жкаждому товару
