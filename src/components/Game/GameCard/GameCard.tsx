@@ -2,8 +2,6 @@ import classNames from 'classnames';
 import { FC } from 'react';
 
 import ManIcon from '../../../icons/Man/Man';
-import game2 from '../../../images/gameSec.png';
-import game1 from '../../../images/main_hand_1_tiny.png';
 import { useAppSelector } from '../../../services/reduxHooks';
 import { IGameCardData } from '../../../utils/types/gameTypes';
 import CircleButton from '../../ui/CircleButton/CircleButton';
@@ -13,18 +11,19 @@ import styles from './GameCard.module.scss';
 interface IProps {
   game: IGameCardData;
   imagePosition: "left" | "right";
+  image: string;
   users: number;
   extraClass?: string;
   handleClickGame: (game: IGameCardData) => void;
 }
 
-const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass }) => {
+const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass, image }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const gameCardClassNames = classNames(
     styles.game,
     extraClass
   );
-
+  console.log(game);
   const handleClick = () => {
     handleClickGame(game);
   };
@@ -41,7 +40,7 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
         {game.room_type === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
       </h3>
       <img
-        src={imagePosition === "left" ? game1 : game2}
+        src={image}
         alt="hand"
         className={imagePosition === 'left' ? styles.game__image : styles.game__imageRight}
       />

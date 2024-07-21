@@ -41,12 +41,10 @@
   &__image {
     @include position(absolute, $top: 40%, $left: -50%);
     transform: translateY(-50%);
-    rotate: 30deg;
   }
 
   &__imageRight {
     @include position(absolute, $top: 40%, $right: -30%);
     transform: translateY(-50%);
-    rotate: -15deg;
   }
 }

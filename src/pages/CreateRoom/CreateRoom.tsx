@@ -42,7 +42,7 @@ export const CreateRoom: FC = () => {
     setSettingsOverlay(!settingsOverlay);
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
-
+  console.log(games);
   return (
     <div className={styles.create}>
       {loading ? <Loader /> : (
@@ -56,6 +56,7 @@ export const CreateRoom: FC = () => {
                 game={game}
                 key={game.id}
                 imagePosition={game.id === 1 ? 'left' : 'right'}
+                image={game.id === 1 ? games[0].url : games[1].url}
                 users={game.users}
                 extraClass={
                   `${styles['create__game-card']}

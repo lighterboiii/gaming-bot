@@ -174,7 +174,7 @@ export const OpenedRooms: FC = () => {
 
       default:
         sortedRooms = rooms;
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     }
   };
 
@@ -187,7 +187,7 @@ export const OpenedRooms: FC = () => {
   };
 
   const handleCreateClick = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     navigate('/create-room')
   };
 
