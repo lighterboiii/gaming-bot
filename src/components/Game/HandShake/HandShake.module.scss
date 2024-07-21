@@ -10,6 +10,10 @@
     @media screen and (min-height: 691px) {
       @include size(226px, auto);
     }
+
+    @media screen and (max-width: 379px) {
+      @include size(164px, auto);
+    }
   }
 
   &__leftMainImage {

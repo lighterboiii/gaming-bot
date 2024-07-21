@@ -18,6 +18,10 @@
     @include indents(16px, 0);
     @include size(100%, 100%);
     @include flex(column, flex-start, center);
+
+  @media screen and (max-width: 379px) {
+    justify-content: center;
+  }
   }
 
   &__closeButton {
@@ -34,6 +38,10 @@
     @include size(84px, 84px);
     aspect-ratio: 1;
     cursor: pointer;
+
+    @media screen and (max-width: 379px) {
+      @include size(64px, 64px);
+    }
   }
 
   &__emojis {
@@ -61,5 +69,10 @@
 
   @media screen and (min-height: 691px) {
     @include size(100%, calc(100% - 55vh));
+  }
+
+
+  @media screen and (max-width: 379px) {
+    height: 50%;
   }
 }

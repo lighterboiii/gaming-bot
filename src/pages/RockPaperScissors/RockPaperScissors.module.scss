@@ -37,6 +37,10 @@
     @include size(178px, 178px);
     @include position(relative);
     @include flex(row, center, center);
+
+    @media screen and (max-width: 379px) {
+      @include size(146px, 146px);
+    }
   }
 
   &__playerName {
@@ -49,6 +53,10 @@
     font-size: 16px;
     color: $rps-text-color;
     z-index: 7;
+
+    @media screen and (max-width: 379px) {
+      font-size: 14px;
+    }
   }
 
   &__balance {
@@ -126,6 +134,11 @@
 
   &__emojiButton {
     @include position(absolute, $bottom: 8%, $right: 16px);
+
+    @media screen and (max-width: 379px) {
+      bottom: 5%;
+      right: 10px;
+    }
   }
 
   &__versusImage {
@@ -166,18 +179,30 @@
     @include position(absolute, $left: 50%, $bottom: -5%);
     transform: translateX(-50%);
     z-index: 2;
+
+    @media screen and (max-width: 379px) {
+      @include size(44px, 44px);
+    }
   }
 
   &__selectedEmoji {
     @include size(60px, 60px);
     @include position(absolute, $bottom: -20%, $left: 0);
     z-index: 6;
+
+    @media screen and (max-width: 379px) {
+      @include size(48px, 48px);
+    }
   }
 
   &__selectedEmojiRight {
     @include size(60px, 60px);
     @include position(absolute, $bottom: -20%, $right: 0);
     z-index: 6;
+
+    @media screen and (max-width: 379px) {
+      @include size(48px, 48px);
+    }
   }
 
   &__resultMessage {
