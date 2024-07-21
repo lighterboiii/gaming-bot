@@ -32,12 +32,16 @@ const Task: FC<IProps> = ({ task, onClick }) => {
       </div>
       <button type='button'
         className={`${task?.task_done === 1 ? styles.task__completedButton : styles.task__button}`}>
-        {task?.task_done === 0 && <ChevronIcon color='#000'
-          width={20}
-          height={20} />}
-        {task?.task_done === 1 && <img src={checkIcon}
-          alt="check icon"
-          className={styles.task__check} />}
+        {task?.task_done === 0
+          && <ChevronIcon color='#000'
+            width={20}
+            height={20}
+          />}
+        {task?.task_done === 1
+          && <img src={checkIcon}
+            alt="check icon"
+            className={styles.task__check}
+          />}
       </button>
     </div>
   );

@@ -16,10 +16,18 @@
     font-weight: 700;
     font-size: 14px;
     line-height: 1;
+
+    @media screen and (max-width: 379px) {
+      @include max-size(90%, auto);
+    }
   }
 
   &__container {
     @include flex(row, flex-start, center, 6px);
+
+    @media screen and (max-width: 379px) {
+      @include max-size(80%, auto);
+    }
   }
 
   &__textWrapper {

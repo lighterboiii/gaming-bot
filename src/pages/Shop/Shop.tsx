@@ -12,7 +12,7 @@ import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
-import { setLavkaAvailable, setProductsArchive } from "../../services/appSlice";
+import { setLavkaAvailable } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
 import { CombinedItemData, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
@@ -36,27 +36,11 @@ export const Shop: FC = () => {
 
   useSetTelegramInterface(indexUrl);
 
-  useEffect(() => {
-    const fetchUserData = () => {
-      getAppData(userId)
-        .then((res) => {
-          console.log(res);
-          dispatch(setProductsArchive(res.collectibles_data));
-        })
-        .catch((error) => {
-          console.error('Get user data error:', error);
-        })
-    };
-
-    fetchUserData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, userId]);
-
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
   // функция отрисовки предметов инвентаря
-  const handleRenderInventoryData = () => {
+  const handleRenderInventoryData = useCallback(() => {
     if (!archiveData) {
       return;
     }
@@ -69,7 +53,7 @@ export const Shop: FC = () => {
     }));
     setGoods(inventoryDataWithCollectible);
     setLoading(false);
-  };
+  }, [archiveData, collectibles]);
   // добавить флаг isCollectible жкаждому товару
   const handleAddIsCollectible = useCallback((data: ItemData[]) => {
     const collectibleIds = collectibles?.map(id => Number(id));
@@ -83,12 +67,6 @@ export const Shop: FC = () => {
   useEffect(() => {
     setLoading(true);
     setActiveButton(`${translation?.shop_button}`);
-    // getShopItemsRequest()
-    // // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // .then((res: any) => {
-      
-    //   setGoods(res.shop);
-    // })
     shopData && setGoods(shopData);
     shopData && handleAddIsCollectible(shopData);
     setTimeout(() => {

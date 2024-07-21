@@ -51,10 +51,15 @@
     @media screen and (min-width: 420px) {
       @include position(absolute, $left: 16px, $top: 20%);
     }
+
+    @media screen and (max-width: 379px) {
+      font-size: 11px;
+      top: 24px;
+    }
   }
 
   &__title {
-    @include indents(16px 16px 0, 0);
+    @include indents(18px 16px 0, 0);
     font-weight: 700;
     color: $main-color;
     font-size: 16px;
@@ -77,6 +82,10 @@
 
     @media screen and (min-width: 420px) {
       @include position(absolute, $left: 16px, $bottom: 8%);
+    }
+
+    @media screen and (max-width: 379px) {
+      font-size: 10px;
     }
   }
 

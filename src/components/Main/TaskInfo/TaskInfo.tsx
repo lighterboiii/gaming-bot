@@ -18,9 +18,11 @@ import styles from './TaskInfo.module.scss';
 interface IProps {
   task: ITask;
   setSelectedTask: (task: ITask | null) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fetchTaskInfo: any;
 }
 
-const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
+const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
   const { tg, user } = useTelegram();
   // const userId = user?.id;
   const dispatch = useAppDispatch();
@@ -42,19 +44,21 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask }) => {
       tg.openTelegramLink(step.target);
     }
     taskStepRequest(userId, task?.task_id, step?.step_id)
-      .then(res => { });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then(res => {});
   };
 
   const handleClaimReward = () => {
     setShowReward(true);
     taskResultRequest(userId, task?.task_id)
       .then((res) => {
-        const response = res as IClaimRewardResponse;
         console.log(res);
+        const response = res as IClaimRewardResponse;
         if (response?.message === 'incomplete') {
           setIncomplete(true);
         } else if (response?.message === 'success') {
           setRewardResult(true);
+          fetchTaskInfo();
           response?.new_value && dispatch(setNewTokensValue(response?.new_value));
           // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         }

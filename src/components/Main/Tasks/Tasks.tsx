@@ -1,6 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 
-import { useAppSelector } from '../../../services/reduxHooks';
+import { getAppData } from '../../../api/mainApi';
+import { userId } from '../../../api/requestData';
+import useTelegram from '../../../hooks/useTelegram';
+import { setTaskList } from '../../../services/appSlice';
+import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
 import { ITask } from '../../../utils/types';
 import Task from '../Task/Task';
 import TaskInfo from '../TaskInfo/TaskInfo';
@@ -8,6 +12,10 @@ import TaskInfo from '../TaskInfo/TaskInfo';
 import styles from './Tasks.module.scss';
 
 const Tasks: FC = () => {
+  const dispatch = useAppDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { user } = useTelegram();
+  // const userId = user?.id;
   const currentTasks = useAppSelector(store => store.app.tasks);
   const translation = useAppSelector(store => store.app.languageSettings);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
@@ -15,6 +23,23 @@ const Tasks: FC = () => {
   const handleTaskClick = (task: ITask) => {
     setSelectedTask(task);
   };
+
+  // useEffect(() => {
+    const fetchUserData = () => {
+      getAppData(userId)
+        .then((res) => {
+          console.log(res);
+          dispatch(setTaskList(res.tasks_available));
+        })
+        .catch((error) => {
+          console.error('Get user data error:', error);
+        })
+    };
+  //   setTimeout(() => {
+  //     fetchUserData();
+  //   }, 3000)
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [dispatch]);
 
   useEffect(() => {
 
@@ -37,16 +62,21 @@ const Tasks: FC = () => {
           </div>
           <div className={styles.tasks__board}>
             {currentTasks && currentTasks.map((task: ITask, index: number) => (
-              <Task task={task}
+              <Task
+                task={task}
                 key={index}
-                onClick={() => handleTaskClick(task)} />
+                onClick={() => handleTaskClick(task)}
+              />
             ))}
           </div>
         </div>
       </>
     ) : (
-      <TaskInfo task={selectedTask}
-        setSelectedTask={() => setSelectedTask(null)} />
+      <TaskInfo
+        fetchTaskInfo={fetchUserData}
+        task={selectedTask}
+        setSelectedTask={() => setSelectedTask(null)}
+      />
     )
   );
 };

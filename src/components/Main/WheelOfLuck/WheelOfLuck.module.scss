@@ -44,9 +44,13 @@
     @include indents();
     @include flex(row, center, center, 10px);
     font-weight: 700;
-    font-size: 17px;
+    font-size: 16px;
     color: $main-color;
     line-height: 1.2;
+
+    @media screen and (max-width: 379px) {
+      font-size: 14px;
+    }
   }
 
   &__background {
@@ -63,6 +67,7 @@
   }
 
   &__item {
+    position: relative;
     @include size(92px, 186px);
     @include flex(column, center, center, 10px);
     color: $black-color;
@@ -91,9 +96,17 @@
 
   &__itemText {
     @include indents();
+    @include position(absolute, $left: 50%, $bottom: 0);
+    @include size(100%, auto);
+    transform: translate(-50%, -50%);
     font-size: 12px;
-    font-weight: 900;
+    font-weight: 700;
+    text-wrap: wrap;
+    line-height: 1;
 
+    @media screen and (max-width: 379px) {
+      font-size: 10px;
+    }
   }
 
   &__buttonWrapper {
@@ -117,14 +130,14 @@
   }
 
   &__pointer {
-    @include size(74px, 98px);
+    @include size(72px, 94px);
     @include position(absolute, $top: -18%, $left: 50%);
     transform: translate(-50%);
     z-index: 7;
 
-    // @media screen and (max-height: 700px) {
-    //   @include size(46px, 60px);
-    // }
+    @media screen and (max-width: 379px) {
+      @include size(52px, 68px);
+    }
   }
 
   &__lights {
@@ -191,28 +204,6 @@
       bottom: 8px;
       left: 90%;
     }
-
-    // &.light1 { top: 12%; left: 10%; }
-    // &.light2 { top: 0; left: 30%; width: 55px; height: 55px; }
-    // &.light3 { top: 0; left: 70%; width: 55px; height: 55px; }
-    // &.light4 { top: 12%; left: 90%; }
-    // &.light5 { bottom: 3%; left: 10%; }
-    // &.light6 { bottom: -1%; left: 30%; width: 55px; height: 55px; }
-    // &.light7 { bottom: 5%; left: 50%;}
-    // &.light8 { bottom: -1%; left: 70%; width: 55px; height: 55px; }
-    // &.light9 { bottom: 3%; left: 90%; }
-
-    // @media screen and (max-height: 700px) {
-    //   &.light1 { top: 6%; left: 10%; }
-    //   &.light2 { top: -3%; left: 30%; width: 55px; height: 55px; }
-    //   &.light3 { top: -3%; left: 70%; width: 55px; height: 55px; }
-    //   &.light4 { top: 6%; left: 90%; }
-    //   &.light5 { bottom: 2%; left: 10%; }
-    //   &.light6 { bottom: -7%; left: 30%; width: 55px; height: 55px; }
-    //   &.light7 { bottom: 2%; left: 50%;}
-    //   &.light8 { bottom: -8%; left: 70%; width: 55px; height: 55px; }
-    //   &.light9 { bottom: 2%; left: 90%; }
-    // }
   }
 }
 
