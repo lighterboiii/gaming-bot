@@ -10,15 +10,18 @@
   border-radius: $radius-10;
   cursor: pointer;
 
+  @media screen and (min-height: 690px) {
+    @include min-size(100%, 86px);
+  }
+
   &__game {
     @include size(100%, 100%);
     @include max-size(70px, 100%);
-    @include flex(column, center, center, 16px);
+    @include flex(column, center, flex-start, 14px);
   }
 
   &__image {
     @include size(48px, auto);
-    rotate: 30deg
   }
 
   &__number {

@@ -27,7 +27,6 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const [message, setMessage] = useState('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
-
   const handleJoinRoom = (roomType: number) => {
     if (room.free_places === 0) {
       setIsMessage(true);
@@ -86,9 +85,11 @@ const Room: FC<IProps> = ({ room, openModal }) => {
         <p className={styles.room__gameName}>
           {Number(room?.room_type) === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
         </p>
-        <img src={Number(room?.room_type) === 1 ? hand : whoCloser}
+        <img
+          src={room?.game_pic}
           alt="game-logo"
-          className={styles.room__image} />
+          className={styles.room__image}
+        />
       </div>
       {isMessage ? (
         <p className={styles.room__creator}>{message}</p>
