@@ -24,7 +24,7 @@ interface IProps {
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [showReward, setShowReward] = useState<boolean>(false);
@@ -60,7 +60,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
           setRewardResult(true);
           fetchTaskInfo();
           response?.new_value && dispatch(setNewTokensValue(response?.new_value));
-          // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+          postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
         }
       });
   };
@@ -74,7 +74,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
     } else {
       setSelectedTask(null);
     }
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   return (

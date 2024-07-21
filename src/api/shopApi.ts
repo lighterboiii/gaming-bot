@@ -9,6 +9,7 @@ import {
   buyLavkaUri,
   buyShopItemUri,
   cancelSellLavka,
+  getInventoryUri,
   getLavkaUri,
   getShopUri,
   itemCountParamString,
@@ -18,7 +19,7 @@ import {
   sellLavkaUri,
   setActiveEmojiUri,
   setActiveSkinUri,
-  setCollectiblesUri
+  setCollectiblesUri,
 } from "./requestData";
 
 // Product
@@ -84,5 +85,12 @@ export const setActiveEmojiRequest = async (userIdValue: number, activeEmoji: nu
 export const getShopItemsRequest = async () => {
   return await getReq({
     uri: getShopUri
+  })
+};
+
+export const getCollectiblesInfo = async (userIdValue: number) => {
+  return await getReq({
+    uri: getInventoryUri,
+    userId: userIdValue,
   })
 };

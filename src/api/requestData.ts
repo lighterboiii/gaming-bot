@@ -37,6 +37,7 @@ export const taskStepButtonUri = 'task_step_button?user_id=';
 export const taskResultUri = 'task_result_button?user_id=';
 export const useEnergyDrinkUri = 'use_energy_drink?user_id=';
 export const getShopUri = 'get_shop_available?=';
+export const getInventoryUri = 'get_user_collectible_info?user_id=';
 // links
 export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
 export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'

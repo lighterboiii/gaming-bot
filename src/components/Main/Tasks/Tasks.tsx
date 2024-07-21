@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 
 import { getAppData } from '../../../api/mainApi';
@@ -15,7 +16,7 @@ const Tasks: FC = () => {
   const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const currentTasks = useAppSelector(store => store.app.tasks);
   const translation = useAppSelector(store => store.app.languageSettings);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
@@ -24,22 +25,15 @@ const Tasks: FC = () => {
     setSelectedTask(task);
   };
 
-  // useEffect(() => {
-    const fetchUserData = () => {
-      getAppData(userId)
-        .then((res) => {
-          console.log(res);
-          dispatch(setTaskList(res.tasks_available));
-        })
-        .catch((error) => {
-          console.error('Get user data error:', error);
-        })
-    };
-  //   setTimeout(() => {
-  //     fetchUserData();
-  //   }, 3000)
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [dispatch]);
+  const fetchUserData = () => {
+    getAppData(userId)
+      .then((res) => {
+        dispatch(setTaskList(res.tasks_available));
+      })
+      .catch((error) => {
+        console.error('Get user data error:', error);
+      })
+  };
 
   useEffect(() => {
 

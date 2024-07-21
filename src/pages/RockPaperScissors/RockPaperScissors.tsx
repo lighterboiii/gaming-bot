@@ -44,7 +44,7 @@ import styles from "./RockPaperScissors.module.scss";
 export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
@@ -407,7 +407,7 @@ export const RockPaperScissors: FC = () => {
   };
 
   const handleShowEmojiOverlay = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     setShowEmojiOverlay(true);
   };
 

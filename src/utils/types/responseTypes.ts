@@ -1,4 +1,5 @@
 import { IMember } from "./memberTypes";
+import { ItemData } from "./shopTypes";
 
 export interface ISellLavkaRes {
   message: string;
@@ -6,6 +7,10 @@ export interface ISellLavkaRes {
 
 export interface IBuyItemRes {
   message: string;
+}
+
+export interface IInventoryRequest {
+  message: ItemData[];
 }
 
 export interface ICreateRoomResponse {
