@@ -20,7 +20,6 @@
   &__textWrapper {
     @include size(90%, 100%);
     @include flex(column, space-between, flex-start, 16px);
-
   }
 
   &__text,

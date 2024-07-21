@@ -75,8 +75,13 @@
     border-radius: $radius-10;
     z-index: 5;
 
-    @media screen and (max-width: 700px) {
+    @media screen and (min-width: 380px) and (max-width: 700px) {
       @include size(38px, 26px);
+    }
+
+    @media screen and (max-width: 379px) {
+      @include position(absolute, $top: 0, $left: -35%);
+      @include size(32px, 20px);
     }
 
     &::after {
@@ -115,16 +120,24 @@
     border-radius: $radius-round;
     z-index: 5;
 
-    @media screen and (max-width: 700px) {
+    @media screen and (min-width: 380px) and (max-width: 700px) {
       @include size(30px, 30px);
+    }
+
+    @media screen and (max-width: 379px) {
+      @include size(24px, 24px);
     }
   }
 
   &__emojiImage {
     @include size(26px, 26px);
-
-    @media screen and (max-width: 700px) {
+    
+    @media screen and (min-width: 380px) and (max-width: 700px) {
       @include size(20px, 20px);
+    }
+
+    @media scree and (max-width: 379px) {
+      @include size(16px, 16px);
     }
   }
 }

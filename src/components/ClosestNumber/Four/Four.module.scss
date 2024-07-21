@@ -14,6 +14,10 @@
   &__player {
     @include size(90px, 90px);
     @include flex(row, center, center);
+
+    @media screen and (max-width: 379px) {
+      @include size(76px, 76px);
+    }
   }
 
   &__name {
@@ -90,7 +94,6 @@
       right: 0;
       bottom: 0;
       border-radius: $radius-10;
-      // box-shadow: 0 0 0 1px black;
       pointer-events: none;
     }
   }
