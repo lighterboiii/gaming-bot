@@ -24,7 +24,6 @@
   &__avatarContainer {
     @include size(148px, 148px);
 
-
     @media screen and (max-width: 379px) {
       @include size(108px, 108px);
     }
@@ -77,7 +76,6 @@
     font-weight: 700;
     font-size: 16px;
     line-height: 1;
-
 
     @media screen and (max-width: 379px) {
       font-size: 14px;

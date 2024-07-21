@@ -16,6 +16,10 @@
     @include indents();
     @include position(relative);
     @include size(90px, 90px);
+
+    @media screen and (max-width: 379px) {
+      @include size(76px, 76px);
+    }
   }
 
   &__price {

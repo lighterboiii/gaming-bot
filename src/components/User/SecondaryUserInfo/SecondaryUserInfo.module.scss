@@ -12,6 +12,12 @@
     @include indents();
     @include position(absolute, $top: -20%, $left: -25%);
     @include size(130px, 130px);
+
+    @media screen and (max-width: 379px) {
+      @include size(108px, 108px);
+      top: -15%;
+      left: -20%;
+    }
   }
 
   &__userInfo {
@@ -39,13 +45,17 @@
     font-weight: 900;
     font-size: 14px;
     line-height: 1;
+
+    @media screen and (max-width: 379px) {
+      font-size: 12px;
+    }
   }
 
   &__text {
     @include indents();
     @include ellipsis();
     color: $black-color;
-    font-weight: 800;
+    font-weight: 900;
     font-size: 12px;
     line-height: 1;
   }
@@ -62,5 +72,10 @@
     text-align: center;
     color: $main-color;
     font-size: 10px;
+
+    @media screen and (max-width: 379px) {
+      @include size(68px, auto);
+      @include indents(6px, 0);
+    }
   }
 }

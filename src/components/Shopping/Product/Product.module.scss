@@ -28,6 +28,10 @@
     @include size(100%, auto);
     @include flex(column, center, center, 16px);
     z-index: 1;
+
+    @media screen and (max-width: 379px) {
+      width: calc(100% - 32px);
+    }
   }
 
   &__textElements {
