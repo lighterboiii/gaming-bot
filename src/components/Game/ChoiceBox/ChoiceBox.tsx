@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
 import paper from '../../../images/rock-paper-scissors/hands-icons/paper.png'
@@ -23,7 +25,7 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
   const onChoiceClick = (choice: string) => {
     handleChoice(choice);
     setChoiceItem(choice);
-
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
   };
 
   const getIconPath = (choice: string): string => {

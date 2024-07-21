@@ -226,7 +226,6 @@ export const OpenedRooms: FC = () => {
                   <Button handleClick={handleCreateClick} text={translation?.create_room_button} />
                 </div>
               </div>
-
             )
             }
           </div>

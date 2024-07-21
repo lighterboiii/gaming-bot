@@ -9,6 +9,10 @@
   font-family: 'Rubik', sans-serif;
   font-size: 600;
 
+  @media screen and (max-width: 379px) {
+    height: 32px;
+  }
+
   &__container {
     @include size(90%, 48px);
     @include flex(row, space-between, center, 16px);
@@ -24,6 +28,11 @@
     @include size(64px, 64px);
     @include flex(row, center, center);
     z-index: 5;
+
+    @media screen and (max-width: 379px) {
+      @include size(52px, 52px);
+      top: -50%;
+    }
   }
 
   &__avatarBackground {
@@ -51,6 +60,10 @@
     font-weight: 900;
     font-size: 14px;
     font-style: italic;
+
+    @media screen and (max-width: 379px) {
+      font-size: 10px;
+    }
   }
 
   &__textCoins {
@@ -63,6 +76,12 @@
     font-weight: 900;
     font-size: 12px;
     font-style: italic;
+
+
+    @media screen and (max-width: 379px) {
+      font-size: 10px;
+      width: 60px;
+    }
   }
 
   &__number {
@@ -71,6 +90,11 @@
     font-weight: 700;
     font-size: 18px;
     font-style: italic;
+
+
+    @media screen and (max-width: 379px) {
+      font-size: 14px;
+    }
   }
 
   &__gainWrapper {

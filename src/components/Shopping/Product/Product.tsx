@@ -105,7 +105,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
               })
             setMessage(`${translation?.successful_purchase}`);
             handlePurchaseItemTypes(item);
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
             break;
           default:
             break;
@@ -120,7 +120,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   const handleSetActiveSkin = (itemId: number) => {
     setActiveSkinRequest(itemId, userId)
       .then(() => {
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
         dispatch(setActiveSkin(itemId));
         onClose();
       })
@@ -132,7 +132,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   const handleSetActiveEmoji = (itemId: number) => {
     setActiveEmojiRequest(userId, item?.item_id)
       .then(() => {
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
         dispatch(setActiveEmoji(String(itemId)));
         onClose();
       })
@@ -145,7 +145,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
     cancelLavkaRequest(itemId, userId)
       .then(() => {
         setMessageShown(true);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         setMessage(`${translation?.item_removed_from_sale}`);
         dispatch(removeItemFromLavka(itemId));
         closeWithDelay(onClose, setMessage, setMessageShown);
@@ -183,7 +183,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
             setMessage(`${translation?.item_already_owned}`);
             break;
           case "ok":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success'});
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success'});
             setMessage(`${translation?.purchased_from_market}`);
             handlePurchaseItemTypes(item);
             break;

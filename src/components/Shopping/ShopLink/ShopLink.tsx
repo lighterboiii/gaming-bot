@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 import { Link } from "react-router-dom";
@@ -16,7 +17,7 @@ interface IProps {
 const ShopLink: FC<IProps> = ({ shopImageUrl }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const handleGetHapticFeedback = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
   };
 
   return (
