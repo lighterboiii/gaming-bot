@@ -39,17 +39,24 @@
   }
 
   &__leaderInfo {
-    @include position(absolute, $left: 70%, $top: 47%);
+    @include position(absolute, $left: 55%, $top: 70%);
     @include size(70%, auto);
     @include flex(column, center, center, 4px);
     align-self: center;
-    transform: translate(50%, 50%);
+    transform: translate(-50%, -50%);
   }
 
   &__avatarContainer {
     @include indents();
-    @include position(absolute, $top: -55%, $left: -35%);
+    @include position(absolute, $top: 10%, $left: 0);
     @include size(180px, 180px);
+    transform: translate(-50%, -50%);
+
+    @media screen and (max-width: 379px) {
+      @include size(140px, 140px);
+      left: 10%;
+      top: 20%;
+    }
   }
 
   &__label {

@@ -124,25 +124,25 @@ export const LeaderBoard: FC = () => {
                       avatar={topLeader.avatar}
                       item={topLeader}
                     />}
-                  <div className={styles.leaderBoard__leaderInfo}>
-                    <>
-                      <p className={styles.leaderBoard__leaderName}>
-                        {topLeader?.public_name}
-                      </p>
-                      <p className={styles.leaderBoard__leaderText}>
-                        {type === 'spendtokens' && '- 🔰 '}
-                        {type === 'spendcoins' && '- 💵 '}
-                        {type === 'coins' && '+ 💵 '}
-                        {type === 'tokens' && '+ 🔰 '}
-                        {type === 'friends' &&
-                          <FriendsIcon
-                            width={16}
-                            height={16}
-                          />}
-                        {topLeader?.coins}
-                      </p>
-                    </>
-                  </div>
+                </div>
+                <div className={styles.leaderBoard__leaderInfo}>
+                  <>
+                    <p className={styles.leaderBoard__leaderName}>
+                      {topLeader?.public_name}
+                    </p>
+                    <p className={styles.leaderBoard__leaderText}>
+                      {type === 'spendtokens' && '- 🔰 '}
+                      {type === 'spendcoins' && '- 💵 '}
+                      {type === 'coins' && '+ 💵 '}
+                      {type === 'tokens' && '+ 🔰 '}
+                      {type === 'friends' &&
+                        <FriendsIcon
+                          width={16}
+                          height={16}
+                        />}
+                      {topLeader?.coins}
+                    </p>
+                  </>
                 </div>
               </div>
             ) : (
