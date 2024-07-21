@@ -5,7 +5,7 @@
   @include position(relative);
   @include size(100%, 106px);
   @include flex(row, space-between, center);
-  border-radius: $radius-20;
+  border-radius: $radius-15;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -24,10 +24,16 @@
     background-size: 100% auto;
   }
 
+  @media screen and (max-width: 379px) {
+    height: 96px;
+    background-size: 100%;
+  }
+
   &__link {
     @include size(100%, 100%);
     @include position(absolute, $top: 0, $left: 0);
     cursor: pointer;
+    overflow: hidden;
     z-index: 1;
   }
 
@@ -69,6 +75,11 @@
     background-color: $black-color;
     border-radius: 40px;
     z-index: 2;
+
+
+    @media screen and (max-width: 379px) {
+      bottom: 12px;
+    }
   }
 
   &__indicator {
@@ -79,6 +90,11 @@
     background-color: $main-color;
     cursor: pointer;
     z-index: 2;
+
+
+    @media screen and (max-width: 379px) {
+      @include size(5px, 5px);
+    }
   }
 
   &__info {
@@ -102,6 +118,11 @@
     @media screen and (min-width: 420px) {
       @include position(absolute, $left: 8%, $top: 20%);
     }
+
+    @media screen and (max-width: 379px) {
+      font-size: 11px;
+      top: 24px;
+    }
   }
 
   &__text {
@@ -112,6 +133,10 @@
     text-align: left;
     text-wrap: nowrap;
     font-size: 12px;
+
+    @media screen and (max-width: 379px) {
+      font-size: 10px;
+    }
 
     @media screen and (min-width: 420px) {
       @include position(absolute, $left: 8%, $bottom: 8%);

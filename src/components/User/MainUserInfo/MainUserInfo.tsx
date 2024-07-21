@@ -49,9 +49,11 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
         <div className={styles.userInfo__info}>
           <div className={styles.userInfo__textElements}>
             <div className={styles.userInfo__name}>
-              <LevelIcon level={userData?.user_exp}
+              <LevelIcon
+                level={userData?.user_exp}
                 width={24}
-                height={24} />
+                height={24}
+              />
               <div className={styles.userInfo__overflow}>
                 <p className={styles.userInfo__userName}
                   ref={userNameRef}>

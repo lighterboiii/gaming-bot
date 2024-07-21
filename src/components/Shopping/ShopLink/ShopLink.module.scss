@@ -13,6 +13,12 @@
   font-style: italic;
   border-radius: $radius-20;
 
+
+  @media screen and (max-width: 379px) {
+    @include size(100%, 96px);
+    @include indents(12px, 0);
+  }
+
   &__content {
     @include flex(column, space-between, flex-start);
     @include size(100%, 100%);
@@ -31,6 +37,7 @@
 
   &__logo {
     @include size(100px, 24px);
+    // z-index: 2;
   }
 
   &__char {
@@ -38,5 +45,10 @@
     @include size(100%, 100%);
     object-fit: cover;
     z-index: 1;
+
+
+    @media screen and (max-width: 379px) {
+      object-fit: fill;
+    }
   }
 }

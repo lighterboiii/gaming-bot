@@ -44,11 +44,21 @@
     justify-content: center;
     gap: 12px;
     @include size(100%, auto);
+
+
+    @media screen and (max-width: 379px) {
+      grid-template-columns: 2fr 1fr;
+    }
   }
 
   &__smallButtonsContainer {
     @include size(100%, auto);
     @include flex(column, space-between, space-between, 12px);
+
+
+    @media screen and (max-width: 379px) {
+     gap: 8px; 
+    }
   }
 
   &::-webkit-scrollbar {

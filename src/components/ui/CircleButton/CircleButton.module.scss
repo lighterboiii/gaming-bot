@@ -7,6 +7,11 @@
   background-color: $main-color;
   border-radius: $radius-round;
 
+
+  @media screen and (max-width: 379px) {
+    @include size(36px, 36px);
+  }
+
   &__tasks {
     @include size(50%, 35%);
   }

@@ -22,7 +22,7 @@ import styles from './Shop.module.scss';
 export const Shop: FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const archiveData = useAppSelector(store => store.app.archive);
@@ -86,6 +86,7 @@ export const Shop: FC = () => {
     // getShopItemsRequest()
     // // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // .then((res: any) => {
+      
     //   setGoods(res.shop);
     // })
     shopData && setGoods(shopData);

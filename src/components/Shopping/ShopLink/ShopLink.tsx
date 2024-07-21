@@ -30,7 +30,8 @@ const ShopLink: FC<IProps> = ({ shopImageUrl }) => {
           alt="main_logo"
           className={styles.shopLink__logo} />
         <h2 className={styles.shopLink__title}>{translation?.menu_shop}</h2>
-        <img src={shopImageUrl ? shopImageUrl : girl}
+        <img
+          src={shopImageUrl ? shopImageUrl : girl}
           alt="character"
           className={styles.shopLink__char} />
       </div>
