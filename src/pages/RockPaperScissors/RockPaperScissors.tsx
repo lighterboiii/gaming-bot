@@ -28,13 +28,7 @@ import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
 import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
 import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
-import {
-  addCoins,
-  addTokens,
-  setCoinsValueAfterBuy,
-  setTokensValueAfterBuy,
-  setFirstGameRulesState
-} from "../../services/appSlice";
+import { setFirstGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { roomsUrl } from "../../utils/routes";
 import { IRPSPlayer } from "../../utils/types/gameTypes";
@@ -166,11 +160,6 @@ export const RockPaperScissors: FC = () => {
                   setTimeout(() => {
                     if (res?.winner === userId) {
                       updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
-                      if (data?.bet_type === "1") {
-                        dispatch(addCoins(Number(res?.winner_value)));
-                      } else {
-                        dispatch(addTokens(Number(res?.winner_value)));
-                      }
                       postEvent(
                         'web_app_trigger_haptic_feedback',
                         { type: 'notification', notification_type: 'success' }
@@ -181,11 +170,6 @@ export const RockPaperScissors: FC = () => {
                         : ''}`);
                     } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
                       updateAnimation(Number(data.creator_id) === Number(res.winner) ? lLoseAnim : rLoseAnim);
-                      if (data?.bet_type === "3") {
-                        dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
-                      } else {
-                        dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
-                      }
                       postEvent(
                         'web_app_trigger_haptic_feedback',
                         { type: 'notification', notification_type: 'error', }
@@ -423,12 +407,16 @@ export const RockPaperScissors: FC = () => {
               <>
                 <div className={styles.game__players}>
                   {data?.players?.map((player: IRPSPlayer) => (
-                    <div className={styles.game__player}
-                      key={player.userid}>
+                    <div
+                      className={styles.game__player}
+                      key={player.userid}
+                    >
                       <p className={styles.game__playerName}>{player?.publicname}</p>
-                      <UserAvatar item={player}
+                      <UserAvatar
+                        item={player}
                         avatar={player?.avatar}
-                        key={player?.userid} />
+                        key={player?.userid}
+                      />
                       {player?.choice === 'ready' && (
                         <img
                           src={readyIcon}
@@ -437,10 +425,7 @@ export const RockPaperScissors: FC = () => {
                       )}
                       {Number(player?.userid) === Number(userId) && player?.choice !== 'ready' && (
                         <div className={styles.game__balance}>
-                          {data?.bet_type === "1"
-                            ? `💵 ${userData?.coins && formatNumber(userData?.coins)}`
-                            : `🔰 ${userData?.tokens && formatNumber(userData?.tokens)}`
-                          }
+                          {player?.money}
                         </div>
                       )}
                       {player?.emoji !== "none" && (
@@ -461,7 +446,8 @@ export const RockPaperScissors: FC = () => {
                       )}
                     </div>
                   ))}
-                </div><>
+                </div>
+                <>
                   {data?.players_count === "2" &&
                     data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready') &&
                     <img src={newVS}

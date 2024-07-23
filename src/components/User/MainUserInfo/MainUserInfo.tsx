@@ -27,7 +27,7 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
 
   useEffect(() => {
     const userNameElement = userNameRef.current;
-    if (userNameElement && userNameElement.scrollWidth > userNameElement.clientWidth) {
+    if (userNameElement && userNameElement.scrollWidth >= userNameElement.clientWidth) {
       userNameElement.classList.add(styles.animateOverflow);
     } else {
       userNameElement?.classList.remove(styles.animateOverflow);

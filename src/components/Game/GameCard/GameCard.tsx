@@ -23,7 +23,7 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
     styles.game,
     extraClass
   );
-  console.log(game);
+
   const handleClick = () => {
     handleClickGame(game);
   };
