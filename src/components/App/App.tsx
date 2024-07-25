@@ -47,8 +47,25 @@ import styles from './App.module.scss';
 export const App: FC = () => {
   const { tg, user } = useTelegram();
   // const userId = user?.id;
-  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
+  const [isPortrait, setIsPortrait] = useState<boolean>(true);
+
+  const handleOrientationChange = () => {
+    if (window.innerHeight > window.innerWidth) {
+      setIsPortrait(true);
+    } else {
+      setIsPortrait(false);
+    }
+  };
+
+  useEffect(() => {
+    handleOrientationChange();
+    window.addEventListener('resize', handleOrientationChange);
+    return () => {
+      window.removeEventListener('resize', handleOrientationChange);
+    };
+  }, []);
 
   document.addEventListener(
     'touchmove',
@@ -104,18 +121,13 @@ export const App: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
 
-  useEffect(() => {
-    const lockOrientation = () => {
-      const orientation = window.screen.orientation as any;
-      if (orientation.lock) {
-        orientation.lock('portrait').catch(function (error: any) {
-          console.log('Screen lock error: ', error);
-        });
-      }
-    };
-
-    lockOrientation();
-  }, []);
+  if (!isPortrait) {
+    return (
+      <div className={styles.warning}>
+        <p>Portrait usage only</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.app}>
