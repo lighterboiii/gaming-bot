@@ -59,12 +59,18 @@
     }
   }
 
+  &__avatarWrapper {
+    @include size(100%, 100%);
+    @include position(absolute, $left: 50%, $top: 60%);
+    transform: translate(-50%, -50%);
+  }
+
   &__balance {
     @include indents(4px 4px, 0);
     @include size(50%, unset);
     @include flex(row, center, center);
     flex-wrap: nowrap;
-    @include position(absolute, $bottom: -8%, $left: 50%);
+    @include position(absolute, $bottom: -20%, $left: 50%);
     transform: translate(-50%);
     color: $rps-text-color;
     background-color: $rps-background-color;

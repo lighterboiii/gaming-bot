@@ -412,11 +412,13 @@ export const RockPaperScissors: FC = () => {
                       key={player.userid}
                     >
                       <p className={styles.game__playerName}>{player?.publicname}</p>
-                      <UserAvatar
-                        item={player}
-                        avatar={player?.avatar}
-                        key={player?.userid}
-                      />
+                      <div className={styles.game__avatarWrapper}>
+                        <UserAvatar
+                          item={player}
+                          avatar={player?.avatar}
+                          key={player?.userid}
+                        />
+                      </div>
                       {player?.choice === 'ready' && (
                         <img
                           src={readyIcon}
