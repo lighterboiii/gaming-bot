@@ -120,7 +120,7 @@ const Referral: FC = () => {
           {message}
         </div>
       ) : (
-        <div className={styles.referral__board}>
+        <div className={styles.referral__board + ' scrollable'}>
           {refsBoard !== null && refsBoard !== undefined && refsBoard.length > 0 ? (
             refsBoard?.map((referral: IMember, index: number) => (
               <UserContainer member={referral}
