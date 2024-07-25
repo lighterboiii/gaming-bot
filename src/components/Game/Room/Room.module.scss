@@ -16,12 +16,14 @@
 
   &__game {
     @include size(100%, 100%);
-    @include max-size(70px, 100%);
-    @include flex(column, center, flex-start, 14px);
+    @include max-size(116px, 100%);
+    @include flex(column, space-between, flex-start, 14px);
   }
 
   &__image {
     @include size(48px, auto);
+    align-self: center;
+    z-index: 2;
   }
 
   &__number {
@@ -43,11 +45,13 @@
     @include size(100%, auto);
     @include indents();
     @include ellipsis();
+    flex: 1;
     color: $main-color;
     font-size: 10px;
     text-align: left;
     text-transform: uppercase;
     font-weight: 700;
+    z-index: 3;
 
     &:nth-child(3) {
       @include ellipsis();
@@ -57,7 +61,7 @@
   &__creator {
     @include indents();
     @include ellipsis();
-    @include size(100%, auto);
+    @include size(auto, auto);
     color: $main-color;
     font-size: 12px;
     text-align: center;

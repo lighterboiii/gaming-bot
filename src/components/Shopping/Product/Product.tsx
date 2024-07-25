@@ -41,7 +41,7 @@ interface ProductProps {
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton, updateItemCount }) => {
   const { user, tg } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);
@@ -105,7 +105,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
               })
             setMessage(`${translation?.successful_purchase}`);
             handlePurchaseItemTypes(item);
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
             break;
           default:
             break;

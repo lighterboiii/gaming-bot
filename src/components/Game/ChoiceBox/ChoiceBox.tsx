@@ -25,7 +25,7 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
   const onChoiceClick = (choice: string) => {
     handleChoice(choice);
     setChoiceItem(choice);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
   };
 
   const getIconPath = (choice: string): string => {

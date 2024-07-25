@@ -18,7 +18,7 @@ import styles from './Referral.module.scss';
 const Referral: FC = () => {
   const { user, tg } = useTelegram();
   const dispatch = useAppDispatch();
-  const userId = user?.id;
+  // const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
@@ -60,7 +60,7 @@ const Referral: FC = () => {
             setMessage(`${translation?.claim_minimum}`);
             break;
           default:
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
             setMessage(`${translation?.funds_transferred}`);
             dispatch(setCoinsNewValue(Number(res.new_coins)));
             setTotalBalance(0);

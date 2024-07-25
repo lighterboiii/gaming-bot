@@ -25,7 +25,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
   const [message, setMessage] = useState('');
@@ -68,7 +68,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       console.log(response);
       if (response.message === 'success') {
         setSelectedRoomId(String(response.room_id));
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         navigate(roomType === 2 ? `/closest/${response.room_id}` : `/room/${response.room_id}`);
       } else if (response.message === 'not_enough_coins') {
         setInsufficient(true);
