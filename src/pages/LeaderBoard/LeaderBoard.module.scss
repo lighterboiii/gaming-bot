@@ -48,7 +48,7 @@
 
   &__avatarContainer {
     @include indents();
-    @include position(absolute, $top: 10%, $left: 0);
+    @include position(absolute, $top: 15%, $left: -10%);
     @include size(180px, 180px);
     transform: translate(-50%, -50%);
 
@@ -118,11 +118,18 @@
     @include flex(row, flex-end, center, 6px);
     font-weight: 900;
     color: $main-color;
+    font-size: 16px;
+  }
+
+  &__prizeRestart {
+    @include flex(row, flex-end, center, 6px);
+    font-weight: 900;
+    color: $main-color;
     font-size: 14px;
   }
 
   &__prizePhoto {
-    @include size(20px, 20px);
+    @include size(32px, 32px);
   }
 
   &__text {

@@ -100,7 +100,7 @@ export const LeaderBoard: FC = () => {
           </div>
           <div className={styles.leaderBoard__leader}>
             <div className={styles.leaderBoard__timeWrapper}>
-              <div className={styles.leaderBoard__prize}>
+              <div className={styles.leaderBoard__prizeRestart}>
                 <span className={styles.leaderBoard__text}>{translation?.leaders_restart_in}</span>
                 <TimerIcon />
                 <Timer
