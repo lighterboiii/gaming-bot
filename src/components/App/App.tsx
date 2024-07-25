@@ -124,7 +124,7 @@ export const App: FC = () => {
   if (!isPortrait) {
     return (
       <div className={styles.warning}>
-        <p>
+        <p className={styles.warning__text}>
           Please rotate your device to portrait mode for optimal app performance.
         </p>
       </div>
