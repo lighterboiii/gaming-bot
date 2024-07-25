@@ -413,7 +413,7 @@ export const ClosestNumber: FC = () => {
   // обработчик клика на иконку эмодзи
   const handleClickEmoji = () => {
     setShowOverlay(true);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
   // Таймер

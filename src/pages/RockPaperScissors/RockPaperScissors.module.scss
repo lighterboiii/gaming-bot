@@ -182,7 +182,7 @@
 
   &__readyIcon {
     @include size(60px, 60px);
-    @include position(absolute, $left: 50%, $bottom: -5%);
+    @include position(absolute, $left: 50%, $bottom: -15%);
     transform: translateX(-50%);
     z-index: 2;
 
