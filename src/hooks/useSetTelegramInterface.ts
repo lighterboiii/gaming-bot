@@ -2,11 +2,10 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { leaveRoomRequest } from "api/gameApi";
-import { roomsUrl } from "utils/routes";
 
 import useTelegram from "./useTelegram";
 
-const useSetTelegramInterface = (navigateUrl?: string, userId?: number) => {
+const useSetTelegramInterface = (navigateUrl: string, userId?: number) => {
   const navigate = useNavigate();
   const { tg } = useTelegram();
 
@@ -20,7 +19,7 @@ const useSetTelegramInterface = (navigateUrl?: string, userId?: number) => {
             console.log(error);
           });
       }
-      navigateUrl && navigate(navigateUrl || roomsUrl);
+      navigateUrl && navigate(navigateUrl);
     });
     return () => {
       tg.BackButton.hide();

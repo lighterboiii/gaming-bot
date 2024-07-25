@@ -35,7 +35,9 @@ export const Shop: FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CombinedItemData | null>(null);
   const [inventoryItems, setInventoryItems] = useState<ItemData[]>([]);
+
   useSetTelegramInterface(indexUrl);
+  
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };

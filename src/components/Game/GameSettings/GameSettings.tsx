@@ -72,10 +72,12 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         navigate(roomType === 2 ? `/closest/${response.room_id}` : `/room/${response.room_id}`);
       } else if (response.message === 'not_enough_coins') {
         setInsufficient(true);
+        setMessage(translation?.insufficient_funds || 'Недостаточно средств');
+        setMessageShown(true);
         setTimeout(() => {
-          closeOverlay();
+          setMessageShown(false);
           setInsufficient(false);
-        }, 2000)
+        }, 2000);
       }
     };
     postNewRoomRequest(data, userIdValue)
@@ -86,14 +88,24 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   };
 
   const handleEnergyCheck = () => {
+    if (bet < 0.1) {
+      setMessage(`${translation?.minimum_bet} ${currency === 1  ? `💵` : `🔰`}`);
+      setMessageShown(true);
+      setTimeout(() => {
+        setMessageShown(false);
+      }, 2000);
+      return;
+    }
+
     if (userInfo) {
       const coins = userCoins ?? 0;
       const tokens = userTokens ?? 0;
 
       if ((currency === 1 && bet > coins) || (currency === 3 && bet > tokens)) {
-        setInsufficient(true);
+        setMessage(translation?.insufficient_funds || 'Недостаточно средств');
+        setMessageShown(true);
         setTimeout(() => {
-          setInsufficient(false);
+          setMessageShown(false);
         }, 2000);
       } else if (userEnergy === 0 && currency === 3) {
         setPopupOpen(true);

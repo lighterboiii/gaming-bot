@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
@@ -38,7 +39,6 @@ import {
   roomUrl,
   closestNumberRoomUrl,
   anyUrl
-
 } from '../../utils/routes';
 import Loader from '../Loader/Loader';
 
@@ -103,6 +103,19 @@ export const App: FC = () => {
     fetchUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
+
+  useEffect(() => {
+    const lockOrientation = () => {
+      const orientation = window.screen.orientation as any;
+      if (orientation.lock) {
+        orientation.lock('portrait').catch(function (error: any) {
+          console.log('Screen lock error: ', error);
+        });
+      }
+    };
+
+    lockOrientation();
+  }, []);
 
   return (
     <div className={styles.app}>
