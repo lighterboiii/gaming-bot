@@ -71,7 +71,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -413,7 +413,7 @@ export const ClosestNumber: FC = () => {
   // обработчик клика на иконку эмодзи
   const handleClickEmoji = () => {
     setShowOverlay(true);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
   // Таймер

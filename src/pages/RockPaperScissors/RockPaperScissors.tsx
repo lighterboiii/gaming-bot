@@ -38,7 +38,7 @@ import styles from "./RockPaperScissors.module.scss";
 export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
@@ -427,7 +427,10 @@ export const RockPaperScissors: FC = () => {
                       )}
                       {Number(player?.userid) === Number(userId) && player?.choice !== 'ready' && (
                         <div className={styles.game__balance}>
-                          {player?.money}
+                          {data?.bet_type === "1"
+                            ? `💵 ${formatNumber(player?.money)}`
+                            : `🔰 ${formatNumber(player?.money)}`
+                          }
                         </div>
                       )}
                       {player?.emoji !== "none" && (

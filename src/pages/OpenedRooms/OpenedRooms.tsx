@@ -26,7 +26,7 @@ import styles from './OpenedRooms.module.scss';
 
 export const OpenedRooms: FC = () => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -48,7 +48,6 @@ export const OpenedRooms: FC = () => {
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
-          console.log(res);
           dispatch(setUserData(res.user_info));
           dispatch(setUserPhoto(res.avatar));
         })
@@ -70,13 +69,16 @@ export const OpenedRooms: FC = () => {
         .then((res: any) => {
           setRooms(res.rooms);
           dispatch(getOpenedRooms(res.rooms));
-          setLoading(false);
+          // setLoading(false);
         })
         .catch((error) => {
           console.log(error);
         });
     };
 
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000)
     fetchRoomsData();
   }, [dispatch]);
 
@@ -174,7 +176,7 @@ export const OpenedRooms: FC = () => {
 
       default:
         sortedRooms = rooms;
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     }
   };
 
@@ -187,7 +189,7 @@ export const OpenedRooms: FC = () => {
   };
 
   const handleCreateClick = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     navigate('/create-room')
   };
 
@@ -229,9 +231,9 @@ export const OpenedRooms: FC = () => {
             )
             }
           </div>
+          {rooms && rooms?.length > 0 && <CreateRoomFooter />}
         </>
       )}
-      {rooms && rooms?.length > 0 && <CreateRoomFooter />}
       {isModalOpen && selectedRoomId && (
         <Modal title={translation?.energy_depleted} closeModal={() => setModalOpen(false)}>
           <JoinRoomPopup

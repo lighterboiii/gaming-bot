@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +23,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [isMessage, setIsMessage] = useState(false);
   const [message, setMessage] = useState('');
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -60,6 +61,7 @@ const Room: FC<IProps> = ({ room, openModal }) => {
 
     joinRoomRequest(userId, String(room.room_id))
       .then((res) => {
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         navigate(roomType === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
       })
       .catch((error) => {

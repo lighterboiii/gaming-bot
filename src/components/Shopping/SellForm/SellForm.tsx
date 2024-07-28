@@ -22,7 +22,7 @@ interface IProps {
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [priceValue, setPriceValue] = useState('')
@@ -43,8 +43,12 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
             setMessage(`${translation?.item_on_display}`);
             break;
+          case "error":
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+            setMessage(`Item sale error`);
+            break;
           case "ok":
-            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
             setMessage(`${translation?.listed_in_marketplace}`);
             dispatch(addItemToLavka(itemWithPrice));
             break;
@@ -59,7 +63,7 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
         onClose();
       });
   };
-
+  console.log(translation?.listed_in_marketplace);
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^\d.]/g, '');
     setPriceValue(value);

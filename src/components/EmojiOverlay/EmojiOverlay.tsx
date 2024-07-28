@@ -17,7 +17,7 @@ interface IProps {
 
 const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [emojis, setEmojis] = useState<string[] | null>(null);
   const [name, setName] = useState<string>("");
 

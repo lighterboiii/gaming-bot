@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -30,7 +31,7 @@ const JoinRoomPopup: FC<IProps> = ({
   fromGameSettings = false,
 }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [messageShown, setMessageShown] = useState(false);
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
@@ -49,6 +50,7 @@ const JoinRoomPopup: FC<IProps> = ({
             }, userId)
               .then((res: any) => {
                 console.log(res);
+                postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
                 navigate(Number(roomType) === 2 ? `/closest/${res.room_id}` : `/room/${res.room_id}`);
               })
               .catch((error) => {
