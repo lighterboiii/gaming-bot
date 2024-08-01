@@ -23,7 +23,7 @@ interface IProps {
 
 const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [messageShown, setMessageShown] = useState<boolean>(false);
@@ -111,6 +111,12 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
     setVisibleItems([]);
   };
 
+  const onOverlayClose = () => {
+    closeOverlay();
+    setMessageShown(false);
+    setVisibleItems([]);
+  };
+
   return (
     <div className={styles.wheel}>
       {loading ? (
@@ -173,7 +179,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
               <Button text={translation?.fortune_wheel_get_button} handleClick={claimPrize} />
             )}
             {!prize && !spinning && messageShown && (
-              <Button text={translation?.insufficient_funds} handleClick={closeOverlay} />
+              <Button text={translation?.insufficient_funds} handleClick={onOverlayClose} />
             )}
           </div>
         </>

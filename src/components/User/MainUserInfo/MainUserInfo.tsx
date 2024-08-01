@@ -25,15 +25,6 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const userNameRef = useRef<HTMLParagraphElement>(null);
 
-  // useEffect(() => {
-  //   const userNameElement = userNameRef.current;
-  //   if (userNameElement && userNameElement.scrollWidth >= userNameElement.clientWidth) {
-  //     userNameElement.classList.add(styles.animateOverflow);
-  //   } else {
-  //     userNameElement?.classList.remove(styles.animateOverflow);
-  //   }
-  // }, [userData]);
-
   const handleClickBalance = () => {
     tg.openTelegramLink(balanceLink);
     postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
@@ -54,12 +45,12 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
                 width={24}
                 height={24}
               />
-              <div className={styles.userInfo__overflow}>
+              {/* <div className={styles.userInfo__overflow}> */}
                 <p className={styles.userInfo__userName}
                   ref={userNameRef}>
                   {userData && userData?.publicname}
                 </p>
-              </div>
+              {/* </div> */}
             </div>
             <p className={styles.userInfo__text}>
               <span>💵</span>

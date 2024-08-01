@@ -8,12 +8,16 @@
   @include flex(row, space-between, center);
 
   &__content {
+    @include size(90%, auto);
     @include flex(row, flex-start, center, 6px);
-    flex-grow: 1;
+
+    @media screen and (max-width: 391px) {
+      gap: 0;
+    }
   }
 
   &__textElements {
-    @include size(80%, 80px);
+    @include size(100%, 80px);
     @include flex(column, flex-end, flex-start, 8px);
   }
 
@@ -24,6 +28,10 @@
   &__avatarContainer {
     @include size(148px, 148px);
 
+    @media screen and (min-width: 380px) and (max-width: 411px) {
+      @include size(130px, 130px);
+    }
+
     @media screen and (max-width: 379px) {
       @include size(108px, 108px);
     }
@@ -33,6 +41,10 @@
     @include size(auto, 136px);
     @include flex(column, center, flex-start, 12px);
     flex-grow: 1;
+
+    @media screen  and (max-width: 411px) {
+      @include max-size(55%, 136px);
+    }
   }
 
   &__money {
@@ -42,32 +54,23 @@
   &__name {
     @include indents();
     @include ellipsis();
-    @include size(140px, auto);
+    @include size(100%, auto);
     @include flex(row, flex-start, center, 6px);
     color: $main-color;
     font-weight: 900;
     line-height: 1;
   }
 
-  &__overflow {
-    @include size(110px, auto);
-    overflow-x: hidden;
-  }
-
   &__userName {
     @include indents();
     @include ellipsis();
-    @include size(120px, auto);
+    @include size(100%, auto);
     text-align: left;
     font-size: 16px;
   
     @media screen and (max-width: 379px) {
       font-size: 14px;
     }
-
-    // &.animateOverflow {
-    //   animation: scrollText 5s linear infinite alternate;
-    // }
   }
 
   &__text {
@@ -142,7 +145,6 @@
     @include size(28px, 28px);
     background-color: $black-color;
     border-radius: $radius-round;
-
 
     @media screen and (max-width: 379px) {
       @include size(24px, 24px);

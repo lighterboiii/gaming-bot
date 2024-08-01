@@ -2,7 +2,6 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useState } from "react";
 
-import { getAppData } from "api/mainApi";
 import { userId } from "api/requestData";
 import useSetTelegramInterface from "hooks/useSetTelegramInterface";
 import useTelegram from "hooks/useTelegram";
@@ -25,9 +24,8 @@ import styles from './Shop.module.scss';
 export const Shop: FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const shopData = useAppSelector(store => store.app.products);
-  const archiveData = useAppSelector(store => store.app.archive);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const lavkaShop = useAppSelector(store => store.app.lavka);
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -91,20 +89,20 @@ export const Shop: FC = () => {
   };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.purchased}`);
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.shop_button}`);
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
