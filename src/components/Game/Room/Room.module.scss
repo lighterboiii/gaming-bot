@@ -17,21 +17,20 @@
   &__game {
     @include size(100%, 100%);
     @include max-size(116px, 100%);
-    @include flex(column, space-between, flex-start, 14px);
+    @include flex(column, center, flex-start, 12px);
 
-    @media screen and (max-width: 380px) {
-      @include max-size(76px, 100%);
+    @media screen and (max-width: 381px) {
+      @include max-size(70px, 100%);
     }
   }
 
   &__image {
     @include size(48px, auto);
-    align-self: center;
   }
 
   &__number {
     @include indents();
-    @include min-size(10%, auto);
+    @include min-size(15%, auto);
     @include ellipsis();
     @include flex(row, center, center, 2px);
     color: $main-color;
@@ -59,15 +58,10 @@
   &__creator {
     @include indents();
     @include ellipsis();
-    @include size(auto, auto);
+    @include size(100%, auto);
     color: $main-color;
     font-size: 12px;
     text-align: center;
     font-weight: 700;
-
-
-    @media screen and (max-width: 380px) {
-      flex-grow: 1;
-    }
   }
 }

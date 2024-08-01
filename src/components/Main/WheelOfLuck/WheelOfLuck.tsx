@@ -26,6 +26,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   // const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
+  const [messageShown, setMessageShown] = useState<boolean>(false);
   const [prize, setPrize] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [visibleItems, setVisibleItems] = useState<IFortuneItem[]>([]);
@@ -86,7 +87,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             }, 1000);
           }, 5000);
         } else if (response?.message === 'notokens') {
-          console.log('Insufficient tokens');
+          setMessageShown(true);
         }
       });
   };
@@ -165,11 +166,14 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             </div>
           </div>
           <div className={styles.wheel__buttonWrapper}>
-            {!spinning && !prize && (
+            {!spinning && !prize && !messageShown && (
               <Button text={translation?.fortune_wheel_spin_button} handleClick={startSpin} />
             )}
             {prize && !spinning && (
               <Button text={translation?.fortune_wheel_get_button} handleClick={claimPrize} />
+            )}
+            {!prize && !spinning && messageShown && (
+              <Button text={translation?.insufficient_funds} handleClick={closeOverlay} />
             )}
           </div>
         </>
