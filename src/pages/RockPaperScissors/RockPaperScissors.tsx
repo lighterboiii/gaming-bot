@@ -398,6 +398,11 @@ export const RockPaperScissors: FC = () => {
     setShowEmojiOverlay(true);
   };
 
+  const handleCloseEmojiOverlay = () => {
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    setShowEmojiOverlay(!showEmojiOverlay)
+  };
+
   if (!isPortrait) {
     return (
       <Warning />
@@ -541,7 +546,7 @@ export const RockPaperScissors: FC = () => {
         )}
         <EmojiOverlay
           show={showEmojiOverlay}
-          onClose={() => setShowEmojiOverlay(!showEmojiOverlay)}
+          onClose={handleCloseEmojiOverlay}
           onEmojiSelect={handleEmojiSelect}
         />
       </div>
