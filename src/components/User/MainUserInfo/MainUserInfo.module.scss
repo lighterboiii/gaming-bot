@@ -56,6 +56,7 @@
 
   &__userName {
     @include indents();
+    @include ellipsis();
     @include size(120px, auto);
     text-align: left;
     font-size: 16px;
@@ -64,9 +65,9 @@
       font-size: 14px;
     }
 
-    &.animateOverflow {
-      animation: scrollText 5s linear infinite alternate;
-    }
+    // &.animateOverflow {
+    //   animation: scrollText 5s linear infinite alternate;
+    // }
   }
 
   &__text {

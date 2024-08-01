@@ -210,7 +210,12 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
           </div>
           <div className={styles.product__info}>
             <div className={styles.product__textElements}>
-              <p className={styles.product__type}>{translation?.item_type}: {item?.item_type}</p>
+              <p className={styles.product__type}>
+                {item?.item_type === "emoji" && `${translation?.shop_type_emoji}` }
+                {item?.item_type === "energy_drink" && `${translation?.shop_type_energydrink}`}
+                {item?.item_type === "skin_anim" && `${translation?.shop_type_skin}`}
+                {item?.item_type === "skin_png" && `${translation?.shop_type_skin}`}
+                </p>
               {item?.seller_publicname &&
                 <p className={styles.product__type}>
                   {translation?.main_menu_seller} {item.seller_publicname}

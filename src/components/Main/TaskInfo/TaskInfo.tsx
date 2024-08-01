@@ -53,6 +53,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
     taskResultRequest(userId, task?.task_id)
       .then((res) => {
         console.log(res);
+        console.log(res);
         const response = res as IClaimRewardResponse;
         if (response?.message === 'incomplete') {
           setIncomplete(true);

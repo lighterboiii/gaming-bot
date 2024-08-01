@@ -1,5 +1,5 @@
 import { postEvent } from "@tma.js/sdk";
-import { FC, useEffect, useRef } from "react";
+import { FC, useRef } from "react";
 import { Link } from "react-router-dom";
 
 import { balanceLink, groupLink } from "../../../api/requestData";
@@ -25,14 +25,14 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const userNameRef = useRef<HTMLParagraphElement>(null);
 
-  useEffect(() => {
-    const userNameElement = userNameRef.current;
-    if (userNameElement && userNameElement.scrollWidth >= userNameElement.clientWidth) {
-      userNameElement.classList.add(styles.animateOverflow);
-    } else {
-      userNameElement?.classList.remove(styles.animateOverflow);
-    }
-  }, [userData]);
+  // useEffect(() => {
+  //   const userNameElement = userNameRef.current;
+  //   if (userNameElement && userNameElement.scrollWidth >= userNameElement.clientWidth) {
+  //     userNameElement.classList.add(styles.animateOverflow);
+  //   } else {
+  //     userNameElement?.classList.remove(styles.animateOverflow);
+  //   }
+  // }, [userData]);
 
   const handleClickBalance = () => {
     tg.openTelegramLink(balanceLink);

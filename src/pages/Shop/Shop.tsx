@@ -40,7 +40,7 @@ export const Shop: FC = () => {
   const isPortrait = useOrientation();
 
   useSetTelegramInterface(indexUrl);
-  
+  console.log(goods);
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
@@ -71,6 +71,7 @@ export const Shop: FC = () => {
     setActiveButton(`${translation?.shop_button}`);
     getCollectiblesInfo(userId)
       .then(res => {
+        console.log(res);
         const response = res as IInventoryRequest;
         setInventoryItems(response?.message);
       })
@@ -91,20 +92,20 @@ export const Shop: FC = () => {
   };
   // обработчик клика по кнопке "приобретено"
   const handleClickInventory = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.purchased}`);
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.shop_button}`);
     shopData && handleAddIsCollectible(shopData);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
     setLoading(true);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
