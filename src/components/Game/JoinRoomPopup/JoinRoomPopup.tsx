@@ -39,7 +39,6 @@ const JoinRoomPopup: FC<IProps> = ({
   const handleJoinRoom = () => {
     energyDrinkRequest(userId)
       .then((res: any) => {
-        console.log(res);
         if (res?.message === 'ok') {
           if (fromGameSettings) {
             postNewRoomRequest({
@@ -49,7 +48,6 @@ const JoinRoomPopup: FC<IProps> = ({
               room_type: roomType
             }, userId)
               .then((res: any) => {
-                console.log(res);
                 postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
                 navigate(Number(roomType) === 2 ? `/closest/${res.room_id}` : `/room/${res.room_id}`);
               })

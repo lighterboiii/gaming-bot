@@ -37,7 +37,6 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
     if (step.step_type === "link") {
       window.open(step.target, '_blank');
     } else if (step.step_type === "instruction") {
-      console.log("Instruction:", step.target);
       setTarget(step.target);
       setShowInstruction(true);
     } else if (step.step_type === "subscribe") {
@@ -52,8 +51,6 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
     setShowReward(true);
     taskResultRequest(userId, task?.task_id)
       .then((res) => {
-        console.log(res);
-        console.log(res);
         const response = res as IClaimRewardResponse;
         if (response?.message === 'incomplete') {
           setIncomplete(true);

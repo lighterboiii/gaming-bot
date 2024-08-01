@@ -95,7 +95,6 @@ export const RockPaperScissors: FC = () => {
       };
       getPollingRequest(userId, data)
         .then((res: any) => {
-          console.log(res);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
@@ -152,7 +151,6 @@ export const RockPaperScissors: FC = () => {
           if (roomId) {
             whoIsWinRequest(roomId)
               .then((res: any) => {
-                console.log(res);
                 setPlayersAnim({
                   firstAnim: res?.f_anim,
                   secondAnim: res?.s_anim,

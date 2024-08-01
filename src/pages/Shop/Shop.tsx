@@ -40,7 +40,7 @@ export const Shop: FC = () => {
   const isPortrait = useOrientation();
 
   useSetTelegramInterface(indexUrl);
-  console.log(goods);
+
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
@@ -71,7 +71,6 @@ export const Shop: FC = () => {
     setActiveButton(`${translation?.shop_button}`);
     getCollectiblesInfo(userId)
       .then(res => {
-        console.log(res);
         const response = res as IInventoryRequest;
         setInventoryItems(response?.message);
       })

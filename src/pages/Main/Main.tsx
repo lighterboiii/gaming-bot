@@ -56,7 +56,6 @@ export const Main: FC = () => {
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
-          console.log(res);
           dispatch(setUserData(res.user_info));
           dispatch(setBannerData(res.ad_info));
           dispatch(setShopImage(res.shop_image_url));

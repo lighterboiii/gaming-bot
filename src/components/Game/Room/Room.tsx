@@ -37,7 +37,7 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       }, 1500);
       return;
     }
-    console.log(room);
+
     if ((userInfo?.user_energy === 0 && Number(room?.bet_type) === 3) || roomType === 0) {
       openModal();
       return;

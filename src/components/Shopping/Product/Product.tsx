@@ -100,9 +100,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
           case "ok":
             updateItemCount(item.item_id);
             getShopItemsRequest()
-              .then(res => {
-                console.log(res);
-              })
+              .then(res => {})
             setMessage(`${translation?.successful_purchase}`);
             handlePurchaseItemTypes(item);
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });

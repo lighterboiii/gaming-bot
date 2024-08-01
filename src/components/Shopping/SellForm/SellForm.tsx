@@ -31,7 +31,6 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
     sellLavkaRequest(itemId, price, userId)
       .then((response) => {
         const res = response as ISellLavkaRes;
-        console.log(res);
         const itemWithPrice = {
           ...item,
           item_price_coins: price,
@@ -40,15 +39,15 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
         setMessageShown(true);
         switch (res.message) {
           case "already":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
             setMessage(`${translation?.item_on_display}`);
             break;
           case "error":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
             setMessage(`Item sale error`);
             break;
           case "ok":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
             setMessage(`${translation?.listed_in_marketplace}`);
             dispatch(addItemToLavka(itemWithPrice));
             break;
@@ -63,7 +62,7 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
         onClose();
       });
   };
-  console.log(translation?.listed_in_marketplace);
+
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^\d.]/g, '');
     setPriceValue(value);

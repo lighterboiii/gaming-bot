@@ -152,7 +152,6 @@ export const ClosestNumber: FC = () => {
       };
       getPollingRequest(userId, data)
         .then((res: any) => {
-          console.log(res);
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
@@ -204,14 +203,12 @@ export const ClosestNumber: FC = () => {
           setTimerStarted(false);
           whoIsWinRequest(roomId!)
             .then((res: any) => {
-              console.log(res);
               if (res.winner === "draw") {
                 setDraw(true);
                 setRoomValue(Number(res?.room_value));
                 const drawPlayerIds = res.draw_players;
                 const drawPlayers = data?.players?.filter((player: any) =>
                   drawPlayerIds.includes(player.userid));
-                console.log(drawPlayers);
                 setDrawWinners(drawPlayers);
                 setWinSum(Number(res?.winner_value));
               } else {
