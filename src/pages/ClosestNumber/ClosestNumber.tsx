@@ -24,8 +24,10 @@ import CaseSix from "../../components/ClosestNumber/Six/Six";
 import CaseTwo from "../../components/ClosestNumber/Three/Three";
 import Loader from "../../components/Loader/Loader";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
+import { Warning } from "../../components/OrientationWarning/Warning";
 import Button from "../../components/ui/Button/Button";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';
@@ -71,7 +73,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -100,6 +102,7 @@ export const ClosestNumber: FC = () => {
   const [rules, setRulesShown] = useState<boolean | null>(false);
   const isRulesShown = useAppSelector(store => store.app.secondGameRulesState);
   const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
+  const isPortrait = useOrientation();
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -486,7 +489,7 @@ export const ClosestNumber: FC = () => {
   // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '2');
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)
@@ -498,6 +501,13 @@ export const ClosestNumber: FC = () => {
         })
     }, 1000);
   };
+
+  if (!isPortrait) {
+    return (
+      <Warning />
+    );
+  }
+
   return (
     <div className={styles.game}>
       {loading ? (

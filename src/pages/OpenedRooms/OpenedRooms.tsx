@@ -15,7 +15,9 @@ import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
 import Room from "../../components/Game/Room/Room";
 import Loader from "../../components/Loader/Loader";
 import { Modal } from "../../components/Modal/Modal";
+import { Warning } from "../../components/OrientationWarning/Warning";
 import Button from "../../components/ui/Button/Button";
+import useOrientation from "../../hooks/useOrientation";
 import { getOpenedRooms, setUserData, setUserPhoto } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { sortRooms } from "../../utils/additionalFunctions";
@@ -26,7 +28,7 @@ import styles from './OpenedRooms.module.scss';
 
 export const OpenedRooms: FC = () => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -43,7 +45,7 @@ export const OpenedRooms: FC = () => {
   const [betClickCount, setBetClickCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-
+  const isPortrait = useOrientation();
   useEffect(() => {
     const fetchUserData = () => {
       getAppData(userId)
@@ -189,9 +191,15 @@ export const OpenedRooms: FC = () => {
   };
 
   const handleCreateClick = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
-    navigate('/create-room')
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    navigate('/create-room');
   };
+
+  if (!isPortrait) {
+    return (
+      <Warning />
+    );
+  }
 
   return (
     <div className={styles.rooms}>

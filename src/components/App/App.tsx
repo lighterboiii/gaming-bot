@@ -46,26 +46,9 @@ import styles from './App.module.scss';
 
 export const App: FC = () => {
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [isPortrait, setIsPortrait] = useState<boolean>(true);
-
-  const handleOrientationChange = () => {
-    if (window.innerHeight > window.innerWidth) {
-      setIsPortrait(true);
-    } else {
-      setIsPortrait(false);
-    }
-  };
-
-  useEffect(() => {
-    handleOrientationChange();
-    window.addEventListener('resize', handleOrientationChange);
-    return () => {
-      window.removeEventListener('resize', handleOrientationChange);
-    };
-  }, []);
 
   document.addEventListener(
     'touchmove',
@@ -120,16 +103,6 @@ export const App: FC = () => {
     fetchUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
-
-  if (!isPortrait) {
-    return (
-      <div className={styles.warning}>
-        <p className={styles.warning__text}>
-          Please rotate your device to portrait mode for optimal app performance.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.app}>

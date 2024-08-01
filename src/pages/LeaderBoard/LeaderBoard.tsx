@@ -5,9 +5,11 @@ import useSetTelegramInterface from "hooks/useSetTelegramInterface";
 
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
+import { Warning } from "../../components/OrientationWarning/Warning";
 import Timer from "../../components/Timer/Timer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import UserContainer from "../../components/User/UserContainer/UserContainer";
+import useOrientation from "../../hooks/useOrientation";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import TimerIcon from "../../icons/Timer/TimerIcon";
 import { useAppSelector } from "../../services/reduxHooks";
@@ -20,6 +22,7 @@ import styles from './LeaderBoard.module.scss';
 
 export const LeaderBoard: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
+  const isPortrait = useOrientation();
   const [loading, setLoading] = useState(false);
   const [leaderBoard, setLeaderBoard] = useState<IMember[] | null>(null);
   const [topLeader, setTopLeader] = useState<IMember | null>(null);
@@ -81,6 +84,12 @@ export const LeaderBoard: FC = () => {
       clearInterval(intervalId);
     };
   }, []);
+
+  if (!isPortrait) {
+    return (
+      <Warning />
+    );
+  }
 
   return (
     <div className={styles.leaderBoard}>

@@ -9,10 +9,12 @@ import useTelegram from "hooks/useTelegram";
 import { IInventoryRequest } from "utils/types/responseTypes";
 
 import { getCollectiblesInfo, getLavkaAvailableRequest, getShopItemsRequest } from "../../api/shopApi";
+import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
+import useOrientation from "../../hooks/useOrientation";
 import { setLavkaAvailable } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
@@ -23,7 +25,7 @@ import styles from './Shop.module.scss';
 export const Shop: FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const shopData = useAppSelector(store => store.app.products);
   const archiveData = useAppSelector(store => store.app.archive);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
@@ -35,6 +37,7 @@ export const Shop: FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CombinedItemData | null>(null);
   const [inventoryItems, setInventoryItems] = useState<ItemData[]>([]);
+  const isPortrait = useOrientation();
 
   useSetTelegramInterface(indexUrl);
   
@@ -122,6 +125,12 @@ export const Shop: FC = () => {
         setGoods(res.shop);
       })
   };
+
+  if (!isPortrait) {
+    return (
+      <Warning />
+    );
+  }
 
   return (
     <div className={styles.shop}>

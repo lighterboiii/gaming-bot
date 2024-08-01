@@ -9,7 +9,9 @@ import { getExistingGamesRequest } from "../../api/gameApi";
 import GameCard from "../../components/Game/GameCard/GameCard";
 import GameSettings from "../../components/Game/GameSettings/GameSettings";
 import Loader from "../../components/Loader/Loader";
+import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
+import useOrientation from "../../hooks/useOrientation";
 import { useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
 import { IGameCardData } from "../../utils/types/gameTypes";
@@ -22,6 +24,7 @@ export const CreateRoom: FC = () => {
   const [settingsOverlay, setSettingsOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
   const translation = useAppSelector(store => store.app.languageSettings);
+  const isPortrait = useOrientation();
 
   useSetTelegramInterface(indexUrl);
 
@@ -42,7 +45,13 @@ export const CreateRoom: FC = () => {
     setSettingsOverlay(!settingsOverlay);
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
-  console.log(games);
+
+  if (!isPortrait) {
+    return (
+      <Warning />
+    );
+  }
+
   return (
     <div className={styles.create}>
       {loading ? <Loader /> : (

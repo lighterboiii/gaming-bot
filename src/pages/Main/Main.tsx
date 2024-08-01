@@ -10,11 +10,13 @@ import DailyBonus from "../../components/Main/Bonus/Bonus";
 import Referral from "../../components/Main/Referral/Referral";
 import Tasks from "../../components/Main/Tasks/Tasks";
 import WheelOfLuck from "../../components/Main/WheelOfLuck/WheelOfLuck";
+import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
 import ShopLink from "../../components/Shopping/ShopLink/ShopLink";
 import BigButton from "../../components/ui/BigButton/BigButton";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
+import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
@@ -35,7 +37,7 @@ import styles from './Main.module.scss';
 export const Main: FC = () => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -48,6 +50,7 @@ export const Main: FC = () => {
   const [showTasksOverlay, setShowTasksOverlay] = useState(false);
   const [showWheelOverlay, setShowWheelOverlay] = useState(false);
   const [luckData, setLuckData] = useState<IFortuneData | null>(null);
+  const isPortrait = useOrientation();
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -115,6 +118,12 @@ export const Main: FC = () => {
       setShowBonusOverlay(true);
     }
   }, [dailyBonusData]);
+
+  if (!isPortrait) {
+    return (
+      <Warning />
+    );
+  }
 
   return (
     <div className={styles.main}>

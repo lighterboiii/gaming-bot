@@ -1,0 +1,16 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.warning {
+  @include size(100vw, 100vh);
+  @include flex(column, center, center);
+  font-weight: 900;
+  font-style: normal;
+  font-size: 20px;
+  color: $main-color;
+  background-color: inherit;
+
+  &__text {
+    @include indents();
+  }
+}

@@ -15,8 +15,10 @@ import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import ChoiceBox from "../../components/Game/ChoiceBox/ChoiceBox";
 import HandShake from '../../components/Game/HandShake/HandShake';
 import Loader from "../../components/Loader/Loader";
+import { Warning } from "../../components/OrientationWarning/Warning";
 import Button from "../../components/ui/Button/Button";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import useOrientation from "../../hooks/useOrientation";
 import useSetTelegramInterface from "../../hooks/useSetTelegramInterface";
 import useTelegram from "../../hooks/useTelegram";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
@@ -38,7 +40,7 @@ import styles from "./RockPaperScissors.module.scss";
 export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
@@ -61,6 +63,7 @@ export const RockPaperScissors: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
+  const isPortrait = useOrientation();
   // установка первоначального вида рук и правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -394,6 +397,12 @@ export const RockPaperScissors: FC = () => {
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     setShowEmojiOverlay(true);
   };
+
+  if (!isPortrait) {
+    return (
+      <Warning />
+    );
+  }
 
   return (
     <div className={styles.game}>
