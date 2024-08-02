@@ -38,18 +38,16 @@ export const Shop: FC = () => {
   const isPortrait = useOrientation();
 
   useSetTelegramInterface(indexUrl);
-  console.log(collectibles);
+
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
   // функция отрисовки предметов инвентаря
   const handleRenderInventoryData = () => {
     setLoading(true);
-    // const collectibleIds = collectibles?.map(id => Number(id));
     setGoods(inventoryItems);
     const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
       ...item,
-      // isCollectible: collectibleIds?.includes(item.item_id),
       isCollectible: true,
     }));
     setGoods(inventoryDataWithCollectible);
@@ -70,7 +68,6 @@ export const Shop: FC = () => {
     setActiveButton(`${translation?.shop_button}`);
     getCollectiblesInfo(userId)
       .then(res => {
-        console.log(res);
         const response = res as IInventoryRequest;
         setInventoryItems(response?.message);
       })
