@@ -46,6 +46,7 @@ export const Shop: FC = () => {
   const handleRenderInventoryData = () => {
     setLoading(true);
     const collectibleIds = collectibles?.map(id => Number(id));
+    console.log(collectibles);
     setGoods(inventoryItems);
     const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
       ...item,
