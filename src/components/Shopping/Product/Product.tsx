@@ -194,7 +194,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
         console.log(error);
       });
   };
-
+  console.log(item);
   return (
     <div className={styles.product}>
       {messageShown ? (

@@ -57,7 +57,6 @@ export const RockPaperScissors: FC = () => {
   const [timerStarted, setTimerStarted] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [showTimer, setShowTimer] = useState(true);
-  const userData = useAppSelector(store => store.app.info);
   const [rules, setRulesShown] = useState<boolean | null>(false);
   const [anyPlayerReady, setAnyPlayerReady] = useState<boolean>(false);
   const translation = useAppSelector(store => store.app.languageSettings);
