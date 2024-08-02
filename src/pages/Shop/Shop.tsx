@@ -70,6 +70,7 @@ export const Shop: FC = () => {
     setActiveButton(`${translation?.shop_button}`);
     getCollectiblesInfo(userId)
       .then(res => {
+        console.log(res);
         const response = res as IInventoryRequest;
         setInventoryItems(response?.message);
       })
