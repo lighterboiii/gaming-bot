@@ -38,7 +38,7 @@ export const Shop: FC = () => {
   const isPortrait = useOrientation();
 
   useSetTelegramInterface(indexUrl);
-
+  console.log(collectibles);
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);
   };
@@ -46,7 +46,6 @@ export const Shop: FC = () => {
   const handleRenderInventoryData = () => {
     setLoading(true);
     const collectibleIds = collectibles?.map(id => Number(id));
-    console.log(collectibles);
     setGoods(inventoryItems);
     const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
       ...item,
