@@ -45,11 +45,12 @@ export const Shop: FC = () => {
   // функция отрисовки предметов инвентаря
   const handleRenderInventoryData = () => {
     setLoading(true);
-    const collectibleIds = collectibles?.map(id => Number(id));
+    // const collectibleIds = collectibles?.map(id => Number(id));
     setGoods(inventoryItems);
     const inventoryDataWithCollectible = inventoryItems?.map((item: ItemData) => ({
       ...item,
-      isCollectible: collectibleIds?.includes(item.item_id),
+      // isCollectible: collectibleIds?.includes(item.item_id),
+      isCollectible: true,
     }));
     setGoods(inventoryDataWithCollectible);
     setLoading(false);
