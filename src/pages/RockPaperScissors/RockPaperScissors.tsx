@@ -146,11 +146,12 @@ export const RockPaperScissors: FC = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+          console.log('data', data);
           setShowTimer(false);
           if (roomId) {
             whoIsWinRequest(roomId)
-              .then((res: any) => {
-                setPlayersAnim({
+              .then( async (res: any) => {
+                await setPlayersAnim({
                   firstAnim: res?.f_anim,
                   secondAnim: res?.s_anim,
                 });

@@ -36,8 +36,8 @@ const SettingsSlider: FC<IProps> = ({
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setBet(prevBet => {
       const currentBet = parseFloat(prevBet);
-      if (currentBet > 0.1) {
-        const newBet = (currentBet - 0.1).toFixed(1);
+      if (currentBet > 0) {
+        const newBet = currentBet === 0.1 ? '0' :  (currentBet - 0.1).toFixed(1);
         onInputChange && onInputChange(newBet);
         return newBet;
       }

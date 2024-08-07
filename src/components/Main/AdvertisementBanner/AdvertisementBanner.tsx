@@ -54,13 +54,13 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
         <div className={styles.banner__info}>
           <h3
             className={styles.banner__picHeader}
-            style={{ color: `${bannersData[currentIndex]?.pic_text_color}` }}
+            style={{ color: `${bannersData[currentIndex]?.pic_text_color}`, wordWrap : "break-word" }}
           >
             {bannersData[currentIndex]?.pic_header}
           </h3>
           <p
             className={styles.banner__text}
-            style={{ color: `${bannersData[currentIndex]?.pic_text_color}` }}
+            style={{ color: `${bannersData[currentIndex]?.pic_text_color}`}}
           >
             {bannersData[currentIndex]?.pic_text}
           </p>

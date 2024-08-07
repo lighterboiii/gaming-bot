@@ -92,7 +92,9 @@ export const App: FC = () => {
           dispatch(setSecondGameRuleImage(res.game_rule_2_url));
           dispatch(setFirstGameRulesState(res.game_rule_1_show));
           dispatch(setSecondGameRulesState(res.game_rule_2_show));
-          setLoading(false);
+          setTimeout(() => {
+            setLoading(false);
+          }, 1500);
         })
         .catch((error) => {
           console.error('Get user data error:', error);
@@ -105,7 +107,7 @@ export const App: FC = () => {
 
   return (
     <div className={styles.app}>
-      {loading ? <Loader /> : (
+      {loading ? <Loader /> : '' }
         <Routes>
           <Route path={indexUrl}
             element={<Main />} />
@@ -124,7 +126,6 @@ export const App: FC = () => {
           <Route path={anyUrl}
             element={<NotFoundPage />} />
         </Routes>
-      )}
     </div>
   );
 };
