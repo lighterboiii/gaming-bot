@@ -35,7 +35,7 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
     goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length);
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
-  
+
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const handlers = useSwipeable({
     onSwipedLeft: handleNextSlide,
@@ -54,13 +54,13 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
         <div className={styles.banner__info}>
           <h3
             className={styles.banner__picHeader}
-            style={{ color: `${bannersData[currentIndex]?.pic_text_color}` }}
+            style={{ color: `${bannersData[currentIndex]?.pic_text_color}`, wordWrap: "break-word" }}
           >
             {bannersData[currentIndex]?.pic_header}
           </h3>
           <p
             className={styles.banner__text}
-            style={{ color: `${bannersData[currentIndex]?.pic_text_color}` }}
+            style={{ color: `${bannersData[currentIndex]?.pic_text_color}`}}
           >
             {bannersData[currentIndex]?.pic_text}
           </p>
