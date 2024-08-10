@@ -107,7 +107,6 @@ export const App: FC = () => {
 
   return (
     <div className={styles.app}>
-<<<<<<< HEAD
       {loading ? <Loader /> : ''}
       <Routes>
         <Route path={indexUrl}
@@ -127,27 +126,6 @@ export const App: FC = () => {
         <Route path={anyUrl}
           element={<NotFoundPage />} />
       </Routes>
-=======
-      {loading ? <Loader /> : '' }
-        <Routes>
-          <Route path={indexUrl}
-            element={<Main />} />
-          <Route path={roomsUrl}
-            element={<OpenedRooms />} />
-          <Route path={createRoomUrl}
-            element={<CreateRoom />} />
-          <Route path={shopUrl}
-            element={<Shop />} />
-          <Route path={leaderboardUrl}
-            element={<LeaderBoard />} />
-          <Route path={roomUrl}
-            element={<RockPaperScissors />} />
-          <Route path={closestNumberRoomUrl}
-            element={<ClosestNumber />} />
-          <Route path={anyUrl}
-            element={<NotFoundPage />} />
-        </Routes>
->>>>>>> fix-bugs
     </div>
   );
 };

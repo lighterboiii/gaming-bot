@@ -54,11 +54,7 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
         <div className={styles.banner__info}>
           <h3
             className={styles.banner__picHeader}
-<<<<<<< HEAD
             style={{ color: `${bannersData[currentIndex]?.pic_text_color}`, wordWrap: "break-word" }}
-=======
-            style={{ color: `${bannersData[currentIndex]?.pic_text_color}`, wordWrap : "break-word" }}
->>>>>>> fix-bugs
           >
             {bannersData[currentIndex]?.pic_header}
           </h3>

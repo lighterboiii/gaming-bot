@@ -50,7 +50,7 @@ export const RockPaperScissors: FC = () => {
   const [animation, setAnimation] = useState<any>(null);
   const [animationKey, setAnimationKey] = useState(0);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
-
+  const [playerMoney, setPlayerMoney] = useState<number | null>(null);
   const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
   const [timer, setTimer] = useState<number>(15);
@@ -143,15 +143,16 @@ export const RockPaperScissors: FC = () => {
       return prevAnimation;
     });
   }, []);
+
   let winFlag: any;
   winFlag = true;
+ 
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-          console.log('data', data);
           setShowTimer(false);
           if (roomId && winFlag) {
             whoIsWinRequest(roomId)

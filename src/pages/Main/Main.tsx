@@ -22,13 +22,6 @@ import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
 import gowinLogo from '../../images/gowin.png';
-import {
-  setBannerData,
-  setProductsArchive,
-  setShopImage,
-  setUserData,
-  setUserPhoto
-} from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { IBannerData, IFortuneData } from "../../utils/types";
 
@@ -51,25 +44,6 @@ export const Main: FC = () => {
   const [showWheelOverlay, setShowWheelOverlay] = useState(false);
   const [luckData, setLuckData] = useState<IFortuneData | null>(null);
   const isPortrait = useOrientation();
-
-  // useEffect(() => {
-  //   const fetchUserData = () => {
-  //     getAppData(userId)
-  //       .then((res) => {
-  //         dispatch(setUserData(res.user_info));
-  //         dispatch(setBannerData(res.ad_info));
-  //         dispatch(setShopImage(res.shop_image_url));
-  //         dispatch(setUserPhoto(res.avatar));
-  //         dispatch(setProductsArchive(res.collectibles_data));
-  //       })
-  //       .catch((error) => {
-  //         console.error('Get user data error:', error);
-  //       })
-  //   };
-
-  //   fetchUserData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [dispatch, userId]);
 
   const handleBannerClick = (bannerData: IBannerData) => {
     setCurrentBanner(bannerData);

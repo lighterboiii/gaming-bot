@@ -5,7 +5,6 @@
   @include big-link-layout();
   text-decoration: none;
   overflow: hidden;
-  background: url('../../../images/Shop_small_bg.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -37,7 +36,6 @@
 
   &__logo {
     @include size(100px, 24px);
-    // z-index: 2;
   }
 
   &__char {

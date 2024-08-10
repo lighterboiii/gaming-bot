@@ -4,7 +4,6 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 
 import gowinLogo from '../../../images/gowin.png';
-import girl from '../../../images/Shop_small_char.png';
 import { useAppSelector } from "../../../services/reduxHooks";
 import { shopUrl } from "../../../utils/routes";
 
@@ -32,7 +31,7 @@ const ShopLink: FC<IProps> = ({ shopImageUrl }) => {
           className={styles.shopLink__logo} />
         <h2 className={styles.shopLink__title}>{translation?.menu_shop}</h2>
         <img
-          src={shopImageUrl ? shopImageUrl : girl}
+          src={shopImageUrl ? shopImageUrl : ''}
           alt="character"
           className={styles.shopLink__char} />
       </div>
