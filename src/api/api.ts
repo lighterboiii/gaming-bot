@@ -17,7 +17,7 @@ type TRequest = {
 };
 
 // const BASE_URL = 'https://gamebottggw.ngrok.app/';
-const BASE_URL = 'https://127.0.0.1:5000/';
+const BASE_URL = 'http://127.0.0.1:5000/';
 
 const BASE_PARAMS = {
   headers: {
