@@ -538,7 +538,8 @@ export const RockPaperScissors: FC = () => {
                     </button>
                   </div>
                 </>
-              </>) : (
+              </>
+              ) : (
               <div className={styles.rules}>
                 <img src={ruleImage ? ruleImage : ''}
                   alt="game rules"

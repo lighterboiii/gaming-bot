@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { token } from "./requestData";
 
 /* eslint-disable import/no-anonymous-default-export */

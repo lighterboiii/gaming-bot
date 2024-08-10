@@ -45,7 +45,7 @@ export const OpenedRooms: FC = () => {
   const [betClickCount, setBetClickCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-  console.log(translation);
+
   const isPortrait = useOrientation();
   useEffect(() => {
     setTypeValue(`${translation?.sort_all}`);
@@ -82,9 +82,6 @@ export const OpenedRooms: FC = () => {
         });
     };
 
-    // setTimeout(() => {
-      // setLoading(false);
-    // }, 1000)
     fetchRoomsData();
   }, [dispatch]);
 
