@@ -18,7 +18,7 @@ const CreateRoomFooter: FC = () => {
   const handleCreateClick = () => {
     postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
     navigate('/create-room')
-  }
+  };
 
   return (
     <div className={styles.footer}>
