@@ -87,12 +87,12 @@ export const RockPaperScissors: FC = () => {
       if (!roomId || !isMounted) {
         return;
       }
-      const data = {
+      const setDatas = {
         user_id: userId,
         room_id: roomId,
         type: 'wait'
       };
-      getPollingRequest(userId, data)
+      getPollingRequest(userId, setDatas)
         .then((res: any) => {
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
@@ -101,7 +101,11 @@ export const RockPaperScissors: FC = () => {
           } else if (res?.message === 'timeout') {
             setTimeout(fetchRoomInfo, 500);
           } else {
-            setData(res);
+            if (data === null ||
+              !data?.players?.every((player: IRPSPlayer) =>
+                player?.choice !== 'none' && player?.choice !== 'ready')) {
+              setData(res);
+            }
             setLoading(false);
           }
 
@@ -139,7 +143,8 @@ export const RockPaperScissors: FC = () => {
       return prevAnimation;
     });
   }, []);
-
+  let winFlag: any;
+  winFlag = true;
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
@@ -148,9 +153,10 @@ export const RockPaperScissors: FC = () => {
         if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
           console.log('data', data);
           setShowTimer(false);
-          if (roomId) {
+          if (roomId && winFlag) {
             whoIsWinRequest(roomId)
               .then(async (res: any) => {
+                winFlag = false;
                 await setPlayersAnim({
                   firstAnim: res?.f_anim,
                   secondAnim: res?.s_anim,
@@ -186,9 +192,7 @@ export const RockPaperScissors: FC = () => {
                     setTimeout(() => {
                       setMessageVisible(false);
                       setAnimation(null);
-                      setShowTimer(true);
                       setAnyPlayerReady(true);
-                      setTimerStarted(true);
                       setTimer(15);
                       setPlayersAnim({
                         firstAnim: null,
@@ -210,6 +214,7 @@ export const RockPaperScissors: FC = () => {
   }, [data, roomId, translation?.draw, translation?.you_lost, translation?.you_won, updateAnimation, userId]);
   // хендлер готовности игрока
   const handleReady = () => {
+    winFlag = true;
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
     if (data?.bet_type === "1") {
       if (player?.money <= data?.bet) {
@@ -310,9 +315,12 @@ export const RockPaperScissors: FC = () => {
   };
   // Таймер
   useEffect(() => {
-    if (data?.players_count === "2" && data?.players?.some((player: IRPSPlayer) => player.choice === 'none')) {
+    if (data?.players_count === "2"
+      && data?.players?.some((player: IRPSPlayer) => player.choice === 'none')
+      && data?.players?.some((player: IRPSPlayer) => player.choice === 'ready')) {
       setTimerStarted(true);
-      setTimer(15);
+      setShowTimer(true);
+      // setTimer(15);
     } else if (data?.players?.every((player: IRPSPlayer) => player.choice !== 'none')) {
       setTimerStarted(false);
       if (timerRef.current) {
