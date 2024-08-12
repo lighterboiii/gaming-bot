@@ -3,6 +3,8 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { formatNumberSecond } from "utils/additionalFunctions";
+
 import UserContainer from "../..//User/UserContainer/UserContainer";
 import { getReferralsData, transferCoinsToBalanceReq } from "../../../api/mainApi";
 import { inviteLink, userId } from "../../../api/requestData";
@@ -92,7 +94,7 @@ const Referral: FC = () => {
         <p className={styles.referral__text}>
           <span className={styles.referral__earn}>{translation?.earned_now}</span>
           <span className={styles.referral__sumSpan}>
-            💵 {totalBalance}$
+            💵 {totalBalance && formatNumberSecond(totalBalance)}$
           </span>
         </p>
       </div>
@@ -124,9 +126,9 @@ const Referral: FC = () => {
           {refsBoard !== null && refsBoard !== undefined && refsBoard.length > 0 ? (
             refsBoard?.map((referral: IMember, index: number) => (
               <UserContainer member={referral}
-                index={index}
-                length={refsBoard.length + 1}
-                key={index} />
+                index={index - 1}
+                length={refsBoard.length}
+                key={index - 1} />
             ))) :
             <span className={styles.referral__emptyBoard}>
               {translation?.no_friends_played}

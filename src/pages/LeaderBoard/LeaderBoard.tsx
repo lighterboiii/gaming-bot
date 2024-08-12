@@ -2,6 +2,7 @@
 import { FC, useEffect, useState } from "react";
 
 import useSetTelegramInterface from "hooks/useSetTelegramInterface";
+import { formatNumber } from "utils/additionalFunctions";
 
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
@@ -149,7 +150,7 @@ export const LeaderBoard: FC = () => {
                           width={16}
                           height={16}
                         />}
-                      {topLeader?.coins}
+                      {topLeader && formatNumber(topLeader?.coins)}
                     </p>
                   </>
                 </div>

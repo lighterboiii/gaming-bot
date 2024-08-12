@@ -122,7 +122,9 @@ export const OpenedRooms: FC = () => {
           } else {
             sortedRooms = sortRooms(rooms as any, 'room_type', sortByType);
             setSortByType(!sortByType);
-            setTypeValue(sortByType ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`);
+            setTypeValue(sortByType 
+              ? `${translation?.rock_paper_scissors_short}` 
+              : `${translation?.closest_number_short}`);
             setRooms(sortedRooms);
           }
           return newCount;

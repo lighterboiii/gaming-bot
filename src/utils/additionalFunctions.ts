@@ -13,3 +13,8 @@ export const sortRooms = (rooms: any[], sortBy: string, ascending: boolean) => {
     }
   });
 };
+
+export function formatNumberSecond(number: number) {
+  const fixedNumber = number.toFixed(4);
+  return fixedNumber.endsWith('.00') ? fixedNumber.slice(0, -3) : fixedNumber;
+}

@@ -4,7 +4,7 @@ import { FC } from "react";
 import { userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
 import FriendsIcon from "../../../icons/Friends/FriendsIcon";
-import { formatNumber } from "../../../utils/additionalFunctions";
+import { formatNumberSecond } from "../../../utils/additionalFunctions";
 import { IMember } from "../../../utils/types/memberTypes";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
@@ -54,11 +54,11 @@ const UserContainer: FC<IProps> = ({
           <p className={styles.userContainer__textCoins}
             style={{ color: isUser ? "#d51845" : "" }}
           >
-            {!leaderBoardType && `+ 💵 ${formatNumber(member.coins)}`}
-            {leaderBoardType === 'spendtokens' && `- 🔰 ${formatNumber(member.coins)}`}
-            {leaderBoardType === 'spendcoins' && `- 💵 ${formatNumber(member.coins)}`}
-            {leaderBoardType === 'coins' && `+ 💵 ${formatNumber(member.coins)}`}
-            {leaderBoardType === 'tokens' && `+ 🔰 ${formatNumber(member.coins)}`}
+            {!leaderBoardType && `+ 💵 ${formatNumberSecond(member.coins)}`}
+            {leaderBoardType === 'spendtokens' && `- 🔰 ${formatNumberSecond(member.coins)}`}
+            {leaderBoardType === 'spendcoins' && `- 💵 ${formatNumberSecond(member.coins)}`}
+            {leaderBoardType === 'coins' && `+ 💵 ${formatNumberSecond(member.coins)}`}
+            {leaderBoardType === 'tokens' && `+ 🔰 ${formatNumberSecond(member.coins)}`}
             {leaderBoardType === 'friends' && (
               <>
                 + {member.coins} <FriendsIcon width={16}

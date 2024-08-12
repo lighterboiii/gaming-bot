@@ -484,8 +484,8 @@ export const RockPaperScissors: FC = () => {
                       {message}
                     </p>
                   ) : (
-                    <p className={styles.game__notify}>
-                      {anyPlayerReady && showTimer && timerStarted && timer}
+                    <p className={styles.game__timer}>
+                      {anyPlayerReady && showTimer && timerStarted && `0:${timer}`}
                     </p>
                   )}
                   <div className={styles.game__hands}>
