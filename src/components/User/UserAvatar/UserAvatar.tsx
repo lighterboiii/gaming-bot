@@ -23,7 +23,7 @@ const UserAvatar: FC<IProps> = ({ item, avatar }) => {
     if (item !== undefined) {
       setSkin(item?.item_pic);
       setMask(item?.item_mask);
-    } else if (userData && activeSkin !== undefined) {
+    } else if (userData && activeSkin) {
       setSkin(`${getImageLink}${activeSkin}`);
       setMask(`${getImageMaskLink}${activeSkin}`);
     } else {

@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-len
-export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoieW91cl91c2VyX2lkIiwiZXhwIjoxNzEyNjk0MDQwfQ.Yj9qWHJZMSl6yg-Xb5tnZeZniCK0FsNwBa1MS4VynxE';
 // export const userId = 172359056;
 export const userId = 5858080651;
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 // uri
 export const mainAppDataUri = `get_start_info?user_id=`;
 export const getUserAvatarUri = `getuserphoto?user_id=`;
@@ -39,8 +39,8 @@ export const useEnergyDrinkUri = 'use_energy_drink?user_id=';
 export const getShopUri = 'get_shop_available?=';
 export const getInventoryUri = 'get_user_collectible_info?user_id=';
 // links
-export const getImageLink = 'https://gamebottggw.ngrok.app/get_item_image/';
-export const getImageMaskLink = 'https://gamebottggw.ngrok.app/get_item_image_mask/'
+export const getImageLink = `${BASE_URL}get_item_image/`;
+export const getImageMaskLink = `${BASE_URL}get_item_image_mask/`
 export const inviteLink = 'https://t.me/gowinclub_bot?start=invite_link';
 export const groupLink = 'https://t.me/gowincommunity';
 export const balanceLink = 'https://t.me/gowinclub_bot?start=balance';

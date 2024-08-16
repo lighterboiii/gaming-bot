@@ -1,23 +1,25 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# Исключение директорий с зависимостями
 /node_modules
 /.pnp
 .pnp.js
 
-# testing
+# Исключение директорий с отчетами тестирования
 /coverage
 
-# production
+# Исключение production сборки
 /build
 
-# misc
+# Разное
 .DS_Store
+
+# Игнорирование файлов с переменными окружения
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
+# Игнорирование логов
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

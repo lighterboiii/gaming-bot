@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { token } from "./requestData";
 
 /* eslint-disable import/no-anonymous-default-export */
 type TOptions = {
@@ -16,7 +15,8 @@ type TRequest = {
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 };
 
-const BASE_URL = 'https://gamebottggw.ngrok.app/';
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const token = process.env.REACT_APP_API_TOKEN;
 
 const BASE_PARAMS = {
   headers: {
