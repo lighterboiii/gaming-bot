@@ -124,7 +124,7 @@
 
   &__avatarWrapper {
     @include position(relative);
-    @include size(103px, 103px);
+    @include size(140px, 103px);
     aspect-ratio: 1;
 
     @media screen and (max-width: 379px) {
