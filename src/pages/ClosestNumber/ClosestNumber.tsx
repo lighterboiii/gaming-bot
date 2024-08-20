@@ -73,7 +73,7 @@ const RenderComponent: FC<IProps> = ({ users }) => {
 export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
