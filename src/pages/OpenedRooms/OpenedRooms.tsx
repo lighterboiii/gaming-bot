@@ -28,7 +28,7 @@ import styles from './OpenedRooms.module.scss';
 
 export const OpenedRooms: FC = () => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -45,12 +45,8 @@ export const OpenedRooms: FC = () => {
   const [betClickCount, setBetClickCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-
   const isPortrait = useOrientation();
   useEffect(() => {
-    setTypeValue(`${translation?.sort_all}`);
-    setBetValue(`${translation?.sort_all}`);
-    setCurrencyValue(`${translation?.sort_all}`);
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
@@ -75,13 +71,16 @@ export const OpenedRooms: FC = () => {
         .then((res: any) => {
           setRooms(res.rooms);
           dispatch(getOpenedRooms(res.rooms));
-          setLoading(false);
+          // setLoading(false);
         })
         .catch((error) => {
           console.log(error);
         });
     };
 
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000)
     fetchRoomsData();
   }, [dispatch]);
 
@@ -122,9 +121,7 @@ export const OpenedRooms: FC = () => {
           } else {
             sortedRooms = sortRooms(rooms as any, 'room_type', sortByType);
             setSortByType(!sortByType);
-            setTypeValue(sortByType 
-              ? `${translation?.rock_paper_scissors_short}` 
-              : `${translation?.closest_number_short}`);
+            setTypeValue(sortByType ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`);
             setRooms(sortedRooms);
           }
           return newCount;
@@ -239,7 +236,8 @@ export const OpenedRooms: FC = () => {
                   <Button handleClick={handleCreateClick} text={translation?.create_room_button} />
                 </div>
               </div>
-            )}
+            )
+            }
           </div>
           {rooms && rooms?.length > 0 && <CreateRoomFooter />}
         </>

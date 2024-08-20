@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-len
-// export const userId = 172359056;
-export const userId = 5858080651;
+export const userId = 172359056;
+// export const userId = 5858080651;
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 // uri
 export const mainAppDataUri = `get_start_info?user_id=`;

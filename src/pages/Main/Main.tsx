@@ -30,7 +30,7 @@ import styles from './Main.module.scss';
 export const Main: FC = () => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -112,8 +112,7 @@ export const Main: FC = () => {
       <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
         <div className={styles.main__addDiv}>
           {banners && banners?.length > 0 && (
-            <AdvertisementBanner
-              bannersData={banners}
+            <AdvertisementBanner bannersData={banners}
               onBannerClick={handleBannerClick} />
           )}
         </div>

@@ -12,7 +12,6 @@ import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { ITask, ITaskStep } from "../../../utils/types/mainTypes";
 import { IClaimRewardResponse } from "../../../utils/types/responseTypes";
 import Button from "../../ui/Button/Button";
-import { TaskStep } from "../TaskStep/TaskStep";
 
 import styles from './TaskInfo.module.scss';
 
@@ -25,7 +24,7 @@ interface IProps {
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [showReward, setShowReward] = useState<boolean>(false);
@@ -93,7 +92,15 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
           ) : (
             <div className={styles.info__steps}>
               {task.steps.map((step: ITaskStep) => (
-                <TaskStep step={step} handleClickTaskStep={handleClickTaskStep} />
+                <div key={step.step_id} className={styles.info__step} onClick={() => handleClickTaskStep(step)}>
+                  <>
+                    <img src={step.img} alt={step.step_type} className={styles.info__icon} />
+                    <h3 className={styles.info__text}>{step.h_key}</h3>
+                    <button type='button' className={styles.info__button}>
+                      <ChevronIcon color='#000' width={20} height={20} />
+                    </button>
+                  </>
+                </div>
               ))}
             </div>
           )}

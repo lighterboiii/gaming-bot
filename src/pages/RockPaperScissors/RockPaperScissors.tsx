@@ -312,7 +312,9 @@ export const RockPaperScissors: FC = () => {
   };
   // Таймер
   useEffect(() => {
-    if (data?.players_count === "2" && data?.players?.some((player: IRPSPlayer) => player.choice === 'none') && data?.players?.some((player: IRPSPlayer) => player.choice === 'ready')){
+    if (data?.players_count === "2" 
+      && data?.players?.some((player: IRPSPlayer) => player.choice === 'none') 
+      && data?.players?.some((player: IRPSPlayer) => player.choice === 'ready')) {
       setTimerStarted(true);
       setShowTimer(true);
       // setTimer(15);
