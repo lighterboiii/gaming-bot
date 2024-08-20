@@ -5,7 +5,6 @@ import { FC, useState } from "react";
 import { taskResultRequest, taskStepRequest } from "../../../api/mainApi";
 import { userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
-import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import CrossIcon from "../../../icons/Cross/Cross";
 import { setNewTokensValue } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
@@ -25,7 +24,7 @@ interface IProps {
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [showReward, setShowReward] = useState<boolean>(false);
