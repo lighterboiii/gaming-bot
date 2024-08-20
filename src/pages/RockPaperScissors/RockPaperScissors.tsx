@@ -4,7 +4,7 @@
 import { postEvent } from "@tma.js/sdk";
 import { motion } from "framer-motion";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import { formatNumber } from "utils/additionalFunctions";
 
@@ -32,7 +32,7 @@ import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
 import { setFirstGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import { roomsUrl } from "../../utils/routes";
+import { indexUrl, roomsUrl } from "../../utils/routes";
 import { IRPSPlayer } from "../../utils/types/gameTypes";
 
 import styles from "./RockPaperScissors.module.scss";
@@ -40,7 +40,8 @@ import styles from "./RockPaperScissors.module.scss";
 export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const location = useLocation();
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
@@ -87,25 +88,22 @@ export const RockPaperScissors: FC = () => {
       if (!roomId || !isMounted) {
         return;
       }
-      const setDatas = {
+      const data = {
         user_id: userId,
         room_id: roomId,
         type: 'wait'
       };
-      getPollingRequest(userId, setDatas)
+      getPollingRequest(userId, data)
         .then((res: any) => {
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
-            navigate(roomsUrl);
+            const currentUrl = location.pathname;
+            currentUrl !== roomsUrl && navigate(roomsUrl);
           } else if (res?.message === 'timeout') {
             setTimeout(fetchRoomInfo, 500);
           } else {
-            if (data === null ||
-              !data?.players?.every((player: IRPSPlayer) =>
-                player?.choice !== 'none' && player?.choice !== 'ready')) {
-              setData(res);
-            }
+            setData(res);
             setLoading(false);
           }
 
@@ -118,7 +116,8 @@ export const RockPaperScissors: FC = () => {
           leaveRoomRequest(userId)
             .then((res: any) => {
               if (res?.message === 'success') {
-                navigate(roomsUrl);
+                const currentUrl = location.pathname;
+                currentUrl !== roomsUrl && navigate(roomsUrl);
               }
             })
             .catch((error) => {
@@ -144,20 +143,17 @@ export const RockPaperScissors: FC = () => {
     });
   }, []);
 
-  let winFlag: any;
-  winFlag = true;
- 
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+          console.log('data', data);
           setShowTimer(false);
-          if (roomId && winFlag) {
+          if (roomId) {
             whoIsWinRequest(roomId)
-              .then(async (res: any) => {
-                winFlag = false;
+              .then( async (res: any) => {
                 await setPlayersAnim({
                   firstAnim: res?.f_anim,
                   secondAnim: res?.s_anim,
@@ -215,14 +211,14 @@ export const RockPaperScissors: FC = () => {
   }, [data, roomId, translation?.draw, translation?.you_lost, translation?.you_won, updateAnimation, userId]);
   // хендлер готовности игрока
   const handleReady = () => {
-    winFlag = true;
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
     if (data?.bet_type === "1") {
       if (player?.money <= data?.bet) {
         leaveRoomRequest(player?.userid)
           .then(_res => {
             if (player?.userid === userId) {
-              navigate(roomsUrl);
+              const currentUrl = location.pathname;
+              currentUrl !== roomsUrl && navigate(roomsUrl);
             }
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
@@ -316,9 +312,7 @@ export const RockPaperScissors: FC = () => {
   };
   // Таймер
   useEffect(() => {
-    if (data?.players_count === "2"
-      && data?.players?.some((player: IRPSPlayer) => player.choice === 'none')
-      && data?.players?.some((player: IRPSPlayer) => player.choice === 'ready')) {
+    if (data?.players_count === "2" && data?.players?.some((player: IRPSPlayer) => player.choice === 'none') && data?.players?.some((player: IRPSPlayer) => player.choice === 'ready')){
       setTimerStarted(true);
       setShowTimer(true);
       // setTimer(15);
@@ -344,7 +338,8 @@ export const RockPaperScissors: FC = () => {
           leaveRoomRequest(player.userid)
             .then((res: any) => {
               if (res?.message === 'success' && player.userid === userId) {
-                navigate(roomsUrl);
+                const currentUrl = location.pathname;
+                currentUrl !== roomsUrl && navigate(roomsUrl);
               }
             })
             .catch((error) => {
