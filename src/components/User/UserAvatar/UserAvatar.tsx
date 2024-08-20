@@ -20,10 +20,10 @@ const UserAvatar: FC<IProps> = ({ item, avatar }) => {
   const activeSkin = useAppSelector(store => store.app.info?.active_skin);
 
   useEffect(() => {
-    if (item !== undefined) {
+    if (item) {
       setSkin(item?.item_pic);
       setMask(item?.item_mask);
-    } else if (userData && activeSkin) {
+    } else if (userData && !item) {
       setSkin(`${getImageLink}${activeSkin}`);
       setMask(`${getImageMaskLink}${activeSkin}`);
     } else {

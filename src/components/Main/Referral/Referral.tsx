@@ -124,7 +124,7 @@ const Referral: FC = () => {
           {refsBoard !== null && refsBoard !== undefined && refsBoard.length > 0 ? (
             refsBoard?.map((referral: IMember, index: number) => (
               <UserContainer member={referral}
-                index={index}
+                index={index - 1}
                 length={refsBoard.length + 1}
                 key={index} />
             ))) :
