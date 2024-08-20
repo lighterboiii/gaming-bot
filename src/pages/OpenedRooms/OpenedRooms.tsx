@@ -71,7 +71,6 @@ export const OpenedRooms: FC = () => {
         .then((res: any) => {
           setRooms(res.rooms);
           dispatch(getOpenedRooms(res.rooms));
-          // setLoading(false);
         })
         .catch((error) => {
           console.log(error);
@@ -121,7 +120,9 @@ export const OpenedRooms: FC = () => {
           } else {
             sortedRooms = sortRooms(rooms as any, 'room_type', sortByType);
             setSortByType(!sortByType);
-            setTypeValue(sortByType ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`);
+            setTypeValue(sortByType
+              ? `${translation?.rock_paper_scissors_short}`
+              : `${translation?.closest_number_short}`);
             setRooms(sortedRooms);
           }
           return newCount;
@@ -178,7 +179,7 @@ export const OpenedRooms: FC = () => {
 
       default:
         sortedRooms = rooms;
-      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     }
   };
 
