@@ -17,15 +17,16 @@ import styles from './ChoiceBox.module.scss';
 interface IProps {
   handleChoice: (value: string) => void;
   choice?: string;
+  isChoiceLocked: boolean;
 }
 
-const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
+const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '', isChoiceLocked }) => {
   const [choiceItem, setChoiceItem] = useState(choice);
 
   const onChoiceClick = (choice: string) => {
+    if (isChoiceLocked) return;
     handleChoice(choice);
     setChoiceItem(choice);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
   };
 
   const getIconPath = (choice: string): string => {
@@ -47,6 +48,7 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
         type="button"
         className={styles.choiceBox__button}
         onClick={() => onChoiceClick('rock')}
+        disabled={isChoiceLocked}
       >
         <img
           src={getIconPath('rock')}
@@ -58,6 +60,7 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
         type="button"
         className={styles.choiceBox__button}
         onClick={() => onChoiceClick('scissors')}
+        disabled={isChoiceLocked}
       >
         <img
           src={getIconPath('scissors')}
@@ -69,6 +72,7 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
         type="button"
         className={styles.choiceBox__button}
         onClick={() => onChoiceClick('paper')}
+        disabled={isChoiceLocked}
       >
         <img
           src={getIconPath('paper')}
@@ -77,7 +81,7 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '' }) => {
         />
       </button>
     </div>
-  )
+  );
 };
 
 export default ChoiceBox;
