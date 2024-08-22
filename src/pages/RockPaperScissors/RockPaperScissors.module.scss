@@ -133,6 +133,14 @@
     @include size(48px, 48px);
   }
 
+  &__iconEmoji:focus,
+  &__iconEmoji:active,
+  &__iconEmoji:hover {
+    outline: none;
+    box-shadow: none;
+    background-color: transparent; 
+  }
+
   &__button {
     @include button-style-reset();
     cursor: pointer;
@@ -179,17 +187,26 @@
 
   &__label {
     background-image: url('../../images/rock-paper-scissors/ready_image.png');
-    @include size(200px, 68px);
+    @include size(180px, 68px);
     @include position(relative);
     @include flex(row, center, center, 6px);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
+    border-radius: $radius-20;
 
     @media screen and (min-height: 691px) {
-      @include size(264px, 84px);
+      @include size(216px, 84px);
     }
+  }
+
+  &__label:focus,
+  &__label:active,
+  &__label:hover {
+    outline: none;
+    box-shadow: none;
+    background-color: transparent; 
   }
 
   &__readyIcon {

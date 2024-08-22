@@ -26,4 +26,12 @@
   &__button {
     @include button-style-reset();
   }
+
+  &__button:focus,
+  &__button:active,
+  &__button:hover {
+    outline: none;
+    box-shadow: none;
+    background-color: transparent;
+  }
 }

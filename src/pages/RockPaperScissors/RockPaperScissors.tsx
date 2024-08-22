@@ -41,7 +41,7 @@ export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const location = useLocation();
-  // const userId = user?.id;
+  const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<any>(null);
@@ -165,26 +165,26 @@ export const RockPaperScissors: FC = () => {
                   setTimeout(() => {
                     if (res?.winner === userId) {
                       updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
-                      // postEvent(
-                      //   'web_app_trigger_haptic_feedback',
-                      //   { type: 'notification', notification_type: 'success' }
-                      // );
+                      postEvent(
+                        'web_app_trigger_haptic_feedback',
+                        { type: 'notification', notification_type: 'success' }
+                      );
                       setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
                         ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
                           : `🔰`}`
                         : ''}`);
                     } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
                       updateAnimation(Number(data.creator_id) === Number(res.winner) ? lLoseAnim : rLoseAnim);
-                      // postEvent(
-                      //   'web_app_trigger_haptic_feedback',
-                      //   { type: 'notification', notification_type: 'error', }
-                      // );
+                      postEvent(
+                        'web_app_trigger_haptic_feedback',
+                        { type: 'notification', notification_type: 'error', }
+                      );
                       setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                         ? `💵`
                         : `🔰`}`);
                     } else if (res?.winner === 'draw') {
                       setMessage(translation?.draw);
-                      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+                      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
                     }
                     setMessageVisible(true);
                     setTimeout(() => {
@@ -222,7 +222,7 @@ export const RockPaperScissors: FC = () => {
               const currentUrl = location.pathname;
               currentUrl !== roomsUrl && navigate(roomsUrl);
             }
-            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -232,7 +232,7 @@ export const RockPaperScissors: FC = () => {
       if (player?.tokens <= data?.bet) {
         leaveRoomRequest(userId)
           .then(_res => {
-            // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
           })
           .catch((error) => {
             console.log(error);
@@ -251,7 +251,7 @@ export const RockPaperScissors: FC = () => {
       .then(res => {
         setData(res);
         setAnyPlayerReady(true);
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -276,7 +276,7 @@ export const RockPaperScissors: FC = () => {
         setAnyPlayerReady(true);
         setTimerStarted(true);
         setTimer(15);
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       })
       .catch((error) => {
         console.error('Set choice error:', error);
@@ -293,7 +293,7 @@ export const RockPaperScissors: FC = () => {
     getPollingRequest(userId, data)
       .then(res => {
         setData(res);
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
         setShowEmojiOverlay(false);
       })
       .catch((error) => {
@@ -389,7 +389,7 @@ export const RockPaperScissors: FC = () => {
   // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)
@@ -403,12 +403,12 @@ export const RockPaperScissors: FC = () => {
   };
 
   const handleShowEmojiOverlay = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     setShowEmojiOverlay(true);
   };
 
   const handleCloseEmojiOverlay = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setShowEmojiOverlay(!showEmojiOverlay)
   };
 
