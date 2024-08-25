@@ -15,8 +15,11 @@ type TRequest = {
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 };
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const token = process.env.REACT_APP_API_TOKEN;
+// const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+// const token = process.env.REACT_APP_API_TOKEN;
+const BASE_URL = 'https://tgminiappgwbot.ngrok.app/';
+// eslint-disable-next-line max-len
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoieW91cl91c2VyX2lkIiwiZXhwIjoxNzEyNjk0MDQwfQ.Yj9qWHJZMSl6yg-Xb5tnZeZniCK0FsNwBa1MS4VynxE';
 
 const BASE_PARAMS = {
   headers: {
