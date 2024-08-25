@@ -14,11 +14,7 @@
     background-position: left;
     position: relative;
     border-radius: $radius-15;
-
-    // @media screen and (max-height: 691px) {
-    //   @include size(100%, 106px);
-    // }
-
+    
     @media screen and (max-width: 380px) {
       background-size: contain;
       height: 96px;

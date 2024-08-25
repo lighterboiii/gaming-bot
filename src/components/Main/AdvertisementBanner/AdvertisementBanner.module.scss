@@ -4,14 +4,12 @@
 .banner {
   @include position(relative);
   @include size(100%, 106px);
-  // @include flex(row, center, center);
   border-radius: $radius-15;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   box-sizing: border-box;
   transition: background-image .7s ease-in-out;
-  // overflow: visible;
 
   @media screen and (min-height: 691px) {
     height: 124px;
