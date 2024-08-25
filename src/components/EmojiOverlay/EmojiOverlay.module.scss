@@ -19,9 +19,9 @@
     @include size(100%, 100%);
     @include flex(column, flex-start, center);
 
-  @media screen and (max-width: 379px) {
-    justify-content: center;
-  }
+    @media screen and (max-width: 379px) {
+      justify-content: center;
+    }
   }
 
   &__closeButton {
@@ -42,6 +42,15 @@
     @media screen and (max-width: 379px) {
       @include size(64px, 64px);
     }
+  }
+
+  &__emoji:active,
+  &__emoji:hover,
+  &__emoji:focus {
+    outline: none;
+    box-shadow: none;
+    background-color: transparent;
+    -webkit-tap-highlight-color: transparent;
   }
 
   &__emojis {

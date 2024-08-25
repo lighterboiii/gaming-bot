@@ -471,7 +471,7 @@ export const RockPaperScissors: FC = () => {
                         />
                       </div>
                     ) : (
-                      <div>
+                      <div className={styles.game__readyWrapper}>
                         <input
                           type="checkbox"
                           id="ready"

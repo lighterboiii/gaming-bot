@@ -80,17 +80,27 @@
     @include size(48px, 48px);
   }
 
-  &__iconEmoji:focus,
-  &__iconEmoji:active,
-  &__iconEmoji:hover {
-    outline: none;
-    box-shadow: none;
-    background-color: transparent; 
-  }
+  // &__iconEmoji:focus,
+  // &__iconEmoji:active,
+  // &__iconEmoji:hover {
+  //   outline: none;
+  //   box-shadow: none;
+  //   background-color: transparent; 
+  // }
 
   &__button {
     @include button-style-reset();
+    border-radius: $radius-40;
     cursor: pointer;
+  }
+
+  &__button:focus,
+  &__button:active,
+  &__button:hover {
+    outline: none;
+    box-shadow: none;
+    background-color: transparent; 
+    -webkit-tap-highlight-color: transparent;
   }
 
   &__emojiButton {
@@ -132,6 +142,19 @@
     display: none;
   }
 
+  &__readyWrapper {
+    border-radius: 40px;
+  }
+
+  &__readyWrapper:focus,
+  &__readyWrapper:active,
+  &__readyWrapper:hover {
+    outline: none;
+    box-shadow: none;
+    background-color: transparent; 
+    -webkit-tap-highlight-color: transparent;
+  }
+
   &__label {
     background-image: url('../../images/rock-paper-scissors/ready_image.png');
     @include size(180px, 68px);
@@ -141,20 +164,10 @@
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
-    border-radius: $radius-20;
 
     @media screen and (min-height: 691px) {
       @include size(216px, 84px);
     }
-  }
-
-  &__label:focus,
-  &__label:active,
-  &__label:hover {
-    outline: none;
-    box-shadow: none;
-    background-color: transparent; 
-    -webkit-tap-highlight-color: transparent;
   }
 
   &__resultMessage {
