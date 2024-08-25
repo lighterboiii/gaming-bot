@@ -34,5 +34,7 @@
     box-shadow: none;
     background-color: transparent;
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
   }
 }

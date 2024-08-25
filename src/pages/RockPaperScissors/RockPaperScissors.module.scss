@@ -80,14 +80,6 @@
     @include size(48px, 48px);
   }
 
-  // &__iconEmoji:focus,
-  // &__iconEmoji:active,
-  // &__iconEmoji:hover {
-  //   outline: none;
-  //   box-shadow: none;
-  //   background-color: transparent; 
-  // }
-
   &__button {
     @include button-style-reset();
     border-radius: $radius-40;
@@ -101,6 +93,8 @@
     box-shadow: none;
     background-color: transparent; 
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   &__emojiButton {
@@ -153,6 +147,8 @@
     box-shadow: none;
     background-color: transparent; 
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   &__label {
