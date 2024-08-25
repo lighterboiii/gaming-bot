@@ -25,7 +25,7 @@
   &__content {
     @include flex(column, flex-start, unset, 24px);
     @include size(100%, 75vh);
-    overflow-y: visible;
+    overflow-y: auto;
     z-index: 3;
 
     @media screen and (max-height: 690px) {
