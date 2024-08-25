@@ -43,8 +43,10 @@ const BannerData: FC<IProps> = ({ data, closeOverlay }) => {
           </p>
         </div>
         <div className={styles.banner__button}>
-          <Button text={data?.button_text}
-            handleClick={closeOverlay} />
+          <Button
+            text={data?.button_text}
+            handleClick={closeOverlay}
+          />
         </div>
       </div>
     )

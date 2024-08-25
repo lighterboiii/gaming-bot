@@ -22,18 +22,18 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
 
   const handleBannerClick = () => {
     const currentBannerData = bannersData[currentIndex];
-    postEvent("web_app_trigger_haptic_feedback", { type: "impact", impact_style: "soft" });
+    // postEvent("web_app_trigger_haptic_feedback", { type: "impact", impact_style: "soft" });
     onBannerClick(currentBannerData);
   };
 
   const handleNextSlide = () => {
     goToSlide((currentIndex + 1) % bannersData.length);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   const handlePrevSlide = () => {
     goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   // eslint-disable-next-line react-hooks/rules-of-hooks

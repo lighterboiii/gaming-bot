@@ -13,9 +13,9 @@
     @include flex(column, center, center);
     background-color: $secondary-color;
 
-    @media screen and (max-height: 690px) {
-      @include size(100%, 30vh);
-    }
+    // @media screen and (max-height: 690px) {
+    //   @include size(100%, 30vh);
+    // }
   }
 
   &__content {
@@ -36,8 +36,9 @@
 
   &__heading {
     @include indents();
-    @include size(70%, unset);
+    // @include size(70%, unset);
     @include page-title();
+    text-align: center;
   }
 
   &__bets {

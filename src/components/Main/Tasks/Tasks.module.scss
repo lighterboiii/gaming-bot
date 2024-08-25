@@ -28,9 +28,13 @@
     @include indents();
     @include flex(row, center, center, 10px);
     font-weight: 700;
-    font-size: 17px;
+    font-size: 16px;
     color: $main-color;
     line-height: 1.2;
+
+    @media screen and (max-width: 379px) {
+      font-size: 14px;
+    }
   }
 
   &__board {

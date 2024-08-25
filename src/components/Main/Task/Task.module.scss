@@ -15,10 +15,10 @@
     color: $secondary-color;
     font-weight: 700;
     font-size: 14px;
-    line-height: 1;
+    line-height: 1.2;
 
     @media screen and (max-width: 379px) {
-      @include size(100%, auto);
+      font-size: 12px;
     }
   }
 
@@ -42,6 +42,10 @@
     font-size: 12px;
     line-height: 1.2;
     text-align: left;
+
+    @media screen and (max-width: 379px) {
+      font-size: 10px;
+    }
   }
 
   &__button {
