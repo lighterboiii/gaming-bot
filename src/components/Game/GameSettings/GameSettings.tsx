@@ -72,6 +72,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       } else if (response.message === 'not_enough_coins') {
         setInsufficient(true);
         setMessage(translation?.insufficient_funds || 'Недостаточно средств');
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
         setMessageShown(true);
         setTimeout(() => {
           setMessageShown(false);
