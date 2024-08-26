@@ -20,7 +20,6 @@ interface IProps {
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user } = useTelegram();
   const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -65,7 +64,7 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
           <img src={bonus?.bonus_image}
             alt="bonus_image"
             className={styles.bonus__image} />
-          <p className={styles.bonus__text}>{bonus?.bonus_type}</p>
+          <p className={styles.bonus__text}>{bonus?.bonus_translate}</p>
           <div className={styles.bonus__button}>
             <Button
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

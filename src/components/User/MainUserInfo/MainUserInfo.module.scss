@@ -116,6 +116,7 @@
   &__linkContainer {
     @include size(unset, 100px);
     @include flex(column, center, center, 10px);
+    margin-right: 4px;
   }
 
   &__links {

@@ -36,6 +36,7 @@ export interface IBonus {
   bonus_image: string;
   bonus_item_id: number;
   bonus_type: string;
+  bonus_translate: string;
   day: number;
 }
 
