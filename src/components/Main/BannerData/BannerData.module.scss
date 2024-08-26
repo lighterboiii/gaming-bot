@@ -15,9 +15,21 @@
     position: relative;
     border-radius: $radius-15;
     
-    @media screen and (max-width: 380px) {
+    @media screen and (min-height: 691px) {
+      height: 136px;
+    }
+  
+    @media screen and (max-width: 430px) {
       background-size: contain;
-      height: 96px;
+      // height: 96px;
+    }
+  
+    @media screen and (min-width: 381px) and (max-width: 430px) {
+      background-size: 100% auto;
+    }
+  
+    @media screen and (max-width: 379px) {
+      background-size: 100%;
     }
   }
 

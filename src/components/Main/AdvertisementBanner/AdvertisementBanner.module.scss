@@ -10,14 +10,16 @@
   background-position: center;
   box-sizing: border-box;
   transition: background-image .7s ease-in-out;
+  // overflow: visible;
+  // z-index: 3;
 
   @media screen and (min-height: 691px) {
-    height: 124px;
+    height: 136px;
   }
 
   @media screen and (max-width: 430px) {
     background-size: contain;
-    height: 96px;
+    // height: 96px;
   }
 
   @media screen and (min-width: 381px) and (max-width: 430px) {

@@ -20,8 +20,10 @@ const BannerData: FC<IProps> = ({ data, closeOverlay }) => {
             <h3 className={styles.banner__title}>
               {data.main_header}
             </h3>
-            <div className={styles.banner__pic}
-              style={{ backgroundImage: `url(${data.pic})`, wordWrap: "break-word" }}>
+            <div
+              className={styles.banner__pic}
+              style={{ backgroundImage: `url(${data.pic})`, wordWrap: "break-word" }}
+            >
               <div className={styles.banner__info}>
                 <h3
                   className={styles.banner__picHeader}
