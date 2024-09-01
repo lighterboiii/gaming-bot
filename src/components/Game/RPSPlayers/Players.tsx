@@ -19,7 +19,7 @@ interface IProps {
 
 const Players: FC<IProps> = ({ data }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
 
   return (
     <div className={styles.players}>

@@ -10,24 +10,18 @@
   background-position: center;
   box-sizing: border-box;
   transition: background-image .7s ease-in-out;
-  // overflow: visible;
-  // z-index: 3;
+  background-size: 100%;
 
   @media screen and (min-height: 691px) {
-    height: 136px;
+    height: 124px;
   }
 
   @media screen and (max-width: 430px) {
     background-size: contain;
-    // height: 96px;
   }
 
   @media screen and (min-width: 381px) and (max-width: 430px) {
     background-size: 100% auto;
-  }
-
-  @media screen and (max-width: 379px) {
-    background-size: 100%;
   }
 
   &__link {
@@ -79,14 +73,18 @@
   &__indicators {
     @include indents(4px 6px, 0);
     @include flex(row, $gap: 2px);
-    @include position(absolute, $bottom: 8px, $left: 50%);
+    @include position(absolute, $bottom: 8%, $left: 50%);
     transform: translate(-50%);
     background-color: $black-color;
     border-radius: 40px;
     z-index: 2;
 
     @media screen and (max-width: 379px) {
-      bottom: 12px;
+      bottom: 12%;
+    }
+
+    @media screen and (max-width: 338px) {
+      bottom: 15%;
     }
   }
 
@@ -128,7 +126,7 @@
 
     @media screen and (max-width: 379px) {
       font-size: 11px;
-      top: 24px;
+      top: 25%
     }
   }
 
@@ -147,6 +145,11 @@
     
     @media screen and (max-width: 379px) {
       font-size: 10px;
+      bottom: 12%;
+    }
+
+    @media screen and (max-width: 338px) {
+      bottom: 15%;
     }
   }
 }
