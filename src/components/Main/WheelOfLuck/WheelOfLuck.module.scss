@@ -1,19 +1,19 @@
 @use '../../../stylesheets/mixins' as *;
 @use '../../../stylesheets/variables' as *;
 
-@mixin spin {
-  $steps: 70;
+// @mixin spin {
+//   $steps: 70;
 
-  @for $i from 0 through $steps {
-    $percentage: $i * (100 / $steps);
-    $direction: if($i % 2==0, 1, -1);
+//   @for $i from 0 through $steps {
+//     $percentage: $i * (100 / $steps);
+//     $direction: if($i % 2==0, 1, -1);
 
-    #{$percentage}% {
-      transform: translateX($direction * 100%);
-      filter: blur(2px);
-    }
-  }
-}
+//     #{$percentage}% {
+//       transform: translateX($direction * 100%);
+//       filter: blur(2px);
+//     }
+//   }
+// }
 
 .wheel {
   @include children-layout();
@@ -220,6 +220,6 @@
   }
 }
 
-@keyframes spin {
-  @include spin();
-}
+// @keyframes spin {
+//   @include spin();
+// }
