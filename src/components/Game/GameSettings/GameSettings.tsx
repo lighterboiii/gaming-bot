@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from '@tma.js/sdk';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { postNewRoomRequest } from '../../../api/gameApi';
@@ -72,6 +72,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       } else if (response.message === 'not_enough_coins') {
         setInsufficient(true);
         setMessage(translation?.insufficient_funds || 'Недостаточно средств');
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
         setMessageShown(true);
         setTimeout(() => {
           setMessageShown(false);

@@ -17,8 +17,13 @@
 
 .wheel {
   @include children-layout();
-  gap: 10px;
+  gap: 0;
   justify-content: flex-start;
+  margin-top: 12px;
+
+  @media screen and (max-height: 589px) {
+    gap: 10px;
+  }
 
   &__title {
     @include indents();
@@ -49,8 +54,8 @@
     color: $main-color;
     line-height: 1.2;
 
-    @media screen and (max-width: 379px) {
-      font-size: 14px;
+    @media screen and (max-height: 589px) {
+      font-size: 12px;
     }
   }
 
@@ -65,18 +70,20 @@
     @media screen and (min-height: 744px) {
       @include size(auto, 38vh);
     }
+
+
+    @media screen and (max-height: px) {
+      @include size(auto, 38vh);
+    }
   }
 
   &__item {
     position: relative;
-    @include size(92px, 186px);
+    @include size(92px, auto);
+    @include min-size(unset, 100%);
     @include flex(column, center, center, 10px);
     color: $black-color;
     border-radius: $radius-15;
-
-    @media screen and (max-height: 678px) {
-      @include size(80px, 114px);
-    }
 
     &:nth-child(odd) {
       background-color: #FBD94E;
@@ -108,6 +115,10 @@
     @media screen and (max-width: 379px) {
       font-size: 10px;
     }
+
+    @media screen and (max-width: 330px) {
+      font-size: 8px;
+    }
   }
 
   &__buttonWrapper {
@@ -117,13 +128,14 @@
     z-index: 5;
 
     @media screen and (max-height: 691px) {
-      @include size(100%, 36px);
+      @include size(100%, 32px);
+      bottom: 3%;
     }
   }
 
   &__spinner {
     @include flex(row, center, center, 10px);
-    @include size(100%, auto);
+    @include size(100%, 75%);
   }
 
   &__spin {

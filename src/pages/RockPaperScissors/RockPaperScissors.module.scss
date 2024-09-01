@@ -26,59 +26,6 @@
     color: $main-color;
   }
 
-  &__players {
-    position: relative;
-    @include indents(0, 6px 0);
-    @include size(100%, auto);
-    @include flex(row, space-between, center);
-  }
-
-  &__player {
-    @include size(178px, 178px);
-    @include position(relative);
-    @include flex(row, center, center);
-
-    @media screen and (max-width: 379px) {
-      @include size(146px, 146px);
-    }
-  }
-
-  &__playerName {
-    @include indents();
-    @include size(152px, auto);
-    @include ellipsis();
-    @include position(absolute, $left: 50%, $top: 0);
-    transform: translateX(-50%);
-    color: $main-color;
-    font-size: 16px;
-    color: $rps-text-color;
-    z-index: 7;
-
-    @media screen and (max-width: 379px) {
-      font-size: 14px;
-    }
-  }
-
-  &__avatarWrapper {
-    @include size(100%, 100%);
-    @include position(absolute, $left: 50%, $top: 60%);
-    transform: translate(-50%, -50%);
-  }
-
-  &__balance {
-    @include indents(4px 4px, 0);
-    @include size(50%, unset);
-    @include flex(row, center, center);
-    flex-wrap: nowrap;
-    @include position(absolute, $bottom: -20%, $left: 50%);
-    transform: translate(-50%);
-    color: $rps-text-color;
-    background-color: $rps-background-color;
-    border-radius: $radius-40;
-    font-size: 14px;
-    z-index: 5;
-  }
-
   &__icon {
     @include size(42px, 52px);
   }
@@ -133,17 +80,21 @@
     @include size(48px, 48px);
   }
 
-  &__iconEmoji:focus,
-  &__iconEmoji:active,
-  &__iconEmoji:hover {
+  &__button {
+    @include button-style-reset();
+    border-radius: $radius-40;
+    cursor: pointer;
+  }
+
+  &__button:focus,
+  &__button:active,
+  &__button:hover {
     outline: none;
     box-shadow: none;
     background-color: transparent; 
-  }
-
-  &__button {
-    @include button-style-reset();
-    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   &__emojiButton {
@@ -185,6 +136,21 @@
     display: none;
   }
 
+  &__readyWrapper {
+    border-radius: 40px;
+  }
+
+  &__readyWrapper:focus,
+  &__readyWrapper:active,
+  &__readyWrapper:hover {
+    outline: none;
+    box-shadow: none;
+    background-color: transparent; 
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
   &__label {
     background-image: url('../../images/rock-paper-scissors/ready_image.png');
     @include size(180px, 68px);
@@ -194,71 +160,14 @@
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
-    border-radius: $radius-20;
 
     @media screen and (min-height: 691px) {
       @include size(216px, 84px);
     }
   }
 
-  &__label:focus,
-  &__label:active,
-  &__label:hover {
-    outline: none;
-    box-shadow: none;
-    background-color: transparent; 
-  }
-
-  &__readyIcon {
-    @include size(60px, 60px);
-    @include position(absolute, $left: 50%, $bottom: -15%);
-    transform: translateX(-50%);
-    z-index: 2;
-
-    @media screen and (max-width: 379px) {
-      @include size(44px, 44px);
-    }
-  }
-
-  &__selectedEmoji {
-    @include size(60px, 60px);
-    @include position(absolute, $bottom: -20%, $left: 0);
-    z-index: 6;
-
-    @media screen and (max-width: 379px) {
-      @include size(48px, 48px);
-    }
-  }
-
-  &__selectedEmojiRight {
-    @include size(60px, 60px);
-    @include position(absolute, $bottom: -20%, $right: 0);
-    z-index: 6;
-
-    @media screen and (max-width: 379px) {
-      @include size(48px, 48px);
-    }
-  }
-
   &__resultMessage {
     @extend .game__notify;
     @include position(absolute, $top: 40%, $left: 50%);
-  }
-}
-
-.rules {
-  @include size(100vw, 100vh);
-  @include flex(row, center, center);
-
-  &__image {
-    @include size(100vw, object-fit);
-    position: relative;
-  }
-
-  &__button {
-    @include size(100%, 42px);
-    @include max-size(312px, auto);
-    @include position(absolute, $bottom: 16px, $left: 50%);
-    transform: translateX(-50%);
   }
 }

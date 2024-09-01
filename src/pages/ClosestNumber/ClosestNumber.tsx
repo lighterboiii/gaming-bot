@@ -7,8 +7,7 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-import useSetTelegramInterface from "hooks/useSetTelegramInterface";
-import { formatNumber } from "utils/additionalFunctions";
+import Rules from "components/Game/Rules/Rules";
 
 import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
 import { getActiveEmojiPack, getAppData } from "../../api/mainApi";
@@ -25,9 +24,9 @@ import CaseTwo from "../../components/ClosestNumber/Three/Three";
 import Loader from "../../components/Loader/Loader";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
 import { Warning } from "../../components/OrientationWarning/Warning";
-import Button from "../../components/ui/Button/Button";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useOrientation from "../../hooks/useOrientation";
+import useSetTelegramInterface from "../../hooks/useSetTelegramInterface";
 import useTelegram from "../../hooks/useTelegram";
 import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';
@@ -40,6 +39,7 @@ import {
   setSecondGameRulesState,
 } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { formatNumber } from "../../utils/additionalFunctions";
 import { roomsUrl } from "../../utils/routes";
 import { IRPSPlayer } from "../../utils/types/gameTypes";
 
@@ -153,7 +153,7 @@ export const ClosestNumber: FC = () => {
       };
       getPollingRequest(userId, data)
         .then((res: any) => {
-          
+
           if (res?.message === 'None') {
             leaveRoomRequest(userId);
             isMounted = false;
@@ -171,7 +171,7 @@ export const ClosestNumber: FC = () => {
           }
         })
         .catch((error) => {
-          
+
           console.error('Room data request error', error);
           leaveRoomRequest(userId)
             .then((res: any) => {
@@ -643,12 +643,10 @@ export const ClosestNumber: FC = () => {
               </div>
             </>
           ) : (
-            <div className={styles.rules}>
-              <img src={ruleImage!} alt="game rules" className={styles.rules__image} />
-              <div className={styles.rules__button}>
-                <Button text={translation?.understood} handleClick={handleRuleButtonClick} />
-              </div>
-            </div>
+            <Rules
+              handleRuleButtonClick={handleRuleButtonClick}
+              ruleImage={ruleImage!}
+            />
           )}
         </>
       )}

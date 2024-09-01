@@ -4,7 +4,7 @@
 .userInfo {
   @include position(relative);
   @include indents();
-  @include size(100%, auto);
+  @include size(98%, auto);
   @include flex(row, space-between, center);
 
   &__content {
@@ -116,6 +116,7 @@
   &__linkContainer {
     @include size(unset, 100px);
     @include flex(column, center, center, 10px);
+    margin-right: 4px;
   }
 
   &__links {

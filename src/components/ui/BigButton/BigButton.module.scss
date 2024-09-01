@@ -5,7 +5,7 @@
   @include button-style-reset();
   @include position(relative);
   @include size(98%, auto);
-  @include size(100%, 100%);
+  @include min-size(98%, 100%);
   background-color: $secondary-color;
   border-radius: $radius-15;
   text-decoration: none;
@@ -20,6 +20,10 @@
     font-size: 16px;
     font-weight: 700;
     text-align: left;
+
+    @media screen and (max-width: 379px) {
+      font-size: 12px;
+    }
   }
 
   &__secondaryText {
@@ -28,8 +32,13 @@
     @include size(60%, auto);
     color: $black-color;
     text-align: left;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 200;
+
+    @media screen and (max-width: 379px) {
+      font-size: 10px;
+      font-weight: 600;
+    }
   }
 
   &__buttonContainer {

@@ -4,21 +4,22 @@
 .banner {
   @include position(relative);
   @include size(100%, 106px);
-  @include flex(row, space-between, center);
   border-radius: $radius-15;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   box-sizing: border-box;
   transition: background-image .7s ease-in-out;
-  overflow: visible;
+  // overflow: visible;
+  // z-index: 3;
 
   @media screen and (min-height: 691px) {
-    height: 124px;
+    height: 136px;
   }
 
   @media screen and (max-width: 430px) {
     background-size: contain;
+    // height: 96px;
   }
 
   @media screen and (min-width: 381px) and (max-width: 430px) {
@@ -33,7 +34,7 @@
     @include size(100%, 100%);
     @include position(absolute, $top: 0, $left: 0);
     cursor: pointer;
-    // overflow: hidden;
+    overflow: hidden;
     z-index: 1;
   }
 

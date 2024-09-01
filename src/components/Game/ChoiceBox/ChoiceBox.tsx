@@ -24,7 +24,10 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '', isChoiceLocked }) =>
   const [choiceItem, setChoiceItem] = useState(choice);
 
   const onChoiceClick = (choice: string) => {
-    if (isChoiceLocked) return;
+    if (isChoiceLocked) {
+      postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+      return
+    }
     handleChoice(choice);
     setChoiceItem(choice);
     postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });

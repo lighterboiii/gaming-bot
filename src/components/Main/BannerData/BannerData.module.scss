@@ -8,25 +8,34 @@
 
   &__pic {
     @include size(100%, 120px);
-    @include flex(column, center, center, 12px);
+    @include flex(column, center, center);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: left;
     position: relative;
     border-radius: $radius-15;
-
-    @media screen and (max-height: 691px) {
-      @include size(100%, 106px);
+    
+    @media screen and (min-height: 691px) {
+      height: 136px;
     }
-
-    @media screen and (max-width: 380px) {
+  
+    @media screen and (max-width: 430px) {
       background-size: contain;
+      // height: 96px;
+    }
+  
+    @media screen and (min-width: 381px) and (max-width: 430px) {
+      background-size: 100% auto;
+    }
+  
+    @media screen and (max-width: 379px) {
+      background-size: 100%;
     }
   }
 
   &__header {
     @include size(100%, unset);
-    @include flex(column, center, center, 12px);
+    @include flex(column, center, center);
   }
 
   &__info {
@@ -34,6 +43,10 @@
     @include ellipsis();
     position: relative;
     @include size(100%, 100%);
+
+    @media screen and (max-width: 379px) {
+      @include size(100%, 90%);
+    }
   }
 
   &__picHeader {
@@ -63,7 +76,12 @@
     font-weight: 700;
     color: $main-color;
     font-size: 16px;
+    line-height: 1.2;
     text-align: center;
+    
+    @media screen and (max-width: 379px) {
+      font-size: 14px;
+    }
   }
 
   &__content {
@@ -99,11 +117,19 @@
     text-overflow: ellipsis;
     white-space: wrap;
     overflow: hidden;
+    line-height: 1.2;
     color: $main-color;
+
+    @media screen and (max-width: 379px) {
+      font-size: 12px;
+    }
   }
 
   &__button {
-    @include indents(0 16px, 0 0 20px 0);
-    @include size(100%, 40px);
+    @include size(calc(100% - 32px), 40px);
+
+    @media screen and (max-width: 379px) {
+      height: 32px;
+    }
   }
 }
