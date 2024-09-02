@@ -41,12 +41,12 @@ import {
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { roomsUrl } from "../../utils/routes";
-import { IRPSPlayer } from "../../utils/types/gameTypes";
+import { IPlayer } from "../../utils/types/gameTypes";
 
 import styles from './ClosestNumber.module.scss';
 
 interface IProps {
-  users: IRPSPlayer[];
+  users: IPlayer[];
 }
 
 const RenderComponent: FC<IProps> = ({ users }) => {
@@ -74,7 +74,7 @@ export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const location = useLocation();
-  const userId = user?.id;
+  // const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -204,7 +204,7 @@ export const ClosestNumber: FC = () => {
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')) {
+        if (data?.players?.every((player: IPlayer) => player?.choice !== 'none')) {
           setTimerStarted(false);
           whoIsWinRequest(roomId!)
             .then((res: any) => {
@@ -426,10 +426,10 @@ export const ClosestNumber: FC = () => {
   };
   // Таймер
   useEffect(() => {
-    if (data?.players_count !== "1" && data?.players?.every((player: IRPSPlayer) => player.choice === 'none')) {
+    if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice === 'none')) {
       setTimerStarted(true);
       setTimer(30);
-    } else if (data?.players_count !== "1" && data?.players?.every((player: IRPSPlayer) => player.choice !== 'none')) {
+    } else if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
       setTimerStarted(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -446,7 +446,7 @@ export const ClosestNumber: FC = () => {
         setTimer((prev) => prev! - 1);
       }, 1000);
     } else if (timer === 0) {
-      const currentPlayer = data?.players.find((player: IRPSPlayer) => Number(player.userid) === Number(userId));
+      const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
       if (currentPlayer?.choice === 'none') {
         leaveRoomRequest(userId)
           .then((res: any) => {

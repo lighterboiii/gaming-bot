@@ -10,22 +10,22 @@ import ManIcon from "../../../icons/Man/Man";
 import whoCloser from '../../../images/gameSec.png';
 import hand from '../../../images/main_hand_1_tiny.png';
 import { useAppSelector } from "../../../services/reduxHooks";
-import { IRPSGameData } from "../../../utils/types/gameTypes";
+import { IGameData } from "../../../utils/types/gameTypes";
 
 import styles from './Room.module.scss';
 
 interface IProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  room: IRPSGameData | any;
+  room: IGameData | any;
   openModal: () => void;
 }
 
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  const userId = user?.id;
-  const [isMessage, setIsMessage] = useState(false);
-  const [message, setMessage] = useState('');
+  // const userId = user?.id;
+  const [isMessage, setIsMessage] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
   const handleJoinRoom = (roomType: number) => {

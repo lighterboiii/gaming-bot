@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { IPropsForClosestNumberComponent, IRPSPlayer } from "../../../utils/types/gameTypes";
+import { IPropsForClosestNumberComponent, IPlayer } from "../../../utils/types/gameTypes";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from './Single.module.scss';
@@ -8,7 +8,7 @@ import styles from './Single.module.scss';
 const OneByOne: FC<IPropsForClosestNumberComponent> = ({ users }) => {
   return (
     <div className={styles.players}>
-      {users?.map((user: IRPSPlayer) => (
+      {users?.map((user: IPlayer) => (
         <div className={styles.players__player}>
           {user?.emoji !== 'none' &&
             <div className={styles.players__emoji}>

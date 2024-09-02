@@ -24,7 +24,7 @@ import styles from './Shop.module.scss';
 export const Shop: FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const lavkaShop = useAppSelector(store => store.app.lavka);

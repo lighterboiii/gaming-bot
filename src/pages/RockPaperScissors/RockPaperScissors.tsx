@@ -29,7 +29,7 @@ import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
 import { setFirstGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { roomsUrl } from "../../utils/routes";
-import { IRPSPlayer } from "../../utils/types/gameTypes";
+import { IGameData, IPlayer } from "../../utils/types/gameTypes";
 
 import styles from "./RockPaperScissors.module.scss";
 
@@ -37,10 +37,10 @@ export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const location = useLocation();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<IGameData | null>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
@@ -66,7 +66,7 @@ export const RockPaperScissors: FC = () => {
   }, [isRulesShown]);
 
   useEffect(() => {
-    if (data?.players?.some((player: IRPSPlayer) => player.choice === 'ready')) {
+    if (data?.players?.some((player: IPlayer) => player.choice === 'ready')) {
       setAnyPlayerReady(true);
     } else {
       setAnyPlayerReady(false);
@@ -129,8 +129,8 @@ export const RockPaperScissors: FC = () => {
 
   }, []);
   // запрос результата хода
-  const updateAnimation = useCallback((newAnimation: any) => {
-    setAnimation((prevAnimation: any) => {
+  const updateAnimation = useCallback((newAnimation: string) => {
+    setAnimation((prevAnimation: string) => {
       if (prevAnimation !== newAnimation) {
         setAnimationKey((prevKey) => prevKey + 1);
         return newAnimation;
@@ -144,7 +144,7 @@ export const RockPaperScissors: FC = () => {
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+        if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
           console.log('data', data);
           setShowTimer(false);
           if (roomId) {
@@ -210,7 +210,7 @@ export const RockPaperScissors: FC = () => {
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
     if (data?.bet_type === "1") {
-      if (player?.money <= data?.bet) {
+      if (player?.money && (player?.money <= Number(data?.bet))) {
         leaveRoomRequest(player?.userid)
           .then(_res => {
             if (player?.userid === userId) {
@@ -224,7 +224,7 @@ export const RockPaperScissors: FC = () => {
           })
       }
     } else if (data?.bet_type === "3") {
-      if (player?.tokens <= data?.bet) {
+      if (player?.tokens && (player?.tokens <= Number(data?.bet))) {
         leaveRoomRequest(userId)
           .then(_res => {
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
@@ -244,7 +244,7 @@ export const RockPaperScissors: FC = () => {
     };
     getPollingRequest(userId, reqData)
       .then(res => {
-        setData(res);
+        setData(res as IGameData);
         setAnyPlayerReady(true);
         postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       })
@@ -287,7 +287,7 @@ export const RockPaperScissors: FC = () => {
     }
     getPollingRequest(userId, data)
       .then(res => {
-        setData(res);
+        setData(res as IGameData);
         postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
         setShowEmojiOverlay(false);
       })
@@ -302,7 +302,7 @@ export const RockPaperScissors: FC = () => {
         emoji: 'none'
       }
       getPollingRequest(userId, noneData)
-        .then(res => {
+        .then((res: any) => {
           setData(res);
         })
         .catch((error) => {
@@ -313,12 +313,12 @@ export const RockPaperScissors: FC = () => {
   // Таймер
   useEffect(() => {
     if (data?.players_count === "2"
-      && data?.players?.some((player: IRPSPlayer) => player.choice === 'none')
-      && data?.players?.some((player: IRPSPlayer) => player.choice === 'ready')) {
+      && data?.players?.some((player: IPlayer) => player.choice === 'none')
+      && data?.players?.some((player: IPlayer) => player.choice === 'ready')) {
       setTimerStarted(true);
       setShowTimer(true);
       // setTimer(15);
-    } else if (data?.players?.every((player: IRPSPlayer) => player.choice !== 'none')) {
+    } else if (data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
       setTimerStarted(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -335,7 +335,7 @@ export const RockPaperScissors: FC = () => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      data?.players.forEach((player: IRPSPlayer) => {
+      data?.players.forEach((player: IPlayer) => {
         if (player.choice === 'none') {
           leaveRoomRequest(player.userid)
             .then((res: any) => {
@@ -423,10 +423,10 @@ export const RockPaperScissors: FC = () => {
           <>
             {rules ? (
               <>
-                <Players data={data} />
+                <Players data={data as IGameData} />
                 <>
                   {data?.players_count === "2" &&
-                    data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready') &&
+                    data?.players?.every((player: IPlayer) => player?.choice === 'ready') &&
                     <img src={newVS}
                       alt="versus icon"
                       className={styles.game__versusImage} />}
@@ -461,7 +461,7 @@ export const RockPaperScissors: FC = () => {
                         <p className={styles.game__text}>{data?.bet}</p>
                       </div>
                     </div>
-                    {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')
+                    {(data?.players?.every((player: IPlayer) => player?.choice !== 'none')
                       && data?.players_count === "2") ? (
                       <div className={styles.game__buttonsWrapper}>
                         <ChoiceBox

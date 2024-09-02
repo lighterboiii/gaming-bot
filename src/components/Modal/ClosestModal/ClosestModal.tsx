@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import { useAppSelector } from "services/reduxHooks";
 
-import { IRPSPlayer } from "../../../utils/types/gameTypes";
+import { IPlayer } from "../../../utils/types/gameTypes";
 import ModalOverlay from "../../Modal/ModalOverlay/ModalOverlay";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
@@ -13,10 +13,10 @@ interface IProps {
   closeModal: () => void;
   gameValue?: number;
   winnerValue?: string;
-  winner?: IRPSPlayer;
+  winner?: IPlayer;
   betType: string;
   isTie?: boolean;
-  tieWinners?: IRPSPlayer[];
+  tieWinners?: IPlayer[];
 }
 
 export const ClosestModal: FC<IProps> = ({
