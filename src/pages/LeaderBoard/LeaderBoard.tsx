@@ -6,7 +6,6 @@ import { formatNumber } from "utils/additionalFunctions";
 
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
-import FriendsBoard from "../../components/Main/FriendsBoard/FriendsBoard";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import Timer from "../../components/Timer/Timer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
