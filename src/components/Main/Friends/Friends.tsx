@@ -3,7 +3,6 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import UserContainer from "../..//User/UserContainer/UserContainer";
 import { getReferralsData, transferCoinsToBalanceReq } from "../../../api/mainApi";
 import { inviteLink, userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
@@ -12,13 +11,15 @@ import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { IMember } from "../../../utils/types/memberTypes";
 import { IResultDataResponse, ITransferCoinsToBalanceResponse } from "../../../utils/types/responseTypes";
 import Button from "../../ui/Button/Button";
+import UserContainer from "../../User/UserContainer/UserContainer";
+import FriendsBoard from "../FriendsBoard/FriendsBoard";
 
-import styles from './Referral.module.scss';
+import styles from './Friends.module.scss';
 
-const Referral: FC = () => {
+const Friends: FC = () => {
   const { user, tg } = useTelegram();
   const dispatch = useAppDispatch();
-  // const userId = user?.id;
+  const userId = user?.id;
   const translation = useAppSelector(store => store.app.languageSettings);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
@@ -120,22 +121,10 @@ const Referral: FC = () => {
           {message}
         </div>
       ) : (
-        <div className={styles.referral__board + ' scrollable'}>
-          {refsBoard !== null && refsBoard !== undefined && refsBoard.length > 0 ? (
-            refsBoard?.map((referral: IMember, index: number) => (
-              <UserContainer member={referral}
-                index={index - 1}
-                length={refsBoard.length + 1}
-                key={index} />
-            ))) :
-            <span className={styles.referral__emptyBoard}>
-              {translation?.no_friends_played}
-            </span>
-          }
-        </div>
+        <FriendsBoard refsBoard={refsBoard} />
       )}
     </div>
   )
 }
 
-export default Referral;
+export default Friends;

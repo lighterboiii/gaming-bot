@@ -6,6 +6,7 @@ import { formatNumber } from "utils/additionalFunctions";
 
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
+import FriendsBoard from "../../components/Main/FriendsBoard/FriendsBoard";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import Timer from "../../components/Timer/Timer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
@@ -43,6 +44,7 @@ export const LeaderBoard: FC = () => {
       setLoading(true);
       getTopUsers()
         .then((response) => {
+          console.log(response);
           const leaders = response as ITopUsersRes;
           setTopLeader(leaders?.top_users[0]);
           setLeaderBoard(leaders?.top_users.slice(1));
@@ -51,7 +53,7 @@ export const LeaderBoard: FC = () => {
           setPrizeCount(leaders?.top_prize_count);
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.message);
         })
         .finally(() => {
           setLoading(false);
