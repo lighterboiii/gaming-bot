@@ -191,7 +191,6 @@ export const RockPaperScissors: FC = () => {
                         firstAnim: null,
                         secondAnim: null,
                       });
-                      setIsChoiceLocked(false);
                     }, 4000)
                   }, animationTime);
                 }
@@ -235,6 +234,7 @@ export const RockPaperScissors: FC = () => {
       }
     }
     setMessageVisible(false);
+    setIsChoiceLocked(false);
     setMessage('');
     const reqData = {
       user_id: userId,
