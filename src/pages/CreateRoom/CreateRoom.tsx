@@ -39,6 +39,11 @@ export const CreateRoom: FC = () => {
         console.log(error);
       });
   }, []);
+  
+  useEffect(() => {
+    const originalHeight = window.innerHeight;
+    document.body.style.height = `${originalHeight}px`;
+  }, []);
 
   const handleGameClick = (game: any) => {
     setGameData(game);

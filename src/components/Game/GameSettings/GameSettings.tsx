@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from '@tma.js/sdk';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { postNewRoomRequest } from '../../../api/gameApi';
@@ -114,6 +114,11 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       }
     }
   };
+
+  useEffect(() => {
+    const originalHeight = window.innerHeight;
+    document.body.style.height = `${originalHeight}px`;
+  }, []);
 
   return (
     <div className={styles.game + ' scrollable'}>
