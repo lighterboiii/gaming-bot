@@ -30,6 +30,8 @@ export interface IGameData {
   players_count: string;
   room_id: string;
   room_type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  win: any;
 }
 
 export interface IPlayerInfo {
