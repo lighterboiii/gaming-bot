@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from '@tma.js/sdk';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 
@@ -33,7 +34,7 @@ const SettingsSlider: FC<IProps> = ({
   };
 
   const decreaseBet = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setBet(prevBet => {
       const currentBet = parseFloat(prevBet);
       if (currentBet > 0) {

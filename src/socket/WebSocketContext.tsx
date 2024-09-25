@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // WebSocketContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
@@ -7,14 +8,14 @@ const SOCKET_SERVER_URL = 'ws://gamebottggw2.ngrok.app';
 
 interface WebSocketContextType {
     sendMessage: (message: object) => void;
-    messages: string[];
+    messages: string[] | any[];
 }
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
 
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [client, setClient] = useState<WebSocketClient | null>(null);
-    const [messages, setMessages] = useState<string[]>([]);
+    const [messages, setMessages] = useState<string[] | any[]>([]);
 
     useEffect(() => {
         const wsClient = new WebSocketClient(SOCKET_SERVER_URL, (data) => {

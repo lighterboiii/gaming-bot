@@ -31,7 +31,7 @@ const JoinRoomPopup: FC<IProps> = ({
   fromGameSettings = false,
 }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const [messageShown, setMessageShown] = useState(false);
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);
@@ -48,7 +48,7 @@ const JoinRoomPopup: FC<IProps> = ({
               room_type: roomType
             }, userId)
               .then((res: any) => {
-                postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+                // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
                 navigate(Number(roomType) === 2 ? `/closest/${res.room_id}` : `/room/${res.room_id}`);
               })
               .catch((error) => {

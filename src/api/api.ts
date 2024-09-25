@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable import/no-anonymous-default-export */
@@ -15,8 +16,8 @@ type TRequest = {
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 };
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const token = process.env.REACT_APP_API_TOKEN;
+const BASE_URL='https://gamebottggw.ngrok.app/'
+const token =`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2FtZWJvdGd3dGciLCJleHAiOjE3MzA4MTY5NDh9.6-w7uCzr2QQ0DkFamtW-OHZRwKsQa4l64Ofu3krwXKE`
 
 const BASE_PARAMS = {
   headers: {

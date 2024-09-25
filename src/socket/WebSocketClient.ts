@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // WebSocketClient.ts
 class WebSocketClient {
     private socket: WebSocket | null = null;

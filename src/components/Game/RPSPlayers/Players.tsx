@@ -13,12 +13,13 @@ import readyIcon from '../../../images/rock-paper-scissors/user_ready_image.png'
 import styles from './Players.module.scss';
 
 interface IProps {
-  data: IGameData;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: IGameData | any;
 }
 
 const Players: FC<IProps> = ({ data }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
 
   return (
     <div className={styles.players}>
