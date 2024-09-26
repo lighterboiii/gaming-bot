@@ -9,18 +9,11 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import Rules from "components/Game/Rules/Rules";
 
-import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
+import { setGameRulesWatched } from "../../api/gameApi";
 import { getActiveEmojiPack, getAppData } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
-import CaseEight from "../../components/ClosestNumber/Eight/Eight";
-import CaseFour from "../../components/ClosestNumber/Five/Five";
-import CaseThree from "../../components/ClosestNumber/Four/Four";
-import Case from '../../components/ClosestNumber/One/CaseOne';
 import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
-import CaseSeven from "../../components/ClosestNumber/Seven/Seven";
-import OneByOne from "../../components/ClosestNumber/Single/Single";
-import CaseSix from "../../components/ClosestNumber/Six/Six";
-import CaseTwo from "../../components/ClosestNumber/Three/Three";
+import RenderComponent from "../../components/ClosestNumber/WhoCloserPlayers/WhoCloserPlayers";
 import Loader from "../../components/Loader/Loader";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
 import { Warning } from "../../components/OrientationWarning/Warning";
@@ -31,44 +24,14 @@ import useTelegram from "../../hooks/useTelegram";
 import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';
 import smile from '../../images/closest-number/smile.png';
-import {
-  addCoins,
-  addTokens,
-  setCoinsValueAfterBuy,
-  setTokensValueAfterBuy,
-  setSecondGameRulesState,
-} from "../../services/appSlice";
+import { setSecondGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { useWebSocket } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { roomsUrl } from "../../utils/routes";
-import { IRPSPlayer } from "../../utils/types/gameTypes";
+import { IPlayer } from "../../utils/types/gameTypes";
 
 import styles from './ClosestNumber.module.scss';
-
-interface IProps {
-  users: IRPSPlayer[];
-}
-
-const RenderComponent: FC<IProps> = ({ users }) => {
-  switch (users?.length) {
-    case 1:
-      return <OneByOne users={users} />;
-    case 3:
-      return <CaseTwo users={users} />;
-    case 4:
-      return <CaseThree users={users} />;
-    case 5:
-      return <CaseFour users={users} />;
-    case 6:
-      return <CaseSix users={users} />;
-    case 7:
-      return <CaseSeven users={users} />;
-    case 8:
-      return <CaseEight users={users} />;
-    default:
-      return <Case users={users} />
-  }
-};
 
 export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
@@ -104,6 +67,7 @@ export const ClosestNumber: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.secondGameRulesState);
   const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
   const isPortrait = useOrientation();
+  const { sendMessage, messages } = useWebSocket();
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -138,116 +102,123 @@ export const ClosestNumber: FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showOverlay]);
-  // long polling
+  // WebSocket connection
   useEffect(() => {
-    let isMounted = true;
     setLoading(true);
-    const fetchRoomInfo = async () => {
-      if (!roomId || !isMounted) {
-        return;
-      }
-      const data = {
+
+    if (!roomId) {
+      return;
+    }
+
+    const sendRoomRequest = () => {
+      sendMessage({
         user_id: userId,
         room_id: roomId,
-        type: 'wait'
-      };
-      getPollingRequest(userId, data)
-        .then((res: any) => {
-
-          if (res?.message === 'None') {
-            leaveRoomRequest(userId);
-            isMounted = false;
-            const currentUrl = location.pathname;
-            currentUrl !== roomsUrl && navigate(roomsUrl);
-          } else if (res?.message === 'timeout') {
-            setTimeout(fetchRoomInfo, 500);
-          } else {
-            setData(res);
-            setLoading(false);
-          }
-
-          if (isMounted) {
-            fetchRoomInfo();
-          }
-        })
-        .catch((error) => {
-
-          console.error('Room data request error', error);
-          leaveRoomRequest(userId)
-            .then((res: any) => {
-              if (res?.message === 'success') {
-                const currentUrl = location.pathname;
-                currentUrl !== roomsUrl && navigate(roomsUrl);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-        });
+        type: 'room_info'
+      });
     };
 
-    fetchRoomInfo();
+    const messageHandler = (message: any) => {
+      const res = JSON.parse(message);
+      console.log(res);
+
+      if (res?.message === 'None') {
+        sendMessage({
+          user_id: userId,
+          room_id: roomId,
+          type: 'kickplayer'
+        });
+        const currentUrl = location.pathname;
+        currentUrl !== roomsUrl && navigate(roomsUrl);
+      } else if (res?.message === 'timeout') {
+        sendRoomRequest();
+      } else {
+        setData(res);
+        setLoading(false);
+      }
+    };
+
+    const handleMessage = () => {
+      messages.forEach((message: any) => {
+        messageHandler(message);
+      });
+    };
+
+    sendRoomRequest();
+    handleMessage();
 
     return () => {
-      isMounted = false;
+      // sendMessage({
+      //   user_id: userId,
+      //   room_id: roomId,
+      //   type: 'kickplayer'
+      // });
     };
-
-  }, []);
+  }, [roomId, userId, messages, sendMessage, navigate]);
+  // получить эмодзи пользователя
+  useEffect(() => {
+    getActiveEmojiPack(userId)
+      .then((res: any) => {
+        setEmojis(res.user_emoji_pack.user_emoji_pack);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userId]);
 
   const count = data?.players?.reduce((total: number, player: any) => {
     return total + (player?.choice !== "none" ? 1 : 0);
   }, 0);
-  console.log(data);
-  // запрос результата кона
+  // запрос результата кона websocket
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')) {
+        if (data?.players?.every((player: IPlayer) => player?.choice !== 'none')) {
           setTimerStarted(false);
-          whoIsWinRequest(roomId!)
-            .then((res: any) => {
-              if (res.winner === "draw") {
-                setDraw(true);
-                setRoomValue(Number(res?.room_value));
-                const drawPlayerIds = res.draw_players;
-                const drawPlayers = data?.players?.filter((player: any) =>
-                  drawPlayerIds.includes(player.userid));
-                setDrawWinners(drawPlayers);
-                setWinSum(Number(res?.winner_value));
-              } else {
-                setRoomValue(Number(res?.room_value));
-                setWinnerId(Number(res?.winner));
-                setWinSum(res?.winner_value);
-                postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
-              }
-              if (res?.message === "success") {
-                setTimeout(() => {
-                  if (res?.winner === userId) {
-                    if (data?.bet_type === "1") {
-                      dispatch(addCoins(Number(res?.winner_value)));
-                    } else {
-                      dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
-                    }
-                  } else {
-                    if (data?.bet_type === "3") {
-                      dispatch(addTokens(Number(res?.winner_value)));
-                    } else {
-                      dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
-                    }
-                  }
-                  setInputValue('');
-                  setModalOpen(true);
-                  setTimerStarted(true);
-                  setTimer(30);
-                }, 5000)
-              }
-
-            })
-            .catch((error) => {
-              console.error('Data request error:', error);
+          if (roomId) {
+            sendMessage({
+              user_id: userId,
+              room_id: roomId,
+              type: 'whoiswin'
             });
+            // if (data?.win.winner_id === "draw") {
+            //   setDraw(true);
+            //   setRoomValue(Number(res?.room_value));
+            //   const drawPlayerIds = res.draw_players;
+            //   const drawPlayers = data?.players?.filter((player: any) =>
+            //     drawPlayerIds.includes(player.userid));
+            //   setDrawWinners(drawPlayers);
+            //   setWinSum(Number(res?.winner_value));
+            // } else {
+            //   setRoomValue(Number(res?.room_value));
+            //   setWinnerId(Number(res?.winner));
+            //   setWinSum(res?.winner_value);
+            //   postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
+            // }
+            // if (res?.message === "success") {
+            //   setTimeout(() => {
+            //     if (res?.winner === userId) {
+            //       if (data?.bet_type === "1") {
+            //         dispatch(addCoins(Number(res?.winner_value)));
+            //       } else {
+            //         dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
+            //       }
+            //     } else {
+            //       if (data?.bet_type === "3") {
+            //         dispatch(addTokens(Number(res?.winner_value)));
+            //       } else {
+            //         dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
+            //       }
+            //     }
+            //     setInputValue('');
+            //     setModalOpen(true);
+            //     setTimerStarted(true);
+            //     setTimer(30);
+            //   }, 5000)
+            // }
+          }
         }
       }, 2500);
     };
@@ -271,7 +242,7 @@ export const ClosestNumber: FC = () => {
       } else {
         setInputError(true);
       }
-      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       return newValue;
     });
   };
@@ -287,7 +258,7 @@ export const ClosestNumber: FC = () => {
       } else {
         setInputError(true);
       }
-      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
       return newValue;
     });
   };
@@ -314,22 +285,12 @@ export const ClosestNumber: FC = () => {
           handleSubmit();
           break;
         default:
-          postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+          // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
           break;
       }
     }
   };
-  // получить эмодзи пользователя
-  useEffect(() => {
-    getActiveEmojiPack(userId)
-      .then((res: any) => {
-        setEmojis(res.user_emoji_pack.user_emoji_pack);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [userId]);
-  // хендлер выбора хода
+  // хендлер выбора хода websocket
   const handleChoice = (value: string) => {
     setDrawWinners(null);
     setDraw(false);
@@ -346,90 +307,69 @@ export const ClosestNumber: FC = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
     if (data?.bet_type === "1") {
       if (player?.money <= data?.bet) {
-        leaveRoomRequest(player?.userid)
-          .then(res => {
-            if (player?.userid === userId) {
-              const currentUrl = location.pathname;
-              currentUrl !== roomsUrl && navigate(roomsUrl);
-            }
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+        sendMessage({
+          user_id: userId,
+          room_id: roomId,
+          type: 'kickplayer'
+        });
+        if (player?.userid === userId) {
+          const currentUrl = location.pathname;
+          currentUrl !== roomsUrl && navigate(roomsUrl);
+        }
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
       }
     } else if (data?.bet_type === "3") {
       if (player?.tokens <= data?.bet) {
-        leaveRoomRequest(userId)
-          .then(res => {
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+        sendMessage({
+          user_id: userId,
+          room_id: roomId,
+          type: 'kickplayer'
+        });
+        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
       }
     }
     const choice = {
       user_id: userId,
       room_id: roomId,
-      type: 'setchoice',
+      type: 'choice',
       choice: value
     };
-    getPollingRequest(userId, choice)
-      .then((res: any) => {
-        setData(res);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-      })
-      .catch((error) => {
-        console.error('Set choice error:', error);
-      });
+    sendMessage(choice);
   };
   // хендлер отпрвки эмодзи
   const handleEmojiSelect = (emoji: string) => {
     const setEmojiData = {
       user_id: userId,
       room_id: roomId,
-      type: 'setemoji',
+      type: 'emoji',
       emoji: emoji
     }
-    getPollingRequest(userId, setEmojiData)
-      .then(res => {
-        setData(res);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-        setShowEmojiOverlay(false);
-        setShowOverlay(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    sendMessage(setEmojiData);
+    setShowEmojiOverlay(false);
+    setShowOverlay(false);
+
     setTimeout(() => {
-      const empty = {
+      const noneChoice = {
         user_id: userId,
         room_id: roomId,
-        type: 'setemoji',
+        type: 'emoji',
         emoji: 'none'
       }
-      getPollingRequest(userId, empty)
-        .then(res => {
-          setData(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+      sendMessage(noneChoice);
     }, 4000)
   };
-  // обработчик клика на иконку эмодзи
+  // обработчик клика на иконку эмодзи websocket
   const handleClickEmoji = () => {
     setShowOverlay(true);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
   // Таймер
   useEffect(() => {
-    if (data?.players_count !== "1" && data?.players?.every((player: IRPSPlayer) => player.choice === 'none')) {
+    if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice === 'none')) {
       setTimerStarted(true);
       setTimer(30);
-    } else if (data?.players_count !== "1" && data?.players?.every((player: IRPSPlayer) => player.choice !== 'none')) {
+    } else if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
       setTimerStarted(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -439,30 +379,33 @@ export const ClosestNumber: FC = () => {
       setTimer(30);
     }
   }, [data]);
-  // кик игрока, если он не прожал готовность
+  // кик игрока, если он не прожал готовность Websocket
   useEffect(() => {
     if (timerStarted && timer! > 0) {
       timerRef.current = setInterval(() => {
         setTimer((prev) => prev! - 1);
       }, 1000);
     } else if (timer === 0) {
-      const currentPlayer = data?.players.find((player: IRPSPlayer) => Number(player.userid) === Number(userId));
-      if (currentPlayer?.choice === 'none') {
-        leaveRoomRequest(userId)
-          .then((res: any) => {
-            if (res?.message === 'success') {
-              const currentUrl = location.pathname;
-              currentUrl !== roomsUrl && navigate(roomsUrl);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-        setTimerStarted(false);
-        if (timerRef.current) {
-          clearInterval(timerRef.current);
+      // const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
+      // if (currentPlayer?.choice === 'none') {
+      data?.players.forEach((player: IPlayer) => {
+        if (player.choice === 'none') {
+          const leaveData = {
+            user_id: player.userid,
+            room_id: roomId,
+            type: 'kickplayer'
+          };
+
+          sendMessage(leaveData);
+          const currentUrl = location.pathname;
+          currentUrl !== roomsUrl && navigate(roomsUrl);
         }
+      });
+      setTimerStarted(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
       }
+      // }
     }
 
     return () => {
@@ -471,22 +414,16 @@ export const ClosestNumber: FC = () => {
       }
     };
   }, [timer, timerStarted, data, navigate, userId]);
-
+  // сброс выбора игрока, когда он единственный в комнате Websocket
   useEffect(() => {
     const resetPlayerChoice = () => {
       const choiceData = {
         user_id: userId,
         room_id: roomId,
-        type: 'setchoice',
+        type: 'choice',
         choice: 'none'
       };
-      getPollingRequest(userId, choiceData)
-        .then(res => {
-          setInputValue('');
-        })
-        .catch((error) => {
-          console.error('Reset choice error:', error);
-        });
+      sendMessage(choiceData);
     };
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();

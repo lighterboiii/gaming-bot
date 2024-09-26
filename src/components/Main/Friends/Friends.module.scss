@@ -64,25 +64,11 @@
     text-align: center;
   }
 
-  &__board {
-    @include indents(6px 16px, 0 12px 0 0);
-    @include flex(column, flex-start, flex-end, 10px);
-    @include size(100%, auto);
-    // overflow: visible;
-    overflow-y: scroll;
-    z-index: 5;
-  }
-
   &__notification {
     @include indents();
     @include size(calc(100% - 32px), 100%);
     @include flex(column, center, center);
     color: $main-color;
     font-weight: 900;
-  }
-
-  &__emptyBoard {
-    @extend .referral__sumSpan;
-    @include size(100%, auto);
   }
 }

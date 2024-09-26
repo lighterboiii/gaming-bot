@@ -10,13 +10,14 @@ import ManIcon from "../../../icons/Man/Man";
 import whoCloser from '../../../images/gameSec.png';
 import hand from '../../../images/main_hand_1_tiny.png';
 import { useAppSelector } from "../../../services/reduxHooks";
-import { IRPSGameData } from "../../../utils/types/gameTypes";
+import { useWebSocket } from '../../../socket/WebSocketContext';
+import { IGameData } from "../../../utils/types/gameTypes";
 
 import styles from './Room.module.scss';
 
 interface IProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  room: IRPSGameData | any;
+  room: IGameData | any;
   openModal: () => void;
 }
 
@@ -24,10 +25,14 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
   // const userId = user?.id;
-  const [isMessage, setIsMessage] = useState(false);
-  const [message, setMessage] = useState('');
+  const [isMessage, setIsMessage] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
+  const { sendMessage, messages } = useWebSocket();
+  const parsedMessages = messages.map(msg => JSON.parse(msg));
+  console.log(parsedMessages);
+
   const handleJoinRoom = (roomType: number) => {
     if (room.free_places === 0) {
       setIsMessage(true);
@@ -59,17 +64,24 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       return;
     }
 
-    joinRoomRequest(userId, String(room.room_id))
-      .then((res) => {
+    sendMessage({
+      user_id: userId,
+      room_id: room.room_id,
+      type: 'addplayer'
+    });
+    if (parsedMessages.length > 0) {
+      const lastMessage = parsedMessages[messages.length - 1].message;
+      console.log(lastMessage.message);
+
+      if (lastMessage.message === "success") {
         postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         navigate(roomType === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
-      })
-      .catch((error) => {
-        console.error("Error joining room:", error);
-        handleLeaveRoom();
-      });
+      } else {
+        return;
+      }
+    }
   };
-
+console.log(room);
   const handleLeaveRoom = () => {
     leaveRoomRequest(userId)
       .then((data) => {

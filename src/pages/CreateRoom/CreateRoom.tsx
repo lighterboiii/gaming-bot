@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-lone-blocks */
 import { postEvent } from "@tma.js/sdk";
@@ -39,11 +40,16 @@ export const CreateRoom: FC = () => {
         console.log(error);
       });
   }, []);
+  
+  useEffect(() => {
+    const originalHeight = window.innerHeight;
+    document.body.style.height = `${originalHeight}px`;
+  }, []);
 
   const handleGameClick = (game: any) => {
     setGameData(game);
     setSettingsOverlay(!settingsOverlay);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   if (!isPortrait) {

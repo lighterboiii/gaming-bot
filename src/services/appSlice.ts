@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { IRPSGameData } from "../utils/types/gameTypes";
+import { IGameData } from "../utils/types/gameTypes";
 import { IBannerData, IBonus, ITask, IUserData } from "../utils/types/mainTypes";
 import { ItemData } from "../utils/types/shopTypes";
 
@@ -12,7 +12,7 @@ interface AppState {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bonus: IBonus | null | any;
   lavka: ItemData[] | null;
-  openedRooms: IRPSGameData | null;
+  openedRooms: IGameData | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   languageSettings: string[] | null | any,
   tasks: ITask[] | null,
@@ -157,7 +157,7 @@ const appSlice = createSlice({
       state.languageSettings = action.payload;
     },
     // rooms & game part
-    getOpenedRooms: (state, action: PayloadAction<IRPSGameData>) => {
+    getOpenedRooms: (state, action: PayloadAction<IGameData>) => {
       state.openedRooms = action.payload;
     },
     setFirstGameRuleImage: (state, action: PayloadAction<string>) => {

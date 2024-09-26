@@ -1,12 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from '@tma.js/sdk';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { postNewRoomRequest } from '../../../api/gameApi';
 import { userId } from '../../../api/requestData';
 import useTelegram from '../../../hooks/useTelegram';
 import { useAppSelector } from '../../../services/reduxHooks';
+import { useWebSocket } from '../../../socket/WebSocketContext';
 import { formatNumber } from '../../../utils/additionalFunctions';
 import { IGameSettingsData } from '../../../utils/types/gameTypes';
 import { ICreateRoomResponse } from '../../../utils/types/responseTypes';
@@ -38,7 +40,30 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const userInfo = useAppSelector(store => store.app.info);
-
+  const { sendMessage, messages } = useWebSocket();
+  console.log(data);
+  const parsedMessages = messages.map(msg => JSON.parse(msg));
+console.log(parsedMessages);
+  useEffect(() => {
+    if (parsedMessages.length > 0) {
+      const lastMessage = parsedMessages[messages.length - 1].message;
+      console.log(lastMessage);
+      // Обработка последнего сообщения
+      if (lastMessage.message === 'success') {
+        setSelectedRoomId(lastMessage.room_id);
+        navigate(data?.room_type === 2 ? `/closest/${lastMessage.room_id}` : `/room/${lastMessage.room_id}`);
+      } else if (lastMessage.type === 'error') {
+        setInsufficient(true);
+        setMessage(translation?.insufficient_funds || 'Недостаточно средств');
+        setMessageShown(true);
+        setTimeout(() => {
+          setMessageShown(false);
+          setInsufficient(false);
+        }, 2000);
+      }
+    }
+  }, [parsedMessages, navigate, translation, data]);
+  
   const handleCurrencyChange = (newCurrency: number) => {
     setCurrency(newCurrency);
   };
@@ -50,41 +75,17 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const handleInputChange = (bet: string) => {
     setBet(parseFloat(bet));
   };
-
-  const handleCreateRoom = (
-    userIdValue: number,
-    bet: number,
-    betType: number,
-    roomType: number,
-    closeOverlay: () => void
-  ) => {
+  const handleCreateRoom = 
+  (userIdValue: number, bet: number, betType: number, roomType: number, closeOverlay: () => void) => {
     const data = {
+      type: 'create_room',
       user_id: userIdValue,
       bet: bet,
       bet_type: betType,
-      room_type: roomType
+      room_type: roomType,
     };
-    const handleResponse = (response: ICreateRoomResponse) => {
-      if (response.message === 'success') {
-        setSelectedRoomId(String(response.room_id));
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
-        navigate(roomType === 2 ? `/closest/${response.room_id}` : `/room/${response.room_id}`);
-      } else if (response.message === 'not_enough_coins') {
-        setInsufficient(true);
-        setMessage(translation?.insufficient_funds || 'Недостаточно средств');
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
-        setMessageShown(true);
-        setTimeout(() => {
-          setMessageShown(false);
-          setInsufficient(false);
-        }, 2000);
-      }
-    };
-    postNewRoomRequest(data, userIdValue)
-      .then((response) => handleResponse(response as ICreateRoomResponse))
-      .catch(error => {
-        console.log(error);
-      });
+    
+    sendMessage(data);  // Отправка сообщения через WebSocket
   };
 
   const handleEnergyCheck = () => {
@@ -114,6 +115,11 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       }
     }
   };
+
+  useEffect(() => {
+    const originalHeight = window.innerHeight;
+    document.body.style.height = `${originalHeight}px`;
+  }, []);
 
   return (
     <div className={styles.game + ' scrollable'}>

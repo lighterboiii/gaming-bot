@@ -6,7 +6,7 @@ export interface IGameCardData {
   users: string;
 }
 
-export interface IRPSPlayer {
+export interface IPlayer {
   active_skin: number;
   avatar: string;
   choice: string;
@@ -20,16 +20,18 @@ export interface IRPSPlayer {
   userid: number;
 }
 
-export interface IRPSGameData {
+export interface IGameData {
   bet: string;
   bet_type: string;
   creator_id: string;
   free_places: string;
   misc_value: string;
-  players: IRPSPlayer[];
+  players: IPlayer[];
   players_count: string;
   room_id: string;
   room_type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  win: any;
 }
 
 export interface IPlayerInfo {
@@ -52,7 +54,7 @@ export interface IGameSettingsData {
 }
 
 export interface IPropsForClosestNumberComponent {
-  users: IRPSPlayer[];
+  users: IPlayer[];
 }
 
 export interface ITime {

@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { IPropsForClosestNumberComponent, IRPSPlayer } from "../../../utils/types/gameTypes";
+import { IPropsForClosestNumberComponent, IPlayer } from "../../../utils/types/gameTypes";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from './CaseOne.module.scss';
@@ -11,7 +11,7 @@ const Case: FC<IPropsForClosestNumberComponent> = ({ users }) => {
       className={styles.players}
       style={users?.length <= 2 ? { width: '180%' } : {}}
     >
-      {users?.map((user: IRPSPlayer) => (
+      {users?.map((user: IPlayer) => (
         <div
           className={styles.players__player}
           style={users?.length <= 2 ? { width: '90px', height: '90px' } : {}}>

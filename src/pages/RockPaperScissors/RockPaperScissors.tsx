@@ -5,7 +5,7 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
+import { setGameRulesWatched } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
@@ -28,8 +28,9 @@ import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
 import { setFirstGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { useWebSocket } from "../../socket/WebSocketContext";
 import { roomsUrl } from "../../utils/routes";
-import { IRPSPlayer } from "../../utils/types/gameTypes";
+import { IGameData, IPlayer } from "../../utils/types/gameTypes";
 
 import styles from "./RockPaperScissors.module.scss";
 
@@ -40,7 +41,7 @@ export const RockPaperScissors: FC = () => {
   // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<IGameData | null>(null);
   const [choice, setChoice] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
@@ -60,13 +61,66 @@ export const RockPaperScissors: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   const isPortrait = useOrientation();
-  // установка первоначального вида рук и правил при старте игры
+  const { sendMessage, messages } = useWebSocket();
+
+  useEffect(() => {
+    tg.setHeaderColor('#1b50b8');
+    setLoading(true);
+
+    if (!roomId) {
+      return;
+    }
+    const fetchInitialData = () => {
+      sendMessage({
+        user_id: userId,
+        room_id: roomId,
+        type: 'room_info'
+      });
+    };
+
+    fetchInitialData();
+
+    const messageHandler = (message: any) => {
+      const res = JSON.parse(message);
+      console.log(res);
+      if (res?.message === 'None') {
+        sendMessage({
+          user_id: userId,
+          room_id: roomId,
+          type: 'kickplayer'
+        });
+        const currentUrl = location.pathname;
+        currentUrl !== roomsUrl && navigate(roomsUrl);
+      } else if (res?.message === 'timeout') {
+        fetchInitialData();
+      } else {
+        setData(res);
+        setLoading(false);
+      }
+    };
+    const handleMessage = () => {
+      messages.forEach((message: any) => {
+        messageHandler(message);
+      });
+    };
+
+    handleMessage();
+
+    return () => {
+      // sendMessage({
+      //   user_id: userId,
+      //   room_id: roomId,
+      //   type: 'kickplayer'
+      // });
+    };
+  }, [roomId, userId, messages, sendMessage, navigate]);
+  // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [isRulesShown]);
-
+  // не помню, нахер надо
   useEffect(() => {
-    if (data?.players?.some((player: IRPSPlayer) => player.choice === 'ready')) {
+    if (data?.players?.some((player: IPlayer) => player.choice === 'ready')) {
       setAnyPlayerReady(true);
     } else {
       setAnyPlayerReady(false);
@@ -74,63 +128,9 @@ export const RockPaperScissors: FC = () => {
   }, [data]);
 
   useSetTelegramInterface(roomsUrl, userId);
-
-  // long polling
-  useEffect(() => {
-    tg.setHeaderColor('#1b50b8');
-    let isMounted = true;
-    setLoading(true);
-    const fetchRoomInfo = async () => {
-      if (!roomId || !isMounted) {
-        return;
-      }
-      const data = {
-        user_id: userId,
-        room_id: roomId,
-        type: 'wait'
-      };
-      getPollingRequest(userId, data)
-        .then((res: any) => {
-          if (res?.message === 'None') {
-            leaveRoomRequest(userId);
-            isMounted = false;
-            const currentUrl = location.pathname;
-            currentUrl !== roomsUrl && navigate(roomsUrl);
-          } else if (res?.message === 'timeout') {
-            setTimeout(fetchRoomInfo, 500);
-          } else {
-            setData(res);
-            setLoading(false);
-          }
-
-          if (isMounted) {
-            fetchRoomInfo();
-          }
-        })
-        .catch((error) => {
-          console.error('Room data request error', error);
-          leaveRoomRequest(userId)
-            .then((res: any) => {
-              if (res?.message === 'success') {
-                const currentUrl = location.pathname;
-                currentUrl !== roomsUrl && navigate(roomsUrl);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-        });
-    };
-    fetchRoomInfo();
-
-    return () => {
-      isMounted = false;
-    };
-
-  }, []);
   // запрос результата хода
-  const updateAnimation = useCallback((newAnimation: any) => {
-    setAnimation((prevAnimation: any) => {
+  const updateAnimation = useCallback((newAnimation: string) => {
+    setAnimation((prevAnimation: string) => {
       if (prevAnimation !== newAnimation) {
         setAnimationKey((prevKey) => prevKey + 1);
         return newAnimation;
@@ -144,61 +144,59 @@ export const RockPaperScissors: FC = () => {
     const fetchData = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+        if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
           console.log('data', data);
           setShowTimer(false);
           if (roomId) {
-            whoIsWinRequest(roomId)
-              .then(async (res: any) => {
-                await setPlayersAnim({
-                  firstAnim: res?.f_anim,
-                  secondAnim: res?.s_anim,
-                });
-                const animationTime = 3000;
-                setAnimationKey(prevKey => prevKey + 1);
-                if (res?.message === "success") {
-                  setTimeout(() => {
-                    if (res?.winner === userId) {
-                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
-                      postEvent(
-                        'web_app_trigger_haptic_feedback',
-                        { type: 'notification', notification_type: 'success' }
-                      );
-                      setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
-                        ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
-                          : `🔰`}`
-                        : ''}`);
-                    } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? lLoseAnim : rLoseAnim);
-                      postEvent(
-                        'web_app_trigger_haptic_feedback',
-                        { type: 'notification', notification_type: 'error', }
-                      );
-                      setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
-                        ? `💵`
-                        : `🔰`}`);
-                    } else if (res?.winner === 'draw') {
-                      setMessage(translation?.draw);
-                      postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-                    }
-                    setMessageVisible(true);
-                    setTimeout(() => {
-                      setMessageVisible(false);
-                      setAnimation(null);
-                      setAnyPlayerReady(true);
-                      setTimer(15);
-                      setPlayersAnim({
-                        firstAnim: null,
-                        secondAnim: null,
-                      });
-                      setIsChoiceLocked(false);
-                    }, 4000)
-                  }, animationTime);
+            sendMessage({
+              user_id: userId,
+              room_id: roomId,
+              type: 'whoiswin'
+            });
+            setPlayersAnim({
+              firstAnim: data?.win.f_anim,
+              secondAnim: data?.win.s_anim,
+            });
+            const animationTime = 3000;
+            setAnimationKey(prevKey => prevKey + 1);
+            if (data?.win.users !== "none" && data?.win.winner_id !== "none" && data?.win.winner_value !== "none") {
+              setTimeout(() => {
+                if (data?.win.winner_id === userId) {
+                  updateAnimation(Number(data.creator_id) === Number(data?.win.winner_id) ? lWinAnim : rWinAnim);
+                  postEvent(
+                    'web_app_trigger_haptic_feedback',
+                    { type: 'notification', notification_type: 'success' }
+                  );
+                  setMessage(`${translation?.you_won} ${data?.win.winner_value !== 'none'
+                    ? `${data?.win.winner_value} ${data?.bet_type === "1" ? `💵`
+                      : `🔰`}`
+                    : ''}`);
+                } else if (Number(data?.win.winner_value) !== Number(userId) && data?.win.winner_id !== 'draw') {
+                  updateAnimation(Number(data.creator_id) === Number(data.win.winner_id) ? lLoseAnim : rLoseAnim);
+                  postEvent(
+                    'web_app_trigger_haptic_feedback',
+                    { type: 'notification', notification_type: 'error', }
+                  );
+                  setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+                    ? `💵`
+                    : `🔰`}`);
+                } else if (data?.win.winner_id === 'draw') {
+                  setMessage(translation?.draw);
+                  postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
                 }
-              })
-              .catch((error) => {
-                console.error('Data request error:', error);
-              });
+                setMessageVisible(true);
+                setTimeout(() => {
+                  setMessageVisible(false);
+                  setAnimation(null);
+                  setAnyPlayerReady(true);
+                  setTimer(15);
+                  setPlayersAnim({
+                    firstAnim: null,
+                    secondAnim: null,
+                  });
+                }, 4000)
+              }, animationTime);
+            }
           }
         }
       }, 1500);
@@ -206,119 +204,104 @@ export const RockPaperScissors: FC = () => {
 
     fetchData();
   }, [data, roomId, translation?.draw, translation?.you_lost, translation?.you_won, updateAnimation, userId]);
-  // хендлер готовности игрока
+  // хендлер готовности игрока websocket
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
+
     if (data?.bet_type === "1") {
-      if (player?.money <= data?.bet) {
-        leaveRoomRequest(player?.userid)
-          .then(_res => {
-            if (player?.userid === userId) {
-              const currentUrl = location.pathname;
-              currentUrl !== roomsUrl && navigate(roomsUrl);
-            }
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+      if (player?.money && (player?.money <= Number(data?.bet))) {
+        sendMessage({
+          user_id: player?.userid,
+          room_id: roomId,
+          type: 'kickplayer'
+        });
+        // Если текущий пользователь - это тот, кто покидает комнату
+        if (player?.userid === userId) {
+          const currentUrl = location.pathname;
+          currentUrl !== roomsUrl && navigate(roomsUrl);
+        }
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+        return;
       }
     } else if (data?.bet_type === "3") {
-      if (player?.tokens <= data?.bet) {
-        leaveRoomRequest(userId)
-          .then(_res => {
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+      if (player?.tokens && (player?.tokens <= Number(data?.bet))) {
+        sendMessage({
+          user_id: userId,
+          room_id: roomId,
+          type: 'kickplayer'
+        });
+
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+        return;
       }
     }
+    // Сброс сообщений и блокировок выбора
     setMessageVisible(false);
+    setIsChoiceLocked(false);
     setMessage('');
-    const reqData = {
+
+    sendMessage({
       user_id: userId,
       room_id: roomId,
-      type: 'setchoice',
+      type: 'choice',
       choice: 'ready'
-    };
-    getPollingRequest(userId, reqData)
-      .then(res => {
-        setData(res);
-        setAnyPlayerReady(true);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+    });
+
+    setAnyPlayerReady(true);
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
   };
-  // хендлер выбора хода
+  // хендлер выбора хода Websocket
   const handleChoice = (value: string) => {
     if (isChoiceLocked) return;
 
     setIsChoiceLocked(true);
     setShowTimer(false);
-    const reqData = {
+
+    const choice = {
       user_id: userId,
       room_id: roomId,
-      type: 'setchoice',
+      type: 'choice',
       choice: value
     };
-    getPollingRequest(userId, reqData)
-      .then((res: any) => {
-        setData(res);
-        setShowTimer(true);
-        setAnyPlayerReady(true);
-        setTimerStarted(true);
-        setTimer(15);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-      })
-      .catch((error) => {
-        console.error('Set choice error:', error);
-      });
+
+    sendMessage(choice);
+    setAnyPlayerReady(true);
+    setTimer(15);
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
   };
-  // хендлер отпрвки эмодзи
+
+  // хендлер отпрвки эмодзи websocket
   const handleEmojiSelect = (emoji: string) => {
     const data = {
       user_id: userId,
       room_id: roomId,
-      type: 'setemoji',
+      type: 'emoji',
       emoji: emoji
-    }
-    getPollingRequest(userId, data)
-      .then(res => {
-        setData(res);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-        setShowEmojiOverlay(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    };
+
+    sendMessage(data);
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    setShowEmojiOverlay(false);
+
     setTimeout(() => {
       const noneData = {
         user_id: userId,
         room_id: roomId,
-        type: 'setemoji',
+        type: 'emoji',
         emoji: 'none'
-      }
-      getPollingRequest(userId, noneData)
-        .then(res => {
-          setData(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    }, 3000)
+      };
+      sendMessage(noneData);
+    }, 3000);
   };
   // Таймер
   useEffect(() => {
     if (data?.players_count === "2"
-      && data?.players?.some((player: IRPSPlayer) => player.choice === 'none')
-      && data?.players?.some((player: IRPSPlayer) => player.choice === 'ready')) {
+      && data?.players?.some((player: IPlayer) => player.choice === 'none')
+      && data?.players?.some((player: IPlayer) => player.choice === 'ready')) {
       setTimerStarted(true);
       setShowTimer(true);
       // setTimer(15);
-    } else if (data?.players?.every((player: IRPSPlayer) => player.choice !== 'none')) {
+    } else if (data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
       setTimerStarted(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -328,25 +311,24 @@ export const RockPaperScissors: FC = () => {
       setTimer(15);
     }
   }, [data]);
-  // кик игрока, если он не прожал готовность
+  // кик игрока, если он не прожал готовность 
   useEffect(() => {
     if (anyPlayerReady && timerStarted && timer > 0) {
       timerRef.current = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      data?.players.forEach((player: IRPSPlayer) => {
+      data?.players.forEach((player: IPlayer) => {
         if (player.choice === 'none') {
-          leaveRoomRequest(player.userid)
-            .then((res: any) => {
-              if (res?.message === 'success' && player.userid === userId) {
-                const currentUrl = location.pathname;
-                currentUrl !== roomsUrl && navigate(roomsUrl);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          const leaveData = {
+            user_id: player.userid,
+            room_id: roomId,
+            type: 'kickplayer'
+          };
+
+          sendMessage(leaveData);
+          const currentUrl = location.pathname;
+          currentUrl !== roomsUrl && navigate(roomsUrl);
         }
       });
       setTimerStarted(false);
@@ -354,34 +336,30 @@ export const RockPaperScissors: FC = () => {
         clearInterval(timerRef.current);
       }
     }
+
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
     };
   }, [timer, timerStarted, anyPlayerReady, data, navigate, userId]);
-  // сброс выбора игрока, когда он единственный в комнате
+  // сброс выбора игрока, когда он единственный в комнате Websocket
   useEffect(() => {
     const resetPlayerChoice = () => {
       const choiceData = {
         user_id: userId,
         room_id: roomId,
-        type: 'setchoice',
+        type: 'choice',
         choice: 'none'
       };
-      getPollingRequest(userId, choiceData)
-        .then((_res: any) => {
-        })
-        .catch((error) => {
-          console.error('Reset choice error:', error);
-        });
+      sendMessage(choiceData);
     };
 
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
   }, [data]);
-  // обработчик клика по кнопке "Ознакомился"
+  // обработчик клика по кнопке "Ознакомился" - не Websocket, но и не надо вроде
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
@@ -398,12 +376,12 @@ export const RockPaperScissors: FC = () => {
   };
 
   const handleShowEmojiOverlay = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     setShowEmojiOverlay(true);
   };
 
   const handleCloseEmojiOverlay = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setShowEmojiOverlay(!showEmojiOverlay)
   };
 
@@ -423,10 +401,10 @@ export const RockPaperScissors: FC = () => {
           <>
             {rules ? (
               <>
-                <Players data={data} />
+                <Players data={data as IGameData} />
                 <>
                   {data?.players_count === "2" &&
-                    data?.players?.every((player: IRPSPlayer) => player?.choice === 'ready') &&
+                    data?.players?.every((player: IPlayer) => player?.choice === 'ready') &&
                     <img src={newVS}
                       alt="versus icon"
                       className={styles.game__versusImage} />}
@@ -461,7 +439,7 @@ export const RockPaperScissors: FC = () => {
                         <p className={styles.game__text}>{data?.bet}</p>
                       </div>
                     </div>
-                    {(data?.players?.every((player: IRPSPlayer) => player?.choice !== 'none')
+                    {(data?.players?.every((player: IPlayer) => player?.choice !== 'none')
                       && data?.players_count === "2") ? (
                       <div className={styles.game__buttonsWrapper}>
                         <ChoiceBox

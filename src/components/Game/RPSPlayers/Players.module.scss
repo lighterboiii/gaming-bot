@@ -41,7 +41,8 @@
 
   &__balance {
     @include indents(4px 4px, 0);
-    @include size(50%, unset);
+    @include max-size(75%, unset);
+    @include size(100%, auto);
     @include flex(row, center, center);
     flex-wrap: nowrap;
     @include position(absolute, $bottom: -20%, $left: 50%);

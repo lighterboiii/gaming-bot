@@ -7,7 +7,7 @@ import { userId } from "../../api/requestData";
 import AdvertisementBanner from '../../components/Main/AdvertisementBanner/AdvertisementBanner';
 import BannerData from "../../components/Main/BannerData/BannerData";
 import DailyBonus from "../../components/Main/Bonus/Bonus";
-import Referral from "../../components/Main/Referral/Referral";
+import Friends from "../../components/Main/Friends/Friends";
 import Tasks from "../../components/Main/Tasks/Tasks";
 import WheelOfLuck from "../../components/Main/WheelOfLuck/WheelOfLuck";
 import { Warning } from "../../components/OrientationWarning/Warning";
@@ -172,7 +172,7 @@ export const Main: FC = () => {
       </div>
       <Overlay
         children={
-          <Referral />
+          <Friends />
         }
         show={showReferralOverlay}
         onClose={toggleRefOverlay}

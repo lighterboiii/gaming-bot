@@ -4,7 +4,7 @@ import { FC } from "react";
 
 import useTelegram from "hooks/useTelegram";
 import { formatNumber } from "utils/additionalFunctions";
-import { IRPSPlayer } from "utils/types/gameTypes";
+import { IGameData, IPlayer } from "utils/types/gameTypes";
 
 import { userId } from "../../../api/requestData";
 import UserAvatar from "../../../components/User/UserAvatar/UserAvatar";
@@ -14,7 +14,7 @@ import styles from './Players.module.scss';
 
 interface IProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
+  data: IGameData | any;
 }
 
 const Players: FC<IProps> = ({ data }) => {
@@ -23,7 +23,7 @@ const Players: FC<IProps> = ({ data }) => {
 
   return (
     <div className={styles.players}>
-    {data?.players?.map((player: IRPSPlayer) => (
+    {data?.players?.map((player: IPlayer) => (
       <div
         className={styles.players__player}
         key={player.userid}

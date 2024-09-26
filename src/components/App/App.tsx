@@ -30,6 +30,7 @@ import {
   setProductsArchive
 } from '../../services/appSlice';
 import { useAppDispatch } from '../../services/reduxHooks';
+import { useWebSocket } from '../../socket/WebSocketContext';
 import {
   indexUrl,
   roomsUrl,
@@ -43,12 +44,13 @@ import {
 import Loader from '../Loader/Loader';
 
 import styles from './App.module.scss';
-
+  
 export const App: FC = () => {
   const { tg, user } = useTelegram();
   // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+  const { sendMessage } = useWebSocket();
 
   document.addEventListener(
     'touchmove',
@@ -76,6 +78,8 @@ export const App: FC = () => {
 
   useEffect(() => {
     setLoading(true);
+    sendMessage({ type: 'test' });
+
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
