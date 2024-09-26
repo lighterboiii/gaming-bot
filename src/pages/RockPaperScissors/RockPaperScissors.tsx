@@ -5,7 +5,7 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-import { getPollingRequest, leaveRoomRequest, setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
+import { setGameRulesWatched } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
@@ -84,9 +84,13 @@ export const RockPaperScissors: FC = () => {
       const res = JSON.parse(message);
       console.log(res);
       if (res?.message === 'None') {
-        leaveRoomRequest(userId).then(() => {
-          navigate(roomsUrl);
+        sendMessage({
+          user_id: userId,
+          room_id: roomId,
+          type: 'kickplayer'
         });
+        const currentUrl = location.pathname;
+        currentUrl !== roomsUrl && navigate(roomsUrl);
       } else if (res?.message === 'timeout') {
         fetchInitialData();
       } else {
@@ -103,7 +107,11 @@ export const RockPaperScissors: FC = () => {
     handleMessage();
 
     return () => {
-      // Продумать, нужно ли тут что то при размонтировании? Думаю да, закрывать сокет
+      // sendMessage({
+      //   user_id: userId,
+      //   room_id: roomId,
+      //   type: 'kickplayer'
+      // });
     };
   }, [roomId, userId, messages, sendMessage, navigate]);
   // проверка правил при старте игры
@@ -145,7 +153,6 @@ export const RockPaperScissors: FC = () => {
               room_id: roomId,
               type: 'whoiswin'
             });
-            whoIsWinRequest(roomId)
             setPlayersAnim({
               firstAnim: data?.win.f_anim,
               secondAnim: data?.win.s_anim,
@@ -250,14 +257,14 @@ export const RockPaperScissors: FC = () => {
     setIsChoiceLocked(true);
     setShowTimer(false);
 
-    const reqData = {
+    const choice = {
       user_id: userId,
       room_id: roomId,
       type: 'choice',
       choice: value
     };
 
-    sendMessage(reqData);
+    sendMessage(choice);
     setAnyPlayerReady(true);
     setTimer(15);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
