@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import WebSocketClient from './WebSocketClient';
 
-const SOCKET_SERVER_URL = 'ws://gamebottggw2.ngrok.app';
+const SOCKET_SERVER_URL = 'wss://gamebottggw2.ngrok.app';
 
 interface WebSocketContextType {
     sendMessage: (message: object) => void;

@@ -11,7 +11,6 @@ import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { IMember } from "../../../utils/types/memberTypes";
 import { IResultDataResponse, ITransferCoinsToBalanceResponse } from "../../../utils/types/responseTypes";
 import Button from "../../ui/Button/Button";
-import UserContainer from "../../User/UserContainer/UserContainer";
 import FriendsBoard from "../FriendsBoard/FriendsBoard";
 
 import styles from './Friends.module.scss';
