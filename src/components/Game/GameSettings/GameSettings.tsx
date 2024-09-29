@@ -43,7 +43,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const { sendMessage, messages } = useWebSocket();
   console.log(data);
   const parsedMessages = messages.map(msg => JSON.parse(msg));
-console.log(parsedMessages);
+  console.log(parsedMessages);
   useEffect(() => {
     if (parsedMessages.length > 0) {
       const lastMessage = parsedMessages[messages.length - 1].message;
@@ -63,7 +63,7 @@ console.log(parsedMessages);
       }
     }
   }, [parsedMessages, navigate, translation, data]);
-  
+
   const handleCurrencyChange = (newCurrency: number) => {
     setCurrency(newCurrency);
   };
@@ -75,22 +75,22 @@ console.log(parsedMessages);
   const handleInputChange = (bet: string) => {
     setBet(parseFloat(bet));
   };
-  const handleCreateRoom = 
-  (userIdValue: number, bet: number, betType: number, roomType: number, closeOverlay: () => void) => {
-    const data = {
-      type: 'create_room',
-      user_id: userIdValue,
-      bet: bet,
-      bet_type: betType,
-      room_type: roomType,
+  const handleCreateRoom =
+    (userIdValue: number, bet: number, betType: number, roomType: number, closeOverlay: () => void) => {
+      const data = {
+        type: 'create_room',
+        user_id: userIdValue,
+        bet: bet,
+        bet_type: betType,
+        room_type: roomType,
+      };
+
+      sendMessage(data);  // Отправка сообщения через WebSocket
     };
-    
-    sendMessage(data);  // Отправка сообщения через WebSocket
-  };
 
   const handleEnergyCheck = () => {
     if (bet < 0.1) {
-      setMessage(`${translation?.minimum_bet} ${currency === 1  ? `💵` : `🔰`}`);
+      setMessage(`${translation?.minimum_bet} ${currency === 1 ? `💵` : `🔰`}`);
       setMessageShown(true);
       setTimeout(() => {
         setMessageShown(false);

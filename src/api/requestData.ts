@@ -39,8 +39,8 @@ export const useEnergyDrinkUri = 'use_energy_drink?user_id=';
 export const getShopUri = 'get_shop_available?=';
 export const getInventoryUri = 'get_user_collectible_info?user_id=';
 // links
-export const getImageLink = `https://tgminiappgwbot.ngrok.app/get_item_image/`;
-export const getImageMaskLink = `https://tgminiappgwbot.ngrok.app/get_item_image_mask/`
+export const getImageLink = `${BASE_URL}/get_item_image/`;
+export const getImageMaskLink = `${BASE_URL}/get_item_image_mask/`
 export const inviteLink = 'https://t.me/gowinclub_bot?start=invite_link';
 export const groupLink = 'https://t.me/gowincommunity';
 export const balanceLink = 'https://t.me/gowinclub_bot?start=balance';

@@ -83,6 +83,7 @@ export const App: FC = () => {
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
+          console.log(res);
           dispatch(setLanguageSettings(res.translate));
           dispatch(setUserData(res.user_info));
           dispatch(setProductsArchive(res.collectibles_data));
