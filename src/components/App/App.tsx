@@ -50,7 +50,7 @@ export const App: FC = () => {
   const userId = user?.id;
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const { sendMessage } = useWebSocket();
+  const { sendMessage, closeSocket } = useWebSocket();
 
   document.addEventListener(
     'touchmove',
@@ -79,7 +79,7 @@ export const App: FC = () => {
   useEffect(() => {
     setLoading(true);
     sendMessage({ type: 'test' });
-
+    
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
@@ -106,6 +106,17 @@ export const App: FC = () => {
     };
 
     fetchUserData();
+
+    const handleBeforeUnload = () => {
+        closeSocket();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+	closeSocket();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
 

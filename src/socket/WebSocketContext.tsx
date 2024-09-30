@@ -7,6 +7,7 @@ const SOCKET_SERVER_URL = 'ws://gamebottggw2.ngrok.app';
 
 interface WebSocketContextType {
     sendMessage: (message: object) => void;
+    closeSocket: () => void;
     messages: string[];
 }
 
@@ -35,8 +36,14 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     };
 
+    const closeSocket = () => {
+        if (client) {
+            client.disconnect();
+        }
+    };
+
     return (
-        <WebSocketContext.Provider value={{ sendMessage, messages }}>
+        <WebSocketContext.Provider value={{ sendMessage, closeSocket, messages }}>
             {children}
         </WebSocketContext.Provider>
     );
