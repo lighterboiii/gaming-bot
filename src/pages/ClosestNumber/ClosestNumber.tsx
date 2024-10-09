@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-fallthrough */
 import { postEvent } from "@tma.js/sdk";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import Rules from "components/Game/Rules/Rules";
@@ -26,7 +26,7 @@ import deleteIcon from '../../images/closest-number/Delete.png';
 import smile from '../../images/closest-number/smile.png';
 import { setSecondGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import { useWebSocket } from "../../socket/WebSocketContext";
+import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { roomsUrl } from "../../utils/routes";
 import { IPlayer } from "../../utils/types/gameTypes";
@@ -67,7 +67,7 @@ export const ClosestNumber: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.secondGameRulesState);
   const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
   const isPortrait = useOrientation();
-  const { sendMessage, messages } = useWebSocket();
+  const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -121,25 +121,37 @@ export const ClosestNumber: FC = () => {
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       console.log(res);
-
-      if (res?.message === 'None') {
-        sendMessage({
-          user_id: userId,
-          room_id: roomId,
-          type: 'kickplayer'
-        });
-        const currentUrl = location.pathname;
-        currentUrl !== roomsUrl && navigate(roomsUrl);
-      } else if (res?.message === 'timeout') {
-        sendRoomRequest();
-      } else {
-        setData(res);
-        setLoading(false);
+      switch (res?.type) {
+        case 'kickplayer':
+          if (res?.message === 'None') {
+            sendMessage({
+              user_id: userId,
+              room_id: roomId,
+              type: 'kickplayer'
+            });
+            const currentUrl = location.pathname;
+            currentUrl !== roomsUrl && navigate(roomsUrl);
+          } else if (res?.message === 'timeout') {
+            sendRoomRequest();
+          } else {
+            setData(res);
+            setLoading(false);
+          }
+          break;
+        case 'room_info':
+          break;
+        case 'whoiswin':
+          break;
+        case 'choice':
+          break;
+        case 'emoji':
+          break;
       }
+
     };
 
     const handleMessage = () => {
-      messages.forEach((message: any) => {
+      wsmessages.forEach((message: any) => {
         messageHandler(message);
       });
     };
@@ -154,7 +166,7 @@ export const ClosestNumber: FC = () => {
       //   type: 'kickplayer'
       // });
     };
-  }, [roomId, userId, messages, sendMessage, navigate]);
+  }, [roomId, userId, wsmessages, sendMessage, navigate]);
   // получить эмодзи пользователя
   useEffect(() => {
     getActiveEmojiPack(userId)

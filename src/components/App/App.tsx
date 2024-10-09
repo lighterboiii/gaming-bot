@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { getAppData } from '../../api/mainApi';
@@ -30,7 +30,7 @@ import {
   setProductsArchive
 } from '../../services/appSlice';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { useWebSocket } from '../../socket/WebSocketContext';
+import { WebSocketContext } from '../../socket/WebSocketContext';
 import {
   indexUrl,
   roomsUrl,
@@ -50,7 +50,7 @@ export const App: FC = () => {
   // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const { sendMessage } = useWebSocket();
+  const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
 
   document.addEventListener(
     'touchmove',
@@ -109,6 +109,19 @@ export const App: FC = () => {
     fetchUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
+
+  const parsedMessages = wsmessages.map(msg => JSON.parse(msg));
+  useEffect(() => {
+    if (parsedMessages.length > 0) {
+      const lastMessage = parsedMessages[wsmessages.length - 1].message;
+      console.log(lastMessage);
+      if (lastMessage.type === 'test') {
+        console.log(lastMessage);
+      } else {
+        
+      }
+    }
+  }, [parsedMessages]);
 
   return (
     <div className={styles.app}>

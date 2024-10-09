@@ -1,52 +1,87 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // WebSocketContext.tsx
-import React, { createContext, useContext, useEffect, useState } from 'react';
-
-import WebSocketClient from './WebSocketClient';
-
-const SOCKET_SERVER_URL = 'wss://gamebottggw2.ngrok.app';
+import React, { createContext, useEffect, useState, ReactNode } from 'react';
 
 interface WebSocketContextType {
     sendMessage: (message: object) => void;
-    messages: string[] | any[];
+    disconnect: () => void;
+    wsmessages: string[];
 }
+
+const SOCKET_SERVER_URL = 'ws://localhost:8080';
+const RECONNECT_INTERVAL = 3000; 
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
 
-export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [client, setClient] = useState<WebSocketClient | null>(null);
-    const [messages, setMessages] = useState<string[] | any[]>([]);
+const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [ws, setWs] = useState<WebSocket | null>(null);
+    const [wsmessages, setMessages] = useState<string[]>([]);
+    const [messageQueue, setMessageQueue] = useState<object[]>([]);
+    const [isReconnecting, setIsReconnecting] = useState(false);
 
     useEffect(() => {
-        const wsClient = new WebSocketClient(SOCKET_SERVER_URL, (data) => {
-            setMessages((prev) => [...prev, JSON.stringify(data)]);
-        });
-        wsClient.connect();
-        setClient(wsClient);
+        const connect = () => {
+            const wsClient = new WebSocket(SOCKET_SERVER_URL);
 
-        // Cleanup on component unmount
-        return () => {
-            wsClient.disconnect();
+            wsClient.onopen = () => {
+                console.log('WebSocket connected');
+                setIsReconnecting(false);
+                while (messageQueue.length > 0) {
+                    sendMessage(messageQueue.shift()!);
+                }
+            };
+
+            wsClient.onmessage = (event) => {
+                const newMessage = event.data;
+                console.log(newMessage);
+                setMessages((prevMessages) => [...prevMessages, newMessage]);
+            };
+
+            wsClient.onclose = () => {
+                console.log('WebSocket disconnected');
+                if (!isReconnecting) {
+                    setIsReconnecting(true);
+                    setTimeout(() => {
+                        console.log('Attempting to reconnect...');
+                        connect();
+                    }, RECONNECT_INTERVAL);
+                }
+            };
+
+            setWs(wsClient);
         };
-    }, []);
+
+        connect(); // Initial connection
+
+        return () => {
+            if (ws) {
+                ws.close();
+            }
+        };
+    }, [messageQueue]);
 
     const sendMessage = (message: object) => {
-        if (client) {
-            client.send(message);
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify(message));
+        } else {
+            console.error('WebSocket is not open. Unable to send message.');
+
+            const messageQueueNew = messageQueue.slice();
+            messageQueueNew.push(message); // Queue the message
+            setMessageQueue(messageQueueNew);
         }
     };
+    
+    const disconnect = () => {
+        if (ws) {
+            ws.close();
+        }
+    }
 
     return (
-        <WebSocketContext.Provider value={{ sendMessage, messages }}>
-            {children}
+        <WebSocketContext.Provider value={{ sendMessage, disconnect, wsmessages }}>
+        {children}
         </WebSocketContext.Provider>
     );
 };
 
-export const useWebSocket = (): WebSocketContextType => {
-    const context = useContext(WebSocketContext);
-    if (!context) {
-        throw new Error('useWebSocket must be used within a WebSocketProvider');
-    }
-    return context;
-};
+export { WebSocketProvider, WebSocketContext };

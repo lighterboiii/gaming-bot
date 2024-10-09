@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
-import { FC, useState } from "react";
+import { FC, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { joinRoomRequest, leaveRoomRequest } from "../../../api/gameApi";
@@ -10,7 +10,7 @@ import ManIcon from "../../../icons/Man/Man";
 import whoCloser from '../../../images/gameSec.png';
 import hand from '../../../images/main_hand_1_tiny.png';
 import { useAppSelector } from "../../../services/reduxHooks";
-import { useWebSocket } from '../../../socket/WebSocketContext';
+import { WebSocketContext } from '../../../socket/WebSocketContext';
 import { IGameData } from "../../../utils/types/gameTypes";
 
 import styles from './Room.module.scss';
@@ -29,8 +29,8 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const [message, setMessage] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
-  const { sendMessage, messages } = useWebSocket();
-  const parsedMessages = messages.map(msg => JSON.parse(msg));
+  const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
+  const parsedMessages = wsmessages.map(msg => JSON.parse(msg));
   console.log(parsedMessages);
 
   const handleJoinRoom = (roomType: number) => {
@@ -70,10 +70,10 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       type: 'addplayer'
     });
     if (parsedMessages.length > 0) {
-      const lastMessage = parsedMessages[messages.length - 1].message;
+      const lastMessage = parsedMessages[wsmessages.length - 1].message;
       console.log(lastMessage.message);
 
-      if (lastMessage.message === "success") {
+      if (lastMessage?.type === "addplayer" && lastMessage.message === "success") {
         postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         navigate(roomType === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
       } else {

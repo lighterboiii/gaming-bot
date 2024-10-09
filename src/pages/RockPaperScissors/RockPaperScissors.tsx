@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import { setGameRulesWatched } from "../../api/gameApi";
@@ -28,7 +28,7 @@ import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
 import { setFirstGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import { useWebSocket } from "../../socket/WebSocketContext";
+import { WebSocketContext } from '../../socket/WebSocketContext';
 import { roomsUrl } from "../../utils/routes";
 import { IGameData, IPlayer } from "../../utils/types/gameTypes";
 
@@ -61,7 +61,7 @@ export const RockPaperScissors: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   const isPortrait = useOrientation();
-  const { sendMessage, messages } = useWebSocket();
+  const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -83,23 +83,36 @@ export const RockPaperScissors: FC = () => {
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       console.log(res);
-      if (res?.message === 'None') {
-        sendMessage({
-          user_id: userId,
-          room_id: roomId,
-          type: 'kickplayer'
-        });
-        const currentUrl = location.pathname;
-        currentUrl !== roomsUrl && navigate(roomsUrl);
-      } else if (res?.message === 'timeout') {
-        fetchInitialData();
-      } else {
-        setData(res);
-        setLoading(false);
+      switch (res?.type) 
+      {
+        case 'room_info':
+          break;
+        case 'kickplayer':
+          if (res?.type === 'kickplayer' && res?.message === 'None') {
+            sendMessage({
+              user_id: userId,
+              room_id: roomId,
+              type: 'kickplayer'
+            });
+            const currentUrl = location.pathname;
+            currentUrl !== roomsUrl && navigate(roomsUrl);
+          } else if (res?.message === 'timeout') {
+            fetchInitialData();
+          } else {
+            setData(res);
+            setLoading(false);
+          }
+          break;
+        case 'whoiswin':
+          break;
+        case 'choice':
+          break;
+        case 'emoji':
+          break;
       }
     };
     const handleMessage = () => {
-      messages.forEach((message: any) => {
+      wsmessages.forEach((message: any) => {
         messageHandler(message);
       });
     };
@@ -113,7 +126,7 @@ export const RockPaperScissors: FC = () => {
       //   type: 'kickplayer'
       // });
     };
-  }, [roomId, userId, messages, sendMessage, navigate]);
+  }, [roomId, userId, wsmessages, sendMessage, navigate]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);

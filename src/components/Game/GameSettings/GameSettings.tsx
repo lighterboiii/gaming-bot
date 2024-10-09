@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from '@tma.js/sdk';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { postNewRoomRequest } from '../../../api/gameApi';
 import { userId } from '../../../api/requestData';
 import useTelegram from '../../../hooks/useTelegram';
 import { useAppSelector } from '../../../services/reduxHooks';
-import { useWebSocket } from '../../../socket/WebSocketContext';
+import { WebSocketContext } from '../../../socket/WebSocketContext';
 import { formatNumber } from '../../../utils/additionalFunctions';
 import { IGameSettingsData } from '../../../utils/types/gameTypes';
 import { ICreateRoomResponse } from '../../../utils/types/responseTypes';
@@ -40,16 +40,16 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const userInfo = useAppSelector(store => store.app.info);
-  const { sendMessage, messages } = useWebSocket();
+  const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
   console.log(data);
-  const parsedMessages = messages.map(msg => JSON.parse(msg));
+  const parsedMessages = wsmessages.map(msg => JSON.parse(msg));
   console.log(parsedMessages);
   useEffect(() => {
     if (parsedMessages.length > 0) {
-      const lastMessage = parsedMessages[messages.length - 1].message;
+      const lastMessage = parsedMessages[wsmessages.length - 1].message;
       console.log(lastMessage);
       // Обработка последнего сообщения
-      if (lastMessage.message === 'success') {
+      if (lastMessage.type === 'create_room' && lastMessage.message === 'success') {
         setSelectedRoomId(lastMessage.room_id);
         navigate(data?.room_type === 2 ? `/closest/${lastMessage.room_id}` : `/room/${lastMessage.room_id}`);
       } else if (lastMessage.type === 'error') {
