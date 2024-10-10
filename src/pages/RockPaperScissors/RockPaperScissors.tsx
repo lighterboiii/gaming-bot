@@ -91,7 +91,7 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'kickplayer':
-          if (res?.type === 'kickplayer' && res?.message === 'None') {
+          if (res?.type === 'kickplayer' || res?.message === 'None') {
             sendMessage({
               user_id: userId,
               room_id: roomId,
@@ -108,10 +108,10 @@ export const RockPaperScissors: FC = () => {
           break;
         // case 'whoiswin':
         //   break;
-        case 'choice':
-          break;
-        case 'emoji':
-          break;
+        // case 'choice':
+        //   break;
+        // case 'emoji':
+        //   break;
       }
     };
     const handleMessage = () => {

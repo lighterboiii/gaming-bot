@@ -58,6 +58,7 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 ws.close();
             }
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [messageQueue]);
 
     const sendMessage = (message: object) => {
