@@ -144,15 +144,15 @@ export const RockPaperScissors: FC = () => {
 
   useSetTelegramInterface(roomsUrl, userId);
   // запрос результата хода
-  const updateAnimation = useCallback((newAnimation: string) => {
-    setAnimation((prevAnimation: string) => {
-      if (prevAnimation !== newAnimation) {
-        setAnimationKey((prevKey) => prevKey + 1);
-        return newAnimation;
-      }
-      return prevAnimation;
-    });
-  }, []);
+  // const updateAnimation = useCallback((newAnimation: string) => {
+  //   setAnimation((prevAnimation: string) => {
+  //     if (prevAnimation !== newAnimation) {
+  //       setAnimationKey((prevKey) => prevKey + 1);
+  //       return newAnimation;
+  //     }
+  //     return prevAnimation;
+  //   });
+  // }, []);
 
   useEffect(() => {
     let timeoutId: any;
@@ -174,7 +174,7 @@ export const RockPaperScissors: FC = () => {
                 if (res?.message === "success") {
                   setTimeout(() => {
                     if (res?.winner === userId) {
-                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
+                      // updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
                       // postEvent(
                       //   'web_app_trigger_haptic_feedback',
                       //   { type: 'notification', notification_type: 'success' }
@@ -184,7 +184,7 @@ export const RockPaperScissors: FC = () => {
                           : `🔰`}`
                         : ''}`);
                     } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? lLoseAnim : rLoseAnim);
+                      // updateAnimation(Number(data.creator_id) === Number(res.winner) ? lLoseAnim : rLoseAnim);
                       // postEvent(
                       //   'web_app_trigger_haptic_feedback',
                       //   { type: 'notification', notification_type: 'error', }
@@ -219,7 +219,14 @@ export const RockPaperScissors: FC = () => {
     };
 
     fetchData();
-  }, [data, roomId, translation?.draw, translation?.you_lost, translation?.you_won, updateAnimation, userId]);
+  }, [data, 
+    // roomId, 
+    // translation?.draw, 
+    // translation?.you_lost, 
+    // translation?.you_won, 
+    // updateAnimation, 
+    // userId
+  ]);
   // хендлер готовности игрока websocket
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
@@ -376,7 +383,7 @@ export const RockPaperScissors: FC = () => {
       resetPlayerChoice();
     }
   }, [data]);
-  // обработчик клика по кнопке "Ознакомился" - не Websocket, но и не надо вроде
+  // обработчик клика по кнопке "Ознакомился" - не Websocket
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });

@@ -70,16 +70,22 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       room_id: room.room_id,
       type: 'addplayer'
     });
+
     if (parsedMessages.length > 0) {
       const lastMessage = parsedMessages[wsmessages.length - 1].message;
       console.log(lastMessage);
 
-      // if (lastMessage.message === "success") {
+      if (lastMessage?.message === "success") {
         // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         navigate(roomType === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
-      // } else {
-      //   return;
-      // }
+      } else {
+        setMessage('Error');
+        sendMessage({
+          user_id: userId,
+          room_id: room.room_id,
+          type: 'kickplayer'
+        });
+      }
     }
   };
 console.log(room);
