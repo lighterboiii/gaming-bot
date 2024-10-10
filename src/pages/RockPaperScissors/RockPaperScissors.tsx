@@ -56,7 +56,7 @@ export const RockPaperScissors: FC = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [showTimer, setShowTimer] = useState(true);
   const [rules, setRulesShown] = useState<boolean | null>(false);
-  const [anyPlayerReady, setAnyPlayerReady] = useState<boolean>(false);
+  // const [anyPlayerReady, setAnyPlayerReady] = useState<boolean>(false);
   const [isChoiceLocked, setIsChoiceLocked] = useState<boolean>(false);
   const translation = useAppSelector(store => store.app.languageSettings);
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
@@ -84,8 +84,7 @@ export const RockPaperScissors: FC = () => {
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       console.log(res);
-      switch (res?.type) 
-      {
+      switch (res?.type) {
         case 'room_info':
           setData(res);
           setLoading(false);
@@ -134,14 +133,14 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [isRulesShown]);
-  // не помню, нахер надо
-  useEffect(() => {
-    if (data?.players?.some((player: IPlayer) => player.choice === 'ready')) {
-      setAnyPlayerReady(true);
-    } else {
-      setAnyPlayerReady(false);
-    }
-  }, [data]);
+  // нужно ли оно в таймере?
+  // useEffect(() => {
+  //   if (data?.players?.some((player: IPlayer) => player.choice === 'ready')) {
+  //     setAnyPlayerReady(true);
+  //   } else {
+  //     setAnyPlayerReady(false);
+  //   }
+  // }, [data]);
 
   useSetTelegramInterface(roomsUrl, userId);
   // запрос результата хода
@@ -154,6 +153,7 @@ export const RockPaperScissors: FC = () => {
       return prevAnimation;
     });
   }, []);
+
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
@@ -165,7 +165,7 @@ export const RockPaperScissors: FC = () => {
           if (roomId) {
             whoIsWinRequest(roomId)
               .then(async (res: any) => {
-                await setPlayersAnim({
+                setPlayersAnim({
                   firstAnim: res?.f_anim,
                   secondAnim: res?.s_anim,
                 });
@@ -200,12 +200,12 @@ export const RockPaperScissors: FC = () => {
                     setTimeout(() => {
                       setMessageVisible(false);
                       setAnimation(null);
-                      setAnyPlayerReady(true);
+                      // setAnyPlayerReady(true);
                       setTimer(15);
-                      setPlayersAnim({
-                        firstAnim: null,
-                        secondAnim: null,
-                      });
+                      // setPlayersAnim({
+                      //   firstAnim: null,
+                      //   secondAnim: null,
+                      // });
                     }, 4000)
                   }, animationTime);
                 }
@@ -263,7 +263,7 @@ export const RockPaperScissors: FC = () => {
       choice: 'ready'
     });
 
-    setAnyPlayerReady(true);
+    // setAnyPlayerReady(true);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
   };
   // хендлер выбора хода Websocket
@@ -281,7 +281,7 @@ export const RockPaperScissors: FC = () => {
     };
 
     sendMessage(choice);
-    setAnyPlayerReady(true);
+    // setAnyPlayerReady(true);
     setTimer(15);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
   };
@@ -310,55 +310,56 @@ export const RockPaperScissors: FC = () => {
     }, 3000);
   };
   // Таймер
-  useEffect(() => {
-    if (data?.players_count === "2"
-      && data?.players?.some((player: IPlayer) => player.choice === 'none')
-      && data?.players?.some((player: IPlayer) => player.choice === 'ready')) {
-      setTimerStarted(true);
-      setShowTimer(true);
-      // setTimer(15);
-    } else if (data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
-      setTimerStarted(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    } else if (data?.players_count === "1") {
-      setTimerStarted(false);
-      setTimer(15);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data?.players_count === "2" &&
+  //     (data?.players?.every((player: IPlayer) => player.choice === 'none') 
+  //     || data?.players?.some((player: IPlayer) => player.choice === 'ready')
+  //   )) {
+  //     setTimerStarted(true);
+  //     setShowTimer(true);
+  //     // setTimer(15);
+  //   } else if (data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
+  //     setTimerStarted(false);
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   } else if (data?.players_count === "1") {
+  //     setTimerStarted(false);
+  //     setTimer(15);
+  //   }
+  // }, [data]);
   // кик игрока, если он не прожал готовность 
-  useEffect(() => {
-    if (anyPlayerReady && timerStarted && timer > 0) {
-      timerRef.current = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      data?.players.forEach((player: IPlayer) => {
-        if (player.choice === 'none') {
-          const leaveData = {
-            user_id: player.userid,
-            room_id: roomId,
-            type: 'kickplayer'
-          };
+  // useEffect(() => {
+  //   if (timerStarted && timer > 0) {
+  //     timerRef.current = setInterval(() => {
+  //       setTimer((prev) => prev - 1);
+  //     }, 1000);
+  //   } else if (timer === 0) {
+  //     data?.players.forEach((player: IPlayer) => {
+  //       if (player.choice === 'none') {
+  //         const leaveData = {
+  //           user_id: player.userid,
+  //           room_id: roomId,
+  //           type: 'kickplayer'
+  //         };
 
-          sendMessage(leaveData);
-          const currentUrl = location.pathname;
-          currentUrl !== roomsUrl && navigate(roomsUrl);
-        }
-      });
-      setTimerStarted(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    }
+  //         sendMessage(leaveData);
+  //         const currentUrl = location.pathname;
+  //         currentUrl !== roomsUrl && navigate(roomsUrl);
+  //       }
+  //     });
+  //     setTimerStarted(false);
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   }
 
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, [timer, timerStarted, anyPlayerReady, data, navigate, userId]);
+  //   return () => {
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   };
+  // }, [timer, timerStarted, data, navigate, userId]);
   // сброс выбора игрока, когда он единственный в комнате Websocket
   useEffect(() => {
     const resetPlayerChoice = () => {
@@ -430,7 +431,7 @@ export const RockPaperScissors: FC = () => {
                     </p>
                   ) : (
                     <p className={styles.game__timer}>
-                      {anyPlayerReady && showTimer && timerStarted && `0:${timer}`}
+                      {showTimer && timerStarted && `0:${timer}`}
                     </p>
                   )}
                   <div className={styles.game__hands}>
