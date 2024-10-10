@@ -30,7 +30,7 @@ import {
   setProductsArchive
 } from '../../services/appSlice';
 import { useAppDispatch } from '../../services/reduxHooks';
-import { WebSocketContext } from '../../socket/WebSocketContext';
+// import { WebSocketContext } from '../../socket/WebSocketContext';
 import {
   indexUrl,
   roomsUrl,
