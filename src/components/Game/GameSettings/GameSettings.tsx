@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from '@tma.js/sdk';
@@ -49,7 +50,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       const lastMessage = parsedMessages[wsmessages.length - 1].message;
       console.log(lastMessage);
       // Обработка последнего сообщения
-      if (lastMessage.type === 'create_room' && lastMessage.message === 'success') {
+      if (lastMessage.message === 'success') {
         setSelectedRoomId(lastMessage.room_id);
         navigate(data?.room_type === 2 ? `/closest/${lastMessage.room_id}` : `/room/${lastMessage.room_id}`);
       } else if (lastMessage.type === 'error') {

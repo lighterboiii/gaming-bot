@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -5,7 +6,7 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-import { setGameRulesWatched } from "../../api/gameApi";
+import { setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
@@ -86,6 +87,8 @@ export const RockPaperScissors: FC = () => {
       switch (res?.type) 
       {
         case 'room_info':
+          setData(res);
+          setLoading(false);
           break;
         case 'kickplayer':
           if (res?.type === 'kickplayer' && res?.message === 'None') {
@@ -99,12 +102,12 @@ export const RockPaperScissors: FC = () => {
           } else if (res?.message === 'timeout') {
             fetchInitialData();
           } else {
-            setData(res);
-            setLoading(false);
+            // setData(res);
+            // setLoading(false);
           }
           break;
-        case 'whoiswin':
-          break;
+        // case 'whoiswin':
+        //   break;
         case 'choice':
           break;
         case 'emoji':
@@ -151,7 +154,6 @@ export const RockPaperScissors: FC = () => {
       return prevAnimation;
     });
   }, []);
-
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
@@ -161,55 +163,56 @@ export const RockPaperScissors: FC = () => {
           console.log('data', data);
           setShowTimer(false);
           if (roomId) {
-            sendMessage({
-              user_id: userId,
-              room_id: roomId,
-              type: 'whoiswin'
-            });
-            setPlayersAnim({
-              firstAnim: data?.win.f_anim,
-              secondAnim: data?.win.s_anim,
-            });
-            const animationTime = 3000;
-            setAnimationKey(prevKey => prevKey + 1);
-            if (data?.win.users !== "none" && data?.win.winner_id !== "none" && data?.win.winner_value !== "none") {
-              setTimeout(() => {
-                if (data?.win.winner_id === userId) {
-                  updateAnimation(Number(data.creator_id) === Number(data?.win.winner_id) ? lWinAnim : rWinAnim);
-                  postEvent(
-                    'web_app_trigger_haptic_feedback',
-                    { type: 'notification', notification_type: 'success' }
-                  );
-                  setMessage(`${translation?.you_won} ${data?.win.winner_value !== 'none'
-                    ? `${data?.win.winner_value} ${data?.bet_type === "1" ? `💵`
-                      : `🔰`}`
-                    : ''}`);
-                } else if (Number(data?.win.winner_value) !== Number(userId) && data?.win.winner_id !== 'draw') {
-                  updateAnimation(Number(data.creator_id) === Number(data.win.winner_id) ? lLoseAnim : rLoseAnim);
-                  postEvent(
-                    'web_app_trigger_haptic_feedback',
-                    { type: 'notification', notification_type: 'error', }
-                  );
-                  setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
-                    ? `💵`
-                    : `🔰`}`);
-                } else if (data?.win.winner_id === 'draw') {
-                  setMessage(translation?.draw);
-                  postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+            whoIsWinRequest(roomId)
+              .then(async (res: any) => {
+                await setPlayersAnim({
+                  firstAnim: res?.f_anim,
+                  secondAnim: res?.s_anim,
+                });
+                const animationTime = 3000;
+                setAnimationKey(prevKey => prevKey + 1);
+                if (res?.message === "success") {
+                  setTimeout(() => {
+                    if (res?.winner === userId) {
+                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
+                      // postEvent(
+                      //   'web_app_trigger_haptic_feedback',
+                      //   { type: 'notification', notification_type: 'success' }
+                      // );
+                      setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
+                        ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
+                          : `🔰`}`
+                        : ''}`);
+                    } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
+                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? lLoseAnim : rLoseAnim);
+                      // postEvent(
+                      //   'web_app_trigger_haptic_feedback',
+                      //   { type: 'notification', notification_type: 'error', }
+                      // );
+                      setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+                        ? `💵`
+                        : `🔰`}`);
+                    } else if (res?.winner === 'draw') {
+                      setMessage(translation?.draw);
+                      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+                    }
+                    setMessageVisible(true);
+                    setTimeout(() => {
+                      setMessageVisible(false);
+                      setAnimation(null);
+                      setAnyPlayerReady(true);
+                      setTimer(15);
+                      setPlayersAnim({
+                        firstAnim: null,
+                        secondAnim: null,
+                      });
+                    }, 4000)
+                  }, animationTime);
                 }
-                setMessageVisible(true);
-                setTimeout(() => {
-                  setMessageVisible(false);
-                  setAnimation(null);
-                  setAnyPlayerReady(true);
-                  setTimer(15);
-                  setPlayersAnim({
-                    firstAnim: null,
-                    secondAnim: null,
-                  });
-                }, 4000)
-              }, animationTime);
-            }
+              })
+              .catch((error) => {
+                console.error('Data request error:', error);
+              });
           }
         }
       }, 1500);
@@ -375,7 +378,7 @@ export const RockPaperScissors: FC = () => {
   // обработчик клика по кнопке "Ознакомился" - не Websocket, но и не надо вроде
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)

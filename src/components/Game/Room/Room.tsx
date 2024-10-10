@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState, useContext } from "react";
@@ -71,14 +72,14 @@ const Room: FC<IProps> = ({ room, openModal }) => {
     });
     if (parsedMessages.length > 0) {
       const lastMessage = parsedMessages[wsmessages.length - 1].message;
-      console.log(lastMessage.message);
+      console.log(lastMessage);
 
-      if (lastMessage?.type === "addplayer" && lastMessage.message === "success") {
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+      // if (lastMessage.message === "success") {
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         navigate(roomType === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
-      } else {
-        return;
-      }
+      // } else {
+      //   return;
+      // }
     }
   };
 console.log(room);

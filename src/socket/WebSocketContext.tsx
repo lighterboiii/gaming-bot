@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 // WebSocketContext.tsx
 import React, { createContext, useEffect, useState, ReactNode } from 'react';
 
@@ -7,7 +8,7 @@ interface WebSocketContextType {
     wsmessages: string[];
 }
 
-const SOCKET_SERVER_URL = 'ws://localhost:8080';
+const SOCKET_SERVER_URL = 'wss://gamebottggw2.ngrok.app';
 const RECONNECT_INTERVAL = 3000; 
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
