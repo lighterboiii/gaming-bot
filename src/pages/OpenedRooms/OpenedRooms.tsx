@@ -1,15 +1,15 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { connect } from "http2";
+
 import { postEvent } from "@tma.js/sdk";
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getAppData } from "api/mainApi";
-import { userId } from "api/requestData";
-import useSetTelegramInterface from "hooks/useSetTelegramInterface";
-import useTelegram from "hooks/useTelegram";
-
 import { getOpenedRoomsRequest } from "../../api/gameApi";
+import { getAppData } from "../../api/mainApi";
+import { userId } from "../../api/requestData";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
 import Room from "../../components/Game/Room/Room";
@@ -18,8 +18,11 @@ import { Modal } from "../../components/Modal/Modal";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import Button from "../../components/ui/Button/Button";
 import useOrientation from "../../hooks/useOrientation";
+import useSetTelegramInterface from "../../hooks/useSetTelegramInterface";
+import useTelegram from "../../hooks/useTelegram";
 import { getOpenedRooms, setUserData, setUserPhoto } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { WebSocketContext } from "../../socket/WebSocketContext";
 import { sortRooms } from "../../utils/additionalFunctions";
 import { indexUrl } from "../../utils/routes";
 import { IGameCardData } from "../../utils/types/gameTypes";
@@ -46,6 +49,8 @@ export const OpenedRooms: FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const isPortrait = useOrientation();
+  const { connect } = useContext(WebSocketContext)!;
+
   useEffect(() => {
     const fetchUserData = () => {
       getAppData(userId)
@@ -66,6 +71,7 @@ export const OpenedRooms: FC = () => {
 
   useEffect(() => {
     setLoading(true);
+    connect();
     const fetchRoomsData = () => {
       getOpenedRoomsRequest()
         .then((res: any) => {
@@ -81,6 +87,7 @@ export const OpenedRooms: FC = () => {
       setLoading(false);
     }, 1000)
     fetchRoomsData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   useEffect(() => {

@@ -65,7 +65,7 @@ export const RockPaperScissors: FC = () => {
   const { sendMessage, wsmessages, disconnect } = useContext(WebSocketContext)!;
 
   useEffect(() => {
-    tg.setHeaderColor('#1b50b8');
+    // tg.setHeaderColor('#1b50b8');
     setLoading(true);
 
     if (!roomId) {
@@ -95,6 +95,7 @@ export const RockPaperScissors: FC = () => {
               room_id: roomId,
               type: 'kickplayer'
             });
+            disconnect();
             const currentUrl = location.pathname;
             currentUrl !== roomsUrl && navigate(roomsUrl);
           } else if (res?.message === 'timeout') {
@@ -193,14 +194,15 @@ export const RockPaperScissors: FC = () => {
                     }
                     setMessageVisible(true);
                     setTimeout(() => {
+                      // setTimerStarted(false);
                       setMessageVisible(false);
                       setAnimation(null);
                       // setAnyPlayerReady(true);
-                      setTimer(15);
-                      // setPlayersAnim({
-                      //   firstAnim: null,
-                      //   secondAnim: null,
-                      // });
+                      // setTimer(15);
+                      setPlayersAnim({
+                        firstAnim: null,
+                        secondAnim: null,
+                      });
                     }, 4000)
                   }, animationTime);
                 }
@@ -214,12 +216,12 @@ export const RockPaperScissors: FC = () => {
     };
 
     fetchData();
-  }, [data, 
+  }, [data,
     // roomId, 
     // translation?.draw, 
     // translation?.you_lost, 
     // translation?.you_won, 
-    updateAnimation, 
+    updateAnimation,
     // userId
   ]);
   // хендлер готовности игрока websocket
@@ -254,6 +256,7 @@ export const RockPaperScissors: FC = () => {
       }
     }
     // Сброс сообщений и блокировок выбора
+    setTimer(15);
     setMessageVisible(false);
     setIsChoiceLocked(false);
     setMessage('');
@@ -265,7 +268,6 @@ export const RockPaperScissors: FC = () => {
       choice: 'ready'
     });
 
-    // setAnyPlayerReady(true);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
   };
   // хендлер выбора хода Websocket
@@ -273,7 +275,8 @@ export const RockPaperScissors: FC = () => {
     if (isChoiceLocked) return;
 
     setIsChoiceLocked(true);
-    setShowTimer(false);
+    // setShowTimer(false);
+    setTimer(15);
 
     const choice = {
       user_id: userId,
@@ -283,8 +286,6 @@ export const RockPaperScissors: FC = () => {
     };
 
     sendMessage(choice);
-    // setAnyPlayerReady(true);
-    setTimer(15);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
   };
 
@@ -312,56 +313,60 @@ export const RockPaperScissors: FC = () => {
     }, 3000);
   };
   // Таймер
-  // useEffect(() => {
-  //   if (data?.players_count === "2" &&
-  //     (data?.players?.every((player: IPlayer) => player.choice === 'none') 
-  //     || data?.players?.some((player: IPlayer) => player.choice === 'ready')
-  //   )) {
-  //     setTimerStarted(true);
-  //     setShowTimer(true);
-  //     // setTimer(15);
-  //   } else if (data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
-  //     setTimerStarted(false);
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //   } else if (data?.players_count === "1") {
-  //     setTimerStarted(false);
-  //     setTimer(15);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data?.players_count === "2") {
+      const allPlayersHaveNoChoice = data.players.every((player: IPlayer) => player.choice === 'none');
+      const allPlayersAreReady = data.players.every((player: IPlayer) => player.choice === 'ready');
+      
+      // Запускаем таймер, если все игроки имеют выбор "none"
+      if (allPlayersHaveNoChoice && !timerStarted) {
+        setTimer(15);
+        setTimerStarted(true);
+        setShowTimer(true);
+      } 
+      // Останавливаем таймер, если все игроки сделали выбор
+      else if (!allPlayersHaveNoChoice && !allPlayersAreReady) {
+        setShowTimer(false);
+        setTimerStarted(false);
+      }
+    } else {
+      setTimerStarted(false);
+      setShowTimer(false);
+    }
+  }, [data]);
   // кик игрока, если он не прожал готовность 
-  // useEffect(() => {
-  //   if (timerStarted && timer > 0) {
-  //     timerRef.current = setInterval(() => {
-  //       setTimer((prev) => prev - 1);
-  //     }, 1000);
-  //   } else if (timer === 0) {
-  //     data?.players.forEach((player: IPlayer) => {
-  //       if (player.choice === 'none') {
-  //         const leaveData = {
-  //           user_id: player.userid,
-  //           room_id: roomId,
-  //           type: 'kickplayer'
-  //         };
+  useEffect(() => {
+    if (timerStarted && timer > 0) {
+      timerRef.current = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timerStarted && timer === 0) {
+      data?.players.forEach((player: IPlayer) => {
+        if (player.choice === 'none') {
+          alert('Timer ended');
+          // const leaveData = {
+          //   user_id: player.userid,
+          //   room_id: roomId,
+          //   type: 'kickplayer'
+          // };
 
-  //         sendMessage(leaveData);
-  //         const currentUrl = location.pathname;
-  //         currentUrl !== roomsUrl && navigate(roomsUrl);
-  //       }
-  //     });
-  //     setTimerStarted(false);
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //   }
+          // sendMessage(leaveData);
+          // const currentUrl = location.pathname;
+          // currentUrl !== roomsUrl && navigate(roomsUrl);
+        }
+      });
+      setTimerStarted(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    }
 
-  //   return () => {
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //   };
-  // }, [timer, timerStarted, data, navigate, userId]);
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [timer, timerStarted, navigate, userId]);
   // сброс выбора игрока, когда он единственный в комнате Websocket
   useEffect(() => {
     const resetPlayerChoice = () => {

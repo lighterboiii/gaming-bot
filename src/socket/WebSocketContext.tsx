@@ -3,6 +3,7 @@
 import React, { createContext, useEffect, useState, ReactNode } from 'react';
 
 interface WebSocketContextType {
+    connect: () => void;
     sendMessage: (message: object) => void;
     disconnect: () => void;
     wsmessages: string[];
@@ -19,38 +20,37 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [messageQueue, setMessageQueue] = useState<object[]>([]);
     const [isReconnecting, setIsReconnecting] = useState(false);
 
-    useEffect(() => {
-        const connect = () => {
-            const wsClient = new WebSocket(SOCKET_SERVER_URL);
+    const connect = () => {
+        const wsClient = new WebSocket(SOCKET_SERVER_URL);
 
-            wsClient.onopen = () => {
-                console.log('WebSocket connected');
-                setIsReconnecting(false);
-                while (messageQueue.length > 0) {
-                    sendMessage(messageQueue.shift()!);
-                }
-            };
-
-            wsClient.onmessage = (event) => {
-                const newMessage = event.data;
-                console.log(newMessage);
-                setMessages((prevMessages) => [...prevMessages, newMessage]);
-            };
-
-            wsClient.onclose = () => {
-                console.log('WebSocket disconnected');
-                if (!isReconnecting) {
-                    setIsReconnecting(true);
-                    setTimeout(() => {
-                        console.log('Attempting to reconnect...');
-                        connect();
-                    }, RECONNECT_INTERVAL);
-                }
-            };
-
-            setWs(wsClient);
+        wsClient.onopen = () => {
+            console.log('WebSocket connected');
+            setIsReconnecting(false);
+            while (messageQueue.length > 0) {
+                sendMessage(messageQueue.shift()!);
+            }
         };
 
+        wsClient.onmessage = (event) => {
+            const newMessage = event.data;
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+        };
+
+        wsClient.onclose = () => {
+            console.log('WebSocket disconnected');
+            if (!isReconnecting) {
+                setIsReconnecting(true);
+                setTimeout(() => {
+                    console.log('Attempting to reconnect...');
+                    connect();
+                }, RECONNECT_INTERVAL);
+            }
+        };
+
+        setWs(wsClient);
+    };
+
+    useEffect(() => {
         connect(); // Initial connection
 
         return () => {
@@ -59,7 +59,49 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             }
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [messageQueue]);
+    }, []);
+
+    // useEffect(() => {
+    //     const connect = () => {
+    //         const wsClient = new WebSocket(SOCKET_SERVER_URL);
+
+    //         wsClient.onopen = () => {
+    //             console.log('WebSocket connected');
+    //             setIsReconnecting(false);
+    //             while (messageQueue.length > 0) {
+    //                 sendMessage(messageQueue.shift()!);
+    //             }
+    //         };
+
+    //         wsClient.onmessage = (event) => {
+    //             const newMessage = event.data;
+    //             // console.log(newMessage);
+    //             setMessages((prevMessages) => [...prevMessages, newMessage]);
+    //         };
+
+    //         wsClient.onclose = () => {
+    //             console.log('WebSocket disconnected');
+    //             if (!isReconnecting) {
+    //                 setIsReconnecting(true);
+    //                 setTimeout(() => {
+    //                     console.log('Attempting to reconnect...');
+    //                     connect();
+    //                 }, RECONNECT_INTERVAL);
+    //             }
+    //         };
+
+    //         setWs(wsClient);
+    //     };
+
+    //     connect(); // Initial connection
+
+    //     return () => {
+    //         if (ws) {
+    //             ws.close();
+    //         }
+    //     };
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [messageQueue]);
 
     const sendMessage = (message: object) => {
         if (ws && ws.readyState === WebSocket.OPEN) {
@@ -76,11 +118,17 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const disconnect = () => {
         if (ws) {
             ws.close();
+            setWs(null);
         }
-    }
+    };
+    // const disconnect = () => {
+    //     if (ws) {
+    //         ws.close();
+    //     }
+    // }
 
     return (
-        <WebSocketContext.Provider value={{ sendMessage, disconnect, wsmessages }}>
+        <WebSocketContext.Provider value={{ connect, sendMessage, disconnect, wsmessages }}>
         {children}
         </WebSocketContext.Provider>
     );

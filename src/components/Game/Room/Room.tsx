@@ -75,28 +75,28 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       const lastMessage = parsedMessages[wsmessages.length - 1].message;
       console.log(lastMessage);
 
-      if (lastMessage?.message === "success") {
+      // if (lastMessage?.message === "success") {
         // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
         navigate(roomType === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
-      } else {
-        setMessage('Error');
-        sendMessage({
-          user_id: userId,
-          room_id: room.room_id,
-          type: 'kickplayer'
-        });
-      }
+      // } else {
+        // setMessage('Error');
+        // sendMessage({
+        //   user_id: userId,
+        //   room_id: room.room_id,
+        //   type: 'kickplayer'
+        // });
+      // }
     }
   };
 console.log(room);
-  const handleLeaveRoom = () => {
-    leaveRoomRequest(userId)
-      .then((data) => {
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const handleLeaveRoom = () => {
+  //   leaveRoomRequest(userId)
+  //     .then((data) => {
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   return (
     <div className={styles.room}
