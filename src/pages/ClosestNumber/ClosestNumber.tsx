@@ -103,7 +103,7 @@ useEffect(() => {
     tg.BackButton.hide();
     tg.setHeaderColor('#d51845');
   }
-}, [tg, userId]);
+}, []);
   // свернуть клавиатуру по клику за ее границами
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
