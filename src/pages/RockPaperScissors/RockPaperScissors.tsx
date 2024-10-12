@@ -84,19 +84,18 @@ export const RockPaperScissors: FC = () => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
-          console.log(res);
           setData(res);
           setLoading(false);
           break;
         case 'kickplayer':
-            sendMessage({
-              user_id: userId,
-              // room_id: roomId,
-              type: 'kickplayer'
-            });
-            disconnect();
-            const currentUrl = location.pathname;
-            currentUrl !== roomsUrl && navigate(roomsUrl);
+          if (res.player_id === userId) {
+            setMessage("Вы были исключены из комнаты.");
+            setTimeout(() => {
+              disconnect();
+              const currentUrl = location.pathname;
+              currentUrl !== roomsUrl && navigate(roomsUrl);
+            }, 2000)
+          }
           break;
         // case 'whoiswin':
         //   break;
@@ -119,25 +118,25 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [isRulesShown]);
-// хук TG
-useEffect(() => {
-  tg.setHeaderColor('#1b50b8');
-  tg.BackButton.show();
-  tg.BackButton.onClick(() => {
-    if (userId) {
-      sendMessage({
-        user_id: userId,
-        // room_id: roomId,
-        type: 'kickplayer'
-      });
+  // хук TG
+  useEffect(() => {
+    tg.setHeaderColor('#1b50b8');
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      if (userId) {
+        sendMessage({
+          user_id: userId,
+          // room_id: roomId,
+          type: 'kickplayer'
+        });
+      }
+      navigate(roomsUrl);
+    });
+    return () => {
+      tg.BackButton.hide();
+      tg.setHeaderColor('#d51845');
     }
-    navigate(roomsUrl);
-  });
-  return () => {
-    tg.BackButton.hide();
-    tg.setHeaderColor('#d51845');
-  }
-}, []);
+  }, []);
   // useSetTelegramInterface(roomsUrl, userId, roomId);
   // запрос результата хода
   const updateAnimation = useCallback((newAnimation: string) => {
@@ -229,7 +228,7 @@ useEffect(() => {
       if (player?.money && (player?.money <= Number(data?.bet))) {
         sendMessage({
           user_id: player?.userid,
-          room_id: roomId,
+          // room_id: roomId,
           type: 'kickplayer'
         });
         // Если текущий пользователь - это тот, кто покидает комнату
@@ -244,7 +243,7 @@ useEffect(() => {
       if (player?.tokens && (player?.tokens <= Number(data?.bet))) {
         sendMessage({
           user_id: userId,
-          room_id: roomId,
+          // room_id: roomId,
           type: 'kickplayer'
         });
 
@@ -307,39 +306,60 @@ useEffect(() => {
     }, 3000);
   };
   // Таймер
+  useEffect(() => {
+    if (data?.players_count === "2"
+      && (data?.players?.every((player: IPlayer) => player.choice !== 'none')
+        || data?.players?.every((player: IPlayer) => player.choice === 'ready'))) {
+      if (!timerStarted) {
+        setTimerStarted(true);
+        setTimer(15);
+      }
+      setShowTimer(true);
+    } else if (data?.players?.every((player: IPlayer) => player.choice === 'ready')) {
+      setTimerStarted(false);
+      setShowTimer(false);
+      // if (timerRef.current) {
+      //   clearInterval(timerRef.current);
+      // }
+    } else if (data?.players_count === "1") {
+      setTimerStarted(false);
+      setTimer(15);
+    } else {
 
-  // кик игрока, если он не прожал готовность 
-  // useEffect(() => {
-  //   if (timerStarted && timer > 0) {
-  //     timerRef.current = setInterval(() => {
-  //       setTimer((prev) => prev - 1);
-  //     }, 1000);
-  //   } else if (timerStarted && timer === 0) {
-  //     data?.players.forEach((player: IPlayer) => {
-  //       if (player.choice === 'none') {
-  //         // const leaveData = {
-  //         //   user_id: player.userid,
-  //         //   room_id: roomId,
-  //         //   type: 'kickplayer'
-  //         // };
-
-  //         // sendMessage(leaveData);
-  //         // const currentUrl = location.pathname;
-  //         // currentUrl !== roomsUrl && navigate(roomsUrl);
-  //       }
-  //     });
-  //     setTimerStarted(false);
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //   }
-
-  //   return () => {
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //   };
-  // }, [timer, timerStarted, navigate, userId]);
+    }
+  }, [data]);
+  // кик игрока, если он не прожал готовность
+  useEffect(() => {
+    if (timerStarted && timer > 0) {
+      timerRef.current = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      data?.players.forEach((player: IPlayer) => {
+        if (player.choice === 'none') {
+          // leaveRoomRequest(player.userid)
+          //   .then((res: any) => {
+          //     if (res?.message === 'success' && player.userid === userId) {
+          //       const currentUrl = location.pathname;
+          //       currentUrl !== roomsUrl && navigate(roomsUrl);
+          //     }
+          //   })
+          //   .catch((error) => {
+          //     console.log(error);
+          //   });
+        }
+      });
+      setTimerStarted(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    }
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [timer, timerStarted, navigate, userId]);
   // сброс выбора игрока, когда он единственный в комнате Websocket
   useEffect(() => {
     const resetPlayerChoice = () => {
