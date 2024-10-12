@@ -51,7 +51,7 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     useEffect(() => {
-        connect(); // Initial connection
+        connect();
 
         return () => {
             if (ws) {

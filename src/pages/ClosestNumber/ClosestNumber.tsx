@@ -7,13 +7,12 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-import Rules from "components/Game/Rules/Rules";
-
-import { setGameRulesWatched } from "../../api/gameApi";
+import { setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
 import { getActiveEmojiPack, getAppData } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
 import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
 import RenderComponent from "../../components/ClosestNumber/WhoCloserPlayers/WhoCloserPlayers";
+import Rules from "../../components/Game/Rules/Rules";
 import Loader from "../../components/Loader/Loader";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
 import { Warning } from "../../components/OrientationWarning/Warning";
@@ -24,7 +23,13 @@ import useTelegram from "../../hooks/useTelegram";
 import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';
 import smile from '../../images/closest-number/smile.png';
-import { setSecondGameRulesState } from "../../services/appSlice";
+import {
+  addCoins,
+  addTokens,
+  setCoinsValueAfterBuy,
+  setTokensValueAfterBuy,
+  setSecondGameRulesState,
+} from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
@@ -79,11 +84,26 @@ export const ClosestNumber: FC = () => {
       setFilteredPlayers(filtered);
     }
   }, [data, userId]);
-  // базовые установки на кнопку "Назад" и цвет хидера
-  useEffect(() => {
-    tg.setHeaderColor('#FEC42C');
-  }, []);
-  useSetTelegramInterface(roomsUrl, userId);
+  // useSetTelegramInterface(roomsUrl, userId);
+  // хук TG
+useEffect(() => {
+  tg.setHeaderColor('#FEC42C');
+  tg.BackButton.show();
+  tg.BackButton.onClick(() => {
+    if (userId) {
+      sendMessage({
+        user_id: userId,
+        // room_id: roomId,
+        type: 'kickplayer'
+      });
+    }
+    navigate(roomsUrl);
+  });
+  return () => {
+    tg.BackButton.hide();
+    tg.setHeaderColor('#d51845');
+  }
+}, [tg, userId]);
   // свернуть клавиатуру по клику за ее границами
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -122,30 +142,33 @@ export const ClosestNumber: FC = () => {
       const res = JSON.parse(message);
       console.log(res);
       switch (res?.type) {
-        case 'kickplayer':
-          if (res?.message === 'None') {
-            sendMessage({
-              user_id: userId,
-              room_id: roomId,
-              type: 'kickplayer'
-            });
-            const currentUrl = location.pathname;
-            currentUrl !== roomsUrl && navigate(roomsUrl);
-          } else if (res?.message === 'timeout') {
-            sendRoomRequest();
-          } else {
-            setData(res);
-            setLoading(false);
-          }
-          break;
         case 'room_info':
+          console.log(res);
+          setData(res);
+          setLoading(false);
           break;
-        case 'whoiswin':
+        case 'kickplayer':
+          // if (res?.message === 'None') {
+          sendMessage({
+            user_id: userId,
+            // room_id: roomId,
+            type: 'kickplayer'
+          });
+          const currentUrl = location.pathname;
+          currentUrl !== roomsUrl && navigate(roomsUrl);
+          // } else if (res?.message === 'timeout') {
+          //   sendRoomRequest();
+          // } else {
+          //   setData(res);
+          //   setLoading(false);
+          // }
           break;
-        case 'choice':
-          break;
-        case 'emoji':
-          break;
+        // case 'whoiswin':
+        //   break;
+        // case 'choice':
+        //   break;
+        // case 'emoji':
+        //   break;
       }
 
     };
@@ -159,13 +182,13 @@ export const ClosestNumber: FC = () => {
     sendRoomRequest();
     handleMessage();
 
-    return () => {
-      // sendMessage({
-      //   user_id: userId,
-      //   room_id: roomId,
-      //   type: 'kickplayer'
-      // });
-    };
+    // return () => {
+    // sendMessage({
+    //   user_id: userId,
+    //   room_id: roomId,
+    //   type: 'kickplayer'
+    // });
+    // };
   }, [roomId, userId, wsmessages, sendMessage, navigate]);
   // получить эмодзи пользователя
   useEffect(() => {
@@ -181,7 +204,7 @@ export const ClosestNumber: FC = () => {
   const count = data?.players?.reduce((total: number, player: any) => {
     return total + (player?.choice !== "none" ? 1 : 0);
   }, 0);
-  // запрос результата кона websocket
+  // запрос результата кона
   useEffect(() => {
     let timeoutId: any;
     const fetchData = () => {
@@ -189,48 +212,48 @@ export const ClosestNumber: FC = () => {
       timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IPlayer) => player?.choice !== 'none')) {
           setTimerStarted(false);
-          if (roomId) {
-            sendMessage({
-              user_id: userId,
-              room_id: roomId,
-              type: 'whoiswin'
+          whoIsWinRequest(roomId!)
+            .then((res: any) => {
+              if (res.winner === "draw") {
+                setDraw(true);
+                setRoomValue(Number(res?.room_value));
+                const drawPlayerIds = res.draw_players;
+                const drawPlayers = data?.players?.filter((player: any) =>
+                  drawPlayerIds.includes(player.userid));
+                setDrawWinners(drawPlayers);
+                setWinSum(Number(res?.winner_value));
+              } else {
+                setRoomValue(Number(res?.room_value));
+                setWinnerId(Number(res?.winner));
+                setWinSum(res?.winner_value);
+                // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
+              }
+              if (res?.message === "success") {
+                setTimeout(() => {
+                  if (res?.winner === userId) {
+                    if (data?.bet_type === "1") {
+                      dispatch(addCoins(Number(res?.winner_value)));
+                    } else {
+                      dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
+                    }
+                  } else {
+                    if (data?.bet_type === "3") {
+                      dispatch(addTokens(Number(res?.winner_value)));
+                    } else {
+                      dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
+                    }
+                  }
+                  setInputValue('');
+                  setModalOpen(true);
+                  setTimerStarted(true);
+                  setTimer(30);
+                }, 5000)
+              }
+
+            })
+            .catch((error) => {
+              console.error('Data request error:', error);
             });
-            // if (data?.win.winner_id === "draw") {
-            //   setDraw(true);
-            //   setRoomValue(Number(res?.room_value));
-            //   const drawPlayerIds = res.draw_players;
-            //   const drawPlayers = data?.players?.filter((player: any) =>
-            //     drawPlayerIds.includes(player.userid));
-            //   setDrawWinners(drawPlayers);
-            //   setWinSum(Number(res?.winner_value));
-            // } else {
-            //   setRoomValue(Number(res?.room_value));
-            //   setWinnerId(Number(res?.winner));
-            //   setWinSum(res?.winner_value);
-            //   postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
-            // }
-            // if (res?.message === "success") {
-            //   setTimeout(() => {
-            //     if (res?.winner === userId) {
-            //       if (data?.bet_type === "1") {
-            //         dispatch(addCoins(Number(res?.winner_value)));
-            //       } else {
-            //         dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
-            //       }
-            //     } else {
-            //       if (data?.bet_type === "3") {
-            //         dispatch(addTokens(Number(res?.winner_value)));
-            //       } else {
-            //         dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
-            //       }
-            //     }
-            //     setInputValue('');
-            //     setModalOpen(true);
-            //     setTimerStarted(true);
-            //     setTimer(30);
-            //   }, 5000)
-            // }
-          }
         }
       }, 2500);
     };
@@ -309,7 +332,7 @@ export const ClosestNumber: FC = () => {
     if (data?.players?.length === 1) {
       setInputValue('');
       setPlaceholder(translation?.waiting4players);
-      postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+      // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
       setTimeout(() => {
         setPlaceholder(translation?.your_number_but);
       }, 2000)
@@ -321,23 +344,23 @@ export const ClosestNumber: FC = () => {
       if (player?.money <= data?.bet) {
         sendMessage({
           user_id: userId,
-          room_id: roomId,
+          // room_id: roomId,
           type: 'kickplayer'
         });
         if (player?.userid === userId) {
           const currentUrl = location.pathname;
           currentUrl !== roomsUrl && navigate(roomsUrl);
         }
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
       }
     } else if (data?.bet_type === "3") {
       if (player?.tokens <= data?.bet) {
         sendMessage({
           user_id: userId,
-          room_id: roomId,
+          // room_id: roomId,
           type: 'kickplayer'
         });
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
       }
     }
     const choice = {
@@ -377,20 +400,20 @@ export const ClosestNumber: FC = () => {
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
   // Таймер
-  useEffect(() => {
-    if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice === 'none')) {
-      setTimerStarted(true);
-      setTimer(30);
-    } else if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
-      setTimerStarted(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    } else if (data?.players_count === "1") {
-      setTimerStarted(false);
-      setTimer(30);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice === 'none')) {
+  //     setTimerStarted(true);
+  //     setTimer(30);
+  //   } else if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
+  //     setTimerStarted(false);
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   } else if (data?.players_count === "1") {
+  //     setTimerStarted(false);
+  //     setTimer(30);
+  //   }
+  // }, [data]);
   // кик игрока, если он не прожал готовность Websocket
   useEffect(() => {
     if (timerStarted && timer! > 0) {
@@ -398,13 +421,13 @@ export const ClosestNumber: FC = () => {
         setTimer((prev) => prev! - 1);
       }, 1000);
     } else if (timer === 0) {
-      // const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
-      // if (currentPlayer?.choice === 'none') {
+      const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
+      if (currentPlayer?.choice === 'none') {
       data?.players.forEach((player: IPlayer) => {
         if (player.choice === 'none') {
           const leaveData = {
             user_id: player.userid,
-            room_id: roomId,
+            // room_id: roomId,
             type: 'kickplayer'
           };
 
@@ -417,7 +440,7 @@ export const ClosestNumber: FC = () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
-      // }
+      }
     }
 
     return () => {
@@ -444,7 +467,7 @@ export const ClosestNumber: FC = () => {
   // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '2');
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)

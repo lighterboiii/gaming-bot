@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { connect } from "http2";
-
 import { postEvent } from "@tma.js/sdk";
 import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -49,7 +47,28 @@ export const OpenedRooms: FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const isPortrait = useOrientation();
-  const { connect } = useContext(WebSocketContext)!;
+  const { tg } = useTelegram();
+  const { connect, disconnect } = useContext(WebSocketContext)!;
+
+  useEffect(() => {
+    connect();
+    // return () => {
+    //   disconnect();
+    // };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      disconnect();
+      navigate(indexUrl);
+    });
+    return () => {
+      tg.BackButton.hide();
+      tg.setHeaderColor('#d51845');
+    }
+  }, [tg, navigate, disconnect]);
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -67,11 +86,8 @@ export const OpenedRooms: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
 
-  useSetTelegramInterface(indexUrl);
-
   useEffect(() => {
     setLoading(true);
-    connect();
     const fetchRoomsData = () => {
       getOpenedRoomsRequest()
         .then((res: any) => {
