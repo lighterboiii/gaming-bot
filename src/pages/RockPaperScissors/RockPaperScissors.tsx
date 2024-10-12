@@ -195,10 +195,10 @@ export const RockPaperScissors: FC = () => {
                     setTimeout(() => {
                       setMessageVisible(false);
                       setAnimation(null);
-                      // setPlayersAnim({
-                      //   firstAnim: null,
-                      //   secondAnim: null,
-                      // });
+                      setPlayersAnim({
+                        firstAnim: null,
+                        secondAnim: null,
+                      });
                     }, 4000)
                   }, animationTime);
                 }
@@ -218,7 +218,7 @@ export const RockPaperScissors: FC = () => {
     // translation?.you_lost, 
     // translation?.you_won, 
     updateAnimation,
-    userId
+    // userId
   ]);
   // хендлер готовности игрока websocket
   const handleReady = () => {
