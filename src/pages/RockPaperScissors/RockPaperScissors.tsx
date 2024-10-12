@@ -88,14 +88,14 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'kickplayer':
-          if (res.player_id === userId) {
+          // if (res.player_id === userId) {
             setMessage("Вы были исключены из комнаты.");
             setTimeout(() => {
               disconnect();
               const currentUrl = location.pathname;
               currentUrl !== roomsUrl && navigate(roomsUrl);
             }, 2000)
-          }
+          // }
           break;
         // case 'whoiswin':
         //   break;
