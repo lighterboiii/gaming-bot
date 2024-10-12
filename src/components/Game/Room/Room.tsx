@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
-import { FC, useState, useContext } from "react";
+import { FC, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { joinRoomRequest, leaveRoomRequest } from "../../../api/gameApi";
 import { userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
 import ManIcon from "../../../icons/Man/Man";
-import whoCloser from '../../../images/gameSec.png';
-import hand from '../../../images/main_hand_1_tiny.png';
 import { useAppSelector } from "../../../services/reduxHooks";
 import { WebSocketContext } from '../../../socket/WebSocketContext';
 import { IGameData } from "../../../utils/types/gameTypes";
@@ -34,10 +31,29 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const parsedMessages = wsmessages.map(msg => JSON.parse(msg));
   console.log(parsedMessages);
 
+  useEffect(() => {
+    const lastMessage = wsmessages[wsmessages.length - 1];
+    if (lastMessage) {
+      const parsedMessage = JSON.parse(lastMessage);
+      if (parsedMessage.type === 'addplayer' && parsedMessage.message.message === 'success') {
+        navigate(room.room_type === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
+      }
+    }
+  }, [wsmessages, navigate, room.room_id, room.room_type]);
+
   const handleJoinRoom = (roomType: number) => {
     if (room.free_places === 0) {
       setIsMessage(true);
       setMessage(translation?.no_free_places || "Нет свободных мест");
+      setTimeout(() => {
+        setIsMessage(false);
+      }, 1500);
+      return;
+    }
+
+    if (room.players[0].userid === userId) {
+      setIsMessage(true);
+      setMessage("Server error");
       setTimeout(() => {
         setIsMessage(false);
       }, 1500);
@@ -65,38 +81,13 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       return;
     }
 
+    // Отправляем сообщение WebSocket для добавления игрока в комнату
     sendMessage({
       user_id: userId,
       room_id: room.room_id,
       type: 'addplayer'
     });
-
-    if (parsedMessages.length > 0) {
-      const lastMessage = parsedMessages[wsmessages.length - 1].message;
-      console.log(lastMessage);
-
-      // if (lastMessage?.message === "success") {
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
-        navigate(roomType === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
-      // } else {
-        // setMessage('Error');
-        // sendMessage({
-        //   user_id: userId,
-        //   room_id: room.room_id,
-        //   type: 'kickplayer'
-        // });
-      // }
-    }
   };
-console.log(room);
-  // const handleLeaveRoom = () => {
-  //   leaveRoomRequest(userId)
-  //     .then((data) => {
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
 
   return (
     <div className={styles.room}

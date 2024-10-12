@@ -254,6 +254,7 @@ export const RockPaperScissors: FC = () => {
     // Сброс сообщений и блокировок выбора
     setMessageVisible(false);
     setIsChoiceLocked(false);
+    setTimer(15);
     setMessage('');
 
     sendMessage({
@@ -268,7 +269,7 @@ export const RockPaperScissors: FC = () => {
   // хендлер выбора хода Websocket
   const handleChoice = (value: string) => {
     if (isChoiceLocked) return;
-
+    setTimer(15);
     setIsChoiceLocked(true);
 
     const choice = {
@@ -306,60 +307,60 @@ export const RockPaperScissors: FC = () => {
     }, 3000);
   };
   // Таймер
-  useEffect(() => {
-    if (data?.players_count === "2"
-      && (data?.players?.every((player: IPlayer) => player.choice !== 'none')
-        || data?.players?.every((player: IPlayer) => player.choice === 'ready'))) {
-      if (!timerStarted) {
-        setTimerStarted(true);
-        setTimer(15);
-      }
-      setShowTimer(true);
-    } else if (data?.players?.every((player: IPlayer) => player.choice === 'ready')) {
-      setTimerStarted(false);
-      setShowTimer(false);
-      // if (timerRef.current) {
-      //   clearInterval(timerRef.current);
-      // }
-    } else if (data?.players_count === "1") {
-      setTimerStarted(false);
-      setTimer(15);
-    } else {
+  // useEffect(() => {
+  //   if (data?.players_count === "2"
+  //     && (data?.players?.every((player: IPlayer) => player.choice !== 'none')
+  //       || data?.players?.every((player: IPlayer) => player.choice === 'ready'))) {
+  //     if (!timerStarted) {
+  //       setTimerStarted(true);
+  //       setTimer(15);
+  //     }
+  //     setShowTimer(true);
+  //   } else if (data?.players?.every((player: IPlayer) => player.choice === 'ready')) {
+  //     setTimerStarted(false);
+  //     setShowTimer(false);
+  //     // if (timerRef.current) {
+  //     //   clearInterval(timerRef.current);
+  //     // }
+  //   } else if (data?.players_count === "1") {
+  //     setTimerStarted(false);
+  //     setTimer(15);
+  //   } else {
 
-    }
-  }, [data]);
+  //   }
+  // }, [data]);
   // кик игрока, если он не прожал готовность
-  useEffect(() => {
-    if (timerStarted && timer > 0) {
-      timerRef.current = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      data?.players.forEach((player: IPlayer) => {
-        if (player.choice === 'none') {
-          // leaveRoomRequest(player.userid)
-          //   .then((res: any) => {
-          //     if (res?.message === 'success' && player.userid === userId) {
-          //       const currentUrl = location.pathname;
-          //       currentUrl !== roomsUrl && navigate(roomsUrl);
-          //     }
-          //   })
-          //   .catch((error) => {
-          //     console.log(error);
-          //   });
-        }
-      });
-      setTimerStarted(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    }
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, [timer, timerStarted, navigate, userId]);
+  // useEffect(() => {
+  //   if (timerStarted && timer > 0) {
+  //     timerRef.current = setInterval(() => {
+  //       setTimer((prev) => prev - 1);
+  //     }, 1000);
+  //   } else if (timer === 0) {
+  //     data?.players.forEach((player: IPlayer) => {
+  //       if (player.choice === 'none') {
+  //         // leaveRoomRequest(player.userid)
+  //         //   .then((res: any) => {
+  //         //     if (res?.message === 'success' && player.userid === userId) {
+  //         //       const currentUrl = location.pathname;
+  //         //       currentUrl !== roomsUrl && navigate(roomsUrl);
+  //         //     }
+  //         //   })
+  //         //   .catch((error) => {
+  //         //     console.log(error);
+  //         //   });
+  //       }
+  //     });
+  //     setTimerStarted(false);
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   }
+  //   return () => {
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //   };
+  // }, [timer, timerStarted, navigate, userId]);
   // сброс выбора игрока, когда он единственный в комнате Websocket
   useEffect(() => {
     const resetPlayerChoice = () => {
