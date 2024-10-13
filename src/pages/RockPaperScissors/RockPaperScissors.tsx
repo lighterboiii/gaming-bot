@@ -72,10 +72,10 @@ export const RockPaperScissors: FC = () => {
         // room_id: roomId,
         type: 'kickplayer'
       });
-      setTimeout(() => {
+      // setTimeout(() => {
         const currentUrl = location.pathname;
         currentUrl !== roomsUrl && navigate(roomsUrl);
-      }, 500)
+      // }, 500)
     });
     return () => {
       tg.BackButton.hide();
