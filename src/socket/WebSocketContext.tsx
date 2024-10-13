@@ -7,6 +7,7 @@ interface WebSocketContextType {
     sendMessage: (message: object) => void;
     disconnect: () => void;
     wsmessages: string[];
+    clearMessages: () => void;
 }
 
 const SOCKET_SERVER_URL = 'wss://gamebottggw2.ngrok.app';
@@ -69,48 +70,6 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // useEffect(() => {
-    //     const connect = () => {
-    //         const wsClient = new WebSocket(SOCKET_SERVER_URL);
-
-    //         wsClient.onopen = () => {
-    //             console.log('WebSocket connected');
-    //             setIsReconnecting(false);
-    //             while (messageQueue.length > 0) {
-    //                 sendMessage(messageQueue.shift()!);
-    //             }
-    //         };
-
-    //         wsClient.onmessage = (event) => {
-    //             const newMessage = event.data;
-    //             // console.log(newMessage);
-    //             setMessages((prevMessages) => [...prevMessages, newMessage]);
-    //         };
-
-    //         wsClient.onclose = () => {
-    //             console.log('WebSocket disconnected');
-    //             if (!isReconnecting) {
-    //                 setIsReconnecting(true);
-    //                 setTimeout(() => {
-    //                     console.log('Attempting to reconnect...');
-    //                     connect();
-    //                 }, RECONNECT_INTERVAL);
-    //             }
-    //         };
-
-    //         setWs(wsClient);
-    //     };
-
-    //     connect(); // Initial connection
-
-    //     return () => {
-    //         if (ws) {
-    //             ws.close();
-    //         }
-    //     };
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [messageQueue]);
-
     const sendMessage = (message: object) => {
         if (ws && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify(message));
@@ -130,14 +89,13 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             setWs(null);
         }
     };
-    // const disconnect = () => {
-    //     if (ws) {
-    //         ws.close();
-    //     }
-    // }
+
+    const clearMessages = () => {
+        setMessages([]);
+    };
 
     return (
-        <WebSocketContext.Provider value={{ connect, sendMessage, disconnect, wsmessages }}>
+        <WebSocketContext.Provider value={{ connect, sendMessage, disconnect, wsmessages, clearMessages }}>
         {children}
         </WebSocketContext.Provider>
     );

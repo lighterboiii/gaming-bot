@@ -41,6 +41,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const userInfo = useAppSelector(store => store.app.info);
+  
   const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
   console.log(data);
   const parsedMessages = wsmessages?.map(msg => JSON.parse(msg));

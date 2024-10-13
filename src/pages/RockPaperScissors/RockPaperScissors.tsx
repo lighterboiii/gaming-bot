@@ -17,7 +17,6 @@ import Rules from "../../components/Game/Rules/Rules";
 import Loader from "../../components/Loader/Loader";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import useOrientation from "../../hooks/useOrientation";
-import useSetTelegramInterface from "../../hooks/useSetTelegramInterface";
 import useTelegram from "../../hooks/useTelegram";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import leftRock from '../../images/rock-paper-scissors/left_rock.png';
@@ -61,7 +60,7 @@ export const RockPaperScissors: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   const isPortrait = useOrientation();
-  const { sendMessage, wsmessages, disconnect } = useContext(WebSocketContext)!;
+  const { sendMessage, wsmessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
   // хук TG
   useEffect(() => {
@@ -73,10 +72,10 @@ export const RockPaperScissors: FC = () => {
         // room_id: roomId,
         type: 'kickplayer'
       });
-      // setTimeout(() => {
-      //   const currentUrl = location.pathname;
-      //   currentUrl !== roomsUrl && navigate(roomsUrl);
-      // }, 500)
+      setTimeout(() => {
+        const currentUrl = location.pathname;
+        currentUrl !== roomsUrl && navigate(roomsUrl);
+      }, 500)
     });
     return () => {
       tg.BackButton.hide();
@@ -110,8 +109,9 @@ export const RockPaperScissors: FC = () => {
         case 'kickplayer':
           // if (res.player_id === userId) {
           setMessage("Вы были исключены из комнаты.");
+          clearMessages(); 
+          disconnect();
           setTimeout(() => {
-            disconnect();
             const currentUrl = location.pathname;
             currentUrl !== roomsUrl && navigate(roomsUrl);
           }, 500)
