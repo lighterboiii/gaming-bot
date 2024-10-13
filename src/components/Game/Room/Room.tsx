@@ -37,6 +37,8 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       const parsedMessage = JSON.parse(lastMessage);
       if (parsedMessage.type === 'addplayer' && parsedMessage.message.message === 'success') {
         navigate(room.room_type === 1 ? `/room/${room.room_id}` : `/closest/${room.room_id}`);
+      } else if (parsedMessage.type === 'addplayer' && parsedMessage.message.message === 'room_is_not_valid') {
+        setMessage("Server error");
       }
     }
   }, [wsmessages, navigate, room.room_id, room.room_type]);

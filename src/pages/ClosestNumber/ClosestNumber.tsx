@@ -55,6 +55,7 @@ export const ClosestNumber: FC = () => {
   const [inputError, setInputError] = useState<boolean>(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [timer, setTimer] = useState<number | null>(null);
+  const [showTimer, setShowTimer] = useState(true);
   const [timerStarted, setTimerStarted] = useState<boolean>(false);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [winnerId, setWinnerId] = useState<number | null>(null);
@@ -71,7 +72,7 @@ export const ClosestNumber: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.secondGameRulesState);
   const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
   const isPortrait = useOrientation();
-  const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsmessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -83,26 +84,21 @@ export const ClosestNumber: FC = () => {
       setFilteredPlayers(filtered);
     }
   }, [data, userId]);
-  // useSetTelegramInterface(roomsUrl, userId);
-  // хук TG
-useEffect(() => {
-  tg.setHeaderColor('#FEC42C');
-  tg.BackButton.show();
-  tg.BackButton.onClick(() => {
-    if (userId) {
+
+  useEffect(() => {
+    tg.setHeaderColor('#FEC42C');
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
       sendMessage({
         user_id: userId,
-        // room_id: roomId,
         type: 'kickplayer'
       });
+    });
+    return () => {
+      tg.BackButton.hide();
+      tg.setHeaderColor('#d51845');
     }
-    navigate(roomsUrl);
-  });
-  return () => {
-    tg.BackButton.hide();
-    tg.setHeaderColor('#d51845');
-  }
-}, []);
+  }, []);
   // свернуть клавиатуру по клику за ее границами
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -142,32 +138,18 @@ useEffect(() => {
       console.log(res);
       switch (res?.type) {
         case 'room_info':
-          console.log(res);
           setData(res);
           setLoading(false);
           break;
         case 'kickplayer':
-          // if (res?.message === 'None') {
-          sendMessage({
-            user_id: userId,
-            // room_id: roomId,
-            type: 'kickplayer'
-          });
-          const currentUrl = location.pathname;
-          currentUrl !== roomsUrl && navigate(roomsUrl);
-          // } else if (res?.message === 'timeout') {
-          //   sendRoomRequest();
-          // } else {
-          //   setData(res);
-          //   setLoading(false);
-          // }
+          clearMessages();
+          disconnect();
+          setTimeout(() => {
+            const currentUrl = location.pathname;
+            currentUrl !== roomsUrl && navigate(roomsUrl);
+          }, 500)
           break;
-        // case 'whoiswin':
-        //   break;
-        // case 'choice':
-        //   break;
-        // case 'emoji':
-        //   break;
+          break;
       }
 
     };
@@ -180,14 +162,6 @@ useEffect(() => {
 
     sendRoomRequest();
     handleMessage();
-
-    // return () => {
-    // sendMessage({
-    //   user_id: userId,
-    //   room_id: roomId,
-    //   type: 'kickplayer'
-    // });
-    // };
   }, [roomId, userId, wsmessages, sendMessage, navigate]);
   // получить эмодзи пользователя
   useEffect(() => {
@@ -211,6 +185,7 @@ useEffect(() => {
       timeoutId = setTimeout(() => {
         if (data?.players?.every((player: IPlayer) => player?.choice !== 'none')) {
           setTimerStarted(false);
+          setShowTimer(false);
           whoIsWinRequest(roomId!)
             .then((res: any) => {
               if (res.winner === "draw") {
@@ -243,9 +218,13 @@ useEffect(() => {
                     }
                   }
                   setInputValue('');
+                  setTimerStarted(false);
                   setModalOpen(true);
-                  setTimerStarted(true);
-                  setTimer(30);
+                  setTimeout(() => {
+                    setModalOpen(false);
+                    setTimerStarted(false);
+                    setShowTimer(true);
+                  }, 3000)
                 }, 5000)
               }
 
@@ -343,7 +322,6 @@ useEffect(() => {
       if (player?.money <= data?.bet) {
         sendMessage({
           user_id: userId,
-          // room_id: roomId,
           type: 'kickplayer'
         });
         if (player?.userid === userId) {
@@ -356,7 +334,6 @@ useEffect(() => {
       if (player?.tokens <= data?.bet) {
         sendMessage({
           user_id: userId,
-          // room_id: roomId,
           type: 'kickplayer'
         });
         // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
@@ -399,20 +376,22 @@ useEffect(() => {
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
   // Таймер
-  // useEffect(() => {
-  //   if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice === 'none')) {
-  //     setTimerStarted(true);
-  //     setTimer(30);
-  //   } else if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
-  //     setTimerStarted(false);
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //   } else if (data?.players_count === "1") {
-  //     setTimerStarted(false);
-  //     setTimer(30);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice === 'none')) {
+      if (!timerStarted) {
+        setTimerStarted(true);
+        setTimer(30);
+      }
+    } else if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
+      setTimerStarted(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    } else if (data?.players_count === "1") {
+      setTimerStarted(false);
+      setTimer(30);
+    }
+  }, [data]);
   // кик игрока, если он не прожал готовность Websocket
   useEffect(() => {
     if (timerStarted && timer! > 0) {
@@ -422,23 +401,19 @@ useEffect(() => {
     } else if (timer === 0) {
       const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
       if (currentPlayer?.choice === 'none') {
-      data?.players.forEach((player: IPlayer) => {
-        if (player.choice === 'none') {
-          const leaveData = {
-            user_id: player.userid,
-            // room_id: roomId,
-            type: 'kickplayer'
-          };
-
-          sendMessage(leaveData);
-          const currentUrl = location.pathname;
-          currentUrl !== roomsUrl && navigate(roomsUrl);
+        data?.players.forEach((player: IPlayer) => {
+          if (player.choice === 'none') {
+            const leaveData = {
+              user_id: player.userid,
+              type: 'kickplayer'
+            };
+            sendMessage(leaveData);
+          }
+        });
+        setTimerStarted(false);
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
         }
-      });
-      setTimerStarted(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
       }
     }
 
@@ -447,7 +422,7 @@ useEffect(() => {
         clearInterval(timerRef.current);
       }
     };
-  }, [timer, timerStarted, data, navigate, userId]);
+  }, [timer, timerStarted, navigate, userId]);
   // сброс выбора игрока, когда он единственный в комнате Websocket
   useEffect(() => {
     const resetPlayerChoice = () => {
@@ -457,6 +432,7 @@ useEffect(() => {
         type: 'choice',
         choice: 'none'
       };
+      setInputValue('');
       sendMessage(choiceData);
     };
     if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
@@ -507,7 +483,7 @@ useEffect(() => {
                   <div className={styles.game__centralContainer}>
                     <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
                     <CircularProgressBar progress={roomValue ? roomValue : 0} />
-                    <p className={styles.game__centralTimer}>{timer}</p>
+                    <p className={styles.game__centralTimer}>{showTimer && timer}</p>
                   </div>
                   <RenderComponent users={filteredPlayers} />
                 </> :
