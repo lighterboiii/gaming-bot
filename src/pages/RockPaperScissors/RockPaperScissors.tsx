@@ -329,7 +329,7 @@ export const RockPaperScissors: FC = () => {
   }, [data]);
   // кик игрока, если он не прожал готовность
   useEffect(() => {
-    if (timerStarted && timer > 0) {
+    if (showTimer && timerStarted && timer > 0) {
       timerRef.current = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
