@@ -50,10 +50,10 @@ export const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
   const { connect, disconnect } = useContext(WebSocketContext)!;
 
-  useEffect(() => {
-    connect();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //     connect();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useEffect(() => {
     tg.BackButton.show();
@@ -100,7 +100,7 @@ export const OpenedRooms: FC = () => {
       setLoading(false);
     }, 1000)
     fetchRoomsData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   useEffect(() => {
@@ -199,7 +199,7 @@ export const OpenedRooms: FC = () => {
 
       default:
         sortedRooms = rooms;
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     }
   };
 

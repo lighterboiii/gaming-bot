@@ -63,9 +63,28 @@ export const RockPaperScissors: FC = () => {
   const isPortrait = useOrientation();
   const { sendMessage, wsmessages, disconnect } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
+  // хук TG
+  useEffect(() => {
+    tg.setHeaderColor('#1b50b8');
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      sendMessage({
+        user_id: userId,
+        // room_id: roomId,
+        type: 'kickplayer'
+      });
+      // setTimeout(() => {
+      //   const currentUrl = location.pathname;
+      //   currentUrl !== roomsUrl && navigate(roomsUrl);
+      // }, 500)
+    });
+    return () => {
+      tg.BackButton.hide();
+      tg.setHeaderColor('#d51845');
+    }
+  }, [tg, navigate, userId]);
 
   useEffect(() => {
-    // tg.setHeaderColor('#1b50b8');
     setLoading(true);
 
     if (!roomId) {
@@ -119,29 +138,6 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [isRulesShown]);
-  // хук TG
-  useEffect(() => {
-    tg.setHeaderColor('#1b50b8');
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      if (currentPlayer) {
-        sendMessage({
-          user_id: userId,
-          // room_id: roomId,
-          type: 'kickplayer'
-        });
-        setTimeout(() => {
-          const currentUrl = location.pathname;
-          currentUrl !== roomsUrl && navigate(roomsUrl);
-        }, 500)
-      }
-    });
-    return () => {
-      tg.BackButton.hide();
-      tg.setHeaderColor('#d51845');
-    }
-  }, [tg]);
-  // useSetTelegramInterface(roomsUrl, userId, roomId);
   // запрос результата хода
   const updateAnimation = useCallback((newAnimation: string) => {
     setAnimation((prevAnimation: string) => {

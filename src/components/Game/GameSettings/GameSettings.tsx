@@ -43,17 +43,17 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const userInfo = useAppSelector(store => store.app.info);
   const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
   console.log(data);
-  const parsedMessages = wsmessages.map(msg => JSON.parse(msg));
+  const parsedMessages = wsmessages?.map(msg => JSON.parse(msg));
   console.log(parsedMessages);
   useEffect(() => {
-    if (parsedMessages.length > 0) {
-      const lastMessage = parsedMessages[wsmessages.length - 1].message;
+    if (parsedMessages?.length > 0) {
+      const lastMessage = parsedMessages[wsmessages?.length - 1]?.message;
       console.log(lastMessage);
       // Обработка последнего сообщения
-      if (lastMessage.message === 'success') {
+      if (lastMessage && lastMessage?.message === 'success') {
         setSelectedRoomId(lastMessage.room_id);
-        navigate(data?.room_type === 2 ? `/closest/${lastMessage.room_id}` : `/room/${lastMessage.room_id}`);
-      } else if (lastMessage.type === 'error') {
+        navigate(data?.room_type === 2 ? `/closest/${lastMessage?.room_id}` : `/room/${lastMessage?.room_id}`);
+      } else if (lastMessage?.type === 'error') {
         setInsufficient(true);
         setMessage(translation?.insufficient_funds || 'Недостаточно средств');
         setMessageShown(true);
