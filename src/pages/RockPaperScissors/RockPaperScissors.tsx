@@ -73,8 +73,8 @@ export const RockPaperScissors: FC = () => {
         type: 'kickplayer'
       });
       // setTimeout(() => {
-        const currentUrl = location.pathname;
-        currentUrl !== roomsUrl && navigate(roomsUrl);
+        // const currentUrl = location.pathname;
+        // currentUrl !== roomsUrl && navigate(roomsUrl);
       // }, 500)
     });
     return () => {
@@ -108,7 +108,7 @@ export const RockPaperScissors: FC = () => {
           break;
         case 'kickplayer':
           // if (res.player_id === userId) {
-          setMessage("Вы были исключены из комнаты.");
+          // setMessage("Вы были исключены из комнаты.");
           clearMessages(); 
           disconnect();
           setTimeout(() => {
@@ -340,10 +340,10 @@ export const RockPaperScissors: FC = () => {
           // room_id: roomId,
           type: 'kickplayer'
         });
-        setTimeout(() => {
-          const currentUrl = location.pathname;
-          currentUrl !== roomsUrl && navigate(roomsUrl);
-        }, 500)
+        // setTimeout(() => {
+        //   const currentUrl = location.pathname;
+        //   currentUrl !== roomsUrl && navigate(roomsUrl);
+        // }, 500)
       }
       setTimerStarted(false);
       if (timerRef.current) {
