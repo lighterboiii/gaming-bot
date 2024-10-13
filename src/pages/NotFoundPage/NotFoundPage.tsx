@@ -1,19 +1,27 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useSetTelegramInterface from "hooks/useSetTelegramInterface";
-
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
+import useTelegram from "../../hooks/useTelegram";
 import { useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
 
 import styles from './NotFoundPage.module.scss';
 
 export const NotFoundPage: FC = () => {
+  const { tg } = useTelegram();
   const navigate = useNavigate();
   const translation = useAppSelector(store => store?.app.languageSettings);
   
-useSetTelegramInterface(indexUrl);
+  useEffect(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      navigate(indexUrl);
+    });
+    return () => {
+      tg.BackButton.hide();
+    }
+  }, [tg, navigate]);
 
   return (
     <div className={styles.rooms}>

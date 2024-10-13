@@ -18,7 +18,6 @@ import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useOrientation from "../../hooks/useOrientation";
-import useSetTelegramInterface from "../../hooks/useSetTelegramInterface";
 import useTelegram from "../../hooks/useTelegram";
 import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';

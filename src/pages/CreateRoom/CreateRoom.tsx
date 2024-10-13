@@ -3,8 +3,7 @@
 /* eslint-disable no-lone-blocks */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
-
-import useSetTelegramInterface from "hooks/useSetTelegramInterface";
+import { useNavigate } from "react-router-dom";
 
 import { getExistingGamesRequest } from "../../api/gameApi";
 import GameCard from "../../components/Game/GameCard/GameCard";
@@ -13,6 +12,7 @@ import Loader from "../../components/Loader/Loader";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
 import useOrientation from "../../hooks/useOrientation";
+import useTelegram from "../../hooks/useTelegram";
 import { useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
 import { IGameCardData } from "../../utils/types/gameTypes";
@@ -20,14 +20,24 @@ import { IGameCardData } from "../../utils/types/gameTypes";
 import styles from './CreateRoom.module.scss';
 
 export const CreateRoom: FC = () => {
+  const { tg } = useTelegram();
   const [games, setGames] = useState<IGameCardData[] | null>(null);
   const [gameData, setGameData] = useState(null);
   const [settingsOverlay, setSettingsOverlay] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const translation = useAppSelector(store => store.app.languageSettings);
   const isPortrait = useOrientation();
 
-  useSetTelegramInterface(indexUrl);
+  useEffect(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      navigate(indexUrl);
+    });
+    return () => {
+      tg.BackButton.hide();
+    }
+  }, [tg, navigate]);
 
   useEffect(() => {
     setLoading(true);

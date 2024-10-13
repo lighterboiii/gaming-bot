@@ -16,7 +16,6 @@ import { Modal } from "../../components/Modal/Modal";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import Button from "../../components/ui/Button/Button";
 import useOrientation from "../../hooks/useOrientation";
-import useSetTelegramInterface from "../../hooks/useSetTelegramInterface";
 import useTelegram from "../../hooks/useTelegram";
 import { getOpenedRooms, setUserData, setUserPhoto } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";

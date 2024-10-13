@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { userId } from "api/requestData";
-import useSetTelegramInterface from "hooks/useSetTelegramInterface";
-import useTelegram from "hooks/useTelegram";
-import { IInventoryRequest } from "utils/types/responseTypes";
-
+import { userId } from "../../api/requestData";
 import { getCollectiblesInfo, getLavkaAvailableRequest, getShopItemsRequest } from "../../api/shopApi";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
@@ -14,17 +11,21 @@ import Product from '../../components/Shopping/Product/Product';
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
 import useOrientation from "../../hooks/useOrientation";
+import useTelegram from "../../hooks/useTelegram";
 import { setLavkaAvailable } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
+import { IInventoryRequest } from "../../utils/types/responseTypes";
 import { CombinedItemData, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
 
 import styles from './Shop.module.scss';
 
 export const Shop: FC = () => {
+  const { tg } = useTelegram();
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
   // const userId = user?.id;
+  const navigate = useNavigate();
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
   const lavkaShop = useAppSelector(store => store.app.lavka);
@@ -37,7 +38,15 @@ export const Shop: FC = () => {
   const [inventoryItems, setInventoryItems] = useState<ItemData[]>([]);
   const isPortrait = useOrientation();
 
-  useSetTelegramInterface(indexUrl);
+  useEffect(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      navigate(indexUrl);
+    });
+    return () => {
+      tg.BackButton.hide();
+    }
+  }, [tg, navigate]);
 
   const toggleOverlay = () => {
     setShowOverlay(!showOverlay);

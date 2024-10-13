@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
-
-import useSetTelegramInterface from "hooks/useSetTelegramInterface";
-import { formatNumber } from "utils/additionalFunctions";
+import { useNavigate } from "react-router-dom";
 
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
@@ -11,9 +9,11 @@ import Timer from "../../components/Timer/Timer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import UserContainer from "../../components/User/UserContainer/UserContainer";
 import useOrientation from "../../hooks/useOrientation";
+import useTelegram from "../../hooks/useTelegram";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import TimerIcon from "../../icons/Timer/TimerIcon";
 import { useAppSelector } from "../../services/reduxHooks";
+import { formatNumber } from "../../utils/additionalFunctions";
 import { indexUrl } from "../../utils/routes";
 import { ITime } from '../../utils/types/gameTypes';
 import { IMember } from "../../utils/types/memberTypes";
@@ -22,6 +22,8 @@ import { ILeaderResponse, ITopUsersRes } from '../../utils/types/responseTypes';
 import styles from './LeaderBoard.module.scss';
 
 export const LeaderBoard: FC = () => {
+  const { tg } = useTelegram();
+  const navigate = useNavigate();
   const translation = useAppSelector(store => store.app.languageSettings);
   const isPortrait = useOrientation();
   const [loading, setLoading] = useState(false);
@@ -36,7 +38,15 @@ export const LeaderBoard: FC = () => {
   const [type, setType] = useState<string>('');
   const [prizeCount, setPrizeCount] = useState<string>('');
 
-  useSetTelegramInterface(indexUrl);
+  useEffect(() => {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      navigate(indexUrl);
+    });
+    return () => {
+      tg.BackButton.hide();
+    }
+  }, [tg, navigate]);
 
   useEffect(() => {
     const fetchLeadersData = () => {
