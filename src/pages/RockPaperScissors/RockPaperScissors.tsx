@@ -157,6 +157,7 @@ export const RockPaperScissors: FC = () => {
         if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
           console.log('data', data);
           setShowTimer(false);
+          setTimerStarted(false);
           if (roomId) {
             whoIsWinRequest(roomId)
               .then(async (res: any) => {
@@ -253,9 +254,9 @@ export const RockPaperScissors: FC = () => {
       }
     }
     // Сброс сообщений и блокировок выбора
+    setTimerStarted(false);
     setMessageVisible(false);
     setIsChoiceLocked(false);
-    setTimer(15);
     setMessage('');
 
     sendMessage({
@@ -270,9 +271,8 @@ export const RockPaperScissors: FC = () => {
   // хендлер выбора хода Websocket
   const handleChoice = (value: string) => {
     if (isChoiceLocked) return;
-    setTimer(15);
     setIsChoiceLocked(true);
-
+    setTimerStarted(false);
     const choice = {
       user_id: userId,
       room_id: roomId,
@@ -337,13 +337,8 @@ export const RockPaperScissors: FC = () => {
       if (currentPlayer?.choice === 'none') {
         sendMessage({
           user_id: userId,
-          // room_id: roomId,
           type: 'kickplayer'
         });
-        // setTimeout(() => {
-        //   const currentUrl = location.pathname;
-        //   currentUrl !== roomsUrl && navigate(roomsUrl);
-        // }, 500)
       }
       setTimerStarted(false);
       if (timerRef.current) {
