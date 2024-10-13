@@ -18,14 +18,15 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [wsmessages, setMessages] = useState<string[]>([]);
     const [messageQueue, setMessageQueue] = useState<object[]>([]);
-    const [isReconnecting, setIsReconnecting] = useState(false);
+    // const [isReconnecting, setIsReconnecting] = useState(false);
+    const [manualDisconnect, setManualDisconnect] = useState(false);
 
     const connect = () => {
         const wsClient = new WebSocket(SOCKET_SERVER_URL);
 
         wsClient.onopen = () => {
             console.log('WebSocket connected');
-            setIsReconnecting(false);
+            // setIsReconnecting(false);
             while (messageQueue.length > 0) {
                 sendMessage(messageQueue.shift()!);
             }
@@ -38,13 +39,20 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
         wsClient.onclose = () => {
             console.log('WebSocket disconnected');
-            if (!isReconnecting) {
-                setIsReconnecting(true);
+            if (!manualDisconnect) { 
+                // setIsReconnecting(true);
                 setTimeout(() => {
                     console.log('Attempting to reconnect...');
                     connect();
                 }, RECONNECT_INTERVAL);
             }
+            // if (!isReconnecting) {
+            //     setIsReconnecting(true);
+            //     setTimeout(() => {
+            //         console.log('Attempting to reconnect...');
+            //         connect();
+            //     }, RECONNECT_INTERVAL);
+            // }
         };
 
         setWs(wsClient);
@@ -117,6 +125,7 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     
     const disconnect = () => {
         if (ws) {
+            setManualDisconnect(true);
             ws.close();
             setWs(null);
         }

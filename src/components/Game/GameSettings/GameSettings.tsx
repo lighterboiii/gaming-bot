@@ -86,7 +86,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         room_type: roomType,
       };
 
-      sendMessage(data);  // Отправка сообщения через WebSocket
+      sendMessage(data);
     };
 
   const handleEnergyCheck = () => {
