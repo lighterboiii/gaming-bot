@@ -48,24 +48,26 @@ export const OpenedRooms: FC = () => {
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const isPortrait = useOrientation();
   const { tg } = useTelegram();
-  const { connect, disconnect } = useContext(WebSocketContext)!;
+  const { connect, disconnect, clearMessages } = useContext(WebSocketContext)!;
 
-  // useEffect(() => {
-  //     connect();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+      connect();
+      clearMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
-      disconnect();
+      // disconnect();
+      // clearMessages();
       navigate(indexUrl);
     });
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
     }
-  }, [tg, navigate, disconnect]);
+  }, [tg, navigate]);
 
   useEffect(() => {
     const fetchUserData = () => {
