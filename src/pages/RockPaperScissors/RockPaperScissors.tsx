@@ -62,6 +62,7 @@ export const RockPaperScissors: FC = () => {
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   const isPortrait = useOrientation();
   const { sendMessage, wsmessages, disconnect } = useContext(WebSocketContext)!;
+  const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
 
   useEffect(() => {
     // tg.setHeaderColor('#1b50b8');
@@ -88,14 +89,14 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'kickplayer':
-          if (res.player_id === userId) {
-            setMessage("Вы были исключены из комнаты.");
-            setTimeout(() => {
-              disconnect();
-              const currentUrl = location.pathname;
-              currentUrl !== roomsUrl && navigate(roomsUrl);
-            }, 2000)
-          }
+          // if (res.player_id === userId) {
+          setMessage("Вы были исключены из комнаты.");
+          setTimeout(() => {
+            disconnect();
+            const currentUrl = location.pathname;
+            currentUrl !== roomsUrl && navigate(roomsUrl);
+          }, 500)
+          // }
           break;
         // case 'whoiswin':
         //   break;
@@ -123,20 +124,23 @@ export const RockPaperScissors: FC = () => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
-      if (userId) {
+      if (currentPlayer) {
         sendMessage({
           user_id: userId,
           // room_id: roomId,
           type: 'kickplayer'
         });
+        setTimeout(() => {
+          const currentUrl = location.pathname;
+          currentUrl !== roomsUrl && navigate(roomsUrl);
+        }, 500)
       }
-      navigate(roomsUrl);
     });
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
     }
-  }, []);
+  }, [tg]);
   // useSetTelegramInterface(roomsUrl, userId, roomId);
   // запрос результата хода
   const updateAnimation = useCallback((newAnimation: string) => {
@@ -334,7 +338,6 @@ export const RockPaperScissors: FC = () => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
       if (currentPlayer?.choice === 'none') {
         sendMessage({
           user_id: userId,
