@@ -62,7 +62,8 @@ export const RockPaperScissors: FC = () => {
   const isPortrait = useOrientation();
   const { sendMessage, wsmessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
-
+  const [fetch, setFetch] = useState(false);
+  console.log(data);
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show();
@@ -82,6 +83,7 @@ export const RockPaperScissors: FC = () => {
     setLoading(true);
 
     if (!roomId) {
+      setLoading(false);
       return;
     }
     const fetchInitialData = () => {
@@ -90,14 +92,27 @@ export const RockPaperScissors: FC = () => {
         room_id: roomId,
         type: 'room_info'
       });
+      setFetch(true);
     };
 
-    fetchInitialData();
+    !fetch && fetchInitialData();
 
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
+          setData(res);
+          setLoading(false);
+          break;
+        case 'addplayer':
+          setData(res);
+          setLoading(false);
+          break;
+        case 'choice':
+          setData(res);
+          setLoading(false);
+          break;
+        case 'emoji':
           setData(res);
           setLoading(false);
           break;
@@ -119,11 +134,11 @@ export const RockPaperScissors: FC = () => {
 
     handleMessage();
 
-  }, [roomId, userId, wsmessages, sendMessage, navigate]);
+  }, [roomId, userId, sendMessage, fetch]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
-  }, [isRulesShown]);
+  }, [dispatch, isRulesShown]);
   // запрос результата хода
   const updateAnimation = useCallback((newAnimation: string) => {
     setAnimation((prevAnimation: string) => {

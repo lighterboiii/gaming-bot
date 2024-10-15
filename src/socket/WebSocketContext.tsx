@@ -27,7 +27,7 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
         wsClient.onopen = () => {
             console.log('WebSocket connected');
-            // setIsReconnecting(false);
+            setManualDisconnect(false);
             while (messageQueue.length > 0) {
                 sendMessage(messageQueue.shift()!);
             }
@@ -41,19 +41,11 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         wsClient.onclose = () => {
             console.log('WebSocket disconnected');
             if (!manualDisconnect) { 
-                // setIsReconnecting(true);
                 setTimeout(() => {
                     console.log('Attempting to reconnect...');
                     connect();
                 }, RECONNECT_INTERVAL);
             }
-            // if (!isReconnecting) {
-            //     setIsReconnecting(true);
-            //     setTimeout(() => {
-            //         console.log('Attempting to reconnect...');
-            //         connect();
-            //     }, RECONNECT_INTERVAL);
-            // }
         };
 
         setWs(wsClient);
@@ -75,9 +67,8 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             ws.send(JSON.stringify(message));
         } else {
             console.error('WebSocket is not open. Unable to send message.');
-
             const messageQueueNew = messageQueue.slice();
-            messageQueueNew.push(message); // Queue the message
+            messageQueueNew.push(message);
             setMessageQueue(messageQueueNew);
         }
     };
