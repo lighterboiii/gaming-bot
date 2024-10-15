@@ -78,6 +78,16 @@ export const RockPaperScissors: FC = () => {
       tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate, userId]);
+  // запрос результата хода
+  const updateAnimation = useCallback((newAnimation: string) => {
+    setAnimation((prevAnimation: string) => {
+      if (prevAnimation !== newAnimation) {
+        setAnimationKey((prevKey) => prevKey + 1);
+        return newAnimation;
+      }
+      return prevAnimation;
+    });
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -104,17 +114,58 @@ export const RockPaperScissors: FC = () => {
           setData(res);
           setLoading(false);
           break;
-        case 'addplayer':
-          setData(res);
-          setLoading(false);
+        case 'whoiswin':
+          setData(res?.room_info);
+          setPlayersAnim({
+            firstAnim: res?.whoiswin.f_anim,
+            secondAnim: res?.whoiswin.s_anim,
+          });
+          const animationTime = 3000;
+          setAnimationKey(prevKey => prevKey + 1);
+          setTimeout(() => {
+            if (res?.whoiswin.winner === userId) {
+              updateAnimation(Number(data?.creator_id) === Number(data?.win.winner_id) ? lWinAnim : rWinAnim);
+              // postEvent(
+              //   'web_app_trigger_haptic_feedback',
+              //   { type: 'notification', notification_type: 'success' }
+              // );
+              setMessage(`${translation?.you_won} ${data?.win.winner_value !== 'none'
+                ? `${data?.win.winner_value} ${data?.bet_type === "1" ? `💵`
+                  : `🔰`}`
+                : ''}`);
+            } else if (Number(data?.win.winner_value) !== Number(userId) && data?.win.winner_id !== 'draw') {
+              updateAnimation(Number(data?.creator_id) === Number(data?.win.winner_id) ? lLoseAnim : rLoseAnim);
+              // postEvent(
+              //   'web_app_trigger_haptic_feedback',
+              //   { type: 'notification', notification_type: 'error', }
+              // );
+              setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+                ? `💵`
+                : `🔰`}`);
+            } else if (data?.win.winner_id === 'draw') {
+              setMessage(translation?.draw);
+              // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+            }
+            setMessageVisible(true);
+            setTimeout(() => {
+              setMessageVisible(false);
+              setAnimation(null);
+              setPlayersAnim({
+                firstAnim: null,
+                secondAnim: null,
+              });
+              setShowTimer(true);
+            }, 4000)
+          }, animationTime);
+          // setLoading(false);
           break;
         case 'choice':
           setData(res);
-          setLoading(false);
+          // setLoading(false);
           break;
         case 'emoji':
           setData(res);
-          setLoading(false);
+          // setLoading(false);
           break;
         case 'kickplayer':
           clearMessages();
@@ -134,89 +185,125 @@ export const RockPaperScissors: FC = () => {
 
     handleMessage();
 
-  }, [roomId, userId, sendMessage, fetch]);
+  }, [roomId, userId, sendMessage, updateAnimation]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [dispatch, isRulesShown]);
-  // запрос результата хода
-  const updateAnimation = useCallback((newAnimation: string) => {
-    setAnimation((prevAnimation: string) => {
-      if (prevAnimation !== newAnimation) {
-        setAnimationKey((prevKey) => prevKey + 1);
-        return newAnimation;
-      }
-      return prevAnimation;
-    });
-  }, []);
 
   useEffect(() => {
-    let timeoutId: any;
-    const fetchData = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-          if (timerRef.current) {
-            clearInterval(timerRef.current);
-          }
-          setShowTimer(false);
-          if (roomId) {
-            whoIsWinRequest(roomId)
-              .then(async (res: any) => {
-                setPlayersAnim({
-                  firstAnim: res?.f_anim,
-                  secondAnim: res?.s_anim,
-                });
-                const animationTime = 3000;
-                setAnimationKey(prevKey => prevKey + 1);
-                if (res?.message === "success") {
-                  setTimeout(() => {
-                    if (res?.winner === userId) {
-                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
-                      // postEvent(
-                      //   'web_app_trigger_haptic_feedback',
-                      //   { type: 'notification', notification_type: 'success' }
-                      // );
-                      setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
-                        ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
-                          : `🔰`}`
-                        : ''}`);
-                    } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
-                      updateAnimation(Number(data.creator_id) === Number(res.winner) ? lLoseAnim : rLoseAnim);
-                      // postEvent(
-                      //   'web_app_trigger_haptic_feedback',
-                      //   { type: 'notification', notification_type: 'error', }
-                      // );
-                      setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
-                        ? `💵`
-                        : `🔰`}`);
-                    } else if (res?.winner === 'draw') {
-                      setMessage(translation?.draw);
-                      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-                    }
-                    setMessageVisible(true);
-                    setTimeout(() => {
-                      setMessageVisible(false);
-                      setAnimation(null);
-                      setPlayersAnim({
-                        firstAnim: null,
-                        secondAnim: null,
-                      });
-                      setShowTimer(true);
-                    }, 4000)
-                  }, animationTime);
-                }
-              })
-              .catch((error) => {
-                console.error('Data request error:', error);
-              });
-          }
-        }
-      }, 1500);
-    };
+    // let timeoutId: any;
+    // const fetchData = () => {
+    //   clearTimeout(timeoutId);
+    //   timeoutId = setTimeout(() => {
+    if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      setShowTimer(false);
+      if (roomId) {
+        sendMessage({
+          user_id: userId,
+          room_id: roomId,
+          type: 'whoiswin'
+        });
+      }
+      // const animationTime = 3000;
+      // setAnimationKey(prevKey => prevKey + 1);
+      // setTimeout(() => {
+      //   if (data?.win.winner_id === userId) {
+      //     updateAnimation(Number(data.creator_id) === Number(data?.win.winner_id) ? lWinAnim : rWinAnim);
+      //     postEvent(
+      //       'web_app_trigger_haptic_feedback',
+      //       { type: 'notification', notification_type: 'success' }
+      //     );
+      //     setMessage(`${translation?.you_won} ${data?.win.winner_value !== 'none'
+      //       ? `${data?.win.winner_value} ${data?.bet_type === "1" ? `💵`
+      //         : `🔰`}`
+      //       : ''}`);
+      //   } else if (Number(data?.win.winner_value) !== Number(userId) && data?.win.winner_id !== 'draw') {
+      //     updateAnimation(Number(data.creator_id) === Number(data.win.winner_id) ? lLoseAnim : rLoseAnim);
+      //     postEvent(
+      //       'web_app_trigger_haptic_feedback',
+      //       { type: 'notification', notification_type: 'error', }
+      //     );
+      //     setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+      //       ? `💵`
+      //       : `🔰`}`);
+      //   } else if (data?.win.winner_id === 'draw') {
+      //     setMessage(translation?.draw);
+      //     postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+      //   }
+      //   setMessageVisible(true);
+      //   setTimeout(() => {
+      //     setMessageVisible(false);
+      //     setAnimation(null);
+      //     setPlayersAnim({
+      //       firstAnim: null,
+      //       secondAnim: null,
+      //     });
+      //     setShowTimer(true);
+      //   }, 4000)
+      // }, animationTime);
+      // }
+    }
+    // if (roomId) {
+    //   whoIsWinRequest(roomId)
+    //     .then(async (res: any) => {
+    //       setPlayersAnim({
+    //         firstAnim: res?.f_anim,
+    //         secondAnim: res?.s_anim,
+    //       });
+    //       const animationTime = 3000;
+    //       setAnimationKey(prevKey => prevKey + 1);
+    //       if (res?.message === "success") {
+    //         setTimeout(() => {
+    //           if (res?.winner === userId) {
+    //             updateAnimation(Number(data.creator_id) === Number(res.winner) ? lWinAnim : rWinAnim);
+    //             // postEvent(
+    //             //   'web_app_trigger_haptic_feedback',
+    //             //   { type: 'notification', notification_type: 'success' }
+    //             // );
+    //             setMessage(`${translation?.you_won} ${res?.winner_value !== 'none'
+    //               ? `${res?.winner_value} ${data?.bet_type === "1" ? `💵`
+    //                 : `🔰`}`
+    //               : ''}`);
+    //           } else if (Number(res?.winner) !== Number(userId) && res?.winner !== 'draw') {
+    //             updateAnimation(Number(data.creator_id) === Number(res.winner) ? lLoseAnim : rLoseAnim);
+    //             // postEvent(
+    //             //   'web_app_trigger_haptic_feedback',
+    //             //   { type: 'notification', notification_type: 'error', }
+    //             // );
+    //             setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+    //               ? `💵`
+    //               : `🔰`}`);
+    //           } else if (res?.winner === 'draw') {
+    //             setMessage(translation?.draw);
+    //             // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    //           }
+    //           setMessageVisible(true);
+    //           setTimeout(() => {
+    //             setMessageVisible(false);
+    //             setAnimation(null);
+    //             setPlayersAnim({
+    //               firstAnim: null,
+    //               secondAnim: null,
+    //             });
+    //             setShowTimer(true);
+    //           }, 4000)
+    //         }, animationTime);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.error('Data request error:', error);
+    //     });
+    // }
+    // }
+    //   }, 1500);
+    // };
 
-    fetchData();
-  }, [data, updateAnimation]);
+    // fetchData();
+  }, [data]);
   // хендлер готовности игрока websocket
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
