@@ -123,7 +123,7 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'whoiswin':
-          // setData(res?.room_info);
+          setData(res?.room_info);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
             secondAnim: res?.whoiswin.s_anim,
@@ -200,9 +200,7 @@ export const RockPaperScissors: FC = () => {
   }, [dispatch, isRulesShown]);
 
   useEffect(() => {
-    if (
-      data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')
-    ) {
+    if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
       console.log('Все игроки сделали выбор:', data.players);
       if (timerRef.current) {
         clearInterval(timerRef.current);
