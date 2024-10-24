@@ -164,11 +164,6 @@ export const RockPaperScissors: FC = () => {
               });
               setShowTimer(true);
 
-              sendMessage({
-                user_id: userId,
-                room_id: roomId,
-                type: 'room_info'
-              });
             }, 4000)
           }, animationTime);
           // setLoading(false);
@@ -222,7 +217,7 @@ export const RockPaperScissors: FC = () => {
         });
       }
     }
-  }, [data, sendMessage, roomId, userId]);
+  }, [data]);
   // хендлер готовности игрока websocket
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
