@@ -62,14 +62,15 @@ export const RockPaperScissors: FC = () => {
   const isPortrait = useOrientation();
   const { sendMessage, wsmessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
-  const [fetch, setFetch] = useState(false);
-  // console.log(data);
+  // const [fetch, setFetch] = useState(false);
+
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
       sendMessage({
         user_id: userId,
+        room_id: roomId,
         type: 'kickplayer'
       });
     });
@@ -108,8 +109,8 @@ export const RockPaperScissors: FC = () => {
     // !fetch && 
     fetchInitialData();
   }, [
-    // roomId, 
-    // userId
+    roomId, 
+    userId
   ]);
 
   useEffect(() => {
@@ -198,12 +199,17 @@ export const RockPaperScissors: FC = () => {
   }, [dispatch, isRulesShown]);
 
   useEffect(() => {
-    if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+    if (
+      data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready') &&
+      data?.players?.some((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')
+    ) {
+      console.log('Все игроки сделали выбор:', data.players);
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
       setShowTimer(false);
-      if (roomId && !isChoiceLocked) {
+      if (roomId) {
+        console.log('Отправка запроса whoiswin');
         sendMessage({
           user_id: userId,
           room_id: roomId,
@@ -212,6 +218,7 @@ export const RockPaperScissors: FC = () => {
       }
     }
   }, [data]);
+  
   // хендлер готовности игрока websocket
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
@@ -220,7 +227,7 @@ export const RockPaperScissors: FC = () => {
       if (player?.money && (player?.money <= Number(data?.bet))) {
         sendMessage({
           user_id: player?.userid,
-          // room_id: roomId,
+          room_id: roomId,
           type: 'kickplayer'
         });
         // Если текущий пользователь - это тот, кто покидает комнату
@@ -235,7 +242,7 @@ export const RockPaperScissors: FC = () => {
       if (player?.tokens && (player?.tokens <= Number(data?.bet))) {
         sendMessage({
           user_id: userId,
-          // room_id: roomId,
+          room_id: roomId,
           type: 'kickplayer'
         });
 
@@ -329,6 +336,7 @@ export const RockPaperScissors: FC = () => {
       if (currentPlayer?.choice === 'none') {
         sendMessage({
           user_id: userId,
+          room_id: roomId,
           type: 'kickplayer'
         });
       }
