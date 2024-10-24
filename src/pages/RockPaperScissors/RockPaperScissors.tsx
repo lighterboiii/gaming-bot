@@ -123,7 +123,6 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'whoiswin':
-          setData(res?.room_info);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
             secondAnim: res?.whoiswin.s_anim,
@@ -163,7 +162,7 @@ export const RockPaperScissors: FC = () => {
                 secondAnim: null,
               });
               setShowTimer(true);
-
+              setData(res?.room_info);
             }, 4000)
           }, animationTime);
           // setLoading(false);
