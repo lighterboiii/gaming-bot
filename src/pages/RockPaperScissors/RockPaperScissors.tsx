@@ -162,7 +162,6 @@ export const RockPaperScissors: FC = () => {
                 secondAnim: null,
               });
               setShowTimer(true);
-              setData(res?.room_info);
             }, 4000)
           }, animationTime);
           // setLoading(false);
@@ -198,7 +197,7 @@ export const RockPaperScissors: FC = () => {
     setRulesShown(isRulesShown);
   }, [dispatch, isRulesShown]);
   useEffect(() => {
-    if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+    if (data?.players?.some((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
       console.log('Все игроки сделали выбор:', data.players);
       if (timerRef.current) {
         clearInterval(timerRef.current);
