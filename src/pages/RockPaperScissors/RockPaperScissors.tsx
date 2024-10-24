@@ -109,8 +109,8 @@ export const RockPaperScissors: FC = () => {
     // !fetch && 
     fetchInitialData();
   }, [
-    roomId,
-    userId
+    // roomId,
+    // userId
   ]);
 
   useEffect(() => {
@@ -162,9 +162,9 @@ export const RockPaperScissors: FC = () => {
                 secondAnim: null,
               });
               setShowTimer(true);
+
             }, 4000)
           }, animationTime);
-          setData(res?.room_info);
           // setLoading(false);
           break;
         case 'choice':
@@ -197,7 +197,6 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [dispatch, isRulesShown]);
-
   useEffect(() => {
     if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
       console.log('Все игроки сделали выбор:', data.players);
