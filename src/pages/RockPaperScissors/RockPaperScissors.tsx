@@ -109,7 +109,7 @@ export const RockPaperScissors: FC = () => {
     // !fetch && 
     fetchInitialData();
   }, [
-    roomId, 
+    roomId,
     userId
   ]);
 
@@ -123,7 +123,7 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'whoiswin':
-          setData(res?.room_info);
+          // setData(res?.room_info);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
             secondAnim: res?.whoiswin.s_anim,
@@ -163,6 +163,12 @@ export const RockPaperScissors: FC = () => {
                 secondAnim: null,
               });
               setShowTimer(true);
+
+              sendMessage({
+                user_id: userId,
+                room_id: roomId,
+                type: 'room_info'
+              });
             }, 4000)
           }, animationTime);
           // setLoading(false);
@@ -200,8 +206,7 @@ export const RockPaperScissors: FC = () => {
 
   useEffect(() => {
     if (
-      data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready') &&
-      data?.players?.some((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')
+      data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')
     ) {
       console.log('Все игроки сделали выбор:', data.players);
       if (timerRef.current) {
@@ -217,8 +222,7 @@ export const RockPaperScissors: FC = () => {
         });
       }
     }
-  }, [data]);
-  
+  }, [data, sendMessage, roomId, userId]);
   // хендлер готовности игрока websocket
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
