@@ -197,7 +197,7 @@ export const RockPaperScissors: FC = () => {
     setRulesShown(isRulesShown);
   }, [dispatch, isRulesShown]);
   useEffect(() => {
-    if (data?.players?.some((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+    if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
       console.log('Все игроки сделали выбор:', data.players);
       if (timerRef.current) {
         clearInterval(timerRef.current);
