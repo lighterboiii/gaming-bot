@@ -162,9 +162,9 @@ export const RockPaperScissors: FC = () => {
                 secondAnim: null,
               });
               setShowTimer(true);
-              setData(res?.room_info);
             }, 4000)
           }, animationTime);
+          setData(res?.room_info);
           // setLoading(false);
           break;
         case 'choice':
