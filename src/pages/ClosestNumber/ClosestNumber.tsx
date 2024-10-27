@@ -7,7 +7,7 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-import { setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
+import { setGameRulesWatched } from "../../api/gameApi";
 import { getActiveEmojiPack, getAppData } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
 import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
@@ -77,16 +77,16 @@ export const ClosestNumber: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, []);
-    // получить эмодзи пользователя
-    useEffect(() => {
-      getActiveEmojiPack(userId)
-        .then((res: any) => {
-          setEmojis(res.user_emoji_pack.user_emoji_pack);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }, [userId]);
+  // получить эмодзи пользователя
+  useEffect(() => {
+    getActiveEmojiPack(userId)
+      .then((res: any) => {
+        setEmojis(res.user_emoji_pack.user_emoji_pack);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userId]);
   // отображение игроков на поле за исключением пользователя
   useEffect(() => {
     if (data?.players) {
@@ -191,29 +191,31 @@ export const ClosestNumber: FC = () => {
             setWinSum(res?.whoiswin.winner_value);
             // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
           }
-            setTimeout(() => {
-              if (res?.winner === userId) {
-                if (data?.bet_type === "1") {
-                  dispatch(addCoins(Number(res?.whoiswin.winner_value)));
-                } else {
-                  dispatch(setCoinsValueAfterBuy(Number(res?.whoiswin.winner_value)));
-                }
+          setTimeout(() => {
+            if (res?.winner === userId) {
+              if (data?.bet_type === "1") {
+                dispatch(addCoins(Number(res?.whoiswin.winner_value)));
               } else {
-                if (data?.bet_type === "3") {
-                  dispatch(addTokens(Number(res?.whoiswin.winner_value)));
-                } else {
-                  dispatch(setTokensValueAfterBuy(Number(res?.whoiswin.winner_value)));
-                }
+                dispatch(setCoinsValueAfterBuy(Number(res?.whoiswin.winner_value)));
               }
-              setInputValue('');
-              setTimerStarted(false);
-              setModalOpen(true);
-              setTimeout(() => {
-                setModalOpen(false);
-                setTimerStarted(true);
-                setShowTimer(true);
-              }, 3000)
-            }, 5000)
+            } else {
+              if (data?.bet_type === "3") {
+                dispatch(addTokens(Number(res?.whoiswin.winner_value)));
+              } else {
+                dispatch(setTokensValueAfterBuy(Number(res?.whoiswin.winner_value)));
+              }
+            }
+            setInputValue('');
+            setTimerStarted(false);
+            setModalOpen(true);
+            setTimeout(() => {
+              clearMessages();
+              setModalOpen(false);
+              setTimerStarted(true);
+              setShowTimer(true);
+              setTimer(30);
+            }, 3000)
+          }, 5000)
           break;
       }
     };
@@ -388,16 +390,11 @@ export const ClosestNumber: FC = () => {
         setTimer((prev) => prev! - 1);
       }, 1000);
     } else if (timer === 0) {
-      const currentPlayer = data?.players.find((player: IPlayer) => Number(player.userid) === Number(userId));
       if (currentPlayer?.choice === 'none') {
-        data?.players.forEach((player: IPlayer) => {
-          if (player.choice === 'none') {
-            sendMessage({
-              user_id: userId,
-              room_id: roomId,
-              type: 'kickplayer'
-            });
-          }
+        sendMessage({
+          user_id: userId,
+          room_id: roomId,
+          type: 'kickplayer'
         });
         setTimerStarted(false);
         if (timerRef.current) {

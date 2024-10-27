@@ -58,6 +58,8 @@ export const OpenedRooms: FC = () => {
   useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
+      // disconnect();
+      // clearMessages();
       navigate(indexUrl);
     });
     return () => {

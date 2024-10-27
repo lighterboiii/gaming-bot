@@ -28,15 +28,13 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages } = useContext(WebSocketContext)!;
-  const parsedMessages = wsMessages.map(msg => JSON.parse(msg));
-  console.log(parsedMessages);
+  // const parsedMessages = wsMessages.map(msg => JSON.parse(msg));
 
   useEffect(() => {
     const lastMessage = wsMessages[wsMessages.length - 1];
-    console.log(lastMessage);
     if (lastMessage) {
       const parsedMessage = JSON.parse(lastMessage);
-      console.log(parsedMessage);
+
       // if (parsedMessage?.type === 'addplayer' && parsedMessage?.message?.message === 'success') {
         navigate(room?.room_type === 1 ? `/room/${room?.room_id}` : `/closest/${room?.room_id}`);
       // } else if (parsedMessage?.type === 'addplayer' && parsedMessage?.message?.message === 'room_is_not_valid') {
