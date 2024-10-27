@@ -112,6 +112,7 @@ export const RockPaperScissors: FC = () => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
+          setData(res);
           setLoading(false);
           break;
         case 'whoiswin':
