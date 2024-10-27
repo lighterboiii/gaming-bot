@@ -77,6 +77,16 @@ export const ClosestNumber: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, []);
+    // получить эмодзи пользователя
+    useEffect(() => {
+      getActiveEmojiPack(userId)
+        .then((res: any) => {
+          setEmojis(res.user_emoji_pack.user_emoji_pack);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, [userId]);
   // отображение игроков на поле за исключением пользователя
   useEffect(() => {
     if (data?.players) {
@@ -84,6 +94,9 @@ export const ClosestNumber: FC = () => {
       setFilteredPlayers(filtered);
     }
   }, [data, userId]);
+  const count = data?.players?.reduce((total: number, player: any) => {
+    return total + (player?.choice !== "none" ? 1 : 0);
+  }, 0);
 
   useEffect(() => {
     tg.setHeaderColor('#FEC42C');
@@ -93,6 +106,10 @@ export const ClosestNumber: FC = () => {
         user_id: userId,
         type: 'kickplayer'
       });
+      setTimeout(() => {
+        const currentUrl = location.pathname;
+        currentUrl !== roomsUrl && navigate(roomsUrl);
+      }, 200)
     });
     return () => {
       tg.BackButton.hide();
@@ -117,15 +134,15 @@ export const ClosestNumber: FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showOverlay]);
-  // WebSocket connection
+  //ws get data
   useEffect(() => {
     setLoading(true);
 
     if (!roomId) {
+      setLoading(false);
       return;
     }
-
-    const sendRoomRequest = () => {
+    const fetchInitialData = () => {
       sendMessage({
         user_id: userId,
         room_id: roomId,
@@ -133,25 +150,80 @@ export const ClosestNumber: FC = () => {
       });
     };
 
+    fetchInitialData();
+  }, []);
+  // обработчик сообщений ws
+  useEffect(() => {
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       console.log(res);
       switch (res?.type) {
         case 'room_info':
+          console.log(res);
           setData(res);
           setLoading(false);
           break;
         case 'kickplayer':
           clearMessages();
           disconnect();
-          setTimeout(() => {
-            const currentUrl = location.pathname;
-            currentUrl !== roomsUrl && navigate(roomsUrl);
-          }, 500)
+          // setTimeout(() => {
+          //   const currentUrl = location.pathname;
+          //   currentUrl !== roomsUrl && navigate(roomsUrl);
+          // }, 500)
           break;
+        case 'choice':
+          setData(res);
+          // setLoading(false);
+          break;
+        case 'emoji':
+          setData(res);
+          // setLoading(false);
+          break;
+        case 'whoiswin':
+          console.log(res);
+          setTimerStarted(false);
+          setShowTimer(false);
+          if (res.winner === "draw") {
+            setDraw(true);
+            setRoomValue(Number(res?.room_value));
+            const drawPlayerIds = res.draw_players;
+            const drawPlayers = data?.players?.filter((player: any) =>
+              drawPlayerIds.includes(player.userid));
+            setDrawWinners(drawPlayers);
+            setWinSum(Number(res?.winner_value));
+          } else {
+            setRoomValue(Number(res?.room_value));
+            setWinnerId(Number(res?.winner));
+            setWinSum(res?.winner_value);
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
+          }
+          if (res?.message === "success") {
+            setTimeout(() => {
+              if (res?.winner === userId) {
+                if (data?.bet_type === "1") {
+                  dispatch(addCoins(Number(res?.winner_value)));
+                } else {
+                  dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
+                }
+              } else {
+                if (data?.bet_type === "3") {
+                  dispatch(addTokens(Number(res?.winner_value)));
+                } else {
+                  dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
+                }
+              }
+              setInputValue('');
+              setTimerStarted(false);
+              setModalOpen(true);
+              setTimeout(() => {
+                setModalOpen(false);
+                setTimerStarted(false);
+                setShowTimer(true);
+              }, 3000)
+            }, 5000)
+          }
           break;
       }
-
     };
 
     const handleMessage = () => {
@@ -160,84 +232,69 @@ export const ClosestNumber: FC = () => {
       });
     };
 
-    sendRoomRequest();
     handleMessage();
   }, [roomId, userId, wsmessages, sendMessage, navigate]);
-  // получить эмодзи пользователя
-  useEffect(() => {
-    getActiveEmojiPack(userId)
-      .then((res: any) => {
-        setEmojis(res.user_emoji_pack.user_emoji_pack);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [userId]);
-
-  const count = data?.players?.reduce((total: number, player: any) => {
-    return total + (player?.choice !== "none" ? 1 : 0);
-  }, 0);
   // запрос результата кона
-  useEffect(() => {
-    let timeoutId: any;
-    const fetchData = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        if (data?.players?.every((player: IPlayer) => player?.choice !== 'none')) {
-          setTimerStarted(false);
-          setShowTimer(false);
-          whoIsWinRequest(roomId!)
-            .then((res: any) => {
-              if (res.winner === "draw") {
-                setDraw(true);
-                setRoomValue(Number(res?.room_value));
-                const drawPlayerIds = res.draw_players;
-                const drawPlayers = data?.players?.filter((player: any) =>
-                  drawPlayerIds.includes(player.userid));
-                setDrawWinners(drawPlayers);
-                setWinSum(Number(res?.winner_value));
-              } else {
-                setRoomValue(Number(res?.room_value));
-                setWinnerId(Number(res?.winner));
-                setWinSum(res?.winner_value);
-                // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
-              }
-              if (res?.message === "success") {
-                setTimeout(() => {
-                  if (res?.winner === userId) {
-                    if (data?.bet_type === "1") {
-                      dispatch(addCoins(Number(res?.winner_value)));
-                    } else {
-                      dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
-                    }
-                  } else {
-                    if (data?.bet_type === "3") {
-                      dispatch(addTokens(Number(res?.winner_value)));
-                    } else {
-                      dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
-                    }
-                  }
-                  setInputValue('');
-                  setTimerStarted(false);
-                  setModalOpen(true);
-                  setTimeout(() => {
-                    setModalOpen(false);
-                    setTimerStarted(false);
-                    setShowTimer(true);
-                  }, 3000)
-                }, 5000)
-              }
+  // useEffect(() => {
+  //   let timeoutId: any;
+  //   const fetchData = () => {
+  //     clearTimeout(timeoutId);
+  //     timeoutId = setTimeout(() => {
+  //       if (data?.players?.every((player: IPlayer) => player?.choice !== 'none')) {
+  //         setTimerStarted(false);
+  //         setShowTimer(false);
+  // whoIsWinRequest(roomId!)
+  //   .then((res: any) => {
+  // if (res.winner === "draw") {
+  //   setDraw(true);
+  //   setRoomValue(Number(res?.room_value));
+  //   const drawPlayerIds = res.draw_players;
+  //   const drawPlayers = data?.players?.filter((player: any) =>
+  //     drawPlayerIds.includes(player.userid));
+  //   setDrawWinners(drawPlayers);
+  //   setWinSum(Number(res?.winner_value));
+  // } else {
+  //   setRoomValue(Number(res?.room_value));
+  //   setWinnerId(Number(res?.winner));
+  //   setWinSum(res?.winner_value);
+  //   // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
+  // }
+  // if (res?.message === "success") {
+  //   setTimeout(() => {
+  //     if (res?.winner === userId) {
+  //       if (data?.bet_type === "1") {
+  //         dispatch(addCoins(Number(res?.winner_value)));
+  //       } else {
+  //         dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
+  //       }
+  //     } else {
+  //       if (data?.bet_type === "3") {
+  //         dispatch(addTokens(Number(res?.winner_value)));
+  //       } else {
+  //         dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
+  //       }
+  //     }
+  //     setInputValue('');
+  //     setTimerStarted(false);
+  //     setModalOpen(true);
+  //     setTimeout(() => {
+  //       setModalOpen(false);
+  //       setTimerStarted(false);
+  //       setShowTimer(true);
+  //     }, 3000)
+  //   }, 5000)
+  // }
 
-            })
-            .catch((error) => {
-              console.error('Data request error:', error);
-            });
-        }
-      }, 2500);
-    };
+  //           })
+  //           .catch((error) => {
+  //             console.error('Data request error:', error);
+  //           });
+  //       }
+  //     }, 2500);
+  //   };
 
-    fetchData();
-  }, [data, roomId]);
+  //   fetchData();
+  // }, [data, roomId]);
   // показать оверлей при фокусе в инпуте
   const handleInputFocus = () => {
     setShowOverlay(true);

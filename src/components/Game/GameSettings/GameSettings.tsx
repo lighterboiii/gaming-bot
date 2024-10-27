@@ -5,14 +5,12 @@ import { postEvent } from '@tma.js/sdk';
 import { FC, useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { postNewRoomRequest } from '../../../api/gameApi';
 import { userId } from '../../../api/requestData';
 import useTelegram from '../../../hooks/useTelegram';
 import { useAppSelector } from '../../../services/reduxHooks';
 import { WebSocketContext } from '../../../socket/WebSocketContext';
 import { formatNumber } from '../../../utils/additionalFunctions';
 import { IGameSettingsData } from '../../../utils/types/gameTypes';
-import { ICreateRoomResponse } from '../../../utils/types/responseTypes';
 import { Modal } from '../../Modal/Modal';
 import Button from '../../ui/Button/Button';
 import JoinRoomPopup from '../JoinRoomPopup/JoinRoomPopup';
@@ -41,11 +39,9 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const userInfo = useAppSelector(store => store.app.info);
-  
   const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
-  console.log(data);
   const parsedMessages = wsmessages?.map(msg => JSON.parse(msg));
-  console.log(parsedMessages);
+
   useEffect(() => {
     if (parsedMessages?.length > 0) {
       const lastMessage = parsedMessages[wsmessages?.length - 1]?.message;
