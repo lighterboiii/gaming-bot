@@ -63,7 +63,6 @@ export const RockPaperScissors: FC = () => {
   const { sendMessage, wsmessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
   // const [fetch, setFetch] = useState(false);
-  console.log(data);
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show();
@@ -122,7 +121,9 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'whoiswin':
+          setData(res?.room_info);
           console.log(res);
+          if (data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
             secondAnim: res?.whoiswin.s_anim,
@@ -161,10 +162,10 @@ export const RockPaperScissors: FC = () => {
                 firstAnim: null,
                 secondAnim: null,
               });
-              setData(res?.room_info);
               setShowTimer(true);
             }, 4000)
           }, animationTime);
+        }
           // setLoading(false);
           break;
         case 'choice':
@@ -174,15 +175,16 @@ export const RockPaperScissors: FC = () => {
           break;
         case 'emoji':
           setData(res);
+          setData(res);
           // setLoading(false);
           break;
         case 'kickplayer':
           // clearMessages();
           // disconnect();
-          setTimeout(() => {
-            const currentUrl = location.pathname;
-            currentUrl !== roomsUrl && navigate(roomsUrl);
-          }, 500)
+          // setTimeout(() => {
+          //   const currentUrl = location.pathname;
+          //   currentUrl !== roomsUrl && navigate(roomsUrl);
+          // }, 500)
           break;
       }
     };
