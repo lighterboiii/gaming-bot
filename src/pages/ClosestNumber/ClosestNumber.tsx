@@ -41,7 +41,7 @@ export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const location = useLocation();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);
@@ -61,6 +61,7 @@ export const ClosestNumber: FC = () => {
   const [winnerId, setWinnerId] = useState<number | null>(null);
   const [winSum, setWinSum] = useState<any>(null);
   const [draw, setDraw] = useState(false);
+  const [isChoiceLocked, setIsChoiceLocked] = useState<boolean>(false);
   const [drawWinners, setDrawWinners] = useState<any | null>(null);
   const currentWinner = data?.players?.find((player: any) => Number(player?.userid) === Number(winnerId));
   const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
@@ -211,6 +212,7 @@ export const ClosestNumber: FC = () => {
               setData(res?.room_info);
               clearMessages();
               setModalOpen(false);
+              setIsChoiceLocked(false);
               setTimerStarted(true);
               setShowTimer(true);
               setTimer(30);
@@ -331,6 +333,8 @@ export const ClosestNumber: FC = () => {
         // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
       }
     }
+    if (isChoiceLocked) return;
+
     const choice = {
       user_id: userId,
       room_id: roomId,
@@ -338,6 +342,7 @@ export const ClosestNumber: FC = () => {
       choice: value
     };
     sendMessage(choice);
+    setIsChoiceLocked(true);
   };
   // хендлер отпрвки эмодзи
   const handleEmojiSelect = (emoji: string) => {
@@ -498,6 +503,9 @@ export const ClosestNumber: FC = () => {
                     </p>
                   </div>
                   <div className={styles.overlay__inputContainer}>
+                    {isChoiceLocked 
+                    ? <p className={styles.overlay__text}>Выбор сделан</p>
+                    :
                     <input
                       type="number"
                       placeholder={placeholder}
@@ -505,7 +513,7 @@ export const ClosestNumber: FC = () => {
                       value={inputValue}
                       onFocus={handleInputFocus}
                       readOnly
-                    />
+                    />}
                     <p className={styles.overlay__inputText}>{translation?.your_number_text}</p>
                     <div className={styles.overlay__userMoney}>
                       <span className={styles.overlay__text}>

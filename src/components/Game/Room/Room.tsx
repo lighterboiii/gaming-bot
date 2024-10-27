@@ -22,13 +22,12 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const [isMessage, setIsMessage] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages } = useContext(WebSocketContext)!;
-  // const parsedMessages = wsMessages.map(msg => JSON.parse(msg));
 
   useEffect(() => {
     const lastMessage = wsMessages[wsMessages.length - 1];

@@ -30,7 +30,6 @@ import {
   setProductsArchive
 } from '../../services/appSlice';
 import { useAppDispatch } from '../../services/reduxHooks';
-// import { WebSocketContext } from '../../socket/WebSocketContext';
 import {
   indexUrl,
   roomsUrl,
@@ -47,10 +46,9 @@ import styles from './App.module.scss';
   
 export const App: FC = () => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = user?.id;
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  // const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
 
   document.addEventListener(
     'touchmove',
@@ -78,8 +76,6 @@ export const App: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    // sendMessage({ type: 'test' });
-
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
@@ -109,19 +105,6 @@ export const App: FC = () => {
     fetchUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
-
-  // const parsedMessages = wsmessages.map(msg => JSON.parse(msg));
-  // useEffect(() => {
-  //   if (parsedMessages.length > 0) {
-  //     const lastMessage = parsedMessages[wsmessages.length - 1].message;
-  //     console.log(lastMessage);
-  //     if (lastMessage.type === 'test') {
-  //       console.log(lastMessage);
-  //     } else {
-        
-  //     }
-  //   }
-  // }, [parsedMessages]);
 
   return (
     <div className={styles.app}>
