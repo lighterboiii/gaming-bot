@@ -6,7 +6,7 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-import { setGameRulesWatched, whoIsWinRequest } from "../../api/gameApi";
+import { setGameRulesWatched } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
 import { userId } from "../../api/requestData";
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
@@ -62,7 +62,7 @@ export const RockPaperScissors: FC = () => {
   const isPortrait = useOrientation();
   const { sendMessage, wsmessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
-  // const [fetch, setFetch] = useState(false);
+
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show();
@@ -102,28 +102,20 @@ export const RockPaperScissors: FC = () => {
         room_id: roomId,
         type: 'room_info'
       });
-      // setFetch(true);
     };
 
-    // !fetch && 
     fetchInitialData();
-  }, [
-    // roomId,
-    // userId
-  ]);
+  }, []);
 
   useEffect(() => {
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
-          setData(res);
           setLoading(false);
           break;
         case 'whoiswin':
           setData(res?.room_info);
-          console.log(res);
-          // if (data?.players?.every((player: IPlayer) => player.choice === 'none')) {
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
             secondAnim: res?.whoiswin.s_anim,
@@ -164,28 +156,26 @@ export const RockPaperScissors: FC = () => {
               });
               clearMessages();
               setShowTimer(true);
-            }, 4000)
+            }, 3500)
           }, animationTime);
-        // }
+          // }
           // setLoading(false);
           break;
         case 'choice':
-          console.log(res);
           setData(res);
           // setLoading(false);
           break;
         case 'emoji':
           setData(res);
-          setData(res);
           // setLoading(false);
           break;
         case 'kickplayer':
-          // clearMessages();
-          // disconnect();
-          // setTimeout(() => {
-          //   const currentUrl = location.pathname;
-          //   currentUrl !== roomsUrl && navigate(roomsUrl);
-          // }, 500)
+          clearMessages();
+          disconnect();
+          setTimeout(() => {
+            const currentUrl = location.pathname;
+            currentUrl !== roomsUrl && navigate(roomsUrl);
+          }, 500)
           break;
       }
     };
@@ -201,23 +191,6 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [dispatch, isRulesShown]);
-  // useEffect(() => {
-  //   if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-  //     console.log('Все игроки сделали выбор:', data.players);
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current);
-  //     }
-  //     setShowTimer(false);
-  //     if (roomId) {
-  //       console.log('Отправка запроса whoiswin');
-  //       sendMessage({
-  //         user_id: userId,
-  //         room_id: roomId,
-  //         type: 'whoiswin'
-  //       });
-  //     }
-  //   }
-  // }, [data]);
   // хендлер готовности игрока websocket
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
@@ -229,7 +202,7 @@ export const RockPaperScissors: FC = () => {
           room_id: roomId,
           type: 'kickplayer'
         });
-        // Если текущий пользователь - это тот, кто покидает комнату
+
         if (player?.userid === userId) {
           const currentUrl = location.pathname;
           currentUrl !== roomsUrl && navigate(roomsUrl);
@@ -279,7 +252,6 @@ export const RockPaperScissors: FC = () => {
     sendMessage(choice);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
   };
-
   // хендлер отпрвки эмодзи websocket
   const handleEmojiSelect = (emoji: string) => {
     const data = {
@@ -288,7 +260,6 @@ export const RockPaperScissors: FC = () => {
       type: 'emoji',
       emoji: emoji
     };
-
     sendMessage(data);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
     setShowEmojiOverlay(false);
