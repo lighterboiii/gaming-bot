@@ -174,7 +174,6 @@ export const ClosestNumber: FC = () => {
           setData(res);
           break;
         case 'whoiswin':
-          setData(res?.room_info);
           setTimerStarted(false);
           setShowTimer(false);
           if (res.whoiswin.winner === "draw") {
@@ -209,6 +208,7 @@ export const ClosestNumber: FC = () => {
             setTimerStarted(false);
             setModalOpen(true);
             setTimeout(() => {
+              setData(res?.room_info);
               clearMessages();
               setModalOpen(false);
               setTimerStarted(true);
