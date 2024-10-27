@@ -123,7 +123,7 @@ export const RockPaperScissors: FC = () => {
         case 'whoiswin':
           setData(res?.room_info);
           console.log(res);
-          if (data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
+          // if (data?.players?.every((player: IPlayer) => player.choice === 'none')) {
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
             secondAnim: res?.whoiswin.s_anim,
@@ -162,10 +162,11 @@ export const RockPaperScissors: FC = () => {
                 firstAnim: null,
                 secondAnim: null,
               });
+              clearMessages();
               setShowTimer(true);
             }, 4000)
           }, animationTime);
-        }
+        // }
           // setLoading(false);
           break;
         case 'choice':
