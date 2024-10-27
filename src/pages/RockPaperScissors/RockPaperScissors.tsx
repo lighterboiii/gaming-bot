@@ -73,10 +73,10 @@ export const RockPaperScissors: FC = () => {
         room_id: roomId,
         type: 'kickplayer'
       });
-      setTimeout(() => {
-        const currentUrl = location.pathname;
-        currentUrl !== roomsUrl && navigate(roomsUrl);
-      }, 200)
+      // setTimeout(() => {
+      //   const currentUrl = location.pathname;
+      //   currentUrl !== roomsUrl && navigate(roomsUrl);
+      // }, 200)
     });
     return () => {
       tg.BackButton.hide();
@@ -180,10 +180,10 @@ export const RockPaperScissors: FC = () => {
         case 'kickplayer':
           clearMessages();
           disconnect();
-          // setTimeout(() => {
-          //   const currentUrl = location.pathname;
-          //   currentUrl !== roomsUrl && navigate(roomsUrl);
-          // }, 500)
+          setTimeout(() => {
+            const currentUrl = location.pathname;
+            currentUrl !== roomsUrl && navigate(roomsUrl);
+          }, 500)
           break;
       }
     };

@@ -104,12 +104,9 @@ export const ClosestNumber: FC = () => {
     tg.BackButton.onClick(() => {
       sendMessage({
         user_id: userId,
+        room_id: roomId,
         type: 'kickplayer'
       });
-      setTimeout(() => {
-        const currentUrl = location.pathname;
-        currentUrl !== roomsUrl && navigate(roomsUrl);
-      }, 200)
     });
     return () => {
       tg.BackButton.hide();
@@ -159,28 +156,24 @@ export const ClosestNumber: FC = () => {
       console.log(res);
       switch (res?.type) {
         case 'room_info':
-          console.log(res);
           setData(res);
           setLoading(false);
           break;
         case 'kickplayer':
           clearMessages();
           disconnect();
-          // setTimeout(() => {
-          //   const currentUrl = location.pathname;
-          //   currentUrl !== roomsUrl && navigate(roomsUrl);
-          // }, 500)
+          setTimeout(() => {
+            const currentUrl = location.pathname;
+            currentUrl !== roomsUrl && navigate(roomsUrl);
+          }, 500)
           break;
         case 'choice':
           setData(res);
-          // setLoading(false);
           break;
         case 'emoji':
           setData(res);
-          // setLoading(false);
           break;
         case 'whoiswin':
-          console.log(res);
           setData(res?.room_info);
           setTimerStarted(false);
           setShowTimer(false);
@@ -198,7 +191,6 @@ export const ClosestNumber: FC = () => {
             setWinSum(res?.whoiswin.winner_value);
             // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
           }
-          // if (res?.whoiswin.message === "success") {
             setTimeout(() => {
               if (res?.winner === userId) {
                 if (data?.bet_type === "1") {
@@ -218,11 +210,10 @@ export const ClosestNumber: FC = () => {
               setModalOpen(true);
               setTimeout(() => {
                 setModalOpen(false);
-                setTimerStarted(false);
+                setTimerStarted(true);
                 setShowTimer(true);
               }, 3000)
             }, 5000)
-          // }
           break;
       }
     };
@@ -235,67 +226,6 @@ export const ClosestNumber: FC = () => {
 
     handleMessage();
   }, [wsMessages]);
-  // запрос результата кона
-  // useEffect(() => {
-  //   let timeoutId: any;
-  //   const fetchData = () => {
-  //     clearTimeout(timeoutId);
-  //     timeoutId = setTimeout(() => {
-  //       if (data?.players?.every((player: IPlayer) => player?.choice !== 'none')) {
-  //         setTimerStarted(false);
-  //         setShowTimer(false);
-  // whoIsWinRequest(roomId!)
-  //   .then((res: any) => {
-  // if (res.winner === "draw") {
-  //   setDraw(true);
-  //   setRoomValue(Number(res?.room_value));
-  //   const drawPlayerIds = res.draw_players;
-  //   const drawPlayers = data?.players?.filter((player: any) =>
-  //     drawPlayerIds.includes(player.userid));
-  //   setDrawWinners(drawPlayers);
-  //   setWinSum(Number(res?.winner_value));
-  // } else {
-  //   setRoomValue(Number(res?.room_value));
-  //   setWinnerId(Number(res?.winner));
-  //   setWinSum(res?.winner_value);
-  //   // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
-  // }
-  // if (res?.message === "success") {
-  //   setTimeout(() => {
-  //     if (res?.winner === userId) {
-  //       if (data?.bet_type === "1") {
-  //         dispatch(addCoins(Number(res?.winner_value)));
-  //       } else {
-  //         dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
-  //       }
-  //     } else {
-  //       if (data?.bet_type === "3") {
-  //         dispatch(addTokens(Number(res?.winner_value)));
-  //       } else {
-  //         dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
-  //       }
-  //     }
-  //     setInputValue('');
-  //     setTimerStarted(false);
-  //     setModalOpen(true);
-  //     setTimeout(() => {
-  //       setModalOpen(false);
-  //       setTimerStarted(false);
-  //       setShowTimer(true);
-  //     }, 3000)
-  //   }, 5000)
-  // }
-
-  //           })
-  //           .catch((error) => {
-  //             console.error('Data request error:', error);
-  //           });
-  //       }
-  //     }, 2500);
-  //   };
-
-  //   fetchData();
-  // }, [data, roomId]);
   // показать оверлей при фокусе в инпуте
   const handleInputFocus = () => {
     setShowOverlay(true);
@@ -380,6 +310,7 @@ export const ClosestNumber: FC = () => {
       if (player?.money <= data?.bet) {
         sendMessage({
           user_id: userId,
+          room_id: roomId,
           type: 'kickplayer'
         });
         if (player?.userid === userId) {
@@ -392,6 +323,7 @@ export const ClosestNumber: FC = () => {
       if (player?.tokens <= data?.bet) {
         sendMessage({
           user_id: userId,
+          room_id: roomId,
           type: 'kickplayer'
         });
         // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
@@ -433,7 +365,6 @@ export const ClosestNumber: FC = () => {
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
-  // Таймер
   useEffect(() => {
     if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice === 'none')) {
       if (!timerStarted) {
@@ -461,11 +392,11 @@ export const ClosestNumber: FC = () => {
       if (currentPlayer?.choice === 'none') {
         data?.players.forEach((player: IPlayer) => {
           if (player.choice === 'none') {
-            const leaveData = {
-              user_id: player.userid,
+            sendMessage({
+              user_id: userId,
+              room_id: roomId,
               type: 'kickplayer'
-            };
-            sendMessage(leaveData);
+            });
           }
         });
         setTimerStarted(false);
