@@ -131,17 +131,17 @@ export const RockPaperScissors: FC = () => {
           setAnimationKey(prevKey => prevKey + 1);
           setTimeout(() => {
             if (res?.whoiswin.winner === userId) {
-              updateAnimation(Number(data?.creator_id) === Number(data?.win.winner_id) ? lWinAnim : rWinAnim);
+              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) ? lWinAnim : rWinAnim);
               // postEvent(
               //   'web_app_trigger_haptic_feedback',
               //   { type: 'notification', notification_type: 'success' }
               // );
-              setMessage(`${translation?.you_won} ${data?.win.winner_value !== 'none'
+              setMessage(`${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
                 ? `${data?.win.winner_value} ${data?.bet_type === "1" ? `💵`
                   : `🔰`}`
                 : ''}`);
-            } else if (Number(data?.win.winner_value) !== Number(userId) && data?.win.winner_id !== 'draw') {
-              updateAnimation(Number(data?.creator_id) === Number(data?.win.winner_id) ? lLoseAnim : rLoseAnim);
+            } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
+              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) ? lLoseAnim : rLoseAnim);
               // postEvent(
               //   'web_app_trigger_haptic_feedback',
               //   { type: 'notification', notification_type: 'error', }
@@ -149,7 +149,7 @@ export const RockPaperScissors: FC = () => {
               setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                 ? `💵`
                 : `🔰`}`);
-            } else if (data?.win.winner_id === 'draw') {
+            } else if (res?.whoiswin.winner === 'draw') {
               setMessage(translation?.draw);
               // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
             }
@@ -162,6 +162,7 @@ export const RockPaperScissors: FC = () => {
                 secondAnim: null,
               });
               setShowTimer(true);
+              setData(res?.room_info);
             }, 4000)
           }, animationTime);
           // setLoading(false);
@@ -196,23 +197,23 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [dispatch, isRulesShown]);
-  useEffect(() => {
-    if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
-      console.log('Все игроки сделали выбор:', data.players);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-      setShowTimer(false);
-      if (roomId) {
-        console.log('Отправка запроса whoiswin');
-        sendMessage({
-          user_id: userId,
-          room_id: roomId,
-          type: 'whoiswin'
-        });
-      }
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data?.players?.every((player: IPlayer) => player?.choice !== 'none' && player?.choice !== 'ready')) {
+  //     console.log('Все игроки сделали выбор:', data.players);
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current);
+  //     }
+  //     setShowTimer(false);
+  //     if (roomId) {
+  //       console.log('Отправка запроса whoiswin');
+  //       sendMessage({
+  //         user_id: userId,
+  //         room_id: roomId,
+  //         type: 'whoiswin'
+  //       });
+  //     }
+  //   }
+  // }, [data]);
   // хендлер готовности игрока websocket
   const handleReady = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
