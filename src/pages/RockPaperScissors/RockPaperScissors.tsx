@@ -63,7 +63,7 @@ export const RockPaperScissors: FC = () => {
   const { sendMessage, wsmessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
   // const [fetch, setFetch] = useState(false);
-
+  console.log(data);
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show();
@@ -118,11 +118,11 @@ export const RockPaperScissors: FC = () => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
-          console.log(res)
           setData(res);
           setLoading(false);
           break;
         case 'whoiswin':
+          console.log(res);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
             secondAnim: res?.whoiswin.s_anim,
@@ -130,14 +130,14 @@ export const RockPaperScissors: FC = () => {
           const animationTime = 3000;
           setAnimationKey(prevKey => prevKey + 1);
           setTimeout(() => {
-            if (res?.whoiswin.winner === userId) {
+            if (Number(res?.whoiswin.winner) === Number(userId)) {
               updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) ? lWinAnim : rWinAnim);
               // postEvent(
               //   'web_app_trigger_haptic_feedback',
               //   { type: 'notification', notification_type: 'success' }
               // );
               setMessage(`${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
-                ? `${data?.win.winner_value} ${data?.bet_type === "1" ? `💵`
+                ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵`
                   : `🔰`}`
                 : ''}`);
             } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
@@ -161,13 +161,14 @@ export const RockPaperScissors: FC = () => {
                 firstAnim: null,
                 secondAnim: null,
               });
-              setShowTimer(true);
               setData(res?.room_info);
+              setShowTimer(true);
             }, 4000)
           }, animationTime);
           // setLoading(false);
           break;
         case 'choice':
+          console.log(res);
           setData(res);
           // setLoading(false);
           break;
@@ -176,8 +177,8 @@ export const RockPaperScissors: FC = () => {
           // setLoading(false);
           break;
         case 'kickplayer':
-          clearMessages();
-          disconnect();
+          // clearMessages();
+          // disconnect();
           setTimeout(() => {
             const currentUrl = location.pathname;
             currentUrl !== roomsUrl && navigate(roomsUrl);
@@ -192,7 +193,7 @@ export const RockPaperScissors: FC = () => {
     };
 
     handleMessage();
-  }, [sendMessage, updateAnimation]);
+  }, [wsmessages]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
