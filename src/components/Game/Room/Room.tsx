@@ -27,12 +27,12 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const [message, setMessage] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
-  const { sendMessage, wsmessages } = useContext(WebSocketContext)!;
-  const parsedMessages = wsmessages.map(msg => JSON.parse(msg));
+  const { sendMessage, wsMessages } = useContext(WebSocketContext)!;
+  const parsedMessages = wsMessages.map(msg => JSON.parse(msg));
   console.log(parsedMessages);
 
   useEffect(() => {
-    const lastMessage = wsmessages[wsmessages.length - 1];
+    const lastMessage = wsMessages[wsMessages.length - 1];
     console.log(lastMessage);
     if (lastMessage) {
       const parsedMessage = JSON.parse(lastMessage);
@@ -43,7 +43,7 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       //   setMessage("Server error");
       // }
     }
-  }, [wsmessages, navigate, room.room_id, room.room_type]);
+  }, [wsMessages, navigate, room.room_id, room.room_type]);
 
   const handleJoinRoom = (roomType: number) => {
     if (room.free_places === 0) {
