@@ -58,15 +58,14 @@ export const OpenedRooms: FC = () => {
   useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
-      // disconnect();
-      // clearMessages();
       navigate(indexUrl);
     });
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
     }
-  }, [tg, navigate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const fetchUserData = () => {

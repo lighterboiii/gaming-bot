@@ -61,7 +61,7 @@ export const RockPaperScissors: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   const isPortrait = useOrientation();
-  const { sendMessage, wsmessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
 
   useEffect(() => {
@@ -188,13 +188,13 @@ export const RockPaperScissors: FC = () => {
       }
     };
     const handleMessage = () => {
-      wsmessages.forEach((message: any) => {
+      wsMessages.forEach((message: any) => {
         messageHandler(message);
       });
     };
 
     handleMessage();
-  }, [wsmessages]);
+  }, [wsMessages]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);

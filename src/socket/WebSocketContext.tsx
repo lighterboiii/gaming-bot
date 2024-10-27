@@ -6,7 +6,7 @@ interface WebSocketContextType {
     connect: () => void;
     sendMessage: (message: object) => void;
     disconnect: () => void;
-    wsmessages: string[];
+    wsMessages: string[];
     clearMessages: () => void;
 }
 
@@ -17,7 +17,7 @@ const WebSocketContext = createContext<WebSocketContextType | undefined>(undefin
 
 const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [ws, setWs] = useState<WebSocket | null>(null);
-    const [wsmessages, setMessages] = useState<string[]>([]);
+    const [wsMessages, setMessages] = useState<string[]>([]);
     const [messageQueue, setMessageQueue] = useState<object[]>([]);
     // const [isReconnecting, setIsReconnecting] = useState(false);
     const [manualDisconnect, setManualDisconnect] = useState(false);
@@ -86,7 +86,7 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     return (
-        <WebSocketContext.Provider value={{ connect, sendMessage, disconnect, wsmessages, clearMessages }}>
+        <WebSocketContext.Provider value={{ connect, sendMessage, disconnect, wsMessages, clearMessages }}>
         {children}
         </WebSocketContext.Provider>
     );

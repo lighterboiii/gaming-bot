@@ -72,7 +72,7 @@ export const ClosestNumber: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.secondGameRulesState);
   const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
   const isPortrait = useOrientation();
-  const { sendMessage, wsmessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -181,35 +181,36 @@ export const ClosestNumber: FC = () => {
           break;
         case 'whoiswin':
           console.log(res);
+          setData(res?.room_info);
           setTimerStarted(false);
           setShowTimer(false);
-          if (res.winner === "draw") {
+          if (res.whoiswin.winner === "draw") {
             setDraw(true);
-            setRoomValue(Number(res?.room_value));
-            const drawPlayerIds = res.draw_players;
+            setRoomValue(Number(res?.whoiswin.room_value));
+            const drawPlayerIds = res.whoiswin.draw_players;
             const drawPlayers = data?.players?.filter((player: any) =>
               drawPlayerIds.includes(player.userid));
             setDrawWinners(drawPlayers);
-            setWinSum(Number(res?.winner_value));
+            setWinSum(Number(res?.whoiswin.winner_value));
           } else {
-            setRoomValue(Number(res?.room_value));
-            setWinnerId(Number(res?.winner));
-            setWinSum(res?.winner_value);
+            setRoomValue(Number(res?.whoiswin.room_value));
+            setWinnerId(Number(res?.whoiswin.winner));
+            setWinSum(res?.whoiswin.winner_value);
             // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
           }
-          if (res?.message === "success") {
+          // if (res?.whoiswin.message === "success") {
             setTimeout(() => {
               if (res?.winner === userId) {
                 if (data?.bet_type === "1") {
-                  dispatch(addCoins(Number(res?.winner_value)));
+                  dispatch(addCoins(Number(res?.whoiswin.winner_value)));
                 } else {
-                  dispatch(setCoinsValueAfterBuy(Number(res?.winner_value)));
+                  dispatch(setCoinsValueAfterBuy(Number(res?.whoiswin.winner_value)));
                 }
               } else {
                 if (data?.bet_type === "3") {
-                  dispatch(addTokens(Number(res?.winner_value)));
+                  dispatch(addTokens(Number(res?.whoiswin.winner_value)));
                 } else {
-                  dispatch(setTokensValueAfterBuy(Number(res?.winner_value)));
+                  dispatch(setTokensValueAfterBuy(Number(res?.whoiswin.winner_value)));
                 }
               }
               setInputValue('');
@@ -221,19 +222,19 @@ export const ClosestNumber: FC = () => {
                 setShowTimer(true);
               }, 3000)
             }, 5000)
-          }
+          // }
           break;
       }
     };
 
     const handleMessage = () => {
-      wsmessages.forEach((message: any) => {
+      wsMessages.forEach((message: any) => {
         messageHandler(message);
       });
     };
 
     handleMessage();
-  }, [roomId, userId, wsmessages, sendMessage, navigate]);
+  }, [wsMessages]);
   // запрос результата кона
   // useEffect(() => {
   //   let timeoutId: any;
