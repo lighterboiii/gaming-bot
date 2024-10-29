@@ -205,15 +205,16 @@ export const ClosestNumber: FC = () => {
               }
             }
             setInputValue('');
+            if (!isModalOpen && !timerStarted) {
+              setModalOpen(true);
+            }
             setTimerStarted(false);
-            setModalOpen(true);
             setTimeout(() => {
               clearMessages();
-              setModalOpen(false);
               setIsChoiceLocked(false);
               setTimerStarted(true);
               setShowTimer(true);
-              setTimer(30);
+              setModalOpen(false);
             }, 3000)
           }, 5000)
           break;
@@ -501,17 +502,17 @@ export const ClosestNumber: FC = () => {
                     </p>
                   </div>
                   <div className={styles.overlay__inputContainer}>
-                    {isChoiceLocked 
-                    ? <p className={styles.overlay__text}>Выбор сделан</p>
-                    :
-                    <input
-                      type="number"
-                      placeholder={placeholder}
-                      className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
-                      value={inputValue}
-                      onFocus={handleInputFocus}
-                      readOnly
-                    />}
+                    {isChoiceLocked
+                      ? <p className={styles.overlay__text}>Выбор сделан</p>
+                      :
+                      <input
+                        type="number"
+                        placeholder={placeholder}
+                        className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
+                        value={inputValue}
+                        onFocus={handleInputFocus}
+                        readOnly
+                      />}
                     <p className={styles.overlay__inputText}>{translation?.your_number_text}</p>
                     <div className={styles.overlay__userMoney}>
                       <span className={styles.overlay__text}>
