@@ -38,7 +38,7 @@ export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const location = useLocation();
-  const userId = user?.id;
+  // const userId = user?.id;
   const { roomId } = useParams<{ roomId: string | any }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<IGameData | null>(null);
@@ -73,10 +73,6 @@ export const RockPaperScissors: FC = () => {
         room_id: roomId,
         type: 'kickplayer'
       });
-      // setTimeout(() => {
-      //   const currentUrl = location.pathname;
-      //   currentUrl !== roomsUrl && navigate(roomsUrl);
-      // }, 200)
     });
     return () => {
       tg.BackButton.hide();
@@ -122,7 +118,6 @@ export const RockPaperScissors: FC = () => {
           break;
         case 'whoiswin':
           setIsWhoIsWinActive(true);
-          setData(res?.room_info);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
             secondAnim: res?.whoiswin.s_anim,
@@ -157,10 +152,10 @@ export const RockPaperScissors: FC = () => {
             setTimeout(() => {
               setMessageVisible(false);
               setAnimation(null);
-              // setPlayersAnim({
-              //   firstAnim: null,
-              //   secondAnim: null,
-              // });
+              setPlayersAnim({
+                firstAnim: null,
+                secondAnim: null,
+              });
               clearMessages();
               setShowTimer(true);
               setIsWhoIsWinActive(false);
@@ -178,12 +173,19 @@ export const RockPaperScissors: FC = () => {
           // setLoading(false);
           break;
         case 'kickplayer':
+          console.log(res);
+          if (Number(res.player_id) === Number(userId)) {
+            navigate(roomsUrl);
+          }
           clearMessages();
           disconnect();
-          setTimeout(() => {
-            const currentUrl = location.pathname;
-            currentUrl !== roomsUrl && navigate(roomsUrl);
-          }, 500)
+          // setTimeout(() => {
+          //   const currentUrl = location.pathname;
+          //   currentUrl !== roomsUrl && navigate(roomsUrl);
+          // }, 500)
+          break;
+        default:
+          // setData(res);
           break;
       }
     };
@@ -199,6 +201,7 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [dispatch, isRulesShown]);
+  console.log(data);
   // хендлер готовности игрока websocket
   const handleReady = () => {
     if (whoIsWinActive) return;
@@ -266,8 +269,8 @@ export const RockPaperScissors: FC = () => {
     const data = {
       user_id: userId,
       room_id: roomId,
-      type: 'emoji',
-      emoji: emoji
+      type: 'kickplayer',
+      // emoji: emoji
     };
     sendMessage(data);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
@@ -314,7 +317,7 @@ export const RockPaperScissors: FC = () => {
     } else if (timer === 0) {
       if (currentPlayer?.choice === 'none') {
         sendMessage({
-          user_id: userId,
+          user_id: currentPlayer?.userid, // userId
           room_id: roomId,
           type: 'kickplayer'
         });

@@ -24,7 +24,7 @@ export const Shop: FC = () => {
   const { tg } = useTelegram();
   const dispatch = useAppDispatch();
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
   const navigate = useNavigate();
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);
