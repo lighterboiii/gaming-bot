@@ -161,12 +161,11 @@ export const ClosestNumber: FC = () => {
           setLoading(false);
           break;
         case 'kickplayer':
-          clearMessages();
-          disconnect();
-          setTimeout(() => {
-            const currentUrl = location.pathname;
-            currentUrl !== roomsUrl && navigate(roomsUrl);
-          }, 500)
+          if (Number(res?.player_id) === Number(currentPlayer?.userid)) {
+            navigate(roomsUrl);
+            clearMessages();
+            // disconnect();
+          }
           break;
         case 'choice':
           setData(res);
@@ -209,7 +208,6 @@ export const ClosestNumber: FC = () => {
             setTimerStarted(false);
             setModalOpen(true);
             setTimeout(() => {
-              setData(res?.room_info);
               clearMessages();
               setModalOpen(false);
               setIsChoiceLocked(false);

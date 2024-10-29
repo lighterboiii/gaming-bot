@@ -116,6 +116,10 @@ export const RockPaperScissors: FC = () => {
           setData(res);
           setLoading(false);
           break;
+        // case 'addplayer':
+        //   setData(res);
+        //   setLoading(false);
+        //   break;
         case 'whoiswin':
           setIsWhoIsWinActive(true);
           setPlayersAnim({
@@ -173,16 +177,11 @@ export const RockPaperScissors: FC = () => {
           // setLoading(false);
           break;
         case 'kickplayer':
-          console.log(res);
-          if (Number(res.player_id) === Number(userId)) {
+          if (Number(res?.player_id) === Number(currentPlayer?.userid)) {
             navigate(roomsUrl);
           }
           clearMessages();
-          disconnect();
-          // setTimeout(() => {
-          //   const currentUrl = location.pathname;
-          //   currentUrl !== roomsUrl && navigate(roomsUrl);
-          // }, 500)
+          // disconnect();
           break;
         default:
           // setData(res);
@@ -269,8 +268,8 @@ export const RockPaperScissors: FC = () => {
     const data = {
       user_id: userId,
       room_id: roomId,
-      type: 'kickplayer',
-      // emoji: emoji
+      type: 'emoji',
+      emoji: emoji
     };
     sendMessage(data);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -52,21 +53,17 @@ export const OpenedRooms: FC = () => {
   useEffect(() => {
       connect();
       clearMessages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
-      // disconnect();
-      // clearMessages();
       navigate(indexUrl);
     });
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -82,7 +79,6 @@ export const OpenedRooms: FC = () => {
     };
 
     fetchUserData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
 
   useEffect(() => {
