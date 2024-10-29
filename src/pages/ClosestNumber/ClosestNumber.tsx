@@ -205,7 +205,7 @@ export const ClosestNumber: FC = () => {
               }
             }
             setInputValue('');
-            if (!isModalOpen && !timerStarted) {
+            if (!isModalOpen) {
               setModalOpen(true);
             }
             setTimerStarted(false);
@@ -412,7 +412,7 @@ export const ClosestNumber: FC = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [timer, timerStarted, navigate, userId]);
+  }, [timer, timerStarted]);
   // сброс выбора игрока, когда он единственный в комнате Websocket
   useEffect(() => {
     const resetPlayerChoice = () => {
