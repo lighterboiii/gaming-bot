@@ -35,7 +35,7 @@ import {
 } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from '../../socket/WebSocketContext';
-import { roomsUrl } from "../../utils/routes";
+import { indexUrl, roomsUrl } from "../../utils/routes";
 import { IGameData, IPlayer } from "../../utils/types/gameTypes";
 
 import styles from "./RockPaperScissors.module.scss";
@@ -46,6 +46,7 @@ export const RockPaperScissors: FC = () => {
   const location = useLocation();
   // const userId = user?.id;
   const hasHandledWin = useRef(false);
+  const hasNavigated = useRef(false);
   const { roomId } = useParams<{ roomId: string | any }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<IGameData | null>(null);
@@ -124,14 +125,9 @@ export const RockPaperScissors: FC = () => {
           setData(res);
           setLoading(false);
           break;
-        // case 'addplayer':
-        //   setData(res);
-        //   setLoading(false);
-        //   break;
         case 'whoiswin':
-          if (hasHandledWin.current) return; // Проверяем, если обработка уже была
+          if (hasHandledWin.current) return;
           hasHandledWin.current = true;
-
           setIsWhoIsWinActive(true);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
@@ -197,14 +193,13 @@ export const RockPaperScissors: FC = () => {
           setData(res);
           break;
         case 'kickplayer':
-          if (Number(res?.player_id) === Number(currentPlayer?.userid)) {
-            navigate(roomsUrl);
-          }
+          // if (!hasNavigated.current && currentPlayer?.userid === userId) {
+            // hasNavigated.current = true;
+            navigate(indexUrl);
+          // }
           clearMessages();
-          // disconnect();
           break;
         default:
-          // setData(res);
           break;
       }
     };
@@ -213,7 +208,6 @@ export const RockPaperScissors: FC = () => {
         messageHandler(message);
       });
     };
-
     handleMessage();
   }, [wsMessages]);
   // проверка правил при старте игры
@@ -333,9 +327,9 @@ export const RockPaperScissors: FC = () => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      if (currentPlayer?.choice === 'none') {
+      if (currentPlayer?.choice === 'none' || currentPlayer?.choice === 'ready') {
         sendMessage({
-          user_id: currentPlayer?.userid, // userId
+          user_id: userId,
           room_id: roomId,
           type: 'kickplayer'
         });
