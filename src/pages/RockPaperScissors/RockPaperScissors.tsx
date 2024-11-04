@@ -181,7 +181,6 @@ export const RockPaperScissors: FC = () => {
               clearMessages();
               setShowTimer(true);
               setIsWhoIsWinActive(false);
-              // hasHandledWin.current = false; 
             }, 3500)
 
           }, animationTime);
@@ -193,11 +192,10 @@ export const RockPaperScissors: FC = () => {
           setData(res);
           break;
         case 'kickplayer':
-          // if (!hasNavigated.current && currentPlayer?.userid === userId) {
-            // hasNavigated.current = true;
+          if (res?.player_id === userId) {
             navigate(indexUrl);
-          // }
-          clearMessages();
+            clearMessages();
+          }
           break;
         default:
           break;

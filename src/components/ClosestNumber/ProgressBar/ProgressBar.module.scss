@@ -1,17 +1,16 @@
 @use '../../../stylesheets/mixins' as *;
 @use '../../../stylesheets/variables' as *;
 
-// @mixin textScrollAnimation {
-//   $steps: 180;
-//   @for $i from 0 through $steps {
-//     $percentage: $i * (100 / $steps);
-//     $direction: if($i % 2 == 0, 1, -1);
-//     #{$percentage}% {
-//       transform: translateY($direction * 90%);
-//       // filter: blur(10px);
-//     }
-//   }
-// }
+@mixin textScrollAnimation {
+  $steps: 180;
+  @for $i from 0 through $steps {
+    $percentage: $i * (100 / $steps);
+    $direction: if($i % 2 == 0, 1, -1);
+    #{$percentage}% {
+      transform: translateY($direction * 90%);
+    }
+  }
+}
 
 .bar {
   @include size(120px, 120px);
@@ -69,7 +68,7 @@
   // }
 
   &__textAnimated {
-    // animation: textScroll 4s linear;
+    animation: textScroll 4s linear;
     animation: none;
   }
 
@@ -84,7 +83,7 @@
     }
   }
 
-  // @keyframes textScroll {
-  //   @include textScrollAnimation;
-  // }
+  @keyframes textScroll {
+    @include textScrollAnimation;
+  }
 }
