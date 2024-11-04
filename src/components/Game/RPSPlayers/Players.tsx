@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { motion } from "framer-motion";
 import { FC } from "react";
@@ -9,17 +10,18 @@ import { IGameData, IPlayer } from "utils/types/gameTypes";
 import { userId } from "../../../api/requestData";
 import UserAvatar from "../../../components/User/UserAvatar/UserAvatar";
 import readyIcon from '../../../images/rock-paper-scissors/user_ready_image.png';
+import { useAppSelector } from "../../../services/reduxHooks";
 
 import styles from './Players.module.scss';
 
 interface IProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: IGameData | any;
+  userData?: IGameData | any;
 }
 
-const Players: FC<IProps> = ({ data }) => {
+const Players: FC<IProps> = ({ data, userData }) => {
   const { user } = useTelegram();
-  const userId = user?.id;
+  // const userId = user?.id;
 
   return (
     <div className={styles.players}>
@@ -44,9 +46,9 @@ const Players: FC<IProps> = ({ data }) => {
         )}
         {Number(player?.userid) === Number(userId) && player?.choice !== 'ready' && (
           <div className={styles.players__balance}>
-            {data?.bet_type === "1"
-              ? `💵 ${formatNumber(player?.money)}`
-              : `🔰 ${formatNumber(player?.money)}`
+            {data?.bet_type === "1" && userData
+              ? `💵 ${formatNumber(userData?.coins)}`
+              : `🔰 ${formatNumber(userData?.tokens)}`
             }
           </div>
         )}

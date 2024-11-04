@@ -26,7 +26,13 @@ import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
 import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
 import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
-import { setFirstGameRulesState } from "../../services/appSlice";
+import {
+  addCoins,
+  addTokens,
+  setCoinsValueAfterBuy,
+  setFirstGameRulesState,
+  setTokensValueAfterBuy
+} from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { roomsUrl } from "../../utils/routes";
@@ -38,7 +44,8 @@ export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const location = useLocation();
-  const userId = user?.id;
+  // const userId = user?.id;
+  const hasHandledWin = useRef(false);
   const { roomId } = useParams<{ roomId: string | any }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<IGameData | null>(null);
@@ -61,6 +68,7 @@ export const RockPaperScissors: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   const isPortrait = useOrientation();
+  const userData = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
 
@@ -121,6 +129,9 @@ export const RockPaperScissors: FC = () => {
         //   setLoading(false);
         //   break;
         case 'whoiswin':
+          if (hasHandledWin.current) return; // Проверяем, если обработка уже была
+          hasHandledWin.current = true;
+
           setIsWhoIsWinActive(true);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
@@ -139,6 +150,11 @@ export const RockPaperScissors: FC = () => {
                 ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵`
                   : `🔰`}`
                 : ''}`);
+              if (data?.bet_type === "1") {
+                dispatch(addCoins(Number(res?.whoiswin.winner_value)));
+              } else {
+                dispatch(addTokens(Number(res?.whoiswin.winner_value)));
+              }
             } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
               updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) ? lLoseAnim : rLoseAnim);
               // postEvent(
@@ -148,11 +164,17 @@ export const RockPaperScissors: FC = () => {
               setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                 ? `💵`
                 : `🔰`}`);
+              if (data?.bet_type === "3") {
+                dispatch(setTokensValueAfterBuy(Number(res?.whoiswin.winner_value)));
+              } else {
+                dispatch(setCoinsValueAfterBuy(Number(res?.whoiswin.winner_value)));
+              }
             } else if (res?.whoiswin.winner === 'draw') {
               setMessage(translation?.draw);
               // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
             }
             setMessageVisible(true);
+
             setTimeout(() => {
               setMessageVisible(false);
               setAnimation(null);
@@ -163,18 +185,16 @@ export const RockPaperScissors: FC = () => {
               clearMessages();
               setShowTimer(true);
               setIsWhoIsWinActive(false);
+              hasHandledWin.current = false; 
             }, 3500)
+
           }, animationTime);
-          // }
-          // setLoading(false);
           break;
         case 'choice':
           setData(res);
-          // setLoading(false);
           break;
         case 'emoji':
           setData(res);
-          // setLoading(false);
           break;
         case 'kickplayer':
           if (Number(res?.player_id) === Number(currentPlayer?.userid)) {
@@ -200,7 +220,6 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [dispatch, isRulesShown]);
-  console.log(data);
   // хендлер готовности игрока websocket
   const handleReady = () => {
     if (whoIsWinActive) return;
@@ -389,7 +408,7 @@ export const RockPaperScissors: FC = () => {
           <>
             {rules ? (
               <>
-                <Players data={data as IGameData} />
+                <Players data={data as IGameData} userData={userData} />
                 <>
                   {data?.players_count === "2" &&
                     data?.players?.every((player: IPlayer) => player?.choice === 'ready') &&
