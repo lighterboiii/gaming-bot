@@ -50,10 +50,10 @@ export const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
   const { connect, disconnect, clearMessages } = useContext(WebSocketContext)!;
 
-  useEffect(() => {
-      connect();
-      clearMessages();
-  }, []);
+  // useEffect(() => {
+  //     connect();
+  //     clearMessages();
+  // }, []);
 
   useEffect(() => {
     tg.BackButton.show();

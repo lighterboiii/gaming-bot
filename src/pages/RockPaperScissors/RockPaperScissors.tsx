@@ -70,7 +70,7 @@ export const RockPaperScissors: FC = () => {
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   const isPortrait = useOrientation();
   const userData = useAppSelector(store => store.app.info);
-  const { sendMessage, wsMessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, clearMessages } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
 
   useEffect(() => {
@@ -126,8 +126,8 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'whoiswin':
-          if (hasHandledWin.current) return;
-          hasHandledWin.current = true;
+          // if (hasHandledWin.current) return;
+          // hasHandledWin.current = true;
           setIsWhoIsWinActive(true);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
@@ -181,7 +181,7 @@ export const RockPaperScissors: FC = () => {
               clearMessages();
               setShowTimer(true);
               setIsWhoIsWinActive(false);
-              hasHandledWin.current = false; 
+              // hasHandledWin.current = false; 
             }, 3500)
 
           }, animationTime);

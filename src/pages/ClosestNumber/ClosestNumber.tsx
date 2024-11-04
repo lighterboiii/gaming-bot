@@ -32,7 +32,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
-import { roomsUrl } from "../../utils/routes";
+import { indexUrl, roomsUrl } from "../../utils/routes";
 import { IPlayer } from "../../utils/types/gameTypes";
 
 import styles from './ClosestNumber.module.scss';
@@ -161,11 +161,11 @@ export const ClosestNumber: FC = () => {
           setLoading(false);
           break;
         case 'kickplayer':
-          if (Number(res?.player_id) === Number(currentPlayer?.userid)) {
-            navigate(roomsUrl);
+          // if (Number(res?.player_id) === Number(currentPlayer?.userid)) {
+            navigate(indexUrl);
             clearMessages();
             // disconnect();
-          }
+          // }
           break;
         case 'choice':
           setData(res);
