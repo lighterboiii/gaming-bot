@@ -161,11 +161,11 @@ export const ClosestNumber: FC = () => {
           setLoading(false);
           break;
         case 'kickplayer':
-          // if (Number(res?.player_id) === Number(currentPlayer?.userid)) {
+          if (Number(res?.player_id) === userId) {
             navigate(indexUrl);
             clearMessages();
             // disconnect();
-          // }
+          }
           break;
         case 'choice':
           setData(res);

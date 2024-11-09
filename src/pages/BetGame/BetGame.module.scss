@@ -1,0 +1,71 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.game {
+  @include indents(40px 16px, 0);
+  @include size(100%, 100vh);
+  @include flex(column, space-between, center);
+  @include position(relative);
+  background-color: #FFF;
+  font-family: 'Rubik', sans-serif;
+
+  p {
+    @include indents();
+    font-weight: 900;
+  }
+
+  &__mainContainer {
+    @include indents(12px, 0);
+    @include size(100%, auto);
+    @include flex(column, space-between, center);
+    background-color: rgba($color: #e2e2e2, $alpha: .7);
+    border-radius: $radius-20;
+    aspect-ratio: 1;
+  }
+
+  &__currentBetHeading {
+    @include indents();
+  }
+
+  &__currentBet {
+    font-size: 32px;
+  }
+
+  &__userContainer {
+    @include size(90%, auto);
+    @include flex(row, space-between, center);
+  }
+
+  &__useNameContainer {
+    @include flex(column, center, center, 4px);
+  }
+
+  &__currentBet {
+    @include flex(row, center, center, 6px);
+  }
+
+  &__buttonContainer {
+    @include size(100%, auto);
+    @include flex(row, center, center, 10px);
+  }
+
+  &__balanceContainer {
+    @include indents(2px 18px, 0);
+    @include flex(column, center, center);
+    border-radius: 40px;
+    background-color: #e2e2e2;
+  }
+
+  &__betContainer {
+    @include indents(2px 18px, 0);
+    @include flex(column, center, center);
+    border-radius: 40px;
+    background-color: $closest-color;
+  }
+
+  &__mainButton {
+    @include min-size(120px, 120px);
+    border-radius: $radius-round;
+    aspect-ratio: 1;
+  }
+}

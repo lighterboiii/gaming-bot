@@ -20,7 +20,7 @@ interface IProps {
 }
 
 const Players: FC<IProps> = ({ data, userData }) => {
-  const { user } = useTelegram();
+  // const { user } = useTelegram();
   // const userId = user?.id;
 
   return (
