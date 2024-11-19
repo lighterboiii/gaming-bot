@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { getAppData } from '../../api/mainApi';
 import { userId } from '../../api/requestData';
-// import useTelegram from '../../hooks/useTelegram';
+import useTelegram from '../../hooks/useTelegram';
 import BetGame from '../../pages/BetGame/BetGame';
 import { ClosestNumber } from '../../pages/ClosestNumber/ClosestNumber';
 import { CreateRoom } from '../../pages/CreateRoom/CreateRoom';
@@ -39,14 +39,15 @@ import {
   leaderboardUrl,
   roomUrl,
   closestNumberRoomUrl,
-  anyUrl
+  anyUrl,
+  ludkaGameUrl
 } from '../../utils/routes';
 import Loader from '../Loader/Loader';
 
 import styles from './App.module.scss';
 
 export const App: FC = () => {
-  // const { tg, user } = useTelegram();
+  const { tg, user } = useTelegram();
   // const userId = user?.id;
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
@@ -67,51 +68,51 @@ export const App: FC = () => {
     { passive: false },
   );
 
-  // useEffect(() => {
-  //   tg.setHeaderColor('#d51845');
-  //   tg.expand();
-  //   tg.enableClosingConfirmation();
-  //   tg.ready();
-  //   window.scrollTo(0, 0);
-  // }, [tg]);
+  useEffect(() => {
+    tg.setHeaderColor('#d51845');
+    tg.expand();
+    tg.enableClosingConfirmation();
+    tg.ready();
+    window.scrollTo(0, 0);
+  }, [tg]);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const fetchUserData = () => {
-  //     getAppData(userId)
-  //       .then((res) => {
-  //         console.log(res);
-  //         dispatch(setLanguageSettings(res.translate));
-  //         dispatch(setUserData(res.user_info));
-  //         dispatch(setProductsArchive(res.collectibles_data));
-  //         dispatch(setShopAvailable(res.shop_available));
-  //         dispatch(setTaskList(res.tasks_available));
-  //         dispatch(setBannerData(res.ad_info));
-  //         dispatch(setShopImage(res.shop_image_url));
-  //         dispatch(setDailyBonus(res.daily_bonus));
-  //         dispatch(setUserPhoto(res.avatar));
-  //         dispatch(setFirstGameRuleImage(res.game_rule_1_url));
-  //         dispatch(setSecondGameRuleImage(res.game_rule_2_url));
-  //         dispatch(setFirstGameRulesState(res.game_rule_1_show));
-  //         dispatch(setSecondGameRulesState(res.game_rule_2_show));
-  //         setTimeout(() => {
-  //           setLoading(false);
-  //         }, 1500);
-  //       })
-  //       .catch((error) => {
-  //         console.error('Get user data error:', error);
-  //       })
-  //   };
+  useEffect(() => {
+    setLoading(true);
+    const fetchUserData = () => {
+      getAppData(userId)
+        .then((res) => {
+          console.log(res);
+          dispatch(setLanguageSettings(res.translate));
+          dispatch(setUserData(res.user_info));
+          dispatch(setProductsArchive(res.collectibles_data));
+          dispatch(setShopAvailable(res.shop_available));
+          dispatch(setTaskList(res.tasks_available));
+          dispatch(setBannerData(res.ad_info));
+          dispatch(setShopImage(res.shop_image_url));
+          dispatch(setDailyBonus(res.daily_bonus));
+          dispatch(setUserPhoto(res.avatar));
+          dispatch(setFirstGameRuleImage(res.game_rule_1_url));
+          dispatch(setSecondGameRuleImage(res.game_rule_2_url));
+          dispatch(setFirstGameRulesState(res.game_rule_1_show));
+          dispatch(setSecondGameRulesState(res.game_rule_2_show));
+          setTimeout(() => {
+            setLoading(false);
+          }, 1500);
+        })
+        .catch((error) => {
+          console.error('Get user data error:', error);
+        })
+    };
 
-  //   fetchUserData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [dispatch, userId]);
+    fetchUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, userId]);
 
   return (
     <div className={styles.app}>
       {loading ? <Loader /> : ''}
       <Routes>
-        {/* <Route path={indexUrl}
+        <Route path={indexUrl}
           element={<Main />} />
         <Route path={roomsUrl}
           element={<OpenedRooms />} />
@@ -124,11 +125,11 @@ export const App: FC = () => {
         <Route path={roomUrl}
           element={<RockPaperScissors />} />
         <Route path={closestNumberRoomUrl}
-          element={<ClosestNumber />} /> */}
-        <Route path={"/betg"}
+          element={<ClosestNumber />} />
+        <Route path={ludkaGameUrl}
           element={<BetGame />} />
-        {/* <Route path={anyUrl}
-          element={<NotFoundPage />} /> */}
+        <Route path={anyUrl}
+          element={<NotFoundPage />} />
       </Routes>
     </div>
   );

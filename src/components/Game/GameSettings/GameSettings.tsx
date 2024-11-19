@@ -46,10 +46,13 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     if (parsedMessages?.length > 0) {
       const lastMessage = parsedMessages[wsMessages?.length - 1]?.message;
       console.log(lastMessage);
-      // Обработка последнего сообщения
       if (lastMessage && lastMessage?.message === 'success') {
         setSelectedRoomId(lastMessage.room_id);
-        navigate(data?.room_type === 2 ? `/closest/${lastMessage?.room_id}` : `/room/${lastMessage?.room_id}`);
+        navigate(data?.room_type === 2 
+            ? `/closest/${lastMessage?.room_id}` 
+            : data?.room_type === 3
+              ? `/ludkaGame/${lastMessage?.room_id}`
+              : `/room/${lastMessage?.room_id}`);
       } else if (lastMessage?.type === 'error') {
         setInsufficient(true);
         setMessage(translation?.insufficient_funds || 'Недостаточно средств');
@@ -134,7 +137,11 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
           <div style={{ backgroundImage: `url(${data?.url})` }} className={styles.game__logo} />
           <div className={styles.game__content}>
             <h3 className={styles.game__title}>
-              {data?.room_type === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
+              {data?.room_type === 1 
+                ? `${translation?.rock_paper_scissors}` 
+                : data?.room_type === 2 
+                  ? `${translation?.closest_number}`
+                  : `${translation?.ludka_name}`}
             </h3>
             <div className={styles.game__balance}>
               <p className={styles.game__text}>{translation?.user_balance}</p>

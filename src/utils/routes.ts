@@ -6,6 +6,7 @@ const shopUrl = '/shop';
 const leaderboardUrl = '/leaderboard';
 const roomUrl = '/room/:roomId';
 const closestNumberRoomUrl = '/closest/:roomId';
+const ludkaGameUrl = '/ludkaGame/:roomId';
 const anyUrl = '*';
 
 export {
@@ -17,5 +18,6 @@ export {
     leaderboardUrl,
     roomUrl,
     closestNumberRoomUrl,
-    anyUrl
+    anyUrl,
+    ludkaGameUrl
 };

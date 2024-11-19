@@ -39,7 +39,7 @@
   &__image,
   &__imageRight {
     @include indents();
-    @include max-size(136px, auto);
+    @include max-size(124px, auto);
 
     @media screen and (max-width: 379px) {
       @include max-size(106px, auto)
@@ -52,7 +52,7 @@
   }
 
   &__imageRight {
-    @include position(absolute, $top: 40%, $left: 90%);
+    @include position(absolute, $top: 40%, $left: 80%);
     transform: translate(-50%, -50%);
   }
 }
