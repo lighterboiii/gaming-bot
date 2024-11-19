@@ -41,7 +41,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const userInfo = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages } = useContext(WebSocketContext)!;
   const parsedMessages = wsMessages?.map(msg => JSON.parse(msg));
-
+  console.log(data);
   useEffect(() => {
     if (parsedMessages?.length > 0) {
       const lastMessage = parsedMessages[wsMessages?.length - 1]?.message;
@@ -85,7 +85,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         bet_type: betType,
         room_type: roomType,
       };
-
       sendMessage(data);
     };
 
@@ -112,7 +111,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       } else if (userEnergy === 0 && currency === 3) {
         setPopupOpen(true);
       } else if (data) {
-        handleCreateRoom(userId, bet, currency, data.id, closeOverlay);
+        handleCreateRoom(userId, bet, currency, data?.room_type, closeOverlay);
       }
     }
   };

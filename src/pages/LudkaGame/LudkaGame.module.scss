@@ -31,8 +31,11 @@
     font-size: 32px;
   }
 
+  &__avatarContainer {
+    @include size(120px, 120px);
+  }
+
   &__userContainer {
-    @include size(90%, auto);
     @include flex(row, space-between, center);
   }
 

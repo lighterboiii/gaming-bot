@@ -6,10 +6,10 @@ import { Route, Routes } from 'react-router-dom';
 import { getAppData } from '../../api/mainApi';
 import { userId } from '../../api/requestData';
 import useTelegram from '../../hooks/useTelegram';
-import BetGame from '../../pages/BetGame/BetGame';
 import { ClosestNumber } from '../../pages/ClosestNumber/ClosestNumber';
 import { CreateRoom } from '../../pages/CreateRoom/CreateRoom';
 import { LeaderBoard } from '../../pages/LeaderBoard/LeaderBoard';
+import LudkaGame from '../../pages/LudkaGame/LudkaGame';
 import Main from '../../pages/Main/Main';
 import { NotFoundPage } from '../../pages/NotFoundPage/NotFoundPage';
 import { OpenedRooms } from '../../pages/OpenedRooms/OpenedRooms';
@@ -127,7 +127,7 @@ export const App: FC = () => {
         <Route path={closestNumberRoomUrl}
           element={<ClosestNumber />} />
         <Route path={ludkaGameUrl}
-          element={<BetGame />} />
+          element={<LudkaGame />} />
         <Route path={anyUrl}
           element={<NotFoundPage />} />
       </Routes>
