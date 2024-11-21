@@ -1,4 +1,4 @@
-import { postEvent } from "@tma.js/sdk";
+// import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
@@ -28,12 +28,12 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
 
   const handleNextSlide = () => {
     goToSlide((currentIndex + 1) % bannersData.length);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   const handlePrevSlide = () => {
     goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
