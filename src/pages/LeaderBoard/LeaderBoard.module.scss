@@ -1,6 +1,18 @@
 @use '../../stylesheets/mixins' as *;
 @use '../../stylesheets/variables' as *;
 
+@keyframes floatingAvatar {
+  0% { transform: translate(-150px, 0); }
+  50% { transform: translate(-150px, -5px); }
+  100% { transform: translate(-150px, 0); }
+}
+
+@keyframes floatingAvatarMobile {
+  0% { transform: translate(10px, 0); }
+  50% { transform: translate(10px, -5px); }
+  100% { transform: translate(10px, 0); }
+}
+
 .leaderBoard {
   @include min-size(100%, calc(100vh + 1px));
   @include flex(column, space-between, center);
@@ -12,12 +24,6 @@
     @include position(relative);
     @include size(100%, 10vh);
     @include flex(column, center, center);
-  }
-
-  &__chevron {
-    @include button-style-reset();
-    @include position(absolute, $top: 10px, $left: 16px);
-    transform: translateY(-50%);
   }
 
   &__heading {
@@ -48,70 +54,26 @@
 
   &__avatarContainer {
     @include indents();
-    @include position(absolute, $top: 15%, $left: -10%);
+    @include position(absolute, $top: 0%, $left: 30%);
     @include size(180px, 180px);
-    transform: translate(-50%, -50%);
+    animation: floatingAvatar 3s ease-in-out infinite;
 
     @media screen and (max-width: 379px) {
+      @include position(absolute, $top: 0%, $left: -30%);
       @include size(140px, 140px);
-      left: 10%;
-      top: 20%;
+      animation-name: floatingAvatarMobile;
     }
-  }
-
-  &__label {
-    @include position(absolute, $right: 10%, $bottom: 7%);
-    @include indents(6px 8px, 0);
-    background-color: $main-color;
-    border-radius: $radius-12;
-    color: $secondary-color;
-    font-style: italic;
-    font-weight: 900;
-    font-size: 18px;
-    transform: rotate(-15deg);
-    z-index: 3;
-  }
-
-  &__leaderText {
-    @include indents();
-    @include ellipsis();
-    @include flex(row, center, center, 4px);
-    color: $black-color;
-    font-weight: 900;
-    font-size: 18px;
-  }
-
-  &__leaderName {
-    @include indents();
-    @include ellipsis();
-    color: $secondary-color;
-    font-weight: 900;
-    font-size: 16px;
-  }
-
-  &__jew {
-    font-style: normal;
-  }
-
-  &__board {
-    @include indents(12px 16px 0, 0 20px 0 0);
-    @include flex(column, flex-start, flex-end, 16px);
-    @include size(100%, 50vh);
-    overflow-y: auto;
-  }
-
-  &__background {
-    @include position(relative);
-    @include size(259px, 106px);
-    background-image: url('../../images/leader_bg.png');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
 
   &__timeWrapper {
     @include size(auto, auto);
     @include flex(column, space-between, flex-end, 4px);
     @include position(absolute, $right: 7%, $bottom: 106px);
+    padding: 12px;
+    background: rgba($black-color, 0.2);
+    backdrop-filter: blur(4px);
+    border-radius: $radius-12;
+    box-shadow: 0 0 10px rgba($main-color, 0.3);
   }
 
   &__prize {
@@ -132,10 +94,42 @@
     @include size(32px, 32px);
   }
 
+  &__background {
+    @include position(relative);
+    @include size(259px, 106px);
+    background-image: url('../../images/leader_bg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  &__board {
+    @include indents(12px 16px 0, 0 20px 0 0);
+    @include flex(column, flex-start, flex-end, 16px);
+    @include size(100%, 50vh);
+    overflow-y: auto;
+  }
+
   &__text {
     @include indents();
     color: $main-color;
     font-size: 14px;
+  }
+
+  &__leaderText {
+    @include indents();
+    @include ellipsis();
+    @include flex(row, center, center, 4px);
+    color: $black-color;
+    font-weight: 900;
+    font-size: 18px;
+  }
+
+  &__leaderName {
+    @include indents();
+    @include ellipsis();
+    color: $secondary-color;
+    font-weight: 900;
+    font-size: 16px;
   }
 
   &__type {

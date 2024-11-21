@@ -139,13 +139,13 @@ export const LeaderBoard: FC = () => {
             </div>
             {leaderBoard?.length !== 0 ? (
               <div className={styles.leaderBoard__background}>
-                <div className={styles.leaderBoard__avatarContainer}>
-                  {topLeader &&
-                    <UserAvatar
-                      avatar={topLeader.avatar}
-                      item={topLeader}
-                    />}
-                </div>
+                  <div className={styles.leaderBoard__avatarContainer}>
+                    {topLeader &&
+                      <UserAvatar
+                        avatar={topLeader.avatar}
+                        item={topLeader}
+                      />}
+                  </div>
                 <div className={styles.leaderBoard__leaderInfo}>
                   <>
                     <p className={styles.leaderBoard__leaderName}>
