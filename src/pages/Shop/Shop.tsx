@@ -3,7 +3,8 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { userId } from "../../api/requestData";
+import { getUserId } from "utils/userConfig";
+
 import { getCollectiblesInfo, getLavkaAvailableRequest, getShopItemsRequest } from "../../api/shopApi";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
@@ -23,8 +24,7 @@ import styles from './Shop.module.scss';
 export const Shop: FC = () => {
   const { tg } = useTelegram();
   const dispatch = useAppDispatch();
-  const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const navigate = useNavigate();
   const shopData = useAppSelector(store => store.app.products);
   const collectibles = useAppSelector(store => store.app.info?.collectibles);

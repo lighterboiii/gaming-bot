@@ -2,8 +2,9 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
+import { getUserId } from "utils/userConfig";
+
 import { taskResultRequest, taskStepRequest } from "../../../api/mainApi";
-import { userId } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
 import CrossIcon from "../../../icons/Cross/Cross";
 import { setNewTokensValue } from "../../../services/appSlice";
@@ -24,7 +25,7 @@ interface IProps {
 
 const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
   const { tg, user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [showReward, setShowReward] = useState<boolean>(false);

@@ -5,7 +5,6 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-import { userId } from "api/requestData";
 import useOrientation from "hooks/useOrientation";
 import useTelegram from "hooks/useTelegram";
 import { useAppDispatch, useAppSelector } from "services/reduxHooks";
@@ -16,13 +15,14 @@ import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import { tokenCurr } from "../../utils/constants";
 import { indexUrl } from "../../utils/routes";
+import { getUserId } from "../../utils/userConfig";
 
 import styles from "./LudkaGame.module.scss";
 
 const LudkaGame: FC = () => {
-  const { tg, user } = useTelegram();
+  const { tg } = useTelegram();
   const [loading, setLoading] = useState<boolean>(false);
-  // const userId = user?.id;
+  const userId = getUserId();
   const { roomId } = useParams<{ roomId: string }>();
   const { wsMessages, sendMessage, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const location = useLocation();

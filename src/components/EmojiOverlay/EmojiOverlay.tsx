@@ -2,10 +2,10 @@
 import { FC, useEffect, useState } from "react";
 
 import { getActiveEmojiPack } from "../../api/mainApi";
-import { userId } from '../../api/requestData';
 import useTelegram from "../../hooks/useTelegram";
 import CrossIcon from '../../icons/Cross/Cross';
 import { IEmojiResponse } from "../../utils/types/responseTypes";
+import { getUserId } from "../../utils/userConfig";
 
 import styles from './EmojiOverlay.module.scss';
 
@@ -17,7 +17,7 @@ interface IProps {
 
 const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const [emojis, setEmojis] = useState<string[] | null>(null);
   const [name, setName] = useState<string>("");
 

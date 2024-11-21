@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 
-import { userId } from "../../../api/requestData";
-import useTelegram from "../../../hooks/useTelegram";
+import { getUserId } from "utils/userConfig";
+
 import FriendsIcon from "../../../icons/Friends/FriendsIcon";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { IMember } from "../../../utils/types/memberTypes";
@@ -25,8 +25,7 @@ const UserContainer: FC<IProps> = ({
   darkBackground = false,
   leaderBoardType
 }) => {
-  const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const isUser = Number(userId) === member?.user_id;
 
   return (

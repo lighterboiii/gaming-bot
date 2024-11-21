@@ -27,7 +27,7 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
   const handleClick = () => {
     handleClickGame(game);
   };
-  console.log(game);
+
   return (
     <div
       className={gameCardClassNames}

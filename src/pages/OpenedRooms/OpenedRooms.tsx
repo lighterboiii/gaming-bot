@@ -6,9 +6,10 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { getUserId } from "utils/userConfig";
+
 import { getOpenedRoomsRequest } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
-import { userId } from "../../api/requestData";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
 import Room from "../../components/Game/Room/Room";
@@ -28,8 +29,7 @@ import { IGameCardData } from "../../utils/types/gameTypes";
 import styles from './OpenedRooms.module.scss';
 
 export const OpenedRooms: FC = () => {
-  const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);

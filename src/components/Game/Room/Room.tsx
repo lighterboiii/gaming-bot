@@ -4,7 +4,8 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { userId } from "../../../api/requestData";
+import { getUserId } from "utils/userConfig";
+
 import useTelegram from "../../../hooks/useTelegram";
 import ManIcon from "../../../icons/Man/Man";
 import { useAppSelector } from "../../../services/reduxHooks";
@@ -22,7 +23,7 @@ interface IProps {
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const [isMessage, setIsMessage] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);

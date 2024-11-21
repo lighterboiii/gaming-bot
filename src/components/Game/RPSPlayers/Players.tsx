@@ -3,14 +3,12 @@
 import { motion } from "framer-motion";
 import { FC } from "react";
 
-import useTelegram from "hooks/useTelegram";
 import { formatNumber } from "utils/additionalFunctions";
 import { IGameData, IPlayer } from "utils/types/gameTypes";
+import { getUserId } from "utils/userConfig";
 
-import { userId } from "../../../api/requestData";
 import UserAvatar from "../../../components/User/UserAvatar/UserAvatar";
 import readyIcon from '../../../images/rock-paper-scissors/user_ready_image.png';
-import { useAppSelector } from "../../../services/reduxHooks";
 
 import styles from './Players.module.scss';
 
@@ -20,8 +18,7 @@ interface IProps {
 }
 
 const Players: FC<IProps> = ({ data, userData }) => {
-  // const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
 
   return (
     <div className={styles.players}>

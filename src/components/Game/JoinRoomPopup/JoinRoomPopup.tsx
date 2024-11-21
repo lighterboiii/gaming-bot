@@ -4,8 +4,9 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { getUserId } from "utils/userConfig";
+
 import { energyDrinkRequest, joinRoomRequest, postNewRoomRequest } from "../../../api/gameApi";
-import { userId } from '../../../api/requestData';
 import useTelegram from "../../../hooks/useTelegram";
 import energy from '../../../images/energy-drink.png';
 import { useAppSelector } from "../../../services/reduxHooks";
@@ -31,7 +32,7 @@ const JoinRoomPopup: FC<IProps> = ({
   fromGameSettings = false,
 }) => {
   const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const [messageShown, setMessageShown] = useState(false);
   const navigate = useNavigate();
   const userInfo = useAppSelector(store => store.app.info);

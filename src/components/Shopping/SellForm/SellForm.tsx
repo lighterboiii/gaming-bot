@@ -2,9 +2,9 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
-import { userId } from "../../../api/requestData";
+import { getUserId } from "utils/userConfig";
+
 import { sellLavkaRequest } from "../../../api/shopApi";
-import useTelegram from "../../../hooks/useTelegram";
 import { addItemToLavka } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { ISellLavkaRes } from "../../../utils/types/responseTypes";
@@ -21,8 +21,7 @@ interface IProps {
 }
 
 const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) => {
-  const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [priceValue, setPriceValue] = useState('')

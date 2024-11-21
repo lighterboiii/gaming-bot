@@ -2,10 +2,9 @@
 import { postEvent } from '@tma.js/sdk';
 import { FC } from "react";
 
-import useTelegram from "hooks/useTelegram";
+import { getUserId } from 'utils/userConfig';
 
 import Button from "../..//ui/Button/Button";
-import { userId } from "../../../api/requestData";
 import { makeCollectibleRequest } from "../../../api/shopApi";
 import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
@@ -20,8 +19,7 @@ interface IProps {
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
-  const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const translation = useAppSelector(store => store.app.languageSettings);
   // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: IBonus) => {

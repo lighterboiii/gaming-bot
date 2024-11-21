@@ -2,9 +2,9 @@
 import { postEvent } from '@tma.js/sdk';
 import { FC, useEffect, useRef, useState } from 'react';
 
+import { getUserId } from 'utils/userConfig';
+
 import { getWheelPrizeRequest, spinWheelRequest } from '../../../api/mainApi';
-import { userId } from '../../../api/requestData';
-import useTelegram from '../../../hooks/useTelegram';
 import lamp from '../../../images/closest-number/lamp.png';
 import light from '../../../images/closest-number/lamp2.png';
 import wheelPointer from '../../../images/closest-number/wheelPoint.png';
@@ -22,8 +22,7 @@ interface IProps {
 }
 
 const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
-  const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [messageShown, setMessageShown] = useState<boolean>(false);

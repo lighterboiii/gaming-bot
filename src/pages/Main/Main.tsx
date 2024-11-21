@@ -2,8 +2,9 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getAppData, getLuckInfo } from "../../api/mainApi";
-import { userId } from "../../api/requestData";
+import { getUserId } from "utils/userConfig";
+
+import { getLuckInfo } from "../../api/mainApi";
 import AdvertisementBanner from '../../components/Main/AdvertisementBanner/AdvertisementBanner';
 import BannerData from "../../components/Main/BannerData/BannerData";
 import DailyBonus from "../../components/Main/Bonus/Bonus";
@@ -17,7 +18,6 @@ import BigButton from "../../components/ui/BigButton/BigButton";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
 import useOrientation from "../../hooks/useOrientation";
-import useTelegram from "../../hooks/useTelegram";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
@@ -29,8 +29,7 @@ import styles from './Main.module.scss';
 
 export const Main: FC = () => {
   const navigate = useNavigate();
-  const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);

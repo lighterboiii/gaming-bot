@@ -2,7 +2,8 @@
 import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
-import { userId } from "../../../api/requestData";
+import { getUserId } from "utils/userConfig";
+
 import {
   buyItemRequest,
   buyLavkaRequest,
@@ -40,8 +41,7 @@ interface ProductProps {
 }
 
 const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton, updateItemCount }) => {
-  const { user, tg } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const dispatch = useAppDispatch();
   const [message, setMessage] = useState('');
   const [messageShown, setMessageShown] = useState(false);

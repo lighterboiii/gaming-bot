@@ -8,7 +8,6 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import { setGameRulesWatched } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
-import { userId } from "../../api/requestData";
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import ChoiceBox from "../../components/Game/ChoiceBox/ChoiceBox";
 import HandShake from '../../components/Game/HandShake/HandShake';
@@ -37,14 +36,15 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { indexUrl, roomsUrl } from "../../utils/routes";
 import { IGameData, IPlayer } from "../../utils/types/gameTypes";
+import { getUserId } from '../../utils/userConfig';
 
 import styles from "./RockPaperScissors.module.scss";
 
 export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
-  const { tg, user } = useTelegram();
+  const { tg } = useTelegram();
   const location = useLocation();
-  // const userId = user?.id;
+  const userId = getUserId();
   const hasHandledWin = useRef(false);
   const hasNavigated = useRef(false);
   const { roomId } = useParams<{ roomId: string | any }>();

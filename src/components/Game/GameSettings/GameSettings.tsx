@@ -5,12 +5,11 @@ import { postEvent } from '@tma.js/sdk';
 import { FC, useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { userId } from '../../../api/requestData';
-import useTelegram from '../../../hooks/useTelegram';
 import { useAppSelector } from '../../../services/reduxHooks';
 import { WebSocketContext } from '../../../socket/WebSocketContext';
 import { formatNumber } from '../../../utils/additionalFunctions';
 import { IGameSettingsData } from '../../../utils/types/gameTypes';
+import { getUserId } from '../../../utils/userConfig';
 import { Modal } from '../../Modal/Modal';
 import Button from '../../ui/Button/Button';
 import JoinRoomPopup from '../JoinRoomPopup/JoinRoomPopup';
@@ -25,8 +24,7 @@ interface IProps {
 
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
-  const { user } = useTelegram();
-  // const userId = user?.id;
+  const userId = getUserId();
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
   const [message, setMessage] = useState('');
@@ -41,7 +39,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const userInfo = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages } = useContext(WebSocketContext)!;
   const parsedMessages = wsMessages?.map(msg => JSON.parse(msg));
-  console.log(data);
+
   useEffect(() => {
     if (parsedMessages?.length > 0) {
       const lastMessage = parsedMessages[wsMessages?.length - 1]?.message;

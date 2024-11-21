@@ -1,6 +1,3 @@
-// eslint-disable-next-line max-len
-// export const userId = 172359056;
-export const userId = 5858080651;
 const BASE_URL = 'https://gamebottggw.ngrok.app/';
 // uri
 export const mainAppDataUri = `get_start_info?user_id=`;

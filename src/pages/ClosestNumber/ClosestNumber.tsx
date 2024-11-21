@@ -7,9 +7,10 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
+import { getUserId } from "utils/userConfig";
+
 import { setGameRulesWatched } from "../../api/gameApi";
 import { getActiveEmojiPack, getAppData } from "../../api/mainApi";
-import { userId } from "../../api/requestData";
 import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
 import RenderComponent from "../../components/ClosestNumber/WhoCloserPlayers/WhoCloserPlayers";
 import Rules from "../../components/Game/Rules/Rules";
@@ -41,7 +42,7 @@ export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
   const { tg, user } = useTelegram();
   const location = useLocation();
-  // const userId = user?.id;
+  const userId = getUserId();
   const dispatch = useAppDispatch();
   const { roomId } = useParams<{ roomId: string }>();
   const [data, setData] = useState<any>(null);

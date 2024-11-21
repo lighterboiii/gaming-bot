@@ -3,8 +3,10 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { getUserId } from "utils/userConfig";
+
 import { getReferralsData, transferCoinsToBalanceReq } from "../../../api/mainApi";
-import { inviteLink, userId } from "../../../api/requestData";
+import { inviteLink } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
 import { setCoinsNewValue } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
@@ -18,7 +20,7 @@ import styles from './Friends.module.scss';
 const Friends: FC = () => {
   const { user, tg } = useTelegram();
   const dispatch = useAppDispatch();
-  // const userId = user?.id;
+  const userId = getUserId();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
