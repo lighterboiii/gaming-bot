@@ -45,8 +45,6 @@ export const RockPaperScissors: FC = () => {
   const { tg } = useTelegram();
   const location = useLocation();
   const userId = getUserId();
-  const hasHandledWin = useRef(false);
-  const hasNavigated = useRef(false);
   const { roomId } = useParams<{ roomId: string | any }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<IGameData | null>(null);

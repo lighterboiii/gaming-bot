@@ -3,16 +3,15 @@ import { getReq, postReq, putReq } from "./api";
 import {
   addPlayerUri,
   createRoomUri,
-  emotionIdParamString,
-  getEmojiPhUri,
+  // emotionIdParamString,
+  // getEmojiPhUri,
   getGamesUri,
   getRoomsUri,
   kickPlayerUri,
-  packIdParamString,
+  // packIdParamString,
   pollingUri,
   roomIdParamString,
-  useEnergyDrinkUri,
-  whoIsWinUri
+  useEnergyDrinkUri
 } from "./requestData";
 
 // получить все комнаты
@@ -50,20 +49,13 @@ export const leaveRoomRequest = (userIdValue: number) => {
     userId: userIdValue,
   })
 };
-// запрос на отправку определения победителя
-export const whoIsWinRequest = (roomId: string) => {
-  return getReq({
-    uri: whoIsWinUri,
-    endpoint: `${roomIdParamString}${roomId}`,
-  })
-};
-// получить активный пак эмодзи пользователя
-export const getEmojiRequest = (packId: string, emojiId: string) => {
-  return getReq({
-    uri: getEmojiPhUri,
-    endpoint: `${packIdParamString}${packId}${emotionIdParamString}${emojiId}`,
-  })
-};
+// // получить активный пак эмодзи пользователя
+// export const getEmojiRequest = (packId: string, emojiId: string) => {
+//   return getReq({
+//     uri: getEmojiPhUri,
+//     endpoint: `${packIdParamString}${packId}${emotionIdParamString}${emojiId}`,
+//   })
+// };
 // запрос на получение данных внутри игры
 export const getPollingRequest = (userIdValue: number, data: any) => {
   return postReq({

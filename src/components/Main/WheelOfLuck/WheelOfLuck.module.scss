@@ -15,11 +15,45 @@
   }
 }
 
+@keyframes wheelSpin {
+  0% {
+    transform: translateX(0) perspective(1000px) rotateY(0deg);
+  }
+  25% {
+    transform: translateX(-100%) perspective(1000px) rotateY(-180deg);
+  }
+  50% {
+    transform: translateX(-200%) perspective(1000px) rotateY(-360deg);
+  }
+  75% {
+    transform: translateX(-100%) perspective(1000px) rotateY(-540deg);
+  }
+  100% {
+    transform: translateX(0) perspective(1000px) rotateY(-720deg);
+  }
+}
+
+@keyframes prizeReveal {
+  0% {
+    transform: scale(0.8) rotateY(90deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotateY(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotateY(0deg);
+    opacity: 1;
+  }
+}
+
 .wheel {
   @include children-layout();
   gap: 0;
   justify-content: flex-start;
   margin-top: 12px;
+  transition: all 0.3s ease;
 
   @media screen and (max-height: 589px) {
     gap: 10px;
@@ -29,9 +63,10 @@
     @include indents();
     font-weight: 700;
     color: $main-color;
-    font-size: 28px;
+    font-size: clamp(24px, 5vw, 28px);
     text-align: center;
     font-style: italic;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   &__blackContainer {
@@ -79,27 +114,77 @@
 
   &__item {
     position: relative;
-    @include size(92px, auto);
-    @include min-size(unset, 100%);
+    @include size(92px, 100%);
     @include flex(column, center, center, 10px);
     color: $black-color;
     border-radius: $radius-15;
+    transition: transform 0.3s ease;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 
     &:nth-child(odd) {
-      background-color: #FBD94E;
+      background: linear-gradient(135deg, #FBD94E, #FFE17B);
+      transform: translateZ(20px);
     }
 
     &:nth-child(even) {
-      background-color: #FFFFFF;
+      background: linear-gradient(135deg, #FFFFFF, #F5F5F5);
+      transform: translateZ(-20px);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: $radius-15;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &.spinning::after {
+      opacity: 1;
+    }
+
+    &:hover {
+      transform: scale(1.02);
     }
   }
 
   &__specialItem {
-    border: 8px #D61846 solid;
+    border: 8px solid $secondary-color;
+    animation: prizeReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+              pulse 1.5s infinite 0.8s;
+    transform-origin: center center;
+    box-shadow: 0 0 30px rgba($secondary-color, 0.5);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border-radius: $radius-15;
+      background: radial-gradient(circle at center, 
+        rgba($secondary-color, 0.2) 0%,
+        transparent 70%);
+      z-index: -1;
+      animation: glow 1.5s infinite alternate;
+    }
   }
 
   &__itemImg {
     @include size(66px, 66px);
+    object-fit: contain;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 
   &__itemText {
@@ -109,6 +194,7 @@
     transform: translate(-50%, -50%);
     font-size: 12px;
     font-weight: 700;
+    text-align: center;
     text-wrap: wrap;
     line-height: 1;
 
@@ -126,6 +212,7 @@
     @include size(100%, 40px);
     @include max-size(312px, auto);
     z-index: 5;
+    transition: all 0.3s ease;
 
     @media screen and (max-height: 691px) {
       @include size(100%, 32px);
@@ -136,10 +223,16 @@
   &__spinner {
     @include flex(row, center, center, 10px);
     @include size(100%, 75%);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    
+    &.spinning {
+      animation: wheelSpin 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    }
   }
 
   &__spin {
-    animation: spin 5s infinite linear;
+    animation: spin 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
   &__pointer {
@@ -147,6 +240,7 @@
     @include position(absolute, $top: -18%, $left: 50%);
     transform: translate(-50%);
     z-index: 7;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 
     @media screen and (max-width: 379px) {
       @include size(52px, 68px);
@@ -164,62 +258,80 @@
     @include size(20px, 20px);
     position: absolute;
     transform: translate(-50%);
+    transition: opacity 0.3s ease;
+    animation: flicker 2s infinite alternate;
 
-    &.light1 {
-      top: 8px;
-      left: 10%;
-    }
-
-    &.light2 {
-      top: -10px;
-      left: 30%;
-      width: 55px;
-      height: 55px;
-    }
-
-    &.light3 {
-      top: -10px;
-      left: 70%;
-      width: 55px;
-      height: 55px;
-    }
-
-    &.light4 {
-      top: 8px;
-      left: 90%;
-    }
-
-    &.light5 {
-      bottom: 8px;
-      left: 10%;
-    }
-
-    &.light6 {
-      bottom: -10px;
-      left: 30%;
-      width: 55px;
-      height: 55px;
-    }
-
-    &.light7 {
-      bottom: 8px;
-      left: 50%;
-    }
-
-    &.light8 {
-      bottom: -10px;
-      left: 70%;
-      width: 55px;
-      height: 55px;
-    }
-
-    &.light9 {
-      bottom: 8px;
-      left: 90%;
+    @for $i from 1 through 9 {
+      &.light#{$i} {
+        @if $i == 1 {
+          top: 8px;
+          left: 10%;
+        } @else if $i == 2 {
+          top: -10px;
+          left: 30%;
+          width: 55px;
+          height: 55px;
+        } @else if $i == 3 {
+          top: -10px;
+          left: 70%;
+          width: 55px;
+          height: 55px;
+        } @else if $i == 4 {
+          top: 8px;
+          left: 90%;
+        } @else if $i == 5 {
+          bottom: 8px;
+          left: 10%;
+        } @else if $i == 6 {
+          bottom: -10px;
+          left: 30%;
+          width: 55px;
+          height: 55px;
+        } @else if $i == 7 {
+          bottom: 8px;
+          left: 50%;
+        } @else if $i == 8 {
+          bottom: -10px;
+          left: 70%;
+          width: 55px;
+          height: 55px;
+        } @else if $i == 9 {
+          bottom: 8px;
+          left: 90%;
+        }
+      }
     }
   }
 }
 
 @keyframes spin {
   @include spin();
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1) translateZ(0);
+  }
+  50% {
+    transform: scale(1.05) translateZ(30px);
+  }
+  100% {
+    transform: scale(1) translateZ(0);
+  }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes glow {
+  from {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }

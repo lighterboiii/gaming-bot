@@ -57,11 +57,16 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
         const response = res as ISpinWheelResponse;
         if (response?.message === 'ok') {
           dispatch(setTokensValueAfterBuy(100));
-          // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
           setSpinning(true);
           setPrize(false);
+          
+          if (spinnerRef.current) {
+            spinnerRef.current.classList.add('spinning');
+          }
+
           const allItems = [...data.fortune_all_items];
           setVisibleItems(allItems);
+          
           const spinInterval = setInterval(() => {
             const firstItem = allItems.shift();
             if (firstItem) {
@@ -72,6 +77,10 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
 
           setTimeout(() => {
             clearInterval(spinInterval);
+            if (spinnerRef.current) {
+              spinnerRef.current.classList.remove('spinning');
+            }
+            
             const prizeItem = data.fortune_prize_info[0] || null;
             const randomIndex = getRandomIndex(allItems.length);
             allItems.splice(randomIndex, 1);
@@ -80,10 +89,11 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             }
 
             setVisibleItems(allItems.slice(0, 4));
+            
             setTimeout(() => {
               setSpinning(false);
               setPrize(true);
-            }, 1000);
+            }, 300);
           }, 5000);
         } else if (response?.message === 'notokens') {
           setMessageShown(true);
@@ -98,7 +108,6 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
       .then((res) => {
         const response = res as IGetPrizeResponse;
         if (response?.message === "ok") {
-          // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
           if (prizeItem.fortune_type === 'tokens') {
             dispatch(addTokens(prizeItem.fortune_item_count));
           }
