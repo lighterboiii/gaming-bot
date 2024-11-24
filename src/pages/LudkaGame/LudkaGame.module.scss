@@ -1,13 +1,36 @@
-@use '../../stylesheets/mixins' as *;
-@use '../../stylesheets/variables' as *;
+@use "../../stylesheets/mixins" as *;
+@use "../../stylesheets/variables" as *;
 
 .game {
-  @include indents(40px 16px, 0);
   @include size(100%, 100vh);
-  @include flex(column, space-between, center);
   @include position(relative);
-  background-color: #FFF;
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
+
+  &::before {
+    content: "";
+    @include position(fixed, $top: 0, $left: 0, $right: 0, $bottom: 0);
+    z-index: 1;
+    background: linear-gradient(
+      to bottom,
+      #4caf50 0%,
+      #4caf50 35%,
+      #2e5e32 45%,
+      #000000 65vh,
+      #000000 100vh
+    );
+  }
+
+  &__roomCounter {
+    @include position(fixed, $top: 16px, $left: 16px);
+  }
+
+  &__content {
+    @include flex(column, space-between, center);
+    @include position(relative);
+    @include size(100%, 100%);
+    z-index: 2;
+    @include indents(32px 16px, 0);
+  }
 
   p {
     @include indents();
@@ -15,60 +38,111 @@
   }
 
   &__mainContainer {
-    @include indents(12px, 0);
-    @include size(100%, auto);
-    @include flex(column, space-between, center);
-    background-color: rgba($color: #e2e2e2, $alpha: .7);
-    border-radius: $radius-20;
-    aspect-ratio: 1;
-  }
-
-  &__currentBetHeading {
     @include indents();
-  }
-
-  &__currentBet {
-    font-size: 32px;
+    @include size(100%, 100%);
+    @include flex(column, flex-end, center, 32px);
   }
 
   &__avatarContainer {
-    @include size(120px, 120px);
+    @include size(112px, 112px);
   }
 
   &__userContainer {
-    @include flex(row, space-between, center);
-  }
-
-  &__useNameContainer {
-    @include flex(column, center, center, 4px);
-  }
-
-  &__currentBet {
-    @include flex(row, center, center, 6px);
-  }
-
-  &__buttonContainer {
     @include size(100%, auto);
-    @include flex(row, center, center, 10px);
+    @include flex(row, flex-start, center);
+    background: linear-gradient(
+      to bottom,
+      #fff9b0 0%,
+      #ffffff 100%
+    );
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  &__balanceContainer {
-    @include indents(2px 18px, 0);
-    @include flex(column, center, center);
-    border-radius: 40px;
-    background-color: #e2e2e2;
+  &__betContainer, &__info {
+    background-color: #323232;
+    border-radius: 12px;
+    @include indents(12px, 0);
+  }
+
+  &__userNameContainer {
+    @include size(auto, auto);
+    @include flex(column, center, flex-start, 4px);
   }
 
   &__betContainer {
-    @include indents(2px 18px, 0);
-    @include flex(column, center, center);
-    border-radius: 40px;
-    background-color: $closest-color;
+    @include size(100%, auto);
+    @include flex(column, center, center, 12px);
   }
 
-  &__mainButton {
-    @include min-size(120px, 120px);
-    border-radius: $radius-round;
+  &__infoContainer {
+    @include size(100%, auto);
+    @include flex(column, center, center, 12px);
+  }
+
+  &__infoInnerContainer {
+    @include size(100%, auto);
+    @include flex(row, space-between, center, 12px);
+  }
+  &__info {
+    @include size(100%, 100%);
+    @include flex(column, center, center);
+  }
+
+  &__text {
+    font-size: 14px;
+    color: #626262;
+  }
+
+  &__bet, &__money {
+    color: $closest-color;
+    text-align: center;
+  }
+
+  &__money {
+    @include flex(row, center, center, 4px);
+    font-size: 18px;
+  }
+
+  &__moneyBetIcon {
+    @include size(24px, 24px);
+  }
+
+  &__moneyIcon {
+    @include size(16px, 16px);
+  }
+
+  &__bet {
+    @include flex(row, center, center, 4px);
+    font-size: 24px;
+  }
+
+  &__buttonsContainer {
+    @include size(100%, auto);
+    @include min-size(100%, 84px);
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 12px;
+  }
+
+  &__actionButton, &__logButton {
+    @include button-style-reset();
+  }
+  &__actionButton {
+    @include size(100%, 100%);
+    background: linear-gradient(90deg, #FFDA0A 0%, #FF9B00 100%);
+    border-radius: 12px;
+  }
+
+  &__logButton {
+    @include size(100%, 100%);
+    background-color: #058D32;
+    border-radius: 12px;
     aspect-ratio: 1;
+  }
+
+  &__actionButtonText {
+    font-size: 18px;
+    text-transform: uppercase;
   }
 }
