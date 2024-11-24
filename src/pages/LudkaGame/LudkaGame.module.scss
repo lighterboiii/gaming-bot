@@ -22,7 +22,7 @@
   }
 
   &__roomCounter {
-    @include position(fixed, $top: 16px, $left: 16px);
+    @include position(fixed, $top: $space-16, $left: $space-16);
   }
 
   &__head {
@@ -56,10 +56,10 @@
     @include position(relative);
     @include size(100%, 100vh);
     z-index: 4;
-    @include indents(16px 16px, 0);
+    @include indents($space-16 $space-16, 0);
 
     @media screen and (min-height: 720px) {
-      @include indents(32px 16px, 0);
+      @include indents(32px $space-16, 0);
      }
   }
 
@@ -71,7 +71,7 @@
   &__mainContainer {
     @include indents();
     @include size(100%, 70vh);
-    @include flex(column, flex-end, center, 32px);
+    @include flex(column, flex-end, center, $space-12);
     z-index: 5;
     overflow: visible;
   }
@@ -89,34 +89,34 @@
       #ffffff 100%
     );
     border-radius: $radius-15;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 14px 6px rgba(0, 0, 0, 0.1);
   }
 
   &__betContainer, &__info, &__keysButton {
     background-color: #323232;
     border-radius: $radius-15;
-    @include indents(12px, 0);
+    @include indents($space-12, 0);
     z-index: 7;
   }
 
   &__userNameContainer {
     @include size(auto, auto);
-    @include flex(column, center, flex-start, 4px);
+    @include flex(column, center, flex-start, $space-4);
   }
 
   &__betContainer {
     @include size(100%, auto);
-    @include flex(column, center, center, 12px);
+    @include flex(column, center, center, $space-12);
   }
 
   &__infoContainer {
     @include size(100%, auto);
-    @include flex(column, center, center, 18px);
+    @include flex(column, center, center, $space-18);
   }
 
   &__infoInnerContainer {
     @include size(100%, auto);
-    @include flex(row, space-between, center, 18px);
+    @include flex(row, space-between, center, $space-18);
   }
 
   &__info {
@@ -141,7 +141,7 @@
   }
 
   &__money {
-    @include flex(row, center, center, 4px);
+    @include flex(row, center, center, 14px);
     font-size: 18px;
   }
 
@@ -150,11 +150,11 @@
   }
 
   &__moneyIcon {
-    @include size(16px, 16px);
+    @include size($space-16, $space-16);
   }
 
   &__bet {
-    @include flex(row, center, center, 4px);
+    @include flex(row, center, center, $space-4);
     font-size: 32px;
   }
 
@@ -163,7 +163,7 @@
     @include min-size(100%, 84px);
     display: grid;
     grid-template-columns: 3fr 1fr;
-    gap: 12px;
+    gap: $space-12;
   }
 
   &__actionButton, &__logButton {

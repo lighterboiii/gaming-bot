@@ -4,11 +4,11 @@
 .create {
   @include size(100%, 100vh);
   min-height: calc(100vh + 1px);
-  @include indents(0 16px 16px, 0);
+  @include indents(0 $space-16 $space-16, 0);
   @include flex(column, flex-start, center);
 
   &__header {
-    @include indents(0 16px, 0);
+    @include indents(0 $space-16, 0);
     @include size(100%, 25vh);
     @include flex(column, center, center);
     background-color: $secondary-color;
@@ -16,7 +16,7 @@
 
   &__content {
     @include size(100%, auto);
-    @include flex(column, space-between, flex-end, 16px);
+    @include flex(column, space-between, flex-end, $space-16);
     overflow: visible;
   }
 
@@ -39,25 +39,25 @@
 
   &__bets {
     @include size(100%, 100%);
-    @include flex(column, center, flex-start, 16px);
+    @include flex(column, center, flex-start, $space-16);
   }
 
   &__buttons {
-    @include indents(0, 0 0 40px 0);
+    @include indents(0, 0 0 $space-40 0);
     @include size(100%, auto);
-    @include flex(row, space-between, center, 8px);
+    @include flex(row, space-between, center, $space-8);
   }
 
   &__label {
-    @include indents(12px 24px, 0);
+    @include indents($space-12 24px, 0);
     @include size(100%, auto);
-    @include flex(row, space-between, center, 8px);
+    @include flex(row, space-between, center, $space-8);
     border: 1px $main-color solid;
     border-radius: $radius-12;
   }
 
   &__input {
-    @include indents(8px, 0);
+    @include indents($space-8, 0);
     @include size(90px, 40px);
     border: none;
     border-radius: $radius-12;

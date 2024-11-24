@@ -1,8 +1,9 @@
 @use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
 
 .rooms {
   @include flex(column, center, center);
-  @include indents(10px, 0);
+  @include indents($space-10, 0);
   @include size(100%, 100vh);
 
   &__content {

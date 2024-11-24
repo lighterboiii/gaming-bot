@@ -8,20 +8,20 @@
   border-radius: $radius-10;
   color: $main-color;
   font-weight: 900;
-  font-size: 12px;
+  font-size: $space-12;
   box-sizing: border-box;
 }
 
 .shop {
   @include position(relative);
-  @include indents(0 16px 16px, 0);
+  @include indents(0 $space-16 $space-16, 0);
   @include size(100%, 100%);
   min-height: calc(100vh + 1px);
-  @include flex(column, flex-start, center, 16px);
+  @include flex(column, flex-start, center, $space-16);
 
   &__header {
     @include size(100%, 30vh);
-    @include flex(column, space-evenly, center, 8px);
+    @include flex(column, space-evenly, center, $space-8);
 
     @media screen and (max-height: 690px) {
       @include size(100%, 35vh);
@@ -29,7 +29,7 @@
   }
 
   &__content {
-    @include flex(column, center, center, 16px);
+    @include flex(column, center, center, $space-16);
     @include size(100%, 100%);
   }
 
@@ -44,7 +44,7 @@
     @include flex(row-reverse, space-between, center);
 
     @media screen and (max-width: 379px) {
-      gap: 6px;
+      gap: $space-6;
     }
   }
 
@@ -52,7 +52,7 @@
     @include indents();
     @include size(100%, 55vh);
     display: grid;
-    gap: 16px;
+    gap: $space-16;
     grid-template-columns: repeat(3, 1fr);
     align-content: start;
     justify-items: center;
@@ -64,7 +64,7 @@
   }
 
   &__leftButtonsContainer {
-    @include flex(column, center, flex-start, 4px);
+    @include flex(column, center, flex-start, $space-4);
   }
 
   &__button {

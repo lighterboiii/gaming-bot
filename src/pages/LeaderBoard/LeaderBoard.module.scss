@@ -16,7 +16,7 @@
 .leaderBoard {
   @include min-size(100%, calc(100vh + 1px));
   @include flex(column, space-between, center);
-  @include indents(16px 0 0 0, 0);
+  @include indents($space-16 0 0 0, 0);
   background-color: $secondary-color;
   z-index: 3;
 
@@ -47,7 +47,7 @@
   &__leaderInfo {
     @include position(absolute, $left: 55%, $top: 70%);
     @include size(70%, auto);
-    @include flex(column, center, center, 4px);
+    @include flex(column, center, center, $space-4);
     align-self: center;
     transform: translate(-50%, -50%);
   }
@@ -67,9 +67,9 @@
 
   &__timeWrapper {
     @include size(auto, auto);
-    @include flex(column, space-between, flex-end, 4px);
+    @include flex(column, space-between, flex-end, $space-4);
     @include position(absolute, $right: 7%, $bottom: 106px);
-    padding: 12px;
+    padding: $space-12;
     background: rgba($black-color, 0.2);
     backdrop-filter: blur(4px);
     border-radius: $radius-12;

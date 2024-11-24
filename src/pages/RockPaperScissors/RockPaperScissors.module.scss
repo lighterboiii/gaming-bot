@@ -4,7 +4,7 @@
 .game {
   @include size(100%, 100vh);
   @include position(relative);
-  @include flex(column, flex-start, center, 10px);
+  @include flex(column, flex-start, center, $space-10);
   font-family: 'Gilroy', sans-serif;
   font-weight: 900;
   background-image: url('../../images/rock-paper-scissors/rps-bg.png');
@@ -37,7 +37,7 @@
   &__lowerContainer {
     @include size(100%, auto);
     @include position(absolute, $bottom: 10%, $left: 50%);
-    @include flex(column, center, center, 10px);
+    @include flex(column, center, center, $space-10);
     transform: translate(-50%);
   }
 
@@ -49,7 +49,7 @@
   &__text {
     @include indents();
     color: $main-color;
-    font-size: 16px;
+    font-size: $space-16;
 
     @media screen and (min-height: 691px) {
       font-weight: 900;
@@ -59,13 +59,13 @@
   }
 
   &__betContainer {
-    @include flex(column, center, center, 10px);
+    @include flex(column, center, center, $space-10);
   }
 
   &__bet {
     @include size(auto, auto);
-    @include indents(6px 16px, 0);
-    @include flex(row, center, center, 10px);
+    @include indents($space-6 $space-16, 0);
+    @include flex(row, center, center, $space-10);
     background-color: $rps-background-color;
     color: $main-color;
     border-radius: $radius-40;
@@ -98,11 +98,11 @@
   }
 
   &__emojiButton {
-    @include position(absolute, $bottom: 8%, $right: 16px);
+    @include position(absolute, $bottom: 8%, $right: $space-16);
 
     @media screen and (max-width: 379px) {
       bottom: 5%;
-      right: 10px;
+      right: $space-10;
     }
   }
 
@@ -137,7 +137,7 @@
   }
 
   &__readyWrapper {
-    border-radius: 40px;
+    border-radius: $space-40;
   }
 
   &__readyWrapper:focus,
@@ -155,7 +155,7 @@
     background-image: url('../../images/rock-paper-scissors/ready_image.png');
     @include size(180px, 68px);
     @include position(relative);
-    @include flex(row, center, center, 6px);
+    @include flex(row, center, center, $space-6);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;

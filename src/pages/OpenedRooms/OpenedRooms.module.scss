@@ -2,7 +2,7 @@
 @use '../../stylesheets/variables' as *;
 
 .rooms {
-  @include indents(16px 16px, 0);
+  @include indents($space-16 $space-16, 0);
   @include size(100%, 100%);
   min-height: calc(100vh + 1px);
   @include flex(column, flex-start, center);
@@ -16,7 +16,7 @@
 
   &__buttons {
     @include size(100%, auto);
-    @include flex(row, space-between, center, 16px);
+    @include flex(row, space-between, center, $space-16);
     border: none;
     border-radius: $radius-40;
   }
@@ -29,14 +29,10 @@
     @include position(absolute, $bottom: 25%, $left: 50%);
     @include size(100%, auto);
     transform: translate(-50%, -50%);
-
-    // @media screen and (min-height: 660px) {
-    //   bottom: 25%;
-    // }
   }
 
   &__notify {
-    @include indents(0, 0 0 16px 0);
+    @include indents(0, 0 0 $space-16 0);
     @include flex(row, center, center, 6px);
     color: $main-color;
     text-align: center;
@@ -44,14 +40,14 @@
     font-weight: 200;
     
     @media screen and (max-width: 379px) {
-      font-size: 12px;
+      font-size: $space-12;
     }
   }
 
   &__button {
     @include button-style-reset();
     @include size(100%, 40px);
-    @include indents(6px 12px, 0);
+    @include indents($space-6 $space-12, 0);
     @include flex(column, space-between, center);
     background-color: $black-color;
     border-radius: $radius-40;
@@ -76,7 +72,7 @@
 
   &__content {
     @include size(100%, 20vh);
-    @include flex(column, flex-start, center, 20px);
+    @include flex(column, flex-start, center, $space-20);
 
     @media screen and (max-height: 690px) {
       @include size(100%, 25vh);
@@ -86,7 +82,7 @@
   &__roomList {
     @include position(relative);
     @include size(100%, calc(68vh - 136px));
-    @include flex(column, flex-start, center, 8px);
+    @include flex(column, flex-start, center, $space-8);
     overflow-y: scroll;
     border-radius: $radius-10;
 

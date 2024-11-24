@@ -16,7 +16,7 @@
   &__text {
     @include indents();
     color: $main-color;
-    font-size: 16px;
+    font-size: $space-16;
     font-weight: 700;
 
     @media screen and (min-height: 691px) {
@@ -33,8 +33,8 @@
 
   &__bet {
     @include min-size(124px, 28px);
-    @include indents(4px 16px, 0);
-    @include flex(row, center, center, 4px);
+    @include indents($space-4 $space-16, 0);
+    @include flex(row, center, center, $space-4);
     background-color: $closest-secondary-color;
     color: $main-color;
     border-radius: $radius-40;
@@ -49,7 +49,7 @@
     @include size(100%, auto);
     @include position(absolute, $left: 50%, $top: 45%);
     transform: translate(-50%, -50%);
-    @include flex(row, center, center, 10px);
+    @include flex(row, center, center, $space-10);
     overflow: visible;
 
     @media screen and (max-height: 691px) {
@@ -98,28 +98,27 @@
 }
 
 .overlay {
-  @include indents(16px, 0);
-  @include size(100%, unset);
+  @include indents($space-16, 0);
+  @include size(100%, 20vh);
   @include min-size(100%, 146px);
   @include position(absolute, $bottom: 0, $left: 50%);
-  @include flex(column, flex-start, center, 16px);
+  @include flex(column, flex-start, center, $space-16);
   transform: translate(-50%);
   background-color: $closest-secondary-color;
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
-  height: 20vh;
   transition: height 1s ease-in-out;
   box-sizing: border-box;
   box-shadow: inset 0 5px 0 0 rgba(0, 0, 0, 0.2);
 
   @media screen and (max-height: 600px) {
-    gap: 6px;
+    gap: $space-6;
     justify-content: center;
   }
 
   &__inputWrapper {
     @include size(100%, auto);
-    @include flex(row, space-between, flex-start, 4px);
+    @include flex(row, space-between, flex-start, $space-4);
   }
 
   &__avatarWrapper {
@@ -134,7 +133,7 @@
 
   &__name {
     @include ellipsis();
-    @include indents(2px 8px, 0);
+    @include indents(2px $space-8, 0);
     @include size(100%, auto);
     @include position(absolute, $bottom: 0, $left: 50%);
     transform: translate(-50%);
@@ -149,12 +148,12 @@
   &__inputContainer {
     @include size(auto, auto);
     @include position(relative);
-    @include flex(column, center, center, 6px);
+    @include flex(column, center, center, $space-6);
   }
 
   &__input {
     @include size(95%, 38px);
-    @include indents(10px, 0);
+    @include indents($space-10, 0);
     font-family: "Rubik", sans-serif;
     border: none;
     border-radius: $radius-40;
@@ -168,7 +167,7 @@
     text-align: center;
 
     @media screen and (max-width: 379px) {
-      @include indents(6px, 0);
+      @include indents($space-6, 0);
       height: 32px;
       font-size: 14px;
     }
@@ -191,12 +190,12 @@
     @include flex(row, center, center);
     background-color: rgba(0, 0, 0, 0.2);
     @include size(95%, 38px);
-    @include indents(10px, 0);
+    @include indents($space-10, 0);
     text-align: center;
     border-radius: $radius-40;
 
     @media screen and (max-width: 379px) {
-      @include indents(6px, 0);
+      @include indents($space-6, 0);
       height: 32px;
     }
   }
@@ -228,7 +227,7 @@
     @include size(100%, auto);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: $space-18;
     align-content: center;
     flex-grow: 1;
   }
@@ -244,7 +243,7 @@
     background-color: #FFE591;
     color: $black-color;
     border: none;
-    border-radius: 8px;
+    border-radius: $radius-8;
     font-weight: 900;
     font-size: 26px;
     cursor: pointer;
@@ -297,7 +296,7 @@
   }
 
   &__emojis {
-    @include indents(4px 10px, 0);
+    @include indents($space-4 $space-10, 0);
     @include size(100%, 100%);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -334,7 +333,7 @@
       bottom: -8px;
       left: 0;
       transform: translateX(-50%);
-      border-width: 12px 6px 0;
+      border-width: $space-12 $space-6 0;
       border-style: solid;
       border-color: $main-color transparent;
       display: block;
