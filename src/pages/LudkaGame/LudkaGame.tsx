@@ -3,20 +3,19 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useContext, useEffect, useRef, useState } from "react";
-import React from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-import useOrientation from "hooks/useOrientation";
-import useTelegram from "hooks/useTelegram";
-import LogIcon from "icons/LogButtonIcon/LogIcon";
-import { useAppDispatch, useAppSelector } from "services/reduxHooks";
-import { WebSocketContext } from "socket/WebSocketContext";
-import { formatNumber } from "utils/additionalFunctions";
-
+import { Overlay } from "../../components/LudkaGame/Overlay/LudkaOverlay";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import useOrientation from "../../hooks/useOrientation";
+import useTelegram from "../../hooks/useTelegram";
+import LogIcon from "../../icons/LogButtonIcon/LogIcon";
 import coinIcon from '../../images/coinIcon.png';
-import { tokenCurr } from "../../utils/constants";
+import { setCoinsNewValue, setNewTokensValue } from "../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { WebSocketContext } from "../../socket/WebSocketContext";
+import { formatNumber } from "../../utils/additionalFunctions";
 import { indexUrl } from "../../utils/routes";
 import { getUserId } from "../../utils/userConfig";
 
@@ -27,10 +26,8 @@ const LudkaGame: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const userId = getUserId();
   const { roomId } = useParams<{ roomId: string }>();
-  const { wsMessages, sendMessage, disconnect, clearMessages } = useContext(WebSocketContext)!;
-  // const location = useLocation();
+  const { wsMessages, sendMessage, clearMessages } = useContext(WebSocketContext)!;
   const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
   const userData = useAppSelector(store => store.app.info);
   const isPortrait = useOrientation();
   const [data, setData] = useState<any>(null);
@@ -39,6 +36,7 @@ const LudkaGame: FC = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [inputError, setInputError] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   console.log(data)
   useEffect(() => {
     setLoading(true);
@@ -64,6 +62,16 @@ const LudkaGame: FC = () => {
       switch (res?.type) {
         case 'choice':
           setData(res);
+          const currentBalance = data?.bet_type === "1" ? userData?.coins ?? 0 : userData?.tokens ?? 0;
+          const choiceValue = parseFloat(res.choice);
+          const newBalance = currentBalance - choiceValue;
+          
+          if (data?.bet_type === "1") {
+            dispatch(setCoinsNewValue(newBalance));
+          } else {
+            dispatch(setNewTokensValue(newBalance));
+          }
+          
           clearMessages();
           setLoading(false);
           break;
@@ -72,6 +80,7 @@ const LudkaGame: FC = () => {
           break;
         case 'error':
           console.log(res);
+          setData(res?.room_info);
           break;
         case 'emoji':
           setData(res);
@@ -139,15 +148,11 @@ const LudkaGame: FC = () => {
   const handleKeyPress = (key: number) => {
     setInputValue(prev => {
       const newValue = prev + key.toString();
-      
-      // Проверяем формат десятичного числа
       const [wholePart, decimalPart] = newValue.split('.');
-      
-      // Проверяем основные условия
+
       if (newValue.length > 1 && wholePart.startsWith('0') && !newValue.startsWith('0.')) {
         setInputError(true);
       } else if (decimalPart && decimalPart.length > 2) {
-        // Ограничиваем до 2 знаков после точки
         setInputError(true);
         return prev;
       } else {
@@ -213,21 +218,17 @@ const LudkaGame: FC = () => {
     handleCloseOverlay();
   };
 
-  const handleClear = () => {
-    setInputValue('');
-    setInputError(false);
-  };
-
   const handleDecimalPoint = () => {
     setInputValue(prev => {
-      // Если точка уже есть, не добавляем еще одну
       if (prev.includes('.')) return prev;
-      
-      // Если поле пустое, добавляем "0."
       if (prev === '') return '0.';
-      
       return prev + '.';
     });
+  };
+
+  const handleRaiseBet = () => {
+    const nextBet = calculateNextBet();
+    handleChoice(nextBet);
   };
 
   if (!isPortrait) {
@@ -240,13 +241,13 @@ const LudkaGame: FC = () => {
     <div className={styles.game}>
       <div className={styles.game__content}>
         <div className={styles.game__head}>
-          <p>Общий банк:</p>
+          <p className={styles.game__text}>Общий банк:</p>
           <p>{data?.win?.winner_value}</p>
         </div>
         <div className={styles.game__mainContainer}>
           <div className={styles.game__userContainer}>
             <div className={styles.game__avatarContainer}>
-              <UserAvatar />
+              {data?.win?.users === "none" ? <UserAvatar /> : "другой юзер"}
             </div>
             <div className={styles.game__userNameContainer}>
               <p className={styles.game__userName}>
@@ -255,7 +256,7 @@ const LudkaGame: FC = () => {
               <p className={styles.game__money}>
                 +
                 <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
-                <span>25</span>
+                <span>{data?.win?.users === "none" ? 0 : data?.win?.users}</span>
               </p>
             </div>
           </div>
@@ -297,7 +298,10 @@ const LudkaGame: FC = () => {
           </div>
 
           <div className={styles.game__buttonsContainer}>
-            <button className={styles.game__actionButton}>
+            <button 
+              className={styles.game__actionButton}
+              onClick={handleRaiseBet}
+            >
               <span className={styles.game__actionButtonText}>Поднять ставку</span>
             </button>
             <button className={styles.game__logButton}>
@@ -308,62 +312,16 @@ const LudkaGame: FC = () => {
       </div>
 
       {showOverlay && (
-        <div
-          ref={overlayRef}
-          className={`${styles.overlay} ${isVisible ? styles.expanded : ''}`}
-        >
-          <div className={styles.overlay__inputContainer}>
-            <p className={styles.overlay__inputLabel}>
-              Введите сумму ставки
-            </p>
-            <input
-              type="text"
-              className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
-              value={inputValue}
-              placeholder="0"
-              readOnly
-            />
-          </div>
-
-          <div className={styles.overlay__keyboard}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, ['←', '.'], 0, 'Готово'].map((key) => (
-              <React.Fragment key={Array.isArray(key) ? 'split-buttons' : key}>
-                {Array.isArray(key) ? (
-                  <div className={styles.overlay__splitButtons}>
-                    {key.map((subKey) => (
-                      <button
-                        key={subKey}
-                        className={subKey === '.' ? 
-                          styles.overlay__key : 
-                          styles.overlay__bottomLeftButton
-                        }
-                        onClick={() => {
-                          if (subKey === '←') handleDelete();
-                          if (subKey === '.') handleDecimalPoint();
-                        }}
-                      >
-                        {subKey}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <button
-                    className={typeof key === 'number' ?
-                      styles.overlay__key :
-                      styles.overlay__bottomRightButton
-                    }
-                    onClick={() => {
-                      if (typeof key === 'number') handleKeyPress(key);
-                      else handleSubmit();
-                    }}
-                  >
-                    {key}
-                  </button>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
+        <Overlay
+          isVisible={isVisible}
+          inputValue={inputValue}
+          inputError={inputError}
+          onKeyPress={handleKeyPress}
+          onDelete={handleDelete}
+          onDecimalPoint={handleDecimalPoint}
+          onSubmit={handleSubmit}
+          overlayRef={overlayRef}
+        />
       )}
     </div>
   )

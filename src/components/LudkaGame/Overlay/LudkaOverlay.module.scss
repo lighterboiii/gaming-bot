@@ -1,0 +1,102 @@
+@use "../../../stylesheets/mixins" as *;
+@use "../../../stylesheets/variables" as *;
+
+.overlay {
+  @include indents(16px, 0);
+  @include size(100%, unset);
+  @include min-size(100%, 146px);
+  @include position(fixed, $bottom: 0, $left: 50%);
+  @include flex(column, flex-start, center);
+  transform: translate(-50%, 100%);
+  background-color: #323232;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+  height: 50vh;
+  transition: transform 0.3s ease-in-out;
+  z-index: 10;
+
+  &.expanded {
+    transform: translate(-50%, 0);
+  }
+
+  &__keyboard {
+    @include position(relative);
+    @include size(100%, auto);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 16px;
+  }
+
+  &__key {
+    @include size(100%, auto);
+    @include min-size(100%, 46px);
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 26px;
+    cursor: pointer;
+
+    @media screen and (min-height: 691px) {
+      @include min-size(100%, 36px);
+    }
+  }
+
+  &__bottomLeftButton,
+  &__bottomRightButton {
+    @extend .overlay__key;
+    @include flex(row, center, center, 8px);
+    font-size: 1em;
+  }
+
+  &__bottomLeftButton {
+    background: #FF4B4B;
+  }
+
+  &__bottomRightButton {
+    background: #058D32;
+  }
+
+  &__inputContainer {
+    @include size(100%, auto);
+    @include flex(column, center, center, 8px);
+    padding: 0 16px;
+  }
+
+  &__input {
+    @include size(100%, 46px);
+    background-color: #4a4a4a;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-family: "Rubik", sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    text-align: center;
+    padding: 0 16px;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  &__inputLabel {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  &__invalidInput {
+    background-color: #FF4B4B;
+    color: white;
+  }
+
+  &__splitButtons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    width: 100%;
+  }
+} 
