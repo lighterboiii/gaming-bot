@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getUserId } from "utils/userConfig";
 
 import { getLuckInfo } from "../../api/mainApi";
+import music_loop from "../../audio/music_loop.mp3";
 import AdvertisementBanner from '../../components/Main/AdvertisementBanner/AdvertisementBanner';
 import BannerData from "../../components/Main/BannerData/BannerData";
 import DailyBonus from "../../components/Main/Bonus/Bonus";
@@ -43,6 +44,8 @@ export const Main: FC = () => {
   const [showWheelOverlay, setShowWheelOverlay] = useState(false);
   const [luckData, setLuckData] = useState<IFortuneData | null>(null);
   const isPortrait = useOrientation();
+  const [audio] = useState(new Audio(music_loop));
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const handleBannerClick = (bannerData: IBannerData) => {
     setCurrentBanner(bannerData);
@@ -90,6 +93,26 @@ export const Main: FC = () => {
       setShowBonusOverlay(true);
     }
   }, [dailyBonusData]);
+
+  useEffect(() => {
+    audio.loop = true;
+    
+    const playAudio = async () => {
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch (error) {
+        console.error('Audio error:', error);
+      }
+    };
+
+    playAudio();
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [audio]);
 
   if (!isPortrait) {
     return (
