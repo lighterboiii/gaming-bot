@@ -15,8 +15,8 @@
       #4caf50 0%,
       #4caf50 35%,
       #2e5e32 45%,
-      #000000 65vh,
-      #000000 100vh
+      #000000 60%,
+      #000000 100%
     );
   }
 
@@ -55,13 +55,13 @@
       #fff9b0 0%,
       #ffffff 100%
     );
-    border-radius: 12px;
+    border-radius: $radius-15;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   &__betContainer, &__info {
     background-color: #323232;
-    border-radius: 12px;
+    border-radius: $radius-15;
     @include indents(12px, 0);
   }
 
@@ -77,12 +77,12 @@
 
   &__infoContainer {
     @include size(100%, auto);
-    @include flex(column, center, center, 12px);
+    @include flex(column, center, center, 18px);
   }
 
   &__infoInnerContainer {
     @include size(100%, auto);
-    @include flex(row, space-between, center, 12px);
+    @include flex(row, space-between, center, 18px);
   }
   &__info {
     @include size(100%, 100%);
@@ -105,7 +105,7 @@
   }
 
   &__moneyBetIcon {
-    @include size(24px, 24px);
+    @include size(30px, 30px);
   }
 
   &__moneyIcon {
@@ -114,7 +114,7 @@
 
   &__bet {
     @include flex(row, center, center, 4px);
-    font-size: 24px;
+    font-size: 32px;
   }
 
   &__buttonsContainer {
@@ -130,14 +130,14 @@
   }
   &__actionButton {
     @include size(100%, 100%);
-    background: linear-gradient(90deg, #FFDA0A 0%, #FF9B00 100%);
-    border-radius: 12px;
+    background: linear-gradient(to bottom, #FFDA0A 0%, #FF9B00 100%);
+    border-radius: $radius-15;
   }
 
   &__logButton {
     @include size(100%, 100%);
     background-color: #058D32;
-    border-radius: 12px;
+    border-radius: $radius-15;
     aspect-ratio: 1;
   }
 

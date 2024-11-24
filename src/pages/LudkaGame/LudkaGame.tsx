@@ -7,6 +7,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import useOrientation from "hooks/useOrientation";
 import useTelegram from "hooks/useTelegram";
+import LogIcon from "icons/LogButtonIcon/LogIcon";
 import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { WebSocketContext } from "socket/WebSocketContext";
 import { formatNumber } from "utils/additionalFunctions";
@@ -33,7 +34,6 @@ const LudkaGame: FC = () => {
   const isPortrait = useOrientation();
   const [data, setData] = useState<any>(null);
   console.log(data)
-  console.log(userData);
   // tg setter
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -109,7 +109,7 @@ const LudkaGame: FC = () => {
     };
     handleMessage();
   }, [wsMessages]);
-  console.log(userData);
+
   const handleChoice = (choice: string) => {
     sendMessage({
       user_id: userId,
@@ -124,11 +124,11 @@ const LudkaGame: FC = () => {
       <Warning />
     );
   }
-
+  console.log(userData);
   return (
     <div className={styles.game}>
       <p className={styles.game__roomCounter}>
-        {data?.room_counter}
+        {data?.players_count}
       </p>
       <div className={styles.game__content}>
         <div className={styles.game__mainContainer}>
@@ -143,9 +143,7 @@ const LudkaGame: FC = () => {
               <p className={styles.game__money}>
                 +
                 <img src={coinIcon} alt="coin" className={styles.game__moneyIcon} />
-                {data?.bet_type === "1"
-                  ? `${userData?.coins && formatNumber(userData?.coins)}`
-                  : ` ${userData?.tokens && formatNumber(userData?.tokens)}`}
+                25
               </p>
             </div>
           </div>
@@ -154,7 +152,7 @@ const LudkaGame: FC = () => {
               <p className={styles.game__text}>Текущая ставка:</p>
               <p className={styles.game__bet}>
                 <img src={coinIcon} alt="coin" className={styles.game__moneyBetIcon} />
-                25.7
+                {data?.bet}
               </p>
             </div>
             <div className={styles.game__infoInnerContainer}>
@@ -162,11 +160,14 @@ const LudkaGame: FC = () => {
                 <p className={styles.game__text}>Баланс:</p>
                 <p className={styles.game__money}>
                   <img src={coinIcon} alt="coin" className={styles.game__moneyIcon} />
-                  100
+                  {data?.bet_type === "1"
+                    ? `${userData?.coins && formatNumber(userData?.coins)}`
+                    : ` ${userData?.tokens && formatNumber(userData?.tokens)}`
+                  }
                 </p>
               </div>
               <div className={styles.game__info}>
-                <p className={styles.game__text}>Баланс:</p>
+                <p className={styles.game__text}>Поднять на:</p>
                 <p className={styles.game__money}>
                   <img src={coinIcon} alt="coin" className={styles.game__moneyIcon} />
                   100
@@ -179,7 +180,7 @@ const LudkaGame: FC = () => {
               <p className={styles.game__actionButtonText}>Поднять ставку</p>
             </button>
             <button className={styles.game__logButton}>
-              b
+              <LogIcon width={40} height={40} />
             </button>
           </div>
         </div>
