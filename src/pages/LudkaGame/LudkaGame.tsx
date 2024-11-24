@@ -352,6 +352,7 @@ const LudkaGame: FC = () => {
           isVisible={isLogVisible}
           onClose={handleCloseLog}
           overlayRef={logOverlayRef}
+          users={data?.win?.users}
         />
       )}
     </div>

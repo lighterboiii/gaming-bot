@@ -11,7 +11,7 @@
 .logOverlay {
   @include size(100%, auto);
   @include min-size(100%, 70vh); 
-  background-color: #323232;
+  background-color: $black-color;
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
   transform: translateY(100%);
@@ -47,5 +47,40 @@
     overflow-y: auto;
     padding: 16px;
     color: white;
+  }
+
+  &__empty {
+    @include flex(row, center, center);
+    @include size(100%, 100%);
+    color: #626262;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  &__list {
+    @include flex(column, flex-start, stretch, 12px);
+  }
+
+  &__item {
+    @include flex(row, space-between, center);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  &__username {
+    color: white;
+    font-size: 16px;
+    margin: 0;
+  }
+
+  &__bet {
+    @include flex(row, center, center, 8px);
+    color: $closest-color;
+    font-size: 18px;
+  }
+
+  &__icon {
+    @include size(16px, 16px);
   }
 }
