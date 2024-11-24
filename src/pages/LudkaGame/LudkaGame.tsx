@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useContext, useEffect, useRef, useState } from "react";
+import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import useOrientation from "hooks/useOrientation";
@@ -37,6 +38,7 @@ const LudkaGame: FC = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [inputError, setInputError] = useState<boolean>(false);
   console.log(data)
   useEffect(() => {
     setLoading(true);
@@ -96,13 +98,18 @@ const LudkaGame: FC = () => {
     };
     handleMessage();
   }, [wsMessages]);
-  
+
+  const calculateNextBet = () => {
+    return data?.bet ? (Number(data.bet) + 0.5).toString() : '0';
+  };
+
   const handleOpenOverlay = () => {
     setShowOverlay(true);
     setTimeout(() => {
       setIsVisible(true);
     }, 50);
-    setInputValue('');
+    setInputValue(calculateNextBet());
+    setInputError(false);
   };
 
   const handleCloseOverlay = () => {
@@ -130,16 +137,53 @@ const LudkaGame: FC = () => {
   }, [showOverlay]);
 
   const handleKeyPress = (key: number) => {
-    setInputValue(prev => prev + key.toString());
+    setInputValue(prev => {
+      const newValue = prev + key.toString();
+      
+      // Проверяем формат десятичного числа
+      const [wholePart, decimalPart] = newValue.split('.');
+      
+      // Проверяем основные условия
+      if (newValue.length > 1 && wholePart.startsWith('0') && !newValue.startsWith('0.')) {
+        setInputError(true);
+      } else if (decimalPart && decimalPart.length > 2) {
+        // Ограничиваем до 2 знаков после точки
+        setInputError(true);
+        return prev;
+      } else {
+        const numValue = parseFloat(newValue);
+        if (numValue >= 0) {
+          setInputError(false);
+        } else {
+          setInputError(true);
+        }
+      }
+      return newValue;
+    });
   };
 
   const handleDelete = () => {
-    setInputValue(prev => prev.slice(0, -1));
+    setInputValue(prev => {
+      const newValue = prev.slice(0, -1);
+      const numValue = parseInt(newValue, 10);
+
+      if (newValue.startsWith('0')) {
+        setInputError(true);
+      } else if (newValue === '' || (numValue >= 1)) {
+        setInputError(false);
+      } else {
+        setInputError(true);
+      }
+      return newValue;
+    });
   };
 
   const handleSubmit = () => {
-    if (inputValue) {
+    const numValue = parseFloat(inputValue);
+    if (numValue >= 0) {
       handleChoice(inputValue);
+    } else {
+      setInputError(true);
     }
   };
 
@@ -169,6 +213,23 @@ const LudkaGame: FC = () => {
     handleCloseOverlay();
   };
 
+  const handleClear = () => {
+    setInputValue('');
+    setInputError(false);
+  };
+
+  const handleDecimalPoint = () => {
+    setInputValue(prev => {
+      // Если точка уже есть, не добавляем еще одну
+      if (prev.includes('.')) return prev;
+      
+      // Если поле пустое, добавляем "0."
+      if (prev === '') return '0.';
+      
+      return prev + '.';
+    });
+  };
+
   if (!isPortrait) {
     return (
       <Warning />
@@ -178,6 +239,10 @@ const LudkaGame: FC = () => {
   return (
     <div className={styles.game}>
       <div className={styles.game__content}>
+        <div className={styles.game__head}>
+          <p>Общий банк:</p>
+          <p>{data?.win?.winner_value}</p>
+        </div>
         <div className={styles.game__mainContainer}>
           <div className={styles.game__userContainer}>
             <div className={styles.game__avatarContainer}>
@@ -189,7 +254,7 @@ const LudkaGame: FC = () => {
               </p>
               <p className={styles.game__money}>
                 +
-                <img src={coinIcon} alt="монета" className={styles.game__moneyIcon} />
+                <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                 <span>25</span>
               </p>
             </div>
@@ -199,7 +264,7 @@ const LudkaGame: FC = () => {
             <div className={styles.game__betContainer}>
               <p className={styles.game__text}>Текущая ставка:</p>
               <p className={styles.game__bet}>
-                <img src={coinIcon} alt="монета" className={styles.game__moneyBetIcon} />
+                <img src={coinIcon} alt="money" className={styles.game__moneyBetIcon} />
                 <span>{data?.bet}</span>
               </p>
             </div>
@@ -208,7 +273,7 @@ const LudkaGame: FC = () => {
               <div className={styles.game__info}>
                 <p className={styles.game__text}>Баланс:</p>
                 <p className={styles.game__money}>
-                  <img src={coinIcon} alt="монета" className={styles.game__moneyIcon} />
+                  <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                   <span>
                     {data?.bet_type === "1"
                       ? userData?.coins && formatNumber(userData?.coins)
@@ -225,7 +290,7 @@ const LudkaGame: FC = () => {
                 <p className={styles.game__text}>Поднять на:</p>
                 <p className={styles.game__money}>
                   <img src={coinIcon} alt="монета" className={styles.game__moneyIcon} />
-                  <span>100</span>
+                  <span>{calculateNextBet()}</span>
                 </p>
               </button>
             </div>
@@ -243,7 +308,7 @@ const LudkaGame: FC = () => {
       </div>
 
       {showOverlay && (
-        <div 
+        <div
           ref={overlayRef}
           className={`${styles.overlay} ${isVisible ? styles.expanded : ''}`}
         >
@@ -253,7 +318,7 @@ const LudkaGame: FC = () => {
             </p>
             <input
               type="text"
-              className={styles.overlay__input}
+              className={`${styles.overlay__input} ${inputError ? styles.overlay__invalidInput : ''}`}
               value={inputValue}
               placeholder="0"
               readOnly
@@ -261,21 +326,41 @@ const LudkaGame: FC = () => {
           </div>
 
           <div className={styles.overlay__keyboard}>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 'Удалить', 0, 'Готово'].map((key) => (
-              <button
-                key={key}
-                className={typeof key === 'number' ? 
-                  styles.overlay__key : 
-                  key === 'Удалить' ? styles.overlay__bottomLeftButton : styles.overlay__bottomRightButton
-                }
-                onClick={() => {
-                  if (typeof key === 'number') handleKeyPress(key);
-                  else if (key === 'Удалить') handleDelete();
-                  else handleSubmit();
-                }}
-              >
-                {key}
-              </button>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, ['←', '.'], 0, 'Готово'].map((key) => (
+              <React.Fragment key={Array.isArray(key) ? 'split-buttons' : key}>
+                {Array.isArray(key) ? (
+                  <div className={styles.overlay__splitButtons}>
+                    {key.map((subKey) => (
+                      <button
+                        key={subKey}
+                        className={subKey === '.' ? 
+                          styles.overlay__key : 
+                          styles.overlay__bottomLeftButton
+                        }
+                        onClick={() => {
+                          if (subKey === '←') handleDelete();
+                          if (subKey === '.') handleDecimalPoint();
+                        }}
+                      >
+                        {subKey}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <button
+                    className={typeof key === 'number' ?
+                      styles.overlay__key :
+                      styles.overlay__bottomRightButton
+                    }
+                    onClick={() => {
+                      if (typeof key === 'number') handleKeyPress(key);
+                      else handleSubmit();
+                    }}
+                  >
+                    {key}
+                  </button>
+                )}
+              </React.Fragment>
             ))}
           </div>
         </div>

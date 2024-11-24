@@ -24,6 +24,11 @@
     @include position(fixed, $top: 16px, $left: 16px);
   }
 
+  &__head {
+    @include flex(column, center, center);
+    @include size(100%, 100%);
+  }
+
   &__content {
     @include flex(column, space-between, center);
     @include position(relative);
@@ -239,5 +244,23 @@
     color: rgba(255, 255, 255, 0.7);
     font-size: 14px;
     font-weight: 500;
+  }
+
+  &__invalidInput {
+    background-color: #FF4B4B;
+    color: white;
+  }
+
+  &__splitButtons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    width: 100%;
+  }
+
+  &__bottomLeftButton {
+    @extend .overlay__key;
+    background: #FF4B4B;
+    width: 100%;
   }
 }
