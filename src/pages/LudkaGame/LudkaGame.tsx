@@ -5,6 +5,8 @@
 import { FC, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { LogOverlay } from "components/LudkaGame/LogOverlay/LogOverlay";
+
 import { Overlay } from "../../components/LudkaGame/Overlay/LudkaOverlay";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
@@ -37,6 +39,10 @@ const LudkaGame: FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [inputError, setInputError] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const [showLogOverlay, setShowLogOverlay] = useState(false);
+  const [isLogVisible, setIsLogVisible] = useState(false);
+  const logOverlayRef = useRef<HTMLDivElement>(null);
+
   console.log(data)
   useEffect(() => {
     setLoading(true);
@@ -126,6 +132,20 @@ const LudkaGame: FC = () => {
     setTimeout(() => {
       setShowOverlay(false);
       setInputValue('');
+    }, 300);
+  };
+
+  const handleOpenLog = () => {
+    setShowLogOverlay(true);
+    setTimeout(() => {
+      setIsLogVisible(true);
+    }, 50);
+  };
+
+  const handleCloseLog = () => {
+    setIsLogVisible(false);
+    setTimeout(() => {
+      setShowLogOverlay(false);
     }, 300);
   };
 
@@ -304,7 +324,10 @@ const LudkaGame: FC = () => {
             >
               <span className={styles.game__actionButtonText}>Поднять ставку</span>
             </button>
-            <button className={styles.game__logButton}>
+            <button 
+              className={styles.game__logButton}
+              onClick={handleOpenLog}
+            >
               <LogIcon width={40} height={40} />
             </button>
           </div>
@@ -321,6 +344,14 @@ const LudkaGame: FC = () => {
           onDecimalPoint={handleDecimalPoint}
           onSubmit={handleSubmit}
           overlayRef={overlayRef}
+        />
+      )}
+
+      {showLogOverlay && (
+        <LogOverlay
+          isVisible={isLogVisible}
+          onClose={handleCloseLog}
+          overlayRef={logOverlayRef}
         />
       )}
     </div>
