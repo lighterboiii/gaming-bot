@@ -7,13 +7,14 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { LogOverlay } from "components/LudkaGame/LogOverlay/LogOverlay";
 
+import Loader from "../../components/Loader/Loader";
 import { Overlay } from "../../components/LudkaGame/Overlay/LudkaOverlay";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import LogIcon from "../../icons/LogButtonIcon/LogIcon";
-import coinIcon from '../../images/coinIcon.png';
+import coinIcon from '../../images/mount/coinIcon.png';
 import { setCoinsNewValue, setNewTokensValue } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
@@ -92,6 +93,7 @@ const LudkaGame: FC = () => {
           setData(res);
           break;
         case 'room_info':
+          setLoading(false);
           setData(res);
           break;
         case 'kickplayer':
@@ -260,78 +262,86 @@ const LudkaGame: FC = () => {
   return (
     <div className={styles.game}>
       <div className={styles.game__content}>
-        <div className={styles.game__head}>
-          <p className={styles.game__text}>Общий банк:</p>
-          <p>{data?.win?.winner_value}</p>
-        </div>
-        <div className={styles.game__mainContainer}>
-          <div className={styles.game__userContainer}>
-            <div className={styles.game__avatarContainer}>
-              {data?.win?.users === "none" ? <UserAvatar /> : "другой юзер"}
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <div className={styles.game__head}>
+              <div className={styles.game__headInner}>
+                <p className={styles.game__text}>Общий банк:</p>
+                <p>{data?.win?.winner_value}</p>
+              </div>
             </div>
-            <div className={styles.game__userNameContainer}>
-              <p className={styles.game__userName}>
-                {userData?.publicname}
-              </p>
-              <p className={styles.game__money}>
-                +
-                <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
-                <span>{data?.win?.users === "none" ? 0 : data?.win?.users}</span>
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.game__infoContainer}>
-            <div className={styles.game__betContainer}>
-              <p className={styles.game__text}>Текущая ставка:</p>
-              <p className={styles.game__bet}>
-                <img src={coinIcon} alt="money" className={styles.game__moneyBetIcon} />
-                <span>{data?.bet}</span>
-              </p>
-            </div>
-
-            <div className={styles.game__infoInnerContainer}>
-              <div className={styles.game__info}>
-                <p className={styles.game__text}>Баланс:</p>
-                <p className={styles.game__money}>
-                  <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
-                  <span>
-                    {data?.bet_type === "1"
-                      ? userData?.coins && formatNumber(userData?.coins)
-                      : userData?.tokens && formatNumber(userData?.tokens)
-                    }
-                  </span>
-                </p>
+            <div className={styles.game__mainContainer}>
+              <div className={styles.game__userContainer}>
+                <div className={styles.game__avatarContainer}>
+                  {data?.win?.users === "none" ? <UserAvatar /> : "другой юзер"}
+                </div>
+                <div className={styles.game__userNameContainer}>
+                  <p className={styles.game__userName}>
+                    {userData?.publicname}
+                  </p>
+                  <p className={styles.game__money}>
+                    +
+                    <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
+                    {/* <span>{data?.win?.users === "none" ? 0 : data?.win?.users}</span> */}
+                  </p>
+                </div>
               </div>
 
-              <button
-                className={styles.game__keysButton}
-                onClick={handleOpenOverlay}
-              >
-                <p className={styles.game__text}>Поднять на:</p>
-                <p className={styles.game__money}>
-                  <img src={coinIcon} alt="монета" className={styles.game__moneyIcon} />
-                  <span>{calculateNextBet()}</span>
-                </p>
-              </button>
-            </div>
-          </div>
+              <div className={styles.game__infoContainer}>
+                <div className={styles.game__betContainer}>
+                  <p className={styles.game__text}>Текущая ставка:</p>
+                  <p className={styles.game__bet}>
+                    <img src={coinIcon} alt="money" className={styles.game__moneyBetIcon} />
+                    <span>{data?.bet}</span>
+                  </p>
+                </div>
 
-          <div className={styles.game__buttonsContainer}>
-            <button 
-              className={styles.game__actionButton}
-              onClick={handleRaiseBet}
-            >
-              <span className={styles.game__actionButtonText}>Поднять ставку</span>
-            </button>
-            <button 
-              className={styles.game__logButton}
-              onClick={handleOpenLog}
-            >
-              <LogIcon width={40} height={40} />
-            </button>
-          </div>
-        </div>
+                <div className={styles.game__infoInnerContainer}>
+                  <div className={styles.game__info}>
+                    <p className={styles.game__text}>Баланс:</p>
+                    <p className={styles.game__money}>
+                      <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
+                      <span>
+                        {data?.bet_type === "1"
+                          ? userData?.coins && formatNumber(userData?.coins)
+                          : userData?.tokens && formatNumber(userData?.tokens)
+                        }
+                      </span>
+                    </p>
+                  </div>
+
+                  <button
+                    className={styles.game__keysButton}
+                    onClick={handleOpenOverlay}
+                  >
+                    <p className={styles.game__text}>Поднять на:</p>
+                    <p className={styles.game__money}>
+                      <img src={coinIcon} alt="монета" className={styles.game__moneyIcon} />
+                      <span>{calculateNextBet()}</span>
+                    </p>
+                  </button>
+                </div>
+              </div>
+
+              <div className={styles.game__buttonsContainer}>
+                <button 
+                  className={styles.game__actionButton}
+                  onClick={handleRaiseBet}
+                >
+                  <span className={styles.game__actionButtonText}>Поднять ставку</span>
+                </button>
+                <button 
+                  className={styles.game__logButton}
+                  onClick={handleOpenLog}
+                >
+                  <LogIcon width={40} height={40} />
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {showOverlay && (

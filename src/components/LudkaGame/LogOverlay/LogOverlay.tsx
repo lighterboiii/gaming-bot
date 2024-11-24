@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
-import coinIcon from '../../../images/coinIcon.png';
+import coinIcon from '../../../images/mount/coinIcon.png';
 
 import styles from './LogOverlay.module.scss';
 

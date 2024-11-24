@@ -3,29 +3,32 @@
 
 .overlay {
   @include indents(16px, 0);
-  @include size(100%, unset);
+  @include size(100%, 50vh);
   @include min-size(100%, 146px);
   @include position(fixed, $bottom: 0, $left: 50%);
-  @include flex(column, flex-start, center);
+  @include flex(column, center, center, 16px);
   transform: translate(-50%, 100%);
   background-color: #323232;
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
-  height: 50vh;
   transition: transform 0.3s ease-in-out;
   z-index: 10;
+
+  @media screen and (min-height: 736px) {
+    @include size(100%, 40vh);
+  }
 
   &.expanded {
     transform: translate(-50%, 0);
   }
 
   &__keyboard {
+    @include indents();
     @include position(relative);
     @include size(100%, auto);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-    padding: 16px;
   }
 
   &__key {
@@ -34,13 +37,13 @@
     background-color: #4a4a4a;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: $radius-8;
     font-weight: 700;
     font-size: 26px;
     cursor: pointer;
 
     @media screen and (min-height: 691px) {
-      @include min-size(100%, 36px);
+      @include min-size(100%, 52px);
     }
   }
 
@@ -48,7 +51,6 @@
   &__bottomRightButton {
     @extend .overlay__key;
     @include flex(row, center, center, 8px);
-    font-size: 1em;
   }
 
   &__bottomLeftButton {
@@ -62,14 +64,13 @@
   &__inputContainer {
     @include size(100%, auto);
     @include flex(column, center, center, 8px);
-    padding: 0 16px;
   }
 
   &__input {
     @include size(100%, 46px);
     background-color: #4a4a4a;
     border: none;
-    border-radius: 8px;
+    border-radius: $radius-8;
     color: white;
     font-family: "Rubik", sans-serif;
     font-weight: 700;
