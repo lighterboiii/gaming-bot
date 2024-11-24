@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
+import UserAvatar from 'components/User/UserAvatar/UserAvatar';
+
 import coinIcon from '../../../images/mount/coinIcon.png';
 
 import styles from './LogOverlay.module.scss';
@@ -16,8 +18,10 @@ export const LogOverlay: React.FC<LogOverlayProps> = ({
   isVisible,
   onClose,
   overlayRef,
-  users
+  users,
+
 }) => {
+  console.log(users);
   return (
     <div className={styles.logOverlayWrapper}>
       <div
@@ -26,7 +30,7 @@ export const LogOverlay: React.FC<LogOverlayProps> = ({
       >
         <div className={styles.logOverlay__header}>
           <h2 className={styles.logOverlay__title}>История ставок</h2>
-          <button 
+          <button
             className={styles.logOverlay__closeButton}
             onClick={onClose}
           >
@@ -42,10 +46,18 @@ export const LogOverlay: React.FC<LogOverlayProps> = ({
             <div className={styles.logOverlay__list}>
               {users.map((user: any, index: number) => (
                 <div key={index} className={styles.logOverlay__item}>
-                  <p className={styles.logOverlay__username}>{user.username}</p>
-                  <div className={styles.logOverlay__bet}>
-                    <img src={coinIcon} alt="coin" className={styles.logOverlay__icon} />
-                    <span>{user.bet}</span>
+                  <div className={styles.logOverlay__avatar}>
+                    <UserAvatar item={user} />
+                  </div>
+                  <div className={styles.logOverlay__userNameContainer}>
+                    <p className={styles.logOverlay__userName}>
+                      {user.user_name}
+                    </p>
+                    <p className={styles.logOverlay__money}>
+                      +
+                      <img src={coinIcon} alt="money" className={styles.logOverlay__moneyIcon} />
+                      {user.coins}
+                    </p>
                   </div>
                 </div>
               ))}

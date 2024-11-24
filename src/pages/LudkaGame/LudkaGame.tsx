@@ -15,7 +15,7 @@ import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import LogIcon from "../../icons/LogButtonIcon/LogIcon";
 import coinIcon from '../../images/mount/coinIcon.png';
-import { setCoinsNewValue, setNewTokensValue } from "../../services/appSlice";
+import { setCoinsValueAfterBuy, setTokensValueAfterBuy } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
@@ -67,20 +67,9 @@ const LudkaGame: FC = () => {
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       switch (res?.type) {
-        case 'choice':
+        case 'choice':          
           setData(res);
-          const currentBalance = data?.bet_type === "1" ? userData?.coins ?? 0 : userData?.tokens ?? 0;
-          const choiceValue = parseFloat(res.choice);
-          const newBalance = currentBalance - choiceValue;
-          
-          if (data?.bet_type === "1") {
-            dispatch(setCoinsNewValue(newBalance));
-          } else {
-            dispatch(setNewTokensValue(newBalance));
-          }
-          
           clearMessages();
-          setLoading(false);
           break;
         case 'whoiswin':
           console.log(res);
@@ -117,7 +106,7 @@ const LudkaGame: FC = () => {
   }, [wsMessages]);
 
   const calculateNextBet = () => {
-    return data?.bet ? (Number(data.bet) + 0.5).toString() : '0';
+    return data?.bet ? (Number(formatNumber(Number(data.bet))) + 0.5).toString() : '0';
   };
 
   const handleOpenOverlay = () => {
@@ -231,12 +220,21 @@ const LudkaGame: FC = () => {
   }, [tg, navigate, userId]);
 
   const handleChoice = (choice: string) => {
+    const choiceValue = Number(choice || 0);
+    
+    if (data?.bet_type === "1") {
+      dispatch(setCoinsValueAfterBuy(choiceValue));
+    } else {
+      dispatch(setTokensValueAfterBuy(choiceValue));
+    }
+
     sendMessage({
       user_id: userId,
       room_id: roomId,
       type: 'choice',
       choice: choice
     });
+    
     handleCloseOverlay();
   };
 
@@ -269,22 +267,30 @@ const LudkaGame: FC = () => {
             <div className={styles.game__head}>
               <div className={styles.game__headInner}>
                 <p className={styles.game__text}>Общий банк:</p>
-                <p>{data?.win?.winner_value}</p>
+                <p>{formatNumber(Number(data?.win?.winner_value))}</p>
               </div>
             </div>
             <div className={styles.game__mainContainer}>
               <div className={styles.game__userContainer}>
                 <div className={styles.game__avatarContainer}>
-                  {data?.win?.users === "none" ? <UserAvatar /> : "другой юзер"}
+                  {data?.win?.users === "none"
+                    ? <UserAvatar />
+                    : <UserAvatar item={data?.win?.users[data.win.users.length - 1]} />}
                 </div>
                 <div className={styles.game__userNameContainer}>
                   <p className={styles.game__userName}>
-                    {userData?.publicname}
+                    {data?.win?.users === "none"
+                      ? userData?.publicname
+                      : data?.win?.users[data.win.users.length - 1]?.user_name
+                    }
                   </p>
                   <p className={styles.game__money}>
                     +
                     <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
-                    {/* <span>{data?.win?.users === "none" ? 0 : data?.win?.users}</span> */}
+                    {data?.win?.users === "none"
+                      ? data?.bet
+                      : data?.win?.users[data.win.users.length - 1]?.coins
+                    }
                   </p>
                 </div>
               </div>
@@ -294,7 +300,7 @@ const LudkaGame: FC = () => {
                   <p className={styles.game__text}>Текущая ставка:</p>
                   <p className={styles.game__bet}>
                     <img src={coinIcon} alt="money" className={styles.game__moneyBetIcon} />
-                    <span>{data?.bet}</span>
+                    <span>{formatNumber(Number(data?.bet))}</span>
                   </p>
                 </div>
 
@@ -305,8 +311,8 @@ const LudkaGame: FC = () => {
                       <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                       <span>
                         {data?.bet_type === "1"
-                          ? userData?.coins && formatNumber(userData?.coins)
-                          : userData?.tokens && formatNumber(userData?.tokens)
+                          ? userData?.coins && `${formatNumber(Number(userData?.coins))}`
+                          : userData?.tokens && `${formatNumber(Number(userData?.tokens))}`
                         }
                       </span>
                     </p>
@@ -318,7 +324,7 @@ const LudkaGame: FC = () => {
                   >
                     <p className={styles.game__text}>Поднять на:</p>
                     <p className={styles.game__money}>
-                      <img src={coinIcon} alt="монета" className={styles.game__moneyIcon} />
+                      <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                       <span>{calculateNextBet()}</span>
                     </p>
                   </button>
@@ -326,13 +332,13 @@ const LudkaGame: FC = () => {
               </div>
 
               <div className={styles.game__buttonsContainer}>
-                <button 
+                <button
                   className={styles.game__actionButton}
                   onClick={handleRaiseBet}
                 >
                   <span className={styles.game__actionButtonText}>Поднять ставку</span>
                 </button>
-                <button 
+                <button
                   className={styles.game__logButton}
                   onClick={handleOpenLog}
                 >
