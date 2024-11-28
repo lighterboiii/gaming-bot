@@ -51,6 +51,7 @@ const LudkaGame: FC = () => {
     user_name: string;
     winner_value: string;
   } | null>(null);
+  const [pendingBet, setPendingBet] = useState<string>('');
 
   useEffect(() => {
     tg.setHeaderColor('#4caf50');
@@ -67,7 +68,7 @@ const LudkaGame: FC = () => {
       tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate, userId]);
-  
+
   useEffect(() => {
     setLoading(true);
 
@@ -240,7 +241,8 @@ const LudkaGame: FC = () => {
   const handleSubmit = () => {
     const numValue = parseFloat(inputValue);
     if (numValue >= 0) {
-      handleChoice(inputValue);
+      setPendingBet(inputValue);
+      handleCloseOverlay();
     } else {
       setInputError(true);
     }
@@ -274,8 +276,9 @@ const LudkaGame: FC = () => {
   };
 
   const handleRaiseBet = () => {
-    const nextBet = calculateNextBet();
-    handleChoice(nextBet);
+    const betToSend = pendingBet || calculateNextBet();
+    handleChoice(betToSend);
+    setPendingBet('');
   };
   console.log(winner);
   if (!isPortrait) {
@@ -304,7 +307,10 @@ const LudkaGame: FC = () => {
                     ? <UserAvatar item={winner?.item} />
                     : data?.win?.users === "none"
                       ? <UserAvatar />
-                      : <UserAvatar item={data?.win?.users[data.win.users.length - 1]} />
+                      : <UserAvatar
+                        item={data?.win?.users[data.win.users.length - 1]}
+                        avatar={data?.win?.users[data.win.users.length - 1]?.user_pic}
+                      />
                   }
                 </div>
                 <div className={styles.game__userNameContainer}>
@@ -361,7 +367,7 @@ const LudkaGame: FC = () => {
                     <p className={styles.game__text}>Поднять на:</p>
                     <p className={styles.game__money}>
                       <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
-                      <span>{calculateNextBet()}</span>
+                      <span>{pendingBet || calculateNextBet()}</span>
                     </p>
                   </button>
                 </div>
