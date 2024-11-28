@@ -65,19 +65,17 @@
         background-color: rgba(0, 0, 0, 0.7);
         z-index: 4;
         opacity: 0;
-        transition: opacity 0.3s ease-out;
+        transition: all 0.5s ease-in-out;
       }
 
       &::before {
         opacity: 1;
       }
 
-      // .game__head,
-      // .game__headInner,
       .game__mainContainer > *:not(.game__userContainer) {
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.3s ease-out;
+        transition: all 0.5s ease-in-out;
       }
     }
 
@@ -116,10 +114,12 @@
     transition: all 0.5s ease-in-out;
 
     &_winner {
+      @include max-size(calc(100% - 20px), 100%);
       @include position(absolute, $top: 50%, $left: 50%);
       transform: translate(-50%, -50%);
       animation: floating 3s ease-in-out infinite;
       z-index: 5;
+      transition: all 0.5s ease-in-out;
     }
   }
 

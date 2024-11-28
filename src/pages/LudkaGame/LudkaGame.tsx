@@ -52,7 +52,22 @@ const LudkaGame: FC = () => {
     winner_value: string;
   } | null>(null);
 
-  console.log(data)
+  useEffect(() => {
+    tg.setHeaderColor('#4caf50');
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      sendMessage({
+        user_id: userId,
+        room_id: roomId,
+        type: 'kickplayer'
+      });
+    });
+    return () => {
+      tg.BackButton.hide();
+      tg.setHeaderColor('#d51845');
+    }
+  }, [tg, navigate, userId]);
+  
   useEffect(() => {
     setLoading(true);
 
@@ -75,7 +90,7 @@ const LudkaGame: FC = () => {
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       switch (res?.type) {
-        case 'choice':          
+        case 'choice':
           setData(res);
           clearMessages();
           break;
@@ -89,22 +104,18 @@ const LudkaGame: FC = () => {
             user_name: res.whoiswin.user_name,
             winner_value: res.whoiswin.winner_value
           });
-          if (winner) {
-            const timer = setTimeout(() => {
-              setWinner(null);
-              setData((prevData: any) => ({
-                ...prevData,
-                bet: res?.bet || "0",
-                win: {
-                  ...prevData.win,
-                  users: "none",
-                  winner_value: "0"
-                }
-              }));
-            }, 5000);
-      
-            return () => clearTimeout(timer);
-          }
+          setTimeout(() => {
+            setWinner(null);
+            setData((prevData: any) => ({
+              ...prevData,
+              bet: res?.bet || "0",
+              win: {
+                ...prevData.win,
+                users: "none",
+                winner_value: "0"
+              }
+            }));
+          }, 6000);
           break;
         case 'error':
           console.log(res);
@@ -235,25 +246,9 @@ const LudkaGame: FC = () => {
     }
   };
 
-  useEffect(() => {
-    tg.setHeaderColor('#1b50b8');
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      sendMessage({
-        user_id: userId,
-        room_id: roomId,
-        type: 'kickplayer'
-      });
-    });
-    return () => {
-      tg.BackButton.hide();
-      tg.setHeaderColor('#d51845');
-    }
-  }, [tg, navigate, userId]);
-
   const handleChoice = (choice: string) => {
     const choiceValue = Number(choice || 0);
-    
+
     if (data?.bet_type === "1") {
       dispatch(setCoinsValueAfterBuy(choiceValue));
     } else {
@@ -266,7 +261,7 @@ const LudkaGame: FC = () => {
       type: 'choice',
       choice: choice
     });
-    
+
     handleCloseOverlay();
   };
 
@@ -305,7 +300,7 @@ const LudkaGame: FC = () => {
             <div className={styles.game__mainContainer}>
               <div className={`${styles.game__userContainer} ${winner ? styles.game__userContainer_winner : ''}`}>
                 <div className={styles.game__avatarContainer}>
-                  {winner 
+                  {winner
                     ? <UserAvatar item={winner?.item} />
                     : data?.win?.users === "none"
                       ? <UserAvatar />
@@ -314,7 +309,7 @@ const LudkaGame: FC = () => {
                 </div>
                 <div className={styles.game__userNameContainer}>
                   <p className={styles.game__userName}>
-                    {winner 
+                    {winner
                       ? `Победитель: ${winner.user_name}`
                       : data?.win?.users === "none"
                         ? userData?.publicname
@@ -325,7 +320,7 @@ const LudkaGame: FC = () => {
                     +
                     <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                     <span>
-                      {winner 
+                      {winner
                         ? formatNumber(Number(winner.winner_value))
                         : data?.win?.users === "none"
                           ? formatNumber(Number(data?.bet || 0))

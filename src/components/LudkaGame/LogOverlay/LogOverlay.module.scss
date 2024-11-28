@@ -27,6 +27,7 @@
   &__header {
     @include flex(row, space-between, center);
     @include indents(16px 24px, 0);
+    font-weight: 900;
   }
 
   &__title {
@@ -45,7 +46,7 @@
 
   &__content {
     @include indents(0 16px, 0);
-    @include size(100%, calc(100% - 60px));
+    @include size(100%, calc(100% - 20%));
     overflow-y: auto;
   }
 

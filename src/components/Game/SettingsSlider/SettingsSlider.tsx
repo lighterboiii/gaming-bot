@@ -28,6 +28,8 @@ const SettingsSlider: FC<IProps> = ({
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
     setBet(prevBet => {
       const newBet = (parseFloat(prevBet) + 0.1).toFixed(1);
+      const numericBet = parseFloat(newBet);
+      onBetChange(numericBet);
       onInputChange && onInputChange(newBet);
       return newBet;
     });
@@ -38,7 +40,9 @@ const SettingsSlider: FC<IProps> = ({
     setBet(prevBet => {
       const currentBet = parseFloat(prevBet);
       if (currentBet > 0) {
-        const newBet = currentBet === 0.1 ? '0' :  (currentBet - 0.1).toFixed(1);
+        const newBet = currentBet === 0.1 ? '0' : (currentBet - 0.1).toFixed(1);
+        const numericBet = parseFloat(newBet);
+        onBetChange(numericBet);
         onInputChange && onInputChange(newBet);
         return newBet;
       }
@@ -63,10 +67,6 @@ const SettingsSlider: FC<IProps> = ({
 
     onInputChange && onInputChange(value);
   };
-
-  useEffect(() => {
-    onBetChange(parseFloat(bet));
-  }, [bet, onBetChange]);
 
   useEffect(() => {
     onCurrencyChange(currency);
