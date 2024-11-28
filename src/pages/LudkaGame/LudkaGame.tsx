@@ -43,6 +43,14 @@ const LudkaGame: FC = () => {
   const [showLogOverlay, setShowLogOverlay] = useState(false);
   const [isLogVisible, setIsLogVisible] = useState(false);
   const logOverlayRef = useRef<HTMLDivElement>(null);
+  const [winner, setWinner] = useState<{
+    item: {
+      item_pic: string;
+      item_mask: string;
+    },
+    user_name: string;
+    winner_value: string;
+  } | null>(null);
 
   console.log(data)
   useEffect(() => {
@@ -73,6 +81,30 @@ const LudkaGame: FC = () => {
           break;
         case 'whoiswin':
           console.log(res);
+          setWinner({
+            item: {
+              item_pic: res.whoiswin.item_pic,
+              item_mask: res.whoiswin.item_mask
+            },
+            user_name: res.whoiswin.user_name,
+            winner_value: res.whoiswin.winner_value
+          });
+          if (winner) {
+            const timer = setTimeout(() => {
+              setWinner(null);
+              setData((prevData: any) => ({
+                ...prevData,
+                bet: res?.bet || "0",
+                win: {
+                  ...prevData.win,
+                  users: "none",
+                  winner_value: "0"
+                }
+              }));
+            }, 5000);
+      
+            return () => clearTimeout(timer);
+          }
           break;
         case 'error':
           console.log(res);
@@ -250,7 +282,7 @@ const LudkaGame: FC = () => {
     const nextBet = calculateNextBet();
     handleChoice(nextBet);
   };
-
+  console.log(winner);
   if (!isPortrait) {
     return (
       <Warning />
@@ -259,7 +291,7 @@ const LudkaGame: FC = () => {
   console.log(userData);
   return (
     <div className={styles.game}>
-      <div className={styles.game__content}>
+      <div className={`${styles.game__content} ${winner ? styles.game__content_winner : ''}`}>
         {loading ? (
           <Loader />
         ) : (
@@ -267,30 +299,39 @@ const LudkaGame: FC = () => {
             <div className={styles.game__head}>
               <div className={styles.game__headInner}>
                 <p className={styles.game__text}>Общий банк:</p>
-                <p>{formatNumber(Number(data?.win?.winner_value))}</p>
+                <p>{data?.win?.winner_value !== "none" ? formatNumber(Number(data?.win?.winner_value)) : '0'}</p>
               </div>
             </div>
             <div className={styles.game__mainContainer}>
-              <div className={styles.game__userContainer}>
+              <div className={`${styles.game__userContainer} ${winner ? styles.game__userContainer_winner : ''}`}>
                 <div className={styles.game__avatarContainer}>
-                  {data?.win?.users === "none"
-                    ? <UserAvatar />
-                    : <UserAvatar item={data?.win?.users[data.win.users.length - 1]} />}
+                  {winner 
+                    ? <UserAvatar item={winner?.item} />
+                    : data?.win?.users === "none"
+                      ? <UserAvatar />
+                      : <UserAvatar item={data?.win?.users[data.win.users.length - 1]} />
+                  }
                 </div>
                 <div className={styles.game__userNameContainer}>
                   <p className={styles.game__userName}>
-                    {data?.win?.users === "none"
-                      ? userData?.publicname
-                      : data?.win?.users[data.win.users.length - 1]?.user_name
+                    {winner 
+                      ? `Победитель: ${winner.user_name}`
+                      : data?.win?.users === "none"
+                        ? userData?.publicname
+                        : data?.win?.users[data.win.users.length - 1]?.user_name
                     }
                   </p>
                   <p className={styles.game__money}>
                     +
                     <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
-                    {data?.win?.users === "none"
-                      ? data?.bet
-                      : data?.win?.users[data.win.users.length - 1]?.coins
-                    }
+                    <span>
+                      {winner 
+                        ? formatNumber(Number(winner.winner_value))
+                        : data?.win?.users === "none"
+                          ? formatNumber(Number(data?.bet || 0))
+                          : formatNumber(Number(data?.win?.users[data.win.users.length - 1]?.coins || 0))
+                      }
+                    </span>
                   </p>
                 </div>
               </div>

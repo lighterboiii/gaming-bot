@@ -58,9 +58,32 @@
     z-index: 4;
     @include indents($space-16 $space-16, 0);
 
+    &_winner {
+      &::before {
+        content: '';
+        @include position(fixed, $top: 0, $left: 0, $right: 0, $bottom: 0);
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 4;
+        opacity: 0;
+        transition: opacity 0.3s ease-out;
+      }
+
+      &::before {
+        opacity: 1;
+      }
+
+      // .game__head,
+      // .game__headInner,
+      .game__mainContainer > *:not(.game__userContainer) {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-out;
+      }
+    }
+
     @media screen and (min-height: 720px) {
       @include indents(32px $space-16, 0);
-     }
+    }
   }
 
   p {
@@ -90,6 +113,14 @@
     );
     border-radius: $radius-15;
     box-shadow: 0 14px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s ease-in-out;
+
+    &_winner {
+      @include position(absolute, $top: 50%, $left: 50%);
+      transform: translate(-50%, -50%);
+      animation: floating 3s ease-in-out infinite;
+      z-index: 5;
+    }
   }
 
   &__betContainer, &__info, &__keysButton {
@@ -112,6 +143,12 @@
   &__infoContainer {
     @include size(100%, auto);
     @include flex(column, center, center, $space-18);
+    transition: opacity 0.3s ease-out;
+
+    &_hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 
   &__infoInnerContainer {
@@ -164,6 +201,12 @@
     display: grid;
     grid-template-columns: 3fr 1fr;
     gap: $space-12;
+    transition: opacity 0.3s ease-out;
+
+    &_hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 
   &__actionButton, &__logButton {
@@ -186,5 +229,17 @@
     font-size: 18px;
     text-transform: uppercase;
     font-weight: 900;
+  }
+
+  @keyframes floating {
+    0% {
+      transform: translate(-50%, -50%);
+    }
+    50% {
+      transform: translate(-50%, -60%);
+    }
+    100% {
+      transform: translate(-50%, -50%);
+    }
   }
 }
