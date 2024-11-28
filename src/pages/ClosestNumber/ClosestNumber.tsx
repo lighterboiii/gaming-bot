@@ -161,6 +161,10 @@ export const ClosestNumber: FC = () => {
         case 'room_info':
           setData(res);
           setLoading(false);
+          setTimer(35);
+          setTimerStarted(true);
+          setShowTimer(true);
+          setIsProcessingWin(false);
           break;
         case 'kickplayer':
           if (Number(res?.player_id) === userId) {
@@ -178,7 +182,7 @@ export const ClosestNumber: FC = () => {
         case 'whoiswin':
           if (isProcessingWin) return;
           setIsProcessingWin(true);
-          
+
           setTimerStarted(false);
           setShowTimer(false);
           if (res.whoiswin.winner === "draw") {
@@ -193,6 +197,7 @@ export const ClosestNumber: FC = () => {
             setRoomValue(Number(res?.whoiswin.room_value));
             setWinnerId(Number(res?.whoiswin.winner));
             setWinSum(res?.whoiswin.winner_value);
+            // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
           }
           setTimeout(() => {
             if (res?.winner === userId) {
@@ -210,7 +215,7 @@ export const ClosestNumber: FC = () => {
             }
             setInputValue('');
             setModalOpen(true);
-            
+
             setTimeout(() => {
               clearMessages();
               setIsChoiceLocked(false);

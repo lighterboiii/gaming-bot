@@ -35,11 +35,11 @@ const Room: FC<IProps> = ({ room, openModal }) => {
     if (lastMessage) {
       const parsedMessage = JSON.parse(lastMessage);
 
-      // if (parsedMessage?.type === 'addplayer' && parsedMessage?.message?.message === 'success') {
-        navigate(room?.room_type === 1 ? `/room/${room?.room_id}` : `/closest/${room?.room_id}`);
-      // } else if (parsedMessage?.type === 'addplayer' && parsedMessage?.message?.message === 'room_is_not_valid') {
-      //   setMessage("Server error");
-      // }
+      navigate(room?.room_type === 1 
+          ? `/room/${room?.room_id}` 
+          : room?.room_type === 2 
+            ? `/closest/${room?.room_id}`
+            : `/ludkaGame/${room?.room_id}`);
     }
   }, [wsMessages, navigate, room.room_id, room.room_type]);
 
@@ -97,7 +97,11 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       key={room?.room_id}>
       <div className={styles.room__game}>
         <p className={styles.room__gameName}>
-          {Number(room?.room_type) === 1 ? `${translation?.rock_paper_scissors}` : `${translation?.closest_number}`}
+          {Number(room?.room_type) === 1 
+            ? `${translation?.rock_paper_scissors}` 
+            : Number(room?.room_type) === 2 
+              ? `${translation?.closest_number}`
+              : `${translation?.ludka_name}`}
         </p>
         <img
           src={room?.game_pic}
