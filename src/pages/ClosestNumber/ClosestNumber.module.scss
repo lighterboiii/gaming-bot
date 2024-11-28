@@ -102,7 +102,7 @@
   @include size(100%, 20vh);
   @include min-size(100%, 146px);
   @include position(absolute, $bottom: 0, $left: 50%);
-  @include flex(column, center, center, $space-16);
+  @include flex(column, center, center, $space-6);
   transform: translate(-50%);
   background-color: $closest-secondary-color;
   border-top-left-radius: 32px;
@@ -124,7 +124,7 @@
   &__avatarWrapper {
     @include position(relative);
     @include size(100%, auto);
-    @include max-size(120px, 120px);
+    @include max-size(116px, 116px);
     aspect-ratio: 1;
 
     @media screen and (max-width: 379px) {
@@ -213,13 +213,13 @@
   }
 
   &.expanded {
-    @include size(100%, calc(100% - 50vh));
+    @include size(100%, calc(100% - 47vh));
     transition: height .5s ease-in-out;
     z-index: 666;
     overflow: visible;
 
     @media screen and (min-height: 691px) {
-      @include size(100%, calc(100% - 55vh));
+      @include size(100%, calc(100% - 52vh));
     }
   }
 
