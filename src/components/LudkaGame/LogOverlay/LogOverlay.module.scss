@@ -9,16 +9,18 @@
 }
 
 .logOverlay {
-  @include size(100%, 70vh);
-  @include min-size(100%, 70vh); 
+  @include size(100%, auto);
+  @include min-size(100%, 20vh);
+  @include max-size(100%, 70vh);
   font-family: 'Gilroy', sans-serif;
-  overflow: scroll;
   background-color: $black-color;
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
   transform: translateY(100%);
   transition: transform 0.3s ease-in-out;
   pointer-events: auto;
+  display: flex;
+  flex-direction: column;
 
   &.expanded {
     transform: translateY(0);
@@ -28,6 +30,12 @@
     @include flex(row, space-between, center);
     @include indents(16px 24px, 0);
     font-weight: 900;
+    position: sticky;
+    top: 0;
+    background-color: $black-color;
+    z-index: 1;
+    border-top-left-radius: 32px;
+    border-top-right-radius: 32px;
   }
 
   &__title {
@@ -46,8 +54,9 @@
 
   &__content {
     @include indents(0 16px, 0);
-    @include size(100%, calc(100% - 20%));
-    overflow-y: auto;
+    min-height: min-content;
+    max-height: calc(70vh - 60px);
+    overflow: scroll;
   }
 
   &__empty {
@@ -59,7 +68,26 @@
   }
 
   &__list {
-    @include flex(column, flex-start, stretch, 12px);
+    @include flex(column-reverse, flex-start, stretch, 12px);
+    min-height: min-content;
+    max-height: 100%;
+    overflow-y: auto;
+    padding-bottom: 16px;
+    
+    // Стили для скроллбара
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+    }
   }
 
   &__item {
