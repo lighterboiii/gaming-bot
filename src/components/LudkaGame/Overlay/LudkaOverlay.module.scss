@@ -3,7 +3,7 @@
 
 .overlay {
   @include indents(16px, 0);
-  @include size(100%, 50vh);
+  @include size(100%, 53vh);
   @include min-size(100%, 146px);
   @include position(fixed, $bottom: 0, $left: 50%);
   @include flex(column, center, center, 16px);
@@ -15,7 +15,7 @@
   z-index: 10;
 
   @media screen and (min-height: 736px) {
-    @include size(100%, 40vh);
+    @include size(100%, 43vh);
   }
 
   &.expanded {

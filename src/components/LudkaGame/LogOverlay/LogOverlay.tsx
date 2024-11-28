@@ -21,7 +21,7 @@ export const LogOverlay: React.FC<LogOverlayProps> = ({
   users,
 
 }) => {
-  console.log(users);
+
   return (
     <div className={styles.logOverlayWrapper}>
       <div

@@ -14,6 +14,7 @@ import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import LogIcon from "../../icons/LogButtonIcon/LogIcon";
+import RoomCounterIcon from "../../icons/RoomCounter/RoomCounter";
 import coinIcon from '../../images/mount/coinIcon.png';
 import { setCoinsValueAfterBuy, setTokensValueAfterBuy } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
@@ -294,6 +295,10 @@ const LudkaGame: FC = () => {
           <Loader />
         ) : (
           <>
+          <p className={styles.game__roomCounter}>
+            <RoomCounterIcon color="#626262" />
+            {data?.players.length}
+            </p>
             <div className={styles.game__head}>
               <div className={styles.game__headInner}>
                 <p className={styles.game__text}>Общий банк:</p>

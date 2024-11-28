@@ -23,6 +23,10 @@
 
   &__roomCounter {
     @include position(fixed, $top: $space-16, $left: $space-16);
+    @include flex(row, center, center, $space-4);
+    color: #626262;
+    font-size: 16px;
+    font-weight: 900;
   }
 
   &__head {
