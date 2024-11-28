@@ -75,6 +75,7 @@ export const ClosestNumber: FC = () => {
   const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
   const isPortrait = useOrientation();
   const { sendMessage, wsMessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
+  const [isProcessingWin, setIsProcessingWin] = useState<boolean>(false);
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -175,6 +176,9 @@ export const ClosestNumber: FC = () => {
           setData(res);
           break;
         case 'whoiswin':
+          if (isProcessingWin) return;
+          setIsProcessingWin(true);
+          
           setTimerStarted(false);
           setShowTimer(false);
           if (res.whoiswin.winner === "draw") {
@@ -189,7 +193,6 @@ export const ClosestNumber: FC = () => {
             setRoomValue(Number(res?.whoiswin.room_value));
             setWinnerId(Number(res?.whoiswin.winner));
             setWinSum(res?.whoiswin.winner_value);
-            // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
           }
           setTimeout(() => {
             if (res?.winner === userId) {
@@ -206,18 +209,16 @@ export const ClosestNumber: FC = () => {
               }
             }
             setInputValue('');
-            if (!isModalOpen) {
-              setModalOpen(true);
-            }
-            setTimerStarted(false);
+            setModalOpen(true);
+            
             setTimeout(() => {
               clearMessages();
               setIsChoiceLocked(false);
               setTimerStarted(true);
               setShowTimer(true);
               setModalOpen(false);
-            }, 3000)
-          }, 5000)
+            }, 3000);
+          }, 5000);
           break;
       }
     };
