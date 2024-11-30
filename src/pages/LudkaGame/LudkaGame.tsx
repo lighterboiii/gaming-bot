@@ -104,7 +104,6 @@ const LudkaGame: FC = () => {
           clearMessages();
           break;
         case 'whoiswin':
-          console.log(res);
           setWinner({
             item: {
               item_pic: res.whoiswin.item_pic,
