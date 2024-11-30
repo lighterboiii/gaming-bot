@@ -218,7 +218,7 @@
 
   &__buttonsContainer {
     @include size(100%, auto);
-    @include min-size(100%, 84px);
+    @include max-size(100%, 84px);
     display: grid;
     grid-template-columns: 3fr 1fr;
     gap: $space-12;
