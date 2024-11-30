@@ -110,12 +110,19 @@ export const ClosestNumber: FC = () => {
         room_id: roomId,
         type: 'kickplayer'
       });
+      clearMessages();
+      navigate(indexUrl, { replace: true });
     });
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
+      clearMessages();
+      setData(null);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
     }
-  }, []);
+  }, [tg, navigate, userId]);
   // свернуть клавиатуру по клику за ее границами
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -156,7 +163,6 @@ export const ClosestNumber: FC = () => {
   useEffect(() => {
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
-      console.log(res);
       switch (res?.type) {
         case 'room_info':
           setData(res);
@@ -167,10 +173,11 @@ export const ClosestNumber: FC = () => {
           setIsProcessingWin(false);
           break;
         case 'kickplayer':
-          if (Number(res?.player_id) === userId) {
-            navigate(indexUrl);
+          if (Number(res?.player_id) === Number(userId)) {
             clearMessages();
-            // disconnect();
+            setData(null);
+            disconnect();
+            navigate(indexUrl, { replace: true });
           }
           break;
         case 'choice':

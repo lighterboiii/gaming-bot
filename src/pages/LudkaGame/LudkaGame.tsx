@@ -30,7 +30,7 @@ const LudkaGame: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const userId = getUserId();
   const { roomId } = useParams<{ roomId: string }>();
-  const { wsMessages, sendMessage, clearMessages } = useContext(WebSocketContext)!;
+  const { wsMessages, sendMessage, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const navigate = useNavigate();
   const userData = useAppSelector(store => store.app.info);
   const isPortrait = useOrientation();
@@ -63,10 +63,15 @@ const LudkaGame: FC = () => {
         room_id: roomId,
         type: 'kickplayer'
       });
+      clearMessages();
+      disconnect();
+      navigate(indexUrl, { replace: true });
     });
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
+      clearMessages();
+      setData(null);
     }
   }, [tg, navigate, userId]);
 
@@ -131,9 +136,12 @@ const LudkaGame: FC = () => {
           setData(res);
           break;
         case 'kickplayer':
-          if (res?.player_id === userId) {
-            navigate(indexUrl);
+          if (Number(res?.player_id) === Number(userId)) {
             clearMessages();
+            setData(null);
+            setWinner(null);
+            disconnect();
+            navigate(indexUrl, { replace: true });
           }
           break;
         default:

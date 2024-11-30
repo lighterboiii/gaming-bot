@@ -68,7 +68,7 @@ export const RockPaperScissors: FC = () => {
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   const isPortrait = useOrientation();
   const userData = useAppSelector(store => store.app.info);
-  const { sendMessage, wsMessages, clearMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
 
   useEffect(() => {
@@ -80,10 +80,15 @@ export const RockPaperScissors: FC = () => {
         room_id: roomId,
         type: 'kickplayer'
       });
+      clearMessages();
+      navigate(indexUrl, { replace: true });
     });
+    
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
+      clearMessages();
+      setData(null);
     }
   }, [tg, navigate, userId]);
   // запрос результата хода
@@ -190,10 +195,12 @@ export const RockPaperScissors: FC = () => {
           setData(res);
           break;
         case 'kickplayer':
-          if (res?.player_id === userId) {
-            navigate(indexUrl);
+          if (Number(res?.player_id) === Number(userId)) {
             clearMessages();
-          }
+            setData(null);
+            disconnect();
+            navigate(indexUrl, { replace: true });
+            }
           break;
         default:
           break;

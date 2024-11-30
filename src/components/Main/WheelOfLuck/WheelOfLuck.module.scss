@@ -52,7 +52,7 @@
   @include children-layout();
   gap: 0;
   justify-content: flex-start;
-  margin-top: 12px;
+  margin-top: max(12px, env(safe-area-inset-top));
   transition: all 0.3s ease;
 
   @media screen and (max-height: 589px) {
@@ -96,18 +96,14 @@
 
   &__background {
     @include indents(24px 0 16px, 0);
-    @include position(absolute, $bottom: 16px, $left: -10%, $right: -10%);
+    // @include position(absolute, $bottom: 16px, $left: -10%, $right: -10%);
+    @include position(absolute, $bottom: max(16px, env(safe-area-inset-bottom)), $left: -10%, $right: -10%);
     @include flex(row, center, center, 10px);
     @include size(auto, 32vh);
     background-color: $black-color;
     z-index: 5;
 
     @media screen and (min-height: 744px) {
-      @include size(auto, 38vh);
-    }
-
-
-    @media screen and (max-height: px) {
       @include size(auto, 38vh);
     }
   }
@@ -206,7 +202,7 @@
   }
 
   &__buttonWrapper {
-    @include position(absolute, $bottom: 2%);
+    @include position(absolute, $bottom: max(2%, env(safe-area-inset-bottom)));
     @include size(100%, 40px);
     @include max-size(312px, auto);
     z-index: 5;
@@ -214,7 +210,7 @@
 
     @media screen and (max-height: 691px) {
       @include size(100%, 32px);
-      bottom: 3%;
+      bottom: max(3%, env(safe-area-inset-bottom));
     }
   }
 
