@@ -406,6 +406,7 @@ const LudkaGame: FC = () => {
                 <button
                   className={styles.game__actionButton}
                   onClick={handleRaiseBet}
+                  disabled={data?.players.length === 1}
                 >
                   <span className={styles.game__actionButtonText}>Поднять ставку</span>
                 </button>
