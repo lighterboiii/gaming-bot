@@ -53,6 +53,7 @@ const LudkaGame: FC = () => {
     winner_value: string;
   } | null>(null);
   const [pendingBet, setPendingBet] = useState<string>('');
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
 
   useEffect(() => {
     tg.setHeaderColor('#4caf50');
@@ -98,6 +99,7 @@ const LudkaGame: FC = () => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'choice':
+          setSlideDirection(prev => prev === 'right' ? 'left' : 'right');
           setData(res);
           clearMessages();
           break;
@@ -314,7 +316,9 @@ const LudkaGame: FC = () => {
               </div>
             </div>
             <div className={styles.game__mainContainer}>
-              <div className={`${styles.game__userContainer} ${winner ? styles.game__userContainer_winner : ''}`}>
+              <div className={`${styles.game__userContainer} 
+                  ${winner ? styles.game__userContainer_winner : ''} 
+                  ${styles[`game__userContainer_slide_${slideDirection}`]}`}>
                 <div className={styles.game__avatarContainer}>
                   {winner
                     ? <UserAvatar item={winner?.item} />
