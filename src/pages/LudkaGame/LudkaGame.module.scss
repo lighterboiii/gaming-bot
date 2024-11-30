@@ -2,7 +2,7 @@
 @use "../../stylesheets/variables" as *;
 
 .game {
-  @include size(100%, 100vh+1);
+  @include size(100%, 100vh);
   @include position(relative);
   font-family: 'Gilroy', sans-serif;
   overflow: visible;
@@ -49,10 +49,19 @@
     @include position(absolute, $top: 60%, $left: 50%);
     @include size(100%, auto);
     transform: translate(-50%, -50%);
+    position: relative;
 
     @media screen and (min-height: 720px) {
      @include position(absolute, $top: 65%, $left: 50%);
     }
+  }
+
+  &__coinsAnimation {
+    @include position(absolute, $top: 10%, $left: 50%);
+    @include size(70%, auto);
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    pointer-events: none;
   }
 
   &__content {
@@ -95,7 +104,7 @@
 
   &__mainContainer {
     @include indents();
-    @include size(100%, 70vh);
+    @include size(100%, auto);
     @include flex(column, flex-end, center, $space-12);
     z-index: 5;
     overflow: visible;

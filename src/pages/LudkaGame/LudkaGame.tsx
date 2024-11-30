@@ -16,6 +16,7 @@ import useTelegram from "../../hooks/useTelegram";
 import LogIcon from "../../icons/LogButtonIcon/LogIcon";
 import RoomCounterIcon from "../../icons/RoomCounter/RoomCounter";
 import coinIcon from '../../images/mount/coinIcon.png';
+import coins from '../../images/mount/coins.png';
 import { setCoinsValueAfterBuy, setTokensValueAfterBuy } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
@@ -54,6 +55,7 @@ const LudkaGame: FC = () => {
   } | null>(null);
   const [pendingBet, setPendingBet] = useState<string>('');
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
+  const [showCoinsAnimation, setShowCoinsAnimation] = useState(false);
 
   useEffect(() => {
     tg.setHeaderColor('#4caf50');
@@ -100,6 +102,8 @@ const LudkaGame: FC = () => {
       switch (res?.type) {
         case 'choice':
           setSlideDirection(prev => prev === 'right' ? 'left' : 'right');
+          setShowCoinsAnimation(true);
+          setTimeout(() => setShowCoinsAnimation(false), 1000);
           setData(res);
           clearMessages();
           break;
@@ -304,14 +308,23 @@ const LudkaGame: FC = () => {
           <Loader />
         ) : (
           <>
-          <p className={styles.game__roomCounter}>
-            <RoomCounterIcon color="#626262" />
-            {data?.players.length}
+            <p className={styles.game__roomCounter}>
+              <RoomCounterIcon color="#626262" />
+              {data?.players.length}
             </p>
             <div className={styles.game__head}>
+              {showCoinsAnimation && (
+                <img
+                  src={coins}
+                  alt="coins animation"
+                  className={styles.game__coinsAnimation}
+                />
+              )}
               <div className={styles.game__headInner}>
                 <p className={styles.game__text}>Общий банк:</p>
-                <p>{data?.win?.winner_value !== "none" ? formatNumber(Number(data?.win?.winner_value)) : '0'}</p>
+                <p className={styles.game__money}>
+                  {data?.win?.winner_value !== "none" ? formatNumber(Number(data?.win?.winner_value)) : '0'}
+                </p>
               </div>
             </div>
             <div className={styles.game__mainContainer}>
