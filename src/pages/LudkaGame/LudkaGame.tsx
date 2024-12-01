@@ -143,7 +143,6 @@ const LudkaGame: FC = () => {
           setData(res);
           break;
         case 'room_info':
-          setWinner(null);
           setLoading(false);
           setData(res);
           break;
