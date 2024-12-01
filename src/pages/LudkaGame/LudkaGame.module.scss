@@ -175,11 +175,17 @@
   &__infoInnerContainer {
     @include size(100%, auto);
     @include flex(row, space-between, center, $space-18);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $space-18;
   }
 
   &__info {
     @include size(100%, 100%);
     @include flex(column, center, center);
+    background-color: $ludka-overlay-bg;
+    border-radius: $radius-15;
+    @include indents($space-12, 0);
   }
 
   &__infoText {
@@ -187,10 +193,11 @@
   }
 
   &__keysButton {
+    @include indents($space-12, 0);
     @include size(100%, 100%);
     @include button-style-reset();
     background-color: $ludka-overlay-bg;
-    animation: pulseOpacity 2s ease-in-out infinite;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     transition: transform 0.2s ease;
 
     &:active {
@@ -317,15 +324,12 @@
     }
   }
 
-  @keyframes pulseOpacity {
-    0% {
-      opacity: 1;
+  @keyframes pulse {
+    0%, 100% {
+      filter: brightness(1);
     }
     50% {
-      opacity: 0.8;
-    }
-    100% {
-      opacity: 1;
+      filter: brightness(0.8);
     }
   }
 }
