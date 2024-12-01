@@ -47,7 +47,7 @@
 
   &__closeButton {
     @include button-style-reset();
-    color: white;
+    color: $main-color;
     font-size: 24px;
     padding: 8px;
   }
@@ -62,7 +62,7 @@
   &__empty {
     @include flex(row, center, center);
     @include size(100%, 100%);
-    color: #626262;
+    color: $ludka-gray-text;
     font-size: 16px;
     text-align: center;
   }
@@ -74,25 +74,24 @@
     overflow-y: auto;
     padding-bottom: 16px;
     
-    // Стили для скроллбара
     &::-webkit-scrollbar {
       width: 6px;
     }
     
     &::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.1);
+      background: $ludka-scrollbar-track;
       border-radius: 3px;
     }
     
     &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
+      background: $ludka-scrollbar-thumb;
       border-radius: 3px;
     }
   }
 
   &__item {
     @include flex(row, flex-start, center);
-    background-color: #38583B;
+    background-color: $ludka-log-item-bg;
     border-radius: $radius-15;
   }
 

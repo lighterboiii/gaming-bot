@@ -13,18 +13,18 @@
     z-index: 1;
     background: linear-gradient(
       to bottom,
-      #4caf50 0%,
-      #4caf50 35%,
-      #2e5e32 45%,
-      #000000 60%,
-      #000000 100%
+      $ludka-grass-green 0%,
+      $ludka-grass-green 35%,
+      $ludka-dark-green 45%,
+      $black-color 60%,
+      $black-color 100%
     );
   }
 
   &__roomCounter {
     @include position(fixed, $top: $space-16, $left: $space-16);
     @include flex(row, center, center, $space-4);
-    color: #626262;
+    color: $ludka-gray-text;
     font-size: 16px;
     font-weight: 900;
   }
@@ -75,7 +75,7 @@
       &::before {
         content: '';
         @include position(fixed, $top: 0, $left: 0, $right: 0, $bottom: 0);
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: $ludka-overlay-black;
         z-index: 4;
         opacity: 0;
         transition: all 0.5s ease-in-out;
