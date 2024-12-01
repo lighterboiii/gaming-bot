@@ -210,7 +210,7 @@
 
     @media screen and (max-height: 691px) {
       @include size(100%, 32px);
-      bottom: max(3%, env(safe-area-inset-bottom));
+      bottom: max(2.5%, env(safe-area-inset-bottom));
     }
   }
 
