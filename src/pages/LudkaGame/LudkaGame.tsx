@@ -16,11 +16,11 @@ import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import LogIcon from "../../icons/LogButtonIcon/LogIcon";
 import RoomCounterIcon from "../../icons/RoomCounter/RoomCounter";
-import coinIcon from '../../images/mount/coinIcon.png';
 import coins from '../../images/mount/coins.png';
 import { useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
 import { indexUrl } from "../../utils/routes";
 import { getUserId } from "../../utils/userConfig";
 
@@ -364,7 +364,7 @@ const LudkaGame: FC = () => {
                   </p>
                   <p className={styles.game__money}>
                     +
-                    <span>{gameState.data?.bet_type === "1" ? "💵" : "🔰"}</span>
+                    <span>{gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}</span>
                     <span>
                       {gameState.winner
                         ? formatNumber(Number(gameState.winner.winner_value))
@@ -382,7 +382,7 @@ const LudkaGame: FC = () => {
                 <div className={styles.game__betContainer}>
                   <p className={styles.game__text}>{translation?.ludka_current_bet}</p>
                   <p className={styles.game__bet}>
-                    {gameState.data?.bet_type === "1" ? "💵" : "🔰"}
+                    {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
                     <span>{formatNumber(Number(gameState.data?.bet))}</span>
                   </p>
                 </div>
@@ -391,7 +391,7 @@ const LudkaGame: FC = () => {
                   <div className={styles.game__info}>
                     <p className={styles.game__text}>{translation?.webapp_balance}</p>
                     <p className={styles.game__money}>
-                      {gameState.data?.bet_type === "1" ? "💵" : "🔰"}
+                      {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
                       <span>
                         {currentPlayerBalance}
                       </span>
@@ -404,7 +404,7 @@ const LudkaGame: FC = () => {
                   >
                     <p className={styles.game__text}>{translation?.ludka_raise_to}</p>
                     <p className={styles.game__money}>
-                      {gameState.data?.bet_type === "1" ? "💵" : "🔰"}
+                      {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
                       <span>{pendingBet || calculateNextBet()}</span>
                     </p>
                   </button>

@@ -1,2 +1,2 @@
-export const tokenCurr= "🔰";
-export const coinCurr = "💵";
+export const MONEY_EMOJI = '💵';
+export const SHIELD_EMOJI = '🔰'; 

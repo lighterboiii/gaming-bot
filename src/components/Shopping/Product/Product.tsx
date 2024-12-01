@@ -12,7 +12,6 @@ import {
   setActiveEmojiRequest,
   setActiveSkinRequest
 } from "../../../api/shopApi";
-import useTelegram from "../../../hooks/useTelegram";
 import {
   addEnergyDrink,
   removeItemFromLavka,
@@ -23,6 +22,7 @@ import {
   setTokensValueAfterBuy
 } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
 import { IBuyItemRes } from "../../../utils/types/responseTypes";
 import { CombinedItemData, ItemData } from "../../../utils/types/shopTypes";
 import { Modal } from "../../Modal/Modal";
@@ -100,7 +100,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
           case "ok":
             updateItemCount(item.item_id);
             getShopItemsRequest()
-              .then(res => {})
+              .then(res => { })
             setMessage(`${translation?.successful_purchase}`);
             handlePurchaseItemTypes(item);
             postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
@@ -181,7 +181,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
             setMessage(`${translation?.item_already_owned}`);
             break;
           case "ok":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success'});
+            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
             setMessage(`${translation?.purchased_from_market}`);
             handlePurchaseItemTypes(item);
             break;
@@ -209,11 +209,11 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
           <div className={styles.product__info}>
             <div className={styles.product__textElements}>
               <p className={styles.product__type}>
-                {item?.item_type === "emoji" && `${translation?.shop_type_emoji}` }
+                {item?.item_type === "emoji" && `${translation?.shop_type_emoji}`}
                 {item?.item_type === "energy_drink" && `${translation?.shop_type_energydrink}`}
                 {item?.item_type === "skin_anim" && `${translation?.shop_type_skin}`}
                 {item?.item_type === "skin_png" && `${translation?.shop_type_skin}`}
-                </p>
+              </p>
               {item?.seller_publicname &&
                 <p className={styles.product__type}>
                   {translation?.main_menu_seller} {item.seller_publicname}
@@ -251,13 +251,17 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
               <div className={styles.product__buttonWrapper}>
                 {activeButton === `${translation?.marketplace}` ? (
                   <Button
-                    text={item?.item_price_coins !== 0 ? `💵 ${item?.item_price_coins}` : `🔰 ${item?.item_price_tokens}`}
+                    text={item?.item_price_coins !== 0
+                      ? `${MONEY_EMOJI} ${item?.item_price_coins}`
+                      : `${SHIELD_EMOJI} ${item?.item_price_tokens}`}
                     handleClick={() => handleBuyLavkaitem(item)}
                     isWhiteBackground
                   />
                 ) : (
                   <Button
-                    text={item?.item_price_coins !== 0 ? `💵 ${item?.item_price_coins}` : `🔰 ${item?.item_price_tokens}`}
+                    text={item?.item_price_coins !== 0
+                      ? `${MONEY_EMOJI} ${item?.item_price_coins}`
+                      : `${SHIELD_EMOJI} ${item?.item_price_tokens}`}
                     handleClick={() => handleBuyShopItem(item)}
                     isWhiteBackground
                   />

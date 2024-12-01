@@ -14,6 +14,7 @@ import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import TimerIcon from "../../icons/Timer/TimerIcon";
 import { useAppSelector } from "../../services/reduxHooks";
 import { formatNumber } from "../../utils/additionalFunctions";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
 import { indexUrl } from "../../utils/routes";
 import { ITime } from '../../utils/types/gameTypes';
 import { IMember } from "../../utils/types/memberTypes";
@@ -152,10 +153,10 @@ export const LeaderBoard: FC = () => {
                       {topLeader?.public_name}
                     </p>
                     <p className={styles.leaderBoard__leaderText}>
-                      {type === 'spendtokens' && '- 🔰 '}
-                      {type === 'spendcoins' && '- 💵 '}
-                      {type === 'coins' && '+ 💵 '}
-                      {type === 'tokens' && '+ 🔰 '}
+                      {type === 'spendtokens' && `- ${SHIELD_EMOJI} `}
+                      {type === 'spendcoins' && `- ${MONEY_EMOJI} `}
+                      {type === 'coins' && `+ ${MONEY_EMOJI} `}
+                      {type === 'tokens' && `+ ${SHIELD_EMOJI} `}
                       {type === 'friends' &&
                         <FriendsIcon
                           width={16}

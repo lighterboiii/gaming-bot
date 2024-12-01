@@ -9,6 +9,7 @@ import LevelIcon from "../../../icons/Level/LevelIcon";
 import WalletIcon from "../../../icons/Wallet/WalletIcon";
 import { useAppSelector } from "../../../services/reduxHooks";
 import { formatNumber } from "../../../utils/additionalFunctions";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
 import CircleButton from "../../ui/CircleButton/CircleButton";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
@@ -53,11 +54,11 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
               {/* </div> */}
             </div>
             <p className={styles.userInfo__text}>
-              <span>💵</span>
+              <span>{MONEY_EMOJI}</span>
               {userData ? formatNumber(userData?.coins) : '0'}
             </p>
             <p className={styles.userInfo__text}>
-              <span>🔰</span>
+              <span>{SHIELD_EMOJI}</span>
               {userData ? formatNumber(userData?.tokens) : '0'}
             </p>
           </div>

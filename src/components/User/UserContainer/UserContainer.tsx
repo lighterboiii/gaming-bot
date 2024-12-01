@@ -5,6 +5,7 @@ import { getUserId } from "utils/userConfig";
 
 import FriendsIcon from "../../../icons/Friends/FriendsIcon";
 import { formatNumber } from "../../../utils/additionalFunctions";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
 import { IMember } from "../../../utils/types/memberTypes";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
@@ -53,11 +54,11 @@ const UserContainer: FC<IProps> = ({
           <p className={styles.userContainer__textCoins}
             style={{ color: isUser ? "#d51845" : "" }}
           >
-            {!leaderBoardType && `+ 💵 ${formatNumber(member.coins)}`}
-            {leaderBoardType === 'spendtokens' && `- 🔰 ${formatNumber(member.coins)}`}
-            {leaderBoardType === 'spendcoins' && `- 💵 ${formatNumber(member.coins)}`}
-            {leaderBoardType === 'coins' && `+ 💵 ${formatNumber(member.coins)}`}
-            {leaderBoardType === 'tokens' && `+ 🔰 ${formatNumber(member.coins)}`}
+            {!leaderBoardType && `+ ${MONEY_EMOJI} ${formatNumber(member.coins)}`}
+            {leaderBoardType === 'spendtokens' && `- ${SHIELD_EMOJI} ${formatNumber(member.coins)}`}
+            {leaderBoardType === 'spendcoins' && `- ${MONEY_EMOJI} ${formatNumber(member.coins)}`}
+            {leaderBoardType === 'coins' && `+ ${MONEY_EMOJI} ${formatNumber(member.coins)}`}
+            {leaderBoardType === 'tokens' && `+ ${SHIELD_EMOJI} ${formatNumber(member.coins)}`}
             {leaderBoardType === 'friends' && (
               <>
                 + {member.coins} <FriendsIcon width={16}

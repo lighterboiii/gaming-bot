@@ -34,6 +34,7 @@ import {
 } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from '../../socket/WebSocketContext';
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
 import { indexUrl, roomsUrl } from "../../utils/routes";
 import { IGameData, IPlayer, IRPSGameState } from "../../utils/types/gameTypes";
 import { getUserId } from '../../utils/userConfig';
@@ -89,7 +90,7 @@ export const RockPaperScissors: FC = () => {
       clearMessages();
       navigate(indexUrl, { replace: true });
     });
-    
+
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
@@ -205,8 +206,7 @@ export const RockPaperScissors: FC = () => {
         setGameState(prev => ({
           ...prev,
           message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
-            ? `${res?.whoiswin.winner_value} ${gameState.data?.bet_type === "1" ? `💵`
-              : `🔰`}`
+            ? `${res?.whoiswin.winner_value} ${gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}`
             : ''}`
         }));
         if (gameState.data?.bet_type === "1") {
@@ -223,8 +223,8 @@ export const RockPaperScissors: FC = () => {
         setGameState(prev => ({
           ...prev,
           message: `${translation?.you_lost} ${gameState.data?.bet} ${gameState.data?.bet_type === "1"
-            ? `💵`
-            : `🔰`}`
+            ? MONEY_EMOJI
+            : SHIELD_EMOJI}`
         }));
         if (gameState.data?.bet_type === "3") {
           dispatch(setTokensValueAfterBuy(Number(res?.whoiswin.winner_value)));
@@ -412,7 +412,7 @@ export const RockPaperScissors: FC = () => {
       sendMessage(choiceData);
     };
 
-    if (gameState.data?.players_count === "1" 
+    if (gameState.data?.players_count === "1"
       && gameState.data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
@@ -493,7 +493,10 @@ export const RockPaperScissors: FC = () => {
                     <div className={styles.game__betContainer}>
                       <p className={styles.game__text}>{translation?.game_bet_text}</p>
                       <div className={styles.game__bet}>
-                        <p className={styles.game__text}>{gameState.data?.bet_type === "1" ? "💵" : "🔰"}</p>
+                        <p className={styles.game__text}>{gameState.data?.bet_type === "1"
+                          ? MONEY_EMOJI
+                          : SHIELD_EMOJI
+                        }</p>
                         <p className={styles.game__text}>{gameState.data?.bet}</p>
                       </div>
                     </div>

@@ -3,6 +3,7 @@ import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 
 import { useAppSelector } from "../../../services/reduxHooks";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
 import { ItemData } from "../../../utils/types/shopTypes";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
@@ -37,7 +38,9 @@ const ShopItem: FC<IProps> = ({ item, onClick, activeButton }) => {
       </div>
       {activeButton !== `${translation?.purchased}` && (
         <p className={styles.item__price}>
-          {item?.item_price_coins !== 0 ? `💵 ${item?.item_price_coins}` : `🔰 ${item?.item_price_tokens}`}
+          {item?.item_price_coins !== 0 
+          ? `${MONEY_EMOJI} ${item?.item_price_coins}` 
+          : `${SHIELD_EMOJI} ${item?.item_price_tokens}`}
         </p>
       )}
     </div>

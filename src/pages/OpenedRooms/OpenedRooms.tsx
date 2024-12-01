@@ -23,6 +23,7 @@ import { getOpenedRooms, setUserData, setUserPhoto } from "../../services/appSli
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { sortRooms } from "../../utils/additionalFunctions";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
 import { indexUrl } from "../../utils/routes";
 import { IGameCardData } from "../../utils/types/gameTypes";
 
@@ -164,7 +165,7 @@ export const OpenedRooms: FC = () => {
           } else {
             sortedRooms = sortRooms(rooms as any, 'bet_type', sortByCurr);
             setSortByCurr(!sortByCurr);
-            setCurrencyValue(sortByCurr ? '💵' : '🔰');
+            setCurrencyValue(sortByCurr ? MONEY_EMOJI : SHIELD_EMOJI);
             setRooms(sortedRooms);
           }
           return newCount;

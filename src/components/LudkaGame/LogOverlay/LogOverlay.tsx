@@ -3,6 +3,7 @@ import React from 'react';
 
 import UserAvatar from '../../../components/User/UserAvatar/UserAvatar';
 import { useAppSelector } from '../../../services/reduxHooks';
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
 import { ILogOverlayProps } from '../../../utils/types/gameTypes';
 
 import styles from './LogOverlay.module.scss';
@@ -50,7 +51,7 @@ export const LogOverlay: React.FC<ILogOverlayProps> = ({
                     </p>
                     <p className={styles.logOverlay__money}>
                       +
-                      {user.bet_type === "1" ? "💵" : "🔰"}
+                      {user.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
                       {user.coins}
                     </p>
                   </div>

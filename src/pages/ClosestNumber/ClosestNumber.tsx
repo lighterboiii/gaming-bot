@@ -33,6 +33,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
 import { indexUrl, roomsUrl } from "../../utils/routes";
 import { IPlayer } from "../../utils/types/gameTypes";
 
@@ -479,7 +480,7 @@ export const ClosestNumber: FC = () => {
                     <p className={styles.game__bet}>
                       {translation?.game_bet_text}
                       <span className={styles.game__text}>
-                        {data?.bet_type === "1" ? "💵" : "🔰"}
+                        {data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
                       </span>
                       {data?.bet}
                     </p>
@@ -531,8 +532,8 @@ export const ClosestNumber: FC = () => {
                     <div className={styles.overlay__userMoney}>
                       <span className={styles.overlay__text}>
                         {data?.bet_type === "1"
-                          ? `💵 ${userData?.coins && formatNumber(userData?.coins)}`
-                          : `🔰 ${userData?.tokens && formatNumber(userData?.tokens)}`}
+                          ? `${MONEY_EMOJI} ${userData?.coins && formatNumber(userData?.coins)}`
+                          : `${SHIELD_EMOJI} ${userData?.tokens && formatNumber(userData?.tokens)}`}
                       </span>
                     </div>
                   </div>

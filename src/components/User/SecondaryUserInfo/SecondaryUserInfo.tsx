@@ -6,6 +6,7 @@ import useTelegram from "../../../hooks/useTelegram";
 import WalletIcon from "../../../icons/Wallet/WalletIcon";
 import { useAppSelector } from "../../../services/reduxHooks";
 import { formatNumber } from "../../../utils/additionalFunctions";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
 import UserAvatar from "../UserAvatar/UserAvatar";
 
 import styles from './SecondaryUserInfo.module.scss';
@@ -30,8 +31,8 @@ const UserInfo: FC = () => {
         <div className={styles.user__textElements}>
           <p className={styles.user__name}>{userData && userData?.publicname}</p>
           <div className={styles.user__money}>
-            <p className={styles.user__text}>💵 {userData ? formatNumber(userData?.coins) : '0'}</p>
-            <p className={styles.user__text}>🔰 {userData ? formatNumber(userData?.tokens) : '0'}</p>
+            <p className={styles.user__text}>{MONEY_EMOJI} {userData ? formatNumber(userData?.coins) : '0'}</p>
+            <p className={styles.user__text}>{SHIELD_EMOJI} {userData ? formatNumber(userData?.tokens) : '0'}</p>
           </div>
           <button type="button"
             className={styles.user__balance}
