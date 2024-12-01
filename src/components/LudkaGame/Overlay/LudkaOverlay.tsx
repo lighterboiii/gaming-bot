@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useAppSelector } from '../../../services/reduxHooks';
 import { ILudkaOverlayProps } from '../../../utils/types/gameTypes';
 
 import styles from './LudkaOverlay.module.scss';
@@ -14,6 +15,8 @@ export const Overlay: React.FC<ILudkaOverlayProps> = ({
   onSubmit,
   overlayRef,
 }) => {
+  const translation = useAppSelector(store => store.app.languageSettings);
+  
   return (
     <div
       ref={overlayRef}
@@ -21,7 +24,7 @@ export const Overlay: React.FC<ILudkaOverlayProps> = ({
     >
       <div className={styles.overlay__inputContainer}>
         <p className={styles.overlay__inputLabel}>
-          Введите сумму ставки
+          {translation?.ludka_enter_bet}
         </p>
         <input
           type="text"

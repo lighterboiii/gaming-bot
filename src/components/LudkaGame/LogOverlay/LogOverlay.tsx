@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
-import UserAvatar from 'components/User/UserAvatar/UserAvatar';
-
+import UserAvatar from '../../../components/User/UserAvatar/UserAvatar';
 import coinIcon from '../../../images/mount/coinIcon.png';
+import { useAppSelector } from '../../../services/reduxHooks';
 import { ILogOverlayProps } from '../../../utils/types/gameTypes';
 
 import styles from './LogOverlay.module.scss';
@@ -16,7 +16,8 @@ export const LogOverlay: React.FC<ILogOverlayProps> = ({
   shouldReset
 }) => {
   const displayUsers = shouldReset ? "none" : users;
-
+  const translation = useAppSelector(store => store.app.languageSettings);
+  
   return (
     <div className={styles.logOverlayWrapper}>
       <div
@@ -24,7 +25,7 @@ export const LogOverlay: React.FC<ILogOverlayProps> = ({
         className={`${styles.logOverlay} ${isVisible ? styles.expanded : ''}`}
       >
         <div className={styles.logOverlay__header}>
-          <h2 className={styles.logOverlay__title}>История ставок</h2>
+          <h2 className={styles.logOverlay__title}>{translation?.ludka_bet_history}</h2>
           <button
             className={styles.logOverlay__closeButton}
             onClick={onClose}
@@ -35,7 +36,7 @@ export const LogOverlay: React.FC<ILogOverlayProps> = ({
         <div className={styles.logOverlay__content}>
           {displayUsers === "none" ? (
             <div className={styles.logOverlay__empty}>
-              <p>История ставок пока пуста</p>
+              <p>{translation?.ludka_bet_clear_history}</p>
             </div>
           ) : (
             <div className={styles.logOverlay__list}>

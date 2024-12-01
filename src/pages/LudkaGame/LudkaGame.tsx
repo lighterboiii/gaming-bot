@@ -55,6 +55,7 @@ const LudkaGame: FC = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const logOverlayRef = useRef<HTMLDivElement>(null);
   const [pendingBet, setPendingBet] = useState<string>('');
+  const translation = useAppSelector(store => store.app.languageSettings);
 
   useEffect(() => {
     tg.setHeaderColor('#4caf50');
@@ -329,7 +330,7 @@ const LudkaGame: FC = () => {
                 />
               )}
               <div className={styles.game__headInner}>
-                <p className={styles.game__text}>Общий банк:</p>
+                <p className={styles.game__text}>{translation?.ludka_total_pot}</p>
                 <p className={styles.game__money}>
                   {gameState.data?.win?.winner_value !== "none" 
                   ? formatNumber(Number(gameState.data?.win?.winner_value)) 
@@ -355,7 +356,7 @@ const LudkaGame: FC = () => {
                 <div className={styles.game__userNameContainer}>
                   <p className={styles.game__userName}>
                     {gameState.winner
-                      ? `Победитель: ${gameState.winner.user_name}`
+                      ? `${translation?.ludka_winner} ${gameState.winner.user_name}`
                       : gameState.data?.win?.users === "none"
                         ? userData?.publicname
                         : gameState.data?.win?.users[gameState.data.win.users.length - 1]?.user_name
@@ -379,7 +380,7 @@ const LudkaGame: FC = () => {
 
               <div className={styles.game__infoContainer}>
                 <div className={styles.game__betContainer}>
-                  <p className={styles.game__text}>Текущая ставка:</p>
+                  <p className={styles.game__text}>{translation?.ludka_current_bet}</p>
                   <p className={styles.game__bet}>
                     <img src={coinIcon} alt="money" className={styles.game__moneyBetIcon} />
                     <span>{formatNumber(Number(gameState.data?.bet))}</span>
@@ -401,7 +402,7 @@ const LudkaGame: FC = () => {
                     className={styles.game__keysButton}
                     onClick={handleOpenOverlay}
                   >
-                    <p className={styles.game__text}>Поднять до:</p>
+                    <p className={styles.game__text}>{translation?.ludka_raise_to}</p>
                     <p className={styles.game__money}>
                       <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                       <span>{pendingBet || calculateNextBet()}</span>
@@ -414,9 +415,9 @@ const LudkaGame: FC = () => {
                 <button
                   className={styles.game__actionButton}
                   onClick={handleRaiseBet}
-                  // disabled={gameState.data?.players.length === 1}
+                  disabled={gameState.data?.players.length === 1}
                 >
-                  <span className={styles.game__actionButtonText}>Поднять ставку</span>
+                  <span className={styles.game__actionButtonText}>{translation?.ludka_raise_bet}</span>
                 </button>
                 <button
                   className={styles.game__logButton}
