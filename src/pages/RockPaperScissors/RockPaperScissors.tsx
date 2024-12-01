@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
-import { FC, useCallback, useEffect, useRef, useState, useContext } from "react";
+import { FC, useCallback, useEffect, useRef, useState, useContext, useMemo } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import { setGameRulesWatched } from "../../api/gameApi";
@@ -40,6 +40,29 @@ import { getUserId } from '../../utils/userConfig';
 
 import styles from "./RockPaperScissors.module.scss";
 
+interface GameState {
+  data: IGameData | null;
+  loading: boolean;
+  message: string;
+  messageVisible: boolean;
+  animation: string | null;
+  playersAnim: {
+    firstAnim: string | null;
+    secondAnim: string | null;
+  };
+}
+
+interface OverlayState {
+  showEmoji: boolean;
+  showRules: boolean | null;
+}
+
+interface TimerState {
+  value: number;
+  started: boolean;
+  show: boolean;
+}
+
 export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
   const { tg } = useTelegram();
@@ -47,11 +70,15 @@ export const RockPaperScissors: FC = () => {
   const userId = getUserId();
   const { roomId } = useParams<{ roomId: string | any }>();
   const dispatch = useAppDispatch();
-  const [data, setData] = useState<IGameData | null>(null);
+  const [gameState, setGameState] = useState<GameState>({
+    data: null,
+    loading: false,
+    message: '',
+    messageVisible: false,
+    animation: null,
+    playersAnim: { firstAnim: null, secondAnim: null }
+  });
   const [choice, setChoice] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>('');
-  const [animation, setAnimation] = useState<any>(null);
   const [animationKey, setAnimationKey] = useState(0);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [messageVisible, setMessageVisible] = useState(false);
@@ -69,7 +96,9 @@ export const RockPaperScissors: FC = () => {
   const isPortrait = useOrientation();
   const userData = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages, clearMessages, disconnect } = useContext(WebSocketContext)!;
-  const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
+  const currentPlayer = useMemo(() => {
+    return gameState.data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
+  }, [gameState.data?.players, userId]);
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -88,25 +117,36 @@ export const RockPaperScissors: FC = () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
       clearMessages();
-      setData(null);
+      setGameState(prev => ({
+        ...prev,
+        data: null,
+        loading: false,
+        message: '',
+        messageVisible: false,
+        animation: null,
+        playersAnim: { firstAnim: null, secondAnim: null }
+      }));
     }
   }, [tg, navigate, userId]);
   // запрос результата хода
   const updateAnimation = useCallback((newAnimation: string) => {
-    setAnimation((prevAnimation: string) => {
-      if (prevAnimation !== newAnimation) {
-        setAnimationKey((prevKey) => prevKey + 1);
-        return newAnimation;
-      }
-      return prevAnimation;
-    });
+    setGameState(prev => ({
+      ...prev,
+      animation: prev.animation !== newAnimation ? newAnimation : prev.animation
+    }));
   }, []);
 
   useEffect(() => {
-    setLoading(true);
+    setGameState(prev => ({
+      ...prev,
+      loading: true
+    }));
 
     if (!roomId) {
-      setLoading(false);
+      setGameState(prev => ({
+        ...prev,
+        loading: false
+      }));
       return;
     }
     const fetchInitialData = () => {
@@ -120,99 +160,132 @@ export const RockPaperScissors: FC = () => {
     fetchInitialData();
   }, []);
 
-  useEffect(() => {
-    const messageHandler = (message: any) => {
-      const res = JSON.parse(message);
-      switch (res?.type) {
-        case 'room_info':
-          setData(res);
-          setLoading(false);
-          break;
-        case 'whoiswin':
-          // if (hasHandledWin.current) return;
-          // hasHandledWin.current = true;
-          setIsWhoIsWinActive(true);
-          setPlayersAnim({
-            firstAnim: res?.whoiswin.f_anim,
-            secondAnim: res?.whoiswin.s_anim,
-          });
-          const animationTime = 3000;
-          setAnimationKey(prevKey => prevKey + 1);
-          setTimeout(() => {
-            if (Number(res?.whoiswin.winner) === Number(userId)) {
-              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) ? lWinAnim : rWinAnim);
-              // postEvent(
-              //   'web_app_trigger_haptic_feedback',
-              //   { type: 'notification', notification_type: 'success' }
-              // );
-              setMessage(`${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
-                ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵`
-                  : `🔰`}`
-                : ''}`);
-              if (data?.bet_type === "1") {
-                dispatch(addCoins(Number(res?.whoiswin.winner_value)));
-              } else {
-                dispatch(addTokens(Number(res?.whoiswin.winner_value)));
-              }
-            } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
-              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) ? lLoseAnim : rLoseAnim);
-              // postEvent(
-              //   'web_app_trigger_haptic_feedback',
-              //   { type: 'notification', notification_type: 'error', }
-              // );
-              setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
-                ? `💵`
-                : `🔰`}`);
-              if (data?.bet_type === "3") {
-                dispatch(setTokensValueAfterBuy(Number(res?.whoiswin.winner_value)));
-              } else {
-                dispatch(setCoinsValueAfterBuy(Number(res?.whoiswin.winner_value)));
-              }
-            } else if (res?.whoiswin.winner === 'draw') {
-              setMessage(translation?.draw);
-              // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-            }
-            setMessageVisible(true);
+  const handleWebSocketMessage = useCallback((message: string) => {
+    const res = JSON.parse(message);
+    switch (res?.type) {
+      case 'room_info':
+        handleRoomInfo(res);
+        break;
+      case 'whoiswin':
+        handleWinnerMessage(res);
+        break;
+      case 'choice':
+        setGameState(prev => ({
+          ...prev,
+          data: res
+        }));
+        break;
+      case 'emoji':
+        setGameState(prev => ({
+          ...prev,
+          data: res
+        }));
+        break;
+      case 'kickplayer':
+        if (Number(res?.player_id) === Number(userId)) {
+          clearMessages();
+          setGameState(prev => ({
+            ...prev,
+            data: null,
+            loading: false,
+            message: '',
+            messageVisible: false,
+            animation: null,
+            playersAnim: { firstAnim: null, secondAnim: null }
+          }));
+          disconnect();
+          navigate(indexUrl, { replace: true });
+        }
+        break;
+      default:
+        break;
+    }
+  }, []);
 
-            setTimeout(() => {
-              setMessageVisible(false);
-              setAnimation(null);
-              setPlayersAnim({
-                firstAnim: null,
-                secondAnim: null,
-              });
-              clearMessages();
-              setShowTimer(true);
-              setIsWhoIsWinActive(false);
-            }, 3500)
+  const handleRoomInfo = useCallback((res: any) => {
+    setGameState(prev => ({
+      ...prev,
+      data: res,
+      loading: false
+    }));
+  }, []);
 
-          }, animationTime);
-          break;
-        case 'choice':
-          setData(res);
-          break;
-        case 'emoji':
-          setData(res);
-          break;
-        case 'kickplayer':
-          if (Number(res?.player_id) === Number(userId)) {
-            clearMessages();
-            setData(null);
-            disconnect();
-            navigate(indexUrl, { replace: true });
-            }
-          break;
-        default:
-          break;
+  const handleWinnerMessage = useCallback((res: any) => {
+    setIsWhoIsWinActive(true);
+    setPlayersAnim({
+      firstAnim: res?.whoiswin.f_anim,
+      secondAnim: res?.whoiswin.s_anim,
+    });
+    const animationTime = 3000;
+    setAnimationKey(prevKey => prevKey + 1);
+    setTimeout(() => {
+      if (Number(res?.whoiswin.winner) === Number(userId)) {
+        updateAnimation(Number(gameState.data?.creator_id) === Number(res?.whoiswin.winner) ? lWinAnim : rWinAnim);
+        // postEvent(
+        //   'web_app_trigger_haptic_feedback',
+        //   { type: 'notification', notification_type: 'success' }
+        // );
+        setGameState(prev => ({
+          ...prev,
+          message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
+            ? `${res?.whoiswin.winner_value} ${gameState.data?.bet_type === "1" ? `💵`
+              : `🔰`}`
+            : ''}`
+        }));
+        if (gameState.data?.bet_type === "1") {
+          dispatch(addCoins(Number(res?.whoiswin.winner_value)));
+        } else {
+          dispatch(addTokens(Number(res?.whoiswin.winner_value)));
+        }
+      } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
+        updateAnimation(Number(gameState.data?.creator_id) === Number(res?.whoiswin.winner) ? lLoseAnim : rLoseAnim);
+        // postEvent(
+        //   'web_app_trigger_haptic_feedback',
+        //   { type: 'notification', notification_type: 'error', }
+        // );
+        setGameState(prev => ({
+          ...prev,
+          message: `${translation?.you_lost} ${gameState.data?.bet} ${gameState.data?.bet_type === "1"
+            ? `💵`
+            : `🔰`}`
+        }));
+        if (gameState.data?.bet_type === "3") {
+          dispatch(setTokensValueAfterBuy(Number(res?.whoiswin.winner_value)));
+        } else {
+          dispatch(setCoinsValueAfterBuy(Number(res?.whoiswin.winner_value)));
+        }
+      } else if (res?.whoiswin.winner === 'draw') {
+        setGameState(prev => ({
+          ...prev,
+          message: translation?.draw
+        }));
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
       }
-    };
-    const handleMessage = () => {
-      wsMessages.forEach((message: any) => {
-        messageHandler(message);
-      });
-    };
-    handleMessage();
-  }, [wsMessages]);
+      setMessageVisible(true);
+
+      setTimeout(() => {
+        setMessageVisible(false);
+        setGameState(prev => ({
+          ...prev,
+          animation: null,
+          playersAnim: {
+            firstAnim: null,
+            secondAnim: null,
+          }
+        }));
+        clearMessages();
+        setShowTimer(true);
+        setIsWhoIsWinActive(false);
+      }, 3500)
+
+    }, animationTime);
+  }, [gameState.data, userId, dispatch, translation]);
+
+  useEffect(() => {
+    wsMessages.forEach(message => {
+      handleWebSocketMessage(message);
+    });
+  }, [wsMessages, handleWebSocketMessage]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -220,10 +293,10 @@ export const RockPaperScissors: FC = () => {
   // хендлер готовности игрока websocket
   const handleReady = () => {
     if (whoIsWinActive) return;
-    const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
+    const player = gameState.data?.players.find((player: any) => Number(player?.userid) === Number(userId));
 
-    if (data?.bet_type === "1") {
-      if (player?.money && (player?.money <= Number(data?.bet))) {
+    if (gameState.data?.bet_type === "1") {
+      if (player?.money && (player?.money <= Number(gameState.data?.bet))) {
         sendMessage({
           user_id: player?.userid,
           room_id: roomId,
@@ -237,8 +310,8 @@ export const RockPaperScissors: FC = () => {
         // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
         return;
       }
-    } else if (data?.bet_type === "3") {
-      if (player?.tokens && (player?.tokens <= Number(data?.bet))) {
+    } else if (gameState.data?.bet_type === "3") {
+      if (player?.tokens && (player?.tokens <= Number(gameState.data?.bet))) {
         sendMessage({
           user_id: userId,
           room_id: roomId,
@@ -252,7 +325,10 @@ export const RockPaperScissors: FC = () => {
     // Сброс сообщений и блокировок выбора
     setMessageVisible(false);
     setIsChoiceLocked(false);
-    setMessage('');
+    setGameState(prev => ({
+      ...prev,
+      message: ''
+    }));
 
     sendMessage({
       user_id: userId,
@@ -303,26 +379,26 @@ export const RockPaperScissors: FC = () => {
   };
   // Таймер
   useEffect(() => {
-    if (data?.players_count === "2" && showTimer
-      && (data?.players?.some((player: IPlayer) => player.choice === 'none')
-        || (data?.players?.some((player: IPlayer) => player.choice === 'ready')))) {
+    if (gameState.data?.players_count === "2" && showTimer
+      && (gameState.data?.players?.some((player: IPlayer) => player.choice === 'none')
+        || (gameState.data?.players?.some((player: IPlayer) => player.choice === 'ready')))) {
       if (!timerStarted) {
         setTimerStarted(true);
         setTimer(20);
       }
 
       setShowTimer(true);
-    } else if (data?.players?.every((player: IPlayer) => player.choice === 'ready')) {
+    } else if (gameState.data?.players?.every((player: IPlayer) => player.choice === 'ready')) {
       setTimerStarted(false);
       setShowTimer(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
-    } else if (data?.players_count === "1") {
+    } else if (gameState.data?.players_count === "1") {
       setTimerStarted(false);
       setTimer(20);
     }
-  }, [data]);
+  }, [gameState]);
   // кик игрока, если он не прожал готовность
   useEffect(() => {
     if (showTimer && timerStarted && timer > 0) {
@@ -359,10 +435,11 @@ export const RockPaperScissors: FC = () => {
       sendMessage(choiceData);
     };
 
-    if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
+    if (gameState.data?.players_count === "1" 
+      && gameState.data?.players.some((player: any) => player.choice !== 'none')) {
       resetPlayerChoice();
     }
-  }, [data]);
+  }, [gameState]);
   // обработчик клика по кнопке "Ознакомился" - не Websocket
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
@@ -399,22 +476,22 @@ export const RockPaperScissors: FC = () => {
     <div className={styles.game}>
       <div
         className={styles.game__result}
-        style={{ backgroundImage: `url(${animation}?key=${animationKey})` }}
+        style={{ backgroundImage: `url(${gameState.animation}?key=${animationKey})` }}
       >
-        {loading ? <Loader /> : (
+        {gameState.loading ? <Loader /> : (
           <>
             {rules ? (
               <>
-                <Players data={data as IGameData} userData={userData} />
+                <Players data={gameState.data as IGameData} userData={userData} />
                 <>
-                  {data?.players_count === "2" &&
-                    data?.players?.every((player: IPlayer) => player?.choice === 'ready') &&
+                  {gameState.data?.players_count === "2" &&
+                    gameState.data?.players?.every((player: IPlayer) => player?.choice === 'ready') &&
                     <img src={newVS}
                       alt="versus icon"
                       className={styles.game__versusImage} />}
                   {messageVisible ? (
                     <p className={styles.game__resultMessage}>
-                      {message}
+                      {gameState.message}
                     </p>
                   ) : (
                     <p className={styles.game__timer}>
@@ -423,13 +500,13 @@ export const RockPaperScissors: FC = () => {
                   )}
                   <div className={styles.game__hands}>
                     {(
-                      data?.players_count === "2"
+                      gameState.data?.players_count === "2"
                     ) ? (
                       <HandShake
                         player1={playersAnim.firstAnim || leftRock}
                         player2={playersAnim.secondAnim || rightRock} />
                     ) : (
-                      data?.players_count === "1"
+                      gameState.data?.players_count === "1"
                     ) ? (
                       <p className={styles.game__notify}>{translation?.waiting4players}</p>
                     ) :
@@ -439,12 +516,12 @@ export const RockPaperScissors: FC = () => {
                     <div className={styles.game__betContainer}>
                       <p className={styles.game__text}>{translation?.game_bet_text}</p>
                       <div className={styles.game__bet}>
-                        <p className={styles.game__text}>{data?.bet_type === "1" ? "💵" : "🔰"}</p>
-                        <p className={styles.game__text}>{data?.bet}</p>
+                        <p className={styles.game__text}>{gameState.data?.bet_type === "1" ? "💵" : "🔰"}</p>
+                        <p className={styles.game__text}>{gameState.data?.bet}</p>
                       </div>
                     </div>
-                    {(data?.players?.every((player: IPlayer) => player?.choice !== 'none')
-                      && data?.players_count === "2") ? (
+                    {(gameState.data?.players?.every((player: IPlayer) => player?.choice !== 'none')
+                      && gameState.data?.players_count === "2") ? (
                       <div className={styles.game__buttonsWrapper}>
                         <ChoiceBox
                           choice={choice}
