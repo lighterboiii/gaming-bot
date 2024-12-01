@@ -105,7 +105,7 @@
   &__mainContainer {
     @include indents();
     @include size(100%, auto);
-    @include flex(column, flex-end, center, $space-12);
+    @include flex(column, flex-end, center, $space-18);
     z-index: 5;
     overflow: visible;
   }
@@ -145,7 +145,7 @@
   }
 
   &__betContainer, &__info, &__keysButton {
-    background-color: #323232;
+    background-color: $ludka-overlay-bg;
     border-radius: $radius-15;
     @include indents($space-12, 0);
     z-index: 7;
@@ -189,7 +189,7 @@
   &__keysButton {
     @include size(100%, 100%);
     @include button-style-reset();
-    background-color: #323232;
+    background-color: $ludka-overlay-bg;
     animation: pulseScale 2s ease-in-out infinite;
     transition: transform 0.2s ease;
 
@@ -200,7 +200,7 @@
 
   &__text {
     font-size: 16px;
-    color: #626262;
+    color: $closest-color;
   }
 
   &__bet, &__money, &__infoText {
@@ -231,7 +231,7 @@
     @include max-size(100%, 84px);
     display: grid;
     grid-template-columns: 3fr 1fr;
-    gap: $space-12;
+    gap: $space-18;
     transition: opacity 0.3s ease-out;
 
     &_hidden {
@@ -258,7 +258,7 @@
 
   &__logButton {
     @include size(100%, 100%);
-    background-color: #058D32;
+    background-color: $ludka-success-bg;
     border-radius: $radius-15;
     aspect-ratio: 1;
   }
