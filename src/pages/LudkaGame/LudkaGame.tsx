@@ -389,7 +389,7 @@ const LudkaGame: FC = () => {
 
                 <div className={styles.game__infoInnerContainer}>
                   <div className={styles.game__info}>
-                    <p className={styles.game__text}>Баланс:</p>
+                    <p className={styles.game__text}>{translation?.webapp_balance}</p>
                     <p className={styles.game__money}>
                       <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                       <span>
