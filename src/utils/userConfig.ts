@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 // Создаем .env файл в корне проекта
 // const IS_DEVELOPMENT = process.env.REACT_APP_ENV === 'development';
-const IS_DEVELOPMENT = false; 
+const IS_DEVELOPMENT = true; 
 
 interface UserConfig {
   DEV_USER_ID: number;

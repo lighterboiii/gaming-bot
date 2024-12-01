@@ -186,6 +186,12 @@
     @include size(100%, 100%);
     @include button-style-reset();
     background-color: #323232;
+    animation: pulseScale 2s ease-in-out infinite;
+    transition: transform 0.2s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
   }
 
   &__text {
@@ -237,6 +243,7 @@
     @include size(100%, 100%);
     background: linear-gradient(to bottom, #FFDA0A 0%, #FF9B00 100%);
     border-radius: $radius-15;
+    color: $black-color;
 
     &:disabled {
       opacity: 0.5;
@@ -303,6 +310,18 @@
     100% {
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+
+  @keyframes pulseScale {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+    100% {
+      transform: scale(1);
     }
   }
 }

@@ -51,12 +51,13 @@ const LudkaGame: FC = () => {
       item_mask: string;
     },
     user_name: string;
+    user_pic: string;
     winner_value: string;
   } | null>(null);
   const [pendingBet, setPendingBet] = useState<string>('');
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const [showCoinsAnimation, setShowCoinsAnimation] = useState(false);
-
+  console.log(winner);
   useEffect(() => {
     tg.setHeaderColor('#4caf50');
     tg.BackButton.show();
@@ -101,6 +102,7 @@ const LudkaGame: FC = () => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'choice':
+          setWinner(null);
           setSlideDirection(prev => prev === 'right' ? 'left' : 'right');
           setShowCoinsAnimation(true);
           setTimeout(() => setShowCoinsAnimation(false), 1000);
@@ -114,6 +116,7 @@ const LudkaGame: FC = () => {
               item_mask: res.whoiswin.item_mask
             },
             user_name: res.whoiswin.user_name,
+            user_pic: res.whoiswin.user_pic,
             winner_value: res.whoiswin.winner_value
           });
           setTimeout(() => {
@@ -137,6 +140,7 @@ const LudkaGame: FC = () => {
           setData(res);
           break;
         case 'room_info':
+          setWinner(null);
           setLoading(false);
           setData(res);
           break;
@@ -172,7 +176,7 @@ const LudkaGame: FC = () => {
     setTimeout(() => {
       setIsVisible(true);
     }, 50);
-    setInputValue(calculateNextBet());
+    setInputValue('');
     setInputError(false);
   };
 
@@ -294,6 +298,16 @@ const LudkaGame: FC = () => {
     handleChoice(betToSend);
     setPendingBet('');
   };
+
+  const getCurrentPlayerBalance = () => {
+    const currentPlayer = data?.players?.find((player: any) => player.userid === Number(userId));
+    if (currentPlayer) {
+      return data?.bet_type === "1" 
+        ? formatNumber(Number(currentPlayer.money))
+        : formatNumber(Number(currentPlayer.tokens));
+    }
+    return "0";
+  };
   console.log(winner);
   if (!isPortrait) {
     return (
@@ -333,7 +347,7 @@ const LudkaGame: FC = () => {
                   ${styles[`game__userContainer_slide_${slideDirection}`]}`}>
                 <div className={styles.game__avatarContainer}>
                   {winner
-                    ? <UserAvatar item={winner?.item} />
+                    ? <UserAvatar item={winner?.item} avatar={winner?.user_pic} />
                     : data?.win?.users === "none"
                       ? <UserAvatar />
                       : <UserAvatar
@@ -381,10 +395,7 @@ const LudkaGame: FC = () => {
                     <p className={styles.game__money}>
                       <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                       <span>
-                        {data?.bet_type === "1"
-                          ? userData?.coins && `${formatNumber(Number(userData?.coins))}`
-                          : userData?.tokens && `${formatNumber(Number(userData?.tokens))}`
-                        }
+                        {getCurrentPlayerBalance()}
                       </span>
                     </p>
                   </div>
@@ -393,7 +404,7 @@ const LudkaGame: FC = () => {
                     className={styles.game__keysButton}
                     onClick={handleOpenOverlay}
                   >
-                    <p className={styles.game__text}>Поднять на:</p>
+                    <p className={styles.game__text}>Поднять до:</p>
                     <p className={styles.game__money}>
                       <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                       <span>{pendingBet || calculateNextBet()}</span>
@@ -406,7 +417,7 @@ const LudkaGame: FC = () => {
                 <button
                   className={styles.game__actionButton}
                   onClick={handleRaiseBet}
-                  disabled={data?.players.length === 1}
+                  // disabled={data?.players.length === 1}
                 >
                   <span className={styles.game__actionButtonText}>Поднять ставку</span>
                 </button>
