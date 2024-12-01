@@ -116,7 +116,7 @@
 
   &__userContainer {
     @include size(100%, auto);
-    @include flex(row, flex-start, center);
+    @include flex(row, flex-start, center, $space-6);
     background: linear-gradient(
       to bottom,
       #fff9b0 0%,
@@ -182,6 +182,10 @@
     @include flex(column, center, center);
   }
 
+  &__infoText {
+    font-size: 16px;
+  }
+
   &__keysButton {
     @include size(100%, 100%);
     @include button-style-reset();
@@ -199,7 +203,7 @@
     color: #626262;
   }
 
-  &__bet, &__money {
+  &__bet, &__money, &__infoText {
     color: $closest-color;
     text-align: center;
   }

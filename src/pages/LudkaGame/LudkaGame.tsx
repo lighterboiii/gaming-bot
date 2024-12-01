@@ -207,8 +207,9 @@ const LudkaGame: FC = () => {
   };
 
   const handleDecimalPoint = () => {
-    setOverlayState(prev => ({ 
-      ...prev, inputValue: prev.inputValue.includes('.') ? prev.inputValue : prev.inputValue + '.' }));
+    setOverlayState(prev => ({
+      ...prev, inputValue: prev.inputValue.includes('.') ? prev.inputValue : prev.inputValue + '.'
+    }));
   };
 
   const handleRaiseBet = useCallback(() => {
@@ -219,7 +220,7 @@ const LudkaGame: FC = () => {
 
   const handleWebSocketMessage = useCallback((message: string) => {
     const res = JSON.parse(message);
-    
+
     switch (res?.type) {
       case 'choice':
         handleChoiceMessage(res);
@@ -332,9 +333,9 @@ const LudkaGame: FC = () => {
               <div className={styles.game__headInner}>
                 <p className={styles.game__text}>{translation?.ludka_total_pot}</p>
                 <p className={styles.game__money}>
-                  {gameState.data?.win?.winner_value !== "none" 
-                  ? formatNumber(Number(gameState.data?.win?.winner_value)) 
-                  : '0'}
+                  {gameState.data?.win?.winner_value !== "none"
+                    ? formatNumber(Number(gameState.data?.win?.winner_value))
+                    : '0'}
                 </p>
               </div>
             </div>
@@ -363,15 +364,18 @@ const LudkaGame: FC = () => {
                     }
                   </p>
                   <p className={styles.game__money}>
-                    +
-                    <span>{gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}</span>
-                    <span>
+                    {gameState.data?.win?.users !== "none" ? "+" : ""}
+                    {gameState.data?.win?.users !== "none" 
+                      ? <span>{gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}</span>
+                      : ""
+                    }
+                    <span className={styles.game__infoText}>
                       {gameState.winner
                         ? formatNumber(Number(gameState.winner.winner_value))
                         : gameState.data?.win?.users === "none"
-                          ? formatNumber(Number(gameState.data?.bet || 0))
-                          // eslint-disable-next-line max-len
-                          : formatNumber(Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins || 0))
+                          ? `${translation?.waiting4players}`
+                          : formatNumber(Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins
+                            || 0))
                       }
                     </span>
                   </p>
