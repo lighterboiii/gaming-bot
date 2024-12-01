@@ -62,3 +62,34 @@ export interface ITime {
   hours: number | string;
   minutes: number | string;
 }
+
+export interface IWinner {
+  item: {
+    item_pic: string;
+    item_mask: string;
+  };
+  user_name: string;
+  user_pic: string;
+  winner_value: string;
+}
+
+export interface ILudkaUser {
+  userid: number;
+  money: number;
+  tokens: number;
+  user_name: string;
+  user_pic: string;
+  item_pic?: string;
+  item_mask?: string;
+  coins?: number;
+}
+
+export interface ILudkaGameData {
+  players: ILudkaUser[];
+  bet: string;
+  bet_type: string;
+  win: {
+    users: ILudkaUser[] | "none";
+    winner_value: string;
+  };
+}

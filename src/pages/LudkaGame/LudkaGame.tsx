@@ -2,10 +2,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useContext, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { LogOverlay } from "components/LudkaGame/LogOverlay/LogOverlay";
+import { ILudkaGameData, IWinner } from "utils/types/gameTypes";
 
 import Loader from "../../components/Loader/Loader";
 import { Overlay } from "../../components/LudkaGame/Overlay/LudkaOverlay";
@@ -17,8 +18,7 @@ import LogIcon from "../../icons/LogButtonIcon/LogIcon";
 import RoomCounterIcon from "../../icons/RoomCounter/RoomCounter";
 import coinIcon from '../../images/mount/coinIcon.png';
 import coins from '../../images/mount/coins.png';
-import { setCoinsValueAfterBuy, setTokensValueAfterBuy } from "../../services/appSlice";
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { indexUrl } from "../../utils/routes";
@@ -28,37 +28,47 @@ import styles from "./LudkaGame.module.scss";
 
 const LudkaGame: FC = () => {
   const { tg } = useTelegram();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [gameState, setGameState] = useState<{
+    data: ILudkaGameData | null;
+    winner: IWinner | null;
+    loading: boolean;
+  }>({
+    data: null,
+    winner: null,
+    loading: false
+  });
   const userId = getUserId();
   const { roomId } = useParams<{ roomId: string }>();
   const { wsMessages, sendMessage, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const navigate = useNavigate();
   const userData = useAppSelector(store => store.app.info);
   const isPortrait = useOrientation();
-  const [data, setData] = useState<any>(null);
-  const [showOverlay, setShowOverlay] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState<string>('');
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [inputError, setInputError] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-  const [showLogOverlay, setShowLogOverlay] = useState(false);
-  const [isLogVisible, setIsLogVisible] = useState(false);
-  const logOverlayRef = useRef<HTMLDivElement>(null);
-  const [winner, setWinner] = useState<{
-    item: {
-      item_pic: string;
-      item_mask: string;
-    },
-    user_name: string;
-    user_pic: string;
-    winner_value: string;
-  } | null>(null);
-  const [pendingBet, setPendingBet] = useState<string>('');
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const [showCoinsAnimation, setShowCoinsAnimation] = useState(false);
-  const [resetLogHistory, setResetLogHistory] = useState(false);
-  console.log(winner);
+  const [overlayState, setOverlayState] = useState<{
+    show: boolean;
+    isVisible: boolean;
+    inputValue: string;
+    inputError: boolean;
+  }>({
+    show: false,
+    isVisible: false,
+    inputValue: '',
+    inputError: false
+  });
+  const [logState, setLogState] = useState<{
+    show: boolean;
+    isVisible: boolean;
+    resetHistory: boolean;
+  }>({
+    show: false,
+    isVisible: false,
+    resetHistory: false
+  });
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const logOverlayRef = useRef<HTMLDivElement>(null);
+  const [pendingBet, setPendingBet] = useState<string>('');
+
   useEffect(() => {
     tg.setHeaderColor('#4caf50');
     tg.BackButton.show();
@@ -76,15 +86,15 @@ const LudkaGame: FC = () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
       clearMessages();
-      setData(null);
+      setGameState(prev => ({ ...prev, data: null, winner: null }));
     }
   }, [tg, navigate, userId]);
 
   useEffect(() => {
-    setLoading(true);
+    setGameState(prev => ({ ...prev, loading: true }));
 
     if (!roomId) {
-      setLoading(false);
+      setGameState(prev => ({ ...prev, loading: false }));
       return;
     }
     const fetchInitialData = () => {
@@ -100,64 +110,7 @@ const LudkaGame: FC = () => {
 
   useEffect(() => {
     const messageHandler = (message: any) => {
-      const res = JSON.parse(message);
-      switch (res?.type) {
-        case 'choice':
-          setWinner(null);
-          setSlideDirection(prev => prev === 'right' ? 'left' : 'right');
-          setShowCoinsAnimation(true);
-          setTimeout(() => setShowCoinsAnimation(false), 1000);
-          setData(res);
-          clearMessages();
-          break;
-        case 'whoiswin':
-          setWinner({
-            item: {
-              item_pic: res.whoiswin.item_pic,
-              item_mask: res.whoiswin.item_mask
-            },
-            user_name: res.whoiswin.user_name,
-            user_pic: res.whoiswin.user_pic,
-            winner_value: res.whoiswin.winner_value
-          });
-          setResetLogHistory(true);
-          setTimeout(() => {
-            setWinner(null);
-            setResetLogHistory(false);
-            setData((prevData: any) => ({
-              ...prevData,
-              bet: res?.bet || "0",
-              win: {
-                ...prevData.win,
-                users: "none",
-                winner_value: "0"
-              }
-            }));
-          }, 6000);
-          break;
-        case 'error':
-          console.log(res);
-          setData(res?.room_info);
-          break;
-        case 'emoji':
-          setData(res);
-          break;
-        case 'room_info':
-          setLoading(false);
-          setData(res);
-          break;
-        case 'kickplayer':
-          if (Number(res?.player_id) === Number(userId)) {
-            clearMessages();
-            setData(null);
-            setWinner(null);
-            disconnect();
-            navigate(indexUrl, { replace: true });
-          }
-          break;
-        default:
-          break;
-      }
+      handleWebSocketMessage(message);
     };
     const handleMessage = () => {
       if (wsMessages.length > 0) {
@@ -170,37 +123,37 @@ const LudkaGame: FC = () => {
   }, [wsMessages]);
 
   const calculateNextBet = () => {
-    return data?.bet ? (Number(formatNumber(Number(data.bet))) + 0.5).toString() : '0';
+    return gameState.data?.bet ? (Number(formatNumber(Number(gameState.data.bet))) + 0.5).toString() : '0';
   };
 
   const handleOpenOverlay = () => {
-    setShowOverlay(true);
+    setOverlayState(prev => ({ ...prev, show: true }));
     setTimeout(() => {
-      setIsVisible(true);
+      setOverlayState(prev => ({ ...prev, isVisible: true }));
     }, 50);
-    setInputValue('');
-    setInputError(false);
+    setOverlayState(prev => ({ ...prev, inputValue: '' }));
+    setOverlayState(prev => ({ ...prev, inputError: false }));
   };
 
   const handleCloseOverlay = () => {
-    setIsVisible(false);
+    setOverlayState(prev => ({ ...prev, isVisible: false }));
     setTimeout(() => {
-      setShowOverlay(false);
-      setInputValue('');
+      setOverlayState(prev => ({ ...prev, show: false }));
+      setOverlayState(prev => ({ ...prev, inputValue: '' }));
     }, 300);
   };
 
   const handleOpenLog = () => {
-    setShowLogOverlay(true);
+    setLogState(prev => ({ ...prev, show: true }));
     setTimeout(() => {
-      setIsLogVisible(true);
+      setLogState(prev => ({ ...prev, isVisible: true }));
     }, 50);
   };
 
   const handleCloseLog = () => {
-    setIsLogVisible(false);
+    setLogState(prev => ({ ...prev, isVisible: false }));
     setTimeout(() => {
-      setShowLogOverlay(false);
+      setLogState(prev => ({ ...prev, show: false }));
     }, 300);
   };
 
@@ -211,72 +164,50 @@ const LudkaGame: FC = () => {
       }
     };
 
-    if (showOverlay) {
+    if (overlayState.show) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showOverlay]);
+  }, [overlayState.show]);
 
   const handleKeyPress = (key: number) => {
-    setInputValue(prev => {
-      const newValue = prev + key.toString();
-      const [wholePart, decimalPart] = newValue.split('.');
+    setOverlayState(prev => ({ ...prev, inputValue: prev.inputValue + key.toString() }));
+    const newValue = overlayState.inputValue + key.toString();
+    const [wholePart, decimalPart] = newValue.split('.');
 
-      if (newValue.length > 1 && wholePart.startsWith('0') && !newValue.startsWith('0.')) {
-        setInputError(true);
-      } else if (decimalPart && decimalPart.length > 2) {
-        setInputError(true);
-        return prev;
+    if (newValue.length > 1 && wholePart.startsWith('0') && !newValue.startsWith('0.')) {
+      setOverlayState(prev => ({ ...prev, inputError: true }));
+    } else if (decimalPart && decimalPart.length > 2) {
+      setOverlayState(prev => ({ ...prev, inputError: true }));
+      return;
+    } else {
+      const numValue = parseFloat(newValue);
+      if (numValue >= 0) {
+        setOverlayState(prev => ({ ...prev, inputError: false }));
       } else {
-        const numValue = parseFloat(newValue);
-        if (numValue >= 0) {
-          setInputError(false);
-        } else {
-          setInputError(true);
-        }
+        setOverlayState(prev => ({ ...prev, inputError: true }));
       }
-      return newValue;
-    });
+    }
   };
 
   const handleDelete = () => {
-    setInputValue(prev => {
-      const newValue = prev.slice(0, -1);
-      const numValue = parseInt(newValue, 10);
-
-      if (newValue.startsWith('0')) {
-        setInputError(true);
-      } else if (newValue === '' || (numValue >= 1)) {
-        setInputError(false);
-      } else {
-        setInputError(true);
-      }
-      return newValue;
-    });
+    setOverlayState(prev => ({ ...prev, inputValue: prev.inputValue.slice(0, -1) }));
   };
 
   const handleSubmit = () => {
-    const numValue = parseFloat(inputValue);
+    const numValue = parseFloat(overlayState.inputValue);
     if (numValue >= 0) {
-      setPendingBet(inputValue);
+      setPendingBet(overlayState.inputValue);
       handleCloseOverlay();
     } else {
-      setInputError(true);
+      setOverlayState(prev => ({ ...prev, inputError: true }));
     }
   };
 
   const handleChoice = (choice: string) => {
-    const choiceValue = Number(choice || 0);
-
-    if (data?.bet_type === "1") {
-      dispatch(setCoinsValueAfterBuy(choiceValue));
-    } else {
-      dispatch(setTokensValueAfterBuy(choiceValue));
-    }
-
     sendMessage({
       user_id: userId,
       room_id: roomId,
@@ -288,45 +219,119 @@ const LudkaGame: FC = () => {
   };
 
   const handleDecimalPoint = () => {
-    setInputValue(prev => {
-      if (prev.includes('.')) return prev;
-      if (prev === '') return '0.';
-      return prev + '.';
-    });
+    setOverlayState(prev => ({ 
+      ...prev, inputValue: prev.inputValue.includes('.') ? prev.inputValue : prev.inputValue + '.' }));
   };
 
-  const handleRaiseBet = () => {
+  const handleRaiseBet = useCallback(() => {
     const betToSend = pendingBet || calculateNextBet();
     handleChoice(betToSend);
     setPendingBet('');
-  };
+  }, [pendingBet, handleChoice, calculateNextBet]);
 
-  const getCurrentPlayerBalance = () => {
-    const currentPlayer = data?.players?.find((player: any) => player.userid === Number(userId));
+  const handleWebSocketMessage = useCallback((message: string) => {
+    const res = JSON.parse(message);
+    
+    switch (res?.type) {
+      case 'choice':
+        handleChoiceMessage(res);
+        break;
+      case 'whoiswin':
+        handleWinnerMessage(res);
+        break;
+      case 'error':
+        console.log(res);
+        setGameState(prev => ({ ...prev, data: res?.room_info }));
+        break;
+      case 'emoji':
+        setGameState(prev => ({ ...prev, data: res }));
+        break;
+      case 'room_info':
+        setGameState(prev => ({ ...prev, loading: false, data: res }));
+        break;
+      case 'kickplayer':
+        if (Number(res?.player_id) === Number(userId)) {
+          clearMessages();
+          setGameState(prev => ({ ...prev, data: null, winner: null }));
+          disconnect();
+          navigate(indexUrl, { replace: true });
+        }
+        break;
+      default:
+        break;
+    }
+  }, []);
+
+  const handleChoiceMessage = useCallback((res: any) => {
+    setGameState(prev => ({
+      ...prev,
+      winner: null,
+      data: res
+    }));
+    setSlideDirection(prev => prev === 'right' ? 'left' : 'right');
+    setShowCoinsAnimation(true);
+    setTimeout(() => setShowCoinsAnimation(false), 1000);
+    clearMessages();
+  }, [clearMessages]);
+
+  const handleWinnerMessage = useCallback((res: any) => {
+    const winner = {
+      item: {
+        item_pic: res.whoiswin.item_pic,
+        item_mask: res.whoiswin.item_mask
+      },
+      user_name: res.whoiswin.user_name,
+      user_pic: res.whoiswin.user_pic,
+      winner_value: res.whoiswin.winner_value
+    };
+
+    setGameState(prev => ({ ...prev, winner }));
+    setLogState(prev => ({ ...prev, resetHistory: true }));
+
+    setTimeout(() => {
+      setGameState(prev => ({
+        ...prev,
+        winner: null,
+        data: {
+          ...prev.data!,
+          bet: res?.bet || "0",
+          win: {
+            ...prev.data!.win,
+            users: "none",
+            winner_value: "0"
+          }
+        }
+      }));
+      setLogState(prev => ({ ...prev, resetHistory: false }));
+    }, 6000);
+  }, []);
+
+  const currentPlayerBalance = useMemo(() => {
+    const currentPlayer = gameState.data?.players?.find(player => player.userid === Number(userId));
     if (currentPlayer) {
-      return data?.bet_type === "1" 
+      return gameState.data?.bet_type === "1"
         ? formatNumber(Number(currentPlayer.money))
         : formatNumber(Number(currentPlayer.tokens));
     }
     return "0";
-  };
-  console.log(winner);
+  }, [gameState.data, userId]);
+
   if (!isPortrait) {
     return (
       <Warning />
     );
   }
-  console.log(userData);
+
   return (
     <div className={styles.game}>
-      <div className={`${styles.game__content} ${winner ? styles.game__content_winner : ''}`}>
-        {loading ? (
+      <div className={`${styles.game__content} ${gameState.winner ? styles.game__content_winner : ''}`}>
+        {gameState.loading ? (
           <Loader />
         ) : (
           <>
             <p className={styles.game__roomCounter}>
               <RoomCounterIcon color="#626262" />
-              {data?.players.length}
+              {gameState.data?.players.length}
             </p>
             <div className={styles.game__head}>
               {showCoinsAnimation && (
@@ -339,43 +344,46 @@ const LudkaGame: FC = () => {
               <div className={styles.game__headInner}>
                 <p className={styles.game__text}>Общий банк:</p>
                 <p className={styles.game__money}>
-                  {data?.win?.winner_value !== "none" ? formatNumber(Number(data?.win?.winner_value)) : '0'}
+                  {gameState.data?.win?.winner_value !== "none" 
+                  ? formatNumber(Number(gameState.data?.win?.winner_value)) 
+                  : '0'}
                 </p>
               </div>
             </div>
             <div className={styles.game__mainContainer}>
               <div className={`${styles.game__userContainer} 
-                  ${winner ? styles.game__userContainer_winner : ''} 
+                  ${gameState.winner ? styles.game__userContainer_winner : ''} 
                   ${styles[`game__userContainer_slide_${slideDirection}`]}`}>
                 <div className={styles.game__avatarContainer}>
-                  {winner
-                    ? <UserAvatar item={winner?.item} avatar={winner?.user_pic} />
-                    : data?.win?.users === "none"
+                  {gameState.winner
+                    ? <UserAvatar item={gameState.winner?.item} avatar={gameState.winner?.user_pic} />
+                    : gameState.data?.win?.users === "none"
                       ? <UserAvatar />
                       : <UserAvatar
-                        item={data?.win?.users[data.win.users.length - 1]}
-                        avatar={data?.win?.users[data.win.users.length - 1]?.user_pic}
+                        item={gameState.data?.win?.users[gameState.data.win.users.length - 1]}
+                        avatar={gameState.data?.win?.users[gameState.data.win.users.length - 1]?.user_pic}
                       />
                   }
                 </div>
                 <div className={styles.game__userNameContainer}>
                   <p className={styles.game__userName}>
-                    {winner
-                      ? `Победитель: ${winner.user_name}`
-                      : data?.win?.users === "none"
+                    {gameState.winner
+                      ? `Победитель: ${gameState.winner.user_name}`
+                      : gameState.data?.win?.users === "none"
                         ? userData?.publicname
-                        : data?.win?.users[data.win.users.length - 1]?.user_name
+                        : gameState.data?.win?.users[gameState.data.win.users.length - 1]?.user_name
                     }
                   </p>
                   <p className={styles.game__money}>
                     +
                     <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                     <span>
-                      {winner
-                        ? formatNumber(Number(winner.winner_value))
-                        : data?.win?.users === "none"
-                          ? formatNumber(Number(data?.bet || 0))
-                          : formatNumber(Number(data?.win?.users[data.win.users.length - 1]?.coins || 0))
+                      {gameState.winner
+                        ? formatNumber(Number(gameState.winner.winner_value))
+                        : gameState.data?.win?.users === "none"
+                          ? formatNumber(Number(gameState.data?.bet || 0))
+                          // eslint-disable-next-line max-len
+                          : formatNumber(Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins || 0))
                       }
                     </span>
                   </p>
@@ -387,7 +395,7 @@ const LudkaGame: FC = () => {
                   <p className={styles.game__text}>Текущая ставка:</p>
                   <p className={styles.game__bet}>
                     <img src={coinIcon} alt="money" className={styles.game__moneyBetIcon} />
-                    <span>{formatNumber(Number(data?.bet))}</span>
+                    <span>{formatNumber(Number(gameState.data?.bet))}</span>
                   </p>
                 </div>
 
@@ -397,7 +405,7 @@ const LudkaGame: FC = () => {
                     <p className={styles.game__money}>
                       <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
                       <span>
-                        {getCurrentPlayerBalance()}
+                        {currentPlayerBalance}
                       </span>
                     </p>
                   </div>
@@ -419,7 +427,7 @@ const LudkaGame: FC = () => {
                 <button
                   className={styles.game__actionButton}
                   onClick={handleRaiseBet}
-                  // disabled={data?.players.length === 1}
+                  // disabled={gameState.data?.players.length === 1}
                 >
                   <span className={styles.game__actionButtonText}>Поднять ставку</span>
                 </button>
@@ -435,11 +443,11 @@ const LudkaGame: FC = () => {
         )}
       </div>
 
-      {showOverlay && (
+      {overlayState.show && (
         <Overlay
-          isVisible={isVisible}
-          inputValue={inputValue}
-          inputError={inputError}
+          isVisible={overlayState.isVisible}
+          inputValue={overlayState.inputValue}
+          inputError={overlayState.inputError}
           onKeyPress={handleKeyPress}
           onDelete={handleDelete}
           onDecimalPoint={handleDecimalPoint}
@@ -448,13 +456,13 @@ const LudkaGame: FC = () => {
         />
       )}
 
-      {showLogOverlay && (
+      {logState.show && (
         <LogOverlay
-          isVisible={isLogVisible}
+          isVisible={logState.isVisible}
           onClose={handleCloseLog}
           overlayRef={logOverlayRef}
-          users={data?.win?.users}
-          shouldReset={resetLogHistory}
+          users={gameState.data?.win?.users}
+          shouldReset={logState.resetHistory}
         />
       )}
     </div>
