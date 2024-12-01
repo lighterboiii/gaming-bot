@@ -364,7 +364,7 @@ const LudkaGame: FC = () => {
                   </p>
                   <p className={styles.game__money}>
                     +
-                    <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
+                    <span>{gameState.data?.bet_type === "1" ? "💵" : "🔰"}</span>
                     <span>
                       {gameState.winner
                         ? formatNumber(Number(gameState.winner.winner_value))
@@ -382,7 +382,7 @@ const LudkaGame: FC = () => {
                 <div className={styles.game__betContainer}>
                   <p className={styles.game__text}>{translation?.ludka_current_bet}</p>
                   <p className={styles.game__bet}>
-                    <img src={coinIcon} alt="money" className={styles.game__moneyBetIcon} />
+                    {gameState.data?.bet_type === "1" ? "💵" : "🔰"}
                     <span>{formatNumber(Number(gameState.data?.bet))}</span>
                   </p>
                 </div>
@@ -391,7 +391,7 @@ const LudkaGame: FC = () => {
                   <div className={styles.game__info}>
                     <p className={styles.game__text}>{translation?.webapp_balance}</p>
                     <p className={styles.game__money}>
-                      <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
+                      {gameState.data?.bet_type === "1" ? "💵" : "🔰"}
                       <span>
                         {currentPlayerBalance}
                       </span>
@@ -404,7 +404,7 @@ const LudkaGame: FC = () => {
                   >
                     <p className={styles.game__text}>{translation?.ludka_raise_to}</p>
                     <p className={styles.game__money}>
-                      <img src={coinIcon} alt="money" className={styles.game__moneyIcon} />
+                      {gameState.data?.bet_type === "1" ? "💵" : "🔰"}
                       <span>{pendingBet || calculateNextBet()}</span>
                     </p>
                   </button>

@@ -205,7 +205,7 @@
   }
 
   &__money {
-    @include flex(row, center, center, 14px);
+    @include flex(row, center, center, $space-4);
     font-size: 18px;
   }
 

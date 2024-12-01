@@ -2,7 +2,6 @@
 import React from 'react';
 
 import UserAvatar from '../../../components/User/UserAvatar/UserAvatar';
-import coinIcon from '../../../images/mount/coinIcon.png';
 import { useAppSelector } from '../../../services/reduxHooks';
 import { ILogOverlayProps } from '../../../utils/types/gameTypes';
 
@@ -51,7 +50,7 @@ export const LogOverlay: React.FC<ILogOverlayProps> = ({
                     </p>
                     <p className={styles.logOverlay__money}>
                       +
-                      <img src={coinIcon} alt="money" className={styles.logOverlay__moneyIcon} />
+                      {user.bet_type === "1" ? "💵" : "🔰"}
                       {user.coins}
                     </p>
                   </div>
