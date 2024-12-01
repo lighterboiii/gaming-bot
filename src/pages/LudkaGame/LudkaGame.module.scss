@@ -190,7 +190,7 @@
     @include size(100%, 100%);
     @include button-style-reset();
     background-color: $ludka-overlay-bg;
-    animation: pulseScale 2s ease-in-out infinite;
+    animation: pulseOpacity 2s ease-in-out infinite;
     transition: transform 0.2s ease;
 
     &:active {
@@ -317,15 +317,15 @@
     }
   }
 
-  // @keyframes pulseScale {
-  //   0% {
-  //     transform: scale(1);
-  //   }
-  //   50% {
-  //     transform: scale(1.02);
-  //   }
-  //   100% {
-  //     transform: scale(1);
-  //   }
-  // }
+  @keyframes pulseOpacity {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 }
