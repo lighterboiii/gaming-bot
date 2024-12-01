@@ -4,18 +4,11 @@ import React from 'react';
 import UserAvatar from 'components/User/UserAvatar/UserAvatar';
 
 import coinIcon from '../../../images/mount/coinIcon.png';
+import { ILogOverlayProps } from '../../../utils/types/gameTypes';
 
 import styles from './LogOverlay.module.scss';
 
-interface LogOverlayProps {
-  isVisible: boolean;
-  onClose: () => void;
-  overlayRef: React.RefObject<HTMLDivElement>;
-  users: any;
-  shouldReset?: boolean;
-}
-
-export const LogOverlay: React.FC<LogOverlayProps> = ({
+export const LogOverlay: React.FC<ILogOverlayProps> = ({
   isVisible,
   onClose,
   overlayRef,

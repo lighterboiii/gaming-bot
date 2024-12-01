@@ -35,33 +35,10 @@ import {
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { indexUrl, roomsUrl } from "../../utils/routes";
-import { IGameData, IPlayer } from "../../utils/types/gameTypes";
+import { IGameData, IPlayer, IRPSGameState } from "../../utils/types/gameTypes";
 import { getUserId } from '../../utils/userConfig';
 
 import styles from "./RockPaperScissors.module.scss";
-
-interface GameState {
-  data: IGameData | null;
-  loading: boolean;
-  message: string;
-  messageVisible: boolean;
-  animation: string | null;
-  playersAnim: {
-    firstAnim: string | null;
-    secondAnim: string | null;
-  };
-}
-
-interface OverlayState {
-  showEmoji: boolean;
-  showRules: boolean | null;
-}
-
-interface TimerState {
-  value: number;
-  started: boolean;
-  show: boolean;
-}
 
 export const RockPaperScissors: FC = () => {
   const navigate = useNavigate();
@@ -70,7 +47,7 @@ export const RockPaperScissors: FC = () => {
   const userId = getUserId();
   const { roomId } = useParams<{ roomId: string | any }>();
   const dispatch = useAppDispatch();
-  const [gameState, setGameState] = useState<GameState>({
+  const [gameState, setGameState] = useState<IRPSGameState>({
     data: null,
     loading: false,
     message: '',

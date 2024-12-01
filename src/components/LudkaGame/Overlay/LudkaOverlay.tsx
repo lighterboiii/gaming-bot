@@ -1,19 +1,10 @@
 import React from 'react';
 
+import { ILudkaOverlayProps } from '../../../utils/types/gameTypes';
+
 import styles from './LudkaOverlay.module.scss';
 
-interface OverlayProps {
-  isVisible: boolean;
-  inputValue: string;
-  inputError: boolean;
-  onKeyPress: (key: number) => void;
-  onDelete: () => void;
-  onDecimalPoint: () => void;
-  onSubmit: () => void;
-  overlayRef: React.RefObject<HTMLDivElement>;
-}
-
-export const Overlay: React.FC<OverlayProps> = ({
+export const Overlay: React.FC<ILudkaOverlayProps> = ({
   isVisible,
   inputValue,
   inputError,

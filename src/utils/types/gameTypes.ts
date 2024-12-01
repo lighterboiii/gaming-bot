@@ -93,3 +93,70 @@ export interface ILudkaGameData {
     winner_value: string;
   };
 }
+
+export interface IRPSGameState {
+  data: IGameData | null;
+  loading: boolean;
+  message: string;
+  messageVisible: boolean;
+  animation: string | null;
+  playersAnim: {
+    firstAnim: string | null;
+    secondAnim: string | null;
+  };
+}
+
+export interface IRPSOverlayState {
+  showEmoji: boolean;
+  showRules: boolean | null;
+}
+
+export interface IRPSTimerState {
+  value: number;
+  started: boolean;
+  show: boolean;
+}
+
+export interface ILudkaGameState {
+  data: ILudkaGameData | null;
+  winner: IWinner | null;
+  loading: boolean;
+}
+
+export interface ILudkaOverlayState {
+  show: boolean;
+  isVisible: boolean;
+  inputValue: string;
+  inputError: boolean;
+}
+
+export interface ILudkaLogState {
+  show: boolean;
+  isVisible: boolean;
+  resetHistory: boolean;
+}
+
+export interface IEmojiOverlayProps {
+  show: boolean;
+  onClose: () => void;
+  onEmojiSelect: (emoji: string) => void;
+}
+
+export interface ILudkaOverlayProps {
+  isVisible: boolean;
+  inputValue: string;
+  inputError: boolean;
+  onKeyPress: (key: number) => void;
+  onDelete: () => void;
+  onDecimalPoint: () => void;
+  onSubmit: () => void;
+  overlayRef: React.RefObject<HTMLDivElement>;
+}
+
+export interface ILogOverlayProps {
+  isVisible: boolean;
+  onClose: () => void;
+  overlayRef: React.RefObject<HTMLDivElement>;
+  users: ILudkaUser[] | "none";
+  shouldReset?: boolean;
+}

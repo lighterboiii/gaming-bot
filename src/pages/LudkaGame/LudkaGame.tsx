@@ -6,7 +6,7 @@ import { FC, useContext, useEffect, useRef, useState, useCallback, useMemo } fro
 import { useNavigate, useParams } from "react-router-dom";
 
 import { LogOverlay } from "components/LudkaGame/LogOverlay/LogOverlay";
-import { ILudkaGameData, IWinner } from "utils/types/gameTypes";
+import { ILudkaGameState, ILudkaOverlayState, ILudkaLogState } from "utils/types/gameTypes";
 
 import Loader from "../../components/Loader/Loader";
 import { Overlay } from "../../components/LudkaGame/Overlay/LudkaOverlay";
@@ -28,11 +28,7 @@ import styles from "./LudkaGame.module.scss";
 
 const LudkaGame: FC = () => {
   const { tg } = useTelegram();
-  const [gameState, setGameState] = useState<{
-    data: ILudkaGameData | null;
-    winner: IWinner | null;
-    loading: boolean;
-  }>({
+  const [gameState, setGameState] = useState<ILudkaGameState>({
     data: null,
     winner: null,
     loading: false
@@ -45,22 +41,13 @@ const LudkaGame: FC = () => {
   const isPortrait = useOrientation();
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const [showCoinsAnimation, setShowCoinsAnimation] = useState(false);
-  const [overlayState, setOverlayState] = useState<{
-    show: boolean;
-    isVisible: boolean;
-    inputValue: string;
-    inputError: boolean;
-  }>({
+  const [overlayState, setOverlayState] = useState<ILudkaOverlayState>({
     show: false,
     isVisible: false,
     inputValue: '',
     inputError: false
   });
-  const [logState, setLogState] = useState<{
-    show: boolean;
-    isVisible: boolean;
-    resetHistory: boolean;
-  }>({
+  const [logState, setLogState] = useState<ILudkaLogState>({
     show: false,
     isVisible: false,
     resetHistory: false
@@ -461,7 +448,7 @@ const LudkaGame: FC = () => {
           isVisible={logState.isVisible}
           onClose={handleCloseLog}
           overlayRef={logOverlayRef}
-          users={gameState.data?.win?.users}
+          users={gameState.data?.win?.users ?? "none"}
           shouldReset={logState.resetHistory}
         />
       )}
