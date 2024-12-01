@@ -57,6 +57,7 @@ const LudkaGame: FC = () => {
   const [pendingBet, setPendingBet] = useState<string>('');
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const [showCoinsAnimation, setShowCoinsAnimation] = useState(false);
+  const [resetLogHistory, setResetLogHistory] = useState(false);
   console.log(winner);
   useEffect(() => {
     tg.setHeaderColor('#4caf50');
@@ -119,8 +120,10 @@ const LudkaGame: FC = () => {
             user_pic: res.whoiswin.user_pic,
             winner_value: res.whoiswin.winner_value
           });
+          setResetLogHistory(true);
           setTimeout(() => {
             setWinner(null);
+            setResetLogHistory(false);
             setData((prevData: any) => ({
               ...prevData,
               bet: res?.bet || "0",
@@ -452,6 +455,7 @@ const LudkaGame: FC = () => {
           onClose={handleCloseLog}
           overlayRef={logOverlayRef}
           users={data?.win?.users}
+          shouldReset={resetLogHistory}
         />
       )}
     </div>

@@ -12,6 +12,7 @@ interface LogOverlayProps {
   onClose: () => void;
   overlayRef: React.RefObject<HTMLDivElement>;
   users: any;
+  shouldReset?: boolean;
 }
 
 export const LogOverlay: React.FC<LogOverlayProps> = ({
@@ -19,8 +20,9 @@ export const LogOverlay: React.FC<LogOverlayProps> = ({
   onClose,
   overlayRef,
   users,
-
+  shouldReset
 }) => {
+  const displayUsers = shouldReset ? "none" : users;
 
   return (
     <div className={styles.logOverlayWrapper}>
@@ -38,13 +40,13 @@ export const LogOverlay: React.FC<LogOverlayProps> = ({
           </button>
         </div>
         <div className={styles.logOverlay__content}>
-          {users === "none" ? (
+          {displayUsers === "none" ? (
             <div className={styles.logOverlay__empty}>
               <p>История ставок пока пуста</p>
             </div>
           ) : (
             <div className={styles.logOverlay__list}>
-              {users.map((user: any, index: number) => (
+              {displayUsers.map((user: any, index: number) => (
                 <div key={index} className={styles.logOverlay__item}>
                   <div className={styles.logOverlay__avatar}>
                     <UserAvatar item={user} />
