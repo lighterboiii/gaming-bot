@@ -229,6 +229,8 @@ const LudkaGame: FC = () => {
 
     switch (res?.type) {
       case 'choice':
+        setShowCoinsAnimation(true);
+        setTimeout(() => setShowCoinsAnimation(false), 1000);
         handleChoiceMessage(res);
         break;
       case 'whoiswin':
@@ -247,7 +249,7 @@ const LudkaGame: FC = () => {
       case 'kickplayer':
         if (Number(res?.player_id) === Number(userId)) {
           clearMessages();
-          setGameState(prev => ({ ...prev, data: null, winner: null }));
+          // setGameState(prev => ({ ...prev, data: null, winner: null }));
           disconnect();
           navigate(indexUrl, { replace: true });
         }
@@ -264,8 +266,6 @@ const LudkaGame: FC = () => {
       data: res
     }));
     setSlideDirection(prev => prev === 'right' ? 'left' : 'right');
-    setShowCoinsAnimation(true);
-    setTimeout(() => setShowCoinsAnimation(false), 1000);
     clearMessages();
   }, [clearMessages]);
 
