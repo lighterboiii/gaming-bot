@@ -56,9 +56,6 @@ export const ClosestNumber: FC = () => {
   const [filteredPlayers, setFilteredPlayers] = useState<any[]>([]);
   const [inputError, setInputError] = useState<boolean>(false);
   const overlayRef = useRef<HTMLDivElement>(null);
-  const [timer, setTimer] = useState<number | null>(null);
-  const [showTimer, setShowTimer] = useState(true);
-  const [timerStarted, setTimerStarted] = useState<boolean>(false);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [winnerId, setWinnerId] = useState<number | null>(null);
   const [winSum, setWinSum] = useState<any>(null);
@@ -67,7 +64,6 @@ export const ClosestNumber: FC = () => {
   const [drawWinners, setDrawWinners] = useState<any | null>(null);
   const currentWinner = data?.players?.find((player: any) => Number(player?.userid) === Number(winnerId));
   const currentPlayer = data?.players?.find((player: any) => Number(player?.userid) === Number(userId));
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const translation = useAppSelector(store => store.app.languageSettings);
   const [placeholder, setPlaceholder] = useState<string>(translation?.your_number_but);
   const userData = useAppSelector(store => store.app.info);
@@ -119,9 +115,6 @@ export const ClosestNumber: FC = () => {
       tg.setHeaderColor('#d51845');
       clearMessages();
       setData(null);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
     }
   }, [tg, navigate, userId]);
   // свернуть клавиатуру по клику за ее границами
@@ -168,9 +161,6 @@ export const ClosestNumber: FC = () => {
         case 'room_info':
           setData(res);
           setLoading(false);
-          setTimer(35);
-          setTimerStarted(true);
-          setShowTimer(true);
           setIsProcessingWin(false);
           break;
         case 'kickplayer':
@@ -191,8 +181,6 @@ export const ClosestNumber: FC = () => {
           if (isProcessingWin) return;
           setIsProcessingWin(true);
 
-          setTimerStarted(false);
-          setShowTimer(false);
           if (res.whoiswin.winner === "draw") {
             setDraw(true);
             setRoomValue(Number(res?.whoiswin.room_value));
@@ -227,8 +215,6 @@ export const ClosestNumber: FC = () => {
             setTimeout(() => {
               clearMessages();
               setIsChoiceLocked(false);
-              setTimerStarted(true);
-              setShowTimer(true);
               setModalOpen(false);
             }, 3000);
           }, 5000);
@@ -386,64 +372,6 @@ export const ClosestNumber: FC = () => {
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
-  useEffect(() => {
-    if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice === 'none')) {
-      if (!timerStarted) {
-        setTimerStarted(true);
-        setTimer(30);
-      }
-    } else if (data?.players_count !== "1" && data?.players?.every((player: IPlayer) => player.choice !== 'none')) {
-      setTimerStarted(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    } else if (data?.players_count === "1") {
-      setTimerStarted(false);
-      setTimer(30);
-    }
-  }, [data]);
-  // кик игрока, если он не прожал готовность Websocket
-  useEffect(() => {
-    if (timerStarted && timer! > 0) {
-      timerRef.current = setInterval(() => {
-        setTimer((prev) => prev! - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      if (currentPlayer?.choice === 'none') {
-        sendMessage({
-          user_id: userId,
-          room_id: roomId,
-          type: 'kickplayer'
-        });
-        setTimerStarted(false);
-        if (timerRef.current) {
-          clearInterval(timerRef.current);
-        }
-      }
-    }
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, [timer, timerStarted]);
-  // сброс выбора игрока, когда он единственный в комнате Websocket
-  useEffect(() => {
-    const resetPlayerChoice = () => {
-      const choiceData = {
-        user_id: userId,
-        room_id: roomId,
-        type: 'choice',
-        choice: 'none'
-      };
-      setInputValue('');
-      sendMessage(choiceData);
-    };
-    if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
-      resetPlayerChoice();
-    }
-  }, [data, roomId, userId]);
   // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '2');
@@ -488,7 +416,6 @@ export const ClosestNumber: FC = () => {
                   <div className={styles.game__centralContainer}>
                     <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
                     <CircularProgressBar progress={roomValue ? roomValue : 0} />
-                    <p className={styles.game__centralTimer}>{showTimer && timer}</p>
                   </div>
                   <RenderComponent users={filteredPlayers} />
                 </> :

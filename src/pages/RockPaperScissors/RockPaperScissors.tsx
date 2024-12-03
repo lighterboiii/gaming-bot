@@ -56,10 +56,6 @@ export const RockPaperScissors: FC = () => {
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [messageVisible, setMessageVisible] = useState(false);
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
-  const [timer, setTimer] = useState<number>(15);
-  const [timerStarted, setTimerStarted] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const [showTimer, setShowTimer] = useState(true);
   const [rules, setRulesShown] = useState<boolean | null>(false);
   const [isChoiceLocked, setIsChoiceLocked] = useState<boolean>(false);
   const [whoIsWinActive, setIsWhoIsWinActive] = useState<boolean>(false);
@@ -182,7 +178,7 @@ export const RockPaperScissors: FC = () => {
                 secondAnim: null,
               });
               clearMessages();
-              setShowTimer(true);
+              // setShowTimer(true);
               setIsWhoIsWinActive(false);
             }, 3500)
 
@@ -267,8 +263,8 @@ export const RockPaperScissors: FC = () => {
   const handleChoice = (value: string) => {
     if (isChoiceLocked) return;
     setIsChoiceLocked(true);
-    setTimerStarted(false);
-    setShowTimer(false);
+    // setTimerStarted(false);
+    // setShowTimer(false);
     const choice = {
       user_id: userId,
       room_id: roomId,
@@ -301,68 +297,6 @@ export const RockPaperScissors: FC = () => {
       sendMessage(noneData);
     }, 3000);
   };
-  // Таймер
-  useEffect(() => {
-    if (data?.players_count === "2" && showTimer
-      && (data?.players?.some((player: IPlayer) => player.choice === 'none')
-        || (data?.players?.some((player: IPlayer) => player.choice === 'ready')))) {
-      if (!timerStarted) {
-        setTimerStarted(true);
-        setTimer(20);
-      }
-
-      setShowTimer(true);
-    } else if (data?.players?.every((player: IPlayer) => player.choice === 'ready')) {
-      setTimerStarted(false);
-      setShowTimer(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    } else if (data?.players_count === "1") {
-      setTimerStarted(false);
-      setTimer(20);
-    }
-  }, [data]);
-  // кик игрока, если он не прожал готовность
-  useEffect(() => {
-    if (showTimer && timerStarted && timer > 0) {
-      timerRef.current = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      if (currentPlayer?.choice === 'none' || currentPlayer?.choice === 'ready') {
-        sendMessage({
-          user_id: userId,
-          room_id: roomId,
-          type: 'kickplayer'
-        });
-      }
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    }
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, [timer, timerStarted, navigate, userId]);
-  // сброс выбора игрока, когда он единственный в комнате Websocket
-  useEffect(() => {
-    const resetPlayerChoice = () => {
-      const choiceData = {
-        user_id: userId,
-        room_id: roomId,
-        type: 'choice',
-        choice: 'none'
-      };
-      sendMessage(choiceData);
-    };
-
-    if (data?.players_count === "1" && data?.players.some((player: any) => player.choice !== 'none')) {
-      resetPlayerChoice();
-    }
-  }, [data]);
   // обработчик клика по кнопке "Ознакомился" - не Websocket
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
@@ -418,7 +352,7 @@ export const RockPaperScissors: FC = () => {
                     </p>
                   ) : (
                     <p className={styles.game__timer}>
-                      {showTimer && timerStarted && `0:${timer}`}
+                      {/* {showTimer && timerStarted && `0:${timer}`} */}
                     </p>
                   )}
                   <div className={styles.game__hands}>

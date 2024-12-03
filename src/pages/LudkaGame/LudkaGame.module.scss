@@ -197,7 +197,6 @@
     @include size(100%, 100%);
     @include button-style-reset();
     background-color: $ludka-overlay-bg;
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     transition: transform 0.2s ease;
 
     &:active {
@@ -207,7 +206,7 @@
 
   &__text {
     font-size: 16px;
-    color: $closest-color;
+    color: $ludka-text-placeholder
   }
 
   &__bet, &__money, &__infoText {
@@ -321,15 +320,6 @@
     100% {
       opacity: 1;
       transform: translateX(0);
-    }
-  }
-
-  @keyframes pulse {
-    0%, 100% {
-      filter: brightness(1);
-    }
-    50% {
-      filter: brightness(0.8);
     }
   }
 }
