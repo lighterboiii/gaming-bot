@@ -28,7 +28,7 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const [message, setMessage] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
-  const { sendMessage, wsMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, connect } = useContext(WebSocketContext)!;
 
   useEffect(() => {
     const lastMessage = wsMessages[wsMessages.length - 1];
@@ -83,12 +83,22 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       return;
     }
 
-    // Отправляем сообщение WebSocket для добавления игрока в комнату
-    sendMessage({
-      user_id: userId,
-      room_id: room.room_id,
-      type: 'addplayer'
-    });
+    if (!wsMessages || wsMessages.length === 0) {
+        connect();
+        setTimeout(() => {
+            sendMessage({
+                user_id: userId,
+                room_id: room.room_id,
+                type: 'addplayer'
+            });
+        }, 1000);
+    } else {
+        sendMessage({
+            user_id: userId,
+            room_id: room.room_id,
+            type: 'addplayer'
+        });
+    }
   };
 
   return (

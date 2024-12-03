@@ -28,9 +28,11 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         wsClient.onopen = () => {
             console.log('WebSocket connected');
             setManualDisconnect(false);
-            while (messageQueue.length > 0) {
-                sendMessage(messageQueue.shift()!);
-            }
+            setTimeout(() => {
+                while (messageQueue.length > 0) {
+                    sendMessage(messageQueue.shift()!);
+                }
+            }, 500);
         };
 
         wsClient.onmessage = (event) => {

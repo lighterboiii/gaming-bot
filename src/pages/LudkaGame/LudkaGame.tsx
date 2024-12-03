@@ -66,15 +66,21 @@ const LudkaGame: FC = () => {
         room_id: roomId,
         type: 'kickplayer'
       });
-      clearMessages();
-      disconnect();
-      navigate(indexUrl, { replace: true });
+      
+      setTimeout(() => {
+        clearMessages();
+        disconnect();
+        navigate(indexUrl, { replace: true });
+      }, 500);
     });
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
-      clearMessages();
-      setGameState(prev => ({ ...prev, data: null, winner: null }));
+      
+      setTimeout(() => {
+        clearMessages(); 
+        setGameState(prev => ({ ...prev, data: null, winner: null }));
+      }, 500);
     }
   }, [tg, navigate, userId]);
 
