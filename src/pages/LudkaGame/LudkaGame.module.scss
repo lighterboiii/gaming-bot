@@ -310,20 +310,16 @@
 
   &__emojiButton {
     @include button-style-reset();
-    @include position(absolute, $bottom: 12px, $right: 12px);
-    @include size(32px, 32px);
+    @include position(absolute, $bottom: $space-8, $right: $space-8);
     @include flex(row, center, center);
-    background-color: #4CAF50;
-    border-radius: 50%;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
+    background-position: centers;
+    background-size: contain;
+    background-repeat: no-repeat;
     cursor: pointer;
-    transition: transform 0.2s ease;
+  }
 
-    &:active {
-      transform: scale(0.95);
-    }
+  &__iconEmoji {
+    @include size(32px, 32px);
   }
 
   @keyframes floating {

@@ -5,11 +5,9 @@
 import { FC, useContext, useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import EmojiOverlay from "components/EmojiOverlay/EmojiOverlay";
-import { LogOverlay } from "components/LudkaGame/LogOverlay/LogOverlay";
-import { ILudkaGameState, ILudkaOverlayState, ILudkaLogState } from "utils/types/gameTypes";
-
+import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import Loader from "../../components/Loader/Loader";
+import { LogOverlay } from "../../components/LudkaGame/LogOverlay/LogOverlay";
 import { Overlay } from "../../components/LudkaGame/Overlay/LudkaOverlay";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
@@ -18,11 +16,13 @@ import useTelegram from "../../hooks/useTelegram";
 import LogIcon from "../../icons/LogButtonIcon/LogIcon";
 import RoomCounterIcon from "../../icons/RoomCounter/RoomCounter";
 import coins from '../../images/mount/coins.png';
+import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import { useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
 import { indexUrl } from "../../utils/routes";
+import { ILudkaGameState, ILudkaOverlayState, ILudkaLogState } from "../../utils/types/gameTypes";
 import { getUserId } from "../../utils/userConfig";
 
 import styles from "./LudkaGame.module.scss";
@@ -68,7 +68,7 @@ const LudkaGame: FC = () => {
         room_id: roomId,
         type: 'kickplayer'
       });
-      
+
       setTimeout(() => {
         clearMessages();
         disconnect();
@@ -78,9 +78,9 @@ const LudkaGame: FC = () => {
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
-      
+
       setTimeout(() => {
-        clearMessages(); 
+        clearMessages();
         setGameState(prev => ({ ...prev, data: null, winner: null }));
       }, 500);
     }
@@ -344,7 +344,7 @@ const LudkaGame: FC = () => {
 
   const getActiveEmojis = useMemo(() => {
     if (!gameState.data?.players) return [];
-    
+
     return gameState.data.players
       .filter((player: any) => player.emoji && player.emoji !== 'none')
       .map((player: any) => ({
@@ -380,15 +380,14 @@ const LudkaGame: FC = () => {
                   className={styles.game__coinsAnimation}
                 />
               )}
-              
+
               {getActiveEmojis.map((emojiData: any, index: number) => (
                 <div
                   key={emojiData.userId}
-                  className={`${styles.game__head__playerEmoji_container} ${
-                    index === 0 
-                      ? styles.game__head__playerEmoji_first 
+                  className={`${styles.game__head__playerEmoji_container} ${index === 0
+                      ? styles.game__head__playerEmoji_first
                       : styles.game__head__playerEmoji_second
-                  }`}
+                    }`}
                 >
                   <img
                     src={emojiData.emoji}
@@ -436,7 +435,7 @@ const LudkaGame: FC = () => {
                   </p>
                   <p className={styles.game__money}>
                     {gameState.data?.win?.users !== "none" ? "+" : ""}
-                    {gameState.data?.win?.users !== "none" 
+                    {gameState.data?.win?.users !== "none"
                       ? <span>{gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}</span>
                       : ""
                     }
@@ -460,11 +459,14 @@ const LudkaGame: FC = () => {
                     {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
                     <span>{formatNumber(Number(gameState.data?.bet))}</span>
                   </p>
-                  <button 
+                  <button
                     className={styles.game__emojiButton}
                     onClick={handleShowEmojiOverlay}
                   >
-                    A
+                    <img src={emoji_icon}
+                      alt="emoji icon"
+                      className={styles.game__iconEmoji}
+                    />
                   </button>
                 </div>
 
