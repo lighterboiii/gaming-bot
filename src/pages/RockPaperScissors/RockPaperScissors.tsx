@@ -66,6 +66,8 @@ export const RockPaperScissors: FC = () => {
   const userData = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
+  const [timer, setTimer] = useState<number | null>(null);
+  const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -120,6 +122,30 @@ export const RockPaperScissors: FC = () => {
       setLoading(false);
       setData(null);
     };
+  }, []);
+
+  const handleTimer = useCallback((initialTime: number) => {
+    // Сначала очищаем предыдущий интервал
+    setTimerInterval((prevInterval) => {
+      if (prevInterval) {
+        clearInterval(prevInterval);
+      }
+      return null;
+    });
+
+    setTimer(initialTime);
+    
+    const interval = setInterval(() => {
+      setTimer((prevTime) => {
+        if (prevTime === null || prevTime <= 0) {
+          clearInterval(interval);
+          return null;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    setTimerInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -209,6 +235,18 @@ export const RockPaperScissors: FC = () => {
             }, 100);
           }
           break;
+        case 'timer_started':
+          handleTimer(res.timer_time);
+          break;
+        case 'timer_stopped':
+          setTimerInterval((prevInterval) => {
+            if (prevInterval) {
+              clearInterval(prevInterval);
+            }
+            return null;
+          });
+          setTimer(null);
+          break;
         default:
           break;
       }
@@ -219,7 +257,7 @@ export const RockPaperScissors: FC = () => {
       });
     };
     handleMessage();
-  }, [wsMessages]);
+  }, [wsMessages, handleTimer]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -256,7 +294,7 @@ export const RockPaperScissors: FC = () => {
         return;
       }
     }
-    // Сброс сообщений и блокировок выбора
+    // Сб��ос сообений и блокировок выбора
     setMessageVisible(false);
     setIsChoiceLocked(false);
     setMessage('');
@@ -334,6 +372,17 @@ export const RockPaperScissors: FC = () => {
     setShowEmojiOverlay(!showEmojiOverlay)
   };
 
+  useEffect(() => {
+    return () => {
+      setTimerInterval((prevInterval) => {
+        if (prevInterval) {
+          clearInterval(prevInterval);
+        }
+        return null;
+      });
+    };
+  }, []);
+
   if (!isPortrait) {
     return (
       <Warning />
@@ -363,7 +412,11 @@ export const RockPaperScissors: FC = () => {
                     </p>
                   ) : (
                     <p className={styles.game__timer}>
-                      {/* {showTimer && timerStarted && `0:${timer}`} */}
+                      {timer !== null && (
+                        <div className={styles.game__timer}>
+                          {timer}
+                        </div>
+                      )}
                     </p>
                   )}
                   <div className={styles.game__hands}>
