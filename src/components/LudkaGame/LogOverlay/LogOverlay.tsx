@@ -17,7 +17,7 @@ export const LogOverlay: React.FC<ILogOverlayProps> = ({
 }) => {
   const displayUsers = shouldReset ? "none" : users;
   const translation = useAppSelector(store => store.app.languageSettings);
-  
+  console.log(users);
   return (
     <div className={styles.logOverlayWrapper}>
       <div
@@ -43,7 +43,7 @@ export const LogOverlay: React.FC<ILogOverlayProps> = ({
               {displayUsers.map((user: any, index: number) => (
                 <div key={index} className={styles.logOverlay__item}>
                   <div className={styles.logOverlay__avatar}>
-                    <UserAvatar item={user} />
+                    <UserAvatar item={user}  avatar={user?.user_pic} />
                   </div>
                   <div className={styles.logOverlay__userNameContainer}>
                     <p className={styles.logOverlay__userName}>
