@@ -17,7 +17,7 @@
   &__children {
     @include indents(16px, 0);
     @include size(100%, 100%);
-    @include flex(column, flex-start, center);
+    @include flex(column, center, center, $space-18);
 
     @media screen and (max-width: 379px) {
       justify-content: center;

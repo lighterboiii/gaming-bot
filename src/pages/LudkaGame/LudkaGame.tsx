@@ -5,6 +5,7 @@
 import { FC, useContext, useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import EmojiOverlay from "components/EmojiOverlay/EmojiOverlay";
 import { LogOverlay } from "components/LudkaGame/LogOverlay/LogOverlay";
 import { ILudkaGameState, ILudkaOverlayState, ILudkaLogState } from "utils/types/gameTypes";
 
@@ -56,6 +57,7 @@ const LudkaGame: FC = () => {
   const logOverlayRef = useRef<HTMLDivElement>(null);
   const [pendingBet, setPendingBet] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);
+  const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
 
   useEffect(() => {
     tg.setHeaderColor('#4caf50');
@@ -311,6 +313,35 @@ const LudkaGame: FC = () => {
     return "0";
   }, [gameState.data, userId]);
 
+  const handleShowEmojiOverlay = () => {
+    setShowEmojiOverlay(true);
+  };
+
+  const handleCloseEmojiOverlay = () => {
+    setShowEmojiOverlay(false);
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    const data = {
+      user_id: userId,
+      room_id: roomId,
+      type: 'emoji',
+      emoji: emoji
+    };
+    sendMessage(data);
+    setShowEmojiOverlay(false);
+
+    setTimeout(() => {
+      const noneData = {
+        user_id: userId,
+        room_id: roomId,
+        type: 'emoji',
+        emoji: 'none'
+      };
+      sendMessage(noneData);
+    }, 3000);
+  };
+
   if (!isPortrait) {
     return (
       <Warning />
@@ -395,6 +426,12 @@ const LudkaGame: FC = () => {
                     {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
                     <span>{formatNumber(Number(gameState.data?.bet))}</span>
                   </p>
+                  <button 
+                    className={styles.game__emojiButton}
+                    onClick={handleShowEmojiOverlay}
+                  >
+                    A
+                  </button>
                 </div>
 
                 <div className={styles.game__infoInnerContainer}>
@@ -463,6 +500,13 @@ const LudkaGame: FC = () => {
           shouldReset={logState.resetHistory}
         />
       )}
+
+      <EmojiOverlay
+        show={showEmojiOverlay}
+        onClose={handleCloseEmojiOverlay}
+        onEmojiSelect={handleEmojiSelect}
+        backgroundColor="#323232"
+      />
     </div>
   )
 };

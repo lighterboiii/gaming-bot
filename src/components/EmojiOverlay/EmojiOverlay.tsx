@@ -13,9 +13,10 @@ interface IProps {
   show: boolean;
   onClose: () => void;
   onEmojiSelect: (emoji: string) => void;
+  backgroundColor?: string;
 }
 
-const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
+const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect, backgroundColor = '#0D2759' }) => {
   const { user } = useTelegram();
   const userId = getUserId();
   const [emojis, setEmojis] = useState<string[] | null>(null);
@@ -31,11 +32,14 @@ const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect }) => {
       .catch((error) => {
         console.log(error);
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   return (
-    <div className={`${styles.overlay} ${show ? styles.active : ''}`}>
+    <div
+      className={`${styles.overlay} ${show ? styles.active : ''}`}
+      style={{ backgroundColor: backgroundColor }}
+    >
       <div className={styles.overlay__children}>
         <h2 className={styles.overlay__name}>{name}</h2>
         <div className={styles.overlay__emojis}>
