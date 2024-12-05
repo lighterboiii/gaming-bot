@@ -191,12 +191,14 @@ export const RockPaperScissors: FC = () => {
           setData(res);
           break;
         case 'kickplayer':
-          if (Number(res?.player_id) === Number(userId)) {
+          setData(res);
+          
+          if (Number(res?.kicked_id) === Number(userId)) {
             clearMessages();
             setData(null);
             disconnect();
             navigate(indexUrl, { replace: true });
-            }
+          }
           break;
         default:
           break;
