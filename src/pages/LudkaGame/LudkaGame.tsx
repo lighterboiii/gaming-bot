@@ -342,12 +342,25 @@ const LudkaGame: FC = () => {
     }, 3000);
   };
 
+  const getActiveEmojis = useMemo(() => {
+    if (!gameState.data?.players) return [];
+    
+    return gameState.data.players
+      .filter((player: any) => player.emoji && player.emoji !== 'none')
+      .map((player: any) => ({
+        userId: player.userid,
+        emoji: player.emoji,
+        name: player.publicname
+      }))
+      .slice(0, 2);
+  }, [gameState.data?.players]);
+
   if (!isPortrait) {
     return (
       <Warning />
     );
   }
-
+console.log(getActiveEmojis)
   return (
     <div className={styles.game}>
       <div className={`${styles.game__content} ${gameState.winner ? styles.game__content_winner : ''}`}>
@@ -367,6 +380,27 @@ const LudkaGame: FC = () => {
                   className={styles.game__coinsAnimation}
                 />
               )}
+              
+              {getActiveEmojis.map((emojiData: any, index: number) => (
+                <div
+                  key={emojiData.userId}
+                  className={`${styles.game__head__playerEmoji_container} ${
+                    index === 0 
+                      ? styles.game__head__playerEmoji_first 
+                      : styles.game__head__playerEmoji_second
+                  }`}
+                >
+                  <img
+                    src={emojiData.emoji}
+                    alt="player emoji"
+                    className={styles.game__head__playerEmoji}
+                  />
+                  <span className={styles.game__head__playerName}>
+                    {emojiData.name}
+                  </span>
+                </div>
+              ))}
+
               <div className={styles.game__headInner}>
                 <p className={styles.game__text}>{translation?.ludka_total_pot}</p>
                 <p className={styles.game__money}>

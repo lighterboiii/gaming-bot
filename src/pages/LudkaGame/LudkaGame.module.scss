@@ -42,6 +42,38 @@
     @media screen and (min-height: 720px) {
       @include size(100%, 50%);
     }
+
+    &__playerEmoji {
+      @include position(absolute);
+      @include size(64px, 64px);
+      z-index: 5;
+      pointer-events: none;
+      
+      &_container {
+        @include position(absolute);
+        @include flex(column, flex-end, center);
+        text-align: center;
+      }
+      
+      &_first {
+        top: 20%;
+        left: 20%;
+      }
+      
+      &_second {
+        top: 30%;
+        right: 20%; 
+      }
+    }
+
+    &__playerName {
+      color: $main-color;
+      font-size: 12px;
+      margin-top: 70%;
+      font-weight: 900;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      z-index: 6;
+    }
   }
 
   &__headInner {
@@ -276,6 +308,24 @@
     font-weight: 900;
   }
 
+  &__emojiButton {
+    @include button-style-reset();
+    @include position(absolute, $bottom: 12px, $right: 12px);
+    @include size(32px, 32px);
+    @include flex(row, center, center);
+    background-color: #4CAF50;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
   @keyframes floating {
     0% {
       transform: translate(-50%, -50%);
@@ -321,24 +371,6 @@
     100% {
       opacity: 1;
       transform: translateX(0);
-    }
-  }
-
-  &__emojiButton {
-    @include button-style-reset();
-    @include position(absolute, $bottom: 12px, $right: 12px);
-    @include size(32px, 32px);
-    @include flex(row, center, center);
-    background-color: #4CAF50;
-    border-radius: 50%;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-
-    &:active {
-      transform: scale(0.95);
     }
   }
 }
