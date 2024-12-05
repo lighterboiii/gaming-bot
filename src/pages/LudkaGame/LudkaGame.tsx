@@ -239,8 +239,6 @@ const LudkaGame: FC = () => {
         handleWinnerMessage(res);
         break;
       case 'error':
-        console.log(res);
-        setGameState(prev => ({ ...prev, data: res?.room_info }));
         break;
       case 'emoji':
         setGameState(prev => ({ ...prev, data: res }));
