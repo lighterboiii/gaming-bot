@@ -77,14 +77,15 @@ export const RockPaperScissors: FC = () => {
         type: 'kickplayer'
       });
       clearMessages();
+      disconnect();
       navigate(indexUrl, { replace: true });
     });
     
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
-      clearMessages();
-      setData(null);
+      // clearMessages();
+      // setData(null);
     }
   }, [tg, navigate, userId]);
   // запрос результата хода
@@ -114,6 +115,11 @@ export const RockPaperScissors: FC = () => {
     };
 
     fetchInitialData();
+
+    return () => {
+      setLoading(false);
+      setData(null);
+    };
   }, []);
 
   useEffect(() => {
@@ -194,10 +200,13 @@ export const RockPaperScissors: FC = () => {
           setData(res);
           
           if (Number(res?.kicked_id) === Number(userId)) {
+            setLoading(false);
             clearMessages();
             setData(null);
             disconnect();
-            navigate(indexUrl, { replace: true });
+            setTimeout(() => {
+              navigate(indexUrl, { replace: true });
+            }, 100);
           }
           break;
         default:
