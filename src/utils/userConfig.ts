@@ -10,8 +10,8 @@ interface UserConfig {
 }
 
 const config: UserConfig = {
-  DEV_USER_ID: 172359056,
-  // DEV_USER_ID: 5858080651,
+  // DEV_USER_ID: 172359056,
+  DEV_USER_ID: 5858080651,
   PROD_USER_ID: (window as any).Telegram.WebApp.initDataUnsafe?.user?.id
 };
 

@@ -343,13 +343,26 @@ const LudkaGame: FC = () => {
   const getActiveEmojis = useMemo(() => {
     if (!gameState.data?.players) return [];
 
+    console.log("Players data:", gameState.data.players);
+
     return gameState.data.players
-      .filter((player: any) => player.emoji && player.emoji !== 'none')
-      .map((player: any) => ({
-        userId: player.userid,
-        emoji: player.emoji,
-        name: player.publicname
-      }))
+      .filter((player: any) => {
+        console.log("Player emoji:", player.emoji);
+        return player.emoji && player.emoji !== 'none' && player.emoji !== '';
+      })
+      .map((player: any) => {
+        console.log("Mapping player:", player);
+        return {
+          userId: player.userid,
+          emoji: player.emoji,
+          name: player.publicname,
+          avatar: player.avatar,
+          item: {
+            item_pic: player.item_pic,
+            item_mask: player.item_mask
+          }
+        };
+      })
       .slice(0, 2);
   }, [gameState.data?.players]);
 
@@ -358,7 +371,7 @@ const LudkaGame: FC = () => {
       <Warning />
     );
   }
-
+console.log(getActiveEmojis);
   return (
     <div className={styles.game}>
       <div className={`${styles.game__content} ${gameState.winner ? styles.game__content_winner : ''}`}>
@@ -379,7 +392,7 @@ const LudkaGame: FC = () => {
                 />
               )}
 
-              {getActiveEmojis.map((emojiData: any, index: number) => (
+              {getActiveEmojis && getActiveEmojis.length > 0 && getActiveEmojis.map((emojiData: any, index: number) => (
                 <div
                   key={emojiData.userId}
                   className={`${styles.game__head__playerEmoji_container} ${index === 0
@@ -392,9 +405,12 @@ const LudkaGame: FC = () => {
                     alt="player emoji"
                     className={styles.game__head__playerEmoji}
                   />
-                  <span className={styles.game__head__playerName}>
-                    {emojiData.name}
-                  </span>
+                  <div className={styles.game__head__avatarWrapper}>
+                  <UserAvatar 
+                      avatar={emojiData.avatar}
+                      item={emojiData.item}
+                    />
+                  </div>
                 </div>
               ))}
 

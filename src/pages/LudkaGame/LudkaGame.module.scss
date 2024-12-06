@@ -46,6 +46,7 @@
     &__playerEmoji {
       @include position(absolute);
       @include size(64px, 64px);
+      rotate: -10deg;
       z-index: 5;
       pointer-events: none;
       
@@ -66,12 +67,10 @@
       }
     }
 
-    &__playerName {
-      color: $main-color;
-      font-size: 12px;
-      margin-top: 70%;
-      font-weight: 900;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    &__avatarWrapper {
+      @include size(40px, 40px);
+      margin-top: 90%;
+      margin-left: 170%;
       z-index: 6;
     }
   }
@@ -370,3 +369,4 @@
     }
   }
 }
+
