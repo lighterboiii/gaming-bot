@@ -59,6 +59,12 @@ const LudkaGame: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
 
+  const getRandomPosition = () => {
+    const top = Math.random() * 60 + 10;
+    const left = Math.random() * 60 + 20;
+    return { top: `${top}%`, left: `${left}%` };
+  };
+
   useEffect(() => {
     tg.setHeaderColor('#4caf50');
     tg.BackButton.show();
@@ -343,27 +349,22 @@ const LudkaGame: FC = () => {
   const getActiveEmojis = useMemo(() => {
     if (!gameState.data?.players) return [];
 
-    console.log("Players data:", gameState.data.players);
-
     return gameState.data.players
       .filter((player: any) => {
-        console.log("Player emoji:", player.emoji);
         return player.emoji && player.emoji !== 'none' && player.emoji !== '';
       })
-      .map((player: any) => {
-        console.log("Mapping player:", player);
-        return {
-          userId: player.userid,
-          emoji: player.emoji,
-          name: player.publicname,
-          avatar: player.avatar,
-          item: {
-            item_pic: player.item_pic,
-            item_mask: player.item_mask
-          }
-        };
-      })
-      .slice(0, 2);
+      .map((player: any) => ({
+        userId: player.userid,
+        emoji: player.emoji,
+        name: player.publicname,
+        avatar: player.avatar,
+        position: getRandomPosition(),
+        item: {
+          item_pic: player.item_pic,
+          item_mask: player.item_mask
+        }
+      }))
+      .slice(0, 4);
   }, [gameState.data?.players]);
 
   if (!isPortrait) {
@@ -392,13 +393,14 @@ console.log(getActiveEmojis);
                 />
               )}
 
-              {getActiveEmojis && getActiveEmojis.length > 0 && getActiveEmojis.map((emojiData: any, index: number) => (
+              {getActiveEmojis && getActiveEmojis.length > 0 && getActiveEmojis.map((emojiData: any) => (
                 <div
                   key={emojiData.userId}
-                  className={`${styles.game__head__playerEmoji_container} ${index === 0
-                      ? styles.game__head__playerEmoji_first
-                      : styles.game__head__playerEmoji_second
-                    }`}
+                  className={styles.game__head__playerEmoji_container}
+                  style={{
+                    top: emojiData.position.top,
+                    left: emojiData.position.left
+                  }}
                 >
                   <img
                     src={emojiData.emoji}
@@ -406,7 +408,7 @@ console.log(getActiveEmojis);
                     className={styles.game__head__playerEmoji}
                   />
                   <div className={styles.game__head__avatarWrapper}>
-                  <UserAvatar 
+                    <UserAvatar 
                       avatar={emojiData.avatar}
                       item={emojiData.item}
                     />

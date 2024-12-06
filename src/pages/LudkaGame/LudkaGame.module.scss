@@ -47,23 +47,15 @@
       @include position(absolute);
       @include size(64px, 64px);
       rotate: -10deg;
-      z-index: 5;
+      z-index: 999;
       pointer-events: none;
       
       &_container {
         @include position(absolute);
         @include flex(column, flex-end, center);
         text-align: center;
-      }
-      
-      &_first {
-        top: 20%;
-        left: 20%;
-      }
-      
-      &_second {
-        top: 30%;
-        right: 20%; 
+        transition: all 0.3s ease;
+        z-index: 999;
       }
     }
 
@@ -71,7 +63,7 @@
       @include size(40px, 40px);
       margin-top: 90%;
       margin-left: 170%;
-      z-index: 6;
+      z-index: 1000;
     }
   }
 
