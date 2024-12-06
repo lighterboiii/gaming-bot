@@ -29,6 +29,8 @@ import { IGameCardData } from "../../utils/types/gameTypes";
 
 import styles from './OpenedRooms.module.scss';
 
+type GameType = 'rock_paper_scissors' | 'closest_number' | 'ludka_game';
+
 export const OpenedRooms: FC = () => {
   const userId = getUserId();
   const navigate = useNavigate();
@@ -101,7 +103,7 @@ export const OpenedRooms: FC = () => {
     fetchRoomsData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
-
+  console.log(translation);
   useEffect(() => {
     const intervalId = setInterval(() => {
       getOpenedRoomsRequest()
@@ -132,17 +134,38 @@ export const OpenedRooms: FC = () => {
         setSortByBetAsc(false);
 
         setTypeClickCount((prevCount) => {
-          const newCount = (prevCount + 1) % 3;
+          const newCount = (prevCount + 1) % 4;
           if (newCount === 0) {
             setTypeValue(`${translation?.sort_all}`);
             setSortByType(false);
+            setRooms([...rooms!]);
           } else {
-            sortedRooms = sortRooms(rooms as any, 'room_type', sortByType);
-            setSortByType(!sortByType);
-            setTypeValue(sortByType
-              ? `${translation?.rock_paper_scissors_short}`
-              : `${translation?.closest_number_short}`);
+            const gameTypeOrder: Record<GameType, number> = {
+              'rock_paper_scissors': 1,
+              'closest_number': 2,
+              'ludka_game': 3
+            };
+            
+            sortedRooms = [...rooms!].sort((a, b) => {
+              const aType = String(a.room_type) as GameType;
+              const bType = String(b.room_type) as GameType;
+              
+              if (newCount === 1) {
+                return gameTypeOrder[aType] - gameTypeOrder[bType];
+              } else if (newCount === 2) {
+                return gameTypeOrder[bType] - gameTypeOrder[aType];
+              } else {
+                const targetType = newCount === 1 ? 'rock_paper_scissors' : 
+                                 newCount === 2 ? 'closest_number' : 'ludka_game';
+                return aType === targetType ? -1 : 1;
+              }
+            });
+
             setRooms(sortedRooms);
+            
+            setTypeValue(newCount === 1 ? `${translation?.rock_paper_scissors_short}` :
+                        newCount === 2 ? `${translation?.closest_number_short}` :
+                        `${translation?.ludka_name}`);
           }
           return newCount;
         });
