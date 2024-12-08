@@ -88,6 +88,7 @@ export interface ILudkaGameData {
   players: ILudkaUser[];
   bet: string;
   bet_type: string;
+  players_count: string;
   win: {
     users: ILudkaUser[] | "none";
     winner_value: string;

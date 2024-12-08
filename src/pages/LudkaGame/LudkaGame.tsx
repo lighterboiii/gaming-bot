@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -372,7 +373,7 @@ const LudkaGame: FC = () => {
       <Warning />
     );
   }
-console.log(getActiveEmojis);
+
   return (
     <div className={styles.game}>
       <div className={`${styles.game__content} ${gameState.winner ? styles.game__content_winner : ''}`}>
@@ -458,10 +459,12 @@ console.log(getActiveEmojis);
                     <span className={styles.game__infoText}>
                       {gameState.winner
                         ? formatNumber(Number(gameState.winner.winner_value))
-                        : gameState.data?.win?.users === "none"
-                          ? `${translation?.waiting4players}`
-                          : formatNumber(Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins
-                            || 0))
+                        : gameState.data?.players_count === "1"
+                          ? translation?.waiting4players
+                          : gameState.data?.win?.users === "none"
+                            ? "0"
+                            : formatNumber(Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins 
+                              || 0))
                       }
                     </span>
                   </p>
