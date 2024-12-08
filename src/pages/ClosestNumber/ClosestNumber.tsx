@@ -66,6 +66,9 @@ export const ClosestNumber: FC = () => {
   const isPortrait = useOrientation();
   const { sendMessage, wsMessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const [isProcessingWin, setIsProcessingWin] = useState<boolean>(false);
+  const [timer, setTimer] = useState<number | null>(null);
+  const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
+  const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -198,6 +201,18 @@ export const ClosestNumber: FC = () => {
               setModalOpen(false);
             }, 3000);
           }, 5000);
+          break;
+        case 'timer_started':
+          setIsTimerShown(true);
+          handleTimer(res.timer_time);
+          break;
+        case 'timer_stopped':
+          setIsTimerShown(false);
+          if (timerInterval) {
+            clearInterval(timerInterval);
+          }
+          setTimerInterval(null);
+          setTimer(null);
           break;
       }
     };
@@ -368,6 +383,32 @@ export const ClosestNumber: FC = () => {
     }, 1000);
   };
 
+  // Timer logic
+  const handleTimer = (initialTime: number) => {
+    if (!timerInterval) {
+      setTimer(initialTime);
+      const newInterval = setInterval(() => {
+        setTimer((prevTime) => {
+          if (prevTime === null || prevTime <= 1) {
+            clearInterval(newInterval);
+            setTimerInterval(null);
+            return null;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+      setTimerInterval(newInterval);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+    };
+  }, [timerInterval]);
+
   if (!isPortrait) {
     return (
       <Warning />
@@ -382,6 +423,7 @@ export const ClosestNumber: FC = () => {
         <>
           {rules ? (
             <>
+
               {data?.players?.length !== 1 ?
                 <>
                   <div className={styles.game__betContainer}>
@@ -395,6 +437,11 @@ export const ClosestNumber: FC = () => {
                   </div>
                   <div className={styles.game__centralContainer}>
                     <p className={styles.game__centralText}> {`${count}/${data?.players_count}`}</p>
+                    {isTimerShown && timer !== null && (
+                      <div className={styles.game__centralTimer}>
+                        {timer}
+                      </div>
+                    )}
                     <CircularProgressBar progress={roomValue ? roomValue : 0} />
                   </div>
                   <RenderComponent users={filteredPlayers} />
