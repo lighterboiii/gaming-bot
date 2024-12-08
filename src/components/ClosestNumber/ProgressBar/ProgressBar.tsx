@@ -20,8 +20,12 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
 
       setIsAnimating(true);
       const interval = setInterval(() => {
-        setRandomNumber(Math.floor(Math.random() * 100));
-      }, 50);
+        setRandomNumber(prev => {
+          const variation = Math.floor(Math.random() * 20) - 10;
+          const newValue = prev + variation;
+          return Math.min(100, Math.max(0, newValue));
+        });
+      }, 25);
 
       const animationTimeout = setTimeout(() => {
         setOffset({ x, y });
@@ -46,23 +50,17 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
         cy={offset.y}
         r="10"
       ></circle>
-      <text
-        x="50%"
-        y="55%"
-        className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}
-        dominantBaseline="middle"
-        textAnchor="middle"
-      >
-        {isAnimating ? (
-          <tspan>
-            {randomNumber}
-          </tspan>
-        ) : (
-          <tspan>
-            {progress}
-          </tspan>
-        )}
-      </text>
+      <foreignObject x="20" y="35" width="60" height="30">
+        <div className={styles.bar__textContainer}>
+          <text
+            className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}
+            dominantBaseline="middle"
+            textAnchor="middle"
+          >
+            {isAnimating ? randomNumber : progress}
+          </text>
+        </div>
+      </foreignObject>
     </svg>
   );
 };

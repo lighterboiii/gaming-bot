@@ -2,12 +2,11 @@
 @use '../../../stylesheets/variables' as *;
 
 @mixin textScrollAnimation {
-  $steps: 180;
+  $steps: 20;
   @for $i from 0 through $steps {
-    $percentage: $i * (100 / $steps);
-    $direction: if($i % 2 == 0, 1, -1);
-    #{$percentage}% {
-      transform: translateY($direction * 90%);
+    #{$i * (100 / $steps)}% {
+      transform: translateY(if($i % 2 == 0, 100%, -100%));
+      filter: blur(2px);
     }
   }
 }
@@ -43,20 +42,33 @@
   }
 
   &__textContainer {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 30px;
+    width: 60px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__text {
     @include indents();
     fill: $black-color;
-    font-size: 16px;
-    transition: transform 0s;
-    font-weight: 900;
     font-size: 20px;
+    font-weight: 900;
     transform-origin: 50% 50%;
-    text-align: center; 
-    // filter: blur(0);
-    // transition: filter 0.5s ease-in-out;
+    text-align: center;
+    transition: all 0.1s ease-in-out;
+    position: absolute;
+    
+    &.bar__textAnimated {
+      animation: textScroll 4s ease-in-out;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
   }
 
   // &__blurText {
@@ -84,6 +96,49 @@
   }
 
   @keyframes textScroll {
-    @include textScrollAnimation;
+    0% {
+      transform: translateY(0);
+      filter: blur(0px);
+    }
+    15% {
+      transform: translateY(-120%);
+      filter: blur(2px);
+    }
+    16% {
+      transform: translateY(120%);
+      filter: blur(2px);
+    }
+    30% {
+      transform: translateY(-120%);
+      filter: blur(2px);
+    }
+    31% {
+      transform: translateY(120%);
+      filter: blur(2px);
+    }
+    45% {
+      transform: translateY(-120%);
+      filter: blur(2px);
+    }
+    46% {
+      transform: translateY(120%);
+      filter: blur(2px);
+    }
+    60% {
+      transform: translateY(-120%);
+      filter: blur(2px);
+    }
+    61% {
+      transform: translateY(120%);
+      filter: blur(2px);
+    }
+    95% {
+      transform: translateY(-50%);
+      filter: blur(1px);
+    }
+    100% {
+      transform: translateY(0);
+      filter: blur(0px);
+    }
   }
 }
