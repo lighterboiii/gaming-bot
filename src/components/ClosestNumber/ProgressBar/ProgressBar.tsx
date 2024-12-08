@@ -3,10 +3,10 @@ import { FC, useEffect, useState } from "react";
 import styles from './ProgressBar.module.scss';
 
 interface IProps {
-  progress: number;
+  progress?: number;
 }
 
-const CircularProgressBar: FC<IProps> = ({ progress }) => {
+const CircularProgressBar: FC<IProps> = ({ progress = 0 }) => {
   const [offset, setOffset] = useState({ x: 50, y: 5 });
   const [isAnimating, setIsAnimating] = useState(false);
   const [randomNumber, setRandomNumber] = useState(0);
@@ -37,6 +37,8 @@ const CircularProgressBar: FC<IProps> = ({ progress }) => {
         clearTimeout(animationTimeout);
         clearInterval(interval);
       };
+    } else {
+      setOffset({ x: 50, y: 5 });
     }
   }, [progress]);
 

@@ -191,6 +191,7 @@ export const ClosestNumber: FC = () => {
             setWinSum(res?.whoiswin.winner_value);
             // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
           }
+          
           setTimeout(() => {
             setInputValue('');
             setModalOpen(true);
@@ -199,6 +200,7 @@ export const ClosestNumber: FC = () => {
               clearMessages();
               setIsChoiceLocked(false);
               setModalOpen(false);
+              setRoomValue(0);
             }, 3000);
           }, 5000);
           break;
@@ -409,6 +411,10 @@ export const ClosestNumber: FC = () => {
     };
   }, [timerInterval]);
 
+  const handleAnimationComplete = () => {
+    setRoomValue(0);
+  };
+
   if (!isPortrait) {
     return (
       <Warning />
@@ -442,7 +448,9 @@ export const ClosestNumber: FC = () => {
                         {timer}
                       </div>
                     )}
-                    <CircularProgressBar progress={roomValue ? roomValue : 0} />
+                    <CircularProgressBar 
+                      progress={roomValue}
+                    />
                   </div>
                   <RenderComponent users={filteredPlayers} />
                 </> :

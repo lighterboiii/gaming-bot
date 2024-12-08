@@ -2,7 +2,7 @@
 @use '../../../stylesheets/variables' as *;
 
 @mixin textScrollAnimation {
-  $steps: 20;
+  $steps: 80;
   @for $i from 0 through $steps {
     #{$i * (100 / $steps)}% {
       transform: translateY(if($i % 2 == 0, 100%, -100%));
@@ -42,16 +42,11 @@
   }
 
   &__textContainer {
-    position: absolute;
-    left: 50%;
-    top: 50%;
+    @include position(absolute, $left: 50%, $top: 50%);
+    @include size(60px, 20px);
+    @include flex(row, center, center);
     transform: translate(-50%, -50%);
-    height: 30px;
-    width: 60px;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   &__text {
