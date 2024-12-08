@@ -206,7 +206,6 @@ export const RockPaperScissors: FC = () => {
           if (Number(res?.kicked_id) === Number(userId)) {
             setLoading(false);
             clearMessages();
-            setData(null);
             disconnect();
             setTimeout(() => {
               navigate(indexUrl, { replace: true });

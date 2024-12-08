@@ -164,7 +164,6 @@ export const ClosestNumber: FC = () => {
           if (Number(res?.kicked_id) === Number(userId)) {
             setLoading(false);
             clearMessages();
-            setData(null);
             disconnect();
             setTimeout(() => {
               navigate(roomsUrl, { replace: true });
