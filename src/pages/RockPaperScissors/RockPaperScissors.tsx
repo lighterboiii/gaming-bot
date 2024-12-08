@@ -201,8 +201,6 @@ export const RockPaperScissors: FC = () => {
           setData(res);
           break;
         case 'kickplayer':
-          setData(res);
-
           if (Number(res?.kicked_id) === Number(userId)) {
             setLoading(false);
             clearMessages();

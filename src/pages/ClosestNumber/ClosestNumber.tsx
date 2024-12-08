@@ -159,8 +159,6 @@ export const ClosestNumber: FC = () => {
           setIsProcessingWin(false);
           break;
         case 'kickplayer':
-          setData(res);
-
           if (Number(res?.kicked_id) === Number(userId)) {
             setLoading(false);
             clearMessages();
