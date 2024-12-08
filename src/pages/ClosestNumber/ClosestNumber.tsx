@@ -23,19 +23,12 @@ import useTelegram from "../../hooks/useTelegram";
 import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';
 import smile from '../../images/closest-number/smile.png';
-import {
-  addCoins,
-  addTokens,
-  setCoinsValueAfterBuy,
-  setTokensValueAfterBuy,
-  setSecondGameRulesState,
-} from "../../services/appSlice";
+import { setSecondGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
 import { indexUrl, roomsUrl } from "../../utils/routes";
-import { IPlayer } from "../../utils/types/gameTypes";
 
 import styles from './ClosestNumber.module.scss';
 
@@ -196,19 +189,6 @@ export const ClosestNumber: FC = () => {
             // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
           }
           setTimeout(() => {
-            if (res?.winner === userId) {
-              if (data?.bet_type === "1") {
-                dispatch(addCoins(Number(res?.whoiswin.winner_value)));
-              } else {
-                dispatch(setCoinsValueAfterBuy(Number(res?.whoiswin.winner_value)));
-              }
-            } else {
-              if (data?.bet_type === "3") {
-                dispatch(addTokens(Number(res?.whoiswin.winner_value)));
-              } else {
-                dispatch(setTokensValueAfterBuy(Number(res?.whoiswin.winner_value)));
-              }
-            }
             setInputValue('');
             setModalOpen(true);
 

@@ -165,7 +165,7 @@ export const OpenedRooms: FC = () => {
             
             setTypeValue(newCount === 1 ? `${translation?.rock_paper_scissors_short}` :
                         newCount === 2 ? `${translation?.closest_number_short}` :
-                        `${translation?.ludka_name}`);
+                        `${translation?.ludka_short}`);
           }
           return newCount;
         });
