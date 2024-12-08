@@ -68,6 +68,7 @@ export const RockPaperScissors: FC = () => {
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
   const [timer, setTimer] = useState<number | null>(null);
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
+  const [isTimerShown, setIsTimerShown] = useState<boolean>(true);
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -229,11 +230,13 @@ export const RockPaperScissors: FC = () => {
           }
           break;
         case 'timer_started':
+          setIsTimerShown(true);
           if (!timerInterval) {
             handleTimer(res.timer_time);
           }
           break;
         case 'timer_stopped':
+          setIsTimerShown(false);
           if (timerInterval) {
             clearInterval(timerInterval);
           }
@@ -287,7 +290,7 @@ export const RockPaperScissors: FC = () => {
         return;
       }
     }
-    // Сб��с сообений и блокировок выбора
+
     setMessageVisible(false);
     setIsChoiceLocked(false);
     setMessage('');
@@ -402,7 +405,7 @@ export const RockPaperScissors: FC = () => {
                     </p>
                   ) : (
                     <p className={styles.game__timer}>
-                      {timer !== null && (
+                      {isTimerShown && timer !== null && (
                         <div className={styles.game__timer}>
                           {timer}
                         </div>
