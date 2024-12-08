@@ -1,5 +1,5 @@
-@use '../../../stylesheets/mixins' as *;
-@use '../../../stylesheets/variables' as *;
+@use "../../../stylesheets/mixins" as *;
+@use "../../../stylesheets/variables" as *;
 
 @mixin textScrollAnimation {
   $steps: 80;
@@ -12,23 +12,54 @@
 }
 
 .bar {
-  @include size(120px, 120px);
+  @include size(100%, 100%);
   overflow: visible;
 
-  @media screen and (max-height: 691px) {
-    @include size(100px, 100px);
+  &__wrapper {
+    position: relative;
+    @include size(120px, 120px);
+
+    @media screen and (max-height: 691px) {
+      @include size(100px, 100px);
+    }
   }
-  
+
+  &__textContainer {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__text {
+    @include indents();
+    color: $black-color;
+    font-size: 20px;
+    font-weight: 900;
+    text-align: center;
+    position: absolute;
+
+    &.bar__textAnimated {
+      animation: textScroll 4s ease-in-out;
+    }
+  }
+
   &__innerCircle {
     fill: $main-color;
   }
-  
+
   &__outerCircle {
     fill: transparent;
     stroke: $black-color;
     stroke-width: 6px;
   }
-  
+
   &__progressPoint {
     fill: $closest-secondary-color;
     transition: transform 5s linear;
@@ -40,39 +71,6 @@
   &__animated {
     animation: spin 4s linear forwards;
   }
-
-  &__textContainer {
-    @include position(absolute, $left: 50%, $top: 50%);
-    @include size(60px, 20px);
-    @include flex(row, center, center);
-    transform: translate(-50%, -50%);
-    overflow: hidden;
-  }
-
-  &__text {
-    @include indents();
-    fill: $black-color;
-    font-size: 20px;
-    font-weight: 900;
-    transform-origin: 50% 50%;
-    text-align: center;
-    transition: all 0.1s ease-in-out;
-    position: absolute;
-    
-    &.bar__textAnimated {
-      animation: textScroll 4s ease-in-out;
-      transform-style: preserve-3d;
-      perspective: 1000px;
-    }
-  }
-
-  // &__blurText {
-  //   filter: url('#blurFilter');
-  // }
-
-  // &__noBlur {
-  //   filter: none;
-  // }
 
   &__textAnimated {
     animation: textScroll 4s linear;

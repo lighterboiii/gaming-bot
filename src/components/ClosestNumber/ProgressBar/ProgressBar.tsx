@@ -43,27 +43,23 @@ const CircularProgressBar: FC<IProps> = ({ progress = 0 }) => {
   }, [progress]);
 
   return (
-    <svg className={styles.bar} viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-      <circle className={styles.bar__innerCircle} cx="50" cy="50" r="45"></circle>
-      <circle className={styles.bar__outerCircle} cx="50" cy="50" r="45"></circle>
-      <circle
-        className={`${styles.bar__progressPoint} ${isAnimating ? styles.bar__animated : ''}`}
-        cx={offset.x}
-        cy={offset.y}
-        r="10"
-      ></circle>
-      <foreignObject x="20" y="35" width="60" height="30">
-        <div className={styles.bar__textContainer}>
-          <text
-            className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}
-            dominantBaseline="middle"
-            textAnchor="middle"
-          >
-            {isAnimating ? randomNumber : progress}
-          </text>
-        </div>
-      </foreignObject>
-    </svg>
+    <div className={styles.bar__wrapper}>
+      <svg className={styles.bar} viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+        <circle className={styles.bar__innerCircle} cx="50" cy="50" r="45"></circle>
+        <circle className={styles.bar__outerCircle} cx="50" cy="50" r="45"></circle>
+        <circle
+          className={`${styles.bar__progressPoint} ${isAnimating ? styles.bar__animated : ''}`}
+          cx={offset.x}
+          cy={offset.y}
+          r="10"
+        ></circle>
+      </svg>
+      <div className={styles.bar__textContainer}>
+        <span className={`${styles.bar__text} ${isAnimating ? styles.bar__textAnimated : ''}`}>
+          {isAnimating ? randomNumber : progress}
+        </span>
+      </div>
+    </div>
   );
 };
 
