@@ -28,7 +28,7 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
-import { indexUrl, roomsUrl } from "../../utils/routes";
+import { roomsUrl } from "../../utils/routes";
 
 import styles from './ClosestNumber.module.scss';
 
@@ -104,7 +104,7 @@ export const ClosestNumber: FC = () => {
         type: 'kickplayer'
       });
       clearMessages();
-      navigate(indexUrl, { replace: true });
+      navigate(roomsUrl, { replace: true });
     });
     return () => {
       tg.BackButton.hide();
@@ -164,7 +164,7 @@ export const ClosestNumber: FC = () => {
             clearMessages();
             setData(null);
             disconnect();
-            navigate(indexUrl, { replace: true });
+            navigate(roomsUrl, { replace: true });
           }
           break;
         case 'choice':
