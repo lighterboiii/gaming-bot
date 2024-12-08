@@ -6,6 +6,8 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
+import { MONEY_EMOJI, SHIELD_EMOJI } from "utils/constants";
+
 import { setGameRulesWatched } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
@@ -25,13 +27,7 @@ import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
 import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
 import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
 import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
-import {
-  addCoins,
-  addTokens,
-  setCoinsValueAfterBuy,
-  setFirstGameRulesState,
-  setTokensValueAfterBuy
-} from "../../services/appSlice";
+import { setFirstGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { indexUrl, roomsUrl } from "../../utils/routes";
@@ -83,7 +79,7 @@ export const RockPaperScissors: FC = () => {
       disconnect();
       navigate(indexUrl, { replace: true });
     });
-    
+
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
@@ -128,7 +124,7 @@ export const RockPaperScissors: FC = () => {
   const handleTimer = useCallback((initialTime: number) => {
     if (!timerInterval) {
       setTimer(initialTime);
-      
+
       const newInterval = setInterval(() => {
         setTimer((prevTime) => {
           if (prevTime === null || prevTime <= 1) {
@@ -171,11 +167,6 @@ export const RockPaperScissors: FC = () => {
                 ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵`
                   : `🔰`}`
                 : ''}`);
-              if (data?.bet_type === "1") {
-                dispatch(addCoins(Number(res?.whoiswin.winner_value)));
-              } else {
-                dispatch(addTokens(Number(res?.whoiswin.winner_value)));
-              }
             } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
               updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) ? lLoseAnim : rLoseAnim);
               // postEvent(
@@ -185,11 +176,6 @@ export const RockPaperScissors: FC = () => {
               setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
                 ? `💵`
                 : `🔰`}`);
-              if (data?.bet_type === "3") {
-                dispatch(setTokensValueAfterBuy(Number(res?.whoiswin.winner_value)));
-              } else {
-                dispatch(setCoinsValueAfterBuy(Number(res?.whoiswin.winner_value)));
-              }
             } else if (res?.whoiswin.winner === 'draw') {
               setMessage(translation?.draw);
               // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
@@ -218,7 +204,7 @@ export const RockPaperScissors: FC = () => {
           break;
         case 'kickplayer':
           setData(res);
-          
+
           if (Number(res?.kicked_id) === Number(userId)) {
             setLoading(false);
             clearMessages();
@@ -430,7 +416,10 @@ export const RockPaperScissors: FC = () => {
                     <div className={styles.game__betContainer}>
                       <p className={styles.game__text}>{translation?.game_bet_text}</p>
                       <div className={styles.game__bet}>
-                        <p className={styles.game__text}>{data?.bet_type === "1" ? "💵" : "🔰"}</p>
+                        <p className={styles.game__text}>{data?.bet_type === "1"
+                          ? `${MONEY_EMOJI}`
+                          : `${SHIELD_EMOJI}`}
+                        </p>
                         <p className={styles.game__text}>{data?.bet}</p>
                       </div>
                     </div>
