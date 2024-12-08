@@ -125,27 +125,23 @@ export const RockPaperScissors: FC = () => {
   }, []);
 
   const handleTimer = useCallback((initialTime: number) => {
-    setTimerInterval((prevInterval) => {
-      if (prevInterval) {
-        clearInterval(prevInterval);
-      }
-      return null;
-    });
+    if (!timerInterval) {
+      setTimer(initialTime);
+      
+      const newInterval = setInterval(() => {
+        setTimer((prevTime) => {
+          if (prevTime === null || prevTime <= 1) {
+            clearInterval(newInterval);
+            setTimerInterval(null);
+            return null;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
 
-    setTimer(initialTime);
-    
-    const interval = setInterval(() => {
-      setTimer((prevTime) => {
-        if (prevTime === null || prevTime <= 0) {
-          clearInterval(interval);
-          return null;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-
-    setTimerInterval(interval);
-  }, []);
+      setTimerInterval(newInterval);
+    }
+  }, [timerInterval]);
 
   useEffect(() => {
     const messageHandler = (message: any) => {
@@ -156,8 +152,6 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'whoiswin':
-          // if (hasHandledWin.current) return;
-          // hasHandledWin.current = true;
           setIsWhoIsWinActive(true);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
@@ -235,15 +229,15 @@ export const RockPaperScissors: FC = () => {
           }
           break;
         case 'timer_started':
-          handleTimer(res.timer_time);
+          if (!timerInterval) {
+            handleTimer(res.timer_time);
+          }
           break;
         case 'timer_stopped':
-          setTimerInterval((prevInterval) => {
-            if (prevInterval) {
-              clearInterval(prevInterval);
-            }
-            return null;
-          });
+          if (timerInterval) {
+            clearInterval(timerInterval);
+          }
+          setTimerInterval(null);
           setTimer(null);
           break;
         default:
@@ -256,7 +250,7 @@ export const RockPaperScissors: FC = () => {
       });
     };
     handleMessage();
-  }, [wsMessages, handleTimer]);
+  }, [wsMessages, handleTimer, timerInterval]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -293,7 +287,7 @@ export const RockPaperScissors: FC = () => {
         return;
       }
     }
-    // Сб��ос сообений и блокировок выбора
+    // Сб��с сообений и блокировок выбора
     setMessageVisible(false);
     setIsChoiceLocked(false);
     setMessage('');
@@ -373,14 +367,11 @@ export const RockPaperScissors: FC = () => {
 
   useEffect(() => {
     return () => {
-      setTimerInterval((prevInterval) => {
-        if (prevInterval) {
-          clearInterval(prevInterval);
-        }
-        return null;
-      });
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
     };
-  }, []);
+  }, [timerInterval]);
 
   if (!isPortrait) {
     return (
