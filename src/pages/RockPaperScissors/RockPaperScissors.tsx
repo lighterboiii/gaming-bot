@@ -83,8 +83,6 @@ export const RockPaperScissors: FC = () => {
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
-      // clearMessages();
-      // setData(null);
     }
   }, [tg, navigate, userId]);
   // запрос результата хода

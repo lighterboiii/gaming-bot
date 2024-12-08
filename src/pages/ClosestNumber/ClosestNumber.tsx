@@ -104,13 +104,12 @@ export const ClosestNumber: FC = () => {
         type: 'kickplayer'
       });
       clearMessages();
+      disconnect();
       navigate(roomsUrl, { replace: true });
     });
     return () => {
       tg.BackButton.hide();
       tg.setHeaderColor('#d51845');
-      clearMessages();
-      setData(null);
     }
   }, [tg, navigate, userId]);
   // свернуть клавиатуру по клику за ее границами
@@ -160,11 +159,16 @@ export const ClosestNumber: FC = () => {
           setIsProcessingWin(false);
           break;
         case 'kickplayer':
-          if (Number(res?.player_id) === Number(userId)) {
+          setData(res);
+
+          if (Number(res?.kicked_id) === Number(userId)) {
+            setLoading(false);
             clearMessages();
             setData(null);
             disconnect();
-            navigate(roomsUrl, { replace: true });
+            setTimeout(() => {
+              navigate(roomsUrl, { replace: true });
+            }, 100);
           }
           break;
         case 'choice':
