@@ -256,7 +256,6 @@ const LudkaGame: FC = () => {
       case 'kickplayer':
         if (Number(res?.player_id) === Number(userId)) {
           clearMessages();
-          // setGameState(prev => ({ ...prev, data: null, winner: null }));
           disconnect();
           navigate(roomsUrl, { replace: true });
         }

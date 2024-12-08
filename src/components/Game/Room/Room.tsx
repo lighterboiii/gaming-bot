@@ -34,7 +34,7 @@ const Room: FC<IProps> = ({ room, openModal }) => {
     const lastMessage = wsMessages[wsMessages.length - 1];
     if (lastMessage) {
       const parsedMessage = JSON.parse(lastMessage);
-
+      console.log(parsedMessage);
       navigate(room?.room_type === 1 
           ? `/room/${room?.room_id}` 
           : room?.room_type === 2 
