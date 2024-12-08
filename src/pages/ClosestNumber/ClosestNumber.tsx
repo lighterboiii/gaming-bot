@@ -459,8 +459,8 @@ export const ClosestNumber: FC = () => {
                     <div className={styles.overlay__userMoney}>
                       <span className={styles.overlay__text}>
                         {data?.bet_type === "1"
-                          ? `${MONEY_EMOJI} ${userData?.coins && formatNumber(userData?.coins)}`
-                          : `${SHIELD_EMOJI} ${userData?.tokens && formatNumber(userData?.tokens)}`}
+                          ? `${MONEY_EMOJI} ${currentPlayer?.money && formatNumber(currentPlayer?.money)}`
+                          : `${SHIELD_EMOJI} ${currentPlayer?.tokens && formatNumber(currentPlayer?.tokens)}`}
                       </span>
                     </div>
                   </div>
