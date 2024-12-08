@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
-import { FC, useCallback, useEffect, useState, useContext } from "react";
+import { FC, useCallback, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import { setGameRulesWatched } from "../../api/gameApi";
@@ -68,7 +68,6 @@ export const RockPaperScissors: FC = () => {
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
   const [timer, setTimer] = useState<number | null>(null);
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
-  const [readyPlayers, setReadyPlayers] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -153,19 +152,7 @@ export const RockPaperScissors: FC = () => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
-          setData(prevData => prevData === null ? res : {
-            ...res,
-            players: res.players.map((newPlayer: IPlayer) => {
-              const existingPlayer = prevData?.players?.find(p => p.userid === newPlayer.userid);
-              return existingPlayer ? {
-                ...existingPlayer,
-                money: newPlayer.money,
-                tokens: newPlayer.tokens,
-                choice: newPlayer.choice !== existingPlayer.choice ? newPlayer.choice : existingPlayer.choice,
-                emoji: newPlayer.emoji !== existingPlayer.emoji ? newPlayer.emoji : existingPlayer.emoji,
-              } : newPlayer;
-            })
-          });
+          setData(res);
           setLoading(false);
           break;
         case 'whoiswin':
@@ -229,22 +216,10 @@ export const RockPaperScissors: FC = () => {
           }, animationTime);
           break;
         case 'choice':
-          setData(prevData => prevData && {
-            ...prevData,
-            players: prevData.players?.map(player => 
-              player.userid === res.players[0].userid 
-                ? { ...player, choice: res.players[0].choice }
-                : player)
-          });
+          setData(res);
           break;
         case 'emoji':
-          setData(prevData => prevData && {
-            ...prevData,
-            players: prevData.players?.map(player => 
-              player.userid === res.players[0].userid 
-                ? { ...player, emoji: res.players[0].emoji }
-                : player)
-          });
+          setData(res);
           break;
         case 'kickplayer':
           setData(res);
@@ -276,10 +251,12 @@ export const RockPaperScissors: FC = () => {
       }
     };
     const handleMessage = () => {
-      wsMessages.forEach(messageHandler);
+      wsMessages.forEach((message: any) => {
+        messageHandler(message);
+      });
     };
     handleMessage();
-  }, [wsMessages]);
+  }, [wsMessages, handleTimer]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -287,9 +264,6 @@ export const RockPaperScissors: FC = () => {
   // хендлер готовности игрока websocket
   const handleReady = () => {
     if (whoIsWinActive) return;
-    
-    if (readyPlayers.has(Number(userId))) return;
-    
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
 
     if (data?.bet_type === "1") {
@@ -304,6 +278,7 @@ export const RockPaperScissors: FC = () => {
           const currentUrl = location.pathname;
           currentUrl !== roomsUrl && navigate(roomsUrl);
         }
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
         return;
       }
     } else if (data?.bet_type === "3") {
@@ -313,12 +288,12 @@ export const RockPaperScissors: FC = () => {
           room_id: roomId,
           type: 'kickplayer'
         });
+
+        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
         return;
       }
     }
-
-    setReadyPlayers(prev => new Set(prev).add(Number(userId)));
-
+    // Сб��ос сообений и блокировок выбора
     setMessageVisible(false);
     setIsChoiceLocked(false);
     setMessage('');
@@ -329,6 +304,8 @@ export const RockPaperScissors: FC = () => {
       type: 'choice',
       choice: 'ready'
     });
+
+    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
   };
   // хендлер выбора хода Websocket
   const handleChoice = (value: string) => {
@@ -368,7 +345,7 @@ export const RockPaperScissors: FC = () => {
       sendMessage(noneData);
     }, 3000);
   };
-  // обраотчик клика по кнопке "Ознакомился" - не Websocket
+  // обработчик клика по кнопке "Ознакомился" - не Websocket
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
@@ -421,7 +398,7 @@ export const RockPaperScissors: FC = () => {
           <>
             {rules ? (
               <>
-                <Players data={data as IGameData} userData={userData} />
+                <Players data={data as IGameData} />
                 <>
                   {data?.players_count === "2" &&
                     data?.players?.every((player: IPlayer) => player?.choice === 'ready') &&

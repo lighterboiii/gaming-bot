@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FC } from "react";
 
 import { formatNumber } from "utils/additionalFunctions";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "utils/constants";
 import { IGameData, IPlayer } from "utils/types/gameTypes";
 import { getUserId } from "utils/userConfig";
 
@@ -14,12 +15,11 @@ import styles from './Players.module.scss';
 
 interface IProps {
   data: IGameData | any;
-  userData?: IGameData | any;
 }
 
-const Players: FC<IProps> = ({ data, userData }) => {
+const Players: FC<IProps> = ({ data }) => {
   const userId = getUserId();
-
+console.log(data);
   return (
     <div className={styles.players}>
     {data?.players?.map((player: IPlayer) => (
@@ -43,9 +43,9 @@ const Players: FC<IProps> = ({ data, userData }) => {
         )}
         {Number(player?.userid) === Number(userId) && player?.choice !== 'ready' && (
           <div className={styles.players__balance}>
-            {data?.bet_type === "1" && userData
-              ? `💵 ${formatNumber(userData?.coins)}`
-              : `🔰 ${formatNumber(userData?.tokens)}`
+            {data?.bet_type === "1" && data
+              ? `${MONEY_EMOJI} ${formatNumber(player?.money)}`
+              : `${SHIELD_EMOJI} ${formatNumber(player?.tokens)}`
             }
           </div>
         )}
