@@ -59,6 +59,7 @@ const LudkaGame: FC = () => {
   const [pendingBet, setPendingBet] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
+  const [isWinnerAnimationPlaying, setIsWinnerAnimationPlaying] = useState(false);
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -238,11 +239,13 @@ const LudkaGame: FC = () => {
 
     switch (res?.type) {
       case 'choice':
+        if (isWinnerAnimationPlaying) return;
         setShowCoinsAnimation(true);
         setTimeout(() => setShowCoinsAnimation(false), 1000);
         handleChoiceMessage(res);
         break;
       case 'whoiswin':
+        if (isWinnerAnimationPlaying) return;
         handleWinnerMessage(res);
         break;
       case 'error':
@@ -263,7 +266,7 @@ const LudkaGame: FC = () => {
       default:
         break;
     }
-  }, []);
+  }, [isWinnerAnimationPlaying]);
 
   const handleChoiceMessage = useCallback((res: any) => {
     setGameState(prev => ({
@@ -276,16 +279,18 @@ const LudkaGame: FC = () => {
   }, [clearMessages]);
 
   const handleWinnerMessage = useCallback((res: any) => {
+    console.log(res);
     const winner = {
       item: {
-        item_pic: res.whoiswin.item_pic,
-        item_mask: res.whoiswin.item_mask
+        item_pic: res?.whoiswin?.item_pic,
+        item_mask: res?.whoiswin?.item_mask
       },
-      user_name: res.whoiswin.user_name,
-      user_pic: res.whoiswin.user_pic,
-      winner_value: res.whoiswin.winner_value
+      user_name: res?.whoiswin?.user_name,
+      user_pic: res?.whoiswin?.user_pic,
+      winner_value: res?.whoiswin?.winner_value
     };
 
+    setIsWinnerAnimationPlaying(true);
     setGameState(prev => ({ ...prev, winner }));
     setLogState(prev => ({ ...prev, resetHistory: true }));
 
@@ -295,7 +300,7 @@ const LudkaGame: FC = () => {
         winner: null,
         data: {
           ...prev.data!,
-          bet: res?.bet || "0",
+          bet: "0",
           win: {
             ...prev.data!.win,
             users: "none",
@@ -304,6 +309,7 @@ const LudkaGame: FC = () => {
         }
       }));
       setLogState(prev => ({ ...prev, resetHistory: false }));
+      setIsWinnerAnimationPlaying(false);
     }, 6000);
   }, []);
 
@@ -372,7 +378,7 @@ const LudkaGame: FC = () => {
       <Warning />
     );
   }
-
+  console.log(gameState.data?.win?.users);
   return (
     <div className={styles.game}>
       <div className={`${styles.game__content} ${gameState.winner ? styles.game__content_winner : ''}`}>
@@ -435,8 +441,11 @@ const LudkaGame: FC = () => {
                     : gameState.data?.win?.users === "none"
                       ? <UserAvatar />
                       : <UserAvatar
-                        item={gameState.data?.win?.users[gameState.data.win.users.length - 1]}
-                        avatar={gameState.data?.win?.users[gameState.data.win.users.length - 1]?.user_pic}
+                        item={{
+                          item_pic: gameState.data?.win?.users[gameState?.data?.win?.users?.length - 1]?.item_pic,
+                          item_mask: gameState.data?.win?.users[gameState?.data?.win?.users?.length - 1]?.item_mask
+                        }}
+                        avatar={gameState.data?.win?.users[gameState?.data?.win?.users?.length - 1]?.user_pic}
                       />
                   }
                 </div>

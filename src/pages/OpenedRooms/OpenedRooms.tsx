@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getUserId } from "utils/userConfig";
@@ -21,7 +21,6 @@ import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import { getOpenedRooms, setUserData, setUserPhoto } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import { WebSocketContext } from "../../socket/WebSocketContext";
 import { sortRooms } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
 import { indexUrl } from "../../utils/routes";
@@ -51,12 +50,6 @@ export const OpenedRooms: FC = () => {
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const isPortrait = useOrientation();
   const { tg } = useTelegram();
-  const { connect, disconnect, clearMessages } = useContext(WebSocketContext)!;
-
-  // useEffect(() => {
-  //     connect();
-  //     clearMessages();
-  // }, []);
 
   useEffect(() => {
     tg.BackButton.show();
@@ -102,8 +95,8 @@ export const OpenedRooms: FC = () => {
     }, 1000)
     fetchRoomsData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
-  console.log(translation);
+  }, []);
+  
   useEffect(() => {
     const intervalId = setInterval(() => {
       getOpenedRoomsRequest()
