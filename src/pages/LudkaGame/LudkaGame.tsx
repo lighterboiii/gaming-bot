@@ -59,7 +59,7 @@ const LudkaGame: FC = () => {
   const [pendingBet, setPendingBet] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
-  const [isWinnerAnimationPlaying, setIsWinnerAnimationPlaying] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -239,16 +239,24 @@ const LudkaGame: FC = () => {
 
     switch (res?.type) {
       case 'choice':
-        if (isWinnerAnimationPlaying) return;
         setShowCoinsAnimation(true);
         setTimeout(() => setShowCoinsAnimation(false), 1000);
         handleChoiceMessage(res);
         break;
       case 'whoiswin':
-        if (isWinnerAnimationPlaying) return;
         handleWinnerMessage(res);
         break;
       case 'error':
+        if (res?.error === 'small_bet') {
+          setErrorMessage(translation?.small_bet_error || 'Bet is too small');
+          setTimeout(() => setErrorMessage(''), 2000);
+        }
+        if (res?.room_info) {
+          setGameState(prev => ({ 
+            ...prev,
+            data: res?.room_info,
+          }));
+        }
         break;
       case 'emoji':
         setGameState(prev => ({ ...prev, data: res }));
@@ -266,7 +274,7 @@ const LudkaGame: FC = () => {
       default:
         break;
     }
-  }, [isWinnerAnimationPlaying]);
+  }, []);
 
   const handleChoiceMessage = useCallback((res: any) => {
     setGameState(prev => ({
@@ -290,7 +298,6 @@ const LudkaGame: FC = () => {
       winner_value: res?.whoiswin?.winner_value
     };
 
-    setIsWinnerAnimationPlaying(true);
     setGameState(prev => ({ ...prev, winner }));
     setLogState(prev => ({ ...prev, resetHistory: true }));
 
@@ -309,7 +316,6 @@ const LudkaGame: FC = () => {
         }
       }));
       setLogState(prev => ({ ...prev, resetHistory: false }));
-      setIsWinnerAnimationPlaying(false);
     }, 6000);
   }, []);
 
@@ -391,6 +397,11 @@ const LudkaGame: FC = () => {
               {gameState.data?.players.length}
             </p>
             <div className={styles.game__head}>
+            {errorMessage && (
+                  <div className={styles.game__error}>
+                    {errorMessage}
+                  </div>
+                )}
               {showCoinsAnimation && (
                 <img
                   src={coins}
@@ -527,7 +538,9 @@ const LudkaGame: FC = () => {
                   onClick={handleRaiseBet}
                   disabled={gameState.data?.players.length === 1}
                 >
-                  <span className={styles.game__actionButtonText}>{translation?.ludka_raise_bet}</span>
+                  <span className={styles.game__actionButtonText}>
+                    {errorMessage ? errorMessage : translation?.ludka_raise_bet}
+                  </span>
                 </button>
                 <button
                   className={styles.game__logButton}
