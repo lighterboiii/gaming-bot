@@ -22,7 +22,7 @@ import { useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
-import { roomsUrl } from "../../utils/routes";
+import { indexUrl } from "../../utils/routes";
 import { ILudkaGameState, ILudkaOverlayState, ILudkaLogState } from "../../utils/types/gameTypes";
 import { getUserId } from "../../utils/userConfig";
 
@@ -79,7 +79,7 @@ const LudkaGame: FC = () => {
       setTimeout(() => {
         clearMessages();
         disconnect();
-        navigate(roomsUrl, { replace: true });
+        navigate(indexUrl, { replace: true });
       }, 500);
     });
     return () => {
@@ -257,7 +257,7 @@ const LudkaGame: FC = () => {
         if (Number(res?.player_id) === Number(userId)) {
           clearMessages();
           disconnect();
-          navigate(roomsUrl, { replace: true });
+          navigate(indexUrl, { replace: true });
         }
         break;
       default:

@@ -72,6 +72,14 @@ const SettingsSlider: FC<IProps> = ({
     onCurrencyChange(currency);
   }, [currency, onCurrencyChange]);
 
+  useEffect(() => {
+    const numericBet = parseFloat(bet);
+    if (!isNaN(numericBet)) {
+      onBetChange(numericBet);
+      onInputChange && onInputChange(bet);
+    }
+  }, [bet, onBetChange, onInputChange]);
+
   return (
     <div className={styles.slider}>
       <button

@@ -28,7 +28,7 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
-import { roomsUrl } from "../../utils/routes";
+import { indexUrl } from "../../utils/routes";
 
 import styles from './ClosestNumber.module.scss';
 
@@ -105,7 +105,7 @@ export const ClosestNumber: FC = () => {
       });
       clearMessages();
       disconnect();
-      navigate(roomsUrl, { replace: true });
+      navigate(indexUrl, { replace: true });
     });
     return () => {
       tg.BackButton.hide();
@@ -164,7 +164,7 @@ export const ClosestNumber: FC = () => {
             clearMessages();
             disconnect();
             setTimeout(() => {
-              navigate(roomsUrl, { replace: true });
+              navigate(indexUrl, { replace: true });
             }, 100);
           }
           break;
@@ -317,7 +317,7 @@ export const ClosestNumber: FC = () => {
         });
         if (player?.userid === userId) {
           const currentUrl = location.pathname;
-          currentUrl !== roomsUrl && navigate(roomsUrl);
+          currentUrl !== indexUrl && navigate(indexUrl);
         }
         // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
       }

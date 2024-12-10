@@ -63,8 +63,8 @@ export const RockPaperScissors: FC = () => {
   const { sendMessage, wsMessages, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
   const [timer, setTimer] = useState<number | null>(null);
-  const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
-  const [isTimerShown, setIsTimerShown] = useState<boolean>(true);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -120,23 +120,28 @@ export const RockPaperScissors: FC = () => {
   }, []);
 
   const handleTimer = useCallback((initialTime: number) => {
-    if (!timerInterval) {
-      setTimer(initialTime);
-
-      const newInterval = setInterval(() => {
-        setTimer((prevTime) => {
-          if (prevTime === null || prevTime <= 1) {
-            clearInterval(newInterval);
-            setTimerInterval(null);
-            return null;
-          }
-          return prevTime - 1;
-        });
-      }, 1000);
-
-      setTimerInterval(newInterval);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
-  }, [timerInterval]);
+
+    setTimer(initialTime);
+    setIsTimerShown(true);
+
+    const newInterval = setInterval(() => {
+      setTimer((prevTime) => {
+        if (prevTime === null || prevTime <= 1) {
+          clearInterval(newInterval);
+          timerRef.current = null;
+          setIsTimerShown(false);
+          return null;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    timerRef.current = newInterval;
+  }, []);
 
   useEffect(() => {
     const messageHandler = (message: any) => {
@@ -211,18 +216,16 @@ export const RockPaperScissors: FC = () => {
           }
           break;
         case 'timer_started':
-          setIsTimerShown(true);
-          if (!timerInterval) {
-            handleTimer(res.timer_time);
-          }
+          // setIsTimerShown(true);
+          handleTimer(res.timer_time);
           break;
         case 'timer_stopped':
-          setIsTimerShown(false);
-          if (timerInterval) {
-            clearInterval(timerInterval);
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
           }
-          setTimerInterval(null);
           setTimer(null);
+          setIsTimerShown(false);
           break;
         default:
           break;
@@ -234,7 +237,7 @@ export const RockPaperScissors: FC = () => {
       });
     };
     handleMessage();
-  }, [wsMessages, handleTimer, timerInterval]);
+  }, [wsMessages, handleTimer]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -351,11 +354,11 @@ export const RockPaperScissors: FC = () => {
 
   useEffect(() => {
     return () => {
-      if (timerInterval) {
-        clearInterval(timerInterval);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
       }
     };
-  }, [timerInterval]);
+  }, []);
 
   if (!isPortrait) {
     return (
@@ -386,11 +389,7 @@ export const RockPaperScissors: FC = () => {
                     </p>
                   ) : (
                     <p className={styles.game__timer}>
-                      {isTimerShown && timer !== null && (
-                        <div className={styles.game__timer}>
-                          {timer}
-                        </div>
-                      )}
+                      {isTimerShown && timer !== null && timer}
                     </p>
                   )}
                   <div className={styles.game__hands}>
