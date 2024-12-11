@@ -241,7 +241,9 @@ const LudkaGame: FC = () => {
       case 'choice':
         setShowCoinsAnimation(true);
         setTimeout(() => setShowCoinsAnimation(false), 1000);
-        handleChoiceMessage(res);
+        if (res?.bet || res?.win?.winner_value) {
+          handleChoiceMessage(res);
+        }
         break;
       case 'whoiswin':
         handleWinnerMessage(res);
@@ -304,16 +306,7 @@ const LudkaGame: FC = () => {
     setTimeout(() => {
       setGameState(prev => ({
         ...prev,
-        winner: null,
-        data: {
-          ...prev.data!,
-          bet: "0",
-          win: {
-            ...prev.data!.win,
-            users: "none",
-            winner_value: "0"
-          }
-        }
+        winner: null
       }));
       setLogState(prev => ({ ...prev, resetHistory: false }));
     }, 6000);
@@ -397,11 +390,6 @@ const LudkaGame: FC = () => {
               {gameState.data?.players.length}
             </p>
             <div className={styles.game__head}>
-            {errorMessage && (
-                  <div className={styles.game__error}>
-                    {errorMessage}
-                  </div>
-                )}
               {showCoinsAnimation && (
                 <img
                   src={coins}
