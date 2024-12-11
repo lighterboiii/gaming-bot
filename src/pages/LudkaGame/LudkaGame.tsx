@@ -241,9 +241,9 @@ const LudkaGame: FC = () => {
       case 'choice':
         setShowCoinsAnimation(true);
         setTimeout(() => setShowCoinsAnimation(false), 1000);
-        if (res?.bet || res?.win?.winner_value) {
+        // if (res?.bet || res?.win?.winner_value) {
           handleChoiceMessage(res);
-        }
+        // }
         break;
       case 'whoiswin':
         handleWinnerMessage(res);
