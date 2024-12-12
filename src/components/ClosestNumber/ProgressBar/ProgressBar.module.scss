@@ -1,16 +1,6 @@
 @use "../../../stylesheets/mixins" as *;
 @use "../../../stylesheets/variables" as *;
 
-@mixin textScrollAnimation {
-  $steps: 80;
-  @for $i from 0 through $steps {
-    #{$i * (100 / $steps)}% {
-      transform: translateY(if($i % 2 == 0, 100%, -100%));
-      filter: blur(2px);
-    }
-  }
-}
-
 .bar {
   @include size(100%, 100%);
   overflow: visible;
@@ -46,7 +36,7 @@
     position: absolute;
 
     &.bar__textAnimated {
-      animation: textScroll 4s ease-in-out;
+      animation: numberAnimation 4s ease-in-out;
     }
   }
 
@@ -72,11 +62,6 @@
     animation: spin 4s linear forwards;
   }
 
-  &__textAnimated {
-    animation: textScroll 4s linear;
-    animation: none;
-  }
-
   @keyframes spin {
     0% {
       transform-origin: 50px 50px;
@@ -88,50 +73,22 @@
     }
   }
 
-  @keyframes textScroll {
+  @keyframes numberAnimation {
     0% {
-      transform: translateY(0);
       filter: blur(0px);
+      transform: scale(1);
     }
-    15% {
-      transform: translateY(-120%);
+    10% {
       filter: blur(2px);
+      transform: scale(1.1);
     }
-    16% {
-      transform: translateY(120%);
+    85% {
       filter: blur(2px);
-    }
-    30% {
-      transform: translateY(-120%);
-      filter: blur(2px);
-    }
-    31% {
-      transform: translateY(120%);
-      filter: blur(2px);
-    }
-    45% {
-      transform: translateY(-120%);
-      filter: blur(2px);
-    }
-    46% {
-      transform: translateY(120%);
-      filter: blur(2px);
-    }
-    60% {
-      transform: translateY(-120%);
-      filter: blur(2px);
-    }
-    61% {
-      transform: translateY(120%);
-      filter: blur(2px);
-    }
-    95% {
-      transform: translateY(-50%);
-      filter: blur(1px);
+      transform: scale(1.1);
     }
     100% {
-      transform: translateY(0);
       filter: blur(0px);
+      transform: scale(1);
     }
   }
 }

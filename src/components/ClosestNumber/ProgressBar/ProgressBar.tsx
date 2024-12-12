@@ -19,7 +19,9 @@ const CircularProgressBar: FC<IProps> = ({ progress = 0 }) => {
       const y = 50 + 45 * Math.sin(angle);
 
       setIsAnimating(true);
-      const interval = setInterval(() => {
+      
+      // Быстрое изменение чисел в начале
+      const fastInterval = setInterval(() => {
         setRandomNumber(prev => {
           const variation = Math.floor(Math.random() * 20) - 10;
           const newValue = prev + variation;
@@ -27,18 +29,32 @@ const CircularProgressBar: FC<IProps> = ({ progress = 0 }) => {
         });
       }, 25);
 
-      const animationTimeout = setTimeout(() => {
-        setOffset({ x, y });
-        setIsAnimating(false);
-        clearInterval(interval);
-      }, 4000);
+      // Замедление в конце анимации
+      setTimeout(() => {
+        clearInterval(fastInterval);
+        const slowInterval = setInterval(() => {
+          setRandomNumber(prev => {
+            const diff = progress - prev;
+            const step = diff / 10;
+            return Math.round(prev + step);
+          });
+        }, 100);
+
+        setTimeout(() => {
+          clearInterval(slowInterval);
+          setRandomNumber(progress);
+          setIsAnimating(false);
+        }, 500);
+      }, 3500);
+
+      setOffset({ x, y });
 
       return () => {
-        clearTimeout(animationTimeout);
-        clearInterval(interval);
+        clearInterval(fastInterval);
       };
     } else {
       setOffset({ x: 50, y: 5 });
+      setRandomNumber(0);
     }
   }, [progress]);
 
