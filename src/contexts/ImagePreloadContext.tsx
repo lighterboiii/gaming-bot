@@ -18,6 +18,8 @@ export const ImagePreloadProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   useEffect(() => {
     const imagesToPreload = {
+      'gowinLogo': require('../images/gowin.png'),
+      
       'emoji_icon': require('../images/rock-paper-scissors/emoji_icon.png'),
       'leftRock': require('../images/rock-paper-scissors/left_rock.png'),
       'rightRock': require('../images/rock-paper-scissors/right_rock.png'),
@@ -39,7 +41,7 @@ export const ImagePreloadProvider: React.FC<{ children: React.ReactNode }> = ({ 
             loadedImages[key] = src;
             resolve();
           };
-          img.onerror = () => resolve(); // Продолжаем даже если изображение не загрузилось
+          img.onerror = () => resolve();
         }));
 
       await Promise.all(promises);

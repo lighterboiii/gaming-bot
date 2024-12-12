@@ -3,8 +3,6 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getUserId } from "utils/userConfig";
-
 import { getCollectiblesInfo, getLavkaAvailableRequest, getShopItemsRequest } from "../../api/shopApi";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
@@ -18,6 +16,7 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { indexUrl } from "../../utils/routes";
 import { IInventoryRequest } from "../../utils/types/responseTypes";
 import { CombinedItemData, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
+import { getUserId } from "../../utils/userConfig";
 
 import styles from './Shop.module.scss';
 

@@ -47,7 +47,6 @@ export const RockPaperScissors: FC = () => {
   const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
   const [rules, setRulesShown] = useState<boolean | null>(false);
   const [isChoiceLocked, setIsChoiceLocked] = useState<boolean>(false);
-  const [whoIsWinActive, setIsWhoIsWinActive] = useState<boolean>(false);
   const translation = useAppSelector(store => store.app.languageSettings);
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
@@ -146,9 +145,6 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'whoiswin':
-          if (whoIsWinActive) return;
-          
-          setIsWhoIsWinActive(true);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
             secondAnim: res?.whoiswin.s_anim,
@@ -195,7 +191,6 @@ export const RockPaperScissors: FC = () => {
                 secondAnim: null,
               });
               clearMessages();
-              setIsWhoIsWinActive(false);
             }, 3500)
 
           }, animationTime);
@@ -245,7 +240,6 @@ export const RockPaperScissors: FC = () => {
   }, [dispatch, isRulesShown]);
   // хенлер готовности игрока websocket
   const handleReady = () => {
-    if (whoIsWinActive) return;
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
 
     if (data?.bet_type === "1") {
@@ -293,7 +287,6 @@ export const RockPaperScissors: FC = () => {
   const handleChoice = (value: string) => {
     if (isChoiceLocked) return;
     setIsChoiceLocked(true);
-    setIsWhoIsWinActive(false);
     const choice = {
       user_id: userId,
       room_id: roomId,

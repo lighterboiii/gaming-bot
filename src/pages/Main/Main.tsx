@@ -2,6 +2,7 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import Loader from "components/Loader/Loader";
 import { getUserId } from "utils/userConfig";
 
 import { getLuckInfo } from "../../api/mainApi";
@@ -18,11 +19,11 @@ import ShopLink from "../../components/Shopping/ShopLink/ShopLink";
 import BigButton from "../../components/ui/BigButton/BigButton";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
+import { useImagePreload } from '../../contexts/ImagePreloadContext';
 import useOrientation from "../../hooks/useOrientation";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
-import gowinLogo from '../../images/gowin.png';
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { IBannerData, IFortuneData } from "../../utils/types";
 
@@ -33,6 +34,7 @@ export const Main: FC = () => {
   const userId = getUserId();
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const dispatch = useAppDispatch();
+  // const [loading, setLoading] = useState(false);
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);
   const shopImageUrl = useAppSelector(store => store.app.shopImage);
@@ -46,6 +48,7 @@ export const Main: FC = () => {
   const isPortrait = useOrientation();
   // const [audio] = useState(new Audio(music_loop));
   const [isPlaying, setIsPlaying] = useState(false);
+  const { isLoading: imagesLoading, preloadedImages } = useImagePreload();
 
   const handleBannerClick = (bannerData: IBannerData) => {
     setCurrentBanner(bannerData);
@@ -120,10 +123,14 @@ export const Main: FC = () => {
     );
   }
 
+  if (imagesLoading) {
+    return <Loader />;
+  }
+
   return (
     <div className={styles.main}>
       <div className={styles.main__header}>
-        <img src={gowinLogo}
+        <img src={preloadedImages.gowinLogo}
           alt="main_logo"
           className={styles.main__logo} />
         <MainUserInfo
