@@ -481,7 +481,7 @@ export const ClosestNumber: FC = () => {
                   </div>
                   <div className={styles.overlay__inputContainer}>
                     {isChoiceLocked
-                      ? <p className={styles.overlay__text}>Выбор сделан</p>
+                      ? <p className={styles.overlay__text}>`${translation?.choice_made} ${inputValue}`</p>
                       :
                       <input
                         type="number"
