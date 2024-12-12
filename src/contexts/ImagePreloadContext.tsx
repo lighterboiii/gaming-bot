@@ -28,6 +28,11 @@ export const ImagePreloadProvider: React.FC<{ children: React.ReactNode }> = ({ 
       'lWinAnim': require('../images/rock-paper-scissors/winlose/l_win.png'),
       'rLoseAnim': require('../images/rock-paper-scissors/winlose/r_lose.png'),
       'rWinAnim': require('../images/rock-paper-scissors/winlose/r_win.png'),
+
+      'deleteIcon': require('../images/closest-number/Delete.png'),
+      'approveIcon': require('../images/closest-number/Approve.png'),
+      'smileIcon': require('../images/closest-number/smile.png'),
+      'layerBg': require('../images/closest-number/layer.png'),
     };
 
     const loadImages = async () => {

@@ -18,10 +18,9 @@ import Loader from "../../components/Loader/Loader";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import { useImagePreload } from '../../contexts/ImagePreloadContext';
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
-import approveIcon from '../../images/closest-number/Approve.png';
-import deleteIcon from '../../images/closest-number/Delete.png';
 import smile from '../../images/closest-number/smile.png';
 import { setSecondGameRulesState } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
@@ -69,6 +68,7 @@ export const ClosestNumber: FC = () => {
   const [timer, setTimer] = useState<number | null>(null);
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
+  const { isLoading: imagesLoading, preloadedImages } = useImagePreload();
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -421,9 +421,8 @@ export const ClosestNumber: FC = () => {
       <Warning />
     );
   }
-
   return (
-    <div className={styles.game}>
+    <div className={styles.game} style={{ backgroundImage: `url(${preloadedImages.layerBg})` }}>
       {loading ? (
         <Loader />
       ) : (
@@ -502,7 +501,7 @@ export const ClosestNumber: FC = () => {
                   </div>
                   <button className={styles.overlay__emojiButton}
                     onClick={handleClickEmoji}>
-                    <img src={smile}
+                    <img src={preloadedImages.smileIcon}
                       alt="smile_icon"
                       className={styles.overlay__smile} />
                   </button>
@@ -541,14 +540,14 @@ export const ClosestNumber: FC = () => {
                               >
                                 {key === `${translation?.game_but_erase}` ? (
                                   <>
-                                    <img src={deleteIcon}
+                                    <img src={preloadedImages.deleteIcon}
                                       alt="delete icon"
                                       className={styles.overlay__icon} />
                                     <span>{translation?.game_but_erase}</span>
                                   </>
                                 ) : (
                                   <>
-                                    <img src={approveIcon}
+                                    <img src={preloadedImages.approveIcon}
                                       alt="done icon"
                                       className={styles.overlay__icon} />
                                     <span>{translation?.game_but_done}</span>
