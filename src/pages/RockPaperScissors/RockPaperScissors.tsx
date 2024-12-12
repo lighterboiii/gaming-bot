@@ -6,7 +6,13 @@ import { postEvent } from "@tma.js/sdk";
 import { FC, useCallback, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
+import { setFirstGameRulesState } from "services/appSlice";
+import { useAppDispatch, useAppSelector } from "services/reduxHooks";
+import { WebSocketContext } from "socket/WebSocketContext";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "utils/constants";
+import { indexUrl } from "utils/routes";
+import { IGameData, IPlayer } from "utils/types/gameTypes";
+import { getUserId } from "utils/userConfig";
 
 import { setGameRulesWatched } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
@@ -17,22 +23,9 @@ import Players from "../../components/Game/RPSPlayers/Players";
 import Rules from "../../components/Game/Rules/Rules";
 import Loader from "../../components/Loader/Loader";
 import { Warning } from "../../components/OrientationWarning/Warning";
+import { useImagePreload } from '../../contexts/ImagePreloadContext';
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
-import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
-import leftRock from '../../images/rock-paper-scissors/left_rock.png';
-import rightRock from '../../images/rock-paper-scissors/right_rock.png';
-import newVS from '../../images/rock-paper-scissors/VS_new.png';
-import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
-import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
-import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
-import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
-import { setFirstGameRulesState } from "../../services/appSlice";
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
-import { WebSocketContext } from '../../socket/WebSocketContext';
-import { indexUrl, roomsUrl } from "../../utils/routes";
-import { IGameData, IPlayer } from "../../utils/types/gameTypes";
-import { getUserId } from '../../utils/userConfig';
 
 import styles from "./RockPaperScissors.module.scss";
 
@@ -65,6 +58,7 @@ export const RockPaperScissors: FC = () => {
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
+  const { isLoading: imagesLoading, preloadedImages } = useImagePreload();
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -152,16 +146,22 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'whoiswin':
+          if (whoIsWinActive) return;
+          
           setIsWhoIsWinActive(true);
           setPlayersAnim({
             firstAnim: res?.whoiswin.f_anim,
             secondAnim: res?.whoiswin.s_anim,
           });
+          
           const animationTime = 3000;
           setAnimationKey(prevKey => prevKey + 1);
+          
           setTimeout(() => {
             if (Number(res?.whoiswin.winner) === Number(userId)) {
-              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) ? lWinAnim : rWinAnim);
+              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
+                ? preloadedImages.lWinAnim 
+                : preloadedImages.rWinAnim);
               // postEvent(
               //   'web_app_trigger_haptic_feedback',
               //   { type: 'notification', notification_type: 'success' }
@@ -171,7 +171,9 @@ export const RockPaperScissors: FC = () => {
                   : `🔰`}`
                 : ''}`);
             } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
-              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) ? lLoseAnim : rLoseAnim);
+              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
+                ? preloadedImages.lLoseAnim 
+                : preloadedImages.rLoseAnim);
               // postEvent(
               //   'web_app_trigger_haptic_feedback',
               //   { type: 'notification', notification_type: 'error', }
@@ -193,7 +195,6 @@ export const RockPaperScissors: FC = () => {
                 secondAnim: null,
               });
               clearMessages();
-              // setShowTimer(true);
               setIsWhoIsWinActive(false);
             }, 3500)
 
@@ -242,7 +243,7 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [dispatch, isRulesShown]);
-  // хендлер готовности игрока websocket
+  // хенлер готовности игрока websocket
   const handleReady = () => {
     if (whoIsWinActive) return;
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
@@ -257,7 +258,7 @@ export const RockPaperScissors: FC = () => {
 
         if (player?.userid === userId) {
           const currentUrl = location.pathname;
-          currentUrl !== roomsUrl && navigate(roomsUrl);
+          currentUrl !== indexUrl && navigate(indexUrl);
         }
         // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
         return;
@@ -292,8 +293,7 @@ export const RockPaperScissors: FC = () => {
   const handleChoice = (value: string) => {
     if (isChoiceLocked) return;
     setIsChoiceLocked(true);
-    // setTimerStarted(false);
-    // setShowTimer(false);
+    setIsWhoIsWinActive(false);
     const choice = {
       user_id: userId,
       room_id: roomId,
@@ -366,6 +366,10 @@ export const RockPaperScissors: FC = () => {
     );
   }
 
+  if (loading || imagesLoading) {
+    return <Loader />;
+  }
+
   return (
     <div className={styles.game}>
       <div
@@ -380,7 +384,7 @@ export const RockPaperScissors: FC = () => {
                 <>
                   {data?.players_count === "2" &&
                     data?.players?.every((player: IPlayer) => player?.choice === 'ready') &&
-                    <img src={newVS}
+                    <img src={preloadedImages.newVS}
                       alt="versus icon"
                       className={styles.game__versusImage} />}
                   {messageVisible ? (
@@ -397,8 +401,8 @@ export const RockPaperScissors: FC = () => {
                       data?.players_count === "2"
                     ) ? (
                       <HandShake
-                        player1={playersAnim.firstAnim || leftRock}
-                        player2={playersAnim.secondAnim || rightRock} />
+                        player1={playersAnim.firstAnim || preloadedImages.leftRock}
+                        player2={playersAnim.secondAnim || preloadedImages.rightRock} />
                     ) : (
                       data?.players_count === "1"
                     ) ? (
@@ -442,7 +446,7 @@ export const RockPaperScissors: FC = () => {
                       className={`${styles.game__button} ${styles.game__emojiButton}`}
                       onClick={handleShowEmojiOverlay}
                     >
-                      <img src={emoji_icon}
+                      <img src={preloadedImages.emoji_icon}
                         alt="emoji icon"
                         className={styles.game__iconEmoji} />
                     </button>

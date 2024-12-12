@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { getAppData } from '../../api/mainApi';
+import { ImagePreloadProvider } from '../../contexts/ImagePreloadContext';
 import useTelegram from '../../hooks/useTelegram';
 import { ClosestNumber } from '../../pages/ClosestNumber/ClosestNumber';
 import { CreateRoom } from '../../pages/CreateRoom/CreateRoom';
@@ -108,28 +109,30 @@ export const App: FC = () => {
   }, [dispatch, userId]);
 
   return (
-    <div className={styles.app}>
-      {loading ? <Loader /> : ''}
-      <Routes>
-        <Route path={indexUrl}
-          element={<Main />} />
-        <Route path={roomsUrl}
-          element={<OpenedRooms />} />
-        <Route path={createRoomUrl}
-          element={<CreateRoom />} />
-        <Route path={shopUrl}
-          element={<Shop />} />
-        <Route path={leaderboardUrl}
-          element={<LeaderBoard />} />
-        <Route path={roomUrl}
-          element={<RockPaperScissors />} />
-        <Route path={closestNumberRoomUrl}
-          element={<ClosestNumber />} />
-        <Route path={ludkaGameUrl}
-          element={<LudkaGame />} />
-        <Route path={anyUrl}
-          element={<NotFoundPage />} />
-      </Routes>
-    </div>
+    <ImagePreloadProvider>
+      <div className={styles.app}>
+        {loading ? <Loader /> : ''}
+        <Routes>
+          <Route path={indexUrl}
+            element={<Main />} />
+          <Route path={roomsUrl}
+            element={<OpenedRooms />} />
+          <Route path={createRoomUrl}
+            element={<CreateRoom />} />
+          <Route path={shopUrl}
+            element={<Shop />} />
+          <Route path={leaderboardUrl}
+            element={<LeaderBoard />} />
+          <Route path={roomUrl}
+            element={<RockPaperScissors />} />
+          <Route path={closestNumberRoomUrl}
+            element={<ClosestNumber />} />
+          <Route path={ludkaGameUrl}
+            element={<LudkaGame />} />
+          <Route path={anyUrl}
+            element={<NotFoundPage />} />
+        </Routes>
+      </div>
+    </ImagePreloadProvider>
   );
 };
