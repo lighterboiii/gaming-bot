@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -5,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Loader from "components/Loader/Loader";
 import { getUserId } from "utils/userConfig";
 
-import { getLuckInfo } from "../../api/mainApi";
+import { getAppData, getLuckInfo } from "../../api/mainApi";
 // import music_loop from "../../audio/music_loop.mp3";
 import AdvertisementBanner from '../../components/Main/AdvertisementBanner/AdvertisementBanner';
 import BannerData from "../../components/Main/BannerData/BannerData";
@@ -24,6 +25,7 @@ import useOrientation from "../../hooks/useOrientation";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
+import { setUserData, setUserPhoto } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { IBannerData, IFortuneData } from "../../utils/types";
 
@@ -34,7 +36,7 @@ export const Main: FC = () => {
   const userId = getUserId();
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const dispatch = useAppDispatch();
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);
   const shopImageUrl = useAppSelector(store => store.app.shopImage);
@@ -97,6 +99,25 @@ export const Main: FC = () => {
     }
   }, [dailyBonusData]);
 
+  useEffect(() => {
+    setLoading(true);
+    const fetchUserData = () => {
+      getAppData(userId)
+        .then((res) => {
+          dispatch(setUserData(res.user_info));
+          dispatch(setUserPhoto(res.avatar));
+          setTimeout(() => {
+            setLoading(false);
+          }, 1500);
+        })
+        .catch((error) => {
+          console.error('Get user data error:', error);
+        })
+    };
+
+    fetchUserData();
+  }, []);
+
   // useEffect(() => {
   //   audio.loop = true;
     
@@ -123,7 +144,7 @@ export const Main: FC = () => {
     );
   }
 
-  if (imagesLoading) {
+  if (loading || imagesLoading) {
     return <Loader />;
   }
 

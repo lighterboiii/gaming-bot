@@ -19,7 +19,6 @@ interface IProps {
 
 const Players: FC<IProps> = ({ data }) => {
   const userId = getUserId();
-console.log(data);
   return (
     <div className={styles.players}>
     {data?.players?.map((player: IPlayer) => (
