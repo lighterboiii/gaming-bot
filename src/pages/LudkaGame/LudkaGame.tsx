@@ -257,9 +257,9 @@ const LudkaGame: FC = () => {
             setTimeout(() => setErrorMessage(''), 2000);
           }
         }
-        
+
         if (res?.room_info) {
-          setGameState(prev => ({ 
+          setGameState(prev => ({
             ...prev,
             data: res?.room_info,
             winner: null
@@ -267,17 +267,24 @@ const LudkaGame: FC = () => {
         }
         break;
       case 'emoji':
-        setGameState(prev => ({ 
-          ...prev, 
+        setGameState(prev => ({
+          ...prev,
           data: res,
           winner: null
         }));
         break;
       case 'room_info':
-        setGameState(prev => ({ 
-          ...prev, 
-          loading: false, 
+        setGameState(prev => ({
+          ...prev,
+          loading: false,
           data: res,
+        }));
+        break;
+      case 'add_player':
+        setGameState(prev => ({
+          ...prev,
+          data: res,
+          winner: null
         }));
         break;
       case 'kickplayer':
@@ -295,6 +302,7 @@ const LudkaGame: FC = () => {
   const handleChoiceMessage = useCallback((res: any) => {
     setGameState(prev => ({
       ...prev,
+      winner: null,
       data: res
     }));
     setSlideDirection(prev => prev === 'right' ? 'left' : 'right');
@@ -391,7 +399,7 @@ const LudkaGame: FC = () => {
       <Warning />
     );
   }
-
+  console.log(gameState);
   return (
     <div className={styles.game}>
       <div className={`${styles.game__content} ${gameState.winner ? styles.game__content_winner : ''}`}>
@@ -427,7 +435,7 @@ const LudkaGame: FC = () => {
                     className={styles.game__head__playerEmoji}
                   />
                   <div className={styles.game__head__avatarWrapper}>
-                    <UserAvatar 
+                    <UserAvatar
                       avatar={emojiData.avatar}
                       item={emojiData.item}
                     />
@@ -484,7 +492,7 @@ const LudkaGame: FC = () => {
                           ? translation?.waiting4players
                           : gameState.data?.win?.users === "none"
                             ? "0"
-                            : formatNumber(Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins 
+                            : formatNumber(Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins
                               || 0))
                       }
                     </span>
@@ -538,7 +546,10 @@ const LudkaGame: FC = () => {
                 <button
                   className={styles.game__actionButton}
                   onClick={handleRaiseBet}
-                  disabled={gameState.data?.players.length === 1}
+                  disabled={
+                    gameState.data?.players.length === 1
+                    || gameState?.winner !== null
+                  }
                 >
                   <span className={styles.game__actionButtonText}>
                     {errorMessage ? errorMessage : translation?.ludka_raise_bet}
