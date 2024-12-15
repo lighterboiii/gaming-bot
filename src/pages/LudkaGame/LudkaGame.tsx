@@ -247,14 +247,17 @@ const LudkaGame: FC = () => {
         handleWinnerMessage(res);
         break;
       case 'error':
-        if (res?.error === 'small_bet') {
-          setErrorMessage(translation?.ludka_small_bet_error || 'Bet is too small');
-          setTimeout(() => setErrorMessage(''), 2000);
+        if (Number(res?.user_id) === Number(userId)) {
+          if (res?.error === 'small_bet') {
+            setErrorMessage(translation?.ludka_small_bet_error || 'Bet is too small');
+            setTimeout(() => setErrorMessage(''), 2000);
+          }
+          if (res?.error === 'bad_bet') {
+            setErrorMessage(translation?.ludka_bad_bet_error || 'Already bet');
+            setTimeout(() => setErrorMessage(''), 2000);
+          }
         }
-        if (res?.error === 'bad_bet') {
-          setErrorMessage(translation?.ludka_bad_bet_error || 'Already bet');
-          setTimeout(() => setErrorMessage(''), 2000);
-        }
+        
         if (res?.room_info) {
           setGameState(prev => ({ 
             ...prev,
