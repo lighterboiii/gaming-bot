@@ -306,6 +306,7 @@ const LudkaGame: FC = () => {
 
     setGameState(prev => ({ ...prev, winner }));
     setLogState(prev => ({ ...prev, resetHistory: true }));
+    setPendingBet('');
 
     setTimeout(() => {
       setGameState(prev => ({
