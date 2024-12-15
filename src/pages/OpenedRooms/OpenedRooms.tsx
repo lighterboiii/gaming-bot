@@ -3,9 +3,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from "@tma.js/sdk";
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { WebSocketContext } from "socket/WebSocketContext";
 import { getUserId } from "utils/userConfig";
 
 import { getOpenedRoomsRequest } from "../../api/gameApi";
@@ -47,6 +48,7 @@ export const OpenedRooms: FC = () => {
   const [currencyClickCount, setCurrencyClickCount] = useState(0);
   const [betClickCount, setBetClickCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const { sendMessage, wsMessages, connect, disconnect, clearMessages } = useContext(WebSocketContext)!;
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const isPortrait = useOrientation();
   const { tg } = useTelegram();
