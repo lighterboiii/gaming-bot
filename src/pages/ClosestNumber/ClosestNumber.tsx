@@ -412,10 +412,6 @@ export const ClosestNumber: FC = () => {
     };
   }, [timerInterval]);
 
-  const handleAnimationComplete = () => {
-    setRoomValue(0);
-  };
-
   if (!isPortrait) {
     return (
       <Warning />

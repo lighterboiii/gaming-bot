@@ -278,7 +278,6 @@ const LudkaGame: FC = () => {
           ...prev, 
           loading: false, 
           data: res,
-          winner: null
         }));
         break;
       case 'kickplayer':
@@ -296,7 +295,6 @@ const LudkaGame: FC = () => {
   const handleChoiceMessage = useCallback((res: any) => {
     setGameState(prev => ({
       ...prev,
-      winner: null,
       data: res
     }));
     setSlideDirection(prev => prev === 'right' ? 'left' : 'right');
@@ -393,7 +391,7 @@ const LudkaGame: FC = () => {
       <Warning />
     );
   }
-  console.log(gameState.data?.win?.users);
+
   return (
     <div className={styles.game}>
       <div className={`${styles.game__content} ${gameState.winner ? styles.game__content_winner : ''}`}>

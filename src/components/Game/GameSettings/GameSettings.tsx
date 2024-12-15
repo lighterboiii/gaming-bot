@@ -37,13 +37,13 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const userInfo = useAppSelector(store => store.app.info);
-  const { sendMessage, wsMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, connect, disconnect } = useContext(WebSocketContext)!;
   const parsedMessages = wsMessages?.map(msg => JSON.parse(msg));
 
   useEffect(() => {
     if (parsedMessages?.length > 0) {
       const lastMessage = parsedMessages[wsMessages?.length - 1]?.message;
-      console.log(lastMessage);
+
       if (lastMessage && lastMessage?.message === 'success') {
         setSelectedRoomId(lastMessage.room_id);
         navigate(data?.room_type === 2 
@@ -74,8 +74,19 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const handleInputChange = (bet: string) => {
     setBet(parseFloat(bet));
   };
-  const handleCreateRoom =
-    (userIdValue: number, bet: number, betType: number, roomType: number, closeOverlay: () => void) => {
+  const handleCreateRoom = async (
+    userIdValue: number, 
+    bet: number, 
+    betType: number, 
+    roomType: number, 
+    closeOverlay: () => void
+  ) => {
+    try {
+      if (!wsMessages || wsMessages.length === 0) {
+        connect();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+
       const data = {
         type: 'create_room',
         user_id: userIdValue,
@@ -83,8 +94,17 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         bet_type: betType,
         room_type: roomType,
       };
+      
       sendMessage(data);
-    };
+    } catch (error) {
+      console.error('Error creating room:', error);
+      setMessage(translation?.error_creating_room || 'Ошибка создания комнаты');
+      setMessageShown(true);
+      setTimeout(() => {
+        setMessageShown(false);
+      }, 2000);
+    }
+  };
 
   const handleEnergyCheck = () => {
     if (bet < 0.1) {

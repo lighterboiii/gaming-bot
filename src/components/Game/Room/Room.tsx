@@ -35,15 +35,10 @@ const Room: FC<IProps> = ({ room, openModal }) => {
     if (lastMessage) {
       const parsedMessage = JSON.parse(lastMessage);
       console.log(parsedMessage);
-      navigate(room?.room_type === 1 
-          ? `/room/${room?.room_id}` 
-          : room?.room_type === 2 
-            ? `/closest/${room?.room_id}`
-            : `/ludkaGame/${room?.room_id}`);
     }
-  }, [wsMessages, navigate, room.room_id, room.room_type]);
+  }, [wsMessages]);
 
-  const handleJoinRoom = (roomType: number) => {
+  const handleJoinRoom = async (roomType: number) => {
     if (room.free_places === 0) {
       setIsMessage(true);
       setMessage(translation?.no_free_places || "Нет свободных мест");
@@ -83,21 +78,29 @@ const Room: FC<IProps> = ({ room, openModal }) => {
       return;
     }
 
-    if (!wsMessages || wsMessages.length === 0) {
-        connect();
-        setTimeout(() => {
-            sendMessage({
-                user_id: userId,
-                room_id: room.room_id,
-                type: 'addplayer'
-            });
-        }, 1000);
-    } else {
-        sendMessage({
-            user_id: userId,
-            room_id: room.room_id,
-            type: 'addplayer'
-        });
+    try {
+      if (!wsMessages || wsMessages.length === 0) {
+        await connect();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+
+      sendMessage({
+        user_id: userId,
+        room_id: room.room_id,
+        type: 'addplayer'
+      });
+
+      const timeout = setTimeout(() => {
+        navigate(room?.room_type === 1 
+          ? `/room/${room?.room_id}` 
+          : room?.room_type === 2 
+            ? `/closest/${room?.room_id}`
+            : `/ludkaGame/${room?.room_id}`);
+      }, 1000);
+
+      return () => clearTimeout(timeout);
+    } catch (error) {
+      console.error('Error joining room:', error);
     }
   };
 
