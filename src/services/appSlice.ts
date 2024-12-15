@@ -20,8 +20,10 @@ interface AppState {
   shopImage: string | null;
   RPSRuleImage: string | null;
   closestNumberRuleImage: string | null;
+  ludkaRuleImage: string | null;
   firstGameRulesState: boolean | null;
-  secondGameRulesState: boolean | null
+  secondGameRulesState: boolean | null;
+  thirdGameRulesState: boolean | null;
 }
 
 const initialState: AppState = {
@@ -39,6 +41,8 @@ const initialState: AppState = {
   closestNumberRuleImage: null,
   firstGameRulesState: null,
   secondGameRulesState: null,
+  ludkaRuleImage: null,
+  thirdGameRulesState: null,
 }
 
 const appSlice = createSlice({
@@ -182,6 +186,12 @@ const appSlice = createSlice({
         state.info.tokens += action.payload;
       }
     },
+    setThirdGameRuleImage: (state, action: PayloadAction<string>) => {
+      state.ludkaRuleImage = action.payload;
+    },
+    setThirdGameRulesState: (state, action: PayloadAction<boolean>) => {
+      state.thirdGameRulesState = action.payload;
+    },
   }
 })
 
@@ -216,7 +226,9 @@ export const {
   setFirstGameRuleImage,
   setSecondGameRuleImage,
   setFirstGameRulesState,
-  setSecondGameRulesState
+  setSecondGameRulesState,
+  setThirdGameRuleImage,
+  setThirdGameRulesState
 } = appSlice.actions;
 
 export default appSlice.reducer;

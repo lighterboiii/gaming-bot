@@ -6,6 +6,11 @@
 import { FC, useContext, useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { setGameRulesWatched } from "api/gameApi";
+import { getAppData } from "api/mainApi";
+import Rules from "components/Game/Rules/Rules";
+import { setThirdGameRulesState } from "services/appSlice";
+
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import Loader from "../../components/Loader/Loader";
 import { LogOverlay } from "../../components/LudkaGame/LogOverlay/LogOverlay";
@@ -18,7 +23,7 @@ import LogIcon from "../../icons/LogButtonIcon/LogIcon";
 import RoomCounterIcon from "../../icons/RoomCounter/RoomCounter";
 import coins from '../../images/mount/coins.png';
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
-import { useAppSelector } from "../../services/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
@@ -60,6 +65,10 @@ const LudkaGame: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [rules, setRulesShown] = useState<boolean | null>(false);
+  const isRulesShown = useAppSelector(store => store.app.thirdGameRulesState);
+  const ruleImage = useAppSelector(store => store.app.ludkaRuleImage);
+  const dispatch = useAppDispatch();
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -394,6 +403,24 @@ const LudkaGame: FC = () => {
       .slice(0, 4);
   }, [gameState.data?.players]);
 
+  useEffect(() => {
+    setRulesShown(isRulesShown);
+  }, [isRulesShown]);
+
+  const handleRuleButtonClick = () => {
+    setGameRulesWatched(userId, '3');
+    setRulesShown(true);
+    setTimeout(() => {
+      getAppData(userId)
+        .then((res) => {
+          dispatch(setThirdGameRulesState(res.game_rule_3_show));
+        })
+        .catch((error) => {
+          console.error('Get user data error:', error);
+        })
+    }, 1000);
+  };
+
   if (!isPortrait) {
     return (
       <Warning />
@@ -407,162 +434,171 @@ const LudkaGame: FC = () => {
           <Loader />
         ) : (
           <>
-            <p className={styles.game__roomCounter}>
-              <RoomCounterIcon color="#626262" />
-              {gameState.data?.players.length}
-            </p>
-            <div className={styles.game__head}>
-              {showCoinsAnimation && (
-                <img
-                  src={coins}
-                  alt="coins animation"
-                  className={styles.game__coinsAnimation}
-                />
-              )}
-
-              {getActiveEmojis && getActiveEmojis.length > 0 && getActiveEmojis.map((emojiData: any) => (
-                <div
-                  key={emojiData.userId}
-                  className={styles.game__head__playerEmoji_container}
-                  style={{
-                    top: emojiData.position.top,
-                    left: emojiData.position.left
-                  }}
-                >
-                  <img
-                    src={emojiData.emoji}
-                    alt="player emoji"
-                    className={styles.game__head__playerEmoji}
-                  />
-                  <div className={styles.game__head__avatarWrapper}>
-                    <UserAvatar
-                      avatar={emojiData.avatar}
-                      item={emojiData.item}
-                    />
-                  </div>
-                </div>
-              ))}
-
-              <div className={styles.game__headInner}>
-                <p className={styles.game__text}>{translation?.ludka_total_pot}</p>
-                <p className={styles.game__money}>
-                  {gameState.data?.win?.winner_value !== "none"
-                    ? formatNumber(Number(gameState.data?.win?.winner_value))
-                    : '0'}
+            {rules ? (
+              <>
+                <p className={styles.game__roomCounter}>
+                  <RoomCounterIcon color="#626262" />
+                  {gameState.data?.players.length}
                 </p>
-              </div>
-            </div>
-            <div className={styles.game__mainContainer}>
-              <div className={`${styles.game__userContainer} 
-                  ${gameState.winner ? styles.game__userContainer_winner : ''} 
-                  ${styles[`game__userContainer_slide_${slideDirection}`]}`}>
-                <div className={styles.game__avatarContainer}>
-                  {gameState.winner
-                    ? <UserAvatar item={gameState.winner?.item} avatar={gameState.winner?.user_pic} />
-                    : gameState.data?.win?.users === "none"
-                      ? <UserAvatar />
-                      : <UserAvatar
-                        item={{
-                          item_pic: gameState.data?.win?.users[gameState?.data?.win?.users?.length - 1]?.item_pic,
-                          item_mask: gameState.data?.win?.users[gameState?.data?.win?.users?.length - 1]?.item_mask
-                        }}
-                        avatar={gameState.data?.win?.users[gameState?.data?.win?.users?.length - 1]?.user_pic}
-                      />
-                  }
-                </div>
-                <div className={styles.game__userNameContainer}>
-                  <p className={styles.game__userName}>
-                    {gameState.winner
-                      ? `${translation?.ludka_winner} ${gameState.winner.user_name}`
-                      : gameState.data?.win?.users === "none"
-                        ? userData?.publicname
-                        : gameState.data?.win?.users[gameState.data.win.users.length - 1]?.user_name
-                    }
-                  </p>
-                  <p className={styles.game__money}>
-                    {gameState.data?.win?.users !== "none" ? "+" : ""}
-                    {gameState.data?.win?.users !== "none"
-                      ? <span>{gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}</span>
-                      : ""
-                    }
-                    <span className={styles.game__infoText}>
-                      {gameState.winner
-                        ? formatNumber(Number(gameState.winner.winner_value))
-                        : gameState.data?.players_count === "1"
-                          ? translation?.waiting4players
-                          : gameState.data?.win?.users === "none"
-                            ? "0"
-                            : formatNumber(Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins
-                              || 0))
-                      }
-                    </span>
-                  </p>
-                </div>
-              </div>
-
-              <div className={styles.game__infoContainer}>
-                <div className={styles.game__betContainer}>
-                  <p className={styles.game__text}>{translation?.ludka_current_bet}</p>
-                  <p className={styles.game__bet}>
-                    {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
-                    <span>{formatNumber(Number(gameState.data?.bet))}</span>
-                  </p>
-                  <button
-                    className={styles.game__emojiButton}
-                    onClick={handleShowEmojiOverlay}
-                  >
-                    <img src={emoji_icon}
-                      alt="emoji icon"
-                      className={styles.game__iconEmoji}
+                <div className={styles.game__head}>
+                  {showCoinsAnimation && (
+                    <img
+                      src={coins}
+                      alt="coins animation"
+                      className={styles.game__coinsAnimation}
                     />
-                  </button>
-                </div>
+                  )}
 
-                <div className={styles.game__infoInnerContainer}>
-                  <div className={styles.game__info}>
-                    <p className={styles.game__text}>{translation?.webapp_balance}</p>
+                  {getActiveEmojis && getActiveEmojis.length > 0 && getActiveEmojis.map((emojiData: any) => (
+                    <div
+                      key={emojiData.userId}
+                      className={styles.game__head__playerEmoji_container}
+                      style={{
+                        top: emojiData.position.top,
+                        left: emojiData.position.left
+                      }}
+                    >
+                      <img
+                        src={emojiData.emoji}
+                        alt="player emoji"
+                        className={styles.game__head__playerEmoji}
+                      />
+                      <div className={styles.game__head__avatarWrapper}>
+                        <UserAvatar
+                          avatar={emojiData.avatar}
+                          item={emojiData.item}
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className={styles.game__headInner}>
+                    <p className={styles.game__text}>{translation?.ludka_total_pot}</p>
                     <p className={styles.game__money}>
-                      {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
-                      <span>
-                        {currentPlayerBalance}
-                      </span>
+                      {gameState.data?.win?.winner_value !== "none"
+                        ? formatNumber(Number(gameState.data?.win?.winner_value))
+                        : '0'}
                     </p>
                   </div>
-
-                  <button
-                    className={styles.game__keysButton}
-                    onClick={handleOpenOverlay}
-                  >
-                    <p className={styles.game__text}>{translation?.ludka_raise_to}</p>
-                    <p className={styles.game__money}>
-                      {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
-                      <span>{pendingBet || calculateNextBet()}</span>
-                    </p>
-                  </button>
                 </div>
-              </div>
+                <div className={styles.game__mainContainer}>
+                  <div className={`${styles.game__userContainer} 
+                      ${gameState.winner ? styles.game__userContainer_winner : ''} 
+                      ${styles[`game__userContainer_slide_${slideDirection}`]}`}>
+                    <div className={styles.game__avatarContainer}>
+                      {gameState.winner
+                        ? <UserAvatar item={gameState.winner?.item} avatar={gameState.winner?.user_pic} />
+                        : gameState.data?.win?.users === "none"
+                          ? <UserAvatar />
+                          : <UserAvatar
+                            item={{
+                              item_pic: gameState.data?.win?.users[gameState?.data?.win?.users?.length - 1]?.item_pic,
+                              item_mask: gameState.data?.win?.users[gameState?.data?.win?.users?.length - 1]?.item_mask
+                            }}
+                            avatar={gameState.data?.win?.users[gameState?.data?.win?.users?.length - 1]?.user_pic}
+                          />
+                      }
+                    </div>
+                    <div className={styles.game__userNameContainer}>
+                      <p className={styles.game__userName}>
+                        {gameState.winner
+                          ? `${translation?.ludka_winner} ${gameState.winner.user_name}`
+                          : gameState.data?.win?.users === "none"
+                            ? userData?.publicname
+                            : gameState.data?.win?.users[gameState.data.win.users.length - 1]?.user_name
+                        }
+                      </p>
+                      <p className={styles.game__money}>
+                        {gameState.data?.win?.users !== "none" ? "+" : ""}
+                        {gameState.data?.win?.users !== "none"
+                          ? <span>{gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}</span>
+                          : ""
+                        }
+                        <span className={styles.game__infoText}>
+                          {gameState.winner
+                            ? formatNumber(Number(gameState.winner.winner_value))
+                            : gameState.data?.players_count === "1"
+                              ? translation?.waiting4players
+                              : gameState.data?.win?.users === "none"
+                                ? "0"
+                                : formatNumber(Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins
+                                  || 0))
+                          }
+                        </span>
+                      </p>
+                    </div>
+                  </div>
 
-              <div className={styles.game__buttonsContainer}>
-                <button
-                  className={styles.game__actionButton}
-                  onClick={handleRaiseBet}
-                  disabled={
-                    gameState.data?.players.length === 1
-                    || gameState?.winner !== null
-                  }
-                >
-                  <span className={styles.game__actionButtonText}>
-                    {errorMessage ? errorMessage : translation?.ludka_raise_bet}
-                  </span>
-                </button>
-                <button
-                  className={styles.game__logButton}
-                  onClick={handleOpenLog}
-                >
-                  <LogIcon width={40} height={40} />
-                </button>
-              </div>
-            </div>
+                  <div className={styles.game__infoContainer}>
+                    <div className={styles.game__betContainer}>
+                      <p className={styles.game__text}>{translation?.ludka_current_bet}</p>
+                      <p className={styles.game__bet}>
+                        {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
+                        <span>{formatNumber(Number(gameState.data?.bet))}</span>
+                      </p>
+                      <button
+                        className={styles.game__emojiButton}
+                        onClick={handleShowEmojiOverlay}
+                      >
+                        <img src={emoji_icon}
+                          alt="emoji icon"
+                          className={styles.game__iconEmoji}
+                        />
+                      </button>
+                    </div>
+
+                    <div className={styles.game__infoInnerContainer}>
+                      <div className={styles.game__info}>
+                        <p className={styles.game__text}>{translation?.webapp_balance}</p>
+                        <p className={styles.game__money}>
+                          {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
+                          <span>
+                            {currentPlayerBalance}
+                          </span>
+                        </p>
+                      </div>
+
+                      <button
+                        className={styles.game__keysButton}
+                        onClick={handleOpenOverlay}
+                      >
+                        <p className={styles.game__text}>{translation?.ludka_raise_to}</p>
+                        <p className={styles.game__money}>
+                          {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
+                          <span>{pendingBet || calculateNextBet()}</span>
+                        </p>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className={styles.game__buttonsContainer}>
+                    <button
+                      className={styles.game__actionButton}
+                      onClick={handleRaiseBet}
+                      disabled={
+                        gameState.data?.players.length === 1
+                        || gameState?.winner !== null
+                      }
+                    >
+                      <span className={styles.game__actionButtonText}>
+                        {errorMessage ? errorMessage : translation?.ludka_raise_bet}
+                      </span>
+                    </button>
+                    <button
+                      className={styles.game__logButton}
+                      onClick={handleOpenLog}
+                    >
+                      <LogIcon width={40} height={40} />
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <Rules
+                handleRuleButtonClick={handleRuleButtonClick}
+                ruleImage={ruleImage!}
+              />
+            )}
           </>
         )}
       </div>

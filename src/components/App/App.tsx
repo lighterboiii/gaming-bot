@@ -28,7 +28,9 @@ import {
   setTaskList,
   setUserData,
   setUserPhoto,
-  setProductsArchive
+  setProductsArchive,
+  setThirdGameRuleImage,
+  setThirdGameRulesState
 } from '../../services/appSlice';
 import { useAppDispatch } from '../../services/reduxHooks';
 import {
@@ -94,8 +96,10 @@ export const App: FC = () => {
           dispatch(setUserPhoto(res.avatar));
           dispatch(setFirstGameRuleImage(res.game_rule_1_url));
           dispatch(setSecondGameRuleImage(res.game_rule_2_url));
+          dispatch(setThirdGameRuleImage(res.game_rule_3_url));
           dispatch(setFirstGameRulesState(res.game_rule_1_show));
           dispatch(setSecondGameRulesState(res.game_rule_2_show));
+          dispatch(setThirdGameRulesState(res.game_rule_3_show));
           setTimeout(() => {
             setLoading(false);
           }, 1500);
