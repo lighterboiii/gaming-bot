@@ -118,7 +118,6 @@ export const OpenedRooms: FC = () => {
   useEffect(() => {
     return () => {
       clearMessages();
-      disconnect();
     }
   }, []);
 
