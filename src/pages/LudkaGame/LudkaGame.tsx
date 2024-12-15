@@ -247,7 +247,7 @@ const LudkaGame: FC = () => {
         handleWinnerMessage(res);
         break;
       case 'error':
-        if (Number(res?.user_id) === Number(userId)) {
+        if (Number(res?.player_id) === Number(userId)) {
           if (res?.error === 'small_bet') {
             setErrorMessage(translation?.ludka_small_bet_error || 'Bet is too small');
             setTimeout(() => setErrorMessage(''), 2000);
