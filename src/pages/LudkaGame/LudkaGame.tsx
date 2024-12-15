@@ -241,9 +241,7 @@ const LudkaGame: FC = () => {
       case 'choice':
         setShowCoinsAnimation(true);
         setTimeout(() => setShowCoinsAnimation(false), 1000);
-        // if (res?.bet || res?.win?.winner_value) {
-          handleChoiceMessage(res);
-        // }
+        handleChoiceMessage(res);
         break;
       case 'whoiswin':
         handleWinnerMessage(res);
@@ -261,14 +259,24 @@ const LudkaGame: FC = () => {
           setGameState(prev => ({ 
             ...prev,
             data: res?.room_info,
+            winner: null
           }));
         }
         break;
       case 'emoji':
-        setGameState(prev => ({ ...prev, data: res }));
+        setGameState(prev => ({ 
+          ...prev, 
+          data: res,
+          winner: null
+        }));
         break;
       case 'room_info':
-        setGameState(prev => ({ ...prev, loading: false, data: res }));
+        setGameState(prev => ({ 
+          ...prev, 
+          loading: false, 
+          data: res,
+          winner: null
+        }));
         break;
       case 'kickplayer':
         if (Number(res?.player_id) === Number(userId)) {
