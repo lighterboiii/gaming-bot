@@ -51,9 +51,7 @@ export const RockPaperScissors: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
   const isPortrait = useOrientation();
-  const userData = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages, clearMessages, disconnect } = useContext(WebSocketContext)!;
-  const currentPlayer = data?.players?.find((player: IPlayer) => Number(player?.userid) === Number(userId));
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
@@ -228,9 +226,10 @@ export const RockPaperScissors: FC = () => {
       }
     };
     const handleMessage = () => {
-      wsMessages.forEach((message: any) => {
-        messageHandler(message);
-      });
+      const lastMessage = wsMessages[wsMessages.length - 1];
+      if (lastMessage) {
+        messageHandler(lastMessage);
+      }
     };
     handleMessage();
   }, [wsMessages, handleTimer]);
