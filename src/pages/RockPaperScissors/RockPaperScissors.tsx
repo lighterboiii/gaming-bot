@@ -226,13 +226,12 @@ export const RockPaperScissors: FC = () => {
       }
     };
     const handleMessage = () => {
-      const lastMessage = wsMessages[wsMessages.length - 1];
-      if (lastMessage) {
-        messageHandler(lastMessage);
-      }
+      wsMessages.forEach((message: any) => {
+        messageHandler(message);
+      });
     };
     handleMessage();
-  }, [wsMessages, handleTimer]);
+  }, [wsMessages]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
