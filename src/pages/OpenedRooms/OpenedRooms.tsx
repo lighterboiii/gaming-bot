@@ -113,6 +113,13 @@ export const OpenedRooms: FC = () => {
     return () => clearInterval(intervalId);
   }, [dispatch]);
 
+  useEffect(() => {
+    return () => {
+      clearMessages();
+      disconnect();
+    }
+  }, []);
+
   const toggleSort = (sortBy: string) => {
     let sortedRooms;
 

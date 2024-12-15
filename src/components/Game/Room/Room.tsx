@@ -28,7 +28,7 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const [message, setMessage] = useState<string>('');
   const translation = useAppSelector(store => store.app.languageSettings);
   const userInfo = useAppSelector(store => store.app.info);
-  const { sendMessage, wsMessages, connect } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
 
   useEffect(() => {
     const lastMessage = wsMessages[wsMessages.length - 1];
@@ -51,6 +51,7 @@ const Room: FC<IProps> = ({ room, openModal }) => {
     if (room.players[0].userid === userId) {
       setIsMessage(true);
       setMessage("Server error");
+      clearMessages();
       setTimeout(() => {
         setIsMessage(false);
       }, 1500);
@@ -79,8 +80,9 @@ const Room: FC<IProps> = ({ room, openModal }) => {
     }
 
     try {
+      clearMessages();
       if (!wsMessages || wsMessages.length === 0) {
-        await connect();
+        connect();
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
