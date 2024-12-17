@@ -149,11 +149,13 @@ export const RockPaperScissors: FC = () => {
       }
     };
 
-    wsMessages.forEach(message => {
-      if (message) {
-        handleTimerMessages(message);
+    const handleMessage = () => {
+      const lastMessage = wsMessages[wsMessages.length - 1];
+      if (lastMessage) {
+        handleTimerMessages(lastMessage);
       }
-    });
+    };
+    handleMessage();
   }, [wsMessages, handleTimer]);
 
   useEffect(() => {
