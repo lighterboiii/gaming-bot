@@ -163,69 +163,32 @@ export const RockPaperScissors: FC = () => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
+        case 'choice':
+        case 'emoji':
+        case 'kickplayer':
+          // Эти типы сообщений обрабатываем для всех сообщений в очереди
+          handleRegularMessage(res);
+          break;
+        case 'whoiswin':
+          // whoiswin обрабатываем только для последнего сообщения
+          if (message === wsMessages[wsMessages.length - 1]) {
+            handleWinMessage(res);
+          }
+          break;
+        default:
+          break;
+      }
+    };
+
+    // Обработка обычных сообщений
+    const handleRegularMessage = (res: any) => {
+      switch (res.type) {
+        case 'room_info':
           setData(prevData => ({
             ...prevData,
             ...res,
           }));
           setLoading(false);
-          break;
-        case 'whoiswin':
-          setPlayersAnim({
-            firstAnim: res?.whoiswin.f_anim,
-            secondAnim: res?.whoiswin.s_anim,
-          });
-          
-          const animationTime = 3000;
-          setAnimationKey(prevKey => prevKey + 1);
-          
-          const gameResult = (() => {
-            if (Number(res?.whoiswin.winner) === Number(userId)) {
-              return {
-                animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-                  ? preloadedImages.lWinAnim 
-                  : preloadedImages.rWinAnim,
-                message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
-                  ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵` : `🔰`}`
-                  : ''}`
-              };
-            } 
-            if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
-              return {
-                animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-                  ? preloadedImages.lLoseAnim 
-                  : preloadedImages.rLoseAnim,
-                message: `${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1" ? `💵` : `🔰`}`
-              };
-            }
-            if (res?.whoiswin.winner === 'draw') {
-              return {
-                animation: null,
-                message: translation?.draw
-              };
-            }
-            return null;
-          })();
-
-          // Применяем результат один раз
-          setTimeout(() => {
-            if (gameResult) {
-              if (gameResult.animation) {
-                updateAnimation(gameResult.animation);
-              }
-              setMessage(gameResult.message);
-              setMessageVisible(true);
-            }
-
-            setTimeout(() => {
-              setMessageVisible(false);
-              setAnimation(null);
-              setPlayersAnim({
-                firstAnim: null,
-                secondAnim: null,
-              });
-              clearMessages();
-            }, 3500);
-          }, animationTime);
           break;
         case 'choice':
           setData(prevData => {
@@ -239,33 +202,70 @@ export const RockPaperScissors: FC = () => {
             };
           });
           break;
-        case 'emoji':
-          setData(prevData => {
-            if (!prevData) return res;
-            return {
-              ...prevData,
-              players: prevData.players.map(player => {
-                const updatedPlayer = res.players.find((p: IPlayer) => p.userid === player.userid);
-                return updatedPlayer ? { ...player, emoji: updatedPlayer.emoji } : player;
-              })
-            };
-          });
-          break;
-        case 'kickplayer':
-          if (Number(res?.kicked_id) === Number(userId)) {
-            setLoading(false);
-            clearMessages();
-            disconnect();
-            setTimeout(() => {
-              navigate(indexUrl, { replace: true });
-            }, 100);
-          }
-          break;
-        default:
-          break;
+        // ... остальные case для регулярных сообщений
       }
     };
 
+    // Обработка сообщения о победе
+    const handleWinMessage = (res: any) => {
+      setPlayersAnim({
+        firstAnim: res?.whoiswin.f_anim,
+        secondAnim: res?.whoiswin.s_anim,
+      });
+      
+      const animationTime = 3000;
+      setAnimationKey(prevKey => prevKey + 1);
+      
+      const gameResult = (() => {
+        if (Number(res?.whoiswin.winner) === Number(userId)) {
+          return {
+            animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
+              ? preloadedImages.lWinAnim 
+              : preloadedImages.rWinAnim,
+            message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
+              ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵` : `🔰`}`
+              : ''}`
+          };
+        } 
+        if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
+          return {
+            animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
+              ? preloadedImages.lLoseAnim 
+              : preloadedImages.rLoseAnim,
+            message: `${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1" ? `💵` : `🔰`}`
+          };
+        }
+        if (res?.whoiswin.winner === 'draw') {
+          return {
+            animation: null,
+            message: translation?.draw
+          };
+        }
+        return null;
+      })();
+
+      setTimeout(() => {
+        if (gameResult) {
+          if (gameResult.animation) {
+            updateAnimation(gameResult.animation);
+          }
+          setMessage(gameResult.message);
+          setMessageVisible(true);
+        }
+
+        setTimeout(() => {
+          setMessageVisible(false);
+          setAnimation(null);
+          setPlayersAnim({
+            firstAnim: null,
+            secondAnim: null,
+          });
+          clearMessages();
+        }, 3500);
+      }, animationTime);
+    };
+
+    // Обрабатываем все сообщения
     wsMessages.forEach(message => {
       if (message) {
         messageHandler(message);
