@@ -233,14 +233,15 @@ export const RockPaperScissors: FC = () => {
           break;
       }
     };
-    const handleMessage = () => {
-      const lastMessage = wsMessages[wsMessages.length - 1];
-      if (lastMessage) {
-        messageHandler(lastMessage);
-      }
-    };
-    handleMessage();
-  }, [wsMessages, handleTimer]);
+   // Обрабатываем ВСЕ сообщения, а не только последнее
+   wsMessages.forEach((message: any) => {
+    messageHandler(message);
+  });
+
+}, [wsMessages, 
+  userId, data,
+   translation, preloadedImages, handleTimer, clearMessages, disconnect, 
+   navigate, winAnimationPlayed, updateAnimation]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
