@@ -23,9 +23,16 @@ import Players from "../../components/Game/RPSPlayers/Players";
 import Rules from "../../components/Game/Rules/Rules";
 import Loader from "../../components/Loader/Loader";
 import { Warning } from "../../components/OrientationWarning/Warning";
-import { useImagePreload } from '../../contexts/ImagePreloadContext';
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
+import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
+import leftRock from '../../images/rock-paper-scissors/left_rock.png';
+import rightRock from '../../images/rock-paper-scissors/right_rock.png';
+import newVS from '../../images/rock-paper-scissors/VS_new.png';
+import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
+import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
+import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
+import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
 
 import styles from "./RockPaperScissors.module.scss";
 
@@ -55,7 +62,6 @@ export const RockPaperScissors: FC = () => {
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
-  const { isLoading: imagesLoading, preloadedImages } = useImagePreload();
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -220,8 +226,8 @@ export const RockPaperScissors: FC = () => {
         if (Number(res?.whoiswin.winner) === Number(userId)) {
           return {
             animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-              ? preloadedImages.lWinAnim 
-              : preloadedImages.rWinAnim,
+              ? lWinAnim 
+              : rWinAnim,
             message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
               ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵` : `🔰`}`
               : ''}`
@@ -230,8 +236,8 @@ export const RockPaperScissors: FC = () => {
         if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
           return {
             animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-              ? preloadedImages.lLoseAnim 
-              : preloadedImages.rLoseAnim,
+              ? lLoseAnim 
+              : rLoseAnim,
             message: `${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1" ? `💵` : `🔰`}`
           };
         }
@@ -397,7 +403,7 @@ export const RockPaperScissors: FC = () => {
     );
   }
 
-  if (loading || imagesLoading) {
+  if (loading) {
     return <Loader />;
   }
 
@@ -415,7 +421,7 @@ export const RockPaperScissors: FC = () => {
                 <>
                   {data?.players_count === "2" &&
                     data?.players?.every((player: IPlayer) => player?.choice === 'ready') &&
-                    <img src={preloadedImages.newVS}
+                    <img src={newVS}
                       alt="versus icon"
                       className={styles.game__versusImage} />}
                   {messageVisible ? (
@@ -432,8 +438,8 @@ export const RockPaperScissors: FC = () => {
                       data?.players_count === "2"
                     ) ? (
                       <HandShake
-                        player1={playersAnim.firstAnim || preloadedImages.leftRock}
-                        player2={playersAnim.secondAnim || preloadedImages.rightRock} />
+                        player1={playersAnim.firstAnim ||leftRock}
+                        player2={playersAnim.secondAnim ||rightRock} />
                     ) : (
                       data?.players_count === "1"
                     ) ? (
@@ -477,7 +483,7 @@ export const RockPaperScissors: FC = () => {
                       className={`${styles.game__button} ${styles.game__emojiButton}`}
                       onClick={handleShowEmojiOverlay}
                     >
-                      <img src={preloadedImages.emoji_icon}
+                      <img src={emoji_icon}
                         alt="emoji icon"
                         className={styles.game__iconEmoji} />
                     </button>

@@ -20,11 +20,11 @@ import ShopLink from "../../components/Shopping/ShopLink/ShopLink";
 import BigButton from "../../components/ui/BigButton/BigButton";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
-import { useImagePreload } from '../../contexts/ImagePreloadContext';
 import useOrientation from "../../hooks/useOrientation";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
+import gowinLogo from '../../images/gowin.png';
 import { setUserData, setUserPhoto } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { IBannerData, IFortuneData } from "../../utils/types";
@@ -50,7 +50,6 @@ export const Main: FC = () => {
   const isPortrait = useOrientation();
   // const [audio] = useState(new Audio(music_loop));
   const [isPlaying, setIsPlaying] = useState(false);
-  const { isLoading: imagesLoading, preloadedImages } = useImagePreload();
 
   const handleBannerClick = (bannerData: IBannerData) => {
     setCurrentBanner(bannerData);
@@ -144,14 +143,14 @@ export const Main: FC = () => {
     );
   }
 
-  if (loading || imagesLoading) {
+  if (loading) {
     return <Loader />;
   }
 
   return (
     <div className={styles.main}>
       <div className={styles.main__header}>
-        <img src={preloadedImages.gowinLogo}
+        <img src={gowinLogo}
           alt="main_logo"
           className={styles.main__logo} />
         <MainUserInfo

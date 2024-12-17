@@ -4,7 +4,6 @@ import { FC, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { getAppData } from '../../api/mainApi';
-import { ImagePreloadProvider } from '../../contexts/ImagePreloadContext';
 import useTelegram from '../../hooks/useTelegram';
 import { ClosestNumber } from '../../pages/ClosestNumber/ClosestNumber';
 import { CreateRoom } from '../../pages/CreateRoom/CreateRoom';
@@ -112,7 +111,6 @@ export const App: FC = () => {
   }, [dispatch, userId]);
 
   return (
-    <ImagePreloadProvider>
       <div className={styles.app}>
         {loading ? <Loader /> : ''}
         <Routes>
@@ -136,6 +134,5 @@ export const App: FC = () => {
             element={<NotFoundPage />} />
         </Routes>
       </div>
-    </ImagePreloadProvider>
   );
 };
