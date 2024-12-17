@@ -49,7 +49,7 @@ export const Main: FC = () => {
   const [luckData, setLuckData] = useState<IFortuneData | null>(null);
   const isPortrait = useOrientation();
   // const [audio] = useState(new Audio(music_loop));
-  const [isPlaying, setIsPlaying] = useState(false);
+  // const [isPlaying, setIsPlaying] = useState(false);
 
   const handleBannerClick = (bannerData: IBannerData) => {
     setCurrentBanner(bannerData);
