@@ -149,10 +149,11 @@ export const RockPaperScissors: FC = () => {
       }
     };
 
-    const lastMessage = wsMessages[wsMessages.length - 1];
-    if (lastMessage) {
-      handleTimerMessages(lastMessage);
-    }
+    wsMessages.forEach(message => {
+      if (message) {
+        handleTimerMessages(message);
+      }
+    });
   }, [wsMessages, handleTimer]);
 
   useEffect(() => {
@@ -235,13 +236,11 @@ export const RockPaperScissors: FC = () => {
       }
     };
 
-    const handleMessage = () => {
-      const lastMessage = wsMessages[wsMessages.length - 1];
-      if (lastMessage) {
-        messageHandler(lastMessage);
+    wsMessages.forEach(message => {
+      if (message) {
+        messageHandler(message);
       }
-    };
-    handleMessage();
+    });
   }, [wsMessages]);
   // проверка правил при старте игры
   useEffect(() => {
@@ -328,7 +327,7 @@ export const RockPaperScissors: FC = () => {
       sendMessage(noneData);
     }, 3000);
   };
-  // обработчик клика по кнопке "Ознакомился" - не Websocket
+  // обработчик клика по кнопке "Ознакомился" - ��е Websocket
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
