@@ -163,7 +163,10 @@ export const RockPaperScissors: FC = () => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
-          setData(res);
+          setData(prevData => ({
+            ...prevData,
+            ...res,
+          }));
           setLoading(false);
           break;
         case 'whoiswin':
@@ -218,10 +221,28 @@ export const RockPaperScissors: FC = () => {
           }, animationTime);
           break;
         case 'choice':
-          setData(res);
+          setData(prevData => {
+            if (!prevData) return res;
+            return {
+              ...prevData,
+              players: prevData.players.map(player => {
+                const updatedPlayer = res.players.find((p: IPlayer) => p.userid === player.userid);
+                return updatedPlayer ? { ...player, ...updatedPlayer } : player;
+              })
+            };
+          });
           break;
         case 'emoji':
-          setData(res);
+          setData(prevData => {
+            if (!prevData) return res;
+            return {
+              ...prevData,
+              players: prevData.players.map(player => {
+                const updatedPlayer = res.players.find((p: IPlayer) => p.userid === player.userid);
+                return updatedPlayer ? { ...player, emoji: updatedPlayer.emoji } : player;
+              })
+            };
+          });
           break;
         case 'kickplayer':
           if (Number(res?.kicked_id) === Number(userId)) {
@@ -329,7 +350,7 @@ export const RockPaperScissors: FC = () => {
       sendMessage(noneData);
     }, 3000);
   };
-  // обработчик клика по кнопке "Ознакомился" - ��е Websocket
+  // обработчик клика по кнопке "Ознакомился" - е Websocket
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
