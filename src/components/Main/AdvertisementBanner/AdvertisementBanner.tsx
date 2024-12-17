@@ -1,6 +1,8 @@
 // import { postEvent } from "@tma.js/sdk";
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
+
+import { getCachedBanners } from "utils/bannerCache";
 
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import { IBannerData } from "../../../utils/types/mainTypes";
@@ -15,24 +17,33 @@ interface IProps {
 const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [cachedBanners, setCachedBanners] = useState(getCachedBanners());
+
+  useEffect(() => {
+    // Обновляем кэшированные баннеры при изменении bannersData
+    setCachedBanners(getCachedBanners());
+  }, [bannersData]);
+
+  // Используем кэшированные баннеры, если они есть
+  const activeBanners = cachedBanners || bannersData;
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
   };
 
   const handleBannerClick = () => {
-    const currentBannerData = bannersData[currentIndex];
+    const currentBannerData = activeBanners[currentIndex];
     // postEvent("web_app_trigger_haptic_feedback", { type: "impact", impact_style: "soft" });
     onBannerClick(currentBannerData);
   };
 
   const handleNextSlide = () => {
-    goToSlide((currentIndex + 1) % bannersData.length);
+    goToSlide((currentIndex + 1) % activeBanners.length);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
   const handlePrevSlide = () => {
-    goToSlide((currentIndex - 1 + bannersData.length) % bannersData.length);
+    goToSlide((currentIndex - 1 + activeBanners.length) % activeBanners.length);
     // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
   };
 
@@ -45,24 +56,24 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
   });
 
   return (
-    bannersData && (
+    activeBanners && (
       <div
         {...handlers}
         className={styles.banner}
-        style={{ backgroundImage: `url(${bannersData[currentIndex]?.pic})` }}
+        style={{ backgroundImage: `url(${activeBanners[currentIndex]?.pic})` }}
       >
         <div className={styles.banner__info}>
           <h3
             className={styles.banner__picHeader}
-            style={{ color: `${bannersData[currentIndex]?.pic_text_color}`, wordWrap: "break-word" }}
+            style={{ color: `${activeBanners[currentIndex]?.pic_text_color}`, wordWrap: "break-word" }}
           >
-            {bannersData[currentIndex]?.pic_header}
+            {activeBanners[currentIndex]?.pic_header}
           </h3>
           <p
             className={styles.banner__text}
-            style={{ color: `${bannersData[currentIndex]?.pic_text_color}`}}
+            style={{ color: `${activeBanners[currentIndex]?.pic_text_color}`}}
           >
-            {bannersData[currentIndex]?.pic_text}
+            {activeBanners[currentIndex]?.pic_text}
           </p>
         </div>
         <button
@@ -86,7 +97,7 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
             color="#d51845" />
         </button>
         <div className={styles.banner__indicators}>
-          {bannersData?.map((_, index) => (
+          {activeBanners?.map((_, index) => (
             <button
               key={index}
               className={`${styles.banner__indicator} ${index === currentIndex ? styles.activeIndicator : ""

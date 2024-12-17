@@ -3,6 +3,8 @@
 import { FC, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+import { cacheBanners } from 'utils/bannerCache';
+
 import { getAppData } from '../../api/mainApi';
 import useTelegram from '../../hooks/useTelegram';
 import { ClosestNumber } from '../../pages/ClosestNumber/ClosestNumber';
@@ -82,7 +84,12 @@ export const App: FC = () => {
     setLoading(true);
     const fetchUserData = () => {
       getAppData(userId)
-        .then((res) => {
+        .then(async (res) => {
+          console.log(res);
+          if (res.ad_info) {
+            await cacheBanners(res.ad_info);
+          }
+          
           dispatch(setBannerData(res.ad_info));
           dispatch(setShopImage(res.shop_image_url));
           dispatch(setLanguageSettings(res.translate));
