@@ -56,7 +56,6 @@ export const RockPaperScissors: FC = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
   const { isLoading: imagesLoading, preloadedImages } = useImagePreload();
-  const [winAnimationPlayed, setWinAnimationPlayed] = useState<boolean>(false);
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -136,6 +135,27 @@ export const RockPaperScissors: FC = () => {
   }, []);
 
   useEffect(() => {
+    const handleTimerMessages = (message: any) => {
+      const res = JSON.parse(message);
+      if (res?.type === 'timer_started') {
+        handleTimer(res.timer_time);
+      } else if (res?.type === 'timer_stopped') {
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+        setTimer(null);
+        setIsTimerShown(false);
+      }
+    };
+
+    const lastMessage = wsMessages[wsMessages.length - 1];
+    if (lastMessage) {
+      handleTimerMessages(lastMessage);
+    }
+  }, [wsMessages, handleTimer]);
+
+  useEffect(() => {
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       switch (res?.type) {
@@ -152,57 +172,50 @@ export const RockPaperScissors: FC = () => {
           const animationTime = 3000;
           setAnimationKey(prevKey => prevKey + 1);
           
-          if (!winAnimationPlayed) {
-            setWinAnimationPlayed(true);
+          setTimeout(() => {
+            if (Number(res?.whoiswin.winner) === Number(userId)) {
+              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
+                ? preloadedImages.lWinAnim 
+                : preloadedImages.rWinAnim);
+              // postEvent(
+              //   'web_app_trigger_haptic_feedback',
+              //   { type: 'notification', notification_type: 'success' }
+              // );
+              setMessage(`${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
+                ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵`
+                  : `🔰`}`
+                : ''}`);
+            } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
+              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
+                ? preloadedImages.lLoseAnim 
+                : preloadedImages.rLoseAnim);
+              // postEvent(
+              //   'web_app_trigger_haptic_feedback',
+              //   { type: 'notification', notification_type: 'error', }
+              // );
+              setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+                ? `💵`
+                : `🔰`}`);
+            } else if (res?.whoiswin.winner === 'draw') {
+              setMessage(translation?.draw);
+              // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+            }
+            setMessageVisible(true);
+
             setTimeout(() => {
-              if (Number(res?.whoiswin.winner) === Number(userId)) {
-                updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-                  ? preloadedImages.lWinAnim 
-                  : preloadedImages.rWinAnim);
-                // postEvent(
-                //   'web_app_trigger_haptic_feedback',
-                //   { type: 'notification', notification_type: 'success' }
-                // );
-                setMessage(`${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
-                  ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵`
-                    : `🔰`}`
-                  : ''}`);
-              } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
-                updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-                  ? preloadedImages.lLoseAnim 
-                  : preloadedImages.rLoseAnim);
-                // postEvent(
-                //   'web_app_trigger_haptic_feedback',
-                //   { type: 'notification', notification_type: 'error', }
-                // );
-                setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
-                  ? `💵`
-                  : `🔰`}`);
-              } else if (res?.whoiswin.winner === 'draw') {
-                setMessage(translation?.draw);
-                // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-              }
-              setMessageVisible(true);
+              setMessageVisible(false);
+              setAnimation(null);
+              setPlayersAnim({
+                firstAnim: null,
+                secondAnim: null,
+              });
+              clearMessages();
+            }, 3500)
 
-              setTimeout(() => {
-                setMessageVisible(false);
-                setAnimation(null);
-                setPlayersAnim({
-                  firstAnim: null,
-                  secondAnim: null,
-                });
-                clearMessages();
-              }, 3500)
-
-            }, animationTime);
-          }
+          }, animationTime);
           break;
         case 'choice':
           setData(res);
-          if (res?.players?.some((player: any) => 
-            Number(player.userid) === Number(userId) && player.choice === 'ready')) {
-            setWinAnimationPlayed(false);
-          }
           break;
         case 'emoji':
           setData(res);
@@ -217,31 +230,19 @@ export const RockPaperScissors: FC = () => {
             }, 100);
           }
           break;
-        case 'timer_started':
-          // setIsTimerShown(true);
-          handleTimer(res.timer_time);
-          break;
-        case 'timer_stopped':
-          if (timerRef.current) {
-            clearInterval(timerRef.current);
-            timerRef.current = null;
-          }
-          setTimer(null);
-          setIsTimerShown(false);
-          break;
         default:
           break;
       }
     };
-   // Обрабатываем ВСЕ сообщения, а не только последнее
-   wsMessages.forEach((message: any) => {
-    messageHandler(message);
-  });
 
-}, [wsMessages, 
-  userId, data,
-   translation, preloadedImages, handleTimer, clearMessages, disconnect, 
-   navigate, winAnimationPlayed, updateAnimation]);
+    const handleMessage = () => {
+      const lastMessage = wsMessages[wsMessages.length - 1];
+      if (lastMessage) {
+        messageHandler(lastMessage);
+      }
+    };
+    handleMessage();
+  }, [wsMessages]);
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
