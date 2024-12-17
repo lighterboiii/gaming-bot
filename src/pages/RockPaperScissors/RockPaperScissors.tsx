@@ -178,35 +178,43 @@ export const RockPaperScissors: FC = () => {
           const animationTime = 3000;
           setAnimationKey(prevKey => prevKey + 1);
           
-          setTimeout(() => {
+          const gameResult = (() => {
             if (Number(res?.whoiswin.winner) === Number(userId)) {
-              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-                ? preloadedImages.lWinAnim 
-                : preloadedImages.rWinAnim);
-              // postEvent(
-              //   'web_app_trigger_haptic_feedback',
-              //   { type: 'notification', notification_type: 'success' }
-              // );
-              setMessage(`${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
-                ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵`
-                  : `🔰`}`
-                : ''}`);
-            } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
-              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-                ? preloadedImages.lLoseAnim 
-                : preloadedImages.rLoseAnim);
-              // postEvent(
-              //   'web_app_trigger_haptic_feedback',
-              //   { type: 'notification', notification_type: 'error', }
-              // );
-              setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
-                ? `💵`
-                : `🔰`}`);
-            } else if (res?.whoiswin.winner === 'draw') {
-              setMessage(translation?.draw);
-              // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+              return {
+                animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
+                  ? preloadedImages.lWinAnim 
+                  : preloadedImages.rWinAnim,
+                message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
+                  ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵` : `🔰`}`
+                  : ''}`
+              };
+            } 
+            if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
+              return {
+                animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
+                  ? preloadedImages.lLoseAnim 
+                  : preloadedImages.rLoseAnim,
+                message: `${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1" ? `💵` : `🔰`}`
+              };
             }
-            setMessageVisible(true);
+            if (res?.whoiswin.winner === 'draw') {
+              return {
+                animation: null,
+                message: translation?.draw
+              };
+            }
+            return null;
+          })();
+
+          // Применяем результат один раз
+          setTimeout(() => {
+            if (gameResult) {
+              if (gameResult.animation) {
+                updateAnimation(gameResult.animation);
+              }
+              setMessage(gameResult.message);
+              setMessageVisible(true);
+            }
 
             setTimeout(() => {
               setMessageVisible(false);
@@ -216,8 +224,7 @@ export const RockPaperScissors: FC = () => {
                 secondAnim: null,
               });
               clearMessages();
-            }, 3500)
-
+            }, 3500);
           }, animationTime);
           break;
         case 'choice':
