@@ -83,13 +83,13 @@ export const App: FC = () => {
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
+          dispatch(setBannerData(res.ad_info));
+          dispatch(setShopImage(res.shop_image_url));
           dispatch(setLanguageSettings(res.translate));
           // dispatch(setUserData(res.user_info));
           dispatch(setProductsArchive(res.collectibles_data));
           dispatch(setShopAvailable(res.shop_available));
           dispatch(setTaskList(res.tasks_available));
-          dispatch(setBannerData(res.ad_info));
-          dispatch(setShopImage(res.shop_image_url));
           dispatch(setDailyBonus(res.daily_bonus));
           // dispatch(setUserPhoto(res.avatar));
           dispatch(setFirstGameRuleImage(res.game_rule_1_url));
@@ -100,7 +100,7 @@ export const App: FC = () => {
           dispatch(setThirdGameRulesState(res.game_rule_3_show));
           setTimeout(() => {
             setLoading(false);
-          }, 1500);
+          }, 2000);
         })
         .catch((error) => {
           console.error('Get user data error:', error);
