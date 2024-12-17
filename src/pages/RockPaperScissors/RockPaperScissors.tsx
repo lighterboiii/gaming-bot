@@ -56,6 +56,7 @@ export const RockPaperScissors: FC = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
   const { isLoading: imagesLoading, preloadedImages } = useImagePreload();
+  const [winAnimationPlayed, setWinAnimationPlayed] = useState<boolean>(false);
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -151,50 +152,57 @@ export const RockPaperScissors: FC = () => {
           const animationTime = 3000;
           setAnimationKey(prevKey => prevKey + 1);
           
-          setTimeout(() => {
-            if (Number(res?.whoiswin.winner) === Number(userId)) {
-              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-                ? preloadedImages.lWinAnim 
-                : preloadedImages.rWinAnim);
-              // postEvent(
-              //   'web_app_trigger_haptic_feedback',
-              //   { type: 'notification', notification_type: 'success' }
-              // );
-              setMessage(`${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
-                ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵`
-                  : `🔰`}`
-                : ''}`);
-            } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
-              updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-                ? preloadedImages.lLoseAnim 
-                : preloadedImages.rLoseAnim);
-              // postEvent(
-              //   'web_app_trigger_haptic_feedback',
-              //   { type: 'notification', notification_type: 'error', }
-              // );
-              setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
-                ? `💵`
-                : `🔰`}`);
-            } else if (res?.whoiswin.winner === 'draw') {
-              setMessage(translation?.draw);
-              // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
-            }
-            setMessageVisible(true);
-
+          if (!winAnimationPlayed) {
+            setWinAnimationPlayed(true);
             setTimeout(() => {
-              setMessageVisible(false);
-              setAnimation(null);
-              setPlayersAnim({
-                firstAnim: null,
-                secondAnim: null,
-              });
-              clearMessages();
-            }, 3500)
+              if (Number(res?.whoiswin.winner) === Number(userId)) {
+                updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
+                  ? preloadedImages.lWinAnim 
+                  : preloadedImages.rWinAnim);
+                // postEvent(
+                //   'web_app_trigger_haptic_feedback',
+                //   { type: 'notification', notification_type: 'success' }
+                // );
+                setMessage(`${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
+                  ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵`
+                    : `🔰`}`
+                  : ''}`);
+              } else if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
+                updateAnimation(Number(data?.creator_id) === Number(res?.whoiswin.winner) 
+                  ? preloadedImages.lLoseAnim 
+                  : preloadedImages.rLoseAnim);
+                // postEvent(
+                //   'web_app_trigger_haptic_feedback',
+                //   { type: 'notification', notification_type: 'error', }
+                // );
+                setMessage(`${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1"
+                  ? `💵`
+                  : `🔰`}`);
+              } else if (res?.whoiswin.winner === 'draw') {
+                setMessage(translation?.draw);
+                // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+              }
+              setMessageVisible(true);
 
-          }, animationTime);
+              setTimeout(() => {
+                setMessageVisible(false);
+                setAnimation(null);
+                setPlayersAnim({
+                  firstAnim: null,
+                  secondAnim: null,
+                });
+                clearMessages();
+              }, 3500)
+
+            }, animationTime);
+          }
           break;
         case 'choice':
           setData(res);
+          if (res?.players?.some((player: any) => 
+            Number(player.userid) === Number(userId) && player.choice === 'ready')) {
+            setWinAnimationPlayed(false);
+          }
           break;
         case 'emoji':
           setData(res);
