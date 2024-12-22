@@ -36,7 +36,7 @@ export const Main: FC = () => {
   const userId = getUserId();
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);
   const shopImageUrl = useAppSelector(store => store.app.shopImage);
@@ -99,15 +99,15 @@ export const Main: FC = () => {
   }, [dailyBonusData]);
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
           dispatch(setUserData(res.user_info));
           dispatch(setUserPhoto(res.avatar));
-          setTimeout(() => {
-            setLoading(false);
-          }, 1500);
+          // setTimeout(() => {
+          //   setLoading(false);
+          // }, 1500);
         })
         .catch((error) => {
           console.error('Get user data error:', error);
@@ -143,9 +143,9 @@ export const Main: FC = () => {
     );
   }
 
-  if (loading) {
-    return <Loader />;
-  }
+  // if (loading) {
+  //   return <Loader />;
+  // }
 
   return (
     <div className={styles.main}>
