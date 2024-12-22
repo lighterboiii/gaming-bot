@@ -186,7 +186,6 @@ export const RockPaperScissors: FC = () => {
       }
     };
 
-    // Обработка обычных сообщений
     const handleRegularMessage = (res: any) => {
       switch (res.type) {
         case 'room_info':
@@ -208,11 +207,9 @@ export const RockPaperScissors: FC = () => {
             };
           });
           break;
-        // ... остальные case для регулярных сообщений
       }
     };
 
-    // Обработка сообщения о победе
     const handleWinMessage = (res: any) => {
       setPlayersAnim({
         firstAnim: res?.whoiswin.f_anim,
@@ -226,18 +223,18 @@ export const RockPaperScissors: FC = () => {
         if (Number(res?.whoiswin.winner) === Number(userId)) {
           return {
             animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-              ? lWinAnim 
-              : rWinAnim,
+              ? rWinAnim 
+              : lWinAnim,
             message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
               ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵` : `🔰`}`
               : ''}`
           };
         } 
-        if (Number(res?.whoiswin.winner_value) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
+        if (Number(res?.whoiswin.winner) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
           return {
             animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-              ? lLoseAnim 
-              : rLoseAnim,
+              ? rLoseAnim 
+              : lLoseAnim,
             message: `${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1" ? `💵` : `🔰`}`
           };
         }

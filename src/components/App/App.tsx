@@ -54,7 +54,7 @@ export const App: FC = () => {
   const { tg } = useTelegram();
   const userId = getUserId();
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   document.addEventListener(
     'touchmove',
@@ -118,20 +118,28 @@ export const App: FC = () => {
   }, [dispatch, userId]);
 
   return (
-    <div className={styles.app}>
-      {loading ? <Loader /> : (
+      <div className={styles.app}>
+        {loading ? <Loader /> : ''}
         <Routes>
-          <Route path={indexUrl} element={<Main />} />
-          <Route path={roomsUrl} element={<OpenedRooms />} />
-          <Route path={createRoomUrl} element={<CreateRoom />} />
-          <Route path={shopUrl} element={<Shop />} />
-          <Route path={leaderboardUrl} element={<LeaderBoard />} />
-          <Route path={roomUrl} element={<RockPaperScissors />} />
-          <Route path={closestNumberRoomUrl} element={<ClosestNumber />} />
-          <Route path={ludkaGameUrl} element={<LudkaGame />} />
-          <Route path={anyUrl} element={<NotFoundPage />} />
+          <Route path={indexUrl}
+            element={<Main />} />
+          <Route path={roomsUrl}
+            element={<OpenedRooms />} />
+          <Route path={createRoomUrl}
+            element={<CreateRoom />} />
+          <Route path={shopUrl}
+            element={<Shop />} />
+          <Route path={leaderboardUrl}
+            element={<LeaderBoard />} />
+          <Route path={roomUrl}
+            element={<RockPaperScissors />} />
+          <Route path={closestNumberRoomUrl}
+            element={<ClosestNumber />} />
+          <Route path={ludkaGameUrl}
+            element={<LudkaGame />} />
+          <Route path={anyUrl}
+            element={<NotFoundPage />} />
         </Routes>
-      )}
-    </div>
+      </div>
   );
 };

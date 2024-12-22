@@ -28,6 +28,21 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
     handleClickGame(game);
   };
 
+  const getGameName = (roomType: number) => {
+    switch(roomType) {
+      case 1:
+        return translation?.rock_paper_scissors;
+      case 2:
+        return translation?.closest_number;
+      case 3:
+        return translation?.ludka_name;
+      case 4:
+        return translation?.fourth_game_name;
+      default:
+        return '';
+    }
+  }
+
   return (
     <div
       className={gameCardClassNames}
@@ -37,11 +52,7 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
         style={{ textAlign: imagePosition === "left" ? 'right' : 'left' }}
         className={styles.game__name}
       >
-        {game.room_type === 1 
-          ? `${translation?.rock_paper_scissors}` 
-          : game.room_type === 2 
-            ? `${translation?.closest_number}`
-            : `${translation?.ludka_name}`}
+        {getGameName(game.room_type)}
       </h3>
       <img
         src={game.url}
