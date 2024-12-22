@@ -3,8 +3,6 @@
 import { FC, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { cacheBanners } from 'utils/bannerCache';
-
 import { getAppData } from '../../api/mainApi';
 import useTelegram from '../../hooks/useTelegram';
 import { ClosestNumber } from '../../pages/ClosestNumber/ClosestNumber';
@@ -12,6 +10,7 @@ import { CreateRoom } from '../../pages/CreateRoom/CreateRoom';
 import { LeaderBoard } from '../../pages/LeaderBoard/LeaderBoard';
 import LudkaGame from '../../pages/LudkaGame/LudkaGame';
 import Main from '../../pages/Main/Main';
+import Monetka from '../../pages/Monetka/Monetka';
 import { NotFoundPage } from '../../pages/NotFoundPage/NotFoundPage';
 import { OpenedRooms } from '../../pages/OpenedRooms/OpenedRooms';
 import { RockPaperScissors } from '../../pages/RockPaperScissors/RockPaperScissors';
@@ -34,6 +33,7 @@ import {
   setThirdGameRulesState
 } from '../../services/appSlice';
 import { useAppDispatch } from '../../services/reduxHooks';
+import { cacheBanners } from '../../utils/bannerCache';
 import {
   indexUrl,
   roomsUrl,
@@ -43,7 +43,8 @@ import {
   roomUrl,
   closestNumberRoomUrl,
   anyUrl,
-  ludkaGameUrl
+  ludkaGameUrl,
+  monetkaUrl
 } from '../../utils/routes';
 import { getUserId } from '../../utils/userConfig';
 import Loader from '../Loader/Loader';
@@ -139,6 +140,8 @@ export const App: FC = () => {
             element={<LudkaGame />} />
           <Route path={anyUrl}
             element={<NotFoundPage />} />
+          <Route path={monetkaUrl}
+            element={<Monetka />} />
         </Routes>
       </div>
   );

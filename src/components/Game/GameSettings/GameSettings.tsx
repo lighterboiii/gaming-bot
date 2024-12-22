@@ -50,7 +50,9 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
             ? `/closest/${lastMessage?.room_id}` 
             : data?.room_type === 3
               ? `/ludkaGame/${lastMessage?.room_id}`
-              : `/room/${lastMessage?.room_id}`);
+              : data?.room_type === 4
+                ? `/monetka/${lastMessage?.room_id}`
+                : `/room/${lastMessage?.room_id}`);
       } else if (lastMessage?.type === 'error') {
         setInsufficient(true);
         setMessage(translation?.insufficient_funds || 'Недостаточно средств');
@@ -159,7 +161,9 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
                 ? `${translation?.rock_paper_scissors}` 
                 : data?.room_type === 2 
                   ? `${translation?.closest_number}`
-                  : `${translation?.ludka_name}`}
+                  : data?.room_type === 3 
+                    ? `${translation?.ludka_name}`
+                    : `Монетка`}
             </h3>
             <div className={styles.game__balance}>
               <p className={styles.game__text}>{translation?.user_balance}</p>
