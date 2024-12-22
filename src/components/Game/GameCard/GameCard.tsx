@@ -37,7 +37,7 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
       case 3:
         return translation?.ludka_name;
       case 4:
-        return translation?.fourth_game_name;
+        return translation?.monetka_name;
       default:
         return '';
     }

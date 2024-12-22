@@ -1,5 +1,5 @@
-@use '../../../stylesheets/mixins' as *;
-@use '../../../stylesheets/variables' as *;
+@use "../../../stylesheets/mixins" as *;
+@use "../../../stylesheets/variables" as *;
 
 .game {
   @include position(relative);
@@ -24,6 +24,8 @@
 
   &__name {
     @include indents();
+    @include size(100%, auto);
+    @include ellipsis();
     color: $main-color;
     font-weight: 900;
     text-transform: uppercase;
@@ -42,17 +44,17 @@
     @include max-size(124px, auto);
 
     @media screen and (max-width: 379px) {
-      @include max-size(106px, auto)
+      @include max-size(106px, auto);
     }
   }
 
   &__image {
-    @include position(absolute, $top: 40%, $left: 0);
+    @include position(absolute, $top: 40%, $left: 10%);
     transform: translate(-50%, -50%);
   }
 
   &__imageRight {
-    @include position(absolute, $top: 40%, $left: 80%);
+    @include position(absolute, $top: 40%, $left: 90%);
     transform: translate(-50%, -50%);
   }
 }

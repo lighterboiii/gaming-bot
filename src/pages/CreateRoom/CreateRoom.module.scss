@@ -6,35 +6,49 @@
   min-height: calc(100vh + 1px);
   @include indents(0 $space-16 $space-16, 0);
   @include flex(column, flex-start, center);
+  overflow-x: visible;
 
   &__header {
     @include indents(0 $space-16, 0);
-    @include size(100%, 25vh);
+    @include size(100%, auto);
     @include flex(column, center, center);
     background-color: $secondary-color;
+    position: sticky;
+    top: 0;
+    z-index: 4;
   }
-
-  &__content {
-    @include size(100%, auto);
-    @include flex(column, space-between, flex-end, $space-16);
-    overflow: visible;
-  }
-
-  &__game-card {
-    &:nth-child(odd) {
-      align-self: flex-end;
-    }
-
-    &:nth-child(even) {
-      align-self: flex-start;
-    }
-  }
-
 
   &__heading {
     @include indents();
     @include page-title();
-    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: $main-color;
+    background-color: inherit;
+  }
+
+  &__content {
+    @include indents($space-16, 0);
+    @include size(100%, auto);
+    @include flex(column, space-between, flex-end, $space-16);
+    overflow-y: auto;
+    overflow-x: visible;
+    flex: 1;
+
+    &.hidden {
+      display: none;
+    }
+  }
+
+  &__game-card {
+
+    &--odd {
+      align-self: flex-end;
+    }
+
+    &--even {
+      align-self: flex-start;
+    }
   }
 
   &__bets {

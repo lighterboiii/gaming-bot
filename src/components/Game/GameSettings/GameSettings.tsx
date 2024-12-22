@@ -163,7 +163,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
                   ? `${translation?.closest_number}`
                   : data?.room_type === 3 
                     ? `${translation?.ludka_name}`
-                    : `Монетка`}
+                    :  `${translation?.monetka_name}`}
             </h3>
             <div className={styles.game__balance}>
               <p className={styles.game__text}>{translation?.user_balance}</p>

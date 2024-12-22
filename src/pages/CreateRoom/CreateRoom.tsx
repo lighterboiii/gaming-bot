@@ -28,7 +28,7 @@ export const CreateRoom: FC = () => {
   const navigate = useNavigate();
   const translation = useAppSelector(store => store.app.languageSettings);
   const isPortrait = useOrientation();
-
+  console.log(translation);
   useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
@@ -70,28 +70,31 @@ export const CreateRoom: FC = () => {
 
   return (
     <div className={styles.create}>
-      {loading ? <Loader /> : (
-        <>
           <div className={styles.create__header}>
             <h2 className={styles.create__heading}>{translation?.create_room}</h2>
           </div>
-          <div className={`${styles.create__content} ${settingsOverlay ? styles.hidden : ''}`}>
-            {games?.map((game: any, index: number) => (
-              <GameCard
-                game={game}
-                key={game.id}
-                imagePosition={game.id === 2 ? 'right' : 'left'}
-                image={game.id === 1 ? games[0].url : games[1].url}
-                users={game.users}
-                extraClass={
-                  `${styles['create__game-card']}
+      
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className={`${styles.create__content} ${settingsOverlay ? styles.hidden : ''}`}>
+          {games?.map((game: any, index: number) => (
+            <GameCard
+              game={game}
+              key={game.id}
+              imagePosition={game.id === 2 ? 'right' : 'left'}
+              image={game.id === 1 ? games[0].url : games[1].url}
+              users={game.users}
+              extraClass={
+                `${styles['create__game-card']}
                 ${index % 2 === 0 ? styles['create__game-card--odd'] : styles['create__game-card--even']}`
-                }
-                handleClickGame={handleGameClick} />
-            ))}
-          </div>
-        </>
+              }
+              handleClickGame={handleGameClick}
+            />
+          ))}
+        </div>
       )}
+      
       <Overlay
         crossColor="#ac1a44"
         buttonColor="#FFF"
@@ -102,7 +105,8 @@ export const CreateRoom: FC = () => {
           <GameSettings
             data={gameData}
             closeOverlay={() => setSettingsOverlay(false)}
-          />}
+          />
+        }
       />
     </div>
   );

@@ -80,7 +80,7 @@ export const App: FC = () => {
     tg.ready();
     window.scrollTo(0, 0);
   }, [tg]);
-
+  
   useEffect(() => {
     setLoading(true);
     const fetchUserData = () => {
