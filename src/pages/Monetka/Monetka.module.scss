@@ -49,11 +49,28 @@
   }
 
   &__vector {
-    // @include size(100%, auto);
     @include size(40%, auto);
     @include position(absolute, $top: 50%, $left: 50%);
     transform: translate(-50%, -50%);
     aspect-ratio: 1/1;
+  }
+
+  &__defaultCoinContainer {
+    @include position(absolute, $top: 34%, $left: 50%);
+    @include size(100%, 32px);
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__defaultCoin {
+    @include max-size(32px, 32px);
+    @include size(100%, auto);
+    aspect-ratio: 1/1;
+    object-fit: contain;
   }
 
   &__coin {

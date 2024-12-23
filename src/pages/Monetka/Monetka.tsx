@@ -17,11 +17,14 @@ import buttonBlueDisabled from '../../images/monetka/btn_O_Down.png';
 import buttonGreenDefault from '../../images/monetka/btn_X_Default.png';
 import buttonGreen from '../../images/monetka/btn_X_Default_light.png';
 import buttonGreenDisabled from '../../images/monetka/btn_X_Down.png';
+import coinDefault from '../../images/monetka/O (1).png';
 import coinOo from '../../images/monetka/o-o.png';
 import coinOx from '../../images/monetka/o-x.png';
+import coinSilver from '../../images/monetka/O.png';
 import vector from '../../images/monetka/Vector.png';
 import coinXo from '../../images/monetka/x-o.png';
 import coinXx from '../../images/monetka/x-x.png';
+import coinGold from '../../images/monetka/X.png';
 import { useAppSelector } from '../../services/reduxHooks';
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { indexUrl } from '../../utils/routes';
@@ -48,9 +51,7 @@ export const Monetka: FC = () => {
   const [greenButtonState, setGreenButtonState] = useState('default');
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [currentCoin, setCurrentCoin] = useState<string | null>(null);
-  const coins = [coinOo, coinOx, coinXo, coinXx];
-  const [usedCoins, setUsedCoins] = useState<string[]>([]);
-
+  console.log(currentCoin);
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
       connect();
@@ -115,21 +116,18 @@ export const Monetka: FC = () => {
 
     switch (res?.type) {
       case 'choice':
-        if (res?.message === 'coin_good') {
+        if (res?.game_answer_info?.message === 'coin_good' || res?.game_answer_info?.message === 'coin_bad') {
+          if (res.game_answer_info.animation) {
+            setCurrentCoin(res.game_answer_info.animation);
+          }
+          
           setGameState((prev: any) => ({
             ...prev,
             data: {
               ...prev.data,
-              next_x: res.next_x
-            },
-            winner: null
-          }));
-        } else if (res?.message === 'coin_bad') {
-          setGameState((prev: any) => ({
-            ...prev,
-            data: {
-              ...prev.data,
-              next_x: '0.0'
+              next_x: res.game_answer_info?.message === 'coin_good' 
+                ? res.game_answer_info.next_x 
+                : '0.0'
             },
             winner: null
           }));
@@ -163,15 +161,6 @@ export const Monetka: FC = () => {
         } else if (res?.message === 'error_zero') {
           console.log('Нечего выводить');
         }
-        break;
-
-      case 'game_answer_info':
-        console.log(res);
-        setGameState((prev: any) => ({
-          ...prev,
-          data: res,
-          winner: null
-        }));
         break;
       case 'room_info':
         setGameState((prev: any) => ({
@@ -235,23 +224,12 @@ export const Monetka: FC = () => {
     }
   };
 
-  const getRandomCoin = () => {
-    const availableCoins = coins.filter(coin => !usedCoins.includes(coin));
-    if (availableCoins.length === 0) {
-      setUsedCoins([]); // Сбрасываем использованные монетки
-      return coins[Math.floor(Math.random() * coins.length)];
-    }
-    const randomCoin = availableCoins[Math.floor(Math.random() * availableCoins.length)];
-    setUsedCoins([...usedCoins, randomCoin]);
-    return randomCoin;
-  };
-
   const handleButtonClick = (type: 'blue' | 'green') => {
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
     
     setButtonState('hover');
-    setCurrentCoin(getRandomCoin());
+    setCurrentCoin(null);
 
     setTimeout(() => {
       setButtonState('down');
@@ -295,6 +273,13 @@ export const Monetka: FC = () => {
   return (
     <div className={styles.monetka}>
       <img src={vector} alt="vector" className={styles.monetka__vector} />
+      <div className={styles.monetka__defaultCoinContainer}>
+        <img src={coinDefault} alt="default coin" className={styles.monetka__defaultCoin} />
+        <img src={coinDefault} alt="silver coin" className={styles.monetka__defaultCoin} />
+        <img src={coinDefault} alt="default coin" className={styles.monetka__defaultCoin} />
+        <img src={coinDefault} alt="gold coin" className={styles.monetka__defaultCoin} />
+        <img src={coinDefault} alt="default coin" className={styles.monetka__defaultCoin} />
+      </div>
       {currentCoin && (
         <img 
           src={currentCoin} 
