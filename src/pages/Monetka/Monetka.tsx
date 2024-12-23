@@ -20,7 +20,6 @@ import buttonGreenDisabled from '../../images/monetka/btn_X_Down.png';
 import { useAppSelector } from '../../services/reduxHooks';
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { indexUrl } from '../../utils/routes';
-import { ILudkaGameState } from '../../utils/types/gameTypes';
 import { getUserId } from '../../utils/userConfig';
 
 import styles from './Monetka.module.scss';
@@ -31,14 +30,13 @@ export const Monetka: FC = () => {
   const userId = getUserId();
   const isPortrait = useOrientation();
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const [gameState, setGameState] = useState<ILudkaGameState>({
+  const [gameState, setGameState] = useState<any>({
     data: null,
     winner: null,
     loading: false
   });
   const translation = useAppSelector(store => store.app.languageSettings);
   const { sendMessage, wsMessages, connect, clearMessages, disconnect } = useContext(WebSocketContext)!;
-  const parsedMessages = wsMessages?.map(msg => JSON.parse(msg));
   const { tg } = useTelegram();
   console.log(gameState);
   const [blueButtonState, setBlueButtonState] = useState('default');
@@ -72,13 +70,13 @@ export const Monetka: FC = () => {
   }, [tg, navigate, userId]);
 
   useEffect(() => {
-    setGameState((prev: ILudkaGameState) => ({
+    setGameState((prev: any) => ({
       ...prev,
       loading: true
     }));
 
     if (!roomId) {
-      setGameState(prev => ({
+      setGameState((prev: any) => ({
         ...prev,
         loading: false
       }));
@@ -95,7 +93,7 @@ export const Monetka: FC = () => {
     fetchInitialData();
 
     return () => {
-      setGameState(prev => ({
+      setGameState((prev: any) => ({
         ...prev,
         loading: false,
         data: null
@@ -109,35 +107,72 @@ export const Monetka: FC = () => {
 
     switch (res?.type) {
       case 'choice':
-        break;
-      case 'whoiswin':
-        break;
-      case 'error':
-
-        if (res?.room_info) {
-          setGameState(prev => ({
+        if (res?.message === 'coin_good') {
+          setGameState((prev: any) => ({
             ...prev,
-            data: res?.room_info,
+            data: {
+              ...prev.data,
+              next_x: res.next_x
+            },
+            winner: null
+          }));
+        } else if (res?.message === 'coin_bad') {
+          setGameState((prev: any) => ({
+            ...prev,
+            data: {
+              ...prev.data,
+              next_x: '0.0'
+            },
             winner: null
           }));
         }
         break;
+
+      case 'whoiswin':
+        if (res?.message === 'success') {
+          setGameState((prev: any) => ({
+            ...prev,
+            winner: {
+              winner_value: res.winner_value,
+              player_id: res.winner,
+              item: null,
+              user_name: '',
+              user_pic: ''
+            }
+          }));
+          
+          setTimeout(() => {
+            clearMessages();
+            disconnect();
+            navigate(indexUrl, { replace: true });
+          }, 3000);
+        }
+        break;
+
+      case 'error':
+        if (res?.message === 'not_money') {
+          console.log('Недостаточно средств для следующего хода');
+        } else if (res?.message === 'error_zero') {
+          console.log('Нечего выводить');
+        }
+        break;
+
       case 'emoji':
-        setGameState(prev => ({
+        setGameState((prev: any) => ({
           ...prev,
           data: res,
           winner: null
         }));
         break;
       case 'room_info':
-        setGameState(prev => ({
+        setGameState((prev: any) => ({
           ...prev,
           loading: false,
           data: res,
         }));
         break;
       case 'add_player':
-        setGameState(prev => ({
+        setGameState((prev: any) => ({
           ...prev,
           data: res,
           winner: null
@@ -153,7 +188,7 @@ export const Monetka: FC = () => {
       default:
         break;
     }
-  }, []);
+  }, [clearMessages, disconnect, navigate]);
 
   useEffect(() => {
     const messageHandler = (message: any) => {
@@ -193,14 +228,32 @@ export const Monetka: FC = () => {
 
   const handleButtonClick = (type: 'blue' | 'green') => {
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
+    const choice = type === 'blue' ? "2" : "1";
     
     setButtonState('hover');
     setTimeout(() => {
       setButtonState('down');
+      
+      sendMessage({
+        type: 'choice',
+        user_id: userId,
+        room_id: roomId,
+        choice: choice
+      });
+
       setTimeout(() => {
         setButtonState('default');
       }, 150);
     }, 150);
+  };
+
+  const handleCollectWinnings = () => {
+    sendMessage({
+      type: 'choice',
+      user_id: userId,
+      room_id: roomId,
+      choice: 3
+    });
   };
 
   useEffect(() => {
