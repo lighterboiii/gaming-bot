@@ -52,7 +52,7 @@ export const Monetka: FC = () => {
   }, [connect, wsMessages]);
 
   useEffect(() => {
-    // tg.setHeaderColor('#1b50b8');
+    tg.setHeaderColor('#202020');
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
       sendMessage({
@@ -67,7 +67,7 @@ export const Monetka: FC = () => {
 
     return () => {
       tg.BackButton.hide();
-      // tg.setHeaderColor('#d51845');
+      tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate, userId]);
 
