@@ -17,6 +17,11 @@ import buttonBlueDisabled from '../../images/monetka/btn_O_Down.png';
 import buttonGreenDefault from '../../images/monetka/btn_X_Default.png';
 import buttonGreen from '../../images/monetka/btn_X_Default_light.png';
 import buttonGreenDisabled from '../../images/monetka/btn_X_Down.png';
+import coinOo from '../../images/monetka/o-o.png';
+import coinOx from '../../images/monetka/o-x.png';
+import vector from '../../images/monetka/Vector.png';
+import coinXo from '../../images/monetka/x-o.png';
+import coinXx from '../../images/monetka/x-x.png';
 import { useAppSelector } from '../../services/reduxHooks';
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { indexUrl } from '../../utils/routes';
@@ -42,6 +47,9 @@ export const Monetka: FC = () => {
   const [blueButtonState, setBlueButtonState] = useState('default');
   const [greenButtonState, setGreenButtonState] = useState('default');
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
+  const [currentCoin, setCurrentCoin] = useState<string | null>(null);
+  const coins = [coinOo, coinOx, coinXo, coinXx];
+  const [usedCoins, setUsedCoins] = useState<string[]>([]);
 
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
@@ -143,7 +151,7 @@ export const Monetka: FC = () => {
           
           setTimeout(() => {
             clearMessages();
-            disconnect();
+            // disconnect();
             navigate(indexUrl, { replace: true });
           }, 3000);
         }
@@ -157,7 +165,8 @@ export const Monetka: FC = () => {
         }
         break;
 
-      case 'emoji':
+      case 'game_answer_info':
+        console.log(res);
         setGameState((prev: any) => ({
           ...prev,
           data: res,
@@ -226,11 +235,24 @@ export const Monetka: FC = () => {
     }
   };
 
+  const getRandomCoin = () => {
+    const availableCoins = coins.filter(coin => !usedCoins.includes(coin));
+    if (availableCoins.length === 0) {
+      setUsedCoins([]); // Сбрасываем использованные монетки
+      return coins[Math.floor(Math.random() * coins.length)];
+    }
+    const randomCoin = availableCoins[Math.floor(Math.random() * availableCoins.length)];
+    setUsedCoins([...usedCoins, randomCoin]);
+    return randomCoin;
+  };
+
   const handleButtonClick = (type: 'blue' | 'green') => {
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
     
     setButtonState('hover');
+    setCurrentCoin(getRandomCoin());
+
     setTimeout(() => {
       setButtonState('down');
       
@@ -272,6 +294,14 @@ export const Monetka: FC = () => {
 
   return (
     <div className={styles.monetka}>
+      <img src={vector} alt="vector" className={styles.monetka__vector} />
+      {currentCoin && (
+        <img 
+          src={currentCoin} 
+          alt="coin animation" 
+          className={styles.monetka__coin}
+        />
+      )}
       <div className={styles.monetka__buttonsContainer}>
         <img src={monetkaButtonsBackground} alt="buttonsBackground" className={styles.monetka__buttons} />
         <div className={styles.monetka__buttonsWrapper}>
