@@ -9,10 +9,17 @@ import Loader from '../../components/Loader/Loader';
 import { Warning } from '../../components/OrientationWarning/Warning';
 import useOrientation from '../../hooks/useOrientation';
 import useTelegram from '../../hooks/useTelegram';
+import monetkaButtonsBackground from '../../images/monetka/0.png';
+import buttonBlueDefault from '../../images/monetka/btn_O_Default.png'
+import buttonBlue from '../../images/monetka/btn_O_Default_light.png';
+import buttonBlueDisabled from '../../images/monetka/btn_O_Down.png';
+import buttonGreenDefault from '../../images/monetka/btn_X_Default.png';
+import buttonGreen from '../../images/monetka/btn_X_Default_light.png';
+import buttonGreenDisabled from '../../images/monetka/btn_X_Down.png';
 import { useAppSelector } from '../../services/reduxHooks';
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { indexUrl } from '../../utils/routes';
-import { IGameData, ILudkaGameState } from '../../utils/types/gameTypes';
+import { ILudkaGameState } from '../../utils/types/gameTypes';
 import { getUserId } from '../../utils/userConfig';
 
 import styles from './Monetka.module.scss';
@@ -33,6 +40,9 @@ export const Monetka: FC = () => {
   const parsedMessages = wsMessages?.map(msg => JSON.parse(msg));
   const { tg } = useTelegram();
   console.log(gameState);
+  const [blueButtonState, setBlueButtonState] = useState('default');
+  const [greenButtonState, setGreenButtonState] = useState('default');
+
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
       connect();
@@ -157,6 +167,40 @@ export const Monetka: FC = () => {
     handleMessage();
   }, [wsMessages]);
 
+  const getButtonImage = (type: 'blue' | 'green', state: string) => {
+    if (type === 'blue') {
+      switch (state) {
+        case 'hover':
+          return buttonBlue;
+        case 'down':
+          return buttonBlueDisabled;
+        default:
+          return buttonBlueDefault;
+      }
+    } else {
+      switch (state) {
+        case 'hover':
+          return buttonGreen;
+        case 'down':
+          return buttonGreenDisabled;
+        default:
+          return buttonGreenDefault;
+      }
+    }
+  };
+
+  const handleButtonClick = (type: 'blue' | 'green') => {
+    const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
+    
+    setButtonState('hover');
+    setTimeout(() => {
+      setButtonState('down');
+      setTimeout(() => {
+        setButtonState('default');
+      }, 150);
+    }, 150);
+  };
+
   if (!isPortrait) {
     return <Warning />;
   }
@@ -167,8 +211,24 @@ export const Monetka: FC = () => {
 
   return (
     <div className={styles.monetka}>
-      
-    </div>
+      <div className={styles.monetka__buttonsContainer}>
+        <img src={monetkaButtonsBackground} alt="buttonsBackground" className={styles.monetka__buttons} />
+        <div className={styles.monetka__buttonsWrapper}>
+          <img 
+            src={getButtonImage('blue', blueButtonState)} 
+            alt="button" 
+            className={styles.monetka__button}
+            onClick={() => handleButtonClick('blue')}
+          />
+          <img 
+            src={getButtonImage('green', greenButtonState)} 
+            alt="button" 
+            className={styles.monetka__button}
+            onClick={() => handleButtonClick('green')}
+          />
+        </div>
+      </div>
+    </div> 
   );
 };
 

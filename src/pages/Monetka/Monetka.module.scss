@@ -3,11 +3,42 @@
 
 .monetka {
   @include size(100%, 100%);
-  @include min-size(100%, 100vh);
+  @include min-size(100%, 100vh+1);
   @include flex(column, center, center);
   @include indents(0 $space-16, 0);
   background-image: url('../../images/monetka/00012-1122478660_3_3\ 1.png');
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
+  
+  &__buttonsContainer {
+    @include size(100%, auto);
+    @include min-size(100%, 48px);
+    @include position(absolute, $bottom: 19%, $left: 50%);
+    @include flex(column, center, center);
+    transform: translateX(-50%);
+  }
+
+  &__buttons {
+    @include size(90%, 110%);
+    @include indents(0 36px, 0);
+  }
+
+  &__buttonsWrapper {
+    @include position(absolute, $top: 0, $left: 50%);
+    @include size(70%, 70%);
+    @include flex(row, center, center, $space-8);
+    transform: translateX(-50%);
+  }
+
+  &__button {
+    @include size(45%, auto);
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
 }
