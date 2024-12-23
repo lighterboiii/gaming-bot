@@ -17,6 +17,9 @@
     @include position(absolute, $bottom: 19%, $left: 50%);
     @include flex(column, center, center);
     transform: translateX(-50%);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-touch-callout: none;
   }
 
   &__buttons {
@@ -36,6 +39,9 @@
     object-fit: contain;
     cursor: pointer;
     transition: transform 0.5s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-touch-callout: none;
 
     &:active {
       transform: scale(0.95);

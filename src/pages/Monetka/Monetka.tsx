@@ -10,6 +10,7 @@ import { Warning } from '../../components/OrientationWarning/Warning';
 import useOrientation from '../../hooks/useOrientation';
 import useTelegram from '../../hooks/useTelegram';
 import monetkaButtonsBackground from '../../images/monetka/0.png';
+import monetkaBackground from '../../images/monetka/00012-1122478660_3_3 1.png';
 import buttonBlueDefault from '../../images/monetka/btn_O_Default.png'
 import buttonBlue from '../../images/monetka/btn_O_Default_light.png';
 import buttonBlueDisabled from '../../images/monetka/btn_O_Down.png';
@@ -42,6 +43,7 @@ export const Monetka: FC = () => {
   console.log(gameState);
   const [blueButtonState, setBlueButtonState] = useState('default');
   const [greenButtonState, setGreenButtonState] = useState('default');
+  const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
 
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
@@ -201,11 +203,17 @@ export const Monetka: FC = () => {
     }, 150);
   };
 
+  useEffect(() => {
+    const img = new Image();
+    img.src = monetkaBackground;
+    img.onload = () => setIsBackgroundLoaded(true);
+  }, []);
+
   if (!isPortrait) {
     return <Warning />;
   }
 
-  if (gameState.loading) {
+  if (gameState.loading || !isBackgroundLoaded) {
     return <Loader />;
   }
 
