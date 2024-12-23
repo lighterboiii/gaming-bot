@@ -52,12 +52,19 @@ export const Monetka: FC = () => {
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [currentCoin, setCurrentCoin] = useState<string | null>(null);
   console.log(currentCoin);
+  const [coinStates, setCoinStates] = useState<string[]>([
+    coinDefault, coinDefault, coinDefault, coinDefault, coinDefault
+  ]);
+  const [currentCoinIndex, setCurrentCoinIndex] = useState<number>(0);
+
+  // Подключение к WebSocket
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
       connect();
     }
   }, [connect, wsMessages]);
 
+  // Настройка кнопки "Назад" в Telegram и цвета хидера
   useEffect(() => {
     tg.setHeaderColor('#202020');
     tg.BackButton.show();
@@ -78,6 +85,7 @@ export const Monetka: FC = () => {
     }
   }, [tg, navigate, userId]);
 
+  // Загрузка начального состояния игры
   useEffect(() => {
     setGameState((prev: any) => ({
       ...prev,
@@ -110,6 +118,7 @@ export const Monetka: FC = () => {
     };
   }, []);
 
+  // Обработка всех входящих WebSocket сообщений
   const handleWebSocketMessage = useCallback((message: string) => {
     const res = JSON.parse(message);
     console.log('WebSocket message received:', res);
@@ -119,6 +128,16 @@ export const Monetka: FC = () => {
         if (res?.game_answer_info?.message === 'coin_good' || res?.game_answer_info?.message === 'coin_bad') {
           if (res.game_answer_info.animation) {
             setCurrentCoin(res.game_answer_info.animation);
+            
+            setCoinStates(prev => {
+              const newStates = [...prev];
+              newStates[currentCoinIndex] = res.game_answer_info.message === 'coin_good' 
+                ? coinGold 
+                : coinSilver;
+              return newStates;
+            });
+
+            setCurrentCoinIndex(prev => (prev + 1) % 5);
           }
           
           setGameState((prev: any) => ({
@@ -149,7 +168,6 @@ export const Monetka: FC = () => {
           
           setTimeout(() => {
             clearMessages();
-            // disconnect();
             navigate(indexUrl, { replace: true });
           }, 3000);
         }
@@ -186,8 +204,9 @@ export const Monetka: FC = () => {
       default:
         break;
     }
-  }, [clearMessages, disconnect, navigate]);
+  }, [clearMessages, disconnect, navigate, currentCoinIndex]);
 
+  // Функции-слушатель WebSocket сообщений
   useEffect(() => {
     const messageHandler = (message: any) => {
       handleWebSocketMessage(message);
@@ -202,6 +221,7 @@ export const Monetka: FC = () => {
     handleMessage();
   }, [wsMessages]);
 
+  // Получение нужной картинки для кнопки
   const getButtonImage = (type: 'blue' | 'green', state: string) => {
     if (type === 'blue') {
       switch (state) {
@@ -224,6 +244,7 @@ export const Monetka: FC = () => {
     }
   };
 
+  // Обработка нажатия на кнопку
   const handleButtonClick = (type: 'blue' | 'green') => {
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
@@ -247,6 +268,7 @@ export const Monetka: FC = () => {
     }, 150);
   };
 
+  // Сбор выигрыша
   const handleCollectWinnings = () => {
     sendMessage({
       type: 'choice',
@@ -256,6 +278,7 @@ export const Monetka: FC = () => {
     });
   };
 
+  // Предзагрузка фонового изображения
   useEffect(() => {
     const img = new Image();
     img.src = monetkaBackground;
@@ -274,11 +297,14 @@ export const Monetka: FC = () => {
     <div className={styles.monetka}>
       <img src={vector} alt="vector" className={styles.monetka__vector} />
       <div className={styles.monetka__defaultCoinContainer}>
-        <img src={coinDefault} alt="default coin" className={styles.monetka__defaultCoin} />
-        <img src={coinDefault} alt="silver coin" className={styles.monetka__defaultCoin} />
-        <img src={coinDefault} alt="default coin" className={styles.monetka__defaultCoin} />
-        <img src={coinDefault} alt="gold coin" className={styles.monetka__defaultCoin} />
-        <img src={coinDefault} alt="default coin" className={styles.monetka__defaultCoin} />
+        {coinStates.map((coinState, index) => (
+          <img 
+            key={index}
+            src={coinState} 
+            alt={`coin ${index}`} 
+            className={styles.monetka__defaultCoin} 
+          />
+        ))}
       </div>
       {currentCoin && (
         <img 
