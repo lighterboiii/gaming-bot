@@ -7,7 +7,7 @@ const leaderboardUrl = '/leaderboard';
 const roomUrl = '/room/:roomId';
 const closestNumberRoomUrl = '/closest/:roomId';
 const ludkaGameUrl = '/ludkaGame/:roomId';
-const monetkaUrl = '/monetka/:id';
+const monetkaUrl = '/monetka/:roomId';
 const anyUrl = '*';
 
 export {

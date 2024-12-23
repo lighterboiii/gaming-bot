@@ -28,7 +28,7 @@ export const CreateRoom: FC = () => {
   const navigate = useNavigate();
   const translation = useAppSelector(store => store.app.languageSettings);
   const isPortrait = useOrientation();
-  console.log(translation);
+
   useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {

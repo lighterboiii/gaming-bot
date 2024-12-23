@@ -43,7 +43,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   useEffect(() => {
     if (parsedMessages?.length > 0) {
       const lastMessage = parsedMessages[wsMessages?.length - 1]?.message;
-
+      console.log(lastMessage);
       if (lastMessage && lastMessage?.message === 'success') {
         setSelectedRoomId(lastMessage.room_id);
         navigate(data?.room_type === 2 

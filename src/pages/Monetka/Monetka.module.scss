@@ -1,2 +1,13 @@
 @use '../../stylesheets/mixins' as *;
 @use '../../stylesheets/variables' as *;
+
+.monetka {
+  @include size(100%, 100%);
+  @include min-size(100%, 100vh);
+  @include flex(column, center, center);
+  @include indents(0 $space-16, 0);
+  background-image: url('../../images/monetka/00012-1122478660_3_3\ 1.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
