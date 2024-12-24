@@ -73,6 +73,38 @@
     object-fit: contain;
   }
 
+  &__controlButtons {
+    @include position(absolute, $bottom: 9.5%, $left: 50%);
+    @include size(50%, auto);
+    @include flex(row, center, center, $space-8);
+    transform: translateX(-50%);
+  }
+
+  &__controlButton {
+    @include size(45%, 36px);
+    border-radius: $radius-10;
+    border: none;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    color: white;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &_pink {
+      background-color: #8c2555;
+      box-shadow: 0 1px 0 darken(#8c2555, 10%);
+    }
+
+    &_gray {
+      background-color: #606060;
+      box-shadow: 0 1px 0 darken(#606060, 10%);
+    }
+  }
+
   &__coin {
     @include position(absolute, $top: 50%, $left: 50%);
     @include size(40%, auto);

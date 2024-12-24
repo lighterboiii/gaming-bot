@@ -172,11 +172,9 @@ export const RockPaperScissors: FC = () => {
         case 'choice':
         case 'emoji':
         case 'kickplayer':
-          // Эти типы сообщений обрабатываем для всех сообщений в очереди
           handleRegularMessage(res);
           break;
         case 'whoiswin':
-          // whoiswin обрабатываем только для последнего сообщения
           if (message === wsMessages[wsMessages.length - 1]) {
             handleWinMessage(res);
           }

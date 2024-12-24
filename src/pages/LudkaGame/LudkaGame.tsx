@@ -426,7 +426,7 @@ const LudkaGame: FC = () => {
       <Warning />
     );
   }
-  console.log(gameState);
+
   return (
     <div className={styles.game}>
       <div className={`${styles.game__content} ${gameState.winner ? styles.game__content_winner : ''}`}>

@@ -56,7 +56,7 @@ export const Monetka: FC = () => {
     coinDefault, coinDefault, coinDefault, coinDefault, coinDefault
   ]);
   const [currentCoinIndex, setCurrentCoinIndex] = useState<number>(0);
-
+  console.log(coinStates);
   // Подключение к WebSocket
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
@@ -125,28 +125,34 @@ export const Monetka: FC = () => {
 
     switch (res?.type) {
       case 'choice':
-        if (res?.game_answer_info?.message === 'coin_good' || res?.game_answer_info?.message === 'coin_bad') {
+        if (res?.game_answer_info) {
           if (res.game_answer_info.animation) {
             setCurrentCoin(res.game_answer_info.animation);
             
-            setCoinStates(prev => {
-              const newStates = [...prev];
-              newStates[currentCoinIndex] = res.game_answer_info.message === 'coin_good' 
-                ? coinGold 
-                : coinSilver;
-              return newStates;
+            const getCoinStatus = (starValue: string) => {
+              switch(starValue) {
+                case 'o':
+                  return coinSilver;
+                case 'x':
+                  return coinGold;
+                default:
+                  return coinDefault;
+              }
+            };
+            
+            const newStates = Array(5).fill(null).map((_, index) => {
+              const starValue = res.game_answer_info[`mini_star_${index + 1}`];
+              return getCoinStatus(starValue);
             });
-
-            setCurrentCoinIndex(prev => (prev + 1) % 5);
+            
+            setCoinStates(newStates);
           }
           
           setGameState((prev: any) => ({
             ...prev,
             data: {
               ...prev.data,
-              next_x: res.game_answer_info?.message === 'coin_good' 
-                ? res.game_answer_info.next_x 
-                : '0.0'
+              next_x: res.game_answer_info.next_x
             },
             winner: null
           }));
@@ -204,21 +210,14 @@ export const Monetka: FC = () => {
       default:
         break;
     }
-  }, [clearMessages, disconnect, navigate, currentCoinIndex]);
+  }, []);
 
-  // Функции-слушатель WebSocket сообщений
+  // Функция-слушатель WebSocket сообщений
   useEffect(() => {
-    const messageHandler = (message: any) => {
-      handleWebSocketMessage(message);
-    };
-    const handleMessage = () => {
-      if (wsMessages.length > 0) {
-        wsMessages.forEach((message: any) => {
-          messageHandler(message);
-        });
-      }
-    };
-    handleMessage();
+    if (wsMessages.length > 0) {
+      const lastMessage = wsMessages[wsMessages.length - 1];
+      handleWebSocketMessage(lastMessage);
+    }
   }, [wsMessages]);
 
   // Получение нужной картинки для кнопки
@@ -245,22 +244,32 @@ export const Monetka: FC = () => {
   };
 
   // Обработка нажатия на кнопку
-  const handleButtonClick = (type: 'blue' | 'green') => {
+  const handleButtonClick = async (type: 'blue' | 'green') => {
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
     
     setButtonState('hover');
     setCurrentCoin(null);
 
+    // Проверяем соединение перед отправкой
+    if (!wsMessages || wsMessages.length === 0) {
+      await connect(); // Ждем подключения
+    }
+
     setTimeout(() => {
       setButtonState('down');
       
-      sendMessage({
-        type: 'choice',
-        user_id: userId,
-        room_id: roomId,
-        choice: choice
-      });
+      try {
+        sendMessage({
+          type: 'choice',
+          user_id: userId,
+          room_id: roomId,
+          choice: choice
+        });
+      } catch (error) {
+        console.error('Ошибка отправки:', error);
+        // Можно добавить обработку ошибки, например показать уведомление
+      }
 
       setTimeout(() => {
         setButtonState('default');
@@ -329,6 +338,20 @@ export const Monetka: FC = () => {
             onClick={() => handleButtonClick('green')}
           />
         </div>
+      </div>
+      <div className={styles.monetka__controlButtons}>
+        <button 
+          className={`${styles.monetka__controlButton} ${styles.monetka__controlButton_pink}`}
+          onClick={() => {}}
+        >
+          Кнопка 1
+        </button>
+        <button 
+          className={`${styles.monetka__controlButton} ${styles.monetka__controlButton_gray}`}
+          onClick={() => {}}
+        >
+          Кнопка 2
+        </button>
       </div>
     </div> 
   );
