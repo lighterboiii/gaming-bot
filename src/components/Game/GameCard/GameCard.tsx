@@ -63,11 +63,13 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
           alt="game_image"
           className={styles.game__image}
         />
-        <CircleButton 
-          chevronPosition="right"
-          iconType="chevron"
-          isWhiteBackground 
-        />
+        <div className={styles.game__buttonWrapper}>
+          <CircleButton 
+            chevronPosition="right"
+            iconType="chevron"
+            isWhiteBackground 
+          />
+        </div>
       </div>
     </div>
   )

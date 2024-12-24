@@ -28,7 +28,7 @@
   }
 
   &__footer {
-    @include flex(row, center, flex-end, $space-16);
+    @include flex(row, space-between, flex-end, $space-16);
     width: 100%;
   }
 
@@ -50,11 +50,14 @@
   &__image {
     @include indents();
     @include max-size(96px, auto);
-    // margin-left: -$space-12;
 
     @media screen and (max-width: 379px) {
       @include max-size(80px, auto);
-      // margin-left: -$space-8;
     }
+  }
+
+  &__buttonWrapper {
+    @include flex(row, center, flex-end);
+    aspect-ratio: 1;
   }
 }
