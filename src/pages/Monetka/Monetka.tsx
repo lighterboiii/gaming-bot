@@ -18,13 +18,11 @@ import buttonBlueDisabled from '../../images/monetka/btn_O_Down.png';
 import buttonGreenDefault from '../../images/monetka/btn_X_Default.png';
 import buttonGreen from '../../images/monetka/btn_X_Default_light.png';
 import buttonGreenDisabled from '../../images/monetka/btn_X_Down.png';
+import greenTiny from '../../images/monetka/green_tiny.png';
 import coinDefault from '../../images/monetka/O (1).png';
-import coinOo from '../../images/monetka/o-o.png';
-import coinOx from '../../images/monetka/o-x.png';
 import coinSilver from '../../images/monetka/O.png';
+import redTiny from '../../images/monetka/red_tiny.png';
 import vector from '../../images/monetka/Vector.png';
-import coinXo from '../../images/monetka/x-o.png';
-import coinXx from '../../images/monetka/x-x.png';
 import coinGold from '../../images/monetka/X.png';
 import { useAppSelector } from '../../services/reduxHooks';
 import { WebSocketContext } from '../../socket/WebSocketContext';
@@ -52,6 +50,7 @@ export const Monetka: FC = () => {
   const [greenButtonState, setGreenButtonState] = useState('default');
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [currentCoin, setCurrentCoin] = useState<string | null>(null);
+  const [flashBackground, setFlashBackground] = useState<'coin_bad' | 'coin_good' | null>(null);
 
   const [coinStates, setCoinStates] = useState<string[]>([
     coinDefault, coinDefault, coinDefault, coinDefault, coinDefault
@@ -130,23 +129,31 @@ export const Monetka: FC = () => {
           if (res.game_answer_info.animation) {
             setCurrentCoin(res.game_answer_info.animation);
             
-            const getCoinStatus = (starValue: string) => {
-              switch(starValue) {
-                case 'o':
-                  return coinSilver;
-                case 'x':
-                  return coinGold;
-                default:
-                  return coinDefault;
-              }
-            };
-            
-            const newStates = Array(5).fill(null).map((_, index) => {
-              const starValue = res.game_answer_info[`mini_star_${index + 1}`];
-              return getCoinStatus(starValue);
-            });
-            
-            setCoinStates(newStates);
+            setTimeout(() => {
+              setFlashBackground(res.game_answer_info.message);
+              
+              setTimeout(() => {
+                setFlashBackground(null);
+                
+                const getCoinStatus = (starValue: string) => {
+                  switch(starValue) {
+                    case 'o':
+                      return coinSilver;
+                    case 'x':
+                      return coinGold;
+                    default:
+                      return coinDefault;
+                  }
+                };
+                
+                const newStates = Array(5).fill(null).map((_, index) => {
+                  const starValue = res.game_answer_info[`mini_star_${index + 1}`];
+                  return getCoinStatus(starValue);
+                });
+                
+                setCoinStates(newStates);
+              }, 1500);
+            }, 2000);
           }
           
           setGameState((prev: any) => ({
@@ -156,27 +163,6 @@ export const Monetka: FC = () => {
           }));
         }
         break;
-
-      case 'whoiswin':
-        if (res?.message === 'success') {
-          setGameState((prev: any) => ({
-            ...prev,
-            winner: {
-              winner_value: res.winner_value,
-              player_id: res.winner,
-              item: null,
-              user_name: '',
-              user_pic: ''
-            }
-          }));
-          
-          setTimeout(() => {
-            clearMessages();
-            navigate(indexUrl, { replace: true });
-          }, 3000);
-        }
-        break;
-
       case 'error':
         if (res?.message === 'not_money') {
           console.log('Недостаточно средств для следующего хода');
@@ -249,9 +235,8 @@ export const Monetka: FC = () => {
     setButtonState('hover');
     setCurrentCoin(null);
 
-    // Проверяем соединение перед отправкой
     if (!wsMessages || wsMessages.length === 0) {
-      await connect(); // Ждем подключения
+      connect();
     }
 
     setTimeout(() => {
@@ -266,7 +251,6 @@ export const Monetka: FC = () => {
         });
       } catch (error) {
         console.error('Ошибка отправки:', error);
-        // Можно добавить обработку ошибки, например показать уведомление
       }
 
       setTimeout(() => {
@@ -285,6 +269,10 @@ export const Monetka: FC = () => {
     });
   };
 
+  const getFlashImage = (type: 'coin_bad' | 'coin_good') => {
+    return type === 'coin_bad' ? redTiny : greenTiny;
+  };
+
   if (!isPortrait) {
     return <Warning />;
   }
@@ -295,6 +283,17 @@ export const Monetka: FC = () => {
 
   return (
     <div className={styles.monetka}>
+      <div className={`${styles.monetka__layer} ${styles.monetka__layer_empty}`} />
+      <div className={`${styles.monetka__layer} ${styles.monetka__layer_fx}`} />
+      {flashBackground && (
+        <div 
+          className={`${styles.monetka__layer} ${styles.monetka__layer_flash}`} 
+          style={{
+            backgroundImage: `url(${getFlashImage(flashBackground)})`
+          }}
+        />
+      )}
+      <div className={`${styles.monetka__layer} ${styles.monetka__layer_bg}`} />
       <img src={vector} alt="vector" className={styles.monetka__vector} />
       <div className={styles.monetka__defaultCoinContainer}>
         {coinStates.map((coinState, index) => (
