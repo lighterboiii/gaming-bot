@@ -10,8 +10,8 @@
 
   &__header {
     @include indents(0 $space-16, 0);
-    @include size(100%, auto);
-    @include flex(column, center, center);
+    @include size(100%, 20vh);
+    @include flex(column, flex-start, center);
     background-color: $secondary-color;
     position: sticky;
     top: 0;
@@ -28,12 +28,12 @@
   }
 
   &__content {
-    @include indents($space-16, 0);
+    @include indents();
     @include size(100%, auto);
-    @include flex(column, space-between, flex-end, $space-16);
-    overflow-y: auto;
-    overflow-x: visible;
-    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    overflow: visible;
 
     &.hidden {
       display: none;
@@ -41,13 +41,13 @@
   }
 
   &__game-card {
+    width: 100%;
+    aspect-ratio: 1;
+    cursor: pointer;
+    transition: transform 0.2s ease;
 
-    &--odd {
-      align-self: flex-end;
-    }
-
-    &--even {
-      align-self: flex-start;
+    &:hover {
+      transform: scale(1.02);
     }
   }
 

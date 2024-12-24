@@ -3,29 +3,37 @@
 
 .game {
   @include position(relative);
-  @include indents(16px, 0);
+  @include indents($space-12, 0);
   @include size(100%, 100%);
   @include max-size(182px, 182px);
   aspect-ratio: 1;
-  border-radius: $radius-10;
+  border-radius: 25px;
   background-color: $tertiary-color;
   text-decoration: none;
   color: $main-color;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   @media screen and (max-width: 379px) {
     @include max-size(160px, 160px);
   }
 
-  &__info {
-    @include position(absolute, $left: 16px, $bottom: 16px, $right: 16px);
+  &__header {
+    @include flex(column, flex-start, flex-end, 8px);
+    width: 100%;
+    text-align: right;
+    padding-right: $space-8;
+  }
+
+  &__footer {
     @include flex(row, space-between, flex-end);
+    width: 100%;
   }
 
   &__name {
     @include indents();
-    @include size(100%, auto);
-    @include ellipsis();
     color: $main-color;
     font-weight: 900;
     text-transform: uppercase;
@@ -35,26 +43,18 @@
     @include indents();
     @include flex(row, center, center, 4px);
     color: $main-color;
-    font-weight: 900;
-  }
-
-  &__image,
-  &__imageRight {
-    @include indents();
-    @include max-size(124px, auto);
-
-    @media screen and (max-width: 379px) {
-      @include max-size(106px, auto);
-    }
+    font-weight: 700;
+    font-size: 14px;
   }
 
   &__image {
-    @include position(absolute, $top: 40%, $left: 10%);
-    transform: translate(-50%, -50%);
-  }
+    @include indents();
+    @include max-size(96px, auto);
+    margin-left: -$space-12;
 
-  &__imageRight {
-    @include position(absolute, $top: 40%, $left: 90%);
-    transform: translate(-50%, -50%);
+    @media screen and (max-width: 379px) {
+      @include max-size(80px, auto);
+      margin-left: -$space-8;
+    }
   }
 }

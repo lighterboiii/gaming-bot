@@ -48,23 +48,26 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
       className={gameCardClassNames}
       onClick={handleClick}
     >
-      <h3
-        style={{ textAlign: imagePosition === "left" ? 'right' : 'left' }}
-        className={styles.game__name}
-      >
-        {getGameName(game.room_type)}
-      </h3>
-      <img
-        src={game.url}
-        alt="game_image"
-        className={imagePosition === 'left' ? styles.game__image : styles.game__imageRight}
-      />
-      <div className={styles.game__info}>
-        <p className={styles.game__players}><ManIcon /> {game.users}</p>
+      <div className={styles.game__header}>
+        <h3 className={styles.game__name}>
+          {getGameName(game.room_type)}
+        </h3>
+        <p className={styles.game__players}>
+          <ManIcon /> {game.users}
+        </p>
+      </div>
+      
+      <div className={styles.game__footer}>
+        <img
+          src={game.url}
+          alt="game_image"
+          className={styles.game__image}
+        />
         <CircleButton 
-        chevronPosition="right"
+          chevronPosition="right"
           iconType="chevron"
-          isWhiteBackground />
+          isWhiteBackground 
+        />
       </div>
     </div>
   )

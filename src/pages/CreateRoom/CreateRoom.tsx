@@ -86,8 +86,7 @@ export const CreateRoom: FC = () => {
               image={game.id === 1 ? games[0].url : games[1].url}
               users={game.users}
               extraClass={
-                `${styles['create__game-card']}
-                ${index % 2 === 0 ? styles['create__game-card--odd'] : styles['create__game-card--even']}`
+                `${styles['create__game-card']}`
               }
               handleClickGame={handleGameClick}
             />
