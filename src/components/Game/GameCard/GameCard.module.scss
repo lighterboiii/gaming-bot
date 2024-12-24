@@ -3,7 +3,7 @@
 
 .game {
   @include position(relative);
-  @include indents($space-12, 0);
+  @include indents($space-16, 0);
   @include size(100%, 100%);
   @include max-size(182px, 182px);
   aspect-ratio: 1;
@@ -28,7 +28,7 @@
   }
 
   &__footer {
-    @include flex(row, space-between, flex-end);
+    @include flex(row, center, flex-end, $space-16);
     width: 100%;
   }
 
@@ -50,11 +50,11 @@
   &__image {
     @include indents();
     @include max-size(96px, auto);
-    margin-left: -$space-12;
+    // margin-left: -$space-12;
 
     @media screen and (max-width: 379px) {
       @include max-size(80px, auto);
-      margin-left: -$space-8;
+      // margin-left: -$space-8;
     }
   }
 }
