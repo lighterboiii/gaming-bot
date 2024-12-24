@@ -6,11 +6,35 @@
   @include min-size(100%, 100vh+1);
   @include flex(column, center, center);
   @include indents(0 $space-16, 0);
-  background-image: url('../../images/monetka/coin_bg.png');
+  position: relative;
+  background-image: url('../../images/monetka/screen_empty.png');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
+  z-index: 1;
   
+  &::before {
+    content: '';
+    @include position(absolute, $top: 0, $left: 0);
+    @include size(100%, 100%);
+    background-image: url('../../images/monetka/coin_bg.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    @include position(absolute, $top: 0, $left: 0);
+    @include size(100%, 100%);
+    background-image: url('../../images/monetka/screen_fx.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+  }
+
   &__buttonsContainer {
     @include size(100%, auto);
     @include min-size(100%, 48px);
@@ -74,14 +98,16 @@
   }
 
   &__controlButtons {
-    @include position(absolute, $bottom: 9.5%, $left: 50%);
+    @include position(absolute, $bottom: 10%, $left: 50%);
     @include size(50%, auto);
     @include flex(row, center, center, $space-8);
     transform: translateX(-50%);
   }
 
   &__controlButton {
+    @include indents(0 $space-16, 0);
     @include size(45%, 36px);
+    @include flex(row, center, center);
     border-radius: $radius-10;
     border: none;
     font-size: 12px;
@@ -89,6 +115,8 @@
     cursor: pointer;
     transition: transform 0.2s ease;
     color: white;
+    overflow: hidden;
+    text-overflow: wrap;
 
     &:active {
       transform: scale(0.95);
@@ -111,14 +139,29 @@
     transform: translate(-50%, -50%);
     aspect-ratio: 1/1;
     z-index: 10;
-    animation: coinAppear 0.3s ease-in forwards;
+    animation: coinAppear .5s ease-in forwards;
+    opacity: 0;
+
+    &[src] {
+      opacity: 1;
+    }
+  }
+
+  &__coinValue {
+    @include position(absolute, $top: 65%, $left: 50%);
+    transform: translateX(-50%);
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    z-index: 10;
+    animation: coinAppear .5s ease-in forwards;
   }
 }
 
 @keyframes coinAppear {
   from {
-    opacity: 0.3;
-    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
   }
   to {
     opacity: 1;

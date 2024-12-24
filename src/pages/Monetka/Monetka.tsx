@@ -5,12 +5,13 @@
 import { FC, useEffect, useState, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { formatNumber } from 'utils/additionalFunctions';
+
 import Loader from '../../components/Loader/Loader';
 import { Warning } from '../../components/OrientationWarning/Warning';
 import useOrientation from '../../hooks/useOrientation';
 import useTelegram from '../../hooks/useTelegram';
 import monetkaButtonsBackground from '../../images/monetka/0.png';
-import monetkaBackground from '../../images/monetka/00012-1122478660_3_3 1.png';
 import buttonBlueDefault from '../../images/monetka/btn_O_Default.png'
 import buttonBlue from '../../images/monetka/btn_O_Default_light.png';
 import buttonBlueDisabled from '../../images/monetka/btn_O_Down.png';
@@ -46,17 +47,17 @@ export const Monetka: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const { sendMessage, wsMessages, connect, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const { tg } = useTelegram();
-  console.log(gameState);
+
   const [blueButtonState, setBlueButtonState] = useState('default');
   const [greenButtonState, setGreenButtonState] = useState('default');
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [currentCoin, setCurrentCoin] = useState<string | null>(null);
-  console.log(currentCoin);
+
   const [coinStates, setCoinStates] = useState<string[]>([
     coinDefault, coinDefault, coinDefault, coinDefault, coinDefault
   ]);
-  const [currentCoinIndex, setCurrentCoinIndex] = useState<number>(0);
   console.log(coinStates);
+  console.log(gameState);
   // Подключение к WebSocket
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
@@ -150,10 +151,7 @@ export const Monetka: FC = () => {
           
           setGameState((prev: any) => ({
             ...prev,
-            data: {
-              ...prev.data,
-              next_x: res.game_answer_info.next_x
-            },
+            data: res,
             winner: null
           }));
         }
@@ -287,18 +285,11 @@ export const Monetka: FC = () => {
     });
   };
 
-  // Предзагрузка фонового изображения
-  useEffect(() => {
-    const img = new Image();
-    img.src = monetkaBackground;
-    img.onload = () => setIsBackgroundLoaded(true);
-  }, []);
-
   if (!isPortrait) {
     return <Warning />;
   }
 
-  if (gameState.loading || !isBackgroundLoaded) {
+  if (gameState.loading) {
     return <Loader />;
   }
 
@@ -316,11 +307,16 @@ export const Monetka: FC = () => {
         ))}
       </div>
       {currentCoin && (
-        <img 
-          src={currentCoin} 
-          alt="coin animation" 
-          className={styles.monetka__coin}
-        />
+        <>
+          <img 
+            src={currentCoin} 
+            alt="coin animation" 
+            className={styles.monetka__coin}
+          />
+          <div className={styles.monetka__coinValue}>
+            + 30
+          </div>
+        </>
       )}
       <div className={styles.monetka__buttonsContainer}>
         <img src={monetkaButtonsBackground} alt="buttonsBackground" className={styles.monetka__buttons} />
@@ -344,13 +340,13 @@ export const Monetka: FC = () => {
           className={`${styles.monetka__controlButton} ${styles.monetka__controlButton_pink}`}
           onClick={() => {}}
         >
-          Кнопка 1
+          Забрать: {gameState.data?.bet || 0}
         </button>
         <button 
           className={`${styles.monetka__controlButton} ${styles.monetka__controlButton_gray}`}
           onClick={() => {}}
-        >
-          Кнопка 2
+          >
+          Забрать: {gameState?.data?.win?.winner_value ? formatNumber(Number(gameState?.data?.win?.winner_value)) : 0}
         </button>
       </div>
     </div> 
