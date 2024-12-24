@@ -18,10 +18,8 @@ import buttonBlueDisabled from '../../images/monetka/btn_O_Down.png';
 import buttonGreenDefault from '../../images/monetka/btn_X_Default.png';
 import buttonGreen from '../../images/monetka/btn_X_Default_light.png';
 import buttonGreenDisabled from '../../images/monetka/btn_X_Down.png';
-import greenTiny from '../../images/monetka/green_tiny.png';
 import coinDefault from '../../images/monetka/O (1).png';
 import coinSilver from '../../images/monetka/O.png';
-import redTiny from '../../images/monetka/red_tiny.png';
 import vector from '../../images/monetka/Vector.png';
 import coinGold from '../../images/monetka/X.png';
 import { useAppSelector } from '../../services/reduxHooks';
@@ -52,6 +50,8 @@ export const Monetka: FC = () => {
   const [coinStates, setCoinStates] = useState<string[]>([
     coinDefault, coinDefault, coinDefault, coinDefault, coinDefault
   ]);
+  const [flashImage, setFlashImage] = useState<string | null>(null);
+  console.log(flashImage);
   // Подключение к WebSocket
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
@@ -112,7 +112,7 @@ export const Monetka: FC = () => {
       }));
     };
   }, []);
-
+  
   // Обработка всех входящих WebSocket сообщений
   const handleWebSocketMessage = useCallback((message: string) => {
     const res = JSON.parse(message);
@@ -123,39 +123,47 @@ export const Monetka: FC = () => {
         if (res?.game_answer_info) {
           if (res.game_answer_info.animation) {
             setCurrentCoin(res.game_answer_info.animation);
-          
-            setTimeout(() => {
-
-              setFlashBackground(null);
             
+            setTimeout(() => {
+              const winAnimation = res.game_answer_info.win_animation;
+              console.log('Setting win animation:', winAnimation);
+              if (winAnimation) {
+                // Попробуем предзагрузить изображение
+                const img = new Image();
+                img.onload = () => {
+                  console.log('Win animation image loaded successfully');
+                  setFlashImage(winAnimation);
+                };
+                img.onerror = (e) => {
+                  console.error('Error loading win animation image:', e);
+                };
+                img.src = winAnimation;
+              }
+              
               setTimeout(() => {
-                setFlashBackground(res.game_answer_info.message);
+                console.log('Clearing win animation');
+                const getCoinStatus = (starValue: string) => {
+                  switch(starValue) {
+                    case 'o':
+                      return coinSilver;
+                    case 'x':
+                      return coinGold;
+                    default:
+                      return coinDefault;
+                  }
+                };
                 
-                setTimeout(() => {
-                  setFlashBackground(null);
-                  
-                  const getCoinStatus = (starValue: string) => {
-                    switch(starValue) {
-                      case 'o':
-                        return coinSilver;
-                      case 'x':
-                        return coinGold;
-                      default:
-                        return coinDefault;
-                    }
-                  };
-                  
-                  const newStates = Array(5).fill(null).map((_, index) => {
-                    const starValue = res.game_answer_info[`mini_star_${index + 1}`];
-                    return getCoinStatus(starValue);
-                  });
-                  
-                  setCoinStates(newStates);
-                }, 1500);
-              }, 50);
+                const newStates = Array(5).fill(null).map((_, index) => {
+                  const starValue = res.game_answer_info[`mini_star_${index + 1}`];
+                  return getCoinStatus(starValue);
+                });
+                
+                setCoinStates(newStates);
+                setFlashImage(null);
+              }, 1500);
             }, 2000);
           }
-          console.log(res);
+
           setGameState((prev: any) => ({
             ...prev,
             data: res,
@@ -167,7 +175,7 @@ export const Monetka: FC = () => {
         if (res?.message === 'not_money') {
           console.log('Недостаточно средств для следующего хода');
         } else if (res?.message === 'error_zero') {
-          console.log('Нечего выводить');
+          console.log('Нечег�� выводить');
         }
         break;
       case 'room_info':
@@ -227,7 +235,7 @@ export const Monetka: FC = () => {
     }
   };
 
-  // Обработка нажатия на кнопку
+  // Обработка нажатия на к��опку
   const handleButtonClick = async (type: 'blue' | 'green') => {
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
@@ -269,10 +277,6 @@ export const Monetka: FC = () => {
     });
   };
 
-  const getFlashImage = (type: 'coin_bad' | 'coin_good') => {
-    return type === 'coin_bad' ? redTiny : greenTiny;
-  };
-
   if (!isPortrait) {
     return <Warning />;
   }
@@ -285,15 +289,14 @@ export const Monetka: FC = () => {
     <div className={styles.monetka}>
       <div className={`${styles.monetka__layer} ${styles.monetka__layer_empty}`} />
       <div className={`${styles.monetka__layer} ${styles.monetka__layer_fx}`} />
-      {flashBackground && (
-        <div 
-          key={Date.now()}
-          className={`${styles.monetka__layer} ${styles.monetka__layer_flash}`} 
-          style={{
-            backgroundImage: `url(${getFlashImage(flashBackground)})`
-          }}
+      {flashImage && (
+        <img 
+          key={flashImage}
+          src={flashImage}
+          alt="flash"
+          className={`${styles.monetka__flash}`} 
         />
-      )}
+      )} 
       <div className={`${styles.monetka__layer} ${styles.monetka__layer_bg}`} />
       <img src={vector} alt="vector" className={styles.monetka__vector} />
       <div className={styles.monetka__defaultCoinContainer}>

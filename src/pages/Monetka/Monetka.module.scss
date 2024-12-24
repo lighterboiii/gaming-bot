@@ -26,32 +26,9 @@
       background-image: url('../../images/monetka/screen_fx.png');
     }
 
-    &_flash {
-      z-index: 3;
-      animation: flashAppear 1.5s ease-in-out forwards;
-    }
-
     &_bg {
       z-index: 5;
       background-image: url('../../images/monetka/coin_bg.png');
-    }
-  }
-
-  &__flash {
-    @include position(absolute, $top: 0, $left: 0);
-    @include size(100%, 100%);
-    background-size: 100% 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: 3;
-    animation: flashAppear 1.5s ease-in-out forwards;
-
-    &_red {
-      background-image: url('../../images/monetka/red_tiny.png');
-    }
-
-    &_green {
-      background-image: url('../../images/monetka/green_tiny.png');
     }
   }
 
@@ -156,6 +133,13 @@
     }
   }
 
+  &__flash {
+    @include position(absolute, $top: 0, $left: 0);
+    @include size(100%, 100%);
+    z-index: 2;
+    // animation: flashAppear 1.5s ease-in-out forwards;
+  }
+
   &__coin {
     @include position(absolute, $top: 50%, $left: 50%);
     @include size(40%, auto);
@@ -192,17 +176,21 @@
   }
 }
 
-@keyframes flashAppear {
-  0% {
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
+// @keyframes flashAppear {
+//   0% {
+//     opacity: 0;
+//     transform: scale(0.8) translate(-50%, -50%);
+//   }
+//   20% {
+//     opacity: 1;
+//     transform: scale(1) translate(-50%, -50%);
+//   }
+//   80% {
+//     opacity: 1;
+//     transform: scale(1) translate(-50%, -50%);
+//   }
+//   100% {
+//     opacity: 0;
+//     transform: scale(1.2) translate(-50%, -50%);
+//   }
+// }
