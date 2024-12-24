@@ -36,7 +36,6 @@ export const Monetka: FC = () => {
   const navigate = useNavigate();
   const userId = getUserId();
   const isPortrait = useOrientation();
-  const [isPopupOpen, setPopupOpen] = useState(false);
   const [gameState, setGameState] = useState<any>({
     data: null,
     winner: null,
@@ -45,18 +44,14 @@ export const Monetka: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const { sendMessage, wsMessages, connect, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const { tg } = useTelegram();
-
   const [blueButtonState, setBlueButtonState] = useState('default');
   const [greenButtonState, setGreenButtonState] = useState('default');
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [currentCoin, setCurrentCoin] = useState<string | null>(null);
   const [flashBackground, setFlashBackground] = useState<'coin_bad' | 'coin_good' | null>(null);
-
   const [coinStates, setCoinStates] = useState<string[]>([
     coinDefault, coinDefault, coinDefault, coinDefault, coinDefault
   ]);
-  console.log(coinStates);
-  console.log(gameState);
   // Подключение к WebSocket
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
@@ -128,34 +123,39 @@ export const Monetka: FC = () => {
         if (res?.game_answer_info) {
           if (res.game_answer_info.animation) {
             setCurrentCoin(res.game_answer_info.animation);
-            
+          
             setTimeout(() => {
-              setFlashBackground(res.game_answer_info.message);
-              
+
+              setFlashBackground(null);
+            
               setTimeout(() => {
-                setFlashBackground(null);
+                setFlashBackground(res.game_answer_info.message);
                 
-                const getCoinStatus = (starValue: string) => {
-                  switch(starValue) {
-                    case 'o':
-                      return coinSilver;
-                    case 'x':
-                      return coinGold;
-                    default:
-                      return coinDefault;
-                  }
-                };
-                
-                const newStates = Array(5).fill(null).map((_, index) => {
-                  const starValue = res.game_answer_info[`mini_star_${index + 1}`];
-                  return getCoinStatus(starValue);
-                });
-                
-                setCoinStates(newStates);
-              }, 1500);
+                setTimeout(() => {
+                  setFlashBackground(null);
+                  
+                  const getCoinStatus = (starValue: string) => {
+                    switch(starValue) {
+                      case 'o':
+                        return coinSilver;
+                      case 'x':
+                        return coinGold;
+                      default:
+                        return coinDefault;
+                    }
+                  };
+                  
+                  const newStates = Array(5).fill(null).map((_, index) => {
+                    const starValue = res.game_answer_info[`mini_star_${index + 1}`];
+                    return getCoinStatus(starValue);
+                  });
+                  
+                  setCoinStates(newStates);
+                }, 1500);
+              }, 50);
             }, 2000);
           }
-          
+          console.log(res);
           setGameState((prev: any) => ({
             ...prev,
             data: res,
@@ -287,6 +287,7 @@ export const Monetka: FC = () => {
       <div className={`${styles.monetka__layer} ${styles.monetka__layer_fx}`} />
       {flashBackground && (
         <div 
+          key={Date.now()}
           className={`${styles.monetka__layer} ${styles.monetka__layer_flash}`} 
           style={{
             backgroundImage: `url(${getFlashImage(flashBackground)})`
@@ -312,9 +313,11 @@ export const Monetka: FC = () => {
             alt="coin animation" 
             className={styles.monetka__coin}
           />
+          {gameState.data?.game_answer_info?.next_x &&
           <div className={styles.monetka__coinValue}>
-            + 30
+          + {gameState.data?.game_answer_info?.next_x}
           </div>
+          }
         </>
       )}
       <div className={styles.monetka__buttonsContainer}>
