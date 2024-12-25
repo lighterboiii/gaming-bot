@@ -8,6 +8,7 @@
   @include indents(0 $space-16, 0);
   position: relative;
   overflow: hidden;
+  font-family: 'Retro Gaming';
 
   &__layer {
     @include position(absolute, $top: 0, $left: 0);
@@ -137,7 +138,7 @@
     @include position(absolute, $top: 0, $left: 0);
     @include size(100%, 100%);
     z-index: 2;
-    // animation: flashAppear 1.5s ease-in-out forwards;
+    opacity: 0.8;
   }
 
   &__coin {
@@ -155,13 +156,27 @@
   }
 
   &__coinValue {
+    @include size(50%, 30px);
     @include position(absolute, $top: 65%, $left: 50%);
-    transform: translateX(-50%);
+    @include flex(row, center, center);
+    transform: translate(-50%, -50%);
+    background-image: url('../../images/monetka/betBg.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 11;
+  }
+
+  &__coinValueText {
+    @include size(100%, 100%);
+    @include flex(row, center, center, $space-6);
     color: white;
-    font-size: 16px;
+    font-size: 30px;
     font-weight: 700;
-    z-index: 10;
-    animation: coinAppear .5s ease-in forwards;
+    z-index: 11;
+    text-align: center;
+    line-height: 30px;
+    animation: floatingText 2s ease-in-out infinite;
   }
 }
 
@@ -176,21 +191,14 @@
   }
 }
 
-// @keyframes flashAppear {
-//   0% {
-//     opacity: 0;
-//     transform: scale(0.8) translate(-50%, -50%);
-//   }
-//   20% {
-//     opacity: 1;
-//     transform: scale(1) translate(-50%, -50%);
-//   }
-//   80% {
-//     opacity: 1;
-//     transform: scale(1) translate(-50%, -50%);
-//   }
-//   100% {
-//     opacity: 0;
-//     transform: scale(1.2) translate(-50%, -50%);
-//   }
-// }
+@keyframes floatingText {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -51,6 +51,7 @@ export const Monetka: FC = () => {
     coinDefault, coinDefault, coinDefault, coinDefault, coinDefault
   ]);
   const [flashImage, setFlashImage] = useState<string | null>(null);
+  const [nextXValue, setNextXValue] = useState<string | null>(null);
   console.log(flashImage);
   // Подключение к WebSocket
   useEffect(() => {
@@ -112,7 +113,7 @@ export const Monetka: FC = () => {
       }));
     };
   }, []);
-  
+
   // Обработка всех входящих WebSocket сообщений
   const handleWebSocketMessage = useCallback((message: string) => {
     const res = JSON.parse(message);
@@ -126,24 +127,16 @@ export const Monetka: FC = () => {
             
             setTimeout(() => {
               const winAnimation = res.game_answer_info.win_animation;
-              console.log('Setting win animation:', winAnimation);
               if (winAnimation) {
-                // Попробуем предзагрузить изображение
-                const img = new Image();
-                img.onload = () => {
-                  console.log('Win animation image loaded successfully');
-                  setFlashImage(winAnimation);
-                };
-                img.onerror = (e) => {
-                  console.error('Error loading win animation image:', e);
-                };
-                img.src = winAnimation;
+                setFlashImage(winAnimation);
+                setNextXValue(res.game_answer_info.next_x);
               }
-              
+
               setTimeout(() => {
-                console.log('Clearing win animation');
+                setFlashImage(null);
+                
                 const getCoinStatus = (starValue: string) => {
-                  switch(starValue) {
+                  switch (starValue) {
                     case 'o':
                       return coinSilver;
                     case 'x':
@@ -152,14 +145,13 @@ export const Monetka: FC = () => {
                       return coinDefault;
                   }
                 };
-                
+
                 const newStates = Array(5).fill(null).map((_, index) => {
                   const starValue = res.game_answer_info[`mini_star_${index + 1}`];
                   return getCoinStatus(starValue);
                 });
-                
+
                 setCoinStates(newStates);
-                setFlashImage(null);
               }, 1500);
             }, 2000);
           }
@@ -175,7 +167,7 @@ export const Monetka: FC = () => {
         if (res?.message === 'not_money') {
           console.log('Недостаточно средств для следующего хода');
         } else if (res?.message === 'error_zero') {
-          console.log('Нечег�� выводить');
+          console.log('Нечего выводить');
         }
         break;
       case 'room_info':
@@ -235,11 +227,11 @@ export const Monetka: FC = () => {
     }
   };
 
-  // Обработка нажатия на к��опку
+  // Обработка нажатия на кнопку
   const handleButtonClick = async (type: 'blue' | 'green') => {
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
-    
+
     setButtonState('hover');
     setCurrentCoin(null);
 
@@ -249,7 +241,7 @@ export const Monetka: FC = () => {
 
     setTimeout(() => {
       setButtonState('down');
-      
+
       try {
         sendMessage({
           type: 'choice',
@@ -280,81 +272,81 @@ export const Monetka: FC = () => {
   if (!isPortrait) {
     return <Warning />;
   }
-
+  console.log(gameState);
   if (gameState.loading) {
     return <Loader />;
   }
-
+  console.log(nextXValue);
   return (
     <div className={styles.monetka}>
       <div className={`${styles.monetka__layer} ${styles.monetka__layer_empty}`} />
       <div className={`${styles.monetka__layer} ${styles.monetka__layer_fx}`} />
       {flashImage && (
-        <img 
+        <img
           key={flashImage}
           src={flashImage}
           alt="flash"
-          className={`${styles.monetka__flash}`} 
+          className={`${styles.monetka__flash}`}
         />
-      )} 
+      )}
       <div className={`${styles.monetka__layer} ${styles.monetka__layer_bg}`} />
       <img src={vector} alt="vector" className={styles.monetka__vector} />
       <div className={styles.monetka__defaultCoinContainer}>
         {coinStates.map((coinState, index) => (
-          <img 
+          <img
             key={index}
-            src={coinState} 
-            alt={`coin ${index}`} 
-            className={styles.monetka__defaultCoin} 
+            src={coinState}
+            alt={`coin ${index}`}
+            className={styles.monetka__defaultCoin}
           />
         ))}
       </div>
-      {currentCoin && (
-        <>
-          <img 
-            src={currentCoin} 
-            alt="coin animation" 
+      <>
+        {currentCoin && (
+          <img
+            src={currentCoin}
+            alt="coin animation"
             className={styles.monetka__coin}
           />
-          {gameState.data?.game_answer_info?.next_x &&
+        )}
+        {nextXValue && (
           <div className={styles.monetka__coinValue}>
-          + {gameState.data?.game_answer_info?.next_x}
+            <p className={styles.monetka__coinValueText}>+{nextXValue}</p>
           </div>
-          }
-        </>
-      )}
+        )} 
+      </>
       <div className={styles.monetka__buttonsContainer}>
         <img src={monetkaButtonsBackground} alt="buttonsBackground" className={styles.monetka__buttons} />
         <div className={styles.monetka__buttonsWrapper}>
-          <img 
-            src={getButtonImage('blue', blueButtonState)} 
-            alt="button" 
+          <img
+            src={getButtonImage('blue', blueButtonState)}
+            alt="button"
             className={styles.monetka__button}
             onClick={() => handleButtonClick('blue')}
           />
-          <img 
-            src={getButtonImage('green', greenButtonState)} 
-            alt="button" 
+          <img
+            src={getButtonImage('green', greenButtonState)}
+            alt="button"
             className={styles.monetka__button}
             onClick={() => handleButtonClick('green')}
           />
         </div>
       </div>
       <div className={styles.monetka__controlButtons}>
-        <button 
+        <button
           className={`${styles.monetka__controlButton} ${styles.monetka__controlButton_pink}`}
-          onClick={() => {}}
+          onClick={() => { }}
         >
           Забрать: {gameState.data?.bet || 0}
         </button>
-        <button 
+        <button
           className={`${styles.monetka__controlButton} ${styles.monetka__controlButton_gray}`}
-          onClick={() => {}}
-          >
+          onClick={() => { }}
+        >
           Забрать: {gameState?.data?.win?.winner_value ? formatNumber(Number(gameState?.data?.win?.winner_value)) : 0}
         </button>
       </div>
-    </div> 
+    </div>
   );
 };
 
