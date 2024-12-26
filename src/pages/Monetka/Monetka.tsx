@@ -42,11 +42,7 @@ export const Monetka: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const { sendMessage, wsMessages, connect, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const { tg } = useTelegram();
-  const [blueButtonState, setBlueButtonState] = useState('default');
-  const [greenButtonState, setGreenButtonState] = useState('default');
-  const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
   const [currentCoin, setCurrentCoin] = useState<string | null>(null);
-  const [flashBackground, setFlashBackground] = useState<'coin_bad' | 'coin_good' | null>(null);
   const [coinStates, setCoinStates] = useState<string[]>([
     coinDefault, coinDefault, coinDefault, coinDefault, coinDefault
   ]);
@@ -119,6 +115,22 @@ export const Monetka: FC = () => {
     const res = JSON.parse(message);
     console.log('WebSocket message received:', res);
 
+    const updateBalance = (data: any) => {
+      if (data?.players && data.players.length > 0) {
+        const currentPlayer = data.players.find((player: any) => 
+          Number(player.userid) === Number(userId));
+        if (currentPlayer) {
+          setGameState((prev: any) => ({
+            ...prev,
+            data: {
+              ...prev.data,
+              balance: currentPlayer.money
+            }
+          }));
+        }
+      }
+    };
+
     switch (res?.type) {
       case 'choice':
         if (res?.game_answer_info) {
@@ -161,6 +173,7 @@ export const Monetka: FC = () => {
             data: res,
             winner: null
           }));
+          updateBalance(res);
         }
         break;
       case 'error':
@@ -176,6 +189,7 @@ export const Monetka: FC = () => {
           loading: false,
           data: res,
         }));
+        updateBalance(res);
         break;
       case 'add_player':
         setGameState((prev: any) => ({
@@ -229,34 +243,23 @@ export const Monetka: FC = () => {
 
   // Обработка нажатия на кнопку
   const handleButtonClick = async (type: 'blue' | 'green') => {
-    const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
-
-    setButtonState('hover');
     setCurrentCoin(null);
 
     if (!wsMessages || wsMessages.length === 0) {
       connect();
     }
 
-    setTimeout(() => {
-      setButtonState('down');
-
-      try {
-        sendMessage({
-          type: 'choice',
-          user_id: userId,
-          room_id: roomId,
-          choice: choice
-        });
-      } catch (error) {
-        console.error('Ошибка отправки:', error);
-      }
-
-      setTimeout(() => {
-        setButtonState('default');
-      }, 150);
-    }, 150);
+    try {
+      sendMessage({
+        type: 'choice',
+        user_id: userId,
+        room_id: roomId,
+        choice: choice
+      });
+    } catch (error) {
+      console.error('Ошибка отправки:', error);
+    }
   };
 
   // Сбор выигрыша
@@ -272,11 +275,11 @@ export const Monetka: FC = () => {
   if (!isPortrait) {
     return <Warning />;
   }
-  console.log(gameState);
+
   if (gameState.loading) {
     return <Loader />;
   }
-  console.log(nextXValue);
+
   return (
     <div className={styles.monetka}>
       <div className={`${styles.monetka__layer} ${styles.monetka__layer_empty}`} />
@@ -318,18 +321,18 @@ export const Monetka: FC = () => {
       <div className={styles.monetka__buttonsContainer}>
         <img src={monetkaButtonsBackground} alt="buttonsBackground" className={styles.monetka__buttons} />
         <div className={styles.monetka__buttonsWrapper}>
-          <img
-            src={getButtonImage('blue', blueButtonState)}
-            alt="button"
-            className={styles.monetka__button}
+          <button
+            className={`${styles.monetka__button} ${styles.monetka__button_blue}`}
             onClick={() => handleButtonClick('blue')}
-          />
-          <img
-            src={getButtonImage('green', greenButtonState)}
-            alt="button"
-            className={styles.monetka__button}
+          >
+            <img src={buttonBlueDefault} alt="button" className={styles.monetka__buttonImage} />
+          </button>
+          <button
+            className={`${styles.monetka__button} ${styles.monetka__button_green}`}
             onClick={() => handleButtonClick('green')}
-          />
+          >
+            <img src={buttonGreenDefault} alt="button" className={styles.monetka__buttonImage} />
+          </button>
         </div>
       </div>
       <div className={styles.monetka__controlButtons}>
@@ -345,6 +348,11 @@ export const Monetka: FC = () => {
         >
           Забрать: {gameState?.data?.win?.winner_value ? formatNumber(Number(gameState?.data?.win?.winner_value)) : 0}
         </button>
+      </div>
+      <div className={styles.monetka__balance}>
+        <p className={styles.monetka__balanceText}>
+          Баланс: {gameState?.data?.balance ? Number(gameState.data.balance).toFixed(2) : '0.00'}
+        </p>
       </div>
     </div>
   );
