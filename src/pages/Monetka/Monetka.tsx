@@ -13,11 +13,7 @@ import useOrientation from '../../hooks/useOrientation';
 import useTelegram from '../../hooks/useTelegram';
 import monetkaButtonsBackground from '../../images/monetka/0.png';
 import buttonBlueDefault from '../../images/monetka/btn_O_Default.png'
-import buttonBlue from '../../images/monetka/btn_O_Default_light.png';
-import buttonBlueDisabled from '../../images/monetka/btn_O_Down.png';
 import buttonGreenDefault from '../../images/monetka/btn_X_Default.png';
-import buttonGreen from '../../images/monetka/btn_X_Default_light.png';
-import buttonGreenDisabled from '../../images/monetka/btn_X_Down.png';
 import coinDefault from '../../images/monetka/O (1).png';
 import coinSilver from '../../images/monetka/O.png';
 import vector from '../../images/monetka/Vector.png';
@@ -48,7 +44,8 @@ export const Monetka: FC = () => {
   ]);
   const [flashImage, setFlashImage] = useState<string | null>(null);
   const [nextXValue, setNextXValue] = useState<string | null>(null);
-  console.log(flashImage);
+  const [balance, setBalance] = useState<number>(0);
+
   // Подключение к WebSocket
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
@@ -91,6 +88,7 @@ export const Monetka: FC = () => {
       }));
       return;
     }
+
     const fetchInitialData = () => {
       sendMessage({
         user_id: userId,
@@ -102,31 +100,26 @@ export const Monetka: FC = () => {
     fetchInitialData();
 
     return () => {
-      setGameState((prev: any) => ({
-        ...prev,
-        loading: false,
-        data: null
-      }));
+      setTimeout(() => {
+        setGameState((prev: any) => ({
+          ...prev,
+          loading: false,
+          data: null
+        }));
+      }, 1500);
     };
   }, []);
 
   // Обработка всех входящих WebSocket сообщений
   const handleWebSocketMessage = useCallback((message: string) => {
     const res = JSON.parse(message);
-    console.log('WebSocket message received:', res);
 
     const updateBalance = (data: any) => {
       if (data?.players && data.players.length > 0) {
         const currentPlayer = data.players.find((player: any) => 
           Number(player.userid) === Number(userId));
         if (currentPlayer) {
-          setGameState((prev: any) => ({
-            ...prev,
-            data: {
-              ...prev.data,
-              balance: currentPlayer.money
-            }
-          }));
+          setBalance(Number(currentPlayer.money));
         }
       }
     };
@@ -164,7 +157,7 @@ export const Monetka: FC = () => {
                 });
 
                 setCoinStates(newStates);
-              }, 1500);
+              }, 800);
             }, 2000);
           }
 
@@ -178,9 +171,9 @@ export const Monetka: FC = () => {
         break;
       case 'error':
         if (res?.message === 'not_money') {
-          console.log('Недостаточно средств для следующего хода');
+          console.log('Insufficient funds for the next move');
         } else if (res?.message === 'error_zero') {
-          console.log('Нечего выводить');
+          console.log('Nothing to withdraw');
         }
         break;
       case 'room_info':
@@ -205,10 +198,13 @@ export const Monetka: FC = () => {
           navigate(indexUrl, { replace: true });
         }
         break;
+      case 'whoiswin':
+        setCoinStates([coinDefault, coinDefault, coinDefault, coinDefault, coinDefault]);
+        break;
       default:
         break;
     }
-  }, []);
+  }, [userId]);
 
   // Функция-слушатель WebSocket сообщений
   useEffect(() => {
@@ -217,30 +213,6 @@ export const Monetka: FC = () => {
       handleWebSocketMessage(lastMessage);
     }
   }, [wsMessages]);
-
-  // Получение нужной картинки для кнопки
-  const getButtonImage = (type: 'blue' | 'green', state: string) => {
-    if (type === 'blue') {
-      switch (state) {
-        case 'hover':
-          return buttonBlue;
-        case 'down':
-          return buttonBlueDisabled;
-        default:
-          return buttonBlueDefault;
-      }
-    } else {
-      switch (state) {
-        case 'hover':
-          return buttonGreen;
-        case 'down':
-          return buttonGreenDisabled;
-        default:
-          return buttonGreenDefault;
-      }
-    }
-  };
-
   // Обработка нажатия на кнопку
   const handleButtonClick = async (type: 'blue' | 'green') => {
     const choice = type === 'blue' ? "2" : "1";
@@ -340,18 +312,18 @@ export const Monetka: FC = () => {
           className={`${styles.monetka__controlButton} ${styles.monetka__controlButton_pink}`}
           onClick={() => { }}
         >
-          Забрать: {gameState.data?.bet || 0}
+          Ставка: {gameState.data?.bet || 0}
         </button>
         <button
           className={`${styles.monetka__controlButton} ${styles.monetka__controlButton_gray}`}
-          onClick={() => { }}
+          onClick={handleCollectWinnings}
         >
           Забрать: {gameState?.data?.win?.winner_value ? formatNumber(Number(gameState?.data?.win?.winner_value)) : 0}
         </button>
       </div>
       <div className={styles.monetka__balance}>
         <p className={styles.monetka__balanceText}>
-          Баланс: {gameState?.data?.balance ? Number(gameState.data.balance).toFixed(2) : '0.00'}
+          Баланс: {balance.toFixed(2)}
         </p>
       </div>
     </div>
