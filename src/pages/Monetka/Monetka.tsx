@@ -13,7 +13,11 @@ import useOrientation from '../../hooks/useOrientation';
 import useTelegram from '../../hooks/useTelegram';
 import monetkaButtonsBackground from '../../images/monetka/0.png';
 import buttonBlueDefault from '../../images/monetka/btn_O_Default.png'
+import buttonBlue from '../../images/monetka/btn_O_Default_light.png';
+import buttonBlueDisabled from '../../images/monetka/btn_O_Down.png';
 import buttonGreenDefault from '../../images/monetka/btn_X_Default.png';
+import buttonGreen from '../../images/monetka/btn_X_Default_light.png';
+import buttonGreenDisabled from '../../images/monetka/btn_X_Down.png';
 import coinDefault from '../../images/monetka/O (1).png';
 import coinSilver from '../../images/monetka/O.png';
 import vector from '../../images/monetka/Vector.png';
@@ -45,6 +49,8 @@ export const Monetka: FC = () => {
   const [flashImage, setFlashImage] = useState<string | null>(null);
   const [nextXValue, setNextXValue] = useState<string | null>(null);
   const [balance, setBalance] = useState<number>(0);
+  const [blueButtonState, setBlueButtonState] = useState('default');
+  const [greenButtonState, setGreenButtonState] = useState('default');
 
   // Подключение к WebSocket
   useEffect(() => {
@@ -127,38 +133,52 @@ export const Monetka: FC = () => {
     switch (res?.type) {
       case 'choice':
         if (res?.game_answer_info) {
-          if (res.game_answer_info.animation) {
-            setCurrentCoin(res.game_answer_info.animation);
-            
-            setTimeout(() => {
-              const winAnimation = res.game_answer_info.win_animation;
-              if (winAnimation) {
-                setFlashImage(winAnimation);
-                setNextXValue(res.game_answer_info.next_x);
+          const { animation, message, next_x } = res.game_answer_info;
+
+          // Обновляем состояние монет на основе mini_star_*
+          const getCoinStatus = (starValue: string) => {
+            switch (starValue) {
+              case 'o':
+                return coinSilver;
+              case 'x':
+                return coinGold;
+              case 'black':
+              default:
+                return coinDefault;
+            }
+          };
+
+          const newStates = Array(5).fill(null).map((_, index) => {
+            const starValue = res.game_answer_info[`mini_star_${index + 1}`];
+            return getCoinStatus(starValue);
+          });
+
+          switch (message) {
+            case 'coin_withdrawn':
+              setCoinStates(newStates);
+              if (next_x) {
+                setNextXValue(next_x);
               }
-
-              setTimeout(() => {
-                setFlashImage(null);
+              break;
+            case 'coin_good':
+            case 'coin_bad':
+              if (animation) {
+                setCurrentCoin(animation);
                 
-                const getCoinStatus = (starValue: string) => {
-                  switch (starValue) {
-                    case 'o':
-                      return coinSilver;
-                    case 'x':
-                      return coinGold;
-                    default:
-                      return coinDefault;
+                setTimeout(() => {
+                  const winAnimation = res.game_answer_info.win_animation;
+                  if (winAnimation) {
+                    setFlashImage(winAnimation);
+                    setNextXValue(next_x);
                   }
-                };
 
-                const newStates = Array(5).fill(null).map((_, index) => {
-                  const starValue = res.game_answer_info[`mini_star_${index + 1}`];
-                  return getCoinStatus(starValue);
-                });
-
-                setCoinStates(newStates);
-              }, 800);
-            }, 2000);
+                  setTimeout(() => {
+                    setFlashImage(null);
+                    setCoinStates(newStates);
+                  }, 800);
+                }, 2000);
+              }
+              break;
           }
 
           setGameState((prev: any) => ({
@@ -213,25 +233,60 @@ export const Monetka: FC = () => {
       handleWebSocketMessage(lastMessage);
     }
   }, [wsMessages]);
-  // Обработка нажатия на кнопку
+
+  // Возвращаем getButtonImage
+  const getButtonImage = (type: 'blue' | 'green', state: string) => {
+    if (type === 'blue') {
+      switch (state) {
+        case 'hover':
+          return buttonBlue;
+        case 'down':
+          return buttonBlueDisabled;
+        default:
+          return buttonBlueDefault;
+      }
+    } else {
+      switch (state) {
+        case 'hover':
+          return buttonGreen;
+        case 'down':
+          return buttonGreenDisabled;
+        default:
+          return buttonGreenDefault;
+      }
+    }
+  };
+
+  // Возвращаем старую версию handleButtonClick
   const handleButtonClick = async (type: 'blue' | 'green') => {
+    const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
+
+    setButtonState('hover');
     setCurrentCoin(null);
 
     if (!wsMessages || wsMessages.length === 0) {
       connect();
     }
 
-    try {
-      sendMessage({
-        type: 'choice',
-        user_id: userId,
-        room_id: roomId,
-        choice: choice
-      });
-    } catch (error) {
-      console.error('Ошибка отправки:', error);
-    }
+    setTimeout(() => {
+      setButtonState('down');
+
+      try {
+        sendMessage({
+          type: 'choice',
+          user_id: userId,
+          room_id: roomId,
+          choice: choice
+        });
+      } catch (error) {
+        console.error('Ошибка отправки:', error);
+      }
+
+      setTimeout(() => {
+        setButtonState('default');
+      }, 150);
+    }, 150);
   };
 
   // Сбор выигрыша
@@ -293,18 +348,18 @@ export const Monetka: FC = () => {
       <div className={styles.monetka__buttonsContainer}>
         <img src={monetkaButtonsBackground} alt="buttonsBackground" className={styles.monetka__buttons} />
         <div className={styles.monetka__buttonsWrapper}>
-          <button
-            className={`${styles.monetka__button} ${styles.monetka__button_blue}`}
+          <img
+            src={getButtonImage('blue', blueButtonState)}
+            alt="button"
+            className={styles.monetka__button}
             onClick={() => handleButtonClick('blue')}
-          >
-            <img src={buttonBlueDefault} alt="button" className={styles.monetka__buttonImage} />
-          </button>
-          <button
-            className={`${styles.monetka__button} ${styles.monetka__button_green}`}
+          />
+          <img
+            src={getButtonImage('green', greenButtonState)}
+            alt="button"
+            className={styles.monetka__button}
             onClick={() => handleButtonClick('green')}
-          >
-            <img src={buttonGreenDefault} alt="button" className={styles.monetka__buttonImage} />
-          </button>
+          />
         </div>
       </div>
       <div className={styles.monetka__controlButtons}>
