@@ -43,11 +43,13 @@
     user-select: none;
     -webkit-touch-callout: none;
     z-index: 99;
+    pointer-events: none;
   }
 
   &__buttons {
     @include size(90%, 110%);
     @include indents(0 36px, 0);
+    pointer-events: none;
   }
 
   &__buttonsWrapper {
@@ -55,6 +57,7 @@
     @include size(70%, 70%);
     @include flex(row, center, center, $space-8);
     transform: translateX(-50%);
+    pointer-events: auto;
   }
 
   &__button {
@@ -69,6 +72,8 @@
     user-select: none;
     -webkit-touch-callout: none;
     outline: none;
+    pointer-events: auto;
+    touch-action: manipulation;
 
     &:active {
       transform: scale(0.95);
