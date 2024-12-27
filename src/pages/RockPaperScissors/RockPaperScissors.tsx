@@ -194,6 +194,7 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'choice':
+        case 'emoji':
           setData(prevData => {
             if (!prevData) return res;
             return {
