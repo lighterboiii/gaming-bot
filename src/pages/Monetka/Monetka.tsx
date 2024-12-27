@@ -51,6 +51,7 @@ export const Monetka: FC = () => {
   const [balance, setBalance] = useState<number>(0);
   const [blueButtonState, setBlueButtonState] = useState('default');
   const [greenButtonState, setGreenButtonState] = useState('default');
+  const [activeButton, setActiveButton] = useState<'bet' | 'collect'>('bet');
 
   // Подключение к WebSocket
   useEffect(() => {
@@ -159,6 +160,13 @@ export const Monetka: FC = () => {
               if (next_x) {
                 setNextXValue(next_x);
               }
+              setActiveButton('bet');
+              setGameState((prev: any) => ({
+                ...prev,
+                data: res,
+                winner: null
+              }));
+              updateBalance(res);
               break;
             case 'coin_good':
             case 'coin_bad':
@@ -170,6 +178,13 @@ export const Monetka: FC = () => {
                   if (winAnimation) {
                     setFlashImage(winAnimation);
                     setNextXValue(next_x);
+                    setActiveButton('collect');
+                    setGameState((prev: any) => ({
+                      ...prev,
+                      data: res,
+                      winner: null
+                    }));
+                    updateBalance(res);
                   }
 
                   setTimeout(() => {
@@ -181,12 +196,12 @@ export const Monetka: FC = () => {
               break;
           }
 
-          setGameState((prev: any) => ({
-            ...prev,
-            data: res,
-            winner: null
-          }));
-          updateBalance(res);
+          // setGameState((prev: any) => ({
+          //   ...prev,
+          //   data: res,
+          //   winner: null
+          // }));
+          // updateBalance(res);
         }
         break;
       case 'error':
@@ -364,13 +379,25 @@ export const Monetka: FC = () => {
       </div>
       <div className={styles.monetka__controlButtons}>
         <button
-          className={`${styles.monetka__controlButton} ${styles.monetka__controlButton_pink}`}
+          className={`
+            ${styles.monetka__controlButton} 
+            ${activeButton === 'collect' 
+              ? styles.monetka__controlButton_gray 
+              : styles.monetka__controlButton_pink
+            }
+          `}
           onClick={() => { }}
         >
           Ставка: {gameState.data?.bet || 0}
         </button>
         <button
-          className={`${styles.monetka__controlButton} ${styles.monetka__controlButton_gray}`}
+          className={`
+            ${styles.monetka__controlButton} 
+            ${activeButton === 'collect'
+              ? styles.monetka__controlButton_pink 
+              : styles.monetka__controlButton_gray
+            }
+          `}
           onClick={handleCollectWinnings}
         >
           Забрать: {gameState?.data?.win?.winner_value ? formatNumber(Number(gameState?.data?.win?.winner_value)) : 0}
