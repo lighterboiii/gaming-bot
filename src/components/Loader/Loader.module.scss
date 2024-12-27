@@ -5,4 +5,5 @@
   @include size(100%, 100vh);
   @include flex(column, center, center, 2px);
   color: $main-color;
+  z-index: 1000;
 }
