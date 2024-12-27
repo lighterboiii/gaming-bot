@@ -15,8 +15,12 @@
   flex-direction: column;
   justify-content: space-between;
 
-  @media screen and (max-width: 379px) {
-    @include max-size(160px, 160px);
+  @media screen and (min-width: 380px) and (max-width: 390px) {
+    @include max-size(166px, 166px);
+  }
+
+  @media screen and (min-width: 380px) and (max-width: 420px) {
+    @include indents($space-8, 0);
   }
 
   &__header {
