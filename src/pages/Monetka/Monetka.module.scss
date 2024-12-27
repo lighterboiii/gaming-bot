@@ -261,6 +261,13 @@
     font-weight: 700;
     z-index: 11;
   }
+
+  &__logo {
+    @include size(50%, auto);
+    @include position(absolute, $top: 7.5%, $left: 50%);
+    transform: translateX(-50%);
+    z-index: 10;
+  }
 }
 
 @keyframes coinAppear {

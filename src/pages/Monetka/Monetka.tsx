@@ -5,8 +5,6 @@
 import { FC, useEffect, useState, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { formatNumber } from 'utils/additionalFunctions';
-
 import Loader from '../../components/Loader/Loader';
 import { Warning } from '../../components/OrientationWarning/Warning';
 import useOrientation from '../../hooks/useOrientation';
@@ -18,12 +16,14 @@ import buttonBlueDisabled from '../../images/monetka/btn_O_Down.png';
 import buttonGreenDefault from '../../images/monetka/btn_X_Default.png';
 import buttonGreen from '../../images/monetka/btn_X_Default_light.png';
 import buttonGreenDisabled from '../../images/monetka/btn_X_Down.png';
+import coinFlipLogo from '../../images/monetka/logo_animated_tiny.png';
 import coinDefault from '../../images/monetka/O (1).png';
 import coinSilver from '../../images/monetka/O.png';
 import vector from '../../images/monetka/Vector.png';
 import coinGold from '../../images/monetka/X.png';
 import { useAppSelector } from '../../services/reduxHooks';
 import { WebSocketContext } from '../../socket/WebSocketContext';
+import { formatNumber } from '../../utils/additionalFunctions';
 import { indexUrl } from '../../utils/routes';
 import { getUserId } from '../../utils/userConfig';
 
@@ -324,6 +324,7 @@ export const Monetka: FC = () => {
 
   return (
     <div className={styles.monetka}>
+      <img src={coinFlipLogo} alt="coin flip logo" className={styles.monetka__logo} />
       <div className={`${styles.monetka__layer} ${styles.monetka__layer_empty}`} />
       <div className={`${styles.monetka__layer} ${styles.monetka__layer_fx}`} />
       {flashImage && (
