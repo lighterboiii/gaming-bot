@@ -52,6 +52,7 @@ export const Monetka: FC = () => {
   const [blueButtonState, setBlueButtonState] = useState('default');
   const [greenButtonState, setGreenButtonState] = useState('default');
   const [activeButton, setActiveButton] = useState<'bet' | 'collect'>('bet');
+  const [previousCoin, setPreviousCoin] = useState<string | null>(null);
 
   // Подключение к WebSocket
   useEffect(() => {
@@ -171,6 +172,7 @@ export const Monetka: FC = () => {
             case 'coin_good':
             case 'coin_bad':
               if (animation) {
+                setPreviousCoin(currentCoin);
                 setCurrentCoin(animation);
                 
                 setTimeout(() => {
@@ -195,13 +197,6 @@ export const Monetka: FC = () => {
               }
               break;
           }
-
-          // setGameState((prev: any) => ({
-          //   ...prev,
-          //   data: res,
-          //   winner: null
-          // }));
-          // updateBalance(res);
         }
         break;
       case 'error':
@@ -277,30 +272,42 @@ export const Monetka: FC = () => {
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
 
+    // Предотвращаем множественные клики
+    if (blueButtonState === 'down' || greenButtonState === 'down') {
+      return;
+    }
+
     setButtonState('hover');
-    setCurrentCoin(null);
 
     if (!wsMessages || wsMessages.length === 0) {
       connect();
     }
 
-    setTimeout(() => {
-      setButtonState('down');
-
+    // Используем Promise для гарантированного выполнения последовательности
+    const clickSequence = async () => {
       try {
-        sendMessage({
+        setButtonState('down');
+        
+        await sendMessage({
           type: 'choice',
           user_id: userId,
           room_id: roomId,
           choice: choice
         });
-      } catch (error) {
-        console.error('Ошибка отправки:', error);
-      }
 
-      setTimeout(() => {
+        // Гарантируем, что кнопка вернется в исходное состояние
+        setTimeout(() => {
+          setButtonState('default');
+        }, 150);
+      } catch (error) {
+        console.error('Error in button click:', error);
         setButtonState('default');
-      }, 150);
+      }
+    };
+
+    // Запускаем последовательность с небольш��й задержкой
+    setTimeout(() => {
+      clickSequence();
     }, 150);
   };
 
@@ -348,12 +355,25 @@ export const Monetka: FC = () => {
         ))}
       </div>
       <>
-        {currentCoin && (
-          <img
-            src={currentCoin}
-            alt="coin animation"
-            className={styles.monetka__coin}
-          />
+        {(currentCoin || previousCoin) && (
+          <div className={styles.monetka__coinContainer}>
+            {previousCoin && (
+              <img
+                key={`prev-${previousCoin}`}
+                src={previousCoin}
+                alt="previous coin animation"
+                className={`${styles.monetka__coin} ${styles.monetka__coin_fadeOut}`}
+              />
+            )}
+            {currentCoin && (
+              <img
+                key={`current-${currentCoin}`}
+                src={currentCoin}
+                alt="current coin animation"
+                className={`${styles.monetka__coin} ${styles.monetka__coin_fadeIn}`}
+              />
+            )}
+          </div>
         )}
         {nextXValue && (
           <div className={styles.monetka__coinValue}>

@@ -211,17 +211,25 @@
     opacity: 0.8;
   }
 
-  &__coin {
+  &__coinContainer {
     @include position(absolute, $top: 50%, $left: 50%);
     @include size(40%, auto);
     transform: translate(-50%, -50%);
     aspect-ratio: 1/1;
     z-index: 10;
-    animation: coinAppear .5s ease-in forwards;
-    opacity: 0;
+  }
 
-    &[src] {
-      opacity: 1;
+  &__coin {
+    @include position(absolute, $top: 0, $left: 0);
+    @include size(100%, 100%);
+    object-fit: contain;
+
+    &_fadeIn {
+      animation: coinFadeIn 0.3s ease-in forwards;
+    }
+
+    &_fadeOut {
+      animation: coinFadeOut 0.3s ease-out forwards;
     }
   }
 
@@ -295,5 +303,23 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes coinFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes coinFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
