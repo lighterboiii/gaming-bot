@@ -269,8 +269,22 @@ export const RockPaperScissors: FC = () => {
 
     // Обрабатываем все сообщения
     wsMessages.forEach(message => {
-      if (message) {
-        messageHandler(message);
+      const res = JSON.parse(message);
+      switch (res?.type) {
+        case 'room_info':
+        case 'choice':
+        case 'emoji':
+        case 'kickplayer':
+          handleRegularMessage(res);
+          break;
+        case 'whoiswin':
+          // Для whoiswin оставляем проверку на последнее сообщение
+          if (message === wsMessages[wsMessages.length - 1]) {
+            handleWinMessage(res);
+          }
+          break;
+        default:
+          break;
       }
     });
   }, [wsMessages]);
