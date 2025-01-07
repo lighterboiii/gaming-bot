@@ -33,11 +33,6 @@ import { getUserId } from "../../utils/userConfig";
 
 import styles from "./LudkaGame.module.scss";
 
-interface ICoinAnimation {
-  id: number;
-  timestamp: number;
-}
-
 const LudkaGame: FC = () => {
   const { tg } = useTelegram();
   const [gameState, setGameState] = useState<ILudkaGameState>({
@@ -52,7 +47,7 @@ const LudkaGame: FC = () => {
   const userData = useAppSelector(store => store.app.info);
   const isPortrait = useOrientation();
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
-  const [animationCount, setAnimationCount] = useState(0);
+  const [showCoinsAnimation, setShowCoinsAnimation] = useState(false);
   const [overlayState, setOverlayState] = useState<ILudkaOverlayState>({
     show: false,
     isVisible: false,
@@ -74,7 +69,6 @@ const LudkaGame: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.thirdGameRulesState);
   const ruleImage = useAppSelector(store => store.app.ludkaRuleImage);
   const dispatch = useAppDispatch();
-  const [coinAnimations, setCoinAnimations] = useState<ICoinAnimation[]>([]);
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -254,7 +248,8 @@ const LudkaGame: FC = () => {
 
     switch (res?.type) {
       case 'choice':
-        setAnimationCount(prev => prev + 1);
+        setShowCoinsAnimation(true);
+        setTimeout(() => setShowCoinsAnimation(false), 1000);
         handleChoiceMessage(res);
         break;
       case 'whoiswin':
@@ -446,12 +441,14 @@ const LudkaGame: FC = () => {
                   {gameState.data?.players.length}
                 </p>
                 <div className={styles.game__head}>
-                  <img
-                    key={animationCount}
-                    src={coins}
-                    alt="coins animation"
-                    className={styles.game__coinsAnimation}
-                  />
+                  {showCoinsAnimation && (
+                    <img
+                      src={coins}
+                      alt="coins animation"
+                      className={styles.game__coinsAnimation}
+                    />
+                  )}
+
                   {getActiveEmojis && getActiveEmojis.length > 0 && getActiveEmojis.map((emojiData: any) => (
                     <div
                       key={emojiData.userId}
