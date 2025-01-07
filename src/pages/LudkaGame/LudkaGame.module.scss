@@ -85,10 +85,8 @@
     transform: translate(-50%, -50%);
     z-index: 4;
     pointer-events: none;
-    backface-visibility: hidden;
-    perspective: 1000px;
-    transform-style: preserve-3d;
-    will-change: transform;
+    animation: coinsFall 1s ease-out forwards;
+    opacity: 0;
   }
 
   &__content {
@@ -362,6 +360,21 @@
     100% {
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+
+  @keyframes coinsFall {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -100%);
+    }
+    20% {
+      opacity: 1;
+      transform: translate(-50%, -80%);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -50%);
     }
   }
 }

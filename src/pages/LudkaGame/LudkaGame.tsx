@@ -52,8 +52,7 @@ const LudkaGame: FC = () => {
   const userData = useAppSelector(store => store.app.info);
   const isPortrait = useOrientation();
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
-  const [showCoinsAnimation, setShowCoinsAnimation] = useState<boolean>(false);
-  const [animationKey, setAnimationKey] = useState(0);
+  const [animationCount, setAnimationCount] = useState(0);
   const [overlayState, setOverlayState] = useState<ILudkaOverlayState>({
     show: false,
     isVisible: false,
@@ -255,17 +254,7 @@ const LudkaGame: FC = () => {
 
     switch (res?.type) {
       case 'choice':
-        setCoinAnimations(prev => [
-          ...prev,
-          { id: Date.now(), timestamp: Date.now() }
-        ]);
-        
-        // Удаляем анимацию после завершения
-        setTimeout(() => {
-          setCoinAnimations(prev => 
-            prev.filter(anim => Date.now() - anim.timestamp < 1000));
-        }, 1000);
-        
+        setAnimationCount(prev => prev + 1);
         handleChoiceMessage(res);
         break;
       case 'whoiswin':
@@ -457,19 +446,12 @@ const LudkaGame: FC = () => {
                   {gameState.data?.players.length}
                 </p>
                 <div className={styles.game__head}>
-                  {coinAnimations.map(animation => (
-                    <img
-                      key={animation.id}
-                      src={coins}
-                      alt="coins animation"
-                      className={styles.game__coinsAnimation}
-                      style={{ 
-                        willChange: 'transform',
-                        animation: 'coinsFall 1s ease-out forwards'
-                      }}
-                    />
-                  ))}
-
+                  <img
+                    key={animationCount}
+                    src={coins}
+                    alt="coins animation"
+                    className={styles.game__coinsAnimation}
+                  />
                   {getActiveEmojis && getActiveEmojis.length > 0 && getActiveEmojis.map((emojiData: any) => (
                     <div
                       key={emojiData.userId}
