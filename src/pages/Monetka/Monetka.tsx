@@ -5,6 +5,8 @@
 import { FC, useEffect, useState, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { MONEY_EMOJI, SHIELD_EMOJI } from 'utils/constants';
+
 import Loader from '../../components/Loader/Loader';
 import { Warning } from '../../components/OrientationWarning/Warning';
 import useOrientation from '../../hooks/useOrientation';
@@ -124,7 +126,7 @@ export const Monetka: FC = () => {
 
     const updateBalance = (data: any) => {
       if (data?.players && data.players.length > 0) {
-        const currentPlayer = data.players.find((player: any) => 
+        const currentPlayer = data.players.find((player: any) =>
           Number(player.userid) === Number(userId));
         if (currentPlayer) {
           setBalance(Number(currentPlayer.money));
@@ -174,7 +176,7 @@ export const Monetka: FC = () => {
               if (animation) {
                 setPreviousCoin(currentCoin);
                 setCurrentCoin(animation);
-                
+
                 setTimeout(() => {
                   const winAnimation = res.game_answer_info.win_animation;
                   if (winAnimation) {
@@ -287,7 +289,7 @@ export const Monetka: FC = () => {
     const clickSequence = async () => {
       try {
         setButtonState('down');
-        
+
         await sendMessage({
           type: 'choice',
           user_id: userId,
@@ -305,7 +307,7 @@ export const Monetka: FC = () => {
       }
     };
 
-    // Запускаем последовательность с небольш��й задержкой
+    // Запускаем последовательность с небольшой задержкой
     setTimeout(() => {
       clickSequence();
     }, 150);
@@ -377,9 +379,14 @@ export const Monetka: FC = () => {
         )}
         {nextXValue && (
           <div className={styles.monetka__coinValue}>
-            <p className={styles.monetka__coinValueText}>+{nextXValue}</p>
+            <p className={styles.monetka__coinValueText}>+{gameState.data?.bet_type === "1"
+              ? MONEY_EMOJI
+              : SHIELD_EMOJI
+            }
+            {nextXValue}
+            </p>
           </div>
-        )} 
+        )}
       </>
       <div className={styles.monetka__buttonsContainer}>
         <img src={monetkaButtonsBackground} alt="buttonsBackground" className={styles.monetka__buttons} />
@@ -402,26 +409,52 @@ export const Monetka: FC = () => {
         <button
           className={`
             ${styles.monetka__controlButton} 
-            ${activeButton === 'collect' 
-              ? styles.monetka__controlButton_gray 
+            ${activeButton === 'collect'
+              ? styles.monetka__controlButton_gray
               : styles.monetka__controlButton_pink
             }
           `}
           onClick={() => { }}
         >
-          Ставка: {gameState.data?.bet || 0}
+          <span className={styles.monetka__controlButton__label}>
+            Ставка:
+          </span>
+          <span className={styles.monetka__controlButton__content}>
+            <span className={styles.monetka__controlButton__emoji}>
+              {gameState.data?.bet_type === "1"
+                ? MONEY_EMOJI
+                : SHIELD_EMOJI
+              }
+            </span>
+            <span className={styles.monetka__controlButton__value}>
+              {gameState.data?.bet || 0}
+            </span>
+          </span>
         </button>
         <button
           className={`
             ${styles.monetka__controlButton} 
             ${activeButton === 'collect'
-              ? styles.monetka__controlButton_pink 
+              ? styles.monetka__controlButton_pink
               : styles.monetka__controlButton_gray
             }
           `}
           onClick={handleCollectWinnings}
         >
-          Забрать: {gameState?.data?.win?.winner_value ? formatNumber(Number(gameState?.data?.win?.winner_value)) : 0}
+          <span className={styles.monetka__controlButton__label}>
+            Забрать:
+          </span>
+          <span className={styles.monetka__controlButton__content}>
+            <span className={styles.monetka__controlButton__emoji}>
+              {gameState?.data?.bet_type === "1"
+                ? MONEY_EMOJI
+                : SHIELD_EMOJI
+              }
+            </span>
+            <span className={styles.monetka__controlButton__value}>
+              {gameState?.data?.win?.winner_value ? formatNumber(Number(gameState?.data?.win?.winner_value)) : 0}
+            </span>
+          </span>
         </button>
       </div>
       <div className={styles.monetka__balance}>

@@ -248,6 +248,7 @@ const LudkaGame: FC = () => {
 
     switch (res?.type) {
       case 'choice':
+        console.log(res);
         setShowCoinsAnimation(true);
         setTimeout(() => setShowCoinsAnimation(false), 1000);
         handleChoiceMessage(res);

@@ -183,7 +183,7 @@
   &__controlButton {
     @include indents(0 $space-16, 0);
     @include size(45%, 36px);
-    @include flex(row, center, center);
+    @include flex(column, center, center);
     border-radius: $radius-10;
     border: none;
     font-size: 12px;
@@ -193,6 +193,23 @@
     color: white;
     overflow: hidden;
     text-overflow: wrap;
+
+    &__label {
+      white-space: nowrap;
+    }
+
+    &__content {
+      @include flex(row, center, center, $space-6);
+    }
+
+    &__emoji {
+      @include flex(row, center, center);
+      font-size: 14px;
+    }
+
+    &__value {
+      @include flex(row, center, center);
+    }
 
     &:active {
       transform: scale(0.95);
@@ -239,7 +256,7 @@
   }
 
   &__coinValue {
-    @include size(50%, 30px);
+    @include size(40%, 30px);
     @include position(absolute, $top: 65%, $left: 50%);
     @include flex(row, center, center);
     transform: translate(-50%, -50%);

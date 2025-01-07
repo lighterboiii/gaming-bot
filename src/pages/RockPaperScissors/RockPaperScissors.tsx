@@ -214,25 +214,25 @@ export const RockPaperScissors: FC = () => {
         firstAnim: res?.whoiswin.f_anim,
         secondAnim: res?.whoiswin.s_anim,
       });
-      
+
       const animationTime = 3000;
       setAnimationKey(prevKey => prevKey + 1);
-      
+
       const gameResult = (() => {
         if (Number(res?.whoiswin.winner) === Number(userId)) {
           return {
-            animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-              ? rWinAnim 
+            animation: Number(data?.creator_id) === Number(res?.whoiswin.winner)
+              ? rWinAnim
               : lWinAnim,
             message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
               ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵` : `🔰`}`
               : ''}`
           };
-        } 
+        }
         if (Number(res?.whoiswin.winner) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
           return {
-            animation: Number(data?.creator_id) === Number(res?.whoiswin.winner) 
-              ? rLoseAnim 
+            animation: Number(data?.creator_id) === Number(res?.whoiswin.winner)
+              ? rLoseAnim
               : lLoseAnim,
             message: `${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1" ? `💵` : `🔰`}`
           };
@@ -448,8 +448,8 @@ export const RockPaperScissors: FC = () => {
                       data?.players_count === "2"
                     ) ? (
                       <HandShake
-                        player1={playersAnim.firstAnim ||leftRock}
-                        player2={playersAnim.secondAnim ||rightRock} />
+                        player1={playersAnim.firstAnim || leftRock}
+                        player2={playersAnim.secondAnim || rightRock} />
                     ) : (
                       data?.players_count === "1"
                     ) ? (
@@ -461,9 +461,11 @@ export const RockPaperScissors: FC = () => {
                     <div className={styles.game__betContainer}>
                       <p className={styles.game__text}>{translation?.game_bet_text}</p>
                       <div className={styles.game__bet}>
-                        <p className={styles.game__text}>{data?.bet_type === "1"
-                          ? `${MONEY_EMOJI}`
-                          : `${SHIELD_EMOJI}`}
+                        <p className={styles.game__text}>
+                          {data?.bet_type === "1"
+                            ? `${MONEY_EMOJI}`
+                            : `${SHIELD_EMOJI}`
+                          }
                         </p>
                         <p className={styles.game__text}>{data?.bet}</p>
                       </div>
