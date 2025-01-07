@@ -174,28 +174,35 @@ export const Monetka: FC = () => {
             case 'coin_good':
             case 'coin_bad':
               if (animation) {
-                setPreviousCoin(currentCoin);
-                setCurrentCoin(animation);
-
-                setTimeout(() => {
-                  const winAnimation = res.game_answer_info.win_animation;
-                  if (winAnimation) {
-                    setFlashImage(winAnimation);
-                    setNextXValue(next_x);
-                    setActiveButton('collect');
-                    setGameState((prev: any) => ({
-                      ...prev,
-                      data: res,
-                      winner: null
-                    }));
-                    updateBalance(res);
-                  }
+                // Создаем новый Image объект для предзагрузки
+                const newCoin = new Image();
+                newCoin.src = animation;
+                
+                // Ждем загрузки новой монетки перед началом анимации
+                newCoin.onload = () => {
+                  setPreviousCoin(currentCoin);
+                  setCurrentCoin(animation);
 
                   setTimeout(() => {
-                    setFlashImage(null);
-                    setCoinStates(newStates);
-                  }, 800);
-                }, 2000);
+                    const winAnimation = res.game_answer_info.win_animation;
+                    if (winAnimation) {
+                      setFlashImage(winAnimation);
+                      setNextXValue(next_x);
+                      setActiveButton('collect');
+                      setGameState((prev: any) => ({
+                        ...prev,
+                        data: res,
+                        winner: null
+                      }));
+                      updateBalance(res);
+                    }
+
+                    setTimeout(() => {
+                      setFlashImage(null);
+                      setCoinStates(newStates);
+                    }, 800);
+                  }, 2000);
+                };
               }
               break;
           }

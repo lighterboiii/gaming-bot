@@ -239,19 +239,24 @@
     transform: translate(-50%, -50%);
     aspect-ratio: 1/1;
     z-index: 10;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    will-change: transform;
   }
 
   &__coin {
     @include position(absolute, $top: 0, $left: 0);
     @include size(100%, 100%);
     object-fit: contain;
+    backface-visibility: hidden;
+    will-change: transform;
 
     &_fadeIn {
-      animation: coinFadeIn 0.3s ease-in forwards;
+      animation: coinScaleIn 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
     }
 
     &_fadeOut {
-      animation: coinFadeOut 0.3s ease-out forwards;
+      animation: coinScaleOut 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
     }
   }
 
@@ -329,20 +334,32 @@
   }
 }
 
-@keyframes coinFadeIn {
-  from {
-    opacity: 0;
+@keyframes coinScaleIn {
+  0% {
+    transform: scale(0.25);
   }
-  to {
-    opacity: 1;
+  20% {
+    transform: scale(0.35);
+  }
+  40% {
+    transform: scale(0.45);
+  }
+  60% {
+    transform: scale(0.7);
+  }
+  80% {
+    transform: scale(0.85);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
-@keyframes coinFadeOut {
-  from {
-    opacity: 1;
+@keyframes coinScaleOut {
+  0% {
+    transform: scale(1);
   }
-  to {
-    opacity: 0;
+  100% {
+    transform: scale(0.25);
   }
 }
