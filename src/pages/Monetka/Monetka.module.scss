@@ -9,6 +9,7 @@
   position: relative;
   overflow: hidden;
   font-family: 'Retro Gaming';
+  transform-style: preserve-3d;
 
   &__layer {
     @include position(absolute, $top: 0, $left: 0);
@@ -16,6 +17,8 @@
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
+    transform: translateZ(0);
+    will-change: transform;
 
     &_empty {
       z-index: 1;
@@ -38,12 +41,13 @@
     @include min-size(100%, 48px);
     @include position(absolute, $bottom: 19%, $left: 50%);
     @include flex(column, center, center);
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateZ(0);
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     -webkit-touch-callout: none;
     z-index: 99;
     pointer-events: none;
+    will-change: transform;
   }
 
   &__buttons {
@@ -171,8 +175,9 @@
     @include position(absolute, $bottom: 10%, $left: 50%);
     @include size(50%, auto);
     @include flex(row, center, center, $space-8);
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateZ(0);
     z-index: 99;
+    will-change: transform;
   }
 
   &__controlButton {
@@ -278,8 +283,9 @@
   &__logo {
     @include size(50%, auto);
     @include position(absolute, $top: 7.5%, $left: 50%);
-    transform: translateX(-50%);
-    z-index: 10;
+    transform: translateX(-50%) translateZ(0);
+    z-index: 100;
+    will-change: transform;
   }
 }
 
