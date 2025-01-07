@@ -47,7 +47,8 @@ const LudkaGame: FC = () => {
   const userData = useAppSelector(store => store.app.info);
   const isPortrait = useOrientation();
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
-  const [showCoinsAnimation, setShowCoinsAnimation] = useState(false);
+  const [showCoinsAnimation, setShowCoinsAnimation] = useState<boolean>(false);
+  const [animationKey, setAnimationKey] = useState(0);
   const [overlayState, setOverlayState] = useState<ILudkaOverlayState>({
     show: false,
     isVisible: false,
@@ -248,8 +249,11 @@ const LudkaGame: FC = () => {
 
     switch (res?.type) {
       case 'choice':
+        setAnimationKey(prev => prev + 1);
         setShowCoinsAnimation(true);
-        setTimeout(() => setShowCoinsAnimation(false), 1000);
+        setTimeout(() => {
+          setShowCoinsAnimation(false);
+        }, 1000);
         handleChoiceMessage(res);
         break;
       case 'whoiswin':
@@ -443,9 +447,11 @@ const LudkaGame: FC = () => {
                 <div className={styles.game__head}>
                   {showCoinsAnimation && (
                     <img
+                      key={animationKey}
                       src={coins}
                       alt="coins animation"
                       className={styles.game__coinsAnimation}
+                      style={{ willChange: 'transform' }}
                     />
                   )}
 
