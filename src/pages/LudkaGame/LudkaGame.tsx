@@ -33,6 +33,11 @@ import { getUserId } from "../../utils/userConfig";
 
 import styles from "./LudkaGame.module.scss";
 
+interface ICoinAnimation {
+  id: number;
+  timestamp: number;
+}
+
 const LudkaGame: FC = () => {
   const { tg } = useTelegram();
   const [gameState, setGameState] = useState<ILudkaGameState>({
@@ -70,6 +75,7 @@ const LudkaGame: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.thirdGameRulesState);
   const ruleImage = useAppSelector(store => store.app.ludkaRuleImage);
   const dispatch = useAppDispatch();
+  const [coinAnimations, setCoinAnimations] = useState<ICoinAnimation[]>([]);
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -249,11 +255,17 @@ const LudkaGame: FC = () => {
 
     switch (res?.type) {
       case 'choice':
-        setAnimationKey(prev => prev + 1);
-        setShowCoinsAnimation(true);
+        setCoinAnimations(prev => [
+          ...prev,
+          { id: Date.now(), timestamp: Date.now() }
+        ]);
+        
+        // Удаляем анимацию после завершения
         setTimeout(() => {
-          setShowCoinsAnimation(false);
+          setCoinAnimations(prev => 
+            prev.filter(anim => Date.now() - anim.timestamp < 1000));
         }, 1000);
+        
         handleChoiceMessage(res);
         break;
       case 'whoiswin':
@@ -445,15 +457,18 @@ const LudkaGame: FC = () => {
                   {gameState.data?.players.length}
                 </p>
                 <div className={styles.game__head}>
-                  {showCoinsAnimation && (
+                  {coinAnimations.map(animation => (
                     <img
-                      key={animationKey}
+                      key={animation.id}
                       src={coins}
                       alt="coins animation"
                       className={styles.game__coinsAnimation}
-                      style={{ willChange: 'transform' }}
+                      style={{ 
+                        willChange: 'transform',
+                        animation: 'coinsFall 1s ease-out forwards'
+                      }}
                     />
-                  )}
+                  ))}
 
                   {getActiveEmojis && getActiveEmojis.length > 0 && getActiveEmojis.map((emojiData: any) => (
                     <div
