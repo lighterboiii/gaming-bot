@@ -169,6 +169,14 @@
     @include size(100%, auto);
     aspect-ratio: 1/1;
     object-fit: contain;
+
+    &_disappear {
+      animation: coinDisappear 0.3s ease-out forwards;
+    }
+
+    &_appear {
+      animation: coinAppearScale 0.3s ease-in forwards;
+    }
   }
 
   &__controlButtons {
@@ -361,5 +369,27 @@
   }
   100% {
     transform: scale(0.25);
+  }
+}
+
+@keyframes coinDisappear {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+@keyframes coinAppearScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }

@@ -55,6 +55,7 @@ export const Monetka: FC = () => {
   const [greenButtonState, setGreenButtonState] = useState('default');
   const [activeButton, setActiveButton] = useState<'bet' | 'collect'>('bet');
   const [previousCoin, setPreviousCoin] = useState<string | null>(null);
+  const [coinAnimationState, setCoinAnimationState] = useState<'default' | 'disappear' | 'appear'>('default');
 
   // Подключение к WebSocket
   useEffect(() => {
@@ -172,37 +173,67 @@ export const Monetka: FC = () => {
               updateBalance(res);
               break;
             case 'coin_good':
-            case 'coin_bad':
               if (animation) {
-                // Создаем новый Image объект для предзагрузки
-                const newCoin = new Image();
-                newCoin.src = animation;
-                
-                // Ждем загрузки новой монетки перед началом анимации
-                newCoin.onload = () => {
-                  setPreviousCoin(currentCoin);
-                  setCurrentCoin(animation);
+                setPreviousCoin(currentCoin);
+                setCurrentCoin(animation);
+
+                setTimeout(() => {
+                  const winAnimation = res.game_answer_info.win_animation;
+                  if (winAnimation) {
+                    setFlashImage(winAnimation);
+                    setNextXValue(next_x);
+                    setActiveButton('collect');
+                    setGameState((prev: any) => ({
+                      ...prev,
+                      data: res,
+                      winner: null
+                    }));
+                    updateBalance(res);
+                  }
 
                   setTimeout(() => {
-                    const winAnimation = res.game_answer_info.win_animation;
-                    if (winAnimation) {
-                      setFlashImage(winAnimation);
-                      setNextXValue(next_x);
-                      setActiveButton('collect');
-                      setGameState((prev: any) => ({
-                        ...prev,
-                        data: res,
-                        winner: null
-                      }));
-                      updateBalance(res);
-                    }
+                    setFlashImage(null);
+                    setCoinStates(newStates);
+                  }, 800);
+                }, 2000);
+              }
+              break;
+            case 'coin_bad':
+              if (animation) {
+                setPreviousCoin(currentCoin);
+                setCurrentCoin(animation);
 
+                setTimeout(() => {
+                  const winAnimation = res.game_answer_info.win_animation;
+                  if (winAnimation) {
+                    setFlashImage(winAnimation);
+                    setNextXValue(next_x);
+                    setActiveButton('collect');
+                    setGameState((prev: any) => ({
+                      ...prev,
+                      data: res,
+                      winner: null
+                    }));
+                    updateBalance(res);
+
+                    // Начинаем анимацию исчезновения после winAnimation
                     setTimeout(() => {
                       setFlashImage(null);
-                      setCoinStates(newStates);
+                      setCoinAnimationState('disappear');
+                      
+                      // После исчезновения начинаем появление по очереди
+                      setTimeout(() => {
+                        setCoinStates(newStates);
+                        setCoinAnimationState('appear');
+                        
+                        // Возвращаем состояние анимации в default
+                        setTimeout(() => {
+                          setCoinAnimationState('default');
+                        }, 1500);
+                      }, 300);
                     }, 800);
-                  }, 2000);
-                };
+                  }
+                }, 2000);
               }
               break;
           }
@@ -243,7 +274,7 @@ export const Monetka: FC = () => {
       default:
         break;
     }
-  }, [userId]);
+  }, [userId, currentCoin]);
 
   // Функция-слушатель WebSocket сообщений
   useEffect(() => {
@@ -330,6 +361,18 @@ export const Monetka: FC = () => {
     });
   };
 
+  const getCurrentPlayerBalance = useCallback(() => {
+    if (!gameState.data?.players) return 0;
+    
+    const currentPlayer = gameState.data.players.find((player: any) => Number(player.userid) === Number(userId));
+
+    if (!currentPlayer) return 0;
+
+    return gameState.data?.bet_type === "3" 
+      ? Number(currentPlayer.tokens)
+      : Number(currentPlayer.money);
+  }, [gameState.data?.players, gameState.data?.bet_type, userId]);
+
   if (!isPortrait) {
     return <Warning />;
   }
@@ -359,7 +402,16 @@ export const Monetka: FC = () => {
             key={index}
             src={coinState}
             alt={`coin ${index}`}
-            className={styles.monetka__defaultCoin}
+            className={`${styles.monetka__defaultCoin} ${
+              coinAnimationState !== 'default' 
+                ? styles[`monetka__defaultCoin_${coinAnimationState}`]
+                : ''
+            }`}
+            style={{
+              animationDelay: coinAnimationState === 'appear' 
+                ? `${index * 0.15}s` 
+                : '0s'
+            }}
           />
         ))}
       </div>
@@ -466,7 +518,7 @@ export const Monetka: FC = () => {
       </div>
       <div className={styles.monetka__balance}>
         <p className={styles.monetka__balanceText}>
-          Баланс: {balance.toFixed(2)}
+          Баланс: {getCurrentPlayerBalance().toFixed(2)}
         </p>
       </div>
     </div>
