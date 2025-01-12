@@ -4,14 +4,14 @@
 .slider {
   @include indents(8px, 0);
   @include size(100%, auto);
-  @include max-size(194px, 52px);
+  @include min-size(194px, 52px);
   @include flex(row, space-between, center);
   background-color: $secondary-color;
   border-radius: $radius-10;
 
   &__text {
     @include indents();
-    font-size: 16px;
+    font-size: 24px;
     color: $main-color;
     font-weight: 900;
   }
@@ -28,7 +28,7 @@
     background-color: inherit;
     @include size(64px, auto);
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
     color: $main-color;
     font-weight: 900;
 
