@@ -359,6 +359,17 @@ export const Monetka: FC = () => {
 
   // Сбор выигрыша
   const handleCollectWinnings = () => {
+    setCoinAnimationState('disappear');
+    
+    setTimeout(() => {
+      setCoinStates([coinDefault, coinDefault, coinDefault, coinDefault, coinDefault]);
+      setCoinAnimationState('appear');
+      
+      setTimeout(() => {
+        setCoinAnimationState('default');
+      }, 700);
+    }, 400);
+
     sendMessage({
       type: 'choice',
       user_id: userId,
