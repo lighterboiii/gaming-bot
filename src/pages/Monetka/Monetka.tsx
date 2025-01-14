@@ -55,7 +55,7 @@ export const Monetka: FC = () => {
   const [greenButtonState, setGreenButtonState] = useState('default');
   const [activeButton, setActiveButton] = useState<'bet' | 'collect'>('bet');
   const [previousCoin, setPreviousCoin] = useState<string | null>(null);
-  const [coinAnimationState, setCoinAnimationState] = useState<'default' | 'disappear' | 'appear'>('default');
+  const [coinAnimationState, setCoinAnimationState] = useState<'default' | 'redTint' | 'disappear' | 'appear'>('default');
 
   // Подключение к WebSocket
   useEffect(() => {
@@ -92,15 +92,26 @@ export const Monetka: FC = () => {
       loading: true
     }));
 
-    if (roomId) {
+    if (!roomId) {
+      setTimeout(() => {
+        setGameState((prev: any) => ({
+          ...prev,
+          loading: false,
+          data: null
+        }));
+      }, 1500);
+      return;
+    }
+
+    const fetchInitialData = () => {
       sendMessage({
         user_id: userId,
         room_id: roomId,
         type: 'room_info'
       });
-    }
+    };
 
-    return () => {};
+    fetchInitialData();
   }, []);
 
   // Обработка всех входящих WebSocket сообщений
@@ -198,21 +209,23 @@ export const Monetka: FC = () => {
                     }));
                     updateBalance(res);
 
-                    // Начинаем анимацию исчезновения после winAnimation
                     setTimeout(() => {
                       setFlashImage(null);
-                      setCoinAnimationState('disappear');
-
-                      // После исчезновения начинаем появление по очереди
+                      
+                      setCoinAnimationState('redTint');
+                      
                       setTimeout(() => {
-                        setCoinStates(newStates);
-                        setCoinAnimationState('appear');
-
-                        // Возвращаем состояние анимации в default
+                        setCoinAnimationState('disappear');
+                        
                         setTimeout(() => {
-                          setCoinAnimationState('default');
-                        }, 1500);
-                      }, 300);
+                          setCoinStates(newStates);
+                          setCoinAnimationState('appear');
+                          
+                          setTimeout(() => {
+                            setCoinAnimationState('default');
+                          }, 700);
+                        }, 400);
+                      }, 250);
                     }, 800);
                   }
                 }, 2000);
@@ -229,14 +242,12 @@ export const Monetka: FC = () => {
         }
         break;
       case 'room_info':
-        setTimeout(() => {
-          setGameState((prev: any) => ({
-            ...prev,
-            loading: false,
-            data: res,
-          }));
-          updateBalance(res);
-        }, 1500);
+        setGameState((prev: any) => ({
+          ...prev,
+          loading: false,
+          data: res,
+        }));
+        updateBalance(res);
         break;
       case 'add_player':
         setGameState((prev: any) => ({
@@ -347,12 +358,12 @@ export const Monetka: FC = () => {
 
   const getCurrentPlayerBalance = useCallback(() => {
     if (!gameState.data?.players) return 0;
-
+    
     const currentPlayer = gameState.data.players.find((player: any) => Number(player.userid) === Number(userId));
 
     if (!currentPlayer) return 0;
 
-    return gameState.data?.bet_type === "3"
+    return gameState.data?.bet_type === "3" 
       ? Number(currentPlayer.tokens)
       : Number(currentPlayer.money);
   }, [gameState.data?.players, gameState.data?.bet_type, userId]);
@@ -386,13 +397,14 @@ export const Monetka: FC = () => {
             key={index}
             src={coinState}
             alt={`coin ${index}`}
-            className={`${styles.monetka__defaultCoin} ${coinAnimationState !== 'default'
+            className={`${styles.monetka__defaultCoin} ${
+              coinAnimationState !== 'default' && coinState === coinDefault
                 ? styles[`monetka__defaultCoin_${coinAnimationState}`]
                 : ''
-              }`}
+            }`}
             style={{
-              animationDelay: coinAnimationState === 'appear'
-                ? `${index * 0.15}s`
+              animationDelay: coinAnimationState === 'appear' 
+                ? `${index * 0.15}s` 
                 : '0s'
             }}
           />
@@ -425,7 +437,7 @@ export const Monetka: FC = () => {
               ? MONEY_EMOJI
               : SHIELD_EMOJI
             }
-              {nextXValue}
+            {nextXValue}
             </p>
           </div>
         )}

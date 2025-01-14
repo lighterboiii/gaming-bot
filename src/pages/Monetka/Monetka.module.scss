@@ -170,11 +170,20 @@
     aspect-ratio: 1/1;
     object-fit: contain;
 
+    &_redTint {
+      animation: redTintEffect 0.25s ease-out forwards;
+      &[src*="Default"] {
+        filter: brightness(0.8) sepia(1) saturate(10000%) hue-rotate(320deg);
+      }
+    }
+
     &_disappear {
       animation: coinDisappear 0.3s ease-out forwards;
+      animation-delay: 0.25s;
     }
 
     &_appear {
+      opacity: 0;
       animation: coinAppearScale 0.3s ease-in forwards;
     }
   }
@@ -391,5 +400,11 @@
   100% {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes redTintEffect {
+  0%, 100% {
+    filter: brightness(0.8) sepia(1) saturate(10000%) hue-rotate(320deg);
   }
 }
