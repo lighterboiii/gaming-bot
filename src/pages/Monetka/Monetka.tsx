@@ -55,6 +55,7 @@ export const Monetka: FC = () => {
   const [greenButtonState, setGreenButtonState] = useState('default');
   const [activeButton, setActiveButton] = useState<'bet' | 'collect'>('bet');
   const [previousCoin, setPreviousCoin] = useState<string | null>(null);
+  // eslint-disable-next-line max-len
   const [coinAnimationState, setCoinAnimationState] = useState<'default' | 'redTint' | 'disappear' | 'appear'>('default');
 
   // Подключение к WebSocket
@@ -151,6 +152,12 @@ export const Monetka: FC = () => {
             return getCoinStatus(starValue);
           });
 
+          // Проверяем, все ли звезды заполнены (не black)
+          const allStarsFilled = Array(5).fill(null).every((_, index) => {
+            const starValue = res.game_answer_info[`mini_star_${index + 1}`];
+            return starValue !== 'black';
+          });
+
           switch (message) {
             case 'coin_withdrawn':
               setCoinStates(newStates);
@@ -182,12 +189,16 @@ export const Monetka: FC = () => {
                       winner: null
                     }));
                     updateBalance(res);
-                  }
 
-                  setTimeout(() => {
-                    setFlashImage(null);
-                    setCoinStates(newStates);
-                  }, 800);
+                    setTimeout(() => {
+                      setFlashImage(null);
+                      setCoinStates(newStates);
+                      
+                      if (allStarsFilled) {
+                        handleCollectWinnings();
+                      }
+                    }, 800);
+                  }
                 }, 2000);
               }
               break;
