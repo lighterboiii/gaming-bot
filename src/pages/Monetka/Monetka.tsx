@@ -92,33 +92,15 @@ export const Monetka: FC = () => {
       loading: true
     }));
 
-    if (!roomId) {
-      setGameState((prev: any) => ({
-        ...prev,
-        loading: false
-      }));
-      return;
-    }
-
-    const fetchInitialData = () => {
+    if (roomId) {
       sendMessage({
         user_id: userId,
         room_id: roomId,
         type: 'room_info'
       });
-    };
+    }
 
-    fetchInitialData();
-
-    return () => {
-      setTimeout(() => {
-        setGameState((prev: any) => ({
-          ...prev,
-          loading: false,
-          data: null
-        }));
-      }, 1500);
-    };
+    return () => {};
   }, []);
 
   // Обработка всех входящих WebSocket сообщений
@@ -220,12 +202,12 @@ export const Monetka: FC = () => {
                     setTimeout(() => {
                       setFlashImage(null);
                       setCoinAnimationState('disappear');
-                      
+
                       // После исчезновения начинаем появление по очереди
                       setTimeout(() => {
                         setCoinStates(newStates);
                         setCoinAnimationState('appear');
-                        
+
                         // Возвращаем состояние анимации в default
                         setTimeout(() => {
                           setCoinAnimationState('default');
@@ -247,12 +229,14 @@ export const Monetka: FC = () => {
         }
         break;
       case 'room_info':
-        setGameState((prev: any) => ({
-          ...prev,
-          loading: false,
-          data: res,
-        }));
-        updateBalance(res);
+        setTimeout(() => {
+          setGameState((prev: any) => ({
+            ...prev,
+            loading: false,
+            data: res,
+          }));
+          updateBalance(res);
+        }, 1500);
         break;
       case 'add_player':
         setGameState((prev: any) => ({
@@ -363,12 +347,12 @@ export const Monetka: FC = () => {
 
   const getCurrentPlayerBalance = useCallback(() => {
     if (!gameState.data?.players) return 0;
-    
+
     const currentPlayer = gameState.data.players.find((player: any) => Number(player.userid) === Number(userId));
 
     if (!currentPlayer) return 0;
 
-    return gameState.data?.bet_type === "3" 
+    return gameState.data?.bet_type === "3"
       ? Number(currentPlayer.tokens)
       : Number(currentPlayer.money);
   }, [gameState.data?.players, gameState.data?.bet_type, userId]);
@@ -402,14 +386,13 @@ export const Monetka: FC = () => {
             key={index}
             src={coinState}
             alt={`coin ${index}`}
-            className={`${styles.monetka__defaultCoin} ${
-              coinAnimationState !== 'default' 
+            className={`${styles.monetka__defaultCoin} ${coinAnimationState !== 'default'
                 ? styles[`monetka__defaultCoin_${coinAnimationState}`]
                 : ''
-            }`}
+              }`}
             style={{
-              animationDelay: coinAnimationState === 'appear' 
-                ? `${index * 0.15}s` 
+              animationDelay: coinAnimationState === 'appear'
+                ? `${index * 0.15}s`
                 : '0s'
             }}
           />
@@ -442,7 +425,7 @@ export const Monetka: FC = () => {
               ? MONEY_EMOJI
               : SHIELD_EMOJI
             }
-            {nextXValue}
+              {nextXValue}
             </p>
           </div>
         )}

@@ -80,7 +80,7 @@
   }
 
   &__coinsAnimation {
-    @include position(absolute, $top: 10%, $left: 50%);
+    @include position(absolute, $top: 5%, $left: 50%);
     @include size(70%, auto);
     transform: translate(-50%, -50%);
     z-index: 4;
