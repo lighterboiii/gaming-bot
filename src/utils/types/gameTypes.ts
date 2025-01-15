@@ -184,6 +184,7 @@ export interface IMonetkaGameData extends IGameData {
 
 export interface IMonetkaGameState {
   data: IMonetkaGameData | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   winner: any;
   loading: boolean;
 }

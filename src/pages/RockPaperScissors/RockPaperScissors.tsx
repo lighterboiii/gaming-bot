@@ -10,6 +10,7 @@ import { setFirstGameRulesState } from "services/appSlice";
 import { useAppDispatch, useAppSelector } from "services/reduxHooks";
 import { WebSocketContext } from "socket/WebSocketContext";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "utils/constants";
+import { triggerHapticFeedback } from "utils/hapticConfig";
 import { indexUrl } from "utils/routes";
 import { IGameData, IPlayer } from "utils/types/gameTypes";
 import { getUserId } from "utils/userConfig";
@@ -308,7 +309,7 @@ export const RockPaperScissors: FC = () => {
           const currentUrl = location.pathname;
           currentUrl !== indexUrl && navigate(indexUrl);
         }
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+        triggerHapticFeedback('notification', 'error');
         return;
       }
     } else if (data?.bet_type === "3") {
@@ -319,7 +320,7 @@ export const RockPaperScissors: FC = () => {
           type: 'kickplayer'
         });
 
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+        triggerHapticFeedback('notification', 'error');
         return;
       }
     }
@@ -335,7 +336,7 @@ export const RockPaperScissors: FC = () => {
       choice: 'ready'
     });
 
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    triggerHapticFeedback('impact', 'soft');
   };
   // хендлер выбора хода Websocket
   const handleChoice = (value: string) => {
@@ -349,7 +350,7 @@ export const RockPaperScissors: FC = () => {
     };
 
     sendMessage(choice);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    triggerHapticFeedback('impact', 'soft');
   };
   // хендлер отпрвки эмодзи websocket
   const handleEmojiSelect = (emoji: string) => {
@@ -360,7 +361,7 @@ export const RockPaperScissors: FC = () => {
       emoji: emoji
     };
     sendMessage(data);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    triggerHapticFeedback('impact', 'soft');
     setShowEmojiOverlay(false);
 
     setTimeout(() => {
@@ -376,7 +377,7 @@ export const RockPaperScissors: FC = () => {
   // обработчик клика по кнопке "Ознакомился" - е Websocket
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '1');
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    triggerHapticFeedback('impact', 'soft');
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)
@@ -390,12 +391,12 @@ export const RockPaperScissors: FC = () => {
   };
 
   const handleShowEmojiOverlay = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+    triggerHapticFeedback('impact', 'light');
     setShowEmojiOverlay(true);
   };
 
   const handleCloseEmojiOverlay = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    triggerHapticFeedback('impact', 'soft');
     setShowEmojiOverlay(!showEmojiOverlay)
   };
 

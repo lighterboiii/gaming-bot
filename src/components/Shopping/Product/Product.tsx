@@ -23,6 +23,7 @@ import {
 } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import { IBuyItemRes } from "../../../utils/types/responseTypes";
 import { CombinedItemData, ItemData } from "../../../utils/types/shopTypes";
 import { Modal } from "../../Modal/Modal";
@@ -118,7 +119,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   const handleSetActiveSkin = (itemId: number) => {
     setActiveSkinRequest(itemId, userId)
       .then(() => {
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        triggerHapticFeedback('impact', 'soft');
         dispatch(setActiveSkin(itemId));
         onClose();
       })
@@ -130,7 +131,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   const handleSetActiveEmoji = (itemId: number) => {
     setActiveEmojiRequest(userId, item?.item_id)
       .then(() => {
-        postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        triggerHapticFeedback('impact', 'soft');
         dispatch(setActiveEmoji(String(itemId)));
         onClose();
       })
@@ -143,7 +144,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
     cancelLavkaRequest(itemId, userId)
       .then(() => {
         setMessageShown(true);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+        triggerHapticFeedback('notification', 'success');
         setMessage(`${translation?.item_removed_from_sale}`);
         dispatch(removeItemFromLavka(itemId));
         closeWithDelay(onClose, setMessage, setMessageShown);

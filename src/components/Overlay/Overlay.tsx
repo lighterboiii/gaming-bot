@@ -1,7 +1,7 @@
-import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 
 import CrossIcon from "../../icons/Cross/Cross";
+import { triggerHapticFeedback } from "../../utils/hapticConfig";
 
 import styles from './Overlay.module.scss';
 
@@ -24,7 +24,7 @@ const Overlay: FC<IProps> = ({
 }) => {
 
   const handleClose = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    triggerHapticFeedback('impact', 'soft');
     onClose && onClose();
   }
 

@@ -11,6 +11,7 @@ import rockSelect from '../../../images/rock-paper-scissors/hands-icons/rock_sel
 import scissors from '../../../images/rock-paper-scissors/hands-icons/scissors.png'
 import scissorsDeselect from '../../../images/rock-paper-scissors/hands-icons/scissors_deselect.png'
 import scissorsSelect from '../../../images/rock-paper-scissors/hands-icons/scissors_select.png'
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 
 import styles from './ChoiceBox.module.scss';
 
@@ -25,12 +26,12 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '', isChoiceLocked }) =>
 
   const onChoiceClick = (choice: string) => {
     if (isChoiceLocked) {
-      // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+      triggerHapticFeedback('notification', 'error');
       return
     }
     handleChoice(choice);
     setChoiceItem(choice);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+    triggerHapticFeedback('notification', 'success');
   };
 
   const getIconPath = (choice: string): string => {

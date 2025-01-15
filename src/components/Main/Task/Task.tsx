@@ -1,8 +1,8 @@
-import { postEvent } from '@tma.js/sdk';
 import { FC } from 'react';
 
 import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
 import checkIcon from '../../../images/check-icon.png';
+import { triggerHapticFeedback } from '../../../utils/hapticConfig';
 import { ITask } from '../../../utils/types/mainTypes';
 
 import styles from './Task.module.scss';
@@ -15,14 +15,16 @@ interface IProps {
 const Task: FC<IProps> = ({ task, onClick }) => {
 
   const handleTaskClick = () => {
-    task?.task_done === 0 
-    ? onClick() 
-    : postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+    if (task?.task_done === 0) {
+      onClick();
+    } else {
+      triggerHapticFeedback('notification', 'success');
+    }
   };
 
   return (
     <div 
-    onClick={handleTaskClick}
+      onClick={handleTaskClick}
       className={styles.task}
       style={task?.task_done === 1 ? { backgroundColor: '#E7E7E7' } : {}}>
       <div className={styles.task__container}>
