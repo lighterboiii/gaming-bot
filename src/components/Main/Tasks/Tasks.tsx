@@ -4,7 +4,6 @@ import { FC, useEffect, useState } from 'react';
 import { getUserId } from 'utils/userConfig';
 
 import { getAppData } from '../../../api/mainApi';
-import useTelegram from '../../../hooks/useTelegram';
 import { setTaskList } from '../../../services/appSlice';
 import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
 import { ITask } from '../../../utils/types';
@@ -15,8 +14,6 @@ import styles from './Tasks.module.scss';
 
 const Tasks: FC = () => {
   const dispatch = useAppDispatch();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { user } = useTelegram();
   const userId = getUserId();
   const currentTasks = useAppSelector(store => store.app.tasks);
   const translation = useAppSelector(store => store.app.languageSettings);

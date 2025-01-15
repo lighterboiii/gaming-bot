@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 
 import gowinLogo from '../../../images/gowin.png';
 import { useAppSelector } from "../../../services/reduxHooks";
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import { shopUrl } from "../../../utils/routes";
 
 import styles from './ShopLink.module.scss';
@@ -15,8 +15,9 @@ interface IProps {
 
 const ShopLink: FC<IProps> = ({ shopImageUrl }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
+  
   const handleGetHapticFeedback = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light', });
+    triggerHapticFeedback('impact', 'light');
   };
 
   return (

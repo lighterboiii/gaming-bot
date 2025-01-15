@@ -22,7 +22,6 @@ interface IProps {
 
 const Room: FC<IProps> = ({ room, openModal }) => {
   const navigate = useNavigate();
-  const { user } = useTelegram();
   const userId = getUserId();
   const [isMessage, setIsMessage] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');

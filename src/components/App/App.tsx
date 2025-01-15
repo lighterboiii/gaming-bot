@@ -94,12 +94,10 @@ export const App: FC = () => {
           dispatch(setBannerData(res.ad_info));
           dispatch(setShopImage(res.shop_image_url));
           dispatch(setLanguageSettings(res.translate));
-          // dispatch(setUserData(res.user_info));
           dispatch(setProductsArchive(res.collectibles_data));
           dispatch(setShopAvailable(res.shop_available));
           dispatch(setTaskList(res.tasks_available));
           dispatch(setDailyBonus(res.daily_bonus));
-          // dispatch(setUserPhoto(res.avatar));
           dispatch(setFirstGameRuleImage(res.game_rule_1_url));
           dispatch(setSecondGameRuleImage(res.game_rule_2_url));
           dispatch(setThirdGameRuleImage(res.game_rule_3_url));

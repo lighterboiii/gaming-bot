@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from "@tma.js/sdk";
 import { FC } from "react";
 
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
@@ -8,6 +7,7 @@ import CrossIcon from "../../../icons/Cross/Cross";
 import FortuneWheelIcon from "../../../icons/FortuneWheel/FortuneWheel";
 import RefIcon from "../../../icons/Referral/ReferralIcon";
 import tasksIcon from '../../../images/tasks_3.png';
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 
 import styles from './CircleButton.module.scss';
 
@@ -32,7 +32,7 @@ const CircleButton: FC<IProps> = ({
 }) => {
 
   const handleClick = () => {
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    triggerHapticFeedback('impact', 'soft');
   }
 
   return (
@@ -40,7 +40,6 @@ const CircleButton: FC<IProps> = ({
       onClick={handleClick}
       className={`${styles.button} ${isWhiteBackground ? styles.whiteButton : styles.pinkButton}`}
       style={shadow ? { boxShadow: '2px 1px 1.2px 1px rgba(0, 0, 0, 0.5)' } : undefined}
-
     >
       {iconType === 'chevron' && <ChevronIcon position={chevronPosition}
         color={color}

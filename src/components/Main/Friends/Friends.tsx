@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -10,6 +9,7 @@ import { inviteLink } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
 import { setCoinsNewValue } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import { IMember } from "../../../utils/types/memberTypes";
 import { IResultDataResponse, ITransferCoinsToBalanceResponse } from "../../../utils/types/responseTypes";
 import Button from "../../ui/Button/Button";
@@ -18,7 +18,7 @@ import FriendsBoard from "../FriendsBoard/FriendsBoard";
 import styles from './Friends.module.scss';
 
 const Friends: FC = () => {
-  const { user, tg } = useTelegram();
+  const { tg } = useTelegram();
   const dispatch = useAppDispatch();
   const userId = getUserId();
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -58,11 +58,11 @@ const Friends: FC = () => {
         setMessageShown(true);
         switch (res.transfered) {
           case "small":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+            triggerHapticFeedback('notification', 'error');
             setMessage(`${translation?.claim_minimum}`);
             break;
           default:
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+            triggerHapticFeedback('notification', 'success');
             setMessage(`${translation?.funds_transferred}`);
             dispatch(setCoinsNewValue(Number(res.new_coins)));
             setTotalBalance(0);

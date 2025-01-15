@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +9,7 @@ import { energyDrinkRequest, joinRoomRequest, postNewRoomRequest } from "../../.
 import useTelegram from "../../../hooks/useTelegram";
 import energy from '../../../images/energy-drink.png';
 import { useAppSelector } from "../../../services/reduxHooks";
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import Button from "../../ui/Button/Button";
 
 import styles from './JoinRoomPopup.module.scss';
@@ -49,7 +49,7 @@ const JoinRoomPopup: FC<IProps> = ({
               room_type: roomType
             }, userId)
               .then((res: any) => {
-                // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+                triggerHapticFeedback('notification', 'success');
                 navigate(Number(roomType) === 2 ? `/closest/${res.room_id}` : `/room/${res.room_id}`);
               })
               .catch((error) => {

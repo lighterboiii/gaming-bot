@@ -3,6 +3,7 @@ import { FC, useState, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 
 import { getCachedBanners } from "utils/bannerCache";
+import { triggerHapticFeedback } from "utils/hapticConfig";
 
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
 import { IBannerData } from "../../../utils/types/mainTypes";
@@ -33,18 +34,18 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
 
   const handleBannerClick = () => {
     const currentBannerData = activeBanners[currentIndex];
-    // postEvent("web_app_trigger_haptic_feedback", { type: "impact", impact_style: "soft" });
+    triggerHapticFeedback("impact", "soft");
     onBannerClick(currentBannerData);
   };
 
   const handleNextSlide = () => {
     goToSlide((currentIndex + 1) % activeBanners.length);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    triggerHapticFeedback('impact', 'soft');
   };
 
   const handlePrevSlide = () => {
     goToSlide((currentIndex - 1 + activeBanners.length) % activeBanners.length);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    triggerHapticFeedback('impact', 'soft');
   };
 
   // eslint-disable-next-line react-hooks/rules-of-hooks

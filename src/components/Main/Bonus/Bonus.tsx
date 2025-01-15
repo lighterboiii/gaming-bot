@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from '@tma.js/sdk';
 import { FC } from "react";
 
 import { getUserId } from 'utils/userConfig';
@@ -8,6 +7,7 @@ import Button from "../..//ui/Button/Button";
 import { makeCollectibleRequest } from "../../../api/shopApi";
 import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import { IBonus } from "../../../utils/types/mainTypes";
 
 import styles from './Bonus.module.scss';
@@ -30,16 +30,16 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
         const tokens = await makeCollectibleRequest(itemId, itemCount, userId);
         const formattedTokens = Math.floor(tokens.message);
         dispatch(setNewTokensValue(formattedTokens));
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+        triggerHapticFeedback('notification', 'success');
         break;
       case "energy_drink":
         const resEnergy = await makeCollectibleRequest(itemId, itemCount, userId);
         dispatch(setEnergyDrinksValue(resEnergy.message));
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+        triggerHapticFeedback('notification', 'success');
         break;
       case "exp":
         await makeCollectibleRequest(itemId, itemCount, userId);
-        postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+        triggerHapticFeedback('notification', 'success');
         break;
       default:
         await makeCollectibleRequest(itemId, itemCount, userId);

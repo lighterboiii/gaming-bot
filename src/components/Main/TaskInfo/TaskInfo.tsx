@@ -9,6 +9,7 @@ import useTelegram from "../../../hooks/useTelegram";
 import CrossIcon from "../../../icons/Cross/Cross";
 import { setNewTokensValue } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import { ITask, ITaskStep } from "../../../utils/types/mainTypes";
 import { IClaimRewardResponse } from "../../../utils/types/responseTypes";
 import Button from "../../ui/Button/Button";
@@ -59,7 +60,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
           setRewardResult(true);
           fetchTaskInfo();
           response?.new_value && dispatch(setNewTokensValue(response?.new_value));
-          postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+          triggerHapticFeedback('notification', 'success');
         }
       });
   };
@@ -73,7 +74,7 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
     } else {
       setSelectedTask(null);
     }
-    postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    triggerHapticFeedback('impact', 'soft');
   };
 
   return (

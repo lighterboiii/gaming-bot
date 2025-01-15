@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
 import { getUserId } from "utils/userConfig";
@@ -7,6 +6,7 @@ import { getUserId } from "utils/userConfig";
 import { sellLavkaRequest } from "../../../api/shopApi";
 import { addItemToLavka } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import { ISellLavkaRes } from "../../../utils/types/responseTypes";
 import { CombinedItemData } from "../../../utils/types/shopTypes";
 import Button from "../../ui/Button/Button";
@@ -38,15 +38,15 @@ const SellForm: FC<IProps> = ({ item, setMessageShown, setMessage, onClose }) =>
         setMessageShown(true);
         switch (res.message) {
           case "already":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+            triggerHapticFeedback('notification', 'error');
             setMessage(`${translation?.item_on_display}`);
             break;
           case "error":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error', });
+            triggerHapticFeedback('notification', 'error');
             setMessage(`Item sale error`);
             break;
           case "ok":
-            postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success', });
+            triggerHapticFeedback('notification', 'success');
             setMessage(`${translation?.listed_in_marketplace}`);
             dispatch(addItemToLavka(itemWithPrice));
             break;
