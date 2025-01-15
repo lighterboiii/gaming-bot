@@ -57,7 +57,7 @@ export const Monetka: FC = () => {
   const [previousCoin, setPreviousCoin] = useState<string | null>(null);
   // eslint-disable-next-line max-len
   const [coinAnimationState, setCoinAnimationState] = useState<'default' | 'redTint' | 'disappear' | 'appear'>('default');
-
+  console.log(translation);
   // Подключение к WebSocket
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
@@ -193,7 +193,7 @@ export const Monetka: FC = () => {
                     setTimeout(() => {
                       setFlashImage(null);
                       setCoinStates(newStates);
-                      
+
                       if (allStarsFilled) {
                         handleCollectWinnings();
                       }
@@ -222,16 +222,16 @@ export const Monetka: FC = () => {
 
                     setTimeout(() => {
                       setFlashImage(null);
-                      
+
                       setCoinAnimationState('redTint');
-                      
+
                       setTimeout(() => {
                         setCoinAnimationState('disappear');
-                        
+
                         setTimeout(() => {
                           setCoinStates(newStates);
                           setCoinAnimationState('appear');
-                          
+
                           setTimeout(() => {
                             setCoinAnimationState('default');
                           }, 700);
@@ -253,11 +253,13 @@ export const Monetka: FC = () => {
         }
         break;
       case 'room_info':
-        setGameState((prev: any) => ({
-          ...prev,
-          loading: false,
-          data: res,
-        }));
+        setTimeout(() => {
+          setGameState((prev: any) => ({
+            ...prev,
+            loading: false,
+            data: res,
+          }));
+        }, 1500);
         updateBalance(res);
         break;
       case 'add_player':
@@ -313,7 +315,6 @@ export const Monetka: FC = () => {
     }
   };
 
-  // Возвращаем старую версию handleButtonClick
   const handleButtonClick = async (type: 'blue' | 'green') => {
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
@@ -329,7 +330,6 @@ export const Monetka: FC = () => {
       connect();
     }
 
-    // Используем Promise для гарантированного выполнения последовательности
     const clickSequence = async () => {
       try {
         setButtonState('down');
@@ -341,7 +341,6 @@ export const Monetka: FC = () => {
           choice: choice
         });
 
-        // Гарантируем, что кнопка вернется в исходное состояние
         setTimeout(() => {
           setButtonState('default');
         }, 150);
@@ -351,7 +350,6 @@ export const Monetka: FC = () => {
       }
     };
 
-    // Запускаем последовательность с небольшой задержкой
     setTimeout(() => {
       clickSequence();
     }, 150);
@@ -360,11 +358,11 @@ export const Monetka: FC = () => {
   // Сбор выигрыша
   const handleCollectWinnings = () => {
     setCoinAnimationState('disappear');
-    
+
     setTimeout(() => {
       setCoinStates([coinDefault, coinDefault, coinDefault, coinDefault, coinDefault]);
       setCoinAnimationState('appear');
-      
+
       setTimeout(() => {
         setCoinAnimationState('default');
       }, 700);
@@ -377,23 +375,23 @@ export const Monetka: FC = () => {
       choice: 3
     });
   };
-
+// получить баланс пользователя
   const getCurrentPlayerBalance = useCallback(() => {
     if (!gameState.data?.players) return 0;
-    
+
     const currentPlayer = gameState.data.players.find((player: any) => Number(player.userid) === Number(userId));
 
     if (!currentPlayer) return 0;
 
-    return gameState.data?.bet_type === "3" 
+    return gameState.data?.bet_type === "3"
       ? Number(currentPlayer.tokens)
       : Number(currentPlayer.money);
   }, [gameState.data?.players, gameState.data?.bet_type, userId]);
-
+// блок использования устройства не в портретном режиме
   if (!isPortrait) {
     return <Warning />;
   }
-
+// показ лоадера
   if (gameState.loading) {
     return <Loader />;
   }
@@ -419,14 +417,13 @@ export const Monetka: FC = () => {
             key={index}
             src={coinState}
             alt={`coin ${index}`}
-            className={`${styles.monetka__defaultCoin} ${
-              coinAnimationState !== 'default' && coinState === coinDefault
+            className={`${styles.monetka__defaultCoin} ${coinAnimationState !== 'default' && coinState === coinDefault
                 ? styles[`monetka__defaultCoin_${coinAnimationState}`]
                 : ''
-            }`}
+              }`}
             style={{
-              animationDelay: coinAnimationState === 'appear' 
-                ? `${index * 0.15}s` 
+              animationDelay: coinAnimationState === 'appear'
+                ? `${index * 0.15}s`
                 : '0s'
             }}
           />
@@ -459,7 +456,7 @@ export const Monetka: FC = () => {
               ? MONEY_EMOJI
               : SHIELD_EMOJI
             }
-            {nextXValue}
+              {nextXValue}
             </p>
           </div>
         )}
@@ -493,7 +490,7 @@ export const Monetka: FC = () => {
           onClick={() => { }}
         >
           <span className={styles.monetka__controlButton__label}>
-            Ставка:
+            {translation.game_bet_text}:
           </span>
           <span className={styles.monetka__controlButton__content}>
             <span className={styles.monetka__controlButton__emoji}>
@@ -518,7 +515,7 @@ export const Monetka: FC = () => {
           onClick={handleCollectWinnings}
         >
           <span className={styles.monetka__controlButton__label}>
-            Забрать:
+            {translation.claim}:
           </span>
           <span className={styles.monetka__controlButton__content}>
             <span className={styles.monetka__controlButton__emoji}>
@@ -535,7 +532,7 @@ export const Monetka: FC = () => {
       </div>
       <div className={styles.monetka__balance}>
         <p className={styles.monetka__balanceText}>
-          Баланс: {getCurrentPlayerBalance().toFixed(2)}
+          {translation.webapp_balance}: {getCurrentPlayerBalance().toFixed(2)}
         </p>
       </div>
     </div>
