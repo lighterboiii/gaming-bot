@@ -29,7 +29,7 @@ export const NotFoundPage: FC = () => {
         <SmallButton
           handleClick={() => navigate(-1)}
           text={translation?.error404}
-          secondaryText="Перейти на главную"
+          secondaryText={translation?.error404_second}
           isWhiteBackground
           chevronPosition="left"
         />

@@ -27,7 +27,7 @@ import { useAppSelector } from '../../services/reduxHooks';
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { formatNumber } from '../../utils/additionalFunctions';
 import { indexUrl } from '../../utils/routes';
-import { IMonetkaGameState, ButtonState, CoinAnimationState, IPlayer } from '../../utils/types/gameTypes';
+import { IMonetkaGameState, ButtonState, CoinAnimationState } from '../../utils/types/gameTypes';
 import { getUserId } from '../../utils/userConfig';
 
 import styles from './Monetka.module.scss';
