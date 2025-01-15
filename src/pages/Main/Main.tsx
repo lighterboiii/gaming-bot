@@ -3,11 +3,9 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Loader from "components/Loader/Loader";
 import { getUserId } from "utils/userConfig";
 
 import { getAppData, getLuckInfo } from "../../api/mainApi";
-// import music_loop from "../../audio/music_loop.mp3";
 import AdvertisementBanner from '../../components/Main/AdvertisementBanner/AdvertisementBanner';
 import BannerData from "../../components/Main/BannerData/BannerData";
 import DailyBonus from "../../components/Main/Bonus/Bonus";
@@ -36,7 +34,6 @@ export const Main: FC = () => {
   const userId = getUserId();
   const dailyBonusData = useAppSelector(store => store.app.bonus);
   const dispatch = useAppDispatch();
-  // const [loading, setLoading] = useState(false);
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);
   const shopImageUrl = useAppSelector(store => store.app.shopImage);
@@ -48,8 +45,6 @@ export const Main: FC = () => {
   const [showWheelOverlay, setShowWheelOverlay] = useState(false);
   const [luckData, setLuckData] = useState<IFortuneData | null>(null);
   const isPortrait = useOrientation();
-  // const [audio] = useState(new Audio(music_loop));
-  // const [isPlaying, setIsPlaying] = useState(false);
 
   const handleBannerClick = (bannerData: IBannerData) => {
     setCurrentBanner(bannerData);
@@ -99,15 +94,11 @@ export const Main: FC = () => {
   }, [dailyBonusData]);
 
   useEffect(() => {
-    // setLoading(true);
     const fetchUserData = () => {
       getAppData(userId)
         .then((res) => {
           dispatch(setUserData(res.user_info));
           dispatch(setUserPhoto(res.avatar));
-          // setTimeout(() => {
-          //   setLoading(false);
-          // }, 1500);
         })
         .catch((error) => {
           console.error('Get user data error:', error);
@@ -117,35 +108,11 @@ export const Main: FC = () => {
     fetchUserData();
   }, []);
 
-  // useEffect(() => {
-  //   audio.loop = true;
-    
-  //   const playAudio = async () => {
-  //     try {
-  //       await audio.play();
-  //       setIsPlaying(true);
-  //     } catch (error) {
-  //       console.error('Audio error:', error);
-  //     }
-  //   };
-
-  //   playAudio();
-
-  //   return () => {
-  //     audio.pause();
-  //     audio.currentTime = 0;
-  //   };
-  // }, [audio]);
-
   if (!isPortrait) {
     return (
       <Warning />
     );
   }
-
-  // if (loading) {
-  //   return <Loader />;
-  // }
 
   return (
     <div className={styles.main}>

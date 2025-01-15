@@ -24,6 +24,7 @@ import { getOpenedRooms, setUserData, setUserPhoto } from "../../services/appSli
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { sortRooms } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
+import { triggerHapticFeedback } from "../../utils/hapticConfig";
 import { indexUrl } from "../../utils/routes";
 import { IGameCardData } from "../../utils/types/gameTypes";
 
@@ -222,7 +223,7 @@ export const OpenedRooms: FC = () => {
 
       default:
         sortedRooms = rooms;
-      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+        triggerHapticFeedback('impact', 'soft');
     }
   };
 
@@ -235,7 +236,7 @@ export const OpenedRooms: FC = () => {
   };
 
   const handleCreateClick = () => {
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    triggerHapticFeedback('impact', 'soft');
     navigate('/create-room');
   };
 

@@ -1,4 +1,3 @@
-import { postEvent } from "@tma.js/sdk";
 import { FC, useRef } from "react";
 import { Link } from "react-router-dom";
 
@@ -10,6 +9,7 @@ import WalletIcon from "../../../icons/Wallet/WalletIcon";
 import { useAppSelector } from "../../../services/reduxHooks";
 import { formatNumber } from "../../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import CircleButton from "../../ui/CircleButton/CircleButton";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
@@ -28,7 +28,7 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
 
   const handleClickBalance = () => {
     tg.openTelegramLink(balanceLink);
-    postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'warning', });
+    triggerHapticFeedback('notification', 'error');
     tg.close();
   };
 

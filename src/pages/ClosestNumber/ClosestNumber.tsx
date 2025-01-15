@@ -28,6 +28,7 @@ import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
 import { formatNumber } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
+import { triggerHapticFeedback } from "../../utils/hapticConfig";
 import { indexUrl } from "../../utils/routes";
 
 import styles from './ClosestNumber.module.scss';
@@ -190,7 +191,7 @@ export const ClosestNumber: FC = () => {
             setRoomValue(Number(res?.whoiswin.room_value));
             setWinnerId(Number(res?.whoiswin.winner));
             setWinSum(res?.whoiswin.winner_value);
-            // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'heavy' });
+            triggerHapticFeedback('impact', 'heavy');
           }
           
           setTimeout(() => {
@@ -245,7 +246,7 @@ export const ClosestNumber: FC = () => {
       } else {
         setInputError(true);
       }
-      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+      triggerHapticFeedback('impact', 'soft');
       return newValue;
     });
   };
@@ -261,7 +262,7 @@ export const ClosestNumber: FC = () => {
       } else {
         setInputError(true);
       }
-      // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+      triggerHapticFeedback('impact', 'light');
       return newValue;
     });
   };
@@ -300,7 +301,7 @@ export const ClosestNumber: FC = () => {
     if (data?.players?.length === 1) {
       setInputValue('');
       setPlaceholder(translation?.waiting4players);
-      // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+      triggerHapticFeedback('notification', 'error');
       setTimeout(() => {
         setPlaceholder(translation?.your_number_but);
       }, 2000)
@@ -319,7 +320,7 @@ export const ClosestNumber: FC = () => {
           const currentUrl = location.pathname;
           currentUrl !== indexUrl && navigate(indexUrl);
         }
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+        triggerHapticFeedback('notification', 'error');
       }
     } else if (data?.bet_type === "3") {
       if (player?.tokens <= data?.bet) {
@@ -328,7 +329,7 @@ export const ClosestNumber: FC = () => {
           room_id: roomId,
           type: 'kickplayer'
         });
-        // postEvent('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'error' });
+        triggerHapticFeedback('notification', 'error');
       }
     }
     if (isChoiceLocked) return;
@@ -367,13 +368,13 @@ export const ClosestNumber: FC = () => {
   // обработчик клика на иконку эмодзи websocket
   const handleClickEmoji = () => {
     setShowOverlay(true);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'light' });
+    triggerHapticFeedback('impact', 'light');
     showEmojiOverlay === true ? setShowEmojiOverlay(false) : setShowEmojiOverlay(true);
   };
   // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '2');
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+    triggerHapticFeedback('impact', 'soft');
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)

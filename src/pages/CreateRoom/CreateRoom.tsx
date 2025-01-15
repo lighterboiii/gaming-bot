@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-lone-blocks */
-import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +13,7 @@ import Overlay from "../../components/Overlay/Overlay";
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import { useAppSelector } from "../../services/reduxHooks";
+import { triggerHapticFeedback } from "../../utils/hapticConfig";
 import { indexUrl } from "../../utils/routes";
 import { IGameCardData } from "../../utils/types/gameTypes";
 
@@ -59,7 +59,7 @@ export const CreateRoom: FC = () => {
   const handleGameClick = (game: any) => {
     setGameData(game);
     setSettingsOverlay(!settingsOverlay);
-    // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft', });
+    triggerHapticFeedback('impact', 'soft');
   };
 
   if (!isPortrait) {
