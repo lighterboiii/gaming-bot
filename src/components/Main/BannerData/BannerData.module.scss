@@ -3,107 +3,76 @@
 
 .banner {
   @include children-layout();
-  padding-bottom: 16px;
+  padding: $space-16 0;
   justify-content: space-between;
+
+  &__content {
+    @include size(100%, auto);
+    @include flex(column, flex-start, center, $space-16);
+    padding-top: $space-16;
+  }
+
+  &__header {
+    @include size(100%, unset);
+    @include flex(column, center, center, $space-8);
+  }
 
   &__pic {
     @include size(100%, 120px);
     @include flex(column, center, center);
     background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
-    background-position: left;
     position: relative;
     border-radius: $radius-15;
+    overflow: hidden;
     
     @media screen and (min-height: 691px) {
       height: 136px;
     }
   
     @media screen and (max-width: 430px) {
-      background-size: contain;
-      // height: 96px;
-    }
-  
-    @media screen and (min-width: 381px) and (max-width: 430px) {
+      height: 106px;
       background-size: 100% auto;
     }
-  
-    @media screen and (max-width: 379px) {
-      background-size: 100%;
-    }
-  }
-
-  &__header {
-    @include size(100%, unset);
-    @include flex(column, center, center);
   }
 
   &__info {
-    @include flex(column, space-between, flex-start);
-    @include ellipsis();
-    position: relative;
     @include size(100%, 100%);
-
-    @media screen and (max-width: 379px) {
-      @include size(100%, 90%);
-    }
+    @include flex(column, space-between, flex-start);
+    position: relative;
   }
 
   &__picHeader {
     @include indents();
     @include size(60%, auto);
     @include min-size(60%, 28px);
-    @include position(absolute, $left: 16px, $top: 20%);
+    @include position(absolute, $left: $space-16, $top: 20%);
     font-family: 'Rubik', sans-serif;
     font-weight: 900;
-    text-align: left;
-    text-wrap: wrap;
-    font-size: 13px;
-    line-height: 1;
-
-    @media screen and (min-width: 420px) {
-      @include position(absolute, $left: 8%, $top: 20%);
-    }
-
-    @media screen and (max-width: 379px) {
-      font-size: 11px;
-      top: 25%
-    }
-  }
-
-  &__title {
-    @include indents(18px 16px 0, 0);
-    font-weight: 700;
-    color: $main-color;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.2;
-    text-align: center;
+    text-wrap: wrap;
+    text-align: left;
     
     @media screen and (max-width: 379px) {
-      font-size: 14px;
+      font-size: 12px;
+      top: 25%;
     }
-  }
-
-  &__content {
-    @include size(100%, auto);
-    @include flex(column, center, center, 10px);
   }
 
   &__infoText {
     @include indents();
-    @include position(absolute, $left: 16px, $bottom: 10%);
+    @include position(absolute, $left: $space-16, $bottom: 10%);
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
-    text-align: left;
-    text-wrap: nowrap;
     font-size: 12px;
-
-    @media screen and (min-width: 420px) {
-      @include position(absolute, $left: 8%, $bottom: 8%);
-    }
+    line-height: 1.2;
+    text-wrap: nowrap;
+    text-align: left;
     
     @media screen and (max-width: 379px) {
-      font-size: 10px;
+      font-size: 11px;
       bottom: 12%;
     }
 
@@ -112,18 +81,30 @@
     }
   }
 
+  &__title {
+    @include indents(0);
+    font-weight: 700;
+    color: $main-color;
+    font-size: 16px;
+    line-height: 1.2;
+    text-align: center;
+    padding: 0 $space-16;
+    
+    @media screen and (max-width: 379px) {
+      font-size: 14px;
+    }
+  }
+
   &__text {
-    @include size(calc(100% - 32px), unset);
-    @include indents();
+    @include size(100%, auto);
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
     font-size: 14px;
     text-align: center;
-    text-overflow: ellipsis;
-    white-space: wrap;
-    overflow: hidden;
     line-height: 1.2;
     color: $main-color;
+    word-wrap: break-word;
+    padding: 0 $space-16;
 
     @media screen and (max-width: 379px) {
       font-size: 12px;
@@ -131,7 +112,8 @@
   }
 
   &__button {
-    @include size(calc(100% - 32px), 40px);
+    @include size(calc(100% - #{$space-32}), 40px);
+    margin: 0 $space-16;
 
     @media screen and (max-width: 379px) {
       height: 32px;

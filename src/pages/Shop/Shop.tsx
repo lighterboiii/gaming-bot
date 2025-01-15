@@ -110,7 +110,7 @@ export const Shop: FC = () => {
   const handleClickLavka = async () => {
     setLoading(true);
     triggerHapticFeedback('impact', 'soft');
-    setActiveButton(`${translation?.marketplace}`);
+     setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
     setGoods(updatedLavka.lavka);

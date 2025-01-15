@@ -3,24 +3,20 @@
 
 .banner {
   @include position(relative);
-  @include size(100%, 106px);
+  @include size(100%, 120px);
   border-radius: $radius-15;
   background-size: cover;
-  background-repeat: no-repeat;
   background-position: center;
-  box-sizing: border-box;
-  transition: background-image .7s ease-in-out;
-  background-size: 100%;
+  background-repeat: no-repeat;
+  transition: background-image 0.3s ease-in-out;
+  overflow: hidden;
 
   @media screen and (min-height: 691px) {
-    height: 124px;
+    height: 136px;
   }
 
   @media screen and (max-width: 430px) {
-    background-size: contain;
-  }
-
-  @media screen and (min-width: 381px) and (max-width: 430px) {
+    height: 106px;
     background-size: 100% auto;
   }
 
@@ -28,128 +24,117 @@
     @include size(100%, 100%);
     @include position(absolute, $top: 0, $left: 0);
     cursor: pointer;
-    overflow: hidden;
     z-index: 1;
   }
 
-  &__sliderButton {
-    @include size(48px, 100%);
-    @include button-style-reset();
-    align-self: flex-end;
-    cursor: pointer;
-    z-index: 3;
+  &__info {
+    @include size(100%, 100%);
+    @include flex(column, space-between, flex-start);
+    position: relative;
   }
 
-  &__leftButton {
-    @include size(20px, 20px);
-    @include position(absolute, $left: 8px, $top: 55%);
-    @include flex(row, center, center);
-    @include indents(8px, 0);
-    transform: translateY(-50%);
-    background-color: $black-color;
-    border-radius: $radius-round;
-    z-index: 2;
-
+  &__picHeader {
+    @include indents();
+    @include size(70%, auto);
+    @include min-size(60%, 28px);
+    @include position(absolute, $left: $space-16, $top: 20%);
+    font-family: 'Rubik', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 1.2;
+    text-wrap: wrap;
+    text-align: left;
+    
     @media screen and (max-width: 379px) {
-      left: 4px;
-    }  
+      font-size: 12px;
+      top: 25%;
+    }
   }
 
-  &__rightButton {
-    @include size(20px, 20px);
-    @include position(absolute, $right: 8px, $top: 55%);
-    @include flex(row, center, center);
-    @include indents(8px, 0);
-    transform: translateY(-50%);
-    background-color: $black-color;
-    border-radius: $radius-round;
-    z-index: 2;
-
+  &__text {
+    @include indents();
+    @include position(absolute, $left: $space-16, $bottom: 10%);
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.2;
+    text-wrap: nowrap;
+    text-align: left;
+    
     @media screen and (max-width: 379px) {
-      right: 4px;
-    }  
-  }
-
-  &__indicators {
-    @include indents(4px 6px, 0);
-    @include flex(row, $gap: 2px);
-    @include position(absolute, $bottom: 8%, $left: 50%);
-    transform: translate(-50%);
-    background-color: $black-color;
-    border-radius: 40px;
-    z-index: 2;
-
-    @media screen and (max-width: 379px) {
+      font-size: 11px;
       bottom: 12%;
     }
 
     @media screen and (max-width: 338px) {
       bottom: 15%;
     }
+  }
+
+  &__controls {
+    @include position(absolute, $bottom: $space-8);
+    @include size(100%, auto);
+    @include flex(row, center, center);
+    z-index: 2;
+  }
+
+  &__indicators {
+    @include flex(row, $gap: 2px);
+    @include indents($space-4 $space-6);
+    background-color: $black-color;
+    border-radius: $radius-40;
   }
 
   &__indicator {
     @include indents();
     @include size(6px, 6px);
     border: none;
-    border-radius: 100%;
+    border-radius: $radius-round;
     background-color: $main-color;
     cursor: pointer;
-    z-index: 2;
+    transition: background-color 0.2s ease;
 
     @media screen and (max-width: 379px) {
       @include size(5px, 5px);
     }
+
+    &:hover {
+      background-color: rgba($secondary-color, 0.8);
+    }
   }
 
-  &__info {
-    @include size(100%, 100%);
-    @include flex(column, space-between, flex-start, 40px);
-    @include ellipsis();
-  }
+  &__sliderButton {
+    @include button-style-reset();
+    @include size(28px, 28px);
+    @include flex(row, center, center);
+    @include position(absolute);
+    background-color: $black-color;
+    border-radius: $radius-round;
+    transition: transform 0.2s ease;
+    z-index: 2;
 
-  &__picHeader {
-    @include indents();
-    @include size(60%, auto);
-    @include min-size(60%, 28px);
-    @include position(absolute, $left: 8%, $top: 20%);
-    font-family: 'Rubik', sans-serif;
-    font-weight: 900;
-    text-align: left;
-    text-wrap: wrap;
-    font-size: 13px;
-    line-height: 1;
+    &--left {
+      left: $space-8;
+      top: 50%;
+      transform: translateY(-50%);
 
-    @media screen and (min-width: 420px) {
-      @include position(absolute, $left: 8%, $top: 20%);
+      &:hover {
+        transform: translateY(-50%) scale(1.1);
+      }
+    }
+
+    &--right {
+      right: $space-8;
+      top: 50%;
+      transform: translateY(-50%);
+
+      &:hover {
+        transform: translateY(-50%) scale(1.1);
+      }
     }
 
     @media screen and (max-width: 379px) {
-      font-size: 11px;
-      top: 25%
-    }
-  }
-
-  &__text {
-    @include indents();
-    @include position(absolute, $left: 8%, $bottom: 10%);
-    font-family: 'Rubik', sans-serif;
-    font-weight: 400;
-    text-align: left;
-    text-wrap: nowrap;
-    font-size: 12px;
-
-    @media screen and (min-width: 420px) {
-      @include position(absolute, $left: 8%, $bottom: 8%);
-    }
-    
-    @media screen and (max-width: 379px) {
-      font-size: 10px;
-      bottom: 12%;
-    }
-
-    @media screen and (max-width: 338px) {
-      bottom: 15%;
+      @include size(24px, 24px);
     }
   }
 }

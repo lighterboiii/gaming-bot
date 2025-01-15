@@ -11,10 +11,9 @@ interface IProps {
 }
 
 const BannerData: FC<IProps> = ({ data, closeOverlay }) => {
-
   return (
     data && (
-      <div className={styles.banner}>
+      <div className={styles.banner} role="dialog" aria-label="Banner Details">
         <div className={styles.banner__content}>
           <div className={styles.banner__header}>
             <h3 className={styles.banner__title}>
@@ -22,15 +21,17 @@ const BannerData: FC<IProps> = ({ data, closeOverlay }) => {
             </h3>
             <div
               className={styles.banner__pic}
-              style={{ backgroundImage: `url(${data.pic})`, wordWrap: "break-word" }}
+              style={{ backgroundImage: `url(${data.pic})` }}
+              role="img"
+              aria-label={data.pic_header}
             >
               <div className={styles.banner__info}>
-                <h3
+                <h4
                   className={styles.banner__picHeader}
                   style={{ color: `${data.pic_text_color}` }}
                 >
                   {data.pic_header}
-                </h3>
+                </h4>
                 <p
                   className={styles.banner__infoText}
                   style={{ color: `${data.pic_text_color}` }}
@@ -46,8 +47,9 @@ const BannerData: FC<IProps> = ({ data, closeOverlay }) => {
         </div>
         <div className={styles.banner__button}>
           <Button
-            text={data?.button_text}
+            text={data.button_text}
             handleClick={closeOverlay}
+            aria-label="Close banner details"
           />
         </div>
       </div>
