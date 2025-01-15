@@ -76,7 +76,7 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
         </div>
 
         <button
-          className={`${styles.banner__sliderButton} ${styles['banner__sliderButton--left']}`}
+          className={styles.banner__leftButton}
           onClick={handlePrevSlide}
           aria-label="Previous banner"
         >
@@ -98,7 +98,7 @@ const AdvertisementBanner: FC<IProps> = ({ bannersData, onBannerClick }) => {
         />
 
         <button
-          className={`${styles.banner__sliderButton} ${styles['banner__sliderButton--right']}`}
+          className={styles.banner__rightButton}
           onClick={handleNextSlide}
           aria-label="Next banner"
         >

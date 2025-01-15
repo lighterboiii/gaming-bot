@@ -104,37 +104,41 @@
   }
 
   &__sliderButton {
+    @include size(48px, 100%);
+    align-self: flex-end;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  &__leftButton {
     @include button-style-reset();
-    @include size(28px, 28px);
+    @include size(20px, 20px);
+    @include position(absolute, $left: 8px, $top: 55%);
     @include flex(row, center, center);
-    @include position(absolute);
+    @include indents(8px, 0);
+    transform: translateY(-50%);
     background-color: $black-color;
     border-radius: $radius-round;
-    transition: transform 0.2s ease;
     z-index: 2;
 
-    &--left {
-      left: $space-8;
-      top: 50%;
-      transform: translateY(-50%);
-
-      &:hover {
-        transform: translateY(-50%) scale(1.1);
-      }
+    @media screen and (max-width: 379px) {
+      left: 4px;
     }
+  }
 
-    &--right {
-      right: $space-8;
-      top: 50%;
-      transform: translateY(-50%);
-
-      &:hover {
-        transform: translateY(-50%) scale(1.1);
-      }
-    }
+  &__rightButton {
+    @include button-style-reset();
+    @include size(20px, 20px);
+    @include position(absolute, $right: 8px, $top: 55%);
+    @include flex(row, center, center);
+    @include indents(8px, 0);
+    transform: translateY(-50%);
+    background-color: $black-color;
+    border-radius: $radius-round;
+    z-index: 2;
 
     @media screen and (max-width: 379px) {
-      @include size(24px, 24px);
+      right: 4px;
     }
   }
 }

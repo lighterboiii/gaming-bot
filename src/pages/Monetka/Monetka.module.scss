@@ -405,6 +405,6 @@
 
 @keyframes redTintEffect {
   0%, 100% {
-    filter: brightness(0.8) sepia(1) saturate(10000%) hue-rotate(320deg);
+    filter: brightness(0.35) sepia(1) saturate(3000%) hue-rotate(320deg);
   }
 }
