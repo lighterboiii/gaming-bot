@@ -161,3 +161,32 @@ export interface ILogOverlayProps {
   users: ILudkaUser[] | "none";
   shouldReset?: boolean;
 }
+
+export interface IGameAnswerInfo {
+  message: 'coin_good' | 'coin_bad' | 'coin_withdrawn';
+  player_id: number;
+  room_id: number;
+  next_x: string;
+  animation: string;
+  animation_front: string;
+  mini_star_1: string;
+  mini_star_2: string;
+  mini_star_3: string;
+  mini_star_4: string;
+  mini_star_5: string;
+  win_animation: string;
+}
+
+export interface IMonetkaGameData extends IGameData {
+  game_answer_info: IGameAnswerInfo;
+  type: string;
+}
+
+export interface IMonetkaGameState {
+  data: IMonetkaGameData | null;
+  winner: any;
+  loading: boolean;
+}
+
+export type ButtonState = 'default' | 'hover' | 'down';
+export type CoinAnimationState = 'default' | 'redTint' | 'disappear' | 'appear';

@@ -27,16 +27,30 @@ import { useAppSelector } from '../../services/reduxHooks';
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { formatNumber } from '../../utils/additionalFunctions';
 import { indexUrl } from '../../utils/routes';
+import { IMonetkaGameState, ButtonState, CoinAnimationState, IPlayer } from '../../utils/types/gameTypes';
 import { getUserId } from '../../utils/userConfig';
 
 import styles from './Monetka.module.scss';
+
+// Константы для таймеров анимаций
+const ANIMATION_DELAYS = {
+  BUTTON: 150,
+  COIN: {
+    DISAPPEAR: 400,
+    APPEAR: 700,
+    RED_TINT: 250,
+    FLASH: 800,
+    SEQUENCE: 2000
+  },
+  ROOM_INFO: 1500
+} as const;
 
 export const Monetka: FC = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
   const userId = getUserId();
   const isPortrait = useOrientation();
-  const [gameState, setGameState] = useState<any>({
+  const [gameState, setGameState] = useState<IMonetkaGameState>({
     data: null,
     winner: null,
     loading: false
@@ -51,13 +65,12 @@ export const Monetka: FC = () => {
   const [flashImage, setFlashImage] = useState<string | null>(null);
   const [nextXValue, setNextXValue] = useState<string | null>(null);
   const [balance, setBalance] = useState<number>(0);
-  const [blueButtonState, setBlueButtonState] = useState('default');
-  const [greenButtonState, setGreenButtonState] = useState('default');
+  const [blueButtonState, setBlueButtonState] = useState<ButtonState>('default');
+  const [greenButtonState, setGreenButtonState] = useState<ButtonState>('default');
   const [activeButton, setActiveButton] = useState<'bet' | 'collect'>('bet');
   const [previousCoin, setPreviousCoin] = useState<string | null>(null);
-  // eslint-disable-next-line max-len
-  const [coinAnimationState, setCoinAnimationState] = useState<'default' | 'redTint' | 'disappear' | 'appear'>('default');
-  console.log(translation);
+  const [coinAnimationState, setCoinAnimationState] = useState<CoinAnimationState>('default');
+  
   // Подключение к WebSocket
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
@@ -197,9 +210,9 @@ export const Monetka: FC = () => {
                       if (allStarsFilled) {
                         handleCollectWinnings();
                       }
-                    }, 800);
+                    }, ANIMATION_DELAYS.COIN.FLASH);
                   }
-                }, 2000);
+                }, ANIMATION_DELAYS.COIN.SEQUENCE);
               }
               break;
             case 'coin_bad':
@@ -234,12 +247,12 @@ export const Monetka: FC = () => {
 
                           setTimeout(() => {
                             setCoinAnimationState('default');
-                          }, 700);
-                        }, 400);
-                      }, 250);
-                    }, 800);
+                          }, ANIMATION_DELAYS.COIN.APPEAR);
+                        }, ANIMATION_DELAYS.COIN.DISAPPEAR);
+                      }, ANIMATION_DELAYS.COIN.RED_TINT);
+                    }, ANIMATION_DELAYS.COIN.FLASH);
                   }
-                }, 2000);
+                }, ANIMATION_DELAYS.COIN.SEQUENCE);
               }
               break;
           }
@@ -259,7 +272,7 @@ export const Monetka: FC = () => {
             loading: false,
             data: res,
           }));
-        }, 1500);
+        }, ANIMATION_DELAYS.ROOM_INFO);
         updateBalance(res);
         break;
       case 'add_player':
@@ -343,7 +356,7 @@ export const Monetka: FC = () => {
 
         setTimeout(() => {
           setButtonState('default');
-        }, 150);
+        }, ANIMATION_DELAYS.BUTTON);
       } catch (error) {
         console.error('Error in button click:', error);
         setButtonState('default');
@@ -352,7 +365,7 @@ export const Monetka: FC = () => {
 
     setTimeout(() => {
       clickSequence();
-    }, 150);
+    }, ANIMATION_DELAYS.BUTTON);
   };
 
   // Сбор выигрыша
@@ -365,8 +378,8 @@ export const Monetka: FC = () => {
 
       setTimeout(() => {
         setCoinAnimationState('default');
-      }, 700);
-    }, 400);
+      }, ANIMATION_DELAYS.COIN.APPEAR);
+    }, ANIMATION_DELAYS.COIN.DISAPPEAR);
 
     sendMessage({
       type: 'choice',
