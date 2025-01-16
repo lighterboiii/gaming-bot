@@ -47,7 +47,7 @@ export const OpenedRooms: FC = () => {
   const [currencyClickCount, setCurrencyClickCount] = useState(0);
   const [betClickCount, setBetClickCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { sendMessage, wsMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const isPortrait = useOrientation();
   const { tg } = useTelegram();
@@ -79,17 +79,19 @@ export const OpenedRooms: FC = () => {
   }, [dispatch, userId]);
 
   useEffect(() => {
-    setLoading(true);
-    sendMessage({
-      type: 'get_rooms',
-      user_id: userId,
-    });
-
+    clearMessages();
     setTimeout(() => {
-      setLoading(false);
-    }, 1000)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      setLoading(true);
+      sendMessage({
+        type: 'get_rooms',
+        user_id: userId,
+      });
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000)
+    }, 0)
+  }, [clearMessages, sendMessage, userId]);
 
   useEffect(() => {
     const handleWebSocketMessage = (message: string) => {
