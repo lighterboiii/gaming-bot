@@ -115,35 +115,40 @@ export const Main: FC = () => {
   }
 
   return (
-    <div className={styles.main}>
-      <div className={styles.main__header}>
-        <img src={gowinLogo}
-          alt="main_logo"
-          className={styles.main__logo} />
+    <main className={styles.main}>
+      <header className={styles.main__header}>
+        <img 
+          src={gowinLogo}
+          alt="GoWin Logo"
+          className={styles.main__logo}
+          loading="eager"
+        />
         <MainUserInfo
           toggleOverlay={toggleTasksOverlay}
           setWheelOverlayOpen={openWheelOfLuckOverlay}
         />
-      </div>
-      <div className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
+      </header>
+      
+      <section className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
         <div className={styles.main__addDiv}>
           {banners && banners?.length > 0 && (
-            <AdvertisementBanner bannersData={banners}
-              onBannerClick={handleBannerClick} />
+            <AdvertisementBanner 
+              bannersData={banners}
+              onBannerClick={handleBannerClick} 
+            />
           )}
         </div>
-        <div className={styles.main__centralButtonsContainer}>
+
+        <nav className={styles.main__centralButtonsContainer}>
           <div className={styles.main__smallButtonsContainer}>
             <SmallButton
-              handleClick={() => toggleRefOverlay()}
+              handleClick={toggleRefOverlay}
               text={
                 <>
-                  <FriendsIcon width={12}
-                    height={12} />
-                  <span>
-                    {translation?.menu_friends}
-                  </span>
-                </>}
+                  <FriendsIcon width={12} height={12} />
+                  <span>{translation?.menu_friends}</span>
+                </>
+              }
               secondaryText={translation?.menu_invite_earn}
               chevronPosition="right"
             />
@@ -151,28 +156,21 @@ export const Main: FC = () => {
               handleClick={() => navigate('/leaderboard')}
               text={
                 <>
-                  <LeaderBoardIcon width={12}
-                    height={12} />
-                  <span>
-                    {translation?.menu_weekly_top}
-                  </span>
+                  <LeaderBoardIcon width={12} height={12} />
+                  <span>{translation?.menu_weekly_top}</span>
                 </>
               }
               secondaryText={translation?.become_weekly_leader}
               chevronPosition="right"
             />
           </div>
+
           <BigButton
             to="/rooms"
             text={
               <>
-                <PlayIcon
-                  width={16}
-                  height={16}
-                />
-                <span>
-                  {translation?.menu_play}
-                </span>
+                <PlayIcon width={16} height={16} />
+                <span>{translation?.menu_play}</span>
               </>
             }
             secondaryText={translation?.main_menu_play_desk}
@@ -181,69 +179,74 @@ export const Main: FC = () => {
             circleIconColor="#FFF"
             shadow
           />
-        </div>
+        </nav>
+
         <div className={styles.main__addDiv}>
           <ShopLink shopImageUrl={shopImageUrl} />
         </div>
-      </div>
+      </section>
+
+      {/* Overlay Components */}
       <Overlay
-        children={
-          <Friends />
-        }
         show={showReferralOverlay}
         onClose={toggleRefOverlay}
         closeButton
         buttonColor="#FFF"
         crossColor="#ac1a44"
-      />
+      >
+        <Friends />
+      </Overlay>
+
       <Overlay
-        buttonColor="#FFF"
-        crossColor="#ac1a44"
-        closeButton
-        children={
-          <BannerData
-            data={currentBanner}
-            closeOverlay={() => setShowBannerOverlay(false)}
-          />
-        }
         show={showBannerOverlay}
         onClose={toggleBannerOverlay}
-      />
-      <Overlay
         buttonColor="#FFF"
         crossColor="#ac1a44"
         closeButton
-        children={
-          <Tasks />
-        }
+      >
+        <BannerData
+          data={currentBanner}
+          closeOverlay={() => setShowBannerOverlay(false)}
+        />
+      </Overlay>
+
+      <Overlay
         show={showTasksOverlay}
         onClose={toggleTasksOverlay}
-      />
-      {(dailyBonusData && dailyBonusData !== "no") &&
+        buttonColor="#FFF"
+        crossColor="#ac1a44"
+        closeButton
+      >
+        <Tasks />
+      </Overlay>
+
+      {dailyBonusData && dailyBonusData !== "no" && (
         <Overlay
-          closeButton
           show={showBonusOverlay}
           onClose={() => setShowBonusOverlay(false)}
-          children={
-            <DailyBonus
-              bonus={dailyBonusData}
-              closeOverlay={toggleBonusOverlay}
-            />}
-        />}
+          closeButton
+        >
+          <DailyBonus
+            bonus={dailyBonusData}
+            closeOverlay={toggleBonusOverlay}
+          />
+        </Overlay>
+      )}
+
       <Overlay
-        children={
-          <WheelOfLuck
-            data={luckData}
-            closeOverlay={() => setShowWheelOverlay(false)} />
-        }
         show={showWheelOverlay}
         onClose={toggleWheelOverlay}
         closeButton
         buttonColor="#FFF"
         crossColor="#ac1a44"
-      />
-    </div>
-  )
+      >
+        <WheelOfLuck
+          data={luckData}
+          closeOverlay={() => setShowWheelOverlay(false)}
+        />
+      </Overlay>
+    </main>
+  );
 }
 
 export default Main;
