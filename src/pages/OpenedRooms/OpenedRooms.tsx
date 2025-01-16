@@ -53,12 +53,6 @@ export const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
 
   useEffect(() => {
-    if (!wsMessages || wsMessages.length === 0) {
-      connect();
-    }
-  }, [wsMessages]);
-
-  useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
       navigate(indexUrl);
@@ -69,34 +63,35 @@ export const OpenedRooms: FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchUserData = () => {
-      getAppData(userId)
-        .then((res) => {
-          dispatch(setUserData(res.user_info));
-          dispatch(setUserPhoto(res.avatar));
-        })
-        .catch((error) => {
-          console.error('Get user data error:', error);
-        })
-    };
+  // useEffect(() => {
+  //   const fetchUserData = () => {
+  //     getAppData(userId)
+  //       .then((res) => {
+  //         dispatch(setUserData(res.user_info));
+  //         dispatch(setUserPhoto(res.avatar));
+  //       })
+  //       .catch((error) => {
+  //         console.error('Get user data error:', error);
+  //       })
+  //   };
 
-    fetchUserData();
-  }, [dispatch, userId]);
+  //   fetchUserData();
+  // }, [dispatch, userId]);
 
   useEffect(() => {
     setLoading(true);
+    
+    sendMessage({
+      user_id: userId,
+      type: 'get_rooms'
+    });
 
-    const fetchInitialData = () => {
-      sendMessage({
-        user_id: userId,
-        type: 'get_rooms'
-      });
+    const timer = setTimeout(() => {
       setLoading(false);
-    };
+    }, 1000);
 
-    fetchInitialData();
-  }, []);
+    return () => clearTimeout(timer);
+  }, [userId]);
 
   useEffect(() => {
     const handleWebSocketMessage = (message: string) => {
