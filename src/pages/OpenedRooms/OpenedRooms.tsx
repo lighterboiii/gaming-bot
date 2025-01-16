@@ -99,7 +99,7 @@ export const OpenedRooms: FC = () => {
     fetchRoomsData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       getOpenedRoomsRequest()
@@ -147,27 +147,27 @@ export const OpenedRooms: FC = () => {
               'closest_number': 2,
               'ludka_game': 3
             };
-            
+
             sortedRooms = [...rooms!].sort((a, b) => {
               const aType = String(a.room_type) as GameType;
               const bType = String(b.room_type) as GameType;
-              
+
               if (newCount === 1) {
                 return gameTypeOrder[aType] - gameTypeOrder[bType];
               } else if (newCount === 2) {
                 return gameTypeOrder[bType] - gameTypeOrder[aType];
               } else {
-                const targetType = newCount === 1 ? 'rock_paper_scissors' : 
-                                 newCount === 2 ? 'closest_number' : 'ludka_game';
+                const targetType = newCount === 1 ? 'rock_paper_scissors' :
+                  newCount === 2 ? 'closest_number' : 'ludka_game';
                 return aType === targetType ? -1 : 1;
               }
             });
 
             setRooms(sortedRooms);
-            
+
             setTypeValue(newCount === 1 ? `${translation?.rock_paper_scissors_short}` :
-                        newCount === 2 ? `${translation?.closest_number_short}` :
-                        `${translation?.ludka_short}`);
+              newCount === 2 ? `${translation?.closest_number_short}` :
+                `${translation?.ludka_short}`);
           }
           return newCount;
         });
@@ -247,31 +247,31 @@ export const OpenedRooms: FC = () => {
   }
 
   return (
-    <div className={styles.rooms}>
+    <main className={styles.rooms}>
       {loading ? <Loader /> : (
         <>
-          <div className={styles.rooms__content}>
+          <header className={styles.rooms__content}>
             <h2 className={styles.rooms__heading}>{translation?.find_game}</h2>
             <div className={styles.rooms__buttons}>
               <button type="button" name="type" className={styles.rooms__button} onClick={() => toggleSort('type')}>
-                <p className={styles.rooms__game}>{translation?.sort_game}</p>
-                <p className={styles.rooms__name}>{typeValue}</p>
+                <span className={styles.rooms__game}>{translation?.sort_game}</span>
+                <span className={styles.rooms__name}>{typeValue}</span>
               </button>
               <button type="button"
                 name="currency"
                 className={styles.rooms__button}
                 onClick={() => toggleSort('currency')}
               >
-                <p className={styles.rooms__game}>{translation?.sort_currency}</p>
-                <p className={styles.rooms__name}>{currencyValue}</p>
+                <span className={styles.rooms__game}>{translation?.sort_currency}</span>
+                <span className={styles.rooms__name}>{currencyValue}</span>
               </button>
               <button type="button" name="bet" className={styles.rooms__button} onClick={() => toggleSort('bet')}>
-                <p className={styles.rooms__game}>{translation?.sort_bet}</p>
-                <p className={styles.rooms__name}>{betValue}</p>
+                <span className={styles.rooms__game}>{translation?.sort_bet}</span>
+                <span className={styles.rooms__name}>{betValue}</span>
               </button>
             </div>
-          </div>
-          <div className={styles.rooms__roomList + " scrollable"}>
+          </header>
+          <section className={styles.rooms__roomList + " scrollable"}>
             {rooms && rooms.length > 0 ? rooms?.map((room: any, index: number) => (
               <Room room={room} key={index} openModal={() => handleRoomClick(room)} />
             )) : (
@@ -283,8 +283,12 @@ export const OpenedRooms: FC = () => {
               </div>
             )
             }
-          </div>
-          {rooms && rooms?.length > 0 && <CreateRoomFooter />}
+          </section>
+          {rooms && rooms?.length > 0 && (
+            <footer>
+              <CreateRoomFooter />
+            </footer>
+          )}
         </>
       )}
       {isModalOpen && selectedRoomId && (
@@ -295,6 +299,6 @@ export const OpenedRooms: FC = () => {
           />
         </Modal>
       )}
-    </div>
+    </main>
   )
 };

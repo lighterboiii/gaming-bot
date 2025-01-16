@@ -12,6 +12,12 @@
     @include size(50%, auto);
     @include indents();
     @include page-title();
+    text-align: center;
+    background: linear-gradient(45deg, $main-color, $mustard-color);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   &__buttons {
@@ -38,6 +44,20 @@
     text-align: center;
     font-size: 14px;
     font-weight: 200;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-in-out;
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
     
     @media screen and (max-width: 379px) {
       font-size: $space-12;
@@ -52,6 +72,16 @@
     background-color: $black-color;
     border-radius: $radius-40;
     cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      background-color: lighten($black-color, 10%);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
   }
 
   &__game,
@@ -83,8 +113,28 @@
     @include position(relative);
     @include size(100%, calc(68vh - 136px));
     @include flex(column, flex-start, center, $space-8);
-    overflow-y: scroll;
+    overflow-y: auto;
     border-radius: $radius-10;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: rgba($black-color, 0.1);
+      border-radius: $radius-10;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: $main-color;
+      border-radius: $radius-10;
+      
+      &:hover {
+        background: darken($main-color, 10%);
+      }
+    }
 
     @media screen and (min-height: 691px) {
       @include size(100%, 60vh);
