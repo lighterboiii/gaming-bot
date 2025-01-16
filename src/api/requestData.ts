@@ -14,7 +14,6 @@ export const buyLavkaUri = `buy_lavka?user_id=`;
 export const sellLavkaUri = `add_sell_lavka?user_id=`;
 export const cancelSellLavka = `cancel_sell_lavka?user_id=`;
 export const setTransferCoinsUri = `transfer_refs_to_balance?user_id=`;
-export const getRoomsUri = `getrooms?user_id=`
 export const getCurrentRoomInfo = `getroominfo?room_id=`;
 export const createRoomUri = `createroom?user_id=`
 export const setActiveEmojiUri = `setactive_emoji?user_id=`;
@@ -24,7 +23,6 @@ export const setUserChoiceUri = `setchoice?user_id=`;
 export const setEmojiUri = `setemoji?user_id=`;
 export const whoIsWinUri = `whoiswin?user_id=`;
 export const getEmojiPhUri = 'getemojiphoto';
-export const pollingUri = 'polling?user_id=';
 export const getGamesUri = 'get_existing_games';
 export const activeEmojiPackUri = 'user_emoji?user_id=';
 export const fortuneWheelUri = 'fortune_get_info?user_id=';

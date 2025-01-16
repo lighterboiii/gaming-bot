@@ -2,14 +2,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from "@tma.js/sdk";
 import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { WebSocketContext } from "socket/WebSocketContext";
 import { getUserId } from "utils/userConfig";
 
-import { getOpenedRoomsRequest } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
@@ -20,7 +18,7 @@ import { Warning } from "../../components/OrientationWarning/Warning";
 import Button from "../../components/ui/Button/Button";
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
-import { getOpenedRooms, setUserData, setUserPhoto } from "../../services/appSlice";
+import { setUserData, setUserPhoto } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { sortRooms } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
@@ -82,45 +80,30 @@ export const OpenedRooms: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    const fetchRoomsData = () => {
-      getOpenedRoomsRequest()
-        .then((res: any) => {
-          setRooms(res.rooms);
-          dispatch(getOpenedRooms(res.rooms));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
+    sendMessage({
+      type: 'get_rooms',
+    });
 
     setTimeout(() => {
       setLoading(false);
     }, 1000)
-    fetchRoomsData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      getOpenedRoomsRequest()
-        .then((res: any) => {
-          setRooms(res.rooms);
-          dispatch(getOpenedRooms(res.rooms));
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }, 10000);
+    const handleWebSocketMessage = (message: string) => {
+      const res = JSON.parse(message);
+      console.log(res);
+      if (res.type === 'rooms_update') {
+        setRooms(res.rooms);
+      }
+    };
 
-    return () => clearInterval(intervalId);
-  }, [dispatch]);
-
-  useEffect(() => {
-    return () => {
-      clearMessages();
+    if (wsMessages.length > 0) {
+      const lastMessage = wsMessages[wsMessages.length - 1];
+      handleWebSocketMessage(lastMessage);
     }
-  }, []);
+  }, [wsMessages, dispatch]);
 
   const toggleSort = (sortBy: string) => {
     let sortedRooms;

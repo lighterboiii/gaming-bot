@@ -30,6 +30,7 @@ export const setActiveSkinRequest = async (itemId: number, userIdValue: number) 
     endpoint: `${activeSkinParamString}${itemId}`
   });
 };
+// покупка товара
 export const buyItemRequest = async (itemId: number, itemCount = 1, userIdValue: number) => {
   return await putReq({
     uri: buyShopItemUri,
@@ -37,6 +38,7 @@ export const buyItemRequest = async (itemId: number, itemCount = 1, userIdValue:
     endpoint: `${itemIdParamString}${itemId}${itemCountParamString}${itemCount}`
   });
 };
+// продажа товара
 export const sellLavkaRequest = async (itemId: number, price: number, userIdValue: number) => {
   return await putReq({
     uri: sellLavkaUri,
@@ -44,7 +46,7 @@ export const sellLavkaRequest = async (itemId: number, price: number, userIdValu
     endpoint: `${itemIdParamString}${itemId}${priceParamString}${price}`,
   });
 };
-
+// покупка товара в лавке
 export const buyLavkaRequest = async (item: CombinedItemData, userIdValue: number) => {
   return await putReq({
     uri: buyLavkaUri,
@@ -52,6 +54,7 @@ export const buyLavkaRequest = async (item: CombinedItemData, userIdValue: numbe
     endpoint: `${nftIdParamString}${item.nft_id}`,
   });
 };
+// снятие с продажи товара в лавке
 export const cancelLavkaRequest = async (itemId: number, userIdValue: number) => {
   return await putReq({
     uri: cancelSellLavka,
@@ -87,7 +90,7 @@ export const getShopItemsRequest = async () => {
     uri: getShopUri
   })
 };
-
+// запрос инфы о инвентаре юзера
 export const getCollectiblesInfo = async (userIdValue: number) => {
   return await getReq({
     uri: getInventoryUri,
