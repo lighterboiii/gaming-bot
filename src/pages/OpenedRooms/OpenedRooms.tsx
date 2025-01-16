@@ -91,7 +91,7 @@ export const OpenedRooms: FC = () => {
         setLoading(false);
       }, 1000)
     }, 0)
-  }, [clearMessages, sendMessage, userId]);
+  }, []);
 
   useEffect(() => {
     const handleWebSocketMessage = (message: string) => {
