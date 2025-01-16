@@ -47,7 +47,7 @@ export const OpenedRooms: FC = () => {
   const [currencyClickCount, setCurrencyClickCount] = useState(0);
   const [betClickCount, setBetClickCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { sendMessage, wsMessages, connect, disconnect, clearMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages } = useContext(WebSocketContext)!;
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const isPortrait = useOrientation();
   const { tg } = useTelegram();
@@ -82,6 +82,7 @@ export const OpenedRooms: FC = () => {
     setLoading(true);
     sendMessage({
       type: 'get_rooms',
+      user_id: userId,
     });
 
     setTimeout(() => {
@@ -103,7 +104,7 @@ export const OpenedRooms: FC = () => {
       const lastMessage = wsMessages[wsMessages.length - 1];
       handleWebSocketMessage(lastMessage);
     }
-  }, [wsMessages, dispatch]);
+  }, [wsMessages]);
 
   const toggleSort = (sortBy: string) => {
     let sortedRooms;
