@@ -117,9 +117,8 @@ export const Main: FC = () => {
   return (
     <main className={styles.main}>
       <header className={styles.main__header}>
-        <img 
-          src={gowinLogo}
-          alt="GoWin Logo"
+        <img src={gowinLogo}
+          alt="main_logo"
           className={styles.main__logo}
           loading="eager"
         />
@@ -128,13 +127,13 @@ export const Main: FC = () => {
           setWheelOverlayOpen={openWheelOfLuckOverlay}
         />
       </header>
-      
+
       <section className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
         <div className={styles.main__addDiv}>
           {banners && banners?.length > 0 && (
-            <AdvertisementBanner 
+            <AdvertisementBanner
               bannersData={banners}
-              onBannerClick={handleBannerClick} 
+              onBannerClick={handleBannerClick}
             />
           )}
         </div>
