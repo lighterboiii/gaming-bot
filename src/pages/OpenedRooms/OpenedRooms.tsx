@@ -80,11 +80,12 @@ export const OpenedRooms: FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    
-    sendMessage({
-      user_id: userId,
-      type: 'get_rooms'
-    });
+    setTimeout(() => {
+      sendMessage({
+        user_id: userId,
+        type: 'get_rooms'
+      });
+    }, 1200);
 
     const timer = setTimeout(() => {
       setLoading(false);
