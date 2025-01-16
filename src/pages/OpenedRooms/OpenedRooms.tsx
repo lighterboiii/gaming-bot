@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { WebSocketContext } from "socket/WebSocketContext";
 import { getUserId } from "utils/userConfig";
 
-import { getAppData } from "../../api/mainApi";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
 import Room from "../../components/Game/Room/Room";
@@ -63,42 +62,15 @@ export const OpenedRooms: FC = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   const fetchUserData = () => {
-  //     getAppData(userId)
-  //       .then((res) => {
-  //         dispatch(setUserData(res.user_info));
-  //         dispatch(setUserPhoto(res.avatar));
-  //       })
-  //       .catch((error) => {
-  //         console.error('Get user data error:', error);
-  //       })
-  //   };
-
-  //   fetchUserData();
-  // }, [dispatch, userId]);
-
   useEffect(() => {
-    // if (!wsMessages || wsMessages.length === 0) {
-    //   setLoading(true);
-    //   connect();
-    // }
-    
-    // const connectionTimer = setTimeout(() => {
       sendMessage({
         user_id: userId,
         type: 'get_rooms'
       });
-    // }, 300);
-
-    const loadingTimer = setTimeout(() => {
+    
+      setTimeout(() => {
       setLoading(false);
     }, 1000);
-
-    // return () => {
-    //   clearTimeout(connectionTimer);
-    //   clearTimeout(loadingTimer);
-    // };
   }, []);
 
   useEffect(() => {
