@@ -1,6 +1,18 @@
 @use '../../../stylesheets/mixins' as *;
 @use '../../../stylesheets/variables' as *;
 
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.02);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
 .modal {
   @include indents(16px);
   @include position(fixed, $top: 50%, $left: 50%);
@@ -14,6 +26,7 @@
   background-size: cover;
   background-position: center;
   z-index: 667;
+  animation: pulse 1s ease-in-out infinite;
 
   &__title {
     @include indents();
