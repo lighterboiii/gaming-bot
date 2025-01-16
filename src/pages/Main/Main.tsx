@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { WebSocketContext } from "socket/WebSocketContext";
 import { getUserId } from "utils/userConfig";
 
 import { getAppData, getLuckInfo } from "../../api/mainApi";
@@ -45,6 +46,8 @@ export const Main: FC = () => {
   const [showWheelOverlay, setShowWheelOverlay] = useState(false);
   const [luckData, setLuckData] = useState<IFortuneData | null>(null);
   const isPortrait = useOrientation();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { connect } = useContext(WebSocketContext)!;
 
   const handleBannerClick = (bannerData: IBannerData) => {
     setCurrentBanner(bannerData);
@@ -106,6 +109,11 @@ export const Main: FC = () => {
     };
 
     fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    connect();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!isPortrait) {
