@@ -56,7 +56,7 @@ export const OpenedRooms: FC = () => {
     if (!wsMessages || wsMessages.length === 0) {
       connect();
     }
-  }, [connect, wsMessages]);
+  }, [wsMessages]);
 
   useEffect(() => {
     tg.BackButton.show();
