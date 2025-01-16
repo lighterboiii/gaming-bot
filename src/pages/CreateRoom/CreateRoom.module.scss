@@ -26,7 +26,7 @@
   }
 
   &__content {
-    @include indents();
+    @include indents(16px 0, 0);
     @include size(100%, auto);
     display: grid;
     grid-template-columns: repeat(2, 1fr);

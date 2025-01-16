@@ -80,17 +80,24 @@ export const OpenedRooms: FC = () => {
 
   useEffect(() => {
     clearMessages();
-    setTimeout(() => {
+    connect();
+    
+    const getRooms = () => {
       setLoading(true);
       sendMessage({
         type: 'get_rooms',
         user_id: userId,
       });
-
       setTimeout(() => {
         setLoading(false);
-      }, 1000)
-    }, 0)
+      }, 1000);
+    };
+
+    getRooms();
+
+    return () => {
+      clearMessages();
+    };
   }, []);
 
   useEffect(() => {
