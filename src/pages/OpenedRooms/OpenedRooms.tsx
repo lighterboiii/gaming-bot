@@ -47,7 +47,7 @@ export const OpenedRooms: FC = () => {
   const [currencyClickCount, setCurrencyClickCount] = useState(0);
   const [betClickCount, setBetClickCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, connect, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const isPortrait = useOrientation();
   const { tg } = useTelegram();
@@ -80,25 +80,33 @@ export const OpenedRooms: FC = () => {
 
   useEffect(() => {
     clearMessages();
+    disconnect();
     connect();
     
-    const getRooms = () => {
-      setLoading(true);
+    const timer = setTimeout(() => {
       sendMessage({
         type: 'get_rooms',
         user_id: userId,
       });
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    };
-
-    getRooms();
+      setLoading(true);
+    }, 500);
 
     return () => {
+      clearTimeout(timer);
+      disconnect();
       clearMessages();
     };
   }, []);
+
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
 
   useEffect(() => {
     const handleWebSocketMessage = (message: string) => {
