@@ -5,8 +5,30 @@
   @include flex(column, center, center);
   @include indents($space-10, 0);
   @include size(100%, 100vh);
+  background-color: $secondary-color;
+  padding: $space-20;
+  text-align: center;
+
+  &__header {
+    margin-bottom: $space-10;
+    font-size: 24px;
+    color: $main-color;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
 
   &__content {
     @include size(100%, 140px);
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

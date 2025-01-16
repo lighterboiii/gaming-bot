@@ -24,8 +24,11 @@ export const NotFoundPage: FC = () => {
   }, [tg, navigate]);
 
   return (
-    <div className={styles.rooms}>
-      <div className={styles.rooms__content}>
+    <main className={styles.rooms}>
+      <header className={styles.rooms__header}>
+        <h1>{translation?.error404}</h1>
+      </header>
+      <section className={styles.rooms__content}>
         <SmallButton
           handleClick={() => navigate(-1)}
           text={translation?.error404}
@@ -33,8 +36,8 @@ export const NotFoundPage: FC = () => {
           isWhiteBackground
           chevronPosition="left"
         />
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }
 
