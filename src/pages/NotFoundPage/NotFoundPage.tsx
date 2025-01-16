@@ -30,7 +30,7 @@ export const NotFoundPage: FC = () => {
       </header>
       <section className={styles.rooms__content}>
         <SmallButton
-          handleClick={() => navigate(-1)}
+          handleClick={() => navigate(indexUrl)}
           text={translation?.error404}
           secondaryText={translation?.error404_second}
           isWhiteBackground
