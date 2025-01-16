@@ -79,9 +79,10 @@ export const OpenedRooms: FC = () => {
   // }, [dispatch, userId]);
 
   useEffect(() => {
-    setLoading(true);
-    
-    connect();
+    if (!wsMessages || wsMessages.length === 0) {
+      setLoading(true);
+      connect();
+    }
     
     const connectionTimer = setTimeout(() => {
       sendMessage({
