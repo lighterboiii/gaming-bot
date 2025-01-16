@@ -53,6 +53,12 @@ export const OpenedRooms: FC = () => {
   const { tg } = useTelegram();
 
   useEffect(() => {
+    if (!wsMessages || wsMessages.length === 0) {
+      connect();
+    }
+  }, [connect, wsMessages]);
+
+  useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
       navigate(indexUrl);
@@ -79,28 +85,18 @@ export const OpenedRooms: FC = () => {
   }, [dispatch, userId]);
 
   useEffect(() => {
-  
+    setLoading(true);
+
+    const fetchInitialData = () => {
       sendMessage({
-        type: 'get_rooms',
         user_id: userId,
+        type: 'get_rooms'
       });
-      setLoading(true);
+      setLoading(false);
+    };
 
-    // return () => {
-    //   disconnect();
-    //   clearMessages();
-    // };
+    fetchInitialData();
   }, []);
-
-  useEffect(() => {
-    if (loading) {
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [loading]);
 
   useEffect(() => {
     const handleWebSocketMessage = (message: string) => {

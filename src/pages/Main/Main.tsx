@@ -111,10 +111,10 @@ export const Main: FC = () => {
     fetchUserData();
   }, []);
 
-  useEffect(() => {
-    connect();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   connect();
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   if (!isPortrait) {
     return (
