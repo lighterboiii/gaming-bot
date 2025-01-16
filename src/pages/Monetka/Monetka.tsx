@@ -89,7 +89,7 @@ export const Monetka: FC = () => {
         type: 'kickplayer'
       });
       clearMessages();
-      disconnect();
+      // disconnect();
       navigate(indexUrl, { replace: true });
     });
 

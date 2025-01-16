@@ -79,27 +79,27 @@ export const OpenedRooms: FC = () => {
   // }, [dispatch, userId]);
 
   useEffect(() => {
-    if (!wsMessages || wsMessages.length === 0) {
-      setLoading(true);
-      connect();
-    }
+    // if (!wsMessages || wsMessages.length === 0) {
+    //   setLoading(true);
+    //   connect();
+    // }
     
-    const connectionTimer = setTimeout(() => {
+    // const connectionTimer = setTimeout(() => {
       sendMessage({
         user_id: userId,
         type: 'get_rooms'
       });
-    }, 300);
+    // }, 300);
 
     const loadingTimer = setTimeout(() => {
       setLoading(false);
     }, 1000);
 
-    return () => {
-      clearTimeout(connectionTimer);
-      clearTimeout(loadingTimer);
-    };
-  }, [userId]);
+    // return () => {
+    //   clearTimeout(connectionTimer);
+    //   clearTimeout(loadingTimer);
+    // };
+  }, []);
 
   useEffect(() => {
     const handleWebSocketMessage = (message: string) => {

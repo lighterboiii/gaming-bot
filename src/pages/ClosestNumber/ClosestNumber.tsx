@@ -105,7 +105,7 @@ export const ClosestNumber: FC = () => {
         type: 'kickplayer'
       });
       clearMessages();
-      disconnect();
+      // disconnect();
       navigate(indexUrl, { replace: true });
     });
     return () => {

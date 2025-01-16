@@ -89,7 +89,7 @@ const LudkaGame: FC = () => {
 
       setTimeout(() => {
         clearMessages();
-        disconnect();
+        // disconnect();
         navigate(indexUrl, { replace: true });
       }, 500);
     });
