@@ -21,7 +21,7 @@ const SettingsSlider: FC<IProps> = ({
   onCurrencyChange = () => { },
   onInputChange,
 }) => {
-  const [bet, setBet] = useState('0');
+  const [bet, setBet] = useState('1.0');
   const [currency, setCurrency] = useState(1);
 
   const increaseBet = () => {
