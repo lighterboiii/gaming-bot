@@ -160,13 +160,9 @@ export const ClosestNumber: FC = () => {
           setIsProcessingWin(false);
           break;
         case 'kickplayer':
-          if (Number(res?.kicked_id) === Number(userId)) {
-            setLoading(false);
+          if (Number(res?.player_id) === Number(userId)) {
             clearMessages();
-            disconnect();
-            setTimeout(() => {
-              navigate(indexUrl, { replace: true });
-            }, 100);
+            navigate(indexUrl, { replace: true });
           }
           break;
         case 'choice':
@@ -193,7 +189,7 @@ export const ClosestNumber: FC = () => {
             setWinSum(res?.whoiswin.winner_value);
             triggerHapticFeedback('impact', 'heavy');
           }
-          
+
           setTimeout(() => {
             setInputValue('');
             setModalOpen(true);
@@ -386,7 +382,6 @@ export const ClosestNumber: FC = () => {
         })
     }, 1000);
   };
-
   // Timer logic
   const handleTimer = (initialTime: number) => {
     if (!timerInterval) {
@@ -418,6 +413,7 @@ export const ClosestNumber: FC = () => {
       <Warning />
     );
   }
+
   return (
     <div className={styles.game}>
       {loading ? (
@@ -445,7 +441,7 @@ export const ClosestNumber: FC = () => {
                         {timer}
                       </div>
                     )}
-                    <CircularProgressBar 
+                    <CircularProgressBar
                       progress={roomValue}
                     />
                   </div>

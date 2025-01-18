@@ -296,7 +296,6 @@ console.log(gameState);
       case 'kickplayer':
         if (Number(res?.player_id) === Number(userId)) {
           clearMessages();
-          disconnect();
           navigate(indexUrl, { replace: true });
         }
         break;

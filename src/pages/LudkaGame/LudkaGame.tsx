@@ -89,7 +89,6 @@ const LudkaGame: FC = () => {
 
       setTimeout(() => {
         clearMessages();
-        // disconnect();
         navigate(indexUrl, { replace: true });
       }, 500);
     });
@@ -304,7 +303,6 @@ const LudkaGame: FC = () => {
       case 'kickplayer':
         if (Number(res?.player_id) === Number(userId)) {
           clearMessages();
-          disconnect();
           navigate(indexUrl, { replace: true });
         }
         break;
