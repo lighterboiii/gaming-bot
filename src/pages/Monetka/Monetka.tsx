@@ -308,7 +308,7 @@ console.log(gameState);
 
         setTimeout(() => {
           setCommentMessage(null);
-        }, 4500);
+        }, 4000);
         break;
       default:
         break;

@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-fallthrough */
-import { postEvent } from "@tma.js/sdk";
 import { FC, useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
@@ -35,7 +34,7 @@ import styles from './ClosestNumber.module.scss';
 
 export const ClosestNumber: FC = () => {
   const navigate = useNavigate();
-  const { tg, user } = useTelegram();
+  const { tg } = useTelegram();
   const location = useLocation();
   const userId = getUserId();
   const dispatch = useAppDispatch();
@@ -65,7 +64,7 @@ export const ClosestNumber: FC = () => {
   const isRulesShown = useAppSelector(store => store.app.secondGameRulesState);
   const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
   const isPortrait = useOrientation();
-  const { sendMessage, wsMessages, disconnect, clearMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, clearMessages } = useContext(WebSocketContext)!;
   const [isProcessingWin, setIsProcessingWin] = useState<boolean>(false);
   const [timer, setTimer] = useState<number | null>(null);
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);

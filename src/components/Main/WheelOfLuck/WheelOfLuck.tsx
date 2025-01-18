@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { postEvent } from '@tma.js/sdk';
 import { FC, useEffect, useRef, useState } from 'react';
@@ -33,14 +34,19 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const [prizeItem, setPrizeItem] = useState<IFortuneItem | null>(null);
   const spinnerRef = useRef<HTMLDivElement>(null);
   const getRandomIndex = (length: number) => Math.floor(Math.random() * length);
-
+  console.log(data);
   useEffect(() => {
     setLoading(true);
     const loadData = () => {
       if (data) {
-        const max = data.fortune_all_items.length - 4;
+        if (prize && visibleItems.length > 0) {
+          setLoading(false);
+          return;
+        }
+
+        const max = data.fortune_all_items.length - 5;
         const randomIndex = Math.floor(Math.random() * max);
-        setVisibleItems(data.fortune_all_items.slice(randomIndex, randomIndex + 4));
+        setVisibleItems(data.fortune_all_items.slice(randomIndex, randomIndex + 5));
         setPrizeItem(data.fortune_prize_info[0] || null);
         setLoading(false);
       }
@@ -71,7 +77,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             const firstItem = allItems.shift();
             if (firstItem) {
               allItems.push(firstItem);
-              setVisibleItems(allItems.slice(0, 4));
+              setVisibleItems(allItems.slice(0, 5));
             }
           }, 100);
 
@@ -82,13 +88,19 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             }
             
             const prizeItem = data.fortune_prize_info[0] || null;
-            const randomIndex = getRandomIndex(allItems.length);
-            allItems.splice(randomIndex, 1);
-            if (prizeItem) {
-              allItems.splice(2, 0, prizeItem);
-            }
-
-            setVisibleItems(allItems.slice(0, 4));
+            const randomItems = [...data.fortune_all_items]
+              .sort(() => Math.random() - 0.5)
+              .slice(0, 4);
+            
+            const finalItems = [
+              randomItems[0],
+              randomItems[1],
+              prizeItem,
+              randomItems[2],
+              randomItems[3]
+            ];
+            
+            setVisibleItems(finalItems);
             
             setTimeout(() => {
               setSpinning(false);
@@ -115,14 +127,29 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
       });
 
     closeOverlay();
-    setPrize(false);
+    setMessageShown(false);
     setVisibleItems([]);
+    setPrize(false);
+    setSpinning(false);
+    setPrizeItem(null);
+    setLoading(false);
+    if (spinnerRef.current) {
+      spinnerRef.current.classList.remove('spinning');
+      const specialItems = spinnerRef.current.getElementsByClassName(styles.wheel__specialItem);
+      Array.from(specialItems).forEach(item => {
+        item.classList.remove(styles.wheel__specialItem);
+      });
+    }
   };
 
   const onOverlayClose = () => {
     closeOverlay();
     setMessageShown(false);
-    setVisibleItems([]);
+    setSpinning(false);
+    setLoading(false);
+    if (spinnerRef.current) {
+      spinnerRef.current.classList.remove('spinning');
+    }
   };
 
   return (

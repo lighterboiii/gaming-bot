@@ -110,7 +110,7 @@
 
   &__item {
     position: relative;
-    @include size(92px, 100%);
+    @include size(80px, 100%);
     @include flex(column, center, center, 10px);
     color: $black-color;
     border-radius: $radius-15;
@@ -215,7 +215,7 @@
   }
 
   &__spinner {
-    @include flex(row, center, center, 10px);
+    @include flex(row, center, center, 8px);
     @include size(100%, 75%);
     transform-style: preserve-3d;
     perspective: 1000px;
