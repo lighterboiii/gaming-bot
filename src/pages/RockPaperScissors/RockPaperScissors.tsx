@@ -165,25 +165,6 @@ export const RockPaperScissors: FC = () => {
   }, [wsMessages, handleTimer]);
 
   useEffect(() => {
-    const messageHandler = (message: any) => {
-      const res = JSON.parse(message);
-      switch (res?.type) {
-        case 'room_info':
-        case 'choice':
-        case 'emoji':
-        case 'kickplayer':
-          handleRegularMessage(res);
-          break;
-        case 'whoiswin':
-          if (message === wsMessages[wsMessages.length - 1]) {
-            handleWinMessage(res);
-          }
-          break;
-        default:
-          break;
-      }
-    };
-
     const handleRegularMessage = (res: any) => {
       switch (res.type) {
         case 'room_info':
@@ -205,6 +186,12 @@ export const RockPaperScissors: FC = () => {
               })
             };
           });
+          break;
+        case 'kickplayer':
+          if (Number(res?.player_id) === Number(userId)) {
+            clearMessages();
+            navigate(indexUrl, { replace: true });
+          }
           break;
       }
     };
@@ -267,8 +254,7 @@ export const RockPaperScissors: FC = () => {
       }, animationTime);
     };
 
-    // Обрабатываем все сообщения
-    wsMessages.forEach(message => {
+    const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
@@ -278,7 +264,6 @@ export const RockPaperScissors: FC = () => {
           handleRegularMessage(res);
           break;
         case 'whoiswin':
-          // Для whoiswin оставляем проверку на последнее сообщение
           if (message === wsMessages[wsMessages.length - 1]) {
             handleWinMessage(res);
           }
@@ -286,8 +271,11 @@ export const RockPaperScissors: FC = () => {
         default:
           break;
       }
-    });
+    };
+
+    wsMessages.forEach(messageHandler);
   }, [wsMessages]);
+
   // проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);

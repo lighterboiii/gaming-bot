@@ -30,9 +30,7 @@ import {
   setUserPhoto,
   setProductsArchive,
   setThirdGameRuleImage,
-  setThirdGameRulesState,
-  setFourthGameRuleImage,
-  setFourthGameRulesState
+  setThirdGameRulesState
 } from '../../services/appSlice';
 import { useAppDispatch } from '../../services/reduxHooks';
 import { cacheBanners } from '../../utils/bannerCache';
@@ -103,11 +101,9 @@ export const App: FC = () => {
           dispatch(setFirstGameRuleImage(res.game_rule_1_url));
           dispatch(setSecondGameRuleImage(res.game_rule_2_url));
           dispatch(setThirdGameRuleImage(res.game_rule_3_url));
-          dispatch(setFourthGameRuleImage(res.game_rule_4_url));
           dispatch(setFirstGameRulesState(res.game_rule_1_show));
           dispatch(setSecondGameRulesState(res.game_rule_2_show));
           dispatch(setThirdGameRulesState(res.game_rule_3_show));
-          dispatch(setFourthGameRulesState(res.game_rule_4_show));
           setTimeout(() => {
             setLoading(false);
           }, 2000);
