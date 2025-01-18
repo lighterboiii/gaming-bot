@@ -74,7 +74,6 @@ export const RockPaperScissors: FC = () => {
         type: 'kickplayer'
       });
       clearMessages();
-      // disconnect();
       navigate(indexUrl, { replace: true });
     });
 

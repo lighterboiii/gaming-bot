@@ -5,8 +5,15 @@
 import { FC, useEffect, useState, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { setFourthGameRulesState } from 'services/appSlice';
+import { useAppDispatch, useAppSelector } from 'services/reduxHooks';
 import { MONEY_EMOJI, SHIELD_EMOJI } from 'utils/constants';
+import { triggerHapticFeedback } from 'utils/hapticConfig';
+import { IAppData } from 'utils/types/appType';
 
+import { setGameRulesWatched } from '../../api/gameApi';
+import { getAppData } from '../../api/mainApi';
+import Rules from '../../components/Game/Rules/Rules';
 import Loader from '../../components/Loader/Loader';
 import { Warning } from '../../components/OrientationWarning/Warning';
 import useOrientation from '../../hooks/useOrientation';
@@ -23,7 +30,6 @@ import coinDefault from '../../images/monetka/O (1).png';
 import coinSilver from '../../images/monetka/O.png';
 import vector from '../../images/monetka/Vector.png';
 import coinGold from '../../images/monetka/X.png';
-import { useAppSelector } from '../../services/reduxHooks';
 import { WebSocketContext } from '../../socket/WebSocketContext';
 import { formatNumber } from '../../utils/additionalFunctions';
 import { indexUrl } from '../../utils/routes';
@@ -46,10 +52,14 @@ const ANIMATION_DELAYS = {
 } as const;
 
 export const Monetka: FC = () => {
-  const { roomId } = useParams();
   const navigate = useNavigate();
+  const { roomId } = useParams();
   const userId = getUserId();
   const isPortrait = useOrientation();
+  const dispatch = useAppDispatch();
+  const [rules, setRulesShown] = useState<boolean | null>(false);
+  const isRulesShown = useAppSelector(store => store.app.fourthGameRulesState);
+  const ruleImage = useAppSelector(store => store.app.monetkaRuleImage);
   const [gameState, setGameState] = useState<IMonetkaGameState>({
     data: null,
     winner: null,
@@ -70,7 +80,7 @@ export const Monetka: FC = () => {
   const [activeButton, setActiveButton] = useState<'bet' | 'collect'>('bet');
   const [previousCoin, setPreviousCoin] = useState<string | null>(null);
   const [coinAnimationState, setCoinAnimationState] = useState<CoinAnimationState>('default');
-  
+
   // Подключение к WebSocket
   useEffect(() => {
     if (!wsMessages || wsMessages.length === 0) {
@@ -89,7 +99,6 @@ export const Monetka: FC = () => {
         type: 'kickplayer'
       });
       clearMessages();
-      // disconnect();
       navigate(indexUrl, { replace: true });
     });
 
@@ -400,7 +409,28 @@ export const Monetka: FC = () => {
       ? Number(currentPlayer.tokens)
       : Number(currentPlayer.money);
   }, [gameState.data?.players, gameState.data?.bet_type, userId]);
-// блок использования устройства не в портретном режиме
+
+  // Проверка правил при старте игры
+  useEffect(() => {
+    setRulesShown(isRulesShown);
+  }, [isRulesShown]);
+
+  // обработчик клика по кнопке "Ознакомился"
+  const handleRuleButtonClick = () => {
+    setGameRulesWatched(userId, '4');
+    triggerHapticFeedback('impact', 'soft');
+    setRulesShown(true);
+    setTimeout(() => {
+      getAppData(userId)
+        .then((response: IAppData) => {
+          dispatch(setFourthGameRulesState(response.game_rule_4_show));
+        })
+        .catch((error: Error) => {
+          console.error('Get user data error:', error);
+        })
+    }, 1000);
+  };
+
   if (!isPortrait) {
     return <Warning />;
   }
@@ -411,143 +441,153 @@ export const Monetka: FC = () => {
 
   return (
     <div className={styles.monetka}>
-      <img src={coinFlipLogo} alt="coin flip logo" className={styles.monetka__logo} />
-      <div className={`${styles.monetka__layer} ${styles.monetka__layer_empty}`} />
-      <div className={`${styles.monetka__layer} ${styles.monetka__layer_fx}`} />
-      {flashImage && (
-        <img
-          key={flashImage}
-          src={flashImage}
-          alt="flash"
-          className={`${styles.monetka__flash}`}
-        />
-      )}
-      <div className={`${styles.monetka__layer} ${styles.monetka__layer_bg}`} />
-      <img src={vector} alt="vector" className={styles.monetka__vector} />
-      <div className={styles.monetka__defaultCoinContainer}>
-        {coinStates.map((coinState, index) => (
-          <img
-            key={index}
-            src={coinState}
-            alt={`coin ${index}`}
-            className={`${styles.monetka__defaultCoin} ${coinAnimationState !== 'default' && coinState === coinDefault
-                ? styles[`monetka__defaultCoin_${coinAnimationState}`]
-                : ''
-              }`}
-            style={{
-              animationDelay: coinAnimationState === 'appear'
-                ? `${index * 0.15}s`
-                : '0s'
-            }}
-          />
-        ))}
-      </div>
-      <>
-        {(currentCoin || previousCoin) && (
-          <div className={styles.monetka__coinContainer}>
-            {previousCoin && (
+      {rules ? (
+        <>
+          <img src={coinFlipLogo} alt="coin flip logo" className={styles.monetka__logo} />
+          <div className={`${styles.monetka__layer} ${styles.monetka__layer_empty}`} />
+          <div className={`${styles.monetka__layer} ${styles.monetka__layer_fx}`} />
+          {flashImage && (
+            <img
+              key={flashImage}
+              src={flashImage}
+              alt="flash"
+              className={`${styles.monetka__flash}`}
+            />
+          )}
+          <div className={`${styles.monetka__layer} ${styles.monetka__layer_bg}`} />
+          <img src={vector} alt="vector" className={styles.monetka__vector} />
+          <div className={styles.monetka__defaultCoinContainer}>
+            {coinStates.map((coinState, index) => (
               <img
-                key={`prev-${previousCoin}`}
-                src={previousCoin}
-                alt="previous coin animation"
-                className={`${styles.monetka__coin} ${styles.monetka__coin_fadeOut}`}
+                key={index}
+                src={coinState}
+                alt={`coin ${index}`}
+                className={`${styles.monetka__defaultCoin}
+                 ${coinAnimationState !== 'default' && coinState === coinDefault
+                    ? styles[`monetka__defaultCoin_${coinAnimationState}`]
+                    : ''
+                  }`}
+                style={{
+                  animationDelay: coinAnimationState === 'appear'
+                    ? `${index * 0.15}s`
+                    : '0s'
+                }}
               />
-            )}
-            {currentCoin && (
-              <img
-                key={`current-${currentCoin}`}
-                src={currentCoin}
-                alt="current coin animation"
-                className={`${styles.monetka__coin} ${styles.monetka__coin_fadeIn}`}
-              />
-            )}
+            ))}
           </div>
-        )}
-        {nextXValue && (
-          <div className={styles.monetka__coinValue}>
-            <p className={styles.monetka__coinValueText}>+{gameState.data?.bet_type === "1"
-              ? MONEY_EMOJI
-              : SHIELD_EMOJI
-            }
-              {nextXValue}
+          <>
+            {(currentCoin || previousCoin) && (
+              <div className={styles.monetka__coinContainer}>
+                {previousCoin && (
+                  <img
+                    key={`prev-${previousCoin}`}
+                    src={previousCoin}
+                    alt="previous coin animation"
+                    className={`${styles.monetka__coin} ${styles.monetka__coin_fadeOut}`}
+                  />
+                )}
+                {currentCoin && (
+                  <img
+                    key={`current-${currentCoin}`}
+                    src={currentCoin}
+                    alt="current coin animation"
+                    className={`${styles.monetka__coin} ${styles.monetka__coin_fadeIn}`}
+                  />
+                )}
+              </div>
+            )}
+            {nextXValue && (
+              <div className={styles.monetka__coinValue}>
+                <p className={styles.monetka__coinValueText}>+{gameState.data?.bet_type === "1"
+                  ? MONEY_EMOJI
+                  : SHIELD_EMOJI
+                }
+                  {nextXValue}
+                </p>
+              </div>
+            )}
+          </>
+          <div className={styles.monetka__buttonsContainer}>
+            <img src={monetkaButtonsBackground} alt="buttonsBackground" className={styles.monetka__buttons} />
+            <div className={styles.monetka__buttonsWrapper}>
+              <img
+                src={getButtonImage('blue', blueButtonState)}
+                alt="button"
+                className={styles.monetka__button}
+                onClick={() => handleButtonClick('blue')}
+              />
+              <img
+                src={getButtonImage('green', greenButtonState)}
+                alt="button"
+                className={styles.monetka__button}
+                onClick={() => handleButtonClick('green')}
+              />
+            </div>
+          </div>
+          <div className={styles.monetka__controlButtons}>
+            <button
+              className={`
+                ${styles.monetka__controlButton} 
+                ${activeButton === 'collect'
+                  ? styles.monetka__controlButton_gray
+                  : styles.monetka__controlButton_pink
+                }
+              `}
+              onClick={() => { }}
+            >
+              <span className={styles.monetka__controlButton__label}>
+                {translation.game_bet_text}:
+              </span>
+              <span className={styles.monetka__controlButton__content}>
+                <span className={styles.monetka__controlButton__emoji}>
+                  {gameState.data?.bet_type === "1"
+                    ? MONEY_EMOJI
+                    : SHIELD_EMOJI
+                  }
+                </span>
+                <span className={styles.monetka__controlButton__value}>
+                  {gameState.data?.bet || 0}
+                </span>
+              </span>
+            </button>
+            <button
+              className={`
+                ${styles.monetka__controlButton} 
+                ${activeButton === 'collect'
+                  ? styles.monetka__controlButton_pink
+                  : styles.monetka__controlButton_gray
+                }
+              `}
+              onClick={handleCollectWinnings}
+            >
+              <span className={styles.monetka__controlButton__label}>
+                {translation.claim}:
+              </span>
+              <span className={styles.monetka__controlButton__content}>
+                <span className={styles.monetka__controlButton__emoji}>
+                  {gameState?.data?.bet_type === "1"
+                    ? MONEY_EMOJI
+                    : SHIELD_EMOJI
+                  }
+                </span>
+                <span className={styles.monetka__controlButton__value}>
+                  {gameState?.data?.win?.winner_value ? formatNumber(Number(gameState?.data?.win?.winner_value)) : 0}
+                </span>
+              </span>
+            </button>
+          </div>
+          <div className={styles.monetka__balance}>
+            <p className={styles.monetka__balanceText}>
+              {translation.webapp_balance}: {getCurrentPlayerBalance().toFixed(2)}
             </p>
           </div>
-        )}
-      </>
-      <div className={styles.monetka__buttonsContainer}>
-        <img src={monetkaButtonsBackground} alt="buttonsBackground" className={styles.monetka__buttons} />
-        <div className={styles.monetka__buttonsWrapper}>
-          <img
-            src={getButtonImage('blue', blueButtonState)}
-            alt="button"
-            className={styles.monetka__button}
-            onClick={() => handleButtonClick('blue')}
-          />
-          <img
-            src={getButtonImage('green', greenButtonState)}
-            alt="button"
-            className={styles.monetka__button}
-            onClick={() => handleButtonClick('green')}
-          />
-        </div>
-      </div>
-      <div className={styles.monetka__controlButtons}>
-        <button
-          className={`
-            ${styles.monetka__controlButton} 
-            ${activeButton === 'collect'
-              ? styles.monetka__controlButton_gray
-              : styles.monetka__controlButton_pink
-            }
-          `}
-          onClick={() => { }}
-        >
-          <span className={styles.monetka__controlButton__label}>
-            {translation.game_bet_text}:
-          </span>
-          <span className={styles.monetka__controlButton__content}>
-            <span className={styles.monetka__controlButton__emoji}>
-              {gameState.data?.bet_type === "1"
-                ? MONEY_EMOJI
-                : SHIELD_EMOJI
-              }
-            </span>
-            <span className={styles.monetka__controlButton__value}>
-              {gameState.data?.bet || 0}
-            </span>
-          </span>
-        </button>
-        <button
-          className={`
-            ${styles.monetka__controlButton} 
-            ${activeButton === 'collect'
-              ? styles.monetka__controlButton_pink
-              : styles.monetka__controlButton_gray
-            }
-          `}
-          onClick={handleCollectWinnings}
-        >
-          <span className={styles.monetka__controlButton__label}>
-            {translation.claim}:
-          </span>
-          <span className={styles.monetka__controlButton__content}>
-            <span className={styles.monetka__controlButton__emoji}>
-              {gameState?.data?.bet_type === "1"
-                ? MONEY_EMOJI
-                : SHIELD_EMOJI
-              }
-            </span>
-            <span className={styles.monetka__controlButton__value}>
-              {gameState?.data?.win?.winner_value ? formatNumber(Number(gameState?.data?.win?.winner_value)) : 0}
-            </span>
-          </span>
-        </button>
-      </div>
-      <div className={styles.monetka__balance}>
-        <p className={styles.monetka__balanceText}>
-          {translation.webapp_balance}: {getCurrentPlayerBalance().toFixed(2)}
-        </p>
-      </div>
+        </>
+      ) : (
+        <Rules
+          handleRuleButtonClick={handleRuleButtonClick}
+          ruleImage={ruleImage!}
+        />
+      )}
     </div>
   );
 };

@@ -16,7 +16,9 @@ export interface IAppData {
   game_rule_1_url: string;
   game_rule_2_url: string;
   game_rule_3_url: string;
+  game_rule_4_url: string;
   game_rule_1_show: boolean;
   game_rule_2_show: boolean;
   game_rule_3_show: boolean;
+  game_rule_4_show: boolean;
 }

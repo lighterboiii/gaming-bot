@@ -21,9 +21,11 @@ interface AppState {
   RPSRuleImage: string | null;
   closestNumberRuleImage: string | null;
   ludkaRuleImage: string | null;
+  monetkaRuleImage: string | null;
   firstGameRulesState: boolean | null;
   secondGameRulesState: boolean | null;
   thirdGameRulesState: boolean | null;
+  fourthGameRulesState: boolean | null;
 }
 
 const initialState: AppState = {
@@ -39,10 +41,12 @@ const initialState: AppState = {
   shopImage: null,
   RPSRuleImage: null,
   closestNumberRuleImage: null,
+  ludkaRuleImage: null,
+  monetkaRuleImage: null,
   firstGameRulesState: null,
   secondGameRulesState: null,
-  ludkaRuleImage: null,
   thirdGameRulesState: null,
+  fourthGameRulesState: null,
 }
 
 const appSlice = createSlice({
@@ -192,6 +196,12 @@ const appSlice = createSlice({
     setThirdGameRulesState: (state, action: PayloadAction<boolean>) => {
       state.thirdGameRulesState = action.payload;
     },
+    setFourthGameRuleImage: (state, action: PayloadAction<string>) => {
+      state.monetkaRuleImage = action.payload;
+    },
+    setFourthGameRulesState: (state, action: PayloadAction<boolean>) => {
+      state.fourthGameRulesState = action.payload;
+    },
   }
 })
 
@@ -228,7 +238,9 @@ export const {
   setFirstGameRulesState,
   setSecondGameRulesState,
   setThirdGameRuleImage,
-  setThirdGameRulesState
+  setThirdGameRulesState,
+  setFourthGameRuleImage,
+  setFourthGameRulesState
 } = appSlice.actions;
 
 export default appSlice.reducer;
