@@ -105,7 +105,6 @@ export const ClosestNumber: FC = () => {
         type: 'kickplayer'
       });
       clearMessages();
-      // disconnect();
       navigate(indexUrl, { replace: true });
     });
     return () => {
@@ -264,6 +263,7 @@ export const ClosestNumber: FC = () => {
   };
   // подтвердить введенное число
   const handleSubmit = () => {
+    triggerHapticFeedback('impact', 'heavy');
     const numValue = parseInt(inputValue, 10);
     if (numValue >= 1 && numValue <= 100) {
       handleChoice(inputValue);
@@ -285,7 +285,7 @@ export const ClosestNumber: FC = () => {
           handleSubmit();
           break;
         default:
-          // postEvent('web_app_trigger_haptic_feedback', { type: 'impact', impact_style: 'soft' });
+          triggerHapticFeedback('impact', 'soft');
           break;
       }
     }
@@ -337,6 +337,7 @@ export const ClosestNumber: FC = () => {
       choice: value
     };
     sendMessage(choice);
+    triggerHapticFeedback('impact', 'heavy');
     setIsChoiceLocked(true);
   };
   // хендлер отпрвки эмодзи
@@ -347,6 +348,7 @@ export const ClosestNumber: FC = () => {
       type: 'emoji',
       emoji: emoji
     }
+    triggerHapticFeedback('impact', 'light');
     sendMessage(setEmojiData);
     setShowEmojiOverlay(false);
     setShowOverlay(false);
@@ -361,7 +363,7 @@ export const ClosestNumber: FC = () => {
       sendMessage(noneChoice);
     }, 4000)
   };
-  // обработчик клика на иконку эмодзи websocket
+  // обработчик клика на иконку эмодзи
   const handleClickEmoji = () => {
     setShowOverlay(true);
     triggerHapticFeedback('impact', 'light');

@@ -31,7 +31,7 @@ const ChoiceBox: FC<IProps> = ({ handleChoice, choice = '', isChoiceLocked }) =>
     }
     handleChoice(choice);
     setChoiceItem(choice);
-    triggerHapticFeedback('notification', 'success');
+    triggerHapticFeedback('notification', 'heavy');
   };
 
   const getIconPath = (choice: string): string => {

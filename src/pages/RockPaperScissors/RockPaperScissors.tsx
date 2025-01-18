@@ -207,6 +207,7 @@ export const RockPaperScissors: FC = () => {
 
       const gameResult = (() => {
         if (Number(res?.whoiswin.winner) === Number(userId)) {
+          triggerHapticFeedback('notification', 'success');
           return {
             animation: Number(data?.creator_id) === Number(res?.whoiswin.winner)
               ? rWinAnim
@@ -217,6 +218,7 @@ export const RockPaperScissors: FC = () => {
           };
         }
         if (Number(res?.whoiswin.winner) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
+          triggerHapticFeedback('notification', 'error');
           return {
             animation: Number(data?.creator_id) === Number(res?.whoiswin.winner)
               ? rLoseAnim
@@ -225,6 +227,7 @@ export const RockPaperScissors: FC = () => {
           };
         }
         if (res?.whoiswin.winner === 'draw') {
+          triggerHapticFeedback('impact', 'heavy');
           return {
             animation: null,
             message: translation?.draw

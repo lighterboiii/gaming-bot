@@ -339,6 +339,12 @@ const LudkaGame: FC = () => {
       winner_value: res?.whoiswin?.winner_value
     };
 
+    if (Number(res?.whoiswin?.winner) === Number(userId)) {
+      triggerHapticFeedback('notification', 'success');
+    } else {
+      triggerHapticFeedback('notification', 'error');
+    }
+
     setGameState(prev => ({ ...prev, winner }));
     setLogState(prev => ({ ...prev, resetHistory: true }));
     setPendingBet('');

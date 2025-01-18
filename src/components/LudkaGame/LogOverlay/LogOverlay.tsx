@@ -17,6 +17,7 @@ export const LogOverlay: React.FC<ILogOverlayProps> = ({
 }) => {
   const displayUsers = shouldReset ? "none" : users;
   const translation = useAppSelector(store => store.app.languageSettings);
+  
   return (
     <div className={styles.logOverlayWrapper}>
       <div

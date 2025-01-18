@@ -16,7 +16,7 @@ const CreateRoomFooter: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
 
   const handleCreateClick = () => {
-    triggerHapticFeedback('notification', 'success');
+    triggerHapticFeedback('notification', 'light');
     navigate('/create-room')
   };
 
