@@ -80,6 +80,7 @@ export const Monetka: FC = () => {
   const [activeButton, setActiveButton] = useState<'bet' | 'collect'>('bet');
   const [previousCoin, setPreviousCoin] = useState<string | null>(null);
   const [coinAnimationState, setCoinAnimationState] = useState<CoinAnimationState>('default');
+  const [commentMessage, setCommentMessage] = useState<string | null>(null);
 
   // Подключение к WebSocket
   useEffect(() => {
@@ -301,6 +302,13 @@ console.log(gameState);
         break;
       case 'whoiswin':
         setCoinStates([coinDefault, coinDefault, coinDefault, coinDefault, coinDefault]);
+        break;
+      case 'comment':
+        setCommentMessage(res.text);
+
+        setTimeout(() => {
+          setCommentMessage(null);
+        }, 4500);
         break;
       default:
         break;
@@ -583,6 +591,11 @@ console.log(gameState);
               {translation.webapp_balance}: {getCurrentPlayerBalance().toFixed(2)}
             </p>
           </div>
+          {commentMessage && (
+            <div className={styles.monetka__commentContainer}>
+              <p className={styles.monetka__commentText}>{commentMessage}</p>
+            </div>
+          )}
         </>
       ) : (
         <Rules
