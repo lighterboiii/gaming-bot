@@ -189,8 +189,8 @@ export const RockPaperScissors: FC = () => {
           break;
         case 'kickplayer':
           if (Number(res?.player_id) === Number(userId)) {
-            clearMessages();
             navigate(indexUrl, { replace: true });
+            clearMessages();
           }
           break;
       }
