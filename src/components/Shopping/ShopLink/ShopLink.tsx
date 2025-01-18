@@ -17,7 +17,7 @@ const ShopLink: FC<IProps> = ({ shopImageUrl }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   
   const handleGetHapticFeedback = () => {
-    triggerHapticFeedback('impact', 'light');
+    triggerHapticFeedback('impact', 'heavy');
   };
 
   return (

@@ -32,7 +32,7 @@ const CircleButton: FC<IProps> = ({
 }) => {
 
   const handleClick = () => {
-    triggerHapticFeedback('impact', 'soft');
+    triggerHapticFeedback('impact', 'light');
   }
 
   return (

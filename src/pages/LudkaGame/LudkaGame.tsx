@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -10,6 +9,7 @@ import { setGameRulesWatched } from "api/gameApi";
 import { getAppData } from "api/mainApi";
 import Rules from "components/Game/Rules/Rules";
 import { setThirdGameRulesState } from "services/appSlice";
+import { triggerHapticFeedback } from "utils/hapticConfig";
 
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import Loader from "../../components/Loader/Loader";
@@ -21,7 +21,6 @@ import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import LogIcon from "../../icons/LogButtonIcon/LogIcon";
 import RoomCounterIcon from "../../icons/RoomCounter/RoomCounter";
-import coins from '../../images/mount/coins.png';
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { WebSocketContext } from "../../socket/WebSocketContext";
@@ -140,6 +139,7 @@ const LudkaGame: FC = () => {
   };
 
   const handleOpenOverlay = () => {
+    triggerHapticFeedback('impact', 'light');
     setOverlayState(prev => ({ ...prev, show: true }));
     setTimeout(() => {
       setOverlayState(prev => ({ ...prev, isVisible: true }));
@@ -149,6 +149,7 @@ const LudkaGame: FC = () => {
   };
 
   const handleCloseOverlay = () => {
+    triggerHapticFeedback('impact', 'soft');
     setOverlayState(prev => ({ ...prev, isVisible: false }));
     setTimeout(() => {
       setOverlayState(prev => ({ ...prev, show: false }));
@@ -157,6 +158,7 @@ const LudkaGame: FC = () => {
   };
 
   const handleOpenLog = () => {
+    triggerHapticFeedback('impact', 'light');
     setLogState(prev => ({ ...prev, show: true }));
     setTimeout(() => {
       setLogState(prev => ({ ...prev, isVisible: true }));
@@ -164,6 +166,7 @@ const LudkaGame: FC = () => {
   };
 
   const handleCloseLog = () => {
+    triggerHapticFeedback('impact', 'soft');
     setLogState(prev => ({ ...prev, isVisible: false }));
     setTimeout(() => {
       setLogState(prev => ({ ...prev, show: false }));
@@ -187,6 +190,7 @@ const LudkaGame: FC = () => {
   }, [overlayState.show]);
 
   const handleKeyPress = (key: number) => {
+    triggerHapticFeedback('impact', 'soft');
     setOverlayState(prev => ({ ...prev, inputValue: prev.inputValue + key.toString() }));
     const newValue = overlayState.inputValue + key.toString();
     const [wholePart, decimalPart] = newValue.split('.');
@@ -207,10 +211,12 @@ const LudkaGame: FC = () => {
   };
 
   const handleDelete = () => {
+    triggerHapticFeedback('impact', 'light');
     setOverlayState(prev => ({ ...prev, inputValue: prev.inputValue.slice(0, -1) }));
   };
 
   const handleSubmit = () => {
+    triggerHapticFeedback('impact', 'heavy');
     const numValue = parseFloat(overlayState.inputValue);
     if (numValue >= 0) {
       setPendingBet(overlayState.inputValue);
@@ -239,6 +245,7 @@ const LudkaGame: FC = () => {
 
   const handleRaiseBet = useCallback(() => {
     const betToSend = pendingBet || calculateNextBet();
+    triggerHapticFeedback('impact', 'heavy');
     handleChoice(betToSend);
     setPendingBet('');
   }, [pendingBet, handleChoice, calculateNextBet]);
@@ -322,7 +329,6 @@ const LudkaGame: FC = () => {
   }, [clearMessages]);
 
   const handleWinnerMessage = useCallback((res: any) => {
-    console.log(res);
     const winner = {
       item: {
         item_pic: res?.whoiswin?.item_pic,
@@ -357,6 +363,7 @@ const LudkaGame: FC = () => {
   }, [gameState.data, userId]);
 
   const handleShowEmojiOverlay = () => {
+    triggerHapticFeedback('impact', 'soft');
     setShowEmojiOverlay(true);
   };
 
@@ -371,6 +378,7 @@ const LudkaGame: FC = () => {
       type: 'emoji',
       emoji: emoji
     };
+    triggerHapticFeedback('impact', 'soft');
     sendMessage(data);
     setShowEmojiOverlay(false);
 
@@ -412,6 +420,7 @@ const LudkaGame: FC = () => {
 
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '3');
+    triggerHapticFeedback('impact', 'soft');
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)
@@ -525,7 +534,8 @@ const LudkaGame: FC = () => {
                               ? translation?.waiting4players
                               : gameState.data?.win?.users === "none"
                                 ? "0"
-                                : formatNumber(Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins
+                                : formatNumber
+                                (Number(gameState.data?.win?.users[gameState.data.win.users.length - 1]?.coins
                                   || 0))
                           }
                         </span>

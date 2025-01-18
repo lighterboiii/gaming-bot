@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../services/reduxHooks';
 import { WebSocketContext } from '../../../socket/WebSocketContext';
 import { formatNumber } from '../../../utils/additionalFunctions';
+import { triggerHapticFeedback } from '../../../utils/hapticConfig';
 import { IGameSettingsData } from '../../../utils/types/gameTypes';
 import { getUserId } from '../../../utils/userConfig';
 import { Modal } from '../../Modal/Modal';
@@ -43,8 +44,8 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   useEffect(() => {
     if (parsedMessages?.length > 0) {
       const lastMessage = parsedMessages[wsMessages?.length - 1]?.message;
-      console.log(lastMessage);
       if (lastMessage && lastMessage?.message === 'success') {
+        triggerHapticFeedback('notification', 'success');
         setSelectedRoomId(lastMessage.room_id);
         navigate(data?.room_type === 2 
             ? `/closest/${lastMessage?.room_id}` 
@@ -76,6 +77,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const handleInputChange = (bet: string) => {
     setBet(parseFloat(bet));
   };
+
   const handleCreateRoom = async (
     userIdValue: number, 
     bet: number, 

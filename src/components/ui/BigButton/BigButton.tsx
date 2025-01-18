@@ -22,7 +22,7 @@ const BigButton: FC<IProps> = ({
 }) => {
 
   const handleGetHapticFeedback = () => {
-    triggerHapticFeedback('impact', 'light');
+    triggerHapticFeedback('impact', 'heavy');
   };
 
   return (

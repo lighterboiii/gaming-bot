@@ -59,7 +59,7 @@ export const CreateRoom: FC = () => {
   const handleGameClick = (game: any) => {
     setGameData(game);
     setSettingsOverlay(!settingsOverlay);
-    triggerHapticFeedback('impact', 'soft');
+    triggerHapticFeedback('impact', 'light');
   };
 
   if (!isPortrait) {
@@ -82,7 +82,6 @@ export const CreateRoom: FC = () => {
             <GameCard
               game={game}
               key={game.id}
-              imagePosition={game.id === 2 ? 'right' : 'left'}
               image={game.id === 1 ? games[0].url : games[1].url}
               users={game.users}
               extraClass={

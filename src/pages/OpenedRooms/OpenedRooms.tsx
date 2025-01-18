@@ -93,6 +93,7 @@ export const OpenedRooms: FC = () => {
 
     switch (sortBy) {
       case 'type':
+        triggerHapticFeedback('impact', 'soft');
         setCurrencyClickCount(0);
         setCurrencyValue(`${translation?.sort_all}`);
         setSortByCurr(false);
@@ -128,7 +129,6 @@ export const OpenedRooms: FC = () => {
                 return aType === targetType ? -1 : 1;
               }
             });
-
             setRooms(sortedRooms);
 
             setTypeValue(newCount === 1 ? `${translation?.rock_paper_scissors_short}` :
@@ -140,6 +140,7 @@ export const OpenedRooms: FC = () => {
         break;
 
       case 'currency':
+        triggerHapticFeedback('impact', 'soft');
         setTypeClickCount(0);
         setTypeValue(`${translation?.sort_all}`);
         setSortByType(false);
@@ -164,6 +165,7 @@ export const OpenedRooms: FC = () => {
         break;
 
       case 'bet':
+        triggerHapticFeedback('impact', 'soft');
         setTypeClickCount(0);
         setTypeValue(`${translation?.sort_all}`);
         setSortByType(false);
@@ -189,12 +191,12 @@ export const OpenedRooms: FC = () => {
 
       default:
         sortedRooms = rooms;
-        triggerHapticFeedback('impact', 'soft');
     }
   };
 
   const handleRoomClick = (room: any) => {
     if (room?.free_places === 0) {
+      triggerHapticFeedback('impact', 'light');
       return;
     }
     setSelectedRoomId(room?.room_id);
@@ -202,7 +204,7 @@ export const OpenedRooms: FC = () => {
   };
 
   const handleCreateClick = () => {
-    triggerHapticFeedback('impact', 'soft');
+    triggerHapticFeedback('notification', 'success');
     navigate('/create-room');
   };
 

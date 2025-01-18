@@ -214,7 +214,7 @@ console.log(gameState);
                     setTimeout(() => {
                       setFlashImage(null);
                       setCoinStates(newStates);
-
+                      triggerHapticFeedback('notification', 'success');
                       if (allStarsFilled) {
                         handleCollectWinnings();
                       }
@@ -245,7 +245,7 @@ console.log(gameState);
                       setFlashImage(null);
 
                       setCoinAnimationState('redTint');
-
+                      triggerHapticFeedback('notification', 'error');
                       setTimeout(() => {
                         setCoinAnimationState('disappear');
 
@@ -339,6 +339,7 @@ console.log(gameState);
   };
 
   const handleButtonClick = async (type: 'blue' | 'green') => {
+    triggerHapticFeedback('impact', 'light');
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
 
@@ -381,7 +382,7 @@ console.log(gameState);
   // Сбор выигрыша
   const handleCollectWinnings = () => {
     setCoinAnimationState('disappear');
-
+    triggerHapticFeedback('impact', 'heavy');
     setTimeout(() => {
       setCoinStates([coinDefault, coinDefault, coinDefault, coinDefault, coinDefault]);
       setCoinAnimationState('appear');

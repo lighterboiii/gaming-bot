@@ -10,14 +10,13 @@ import styles from './GameCard.module.scss';
 
 interface IProps {
   game: IGameCardData;
-  imagePosition: "left" | "right";
   image: string;
   users: number;
   extraClass?: string;
   handleClickGame: (game: IGameCardData) => void;
 }
 
-const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass }) => {
+const GameCard: FC<IProps> = ({ game, handleClickGame, extraClass }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const gameCardClassNames = classNames(
     styles.game,
@@ -43,36 +42,48 @@ const GameCard: FC<IProps> = ({ game, imagePosition, handleClickGame, extraClass
     }
   }
 
+  const gameName = getGameName(game.room_type);
+
   return (
-    <div
+    <article 
       className={gameCardClassNames}
       onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      aria-label={`${gameName} game - ${game.users} players`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleClick();
+        }
+      }}
     >
-      <div className={styles.game__header}>
+      <header className={styles.game__header}>
         <h3 className={styles.game__name}>
-          {getGameName(game.room_type)}
+          {gameName}
         </h3>
-        <p className={styles.game__players}>
-          <ManIcon /> {game.users}
+        <p className={styles.game__players} aria-label={`${game.users} active players`}>
+          <ManIcon aria-hidden="true" /> 
+          <span>{game.users}</span>
         </p>
-      </div>
+      </header>
       
-      <div className={styles.game__footer}>
+      <footer className={styles.game__footer}>
         <img
           src={game.url}
-          alt="game_image"
+          alt={`${gameName} game illustration`}
           className={styles.game__image}
         />
         <div className={styles.game__buttonWrapper}>
           <CircleButton 
             chevronPosition="right"
             iconType="chevron"
-            isWhiteBackground 
+            isWhiteBackground
+            aria-label={`Play ${gameName}`}
           />
         </div>
-      </div>
-    </div>
-  )
+      </footer>
+    </article>
+  );
 };
 
 export default GameCard;

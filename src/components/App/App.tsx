@@ -88,11 +88,9 @@ export const App: FC = () => {
     const fetchUserData = () => {
       getAppData(userId)
         .then(async (res) => {
-          console.log(res);
           if (res.ad_info) {
             await cacheBanners(res.ad_info);
           }
-          
           dispatch(setBannerData(res.ad_info));
           dispatch(setShopImage(res.shop_image_url));
           dispatch(setLanguageSettings(res.translate));
