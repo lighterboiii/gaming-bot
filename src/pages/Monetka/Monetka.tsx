@@ -125,7 +125,7 @@ export const Monetka: FC = () => {
       }, 1500);
       return;
     }
-
+console.log(gameState);
     const fetchInitialData = () => {
       sendMessage({
         user_id: userId,
@@ -156,7 +156,6 @@ export const Monetka: FC = () => {
         if (res?.game_answer_info) {
           const { animation, message, next_x } = res.game_answer_info;
 
-          // Обновляем состояние монет на основе mini_star_*
           const getCoinStatus = (starValue: string) => {
             switch (starValue) {
               case 'o':
@@ -281,6 +280,9 @@ export const Monetka: FC = () => {
             loading: false,
             data: res,
           }));
+          if (res?.game_answer_info?.next_x) {
+            setNextXValue(res.game_answer_info.next_x);
+          }
         }, ANIMATION_DELAYS.ROOM_INFO);
         updateBalance(res);
         break;
