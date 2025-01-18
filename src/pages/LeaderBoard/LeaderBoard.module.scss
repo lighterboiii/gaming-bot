@@ -34,12 +34,12 @@
   }
 
   &__leader {
-    @include size(100%, auto);
+    @include size(100%, 30vh);
     @include position(relative);
-    @include flex(column, flex-end, flex-end);
+    @include flex(column, center, flex-end);
 
-    @media screen and (min-height: 691px) {
-      @include size(100%, 20vh);
+    @media screen and (max-width: 691px) {
+      @include size(100%, auto);
       margin-bottom: 20px;
     }
   }
