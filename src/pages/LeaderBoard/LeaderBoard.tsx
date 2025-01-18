@@ -119,25 +119,27 @@ export const LeaderBoard: FC = () => {
               {type === 'tokens' && `${translation?.leaderboard_type_tokens}`}
               {type === 'friends' && `${translation?.leaderboard_type_friends}`}
             </p>
+            {/* <div className={styles.leaderBoard__infoContainer}> */}
+              <div className={styles.leaderBoard__timeWrapper}>
+                <div className={styles.leaderBoard__prizeRestart}>
+                  <span className={styles.leaderBoard__text}>{translation?.leaders_restart_in}</span>
+                  <TimerIcon />
+                  <Timer
+                    days={String(time?.days)}
+                    hours={String(time?.hours)}
+                    minutes={String(time?.minutes)} />
+                </div>
+                <div className={styles.leaderBoard__prize}>
+                  <span>{translation?.leaders_prize}</span>
+                  {prizeCount !== '' && <span>{prizeCount}</span>}
+                  <img src={prizePhoto}
+                    alt="prize"
+                    className={styles.leaderBoard__prizePhoto} />
+                </div>
+              </div>
+            {/* </div> */}
           </div>
           <div className={styles.leaderBoard__leader}>
-            <div className={styles.leaderBoard__timeWrapper}>
-              <div className={styles.leaderBoard__prizeRestart}>
-                <span className={styles.leaderBoard__text}>{translation?.leaders_restart_in}</span>
-                <TimerIcon />
-                <Timer
-                  days={String(time?.days)}
-                  hours={String(time?.hours)}
-                  minutes={String(time?.minutes)} />
-              </div>
-              <div className={styles.leaderBoard__prize}>
-                <span>{translation?.leaders_prize}</span>
-                {prizeCount !== '' && <span>{prizeCount}</span>}
-                <img src={prizePhoto}
-                  alt="prize"
-                  className={styles.leaderBoard__prizePhoto} />
-              </div>
-            </div>
             {leaderBoard?.length !== 0 ? (
               <div className={styles.leaderBoard__background}>
                   <div className={styles.leaderBoard__avatarContainer}>

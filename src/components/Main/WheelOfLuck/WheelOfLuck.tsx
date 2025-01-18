@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from '@tma.js/sdk';
 import { FC, useEffect, useRef, useState } from 'react';
 
 import { getUserId } from 'utils/userConfig';
@@ -33,8 +32,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const [spinning, setSpinning] = useState<boolean>(false);
   const [prizeItem, setPrizeItem] = useState<IFortuneItem | null>(null);
   const spinnerRef = useRef<HTMLDivElement>(null);
-  const getRandomIndex = (length: number) => Math.floor(Math.random() * length);
-  console.log(data);
+
   useEffect(() => {
     setLoading(true);
     const loadData = () => {
