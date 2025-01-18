@@ -68,6 +68,30 @@ const SettingsSlider: FC<IProps> = ({
     onInputChange && onInputChange(value);
   };
 
+  const handleFocus = () => {
+    const scrollPosition = window.scrollY;
+    
+    const handleScroll = () => window.scrollTo(0, scrollPosition);
+    window.addEventListener('scroll', handleScroll);
+    
+    const cleanup = () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.scrollTo(0, 0);
+      document.documentElement.style.height = '100%';
+      document.body.style.height = '100%';
+    };
+    
+    window.addEventListener('blur', cleanup, { once: true });
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.style.height = '100%';
+      document.body.style.height = '100%';
+    }, 100);
+  };
+
   useEffect(() => {
     onCurrencyChange(currency);
   }, [currency, onCurrencyChange]);
@@ -98,6 +122,8 @@ const SettingsSlider: FC<IProps> = ({
           value={bet}
           className={styles.slider__input}
           onChange={handleInputChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       )}
 

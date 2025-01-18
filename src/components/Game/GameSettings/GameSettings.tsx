@@ -137,11 +137,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     }
   };
 
-  useEffect(() => {
-    const originalHeight = window.innerHeight;
-    document.body.style.height = `${originalHeight}px`;
-  }, []);
-
   return (
     <div className={styles.game + ' scrollable'}>
       {messageShown ? (
