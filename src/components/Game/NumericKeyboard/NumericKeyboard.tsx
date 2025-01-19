@@ -131,7 +131,7 @@ const NumericKeyboard: FC<IProps> = ({
         className={styles.keyboard__confirmButton}
         onClick={onConfirm}
       >
-        ✓
+        Подтвердить
       </button>
     </div>
   );
