@@ -3,7 +3,10 @@
 
 .game {
   @include children-layout();
-  justify-content: flex-start;
+  // min-height: 100%;
+  // justify-content: flex-start;
+  position: relative;
+  z-index: 4;
   // background-color: $tertiary-color;
 
   &__logo {
