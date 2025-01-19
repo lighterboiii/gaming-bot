@@ -351,7 +351,6 @@ console.log(gameState);
     const setButtonState = type === 'blue' ? setBlueButtonState : setGreenButtonState;
     const choice = type === 'blue' ? "2" : "1";
 
-    // Предотвращаем множественные клики
     if (blueButtonState === 'down' || greenButtonState === 'down') {
       return;
     }
