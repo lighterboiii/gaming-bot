@@ -3,7 +3,7 @@ import { ItemData } from "./types/shopTypes";
 const SHOP_IMAGES_CACHE_KEY = 'cached_shop_images';
 const CACHE_LIFETIME = 1000 * 60 * 60 * 24; // 24 hours
 
-interface CachedImage {
+export interface CachedImage {
   id: number;
   pic: string;
   mask: string;
@@ -49,7 +49,7 @@ export const getCachedShopImage = (itemId: number): CachedImage | null => {
   }
 };
 
-export const cacheShopImage = async (item: ItemData): Promise<void> => {
+export const cacheShopImage = async (item: ItemData): Promise<CachedImage | null> => {
   try {
     const cachedImagesString = localStorage.getItem(SHOP_IMAGES_CACHE_KEY);
     const cachedImages: CachedImage[] = cachedImagesString ? JSON.parse(cachedImagesString) : [];
@@ -61,16 +61,20 @@ export const cacheShopImage = async (item: ItemData): Promise<void> => {
       convertImageToBase64(item.item_mask)
     ]);
 
-    filteredCache.push({
+    const newCacheEntry: CachedImage = {
       id: item.item_id,
       pic: picBase64,
       mask: maskBase64,
       timestamp: Date.now()
-    });
+    };
 
+    filteredCache.push(newCacheEntry);
     localStorage.setItem(SHOP_IMAGES_CACHE_KEY, JSON.stringify(filteredCache));
+    
+    return newCacheEntry;
   } catch (error) {
     console.error('Error caching shop image:', error);
+    return null;
   }
 };
 

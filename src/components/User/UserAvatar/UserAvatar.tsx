@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from "react";
 
 import { getImageLink, getImageMaskLink } from "../../../api/requestData";
-import { useAppSelector } from "../../../services/reduxHooks";
+import { setCachedShopImage } from "../../../services/appSlice";
+import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { getCachedShopImage, cacheShopImage } from "../../../utils/imageCache";
 
 import styles from './UserAvatar.module.scss';
@@ -13,6 +14,7 @@ interface IProps {
 }
 
 const UserAvatar: FC<IProps> = ({ item, avatar }) => {
+  const dispatch = useAppDispatch();
   const [userSkin, setSkin] = useState<string | null>(null);
   const [userMask, setMask] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,6 +23,7 @@ const UserAvatar: FC<IProps> = ({ item, avatar }) => {
   const userAvatar = useAppSelector(store => store.app.info?.photo);
   const userData = useAppSelector(store => store.app.info);
   const activeSkin = useAppSelector(store => store.app.info?.active_skin);
+  const cachedImages = useAppSelector(store => store.app.cachedShopImages);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -29,17 +32,30 @@ const UserAvatar: FC<IProps> = ({ item, avatar }) => {
         if (item) {
           setShouldShowAvatar(item.item_type !== "emoji");
           
-          const cachedImage = item.item_id ? getCachedShopImage(item.item_id) : null;
-          
-          if (cachedImage) {
-            setSkin(cachedImage.pic);
-            setMask(cachedImage.mask);
+          // Check Redux store first
+          const reduxCachedImage = item.item_id ? cachedImages[item.item_id] : null;
+          if (reduxCachedImage) {
+            setSkin(reduxCachedImage.pic);
+            setMask(reduxCachedImage.mask);
           } else {
-            setSkin(item?.item_pic);
-            setMask(item?.item_mask);
+            // Try localStorage cache
+            const localCachedImage = item.item_id ? getCachedShopImage(item.item_id) : null;
             
-            if (item.item_id) {
-              await cacheShopImage(item);
+            if (localCachedImage) {
+              setSkin(localCachedImage.pic);
+              setMask(localCachedImage.mask);
+              // Store in Redux for future use
+              dispatch(setCachedShopImage(localCachedImage));
+            } else {
+              setSkin(item?.item_pic);
+              setMask(item?.item_mask);
+              
+              if (item.item_id) {
+                const cachedImage = await cacheShopImage(item);
+                if (cachedImage) {
+                  dispatch(setCachedShopImage(cachedImage));
+                }
+              }
             }
           }
         } else if (userData && !item) {
@@ -62,7 +78,7 @@ const UserAvatar: FC<IProps> = ({ item, avatar }) => {
     };
 
     loadImages();
-  }, [activeSkin, userData, item]);
+  }, [activeSkin, userData, item, dispatch, cachedImages]);
 
   return (
     <div className={`${styles.userAvatar} ${isLoading ? styles.userAvatar_loading : ''}`}>
