@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
+import { CachedImage } from '../utils/imageCache';
 import { IGameData } from "../utils/types/gameTypes";
 import { IBannerData, IBonus, ITask, IUserData } from "../utils/types/mainTypes";
 import { ItemData } from "../utils/types/shopTypes";
@@ -26,6 +27,7 @@ interface AppState {
   secondGameRulesState: boolean | null;
   thirdGameRulesState: boolean | null;
   fourthGameRulesState: boolean | null;
+  cachedShopImages: { [key: number]: CachedImage };
 }
 
 const initialState: AppState = {
@@ -47,6 +49,7 @@ const initialState: AppState = {
   secondGameRulesState: null,
   thirdGameRulesState: null,
   fourthGameRulesState: null,
+  cachedShopImages: {},
 }
 
 const appSlice = createSlice({
@@ -202,6 +205,12 @@ const appSlice = createSlice({
     setFourthGameRulesState: (state, action: PayloadAction<boolean>) => {
       state.fourthGameRulesState = action.payload;
     },
+    setCachedShopImage: (state, action: PayloadAction<CachedImage>) => {
+      state.cachedShopImages[action.payload.id] = action.payload;
+    },
+    clearShopImagesCache: (state) => {
+      state.cachedShopImages = {};
+    }
   }
 })
 
@@ -240,7 +249,9 @@ export const {
   setThirdGameRuleImage,
   setThirdGameRulesState,
   setFourthGameRuleImage,
-  setFourthGameRulesState
+  setFourthGameRulesState,
+  setCachedShopImage,
+  clearShopImagesCache
 } = appSlice.actions;
 
 export default appSlice.reducer;

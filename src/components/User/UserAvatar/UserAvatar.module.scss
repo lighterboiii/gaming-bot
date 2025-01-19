@@ -6,13 +6,20 @@
   @include position(relative);
   @include flex(row, center, center);
   @include size(100%, 100%);
+  transition: opacity 0.2s ease-in-out;
+
+  &_loading {
+    opacity: 0.7;
+  }
 
   &__avatarBackground {
     @include position(absolute, $top: 0, $left: 0);
     @include size(100%, 100%);
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: center;
     z-index: 2;
+    transition: background-image 0.2s ease-in-out;
   }
 
   &__userAvatar {
@@ -21,5 +28,6 @@
     mask-composite: exclude;
     mask-size: 155%;
     mask-position: center;
+    transition: mask-image 0.2s ease-in-out;
   }
 }
