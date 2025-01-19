@@ -97,6 +97,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
             setMessage(`${translation?.insufficient_funds}`);
             triggerHapticFeedback('notification', 'error');
             break;
+          case "has":
+            triggerHapticFeedback('notification', 'error');
+            setMessage(`${translation?.item_already_owned}`);
+            break;
           case "ok":
             updateItemCount(item.item_id);
             getShopItemsRequest()
