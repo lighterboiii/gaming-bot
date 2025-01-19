@@ -26,8 +26,6 @@ import {
   setShopAvailable,
   setShopImage,
   setTaskList,
-  setUserData,
-  setUserPhoto,
   setProductsArchive,
   setThirdGameRuleImage,
   setThirdGameRulesState,

@@ -20,7 +20,6 @@
   }
 
   &__stats {
-    @include indents();
     font-weight: 900;
     color: $main-color;
   }

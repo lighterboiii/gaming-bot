@@ -21,17 +21,17 @@ const CreateRoomFooter: FC = () => {
   };
 
   return (
-    <div className={styles.footer}>
+    <footer className={styles.footer}>
       <div className={styles.footer__statistics}>
-        <p className={styles.footer__stats}>💵 {userInfo && formatNumber(userInfo!.coins)}</p>
-        <p className={styles.footer__stats}>🔰 {userInfo && formatNumber(userInfo!.tokens)}</p>
-        <p className={styles.footer__stats}>⚡ {userInfo?.user_energy}</p>
+        <span className={styles.footer__stats}>💵 {userInfo && formatNumber(userInfo!.coins)}</span>
+        <span className={styles.footer__stats}>🔰 {userInfo && formatNumber(userInfo!.tokens)}</span>
+        <span className={styles.footer__stats}>⚡ {userInfo?.user_energy}</span>
       </div>
       <div className={styles.footer__buttonWrapper}>
         <Button text={translation?.create_room}
           handleClick={handleCreateClick} />
       </div>
-    </div>
+    </footer>
   )
 };
 

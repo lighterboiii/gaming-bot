@@ -26,20 +26,41 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const userId = getUserId();
+  
+  // Game state
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
-  const [message, setMessage] = useState('');
-  const [messageShown, setMessageShown] = useState(false);
-  const [insufficient, setInsufficient] = useState(false);
+  
+  // UI state
+  const [notification, setNotification] = useState({
+    message: '',
+    isShown: false,
+    isInsufficient: false
+  });
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+
+  // Redux state
   const userTokens = useAppSelector(store => store.app.info?.tokens);
   const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const userInfo = useAppSelector(store => store.app.info);
+  
+  // WebSocket context
   const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
   const parsedMessages = wsMessages?.map(msg => JSON.parse(msg));
+
+  const showNotification = (message: string, isInsufficient = false) => {
+    setNotification({
+      message,
+      isShown: true,
+      isInsufficient
+    });
+    setTimeout(() => {
+      setNotification(prev => ({ ...prev, isShown: false, isInsufficient: false }));
+    }, 2000);
+  };
 
   useEffect(() => {
     if (parsedMessages?.length > 0) {
@@ -47,36 +68,22 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       if (lastMessage && lastMessage?.message === 'success') {
         triggerHapticFeedback('notification', 'success');
         setSelectedRoomId(lastMessage.room_id);
-        navigate(data?.room_type === 2
-          ? `/closest/${lastMessage?.room_id}`
-          : data?.room_type === 3
-            ? `/ludkaGame/${lastMessage?.room_id}`
-            : data?.room_type === 4
-              ? `/monetka/${lastMessage?.room_id}`
-              : `/room/${lastMessage?.room_id}`);
+        const roomRoutes = {
+          2: `/closest/${lastMessage?.room_id}`,
+          3: `/ludkaGame/${lastMessage?.room_id}`,
+          4: `/monetka/${lastMessage?.room_id}`,
+          default: `/room/${lastMessage?.room_id}`
+        };
+        navigate(roomRoutes[data?.room_type as keyof typeof roomRoutes] || roomRoutes.default);
       } else if (lastMessage?.type === 'error') {
-        setInsufficient(true);
-        setMessage(translation?.insufficient_funds || 'Недостаточно средств');
-        setMessageShown(true);
-        setTimeout(() => {
-          setMessageShown(false);
-          setInsufficient(false);
-        }, 2000);
+        showNotification(translation?.insufficient_funds || 'Недостаточно средств', true);
       }
     }
   }, [parsedMessages, navigate, translation, data]);
 
-  const handleCurrencyChange = (newCurrency: number) => {
-    setCurrency(newCurrency);
-  };
-
-  const handleBetChange = (newBet: number) => {
-    setBet(newBet);
-  };
-
-  const handleInputChange = (bet: string) => {
-    setBet(parseFloat(bet));
-  };
+  const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
+  const handleBetChange = (newBet: number) => setBet(newBet);
+  const handleInputChange = (bet: string) => setBet(parseFloat(bet));
 
   const handleCreateRoom = async (
     userIdValue: number,
@@ -92,32 +99,22 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
-      const data = {
+      sendMessage({
         type: 'create_room',
         user_id: userIdValue,
-        bet: bet,
+        bet,
         bet_type: betType,
         room_type: roomType,
-      };
-
-      sendMessage(data);
+      });
     } catch (error) {
       console.error('Error creating room:', error);
-      setMessage(translation?.error_creating_room || 'Ошибка создания комнаты');
-      setMessageShown(true);
-      setTimeout(() => {
-        setMessageShown(false);
-      }, 2000);
+      showNotification(translation?.error_creating_room || 'Ошибка создания комнаты');
     }
   };
 
   const handleEnergyCheck = () => {
     if (bet < 0.1) {
-      setMessage(`${translation?.minimum_bet} ${currency === 1 ? `💵` : `🔰`}`);
-      setMessageShown(true);
-      setTimeout(() => {
-        setMessageShown(false);
-      }, 2000);
+      showNotification(`${translation?.minimum_bet} ${currency === 1 ? `💵` : `🔰`}`);
       return;
     }
 
@@ -126,11 +123,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       const tokens = userTokens ?? 0;
 
       if ((currency === 1 && bet > coins) || (currency === 3 && bet > tokens)) {
-        setMessage(translation?.insufficient_funds || 'Недостаточно средств');
-        setMessageShown(true);
-        setTimeout(() => {
-          setMessageShown(false);
-        }, 2000);
+        showNotification(translation?.insufficient_funds || 'Недостаточно средств');
       } else if (userEnergy === 0 && currency === 3) {
         setPopupOpen(true);
       } else if (data) {
@@ -139,40 +132,60 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     }
   };
 
+  const getGameTitle = () => {
+    const titles = {
+      1: translation?.rock_paper_scissors,
+      2: translation?.closest_number,
+      3: translation?.ludka_name,
+      4: translation?.monetka_name
+    };
+    return titles[data?.room_type as keyof typeof titles] || '';
+  };
+
   return (
-    <div className={styles.game + ' scrollable'}>
-      {messageShown ? (
-        <div className={styles.game__notification}>
-          {message}
-        </div>
-      ) : insufficient ? (
-        <div className={styles.game__notification}>
+    <main className={styles.game + ' scrollable'} role="main">
+      {notification.isShown ? (
+        <section 
+          className={styles.game__notification}
+          role="alert"
+          aria-live="polite"
+        >
+          {notification.message}
+        </section>
+      ) : notification.isInsufficient ? (
+        <section 
+          className={styles.game__notification}
+          role="alert"
+          aria-live="polite"
+        >
           {translation?.insufficient_funds}
-        </div>
+        </section>
       ) : (
         <>
-          <div style={{ backgroundImage: `url(${data?.url})` }} className={styles.game__logo} />
-          <div className={styles.game__content}>
-            <h3 className={styles.game__title}>
-              {data?.room_type === 1
-                ? `${translation?.rock_paper_scissors}`
-                : data?.room_type === 2
-                  ? `${translation?.closest_number}`
-                  : data?.room_type === 3
-                    ? `${translation?.ludka_name}`
-                    : `${translation?.monetka_name}`}
-            </h3>
-            <div className={styles.game__balance}>
-              <p className={styles.game__text}>{translation?.user_balance}</p>
+          <img 
+            src={data?.url} 
+            alt={getGameTitle()}
+            className={styles.game__logo}
+          />
+          <section className={styles.game__content}>
+            <h1 className={styles.game__title}>
+              {getGameTitle()}
+            </h1>
+            <section className={styles.game__balance} aria-label="User Balance">
+              <h2 className={styles.game__text}>{translation?.user_balance}</h2>
               <div className={styles.game__balanceWrapper}>
                 <p className={styles.game__text}>
-                  {MONEY_EMOJI} {userCoins !== undefined ? formatNumber(userCoins) : 0}</p>
+                  <span>{MONEY_EMOJI}</span> 
+                   {userCoins !== undefined ? formatNumber(userCoins) : 0}
+                </p>
                 <p className={styles.game__text}>
-                  {SHIELD_EMOJI} {userTokens !== undefined ? formatNumber(userTokens) : 0}</p>
+                  <span>{SHIELD_EMOJI}</span> 
+                  {userTokens !== undefined ? formatNumber(userTokens) : 0}
+                </p>
               </div>
-            </div>
-            <div className={styles.game__menu}>
-              <p className={styles.game__text}>{translation?.bet_in_room}</p>
+            </section>
+            <section className={styles.game__menu} aria-label="Game Settings">
+              <h2 className={styles.game__text}>{translation?.bet_in_room}</h2>
               <div className={styles.game__buttons}>
                 <SettingsSlider
                   betValue={bet}
@@ -185,7 +198,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
                   onCurrencyChange={handleCurrencyChange}
                 />
               </div>
-            </div>
+            </section>
             <div className={styles.game__buttonWrapper}>
               <Button
                 disabled={isNaN(bet) || bet <= 0}
@@ -193,11 +206,14 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
                 handleClick={handleEnergyCheck}
               />
             </div>
-          </div>
+          </section>
         </>
       )}
       {isPopupOpen && (
-        <Modal title={translation?.energy_depleted} closeModal={() => setPopupOpen(false)}>
+        <Modal 
+          title={translation?.energy_depleted} 
+          closeModal={() => setPopupOpen(false)}
+        >
           <JoinRoomPopup
             handleClick={() => setPopupOpen(false)}
             roomId={selectedRoomId ?? ''}
@@ -208,7 +224,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
           />
         </Modal>
       )}
-    </div>
+    </main>
   );
 };
 
