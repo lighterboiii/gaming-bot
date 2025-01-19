@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState, useRef, TouchEvent } from 'react';
 
 import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
 import { triggerHapticFeedback } from '../../../utils/hapticConfig';
@@ -23,6 +23,54 @@ const SettingsSlider: FC<IProps> = ({
 }) => {
   const [bet, setBet] = useState('1.0');
   const [currency, setCurrency] = useState(1);
+  const [showKeyboard, setShowKeyboard] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const keyboardRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<number>(0);
+
+  const closeKeyboard = () => {
+    setShowKeyboard(false);
+  };
+
+  // Handle click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (keyboardRef.current && !keyboardRef.current.contains(event.target as Node)) {
+        closeKeyboard();
+      }
+    };
+
+    // Handle escape key
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeKeyboard();
+      }
+    };
+
+    if (showKeyboard) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [showKeyboard]);
+
+  // Handle swipe down
+  const handleTouchStart = (e: TouchEvent) => {
+    touchStartRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touchEnd = e.touches[0].clientY;
+    const diff = touchEnd - touchStartRef.current;
+
+    if (diff > 50) { // If swipe down is more than 50px
+      closeKeyboard();
+    }
+  };
 
   const increaseBet = () => {
     triggerHapticFeedback('impact', 'soft');
@@ -56,40 +104,49 @@ const SettingsSlider: FC<IProps> = ({
     setCurrency(newCurrency);
   };
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setBet(value);
-
-    const newBetValue = parseFloat(value);
-    if (!isNaN(newBetValue)) {
-      onBetChange(newBetValue);
+  const handleInputFocus = () => {
+    if (inputRef.current) {
+      inputRef.current.blur(); // Prevent default keyboard
     }
-
-    onInputChange && onInputChange(value);
+    setShowKeyboard(true);
   };
 
-  const handleFocus = () => {
-    const scrollPosition = window.scrollY;
-    
-    const handleScroll = () => window.scrollTo(0, scrollPosition);
-    window.addEventListener('scroll', handleScroll);
-    
-    const cleanup = () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.scrollTo(0, 0);
-      document.documentElement.style.height = '100%';
-      document.body.style.height = '100%';
-    };
-    
-    window.addEventListener('blur', cleanup, { once: true });
-  };
-
-  const handleBlur = () => {
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.style.height = '100%';
-      document.body.style.height = '100%';
-    }, 100);
+  const handleKeyPress = (key: string) => {
+    triggerHapticFeedback('impact', 'soft');
+    if (key === 'delete') {
+      setBet(prevBet => {
+        const newBet = prevBet.slice(0, -1) || '0';
+        const numericBet = parseFloat(newBet);
+        onBetChange(numericBet);
+        onInputChange && onInputChange(newBet);
+        return newBet;
+      });
+    } else if (key === 'done') {
+      closeKeyboard();
+    } else {
+      setBet(prevBet => {
+        let newBet = prevBet;
+        // Handle decimal point
+        if (key === '.' && !prevBet.includes('.')) {
+          newBet = prevBet + key;
+        } 
+        // Handle numbers
+        else if (key !== '.') {
+          if (prevBet === '0') {
+            newBet = key;
+          } else {
+            newBet = prevBet + key;
+          }
+        }
+        
+        const numericBet = parseFloat(newBet);
+        if (!isNaN(numericBet)) {
+          onBetChange(numericBet);
+          onInputChange && onInputChange(newBet);
+        }
+        return newBet;
+      });
+    }
   };
 
   useEffect(() => {
@@ -105,35 +162,57 @@ const SettingsSlider: FC<IProps> = ({
   }, [bet, onBetChange, onInputChange]);
 
   return (
-    <div className={styles.slider}>
-      <button
-        onClick={isCurrency ? toggleCurrency : decreaseBet}
-        className={styles.slider__button}
-      >
-        <ChevronIcon position='left' />
-      </button>
-      {isCurrency ? (
-        <span className={styles.slider__text}>
-          {currency === 1 ? '💵' : '🔰'}
-        </span>
-      ) : (
-        <input
-          type="number"
-          value={bet}
-          className={styles.slider__input}
-          onChange={handleInputChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
-      )}
+    <>
+      <div className={styles.slider}>
+        <button
+          onClick={isCurrency ? toggleCurrency : decreaseBet}
+          className={styles.slider__button}
+        >
+          <ChevronIcon position='left' />
+        </button>
+        {isCurrency ? (
+          <span className={styles.slider__text}>
+            {currency === 1 ? '💵' : '🔰'}
+          </span>
+        ) : (
+          <input
+            ref={inputRef}
+            type="text"
+            inputMode="none"
+            value={bet}
+            className={styles.slider__input}
+            onFocus={handleInputFocus}
+            readOnly
+          />
+        )}
 
-      <button
-        onClick={isCurrency ? toggleCurrency : increaseBet}
-        className={styles.slider__button}
+        <button
+          onClick={isCurrency ? toggleCurrency : increaseBet}
+          className={styles.slider__button}
+        >
+          <ChevronIcon position='right' />
+        </button>
+      </div>
+
+      <div 
+        ref={keyboardRef}
+        className={`${styles.keyboard} ${showKeyboard ? styles['keyboard--visible'] : ''}`}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
       >
-        <ChevronIcon position='right' />
-      </button>
-    </div>
+        <div className={styles.keyboard__grid}>
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'delete'].map((key) => (
+            <button
+              key={key}
+              className={`${styles.keyboard__key} ${key === 'delete' ? styles['keyboard__key--action'] : ''}`}
+              onClick={() => handleKeyPress(key)}
+            >
+              {key === 'delete' ? '⌫' : key}
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 
