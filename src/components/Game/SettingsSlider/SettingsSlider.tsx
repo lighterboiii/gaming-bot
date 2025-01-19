@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ChangeEvent, FC, useEffect, useState, useRef, TouchEvent } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
 
 import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
 import { triggerHapticFeedback } from '../../../utils/hapticConfig';
+import NumericKeyboard from '../NumericKeyboard/NumericKeyboard';
 
 import styles from './SettingsSlider.module.scss';
 
@@ -26,48 +27,9 @@ const SettingsSlider: FC<IProps> = ({
   const [currency, setCurrency] = useState(1);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const keyboardRef = useRef<HTMLDivElement>(null);
-  const touchStartRef = useRef<number>(0);
 
   const closeKeyboard = () => {
     setShowKeyboard(false);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (keyboardRef.current && !keyboardRef.current.contains(event.target as Node)) {
-        closeKeyboard();
-      }
-    };
-
-    const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeKeyboard();
-      }
-    };
-
-    if (showKeyboard) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleEscapeKey);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscapeKey);
-    };
-  }, [showKeyboard]);
-
-  const handleTouchStart = (e: TouchEvent) => {
-    touchStartRef.current = e.touches[0].clientY;
-  };
-
-  const handleTouchMove = (e: TouchEvent) => {
-    const touchEnd = e.touches[0].clientY;
-    const diff = touchEnd - touchStartRef.current;
-
-    if (diff > 50) {
-      closeKeyboard();
-    }
   };
 
   const increaseBet = () => {
@@ -108,33 +70,6 @@ const SettingsSlider: FC<IProps> = ({
     }
     setKeyboardValue(bet);
     setShowKeyboard(true);
-  };
-
-  const handleKeyPress = (key: string) => {
-    triggerHapticFeedback('impact', 'soft');
-    if (key === 'delete') {
-      setKeyboardValue(prevValue => {
-        const newValue = prevValue.slice(0, -1) || '0';
-        return newValue;
-      });
-    } else if (key === 'done') {
-      closeKeyboard();
-    } else {
-      setKeyboardValue(prevValue => {
-        let newValue = prevValue;
-        if (key === '.' && !prevValue.includes('.')) {
-          newValue = prevValue + key;
-        } 
-        else if (key !== '.') {
-          if (prevValue === '0') {
-            newValue = key;
-          } else {
-            newValue = prevValue + key;
-          }
-        }
-        return newValue;
-      });
-    }
   };
 
   const handleConfirm = () => {
@@ -192,43 +127,13 @@ const SettingsSlider: FC<IProps> = ({
         </button>
       </div>
 
-      <div 
-        ref={keyboardRef}
-        className={`${styles.keyboard} ${showKeyboard ? styles['keyboard--visible'] : ''}`}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-      >
-        <div className={styles.keyboard__header}>
-          <div className={styles['keyboard__input-wrapper']}>
-            <input
-              type="text"
-              inputMode="none"
-              value={keyboardValue}
-              className={styles.keyboard__input}
-              readOnly
-            />
-          </div>
-        </div>
-
-        <div className={styles.keyboard__grid}>
-          {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'delete'].map((key) => (
-            <button
-              key={key}
-              className={`${styles.keyboard__key} ${key === 'delete' ? styles['keyboard__key--action'] : ''}`}
-              onClick={() => handleKeyPress(key)}
-            >
-              {key === 'delete' ? '⌫' : key}
-            </button>
-          ))}
-        </div>
-
-        <button 
-          className={styles.keyboard__confirm}
-          onClick={handleConfirm}
-        >
-          ✓
-        </button>
-      </div>
+      <NumericKeyboard
+        isVisible={showKeyboard}
+        value={keyboardValue}
+        onClose={closeKeyboard}
+        onChange={setKeyboardValue}
+        onConfirm={handleConfirm}
+      />
     </>
   );
 };

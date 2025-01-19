@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from '@tma.js/sdk';
 import { FC, useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from '../../../services/reduxHooks';
 import { WebSocketContext } from '../../../socket/WebSocketContext';
 import { formatNumber } from '../../../utils/additionalFunctions';
+import { MONEY_EMOJI, SHIELD_EMOJI } from '../../../utils/constants';
 import { triggerHapticFeedback } from '../../../utils/hapticConfig';
 import { IGameSettingsData } from '../../../utils/types/gameTypes';
 import { getUserId } from '../../../utils/userConfig';
@@ -47,13 +47,13 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       if (lastMessage && lastMessage?.message === 'success') {
         triggerHapticFeedback('notification', 'success');
         setSelectedRoomId(lastMessage.room_id);
-        navigate(data?.room_type === 2 
-            ? `/closest/${lastMessage?.room_id}` 
-            : data?.room_type === 3
-              ? `/ludkaGame/${lastMessage?.room_id}`
-              : data?.room_type === 4
-                ? `/monetka/${lastMessage?.room_id}`
-                : `/room/${lastMessage?.room_id}`);
+        navigate(data?.room_type === 2
+          ? `/closest/${lastMessage?.room_id}`
+          : data?.room_type === 3
+            ? `/ludkaGame/${lastMessage?.room_id}`
+            : data?.room_type === 4
+              ? `/monetka/${lastMessage?.room_id}`
+              : `/room/${lastMessage?.room_id}`);
       } else if (lastMessage?.type === 'error') {
         setInsufficient(true);
         setMessage(translation?.insufficient_funds || 'Недостаточно средств');
@@ -79,10 +79,10 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   };
 
   const handleCreateRoom = async (
-    userIdValue: number, 
-    bet: number, 
-    betType: number, 
-    roomType: number, 
+    userIdValue: number,
+    bet: number,
+    betType: number,
+    roomType: number,
     closeOverlay: () => void
   ) => {
     try {
@@ -99,7 +99,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         bet_type: betType,
         room_type: roomType,
       };
-      
+
       sendMessage(data);
     } catch (error) {
       console.error('Error creating room:', error);
@@ -154,19 +154,21 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
           <div style={{ backgroundImage: `url(${data?.url})` }} className={styles.game__logo} />
           <div className={styles.game__content}>
             <h3 className={styles.game__title}>
-              {data?.room_type === 1 
-                ? `${translation?.rock_paper_scissors}` 
-                : data?.room_type === 2 
+              {data?.room_type === 1
+                ? `${translation?.rock_paper_scissors}`
+                : data?.room_type === 2
                   ? `${translation?.closest_number}`
-                  : data?.room_type === 3 
+                  : data?.room_type === 3
                     ? `${translation?.ludka_name}`
-                    :  `${translation?.monetka_name}`}
+                    : `${translation?.monetka_name}`}
             </h3>
             <div className={styles.game__balance}>
               <p className={styles.game__text}>{translation?.user_balance}</p>
               <div className={styles.game__balanceWrapper}>
-                <p className={styles.game__text}>💵 {userCoins !== undefined ? formatNumber(userCoins) : 0}</p>
-                <p className={styles.game__text}>🔰 {userTokens !== undefined ? formatNumber(userTokens) : 0}</p>
+                <p className={styles.game__text}>
+                  {MONEY_EMOJI} {userCoins !== undefined ? formatNumber(userCoins) : 0}</p>
+                <p className={styles.game__text}>
+                  {SHIELD_EMOJI} {userTokens !== undefined ? formatNumber(userTokens) : 0}</p>
               </div>
             </div>
             <div className={styles.game__menu}>
