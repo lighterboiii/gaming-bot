@@ -138,15 +138,16 @@ export const Shop: FC = () => {
   }
 
   return (
-    <div className={styles.shop}>
-      <div className={styles.shop__header}>
-        <h2 className={styles.shop__title}>{translation?.shop_menu}</h2>
+    <main className={styles.shop}>
+      <header className={styles.shop__header}>
+        <h1 className={styles.shop__title}>{translation?.shop_menu}</h1>
         <UserInfo />
-      </div>
-      <div className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
-        <div className={styles.shop__buttons}>
+      </header>
+      <section className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
+        <nav className={styles.shop__buttons}>
           <div className={styles.shop__leftButtonsContainer}>
             <button
+              aria-pressed={activeButton === `${translation?.shop_button}`}
               className={
                 `${styles.shop__button} ${activeButton === `${translation?.shop_button}` ? styles.activeButton : ''}`
               }
@@ -156,6 +157,7 @@ export const Shop: FC = () => {
               {translation?.shop_button}
             </button>
             <button
+              aria-pressed={activeButton === `${translation?.marketplace}`}
               className={
                 `${styles.shop__button} ${activeButton === `${translation?.marketplace}` ? styles.activeButton : ''}`
               }
@@ -166,6 +168,7 @@ export const Shop: FC = () => {
             </button>
           </div>
           <button
+            aria-pressed={activeButton === `${translation?.purchased}`}
             className={
               `${styles.shop__button} 
               ${styles.shop__inventory} 
@@ -176,29 +179,33 @@ export const Shop: FC = () => {
           >
             {translation?.purchased}
           </button>
-        </div>
-        {loading ? <p style={{ color: '#ffdb50', fontWeight: '900' }}>{translation?.loading}...</p> : (
-          <>
-            <div className={styles.shop__goods + ' scrollable'}>
-              {goods?.length > 0 ? (
-                <>
-                  {goods.map((item: ItemData, index: number) => (
+        </nav>
+        {loading ? (
+          <p role="status" aria-live="polite" style={{ color: '#ffdb50', fontWeight: '900' }}>
+            {translation?.loading}...
+          </p>
+        ) : (
+          <section className={styles.shop__goods + ' scrollable'} aria-label="Shop items">
+            {goods?.length > 0 ? (
+              <>
+                {goods.map((item: ItemData, index: number) => (
+                  <li key={index} className={styles.shop__item}>
                     <ShopItem
-                      key={index}
                       item={item}
                       onClick={() => handleShowItemDetails(item)}
                       activeButton={activeButton}
                     />
-                  ))}
-                </>
-              ) : (
-                <p style={{ color: '#ffdb50', fontWeight: '900' }}>{translation?.empty_here}</p>
-              )}
-            </div>
-          </>
-        )
-        }
-      </div>
+                  </li>
+                ))}
+              </>
+            ) : (
+              <p role="status" aria-live="polite" style={{ color: '#ffdb50', fontWeight: '900' }}>
+                {translation?.empty_here}
+              </p>
+            )}
+          </section>
+        )}
+      </section>
       {selectedItem && <Overlay
         buttonColor="#FFF"
         crossColor="#ac1a44"
@@ -214,7 +221,7 @@ export const Shop: FC = () => {
             updateItemCount={updateItemCount}
           />}
       />}
-    </div >
+    </main>
   )
 };
 
