@@ -13,6 +13,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { setLavkaAvailable } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { triggerHapticFeedback } from "../../utils/hapticConfig";
+import { preloadShopImages } from "../../utils/imageCache";
 import { indexUrl } from "../../utils/routes";
 import { IInventoryRequest } from "../../utils/types/responseTypes";
 import { CombinedItemData, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
@@ -78,12 +79,18 @@ export const Shop: FC = () => {
       .then(res => {
         const response = res as IInventoryRequest;
         setInventoryItems(response?.message);
+        // Preload inventory images
+        preloadShopImages(response?.message);
       })
       .catch(error => {
         console.log(error)
       })
-    shopData && setGoods(shopData);
-    shopData && handleAddIsCollectible(shopData);
+    if (shopData) {
+      setGoods(shopData);
+      handleAddIsCollectible(shopData);
+      // Preload shop images
+      preloadShopImages(shopData);
+    }
     setTimeout(() => {
       setLoading(false);
     }, 800);
@@ -110,10 +117,12 @@ export const Shop: FC = () => {
   const handleClickLavka = async () => {
     setLoading(true);
     triggerHapticFeedback('impact', 'soft');
-     setActiveButton(`${translation?.marketplace}`);
+    setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
     setGoods(updatedLavka.lavka);
+    // Preload lavka images
+    await preloadShopImages(updatedLavka.lavka);
     setLoading(false);
   };
 
