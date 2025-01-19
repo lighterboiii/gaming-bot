@@ -22,6 +22,7 @@ const SettingsSlider: FC<IProps> = ({
   onInputChange,
 }) => {
   const [bet, setBet] = useState('1.0');
+  const [keyboardValue, setKeyboardValue] = useState('1.0');
   const [currency, setCurrency] = useState(1);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -32,7 +33,6 @@ const SettingsSlider: FC<IProps> = ({
     setShowKeyboard(false);
   };
 
-  // Handle click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (keyboardRef.current && !keyboardRef.current.contains(event.target as Node)) {
@@ -40,7 +40,6 @@ const SettingsSlider: FC<IProps> = ({
       }
     };
 
-    // Handle escape key
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         closeKeyboard();
@@ -58,7 +57,6 @@ const SettingsSlider: FC<IProps> = ({
     };
   }, [showKeyboard]);
 
-  // Handle swipe down
   const handleTouchStart = (e: TouchEvent) => {
     touchStartRef.current = e.touches[0].clientY;
   };
@@ -67,7 +65,7 @@ const SettingsSlider: FC<IProps> = ({
     const touchEnd = e.touches[0].clientY;
     const diff = touchEnd - touchStartRef.current;
 
-    if (diff > 50) { // If swipe down is more than 50px
+    if (diff > 50) {
       closeKeyboard();
     }
   };
@@ -106,47 +104,47 @@ const SettingsSlider: FC<IProps> = ({
 
   const handleInputFocus = () => {
     if (inputRef.current) {
-      inputRef.current.blur(); // Prevent default keyboard
+      inputRef.current.blur();
     }
+    setKeyboardValue(bet);
     setShowKeyboard(true);
   };
 
   const handleKeyPress = (key: string) => {
     triggerHapticFeedback('impact', 'soft');
     if (key === 'delete') {
-      setBet(prevBet => {
-        const newBet = prevBet.slice(0, -1) || '0';
-        const numericBet = parseFloat(newBet);
-        onBetChange(numericBet);
-        onInputChange && onInputChange(newBet);
-        return newBet;
+      setKeyboardValue(prevValue => {
+        const newValue = prevValue.slice(0, -1) || '0';
+        return newValue;
       });
     } else if (key === 'done') {
       closeKeyboard();
     } else {
-      setBet(prevBet => {
-        let newBet = prevBet;
-        // Handle decimal point
-        if (key === '.' && !prevBet.includes('.')) {
-          newBet = prevBet + key;
+      setKeyboardValue(prevValue => {
+        let newValue = prevValue;
+        if (key === '.' && !prevValue.includes('.')) {
+          newValue = prevValue + key;
         } 
-        // Handle numbers
         else if (key !== '.') {
-          if (prevBet === '0') {
-            newBet = key;
+          if (prevValue === '0') {
+            newValue = key;
           } else {
-            newBet = prevBet + key;
+            newValue = prevValue + key;
           }
         }
-        
-        const numericBet = parseFloat(newBet);
-        if (!isNaN(numericBet)) {
-          onBetChange(numericBet);
-          onInputChange && onInputChange(newBet);
-        }
-        return newBet;
+        return newValue;
       });
     }
+  };
+
+  const handleConfirm = () => {
+    const numericBet = parseFloat(keyboardValue);
+    if (!isNaN(numericBet)) {
+      setBet(keyboardValue);
+      onBetChange(numericBet);
+      onInputChange && onInputChange(keyboardValue);
+    }
+    closeKeyboard();
   };
 
   useEffect(() => {
@@ -200,6 +198,18 @@ const SettingsSlider: FC<IProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
       >
+        <div className={styles.keyboard__header}>
+          <div className={styles['keyboard__input-wrapper']}>
+            <input
+              type="text"
+              inputMode="none"
+              value={keyboardValue}
+              className={styles.keyboard__input}
+              readOnly
+            />
+          </div>
+        </div>
+
         <div className={styles.keyboard__grid}>
           {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'delete'].map((key) => (
             <button
@@ -211,6 +221,13 @@ const SettingsSlider: FC<IProps> = ({
             </button>
           ))}
         </div>
+
+        <button 
+          className={styles.keyboard__confirm}
+          onClick={handleConfirm}
+        >
+          ✓
+        </button>
       </div>
     </>
   );
