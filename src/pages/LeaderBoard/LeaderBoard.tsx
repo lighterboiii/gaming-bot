@@ -54,7 +54,6 @@ export const LeaderBoard: FC = () => {
       setLoading(true);
       getTopUsers()
         .then((response) => {
-          console.log(response);
           const leaders = response as ITopUsersRes;
           setTopLeader(leaders?.top_users[0]);
           setLeaderBoard(leaders?.top_users.slice(1));
@@ -119,7 +118,6 @@ export const LeaderBoard: FC = () => {
               {type === 'tokens' && `${translation?.leaderboard_type_tokens}`}
               {type === 'friends' && `${translation?.leaderboard_type_friends}`}
             </p>
-            {/* <div className={styles.leaderBoard__infoContainer}> */}
               <div className={styles.leaderBoard__timeWrapper}>
                 <div className={styles.leaderBoard__prizeRestart}>
                   <span className={styles.leaderBoard__text}>{translation?.leaders_restart_in}</span>
@@ -137,7 +135,6 @@ export const LeaderBoard: FC = () => {
                     className={styles.leaderBoard__prizePhoto} />
                 </div>
               </div>
-            {/* </div> */}
           </div>
           <div className={styles.leaderBoard__leader}>
             {leaderBoard?.length !== 0 ? (
