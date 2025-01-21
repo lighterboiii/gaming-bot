@@ -220,8 +220,8 @@ export const RockPaperScissors: FC = () => {
           triggerHapticFeedback('notification', 'error');
           return {
             animation: Number(data?.creator_id) === Number(res?.whoiswin.winner)
-              ? rLoseAnim
-              : lLoseAnim,
+              ? lLoseAnim
+              : rLoseAnim,
             message: `${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1" ? `💵` : `🔰`}`
           };
         }
