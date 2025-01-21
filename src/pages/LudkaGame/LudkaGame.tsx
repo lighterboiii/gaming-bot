@@ -714,6 +714,7 @@ const LudkaGame: FC = () => {
         onClose={handleCloseEmojiOverlay}
         onEmojiSelect={handleEmojiSelect}
         backgroundColor="#323232"
+        userId={userId}
       />
     </div>
   )

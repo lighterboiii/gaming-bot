@@ -506,6 +506,8 @@ export const RockPaperScissors: FC = () => {
           show={showEmojiOverlay}
           onClose={handleCloseEmojiOverlay}
           onEmojiSelect={handleEmojiSelect}
+          userId={userId}
+          backgroundColor="#0D2759"
         />
       </div>
     </div>

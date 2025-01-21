@@ -1,39 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState } from "react";
+import { FC } from 'react';
 
-import { getActiveEmojiPack } from "../../api/mainApi";
-import useTelegram from "../../hooks/useTelegram";
+import { useEmojiPack } from '../../hooks/useEmojiPack';
 import CrossIcon from '../../icons/Cross/Cross';
-import { IEmojiResponse } from "../../utils/types/responseTypes";
-import { getUserId } from "../../utils/userConfig";
 
 import styles from './EmojiOverlay.module.scss';
 
-interface IProps {
+interface EmojiOverlayProps {
   show: boolean;
   onClose: () => void;
   onEmojiSelect: (emoji: string) => void;
   backgroundColor?: string;
+  userId: number;
 }
 
-const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect, backgroundColor = '#0D2759' }) => {
-  const { user } = useTelegram();
-  const userId = getUserId();
-  const [emojis, setEmojis] = useState<string[] | null>(null);
-  const [name, setName] = useState<string>("");
+const EmojiOverlay: FC<EmojiOverlayProps> = ({
+  show,
+  onClose,
+  onEmojiSelect,
+  backgroundColor = 'rgba(255, 255, 255, 0.9)',
+  userId
+}) => {
+  const { emojiPack, isLoading } = useEmojiPack(userId);
 
-  useEffect(() => {
-    getActiveEmojiPack(userId)
-      .then((response) => {
-        const res = response as IEmojiResponse;
-        setName(res.user_emoji_pack.name);
-        setEmojis(res.user_emoji_pack.user_emoji_pack);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  if (isLoading || !emojiPack) {
+    return null;
+  }
 
   return (
     <div
@@ -41,9 +33,9 @@ const EmojiOverlay: FC<IProps> = ({ show, onClose, onEmojiSelect, backgroundColo
       style={{ backgroundColor: backgroundColor }}
     >
       <div className={styles.overlay__children}>
-        <h2 className={styles.overlay__name}>{name}</h2>
+        <h2 className={styles.overlay__name}>{emojiPack.name}</h2>
         <div className={styles.overlay__emojis}>
-          {emojis && emojis?.map((emoji: string, index: number) => (
+          {emojiPack.emojis.map((emoji: string, index: number) => (
             <img
               key={index}
               src={emoji}

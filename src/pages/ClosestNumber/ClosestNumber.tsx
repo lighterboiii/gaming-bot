@@ -17,6 +17,7 @@ import Loader from "../../components/Loader/Loader";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
 import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
+import { useEmojiPack } from "../../hooks/useEmojiPack";
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import approveIcon from '../../images/closest-number/Approve.png';
@@ -73,16 +74,15 @@ export const ClosestNumber: FC = () => {
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, []);
+  
   // получить эмодзи пользователя
+  const { emojiPack } = useEmojiPack(userId);
   useEffect(() => {
-    getActiveEmojiPack(userId)
-      .then((res: any) => {
-        setEmojis(res.user_emoji_pack.user_emoji_pack);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [userId]);
+    if (emojiPack) {
+      setEmojis(emojiPack.emojis);
+    }
+  }, [emojiPack]);
+
   // отображение игроков на поле за исключением пользователя
   useEffect(() => {
     if (data?.players) {

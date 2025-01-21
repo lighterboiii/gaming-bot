@@ -26,6 +26,11 @@ interface AppState {
   secondGameRulesState: boolean | null;
   thirdGameRulesState: boolean | null;
   fourthGameRulesState: boolean | null;
+  emojiPack: {
+    name: string;
+    emojis: string[];
+    lastUpdated: number;
+  } | null;
 }
 
 const initialState: AppState = {
@@ -47,6 +52,7 @@ const initialState: AppState = {
   secondGameRulesState: null,
   thirdGameRulesState: null,
   fourthGameRulesState: null,
+  emojiPack: null,
 }
 
 const appSlice = createSlice({
@@ -202,6 +208,13 @@ const appSlice = createSlice({
     setFourthGameRulesState: (state, action: PayloadAction<boolean>) => {
       state.fourthGameRulesState = action.payload;
     },
+    setEmojiPack: (state, action: PayloadAction<{ name: string; emojis: string[] }>) => {
+      state.emojiPack = {
+        name: action.payload.name,
+        emojis: action.payload.emojis,
+        lastUpdated: Date.now()
+      };
+    },
   }
 })
 
@@ -240,7 +253,8 @@ export const {
   setThirdGameRuleImage,
   setThirdGameRulesState,
   setFourthGameRuleImage,
-  setFourthGameRulesState
+  setFourthGameRulesState,
+  setEmojiPack
 } = appSlice.actions;
 
 export default appSlice.reducer;
