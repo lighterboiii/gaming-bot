@@ -66,9 +66,12 @@ const LudkaGame: FC = () => {
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [rules, setRulesShown] = useState<boolean | null>(false);
+  const [isWhoiswin, setIsWhoiswin] = useState<boolean>(false);
+  const [isWaitError, setIsWaitError] = useState<boolean>(false);
   const isRulesShown = useAppSelector(store => store.app.thirdGameRulesState);
   const ruleImage = useAppSelector(store => store.app.ludkaRuleImage);
   const dispatch = useAppDispatch();
+  const [emojiPositions, setEmojiPositions] = useState<Record<string, { top: string, left: string }>>({});
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -227,6 +230,10 @@ const LudkaGame: FC = () => {
   };
 
   const handleChoice = (choice: string) => {
+    if (isWhoiswin || isWaitError) {
+      return;
+    }
+    
     sendMessage({
       user_id: userId,
       room_id: roomId,
@@ -244,6 +251,10 @@ const LudkaGame: FC = () => {
   };
 
   const handleRaiseBet = useCallback(() => {
+    if (isWhoiswin || isWaitError) {
+      return;
+    }
+
     const betToSend = pendingBet || calculateNextBet();
     triggerHapticFeedback('impact', 'heavy');
     handleChoice(betToSend);
@@ -275,6 +286,13 @@ const LudkaGame: FC = () => {
           if (res?.error === 'bad_bet') {
             setErrorMessage(translation?.ludka_bad_bet_error || 'Already bet');
             setTimeout(() => setErrorMessage(''), 2000);
+          }
+          if (res?.error === 'error_wait') {
+            setIsWaitError(true);
+            setTimeout(() => {
+              setIsWaitError(false);
+              setErrorMessage('');
+            }, 900);
           }
         }
 
@@ -329,6 +347,7 @@ const LudkaGame: FC = () => {
   }, [clearMessages]);
 
   const handleWinnerMessage = useCallback((res: any) => {
+    setIsWhoiswin(true);
     const winner = {
       item: {
         item_pic: res?.whoiswin?.item_pic,
@@ -355,6 +374,7 @@ const LudkaGame: FC = () => {
         winner: null
       }));
       setLogState(prev => ({ ...prev, resetHistory: false }));
+      setIsWhoiswin(false);
     }, 6000);
   }, []);
 
@@ -402,22 +422,54 @@ const LudkaGame: FC = () => {
   const getActiveEmojis = useMemo(() => {
     if (!gameState.data?.players) return [];
 
-    return gameState.data.players
+    const activeEmojis = gameState.data.players
       .filter((player: any) => {
         return player.emoji && player.emoji !== 'none' && player.emoji !== '';
       })
-      .map((player: any) => ({
-        userId: player.userid,
-        emoji: player.emoji,
-        name: player.publicname,
-        avatar: player.avatar,
-        position: getRandomPosition(),
-        item: {
-          item_pic: player.item_pic,
-          item_mask: player.item_mask
+      .map((player: any) => {
+        if (!emojiPositions[player.userid]) {
+          setEmojiPositions(prev => ({
+            ...prev,
+            [player.userid]: {
+              top: `${Math.random() * 60 + 10}%`,
+              left: `${Math.random() * 60 + 20}%`
+            }
+          }));
         }
-      }))
+
+        return {
+          userId: player.userid,
+          emoji: player.emoji,
+          name: player.publicname,
+          avatar: player.avatar,
+          position: emojiPositions[player.userid] || { top: '0%', left: '0%' },
+          item: {
+            item_pic: player.item_pic,
+            item_mask: player.item_mask
+          }
+        };
+      })
       .slice(0, 4);
+
+    return activeEmojis;
+  }, [gameState.data?.players, emojiPositions]);
+
+  useEffect(() => {
+    if (gameState.data?.players) {
+      const activePlayerIds = gameState.data.players
+        .filter((player: any) => player.emoji && player.emoji !== 'none' && player.emoji !== '')
+        .map((player: any) => player.userid);
+
+      setEmojiPositions(prev => {
+        const newPositions = { ...prev };
+        Object.keys(newPositions).forEach(userId => {
+          if (!activePlayerIds.includes(Number(userId))) {
+            delete newPositions[userId];
+          }
+        });
+        return newPositions;
+      });
+    }
   }, [gameState.data?.players]);
 
   useEffect(() => {
@@ -598,6 +650,8 @@ const LudkaGame: FC = () => {
                       disabled={
                         gameState.data?.players.length === 1
                         || gameState?.winner !== null
+                        || isWhoiswin
+                        || isWaitError
                       }
                     >
                       <span className={styles.game__actionButtonText}>
