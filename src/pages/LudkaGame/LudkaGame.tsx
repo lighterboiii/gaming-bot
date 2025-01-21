@@ -266,6 +266,7 @@ const LudkaGame: FC = () => {
 
     switch (res?.type) {
       case 'choice':
+        if (isWhoiswin) return;
         console.log(res);
         if (res?.game_answer_info?.animation) {
           setCoinsAnimationUrl(res.game_answer_info.animation);
@@ -278,6 +279,7 @@ const LudkaGame: FC = () => {
         handleWinnerMessage(res);
         break;
       case 'error':
+        if (isWhoiswin) return;
         if (Number(res?.player_id) === Number(userId)) {
           if (res?.error === 'small_bet') {
             setErrorMessage(translation?.ludka_small_bet_error || 'Bet is too small');
@@ -296,7 +298,7 @@ const LudkaGame: FC = () => {
           }
         }
 
-        if (res?.room_info) {
+        if (res?.room_info && !isWhoiswin) {
           setGameState(prev => ({
             ...prev,
             data: res?.room_info,
@@ -305,6 +307,7 @@ const LudkaGame: FC = () => {
         }
         break;
       case 'emoji':
+        if (isWhoiswin) return;
         setGameState(prev => ({
           ...prev,
           data: res,
@@ -312,6 +315,7 @@ const LudkaGame: FC = () => {
         }));
         break;
       case 'room_info':
+        if (isWhoiswin) return;
         setGameState(prev => ({
           ...prev,
           loading: false,
@@ -319,6 +323,7 @@ const LudkaGame: FC = () => {
         }));
         break;
       case 'add_player':
+        if (isWhoiswin) return;
         setGameState(prev => ({
           ...prev,
           data: res,
@@ -337,6 +342,8 @@ const LudkaGame: FC = () => {
   }, []);
 
   const handleChoiceMessage = useCallback((res: any) => {
+    if (isWhoiswin) return;
+    
     setGameState(prev => ({
       ...prev,
       winner: null,
@@ -344,7 +351,7 @@ const LudkaGame: FC = () => {
     }));
     setSlideDirection(prev => prev === 'right' ? 'left' : 'right');
     clearMessages();
-  }, [clearMessages]);
+  }, [clearMessages, isWhoiswin]);
 
   const handleWinnerMessage = useCallback((res: any) => {
     setIsWhoiswin(true);
@@ -368,7 +375,7 @@ const LudkaGame: FC = () => {
     setLogState(prev => ({ ...prev, resetHistory: true }));
     setPendingBet('');
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setGameState(prev => ({
         ...prev,
         winner: null
@@ -376,6 +383,8 @@ const LudkaGame: FC = () => {
       setLogState(prev => ({ ...prev, resetHistory: false }));
       setIsWhoiswin(false);
     }, 6000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const currentPlayerBalance = useMemo(() => {
