@@ -27,7 +27,7 @@ const NumericKeyboard: FC<IProps> = ({
   const touchStartRef = useRef<number>(0);
   const userTokens = useAppSelector(store => store.app.info?.tokens);
   const userCoins = useAppSelector(store => store.app.info?.coins);
-
+  const translation = useAppSelector(store => store.app.languageSettings);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (keyboardRef.current && !keyboardRef.current.contains(event.target as Node)) {
@@ -131,7 +131,7 @@ const NumericKeyboard: FC<IProps> = ({
         className={styles.keyboard__confirmButton}
         onClick={onConfirm}
       >
-        Подтвердить
+        {translation?.confirm_text}
       </button>
     </div>
   );
