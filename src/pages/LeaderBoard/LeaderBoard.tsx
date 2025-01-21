@@ -54,9 +54,15 @@ export const LeaderBoard: FC = () => {
       setLoading(true);
       getTopUsers()
         .then((response) => {
+          console.log(response);
           const leaders = response as ITopUsersRes;
-          setTopLeader(leaders?.top_users[0]);
-          setLeaderBoard(leaders?.top_users.slice(1));
+          if (leaders?.top_users.length > 0) {
+            setTopLeader(leaders?.top_users[0]);
+            setLeaderBoard(leaders?.top_users.length > 1 ? leaders?.top_users.slice(1) : []);
+          } else {
+            setTopLeader(null);
+            setLeaderBoard([]);
+          }
           setPrizePhoto(leaders?.top_prize_photo_url);
           setType(leaders?.top_type);
           setPrizeCount(leaders?.top_prize_count);
@@ -137,7 +143,7 @@ export const LeaderBoard: FC = () => {
               </div>
           </div>
           <div className={styles.leaderBoard__leader}>
-            {leaderBoard?.length !== 0 ? (
+            {topLeader ? (
               <div className={styles.leaderBoard__background}>
                   <div className={styles.leaderBoard__avatarContainer}>
                     {topLeader &&
@@ -174,7 +180,7 @@ export const LeaderBoard: FC = () => {
             )}
           </div>
           <div className={styles.leaderBoard__board + " scrollable"}>
-            {leaderBoard?.filter((leader: ILeaderResponse) =>
+            {leaderBoard && leaderBoard.length > 0 && leaderBoard.filter((leader: ILeaderResponse) =>
               leader.user_id !== 1).map((leader: ILeaderResponse, index: number) =>
                 <UserContainer
                   member={leader}
