@@ -13,7 +13,7 @@ interface EmojiPackResponse {
   }
 }
 
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+const CACHE_DURATION = 5 * 300 * 1000;
 
 export const useEmojiPack = (userId: number) => {
   const dispatch = useDispatch();
@@ -28,7 +28,6 @@ export const useEmojiPack = (userId: number) => {
         setIsLoading(true);
         setError(null);
         
-        // Check if cache is valid
         if (cachedPack && Date.now() - cachedPack.lastUpdated < CACHE_DURATION) {
           setIsLoading(false);
           return;
