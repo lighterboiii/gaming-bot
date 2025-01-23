@@ -3,13 +3,12 @@
 
 .game {
   @include children-layout();
-  // min-height: 100%;
   position: relative;
   z-index: 4;
 
   &__logo {
-    @include max-size(120px, 120px);
-    @include size(100%, 100%);
+    @include max-size(136px, 136px);
+    @include size(100%, auto);
     @include position(absolute, $top: -10%, $left: 30%);
     background-size: contain;
     background-repeat: no-repeat;
