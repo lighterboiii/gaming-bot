@@ -426,7 +426,6 @@ console.log(gameState);
 
   // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
-    setGameState(prev => ({ ...prev, loading: true }));
     setGameRulesWatched(userId, '4');
     triggerHapticFeedback('impact', 'soft');
     setRulesShown(true);
@@ -434,11 +433,9 @@ console.log(gameState);
       getAppData(userId)
         .then((response: IAppData) => {
           dispatch(setFourthGameRulesState(response.game_rule_4_show));
-          setGameState(prev => ({ ...prev, loading: false }));
         })
         .catch((error: Error) => {
           console.error('Get user data error:', error);
-          setGameState(prev => ({ ...prev, loading: false }));
         })
     }, 1000);
   };

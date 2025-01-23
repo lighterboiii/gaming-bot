@@ -3,15 +3,13 @@
 
 .monetka {
   @include size(100%, 100%);
-  @include min-size(100%, 100vh);
+  @include min-size(100%, 100vh+1);
   @include flex(column, center, center);
   @include indents(0 $space-16, 0);
   position: relative;
   overflow: hidden;
   font-family: 'Retro Gaming';
   transform-style: preserve-3d;
-  // padding-bottom: env(safe-area-inset-bottom);
-  height: calc(100vh - env(safe-area-inset-top));
 
   &__layer {
     @include position(absolute, $top: 0, $left: 0);
@@ -282,11 +280,11 @@
     will-change: transform;
 
     &_fadeIn {
-      animation: coinScaleIn 0.15s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+      animation: coinScaleIn 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
     }
 
     &_fadeOut {
-      animation: coinScaleOut 0.15s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+      animation: coinScaleOut 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
     }
   }
 

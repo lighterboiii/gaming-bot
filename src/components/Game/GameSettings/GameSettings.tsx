@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState, useContext, useCallback, useRef } from 'react';
+import { FC, useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from '../../../services/reduxHooks';
@@ -26,9 +26,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const userId = getUserId();
-  const mountedRef = useRef(true);
-  const wsTimeoutRef = useRef<NodeJS.Timeout>();
-  const initRef = useRef(false);
+
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
   const [notification, setNotification] = useState({
@@ -38,113 +36,60 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   });
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const userTokens = useAppSelector(store => store.app.info?.tokens);
   const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const userInfo = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
+  const parsedMessages = wsMessages?.map(msg => JSON.parse(msg));
 
-  const setViewportHeight = useCallback(() => {
-    if (window.Telegram?.WebApp?.viewportStableHeight) {
-      const height = window.Telegram.WebApp.viewportStableHeight;
-      document.documentElement.style.setProperty('--tg-viewport-stable-height', `${height}px`);
-      document.documentElement.style.setProperty('--tg-viewport-height', `${window.Telegram.WebApp.viewportHeight}px`);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!initRef.current) {
-      const initializeComponent = async () => {
-        if (!mountedRef.current) return;
-        
-        try {
-          clearMessages();
-          
-          if (!wsMessages || wsMessages.length === 0) {
-            connect();
-            await new Promise(resolve => {
-              wsTimeoutRef.current = setTimeout(resolve, 1000);
-            });
-          }
-
-          setViewportHeight();
-          window.addEventListener('resize', setViewportHeight);
-
-          initRef.current = true;
-        } catch (error) {
-          console.error('Error initializing component:', error);
-        }
-      };
-
-      initializeComponent();
-    }
-
-    return () => {
-      mountedRef.current = false;
-      if (wsTimeoutRef.current) {
-        clearTimeout(wsTimeoutRef.current);
-      }
-      window.removeEventListener('resize', setViewportHeight);
-    };
-  }, [clearMessages, connect, wsMessages, setViewportHeight]);
-
-  const showNotification = useCallback((message: string, isInsufficient = false) => {
-    if (!mountedRef.current) return;
-    
+  const showNotification = (message: string, isInsufficient = false) => {
     setNotification({
       message,
       isShown: true,
       isInsufficient
     });
     setTimeout(() => {
-      if (mountedRef.current) {
-        setNotification(prev => ({ ...prev, isShown: false, isInsufficient: false }));
-      }
+      setNotification(prev => ({ ...prev, isShown: false, isInsufficient: false }));
     }, 2000);
-  }, []);
+  };
 
   useEffect(() => {
-    if (wsMessages?.length > 0) {
-      try {
-        const lastMessage = JSON.parse(wsMessages[wsMessages.length - 1]);
-        if (lastMessage?.message?.message === 'success') {
-          triggerHapticFeedback('notification', 'success');
-          setSelectedRoomId(lastMessage.message.room_id);
-          const roomRoutes = {
-            2: `/closest/${lastMessage?.message?.room_id}`,
-            3: `/ludkaGame/${lastMessage?.message?.room_id}`,
-            4: `/monetka/${lastMessage?.message?.room_id}`,
-            default: `/room/${lastMessage?.message?.room_id}`
-          };
-          navigate(roomRoutes[data?.room_type as keyof typeof roomRoutes] || roomRoutes.default);
-        } else if (lastMessage?.message?.type === 'error') {
-          showNotification(translation?.insufficient_funds || 'Недостаточно средств', true);
-        }
-      } catch (error) {
-        console.error('Error parsing WebSocket message:', error);
+    if (parsedMessages?.length > 0) {
+      const lastMessage = parsedMessages[wsMessages?.length - 1]?.message;
+      if (lastMessage && lastMessage?.message === 'success') {
+        triggerHapticFeedback('notification', 'success');
+        setSelectedRoomId(lastMessage.room_id);
+        const roomRoutes = {
+          2: `/closest/${lastMessage?.room_id}`,
+          3: `/ludkaGame/${lastMessage?.room_id}`,
+          4: `/monetka/${lastMessage?.room_id}`,
+          default: `/room/${lastMessage?.room_id}`
+        };
+        navigate(roomRoutes[data?.room_type as keyof typeof roomRoutes] || roomRoutes.default);
+      } else if (lastMessage?.type === 'error') {
+        showNotification(translation?.insufficient_funds || 'Недостаточно средств', true);
       }
     }
-  }, [wsMessages, navigate, translation, data, showNotification]);
+  }, [parsedMessages, navigate, translation, data]);
 
-  const handleCreateRoom = useCallback(async (
+  const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
+  const handleBetChange = (newBet: number) => setBet(newBet);
+  const handleInputChange = (bet: string) => setBet(parseFloat(bet));
+
+  const handleCreateRoom = async (
     userIdValue: number,
     bet: number,
     betType: number,
     roomType: number,
     closeOverlay: () => void
   ) => {
-    if (!mountedRef.current) return;
-
-    setIsLoading(true);
     try {
       clearMessages();
       if (!wsMessages || wsMessages.length === 0) {
         connect();
-        await new Promise(resolve => {
-          wsTimeoutRef.current = setTimeout(resolve, 1000);
-        });
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
       sendMessage({
@@ -157,16 +102,12 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     } catch (error) {
       console.error('Error creating room:', error);
       showNotification(translation?.error_creating_room || 'Ошибка создания комнаты');
-    } finally {
-      if (mountedRef.current) {
-        setIsLoading(false);
-      }
     }
-  }, [wsMessages, connect, clearMessages, sendMessage, translation, showNotification]);
+  };
 
-  const handleEnergyCheck = useCallback(() => {
+  const handleEnergyCheck = () => {
     if (bet < 0.1) {
-      showNotification(`${translation?.minimum_bet} ${currency === 1 ? MONEY_EMOJI : SHIELD_EMOJI}`);
+      showNotification(`${translation?.minimum_bet} ${currency === 1 ? `💵` : `🔰`}`);
       return;
     }
 
@@ -182,12 +123,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         handleCreateRoom(userId, bet, currency, data?.room_type, closeOverlay);
       }
     }
-  }, [bet, currency, userInfo, userCoins, userTokens, userEnergy, data, 
-    translation, showNotification, handleCreateRoom, userId, closeOverlay]);
-
-  const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
-  const handleBetChange = (newBet: number) => setBet(newBet);
-  const handleInputChange = (bet: string) => setBet(parseFloat(bet));
+  };
 
   const getGameTitle = () => {
     const titles = {
@@ -200,7 +136,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   };
 
   return (
-    <main className={styles.game + ' scrollable'} role="main">
+    <main className={`${styles.game} scrollable`} role="main">
       {notification.isShown ? (
         <section 
           className={styles.game__notification}

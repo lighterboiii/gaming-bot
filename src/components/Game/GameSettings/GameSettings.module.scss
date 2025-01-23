@@ -4,13 +4,16 @@
 .game {
   @include children-layout();
   position: relative;
-  z-index: 999;
-  margin-bottom: env(safe-area-inset-bottom);
-  -webkit-overflow-scrolling: touch;
+  z-index: 4;
+  height: 100%;
+  overflow: hidden;
+  // min-height: 100%;
+  // justify-content: flex-start;
+  // background-color: $tertiary-color;
 
   &__logo {
-    @include max-size(136px, 136px);
-    @include size(100%, auto);
+    @include max-size(120px, 120px);
+    @include size(100%, 100%);
     @include position(absolute, $top: -10%, $left: 30%);
     background-size: contain;
     background-repeat: no-repeat;
@@ -20,9 +23,9 @@
   &__content {
     @include flex(column, space-evenly, center, 10px);
     @include indents(0, 20% 0 0 0);
-    @include size(100%, auto);
+    @include size(100%, 100%);
     position: relative;
-    flex: 1;
+    overflow: hidden;
   }
 
   &__title {
@@ -53,9 +56,7 @@
   }
 
   &__buttonWrapper {
-    @include indents(0, 0 0 calc(env(safe-area-inset-bottom) + 20px) 0);
     @include size(calc(100% - 32px), 40px);
-    z-index: 778;
   }
 
   &__buttons {

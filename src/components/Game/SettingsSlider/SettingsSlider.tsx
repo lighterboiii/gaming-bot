@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState, useRef } from 'react';
 
@@ -8,12 +9,12 @@ import NumericKeyboard from '../NumericKeyboard/NumericKeyboard';
 import styles from './SettingsSlider.module.scss';
 
 interface IProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   betValue?: any;
   isCurrency?: boolean;
   onBetChange?: (newBet: number) => void;
   onCurrencyChange?: (newCurrency: number) => void;
   onInputChange?: (bet: string) => void;
+  onKeyboardShow?: (show: boolean) => void;
 }
 
 const SettingsSlider: FC<IProps> = ({
@@ -21,6 +22,7 @@ const SettingsSlider: FC<IProps> = ({
   onBetChange = () => { },
   onCurrencyChange = () => { },
   onInputChange,
+  onKeyboardShow = () => { }
 }) => {
   const [bet, setBet] = useState('1.0');
   const [keyboardValue, setKeyboardValue] = useState('1.0');
@@ -30,6 +32,7 @@ const SettingsSlider: FC<IProps> = ({
 
   const closeKeyboard = () => {
     setShowKeyboard(false);
+    onKeyboardShow(false);
   };
 
   const increaseBet = () => {
@@ -70,6 +73,7 @@ const SettingsSlider: FC<IProps> = ({
     }
     setKeyboardValue(bet);
     setShowKeyboard(true);
+    onKeyboardShow(true);
   };
 
   const handleConfirm = () => {
