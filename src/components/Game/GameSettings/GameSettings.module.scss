@@ -4,7 +4,7 @@
 .game {
   @include children-layout();
   position: relative;
-  z-index: 4;
+  z-index: 999;
 
   &__logo {
     @include max-size(136px, 136px);
@@ -18,7 +18,9 @@
   &__content {
     @include flex(column, space-evenly, center, 10px);
     @include indents(0, 20% 0 0 0);
-    @include size(100%, 100%);
+    @include size(100%, auto);
+    position: relative;
+    flex: 1;
   }
 
   &__title {
