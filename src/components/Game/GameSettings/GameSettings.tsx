@@ -28,6 +28,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const userId = getUserId();
   const mountedRef = useRef(true);
   const wsTimeoutRef = useRef<NodeJS.Timeout>();
+  const initRef = useRef(false);
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
   const [notification, setNotification] = useState({
@@ -45,14 +46,49 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const userInfo = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
 
+  const setViewportHeight = useCallback(() => {
+    if (window.Telegram?.WebApp?.viewportStableHeight) {
+      const height = window.Telegram.WebApp.viewportStableHeight;
+      document.documentElement.style.setProperty('--tg-viewport-stable-height', `${height}px`);
+      document.documentElement.style.setProperty('--tg-viewport-height', `${window.Telegram.WebApp.viewportHeight}px`);
+    }
+  }, []);
+
   useEffect(() => {
+    if (!initRef.current) {
+      const initializeComponent = async () => {
+        if (!mountedRef.current) return;
+        
+        try {
+          clearMessages();
+          
+          if (!wsMessages || wsMessages.length === 0) {
+            connect();
+            await new Promise(resolve => {
+              wsTimeoutRef.current = setTimeout(resolve, 1000);
+            });
+          }
+
+          setViewportHeight();
+          window.addEventListener('resize', setViewportHeight);
+
+          initRef.current = true;
+        } catch (error) {
+          console.error('Error initializing component:', error);
+        }
+      };
+
+      initializeComponent();
+    }
+
     return () => {
       mountedRef.current = false;
       if (wsTimeoutRef.current) {
         clearTimeout(wsTimeoutRef.current);
       }
+      window.removeEventListener('resize', setViewportHeight);
     };
-  }, []);
+  }, [clearMessages, connect, wsMessages, setViewportHeight]);
 
   const showNotification = useCallback((message: string, isInsufficient = false) => {
     if (!mountedRef.current) return;
@@ -148,21 +184,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     }
   }, [bet, currency, userInfo, userCoins, userTokens, userEnergy, data, 
     translation, showNotification, handleCreateRoom, userId, closeOverlay]);
-
-  useEffect(() => {
-    const setViewportHeight = () => {
-      if (window.Telegram?.WebApp?.viewportStableHeight) {
-        document.documentElement.style.setProperty(
-          '--tg-viewport-stable-height',
-          `${window.Telegram.WebApp.viewportStableHeight}px`
-        );
-      }
-    };
-
-    setViewportHeight();
-    window.addEventListener('resize', setViewportHeight);
-    return () => window.removeEventListener('resize', setViewportHeight);
-  }, []);
 
   const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
   const handleBetChange = (newBet: number) => setBet(newBet);
