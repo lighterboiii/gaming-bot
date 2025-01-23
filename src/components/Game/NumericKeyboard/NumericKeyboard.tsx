@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useRef, TouchEvent } from 'react';
 
+import ChevronIcon from 'icons/Chevron/ChevronIcon';
+
 import { useAppSelector } from '../../../services/reduxHooks';
 import { formatNumber } from '../../../utils/additionalFunctions';
 import { MONEY_EMOJI, SHIELD_EMOJI } from '../../../utils/constants';
@@ -13,6 +15,7 @@ interface IProps {
   onClose: () => void;
   onChange: (value: string) => void;
   onConfirm: () => void;
+  onBack: () => void;
 }
 
 const NumericKeyboard: FC<IProps> = ({
@@ -20,6 +23,7 @@ const NumericKeyboard: FC<IProps> = ({
   onClose,
   onChange,
   onConfirm,
+  onBack,
 }) => {
   const keyboardRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<number>(0);
@@ -67,18 +71,26 @@ const NumericKeyboard: FC<IProps> = ({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
     >
-      <div className={styles.keyboard__balance}>
-        <div className={styles['keyboard__balance-item']}>
-          <span>{MONEY_EMOJI} </span>
-          <span>{userCoins !== undefined ? formatNumber(userCoins) : 0}</span>
-        </div>
-        <div className={styles['keyboard__balance-item']}>
-          <span>{SHIELD_EMOJI} </span>
-          <span>{userTokens !== undefined ? formatNumber(userTokens) : 0}</span>
+      <div className={styles.keyboard__header}>
+        <button 
+          onClick={onBack}
+          className={styles.keyboard__backButton}
+        >
+          <ChevronIcon position='left' />
+        </button>
+        <div className={styles.keyboard__balance}>
+          <div className={styles['keyboard__balance-item']}>
+            <span>{MONEY_EMOJI} </span>
+            <span>{userCoins !== undefined ? formatNumber(userCoins) : 0}</span>
+          </div>
+          <div className={styles['keyboard__balance-item']}>
+            <span>{SHIELD_EMOJI} </span>
+            <span>{userTokens !== undefined ? formatNumber(userTokens) : 0}</span>
+          </div>
         </div>
       </div>
 
-      <div className={styles.keyboard__header}>
+      <div className={styles.keyboard__input}>
         <div className={styles['keyboard__input-wrapper']}>
           <input
             type="text"

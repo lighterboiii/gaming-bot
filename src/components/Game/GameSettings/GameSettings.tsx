@@ -141,13 +141,31 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     return titles[data?.room_type as keyof typeof titles] || '';
   };
 
+  useEffect(() => {
+    return () => {
+      setShowKeyboard(false);
+    };
+  }, []);
+
+  const handleOverlayClose = () => {
+    setShowKeyboard(false);
+    closeOverlay();
+  };
+
   if (showKeyboard) {
     return (
       <NumericKeyboard
         value={betString}
         onClose={() => setShowKeyboard(false)}
         onChange={setBetString}
-        onConfirm={handleKeyboardConfirm}
+        onConfirm={() => {
+          const numericBet = parseFloat(betString);
+          if (!isNaN(numericBet)) {
+            setBet(numericBet);
+          }
+          setShowKeyboard(false);
+        }}
+        onBack={() => setShowKeyboard(false)}
       />
     );
   }
