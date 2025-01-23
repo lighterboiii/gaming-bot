@@ -3,7 +3,8 @@
 
 .banner {
   @include position(relative);
-  @include size(100%, 120px);
+  @include size(100%, 100%);
+  @include min-size(100%, 120px);
   border-radius: $radius-15;
   background-size: cover;
   background-position: center;
@@ -12,12 +13,13 @@
   overflow: visible;
   z-index: 1;
 
-  @media screen and (min-height: 691px) {
-    height: 136px;
+  @media screen and (min-width: 450px) {
+    height: 130px;
+    background-size: 100% auto;
   }
 
   @media screen and (max-width: 430px) {
-    height: 106px;
+    // height: 112px;
     background-size: 100% auto;
   }
 
