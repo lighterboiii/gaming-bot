@@ -10,7 +10,7 @@
   overflow: hidden;
   font-family: 'Retro Gaming';
   transform-style: preserve-3d;
-  padding-bottom: env(safe-area-inset-bottom);
+  // padding-bottom: env(safe-area-inset-bottom);
   height: calc(100vh - env(safe-area-inset-top));
 
   &__layer {
@@ -41,7 +41,7 @@
   &__buttonsContainer {
     @include size(100%, auto);
     @include min-size(100%, 48px);
-    @include position(fixed, $bottom: calc(19% + env(safe-area-inset-bottom)), $left: 50%);
+    @include position(absolute, $bottom: 19%, $left: 50%);
     @include flex(column, center, center);
     transform: translateX(-50%) translateZ(0);
     -webkit-tap-highlight-color: transparent;
@@ -202,7 +202,7 @@
   }
 
   &__controlButtons {
-    @include position(fixed, $bottom: calc(10% + env(safe-area-inset-bottom)), $left: 50%);
+    @include position(absolute, $bottom: 10%, $left: 50%);
     @include size(50%, auto);
     @include flex(row, center, center, $space-8);
     transform: translateX(-50%) translateZ(0);
@@ -316,7 +316,7 @@
   }
 
   &__balance {
-    @include position(fixed, $bottom: calc(5% + env(safe-area-inset-bottom)), $left: 50%);
+    @include position(absolute, $bottom: 5%, $left: 50%);
     @include flex(row, center, center);
     transform: translateX(-50%);
     z-index: 11;
