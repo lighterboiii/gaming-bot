@@ -59,7 +59,9 @@ export const Shop: FC = () => {
       isCollectible: true,
     }));
     setGoods(inventoryDataWithCollectible);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
   };
   // добавить флаг isCollectible жкаждому товару
   const handleAddIsCollectible = useCallback((data: ItemData[]) => {
@@ -86,7 +88,7 @@ export const Shop: FC = () => {
     shopData && handleAddIsCollectible(shopData);
     setTimeout(() => {
       setLoading(false);
-    }, 800);
+    }, 300);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleAddIsCollectible, shopData, translation?.shop_button]);
   // открыть страничку с данными скина
@@ -108,13 +110,13 @@ export const Shop: FC = () => {
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
-    setLoading(true);
+    // setLoading(true);
     triggerHapticFeedback('impact', 'soft');
      setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
     setGoods(updatedLavka.lavka);
-    setLoading(false);
+    // setLoading(false);
   };
 
   useEffect(() => {
