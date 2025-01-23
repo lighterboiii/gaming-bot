@@ -5,11 +5,12 @@
   @include position(relative);
   @include size(100%, 120px);
   border-radius: $radius-15;
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
   transition: background-image 0.3s ease-in-out;
-  overflow: hidden;
+  overflow: visible;
+  z-index: 1;
 
   @media screen and (min-height: 691px) {
     height: 136px;
@@ -17,7 +18,7 @@
 
   @media screen and (max-width: 430px) {
     height: 106px;
-    background-size: 100% auto;
+    background-size: 100% 100%;
   }
 
   &__link {
