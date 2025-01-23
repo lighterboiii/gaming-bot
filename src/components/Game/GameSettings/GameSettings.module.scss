@@ -5,6 +5,8 @@
   @include children-layout();
   position: relative;
   z-index: 999;
+  margin-bottom: env(safe-area-inset-bottom);
+  -webkit-overflow-scrolling: touch;
 
   &__logo {
     @include max-size(136px, 136px);
@@ -51,6 +53,7 @@
   }
 
   &__buttonWrapper {
+    @include indents(0, 0 0 calc(env(safe-area-inset-bottom) + 20px) 0);
     @include size(calc(100% - 32px), 40px);
     z-index: 778;
   }
