@@ -4,10 +4,8 @@
 .game {
   @include children-layout();
   // min-height: 100%;
-  // justify-content: flex-start;
   position: relative;
   z-index: 4;
-  // background-color: $tertiary-color;
 
   &__logo {
     @include max-size(120px, 120px);
@@ -53,6 +51,7 @@
 
   &__buttonWrapper {
     @include size(calc(100% - 32px), 40px);
+    z-index: 778;
   }
 
   &__buttons {
