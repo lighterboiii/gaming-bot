@@ -5,6 +5,7 @@
   @include children-layout();
   position: relative;
   z-index: 4;
+  overflow: visible;
 
   &__logo {
     @include max-size(136px, 136px);

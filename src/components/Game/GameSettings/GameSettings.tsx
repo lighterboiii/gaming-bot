@@ -26,12 +26,8 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const userId = getUserId();
-  
-  // Game state
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
-  
-  // UI state
   const [notification, setNotification] = useState({
     message: '',
     isShown: false,
@@ -39,15 +35,11 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   });
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-
-  // Redux state
   const userTokens = useAppSelector(store => store.app.info?.tokens);
   const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const userInfo = useAppSelector(store => store.app.info);
-  
-  // WebSocket context
   const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
   const parsedMessages = wsMessages?.map(msg => JSON.parse(msg));
 
