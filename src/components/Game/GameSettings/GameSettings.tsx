@@ -14,6 +14,7 @@ import { getUserId } from '../../../utils/userConfig';
 import { Modal } from '../../Modal/Modal';
 import Button from '../../ui/Button/Button';
 import JoinRoomPopup from '../JoinRoomPopup/JoinRoomPopup';
+import NumericKeyboard from '../NumericKeyboard/NumericKeyboard';
 import SettingsSlider from '../SettingsSlider/SettingsSlider';
 
 import styles from './GameSettings.module.scss';
@@ -27,6 +28,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const userId = getUserId();
   const [bet, setBet] = useState(0.1);
+  const [betString, setBetString] = useState('0.1');
   const [currency, setCurrency] = useState(1);
   const [notification, setNotification] = useState({
     message: '',
@@ -35,6 +37,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   });
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const userTokens = useAppSelector(store => store.app.info?.tokens);
   const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -52,6 +55,10 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     setTimeout(() => {
       setNotification(prev => ({ ...prev, isShown: false, isInsufficient: false }));
     }, 2000);
+  };
+
+  const handleKeyboardConfirm = () => {
+    setShowKeyboard(false);
   };
 
   useEffect(() => {
@@ -75,7 +82,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
 
   const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
   const handleBetChange = (newBet: number) => setBet(newBet);
-  const handleInputChange = (bet: string) => setBet(parseFloat(bet));
+  const handleInputChange = (bet: string) => setBetString(bet);
 
   const handleCreateRoom = async (
     userIdValue: number,
@@ -134,6 +141,17 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     return titles[data?.room_type as keyof typeof titles] || '';
   };
 
+  if (showKeyboard) {
+    return (
+      <NumericKeyboard
+        value={betString}
+        onClose={() => setShowKeyboard(false)}
+        onChange={setBetString}
+        onConfirm={handleKeyboardConfirm}
+      />
+    );
+  }
+
   return (
     <main className={`${styles.game} scrollable`} role="main">
       {notification.isShown ? (
@@ -180,10 +198,11 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
               <h2 className={styles.game__text}>{translation?.bet_in_room}</h2>
               <div className={styles.game__buttons}>
                 <SettingsSlider
-                  betValue={bet}
+                  betValue={betString}
                   isCurrency={false}
                   onBetChange={handleBetChange}
                   onInputChange={handleInputChange}
+                  onKeyboardShow={setShowKeyboard}
                 />
                 <SettingsSlider
                   isCurrency

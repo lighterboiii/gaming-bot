@@ -4,12 +4,11 @@ import { FC, useEffect, useState, useRef } from 'react';
 
 import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
 import { triggerHapticFeedback } from '../../../utils/hapticConfig';
-// import NumericKeyboard from '../NumericKeyboard/NumericKeyboard';
 
 import styles from './SettingsSlider.module.scss';
 
 interface IProps {
-  betValue?: any;
+  betValue?: string;
   isCurrency?: boolean;
   onBetChange?: (newBet: number) => void;
   onCurrencyChange?: (newCurrency: number) => void;
@@ -18,47 +17,34 @@ interface IProps {
 }
 
 const SettingsSlider: FC<IProps> = ({
+  betValue = '1.0',
   isCurrency = false,
   onBetChange = () => { },
   onCurrencyChange = () => { },
   onInputChange,
   onKeyboardShow = () => { }
 }) => {
-  const [bet, setBet] = useState('1.0');
-  const [keyboardValue, setKeyboardValue] = useState('1.0');
   const [currency, setCurrency] = useState(1);
-  const [showKeyboard, setShowKeyboard] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const closeKeyboard = () => {
-    setShowKeyboard(false);
-    onKeyboardShow(false);
-  };
 
   const increaseBet = () => {
     triggerHapticFeedback('impact', 'soft');
-    setBet(prevBet => {
-      const newBet = (parseFloat(prevBet) + 0.1).toFixed(1);
-      const numericBet = parseFloat(newBet);
-      onBetChange(numericBet);
-      onInputChange && onInputChange(newBet);
-      return newBet;
-    });
+    const currentBet = parseFloat(betValue);
+    const newBet = (currentBet + 0.1).toFixed(1);
+    const numericBet = parseFloat(newBet);
+    onBetChange(numericBet);
+    onInputChange && onInputChange(newBet);
   };
 
   const decreaseBet = () => {
     triggerHapticFeedback('impact', 'soft');
-    setBet(prevBet => {
-      const currentBet = parseFloat(prevBet);
-      if (currentBet > 0) {
-        const newBet = currentBet === 0.1 ? '0' : (currentBet - 0.1).toFixed(1);
-        const numericBet = parseFloat(newBet);
-        onBetChange(numericBet);
-        onInputChange && onInputChange(newBet);
-        return newBet;
-      }
-      return prevBet;
-    });
+    const currentBet = parseFloat(betValue);
+    if (currentBet > 0) {
+      const newBet = currentBet === 0.1 ? '0' : (currentBet - 0.1).toFixed(1);
+      const numericBet = parseFloat(newBet);
+      onBetChange(numericBet);
+      onInputChange && onInputChange(newBet);
+    }
   };
 
   const toggleCurrency = () => {
@@ -68,77 +54,46 @@ const SettingsSlider: FC<IProps> = ({
   };
 
   const handleInputFocus = () => {
-    if (inputRef.current) {
-      inputRef.current.blur();
+    if (!isCurrency) {
+      onKeyboardShow(true);
     }
-    setKeyboardValue(bet);
-    setShowKeyboard(true);
-    onKeyboardShow(true);
-  };
-
-  const handleConfirm = () => {
-    const numericBet = parseFloat(keyboardValue);
-    if (!isNaN(numericBet)) {
-      setBet(keyboardValue);
-      onBetChange(numericBet);
-      onInputChange && onInputChange(keyboardValue);
-    }
-    closeKeyboard();
   };
 
   useEffect(() => {
     onCurrencyChange(currency);
   }, [currency, onCurrencyChange]);
 
-  useEffect(() => {
-    const numericBet = parseFloat(bet);
-    if (!isNaN(numericBet)) {
-      onBetChange(numericBet);
-      onInputChange && onInputChange(bet);
-    }
-  }, [bet, onBetChange, onInputChange]);
-
   return (
-    <>
-      <div className={styles.slider}>
-        <button
-          onClick={isCurrency ? toggleCurrency : decreaseBet}
-          className={styles.slider__button}
-        >
-          <ChevronIcon position='left' />
-        </button>
-        {isCurrency ? (
-          <span className={styles.slider__text}>
-            {currency === 1 ? '💵' : '🔰'}
-          </span>
-        ) : (
-          <input
-            ref={inputRef}
-            type="text"
-            inputMode="none"
-            value={bet}
-            className={styles.slider__input}
-            onFocus={handleInputFocus}
-            readOnly
-          />
-        )}
+    <div className={styles.slider}>
+      <button
+        onClick={isCurrency ? toggleCurrency : decreaseBet}
+        className={styles.slider__button}
+      >
+        <ChevronIcon position='left' />
+      </button>
+      {isCurrency ? (
+        <span className={styles.slider__text}>
+          {currency === 1 ? '💵' : '🔰'}
+        </span>
+      ) : (
+        <input
+          ref={inputRef}
+          type="text"
+          inputMode="none"
+          value={betValue}
+          className={styles.slider__input}
+          onFocus={handleInputFocus}
+          readOnly
+        />
+      )}
 
-        <button
-          onClick={isCurrency ? toggleCurrency : increaseBet}
-          className={styles.slider__button}
-        >
-          <ChevronIcon position='right' />
-        </button>
-      </div>
-
-      {/* <NumericKeyboard
-        isVisible={showKeyboard}
-        value={keyboardValue}
-        onClose={closeKeyboard}
-        onChange={setKeyboardValue}
-        onConfirm={handleConfirm}
-      /> */}
-    </>
+      <button
+        onClick={isCurrency ? toggleCurrency : increaseBet}
+        className={styles.slider__button}
+      >
+        <ChevronIcon position='right' />
+      </button>
+    </div>
   );
 };
 
