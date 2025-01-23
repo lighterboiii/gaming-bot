@@ -5,19 +5,15 @@
   @include children-layout();
   position: relative;
   z-index: 4;
-  height: 100%;
-  overflow: hidden;
-  // min-height: 100%;
-  // justify-content: flex-start;
-  // background-color: $tertiary-color;
+  overflow: visible;
 
   &__logo {
-    @include max-size(120px, 120px);
-    @include size(100%, 100%);
+    @include max-size(136px, 136px);
+    @include size(100%, auto);
     @include position(absolute, $top: -10%, $left: 30%);
     background-size: contain;
     background-repeat: no-repeat;
-    z-index: 777;
+    z-index: 200;
   }
 
   &__content {

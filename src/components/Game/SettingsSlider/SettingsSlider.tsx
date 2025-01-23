@@ -4,7 +4,7 @@ import { FC, useEffect, useState, useRef } from 'react';
 
 import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
 import { triggerHapticFeedback } from '../../../utils/hapticConfig';
-import NumericKeyboard from '../NumericKeyboard/NumericKeyboard';
+// import NumericKeyboard from '../NumericKeyboard/NumericKeyboard';
 
 import styles from './SettingsSlider.module.scss';
 
@@ -131,13 +131,13 @@ const SettingsSlider: FC<IProps> = ({
         </button>
       </div>
 
-      <NumericKeyboard
+      {/* <NumericKeyboard
         isVisible={showKeyboard}
         value={keyboardValue}
         onClose={closeKeyboard}
         onChange={setKeyboardValue}
         onConfirm={handleConfirm}
-      />
+      /> */}
     </>
   );
 };

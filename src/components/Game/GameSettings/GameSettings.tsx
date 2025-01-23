@@ -26,7 +26,6 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const userId = getUserId();
-
   const [bet, setBet] = useState(0.1);
   const [currency, setCurrency] = useState(1);
   const [notification, setNotification] = useState({
