@@ -27,8 +27,8 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const userId = getUserId();
-  const [bet, setBet] = useState(0.1);
-  const [betString, setBetString] = useState('1');
+  const [bet, setBet] = useState(1.0);
+  const [betString, setBetString] = useState('1.0');
   const [currency, setCurrency] = useState(1);
   const [notification, setNotification] = useState({
     message: '',
@@ -151,7 +151,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   if (showKeyboard) {
     return (
       <NumericKeyboard
-        value={betString}
+        value=""
         onClose={() => setShowKeyboard(false)}
         onChange={setBetString}
         onConfirm={() => {

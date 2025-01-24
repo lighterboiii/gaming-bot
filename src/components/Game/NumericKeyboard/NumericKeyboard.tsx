@@ -47,14 +47,14 @@ const NumericKeyboard: FC<IProps> = ({
   const handleKeyPress = (key: string) => {
     triggerHapticFeedback('impact', 'soft');
     if (key === 'delete') {
-      onChange(value.slice(0, -1) || '0');
+      onChange(value.slice(0, -1) || '');
     } else {
       let newValue = value;
       if (key === '.' && !value.includes('.')) {
         newValue = value + key;
       } 
       else if (key !== '.') {
-        if (value === '0') {
+        if (value === '') {
           newValue = key;
         } else {
           newValue = value + key;
@@ -96,6 +96,7 @@ const NumericKeyboard: FC<IProps> = ({
             type="text"
             inputMode="none"
             value={value}
+            placeholder="insert bet"
             className={styles.keyboard__input}
             readOnly
           />
