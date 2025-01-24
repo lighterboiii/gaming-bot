@@ -10,6 +10,8 @@
   overflow: hidden;
   font-family: 'Retro Gaming';
   transform-style: preserve-3d;
+  isolation: isolate;
+  z-index: 1;
 
   &__layer {
     @include position(absolute, $top: 0, $left: 0);
@@ -45,7 +47,7 @@
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     -webkit-touch-callout: none;
-    z-index: 999;
+    z-index: 11;
     pointer-events: none;
     will-change: transform;
     backface-visibility: hidden;
@@ -56,7 +58,7 @@
     @include size(90%, 110%);
     @include indents(0 36px, 0);
     pointer-events: none;
-    z-index: 998;
+    z-index: 10;
   }
 
   &__buttonsWrapper {
@@ -65,7 +67,7 @@
     @include flex(row, center, center, $space-8);
     transform: translateX(-50%) translateZ(10px);
     pointer-events: auto;
-    z-index: 1000;
+    z-index: 12;
     backface-visibility: hidden;
     perspective: 1000px;
     transform-style: preserve-3d;
@@ -85,7 +87,7 @@
     outline: none;
     pointer-events: auto;
     touch-action: manipulation;
-    z-index: 1001;
+    z-index: 14;
     backface-visibility: hidden;
     transform-style: preserve-3d;
     will-change: transform;
@@ -204,7 +206,7 @@
     @include size(50%, auto);
     @include flex(row, center, center, $space-8);
     transform: translateX(-50%) translateZ(0);
-    z-index: 99;
+    z-index: 11;
     will-change: transform;
   }
 
@@ -221,6 +223,7 @@
     color: white;
     overflow: hidden;
     text-overflow: wrap;
+    z-index: 12;
 
     &__label {
       white-space: nowrap;
@@ -327,7 +330,7 @@
     color: #2fa9c5;
     font-size: 11px;
     font-weight: 700;
-    z-index: 11;
+    z-index: 12;
   }
 
   &__logo {
