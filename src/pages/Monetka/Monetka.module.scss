@@ -292,7 +292,7 @@
   }
 
   &__coinValue {
-    @include size(40%, 30px);
+    @include size(auto, 30px);
     @include position(absolute, $top: 65%, $left: 50%);
     @include flex(row, center, center);
     transform: translate(-50%, -50%);

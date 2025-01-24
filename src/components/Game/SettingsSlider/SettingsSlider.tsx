@@ -14,7 +14,6 @@ interface IProps {
   onCurrencyChange?: (newCurrency: number) => void;
   onInputChange?: (bet: string) => void;
   onKeyboardShow?: (show: boolean) => void;
-  defaultCurrency?: number;
 }
 
 const SettingsSlider: FC<IProps> = ({
@@ -23,10 +22,9 @@ const SettingsSlider: FC<IProps> = ({
   onBetChange = () => { },
   onCurrencyChange = () => { },
   onInputChange,
-  onKeyboardShow = () => { },
-  defaultCurrency = 1
+  onKeyboardShow = () => { }
 }) => {
-  const [currency, setCurrency] = useState(defaultCurrency);
+  const [currency, setCurrency] = useState(1);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const increaseBet = () => {
@@ -57,8 +55,6 @@ const SettingsSlider: FC<IProps> = ({
 
   const handleInputFocus = () => {
     if (!isCurrency) {
-      onInputChange && onInputChange('0');
-      onBetChange(0);
       onKeyboardShow(true);
     }
   };

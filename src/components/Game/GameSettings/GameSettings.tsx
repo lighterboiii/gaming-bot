@@ -27,7 +27,6 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const userId = getUserId();
-  const [bet, setBet] = useState(1.0);
   const [betString, setBetString] = useState('1.0');
   const [currency, setCurrency] = useState(1);
   const [notification, setNotification] = useState({
@@ -77,8 +76,9 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   }, [parsedMessages, navigate, translation, data]);
 
   const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
-  const handleBetChange = (newBet: number) => setBet(newBet);
-  const handleInputChange = (bet: string) => setBetString(bet);
+  const handleBetChange = (newBet: number) => {
+    setBetString(newBet.toFixed(1));
+  };
 
   const handleCreateRoom = async (
     userIdValue: number,
@@ -108,7 +108,8 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   };
 
   const handleEnergyCheck = () => {
-    if (bet < 0.1) {
+    const numericBet = parseFloat(betString);
+    if (numericBet < 0.1) {
       showNotification(`${translation?.minimum_bet} ${currency === 1 ? `💵` : `🔰`}`);
       return;
     }
@@ -117,12 +118,12 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       const coins = userCoins ?? 0;
       const tokens = userTokens ?? 0;
 
-      if ((currency === 1 && bet > coins) || (currency === 3 && bet > tokens)) {
+      if ((currency === 1 && numericBet > coins) || (currency === 3 && numericBet > tokens)) {
         showNotification(translation?.insufficient_funds || 'Недостаточно средств');
       } else if (userEnergy === 0 && currency === 3) {
         setPopupOpen(true);
       } else if (data) {
-        handleCreateRoom(userId, bet, currency, data?.room_type, closeOverlay);
+        handleCreateRoom(userId, numericBet, currency, data?.room_type, closeOverlay);
       }
     }
   };
@@ -151,13 +152,11 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   if (showKeyboard) {
     return (
       <NumericKeyboard
-        value=""
         onClose={() => setShowKeyboard(false)}
-        onChange={setBetString}
-        onConfirm={() => {
-          const numericBet = parseFloat(betString);
+        onConfirm={(value) => {
+          const numericBet = parseFloat(value || '0');
           if (!isNaN(numericBet)) {
-            setBet(numericBet);
+            setBetString(numericBet.toFixed(1));
           }
           setShowKeyboard(false);
         }}
@@ -215,7 +214,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
                   betValue={betString}
                   isCurrency={false}
                   onBetChange={handleBetChange}
-                  onInputChange={handleInputChange}
+                  onInputChange={setBetString}
                   onKeyboardShow={setShowKeyboard}
                 />
                 <SettingsSlider
@@ -226,7 +225,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
             </section>
             <div className={styles.game__buttonWrapper}>
               <Button
-                disabled={isNaN(bet) || bet <= 0}
+                disabled={isNaN(parseFloat(betString)) || parseFloat(betString) <= 0}
                 text={translation?.create_room_button}
                 handleClick={handleEnergyCheck}
               />
@@ -242,7 +241,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
           <JoinRoomPopup
             handleClick={() => setPopupOpen(false)}
             roomId={selectedRoomId ?? ''}
-            bet={bet}
+            bet={parseFloat(betString)}
             betType={currency}
             roomType={data?.room_type}
             fromGameSettings

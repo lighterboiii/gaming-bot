@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useRef, TouchEvent } from 'react';
+import { FC, useEffect, useRef, TouchEvent, useState } from 'react';
 
 import ChevronIcon from 'icons/Chevron/ChevronIcon';
 
@@ -11,20 +11,17 @@ import { triggerHapticFeedback } from '../../../utils/hapticConfig';
 import styles from './NumericKeyboard.module.scss';
 
 interface IProps {
-  value: string;
   onClose: () => void;
-  onChange: (value: string) => void;
-  onConfirm: () => void;
+  onConfirm: (value: string) => void;
   onBack: () => void;
 }
 
 const NumericKeyboard: FC<IProps> = ({
-  value,
   onClose,
-  onChange,
   onConfirm,
   onBack,
 }) => {
+  const [inputValue, setInputValue] = useState('');
   const keyboardRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<number>(0);
   const userTokens = useAppSelector(store => store.app.info?.tokens);
@@ -46,22 +43,36 @@ const NumericKeyboard: FC<IProps> = ({
 
   const handleKeyPress = (key: string) => {
     triggerHapticFeedback('impact', 'soft');
+    
     if (key === 'delete') {
-      onChange(value.slice(0, -1) || '');
-    } else {
-      let newValue = value;
-      if (key === '.' && !value.includes('.')) {
-        newValue = value + key;
-      } 
-      else if (key !== '.') {
-        if (value === '') {
-          newValue = key;
-        } else {
-          newValue = value + key;
-        }
-      }
-      onChange(newValue);
+      setInputValue(prev => prev.slice(0, -1) || '');
+      return;
     }
+
+    if (key === '.') {
+      if (!inputValue.includes('.')) {
+        setInputValue(prev => prev === '' ? '0.' : prev + '.');
+      }
+      return;
+    }
+
+    if (inputValue.includes('.')) {
+      const [, decimal] = inputValue.split('.');
+      if (decimal && decimal.length >= 1) {
+        return;
+      }
+    }
+
+    if (inputValue === '') {
+      setInputValue(key);
+      return;
+    }
+
+    setInputValue(prev => prev + key);
+  };
+
+  const handleConfirm = () => {
+    onConfirm(inputValue);
   };
 
   return (
@@ -95,8 +106,8 @@ const NumericKeyboard: FC<IProps> = ({
           <input
             type="text"
             inputMode="none"
-            value={value}
-            placeholder="insert bet"
+            value={inputValue}
+            placeholder={translation?.insert_bet || "Введите ставку"}
             className={styles.keyboard__input}
             readOnly
           />
@@ -117,7 +128,7 @@ const NumericKeyboard: FC<IProps> = ({
 
       <button 
         className={styles.keyboard__confirmButton}
-        onClick={onConfirm}
+        onClick={handleConfirm}
       >
         {translation?.confirm_text}
       </button>
