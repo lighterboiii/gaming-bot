@@ -28,7 +28,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const userId = getUserId();
   const [bet, setBet] = useState(0.1);
-  const [betString, setBetString] = useState('0.1');
+  const [betString, setBetString] = useState('1');
   const [currency, setCurrency] = useState(1);
   const [notification, setNotification] = useState({
     message: '',
@@ -55,10 +55,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     setTimeout(() => {
       setNotification(prev => ({ ...prev, isShown: false, isInsufficient: false }));
     }, 2000);
-  };
-
-  const handleKeyboardConfirm = () => {
-    setShowKeyboard(false);
   };
 
   useEffect(() => {

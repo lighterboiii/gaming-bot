@@ -12,9 +12,15 @@
   border-top-left-radius: $radius-12;
   border-top-right-radius: $radius-12;
   z-index: 666;
+  isolation: isolate;
+  will-change: transform, height;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
   &__children {
     @include size(100%, 100%);
+    position: relative;
+    z-index: 1;
   }
 
   &__closeButton {
@@ -25,6 +31,7 @@
     @include size(25px, 25px);
     border-radius: 40px;
     background-color: $tertiary-color;
+    z-index: 2;
   }
 }
 
