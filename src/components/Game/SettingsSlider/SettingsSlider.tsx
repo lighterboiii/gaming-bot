@@ -65,12 +65,14 @@ const SettingsSlider: FC<IProps> = ({
 
   return (
     <div className={styles.slider}>
-      {isCurrency && <button
+      {/* {isCurrency &&  */}
+      <button
         onClick={isCurrency ? toggleCurrency : decreaseBet}
         className={styles.slider__button}
       >
         <ChevronIcon position='left' />
-      </button>}
+      </button>
+      {/* } */}
       {isCurrency ? (
         <span className={styles.slider__text}>
           {currency === 1 ? '💵' : '🔰'}
@@ -86,13 +88,14 @@ const SettingsSlider: FC<IProps> = ({
           readOnly
         />
       )}
-      {isCurrency && <button
+      {/* {isCurrency && */}
+       <button
         onClick={isCurrency ? toggleCurrency : increaseBet}
         className={styles.slider__button}
       >
           <ChevronIcon position='right' />
         </button>
-      }
+      {/* } */}
     </div>
   );
 };
