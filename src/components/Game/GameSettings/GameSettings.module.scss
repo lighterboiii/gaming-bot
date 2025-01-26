@@ -17,7 +17,7 @@
   }
 
   &__content {
-    @include flex(column, space-evenly, center, 10px);
+    @include flex(column, space-evenly, center, $space-10);
     @include indents(0, 20% 0 0 0);
     @include size(100%, 100%);
     position: relative;
@@ -33,15 +33,16 @@
   }
 
   &__balance {
-    @include indents(8px 0, 0);
+    @include indents($space-8 0, 0);
     @include size(100%, auto);
     @include max-size(100%, 62px);
-    @include flex(column, center, center, 8px);
+    @include flex(column, center, center, $space-8);
     background-color: $black-color;
   }
 
   &__text {
     @include indents();
+    @include flex(row, center, center, $space-6);
     font-size: 16px;
     color: $main-color;
     font-weight: 900;
@@ -57,11 +58,11 @@
 
   &__buttons {
     @include size(100%, auto);
-    @include flex(column, center, center, 8px);
+    @include flex(column, center, center, $space-8);
   }
 
   &__menu {
-    @include flex(column, center, center, 8px);
+    @include flex(column, center, center, $space-8);
   }
 
   &__notification {

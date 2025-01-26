@@ -5,7 +5,7 @@
   @include indents($space-8, 0);
   @include size(100%, auto);
   @include min-size(194px, 52px);
-  @include flex(row, space-between, center);
+  @include flex(row, space-evenly, center, $space-18);
   background-color: $secondary-color;
   border-radius: $radius-10;
 
@@ -24,6 +24,7 @@
   }
 
   &__input {
+    align-self: center;
     border: none;
     background-color: inherit;
     @include size(64px, auto);
@@ -32,11 +33,26 @@
     color: $main-color;
     font-weight: 900;
     caret-color: transparent;
+    cursor: pointer;
+    animation: floating 2s ease-in-out infinite;
+    -webkit-tap-highlight-color: transparent;
 
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
+  }
+}
+
+@keyframes floating {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
   }
 }
