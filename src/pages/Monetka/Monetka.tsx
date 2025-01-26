@@ -108,7 +108,6 @@ export const Monetka: FC = () => {
       tg.setHeaderColor('#d51845');
     }
   }, [tg, navigate, userId]);
-
   // Загрузка начального состояния игры
   useEffect(() => {
     setGameState((prev: any) => ({
@@ -126,7 +125,6 @@ export const Monetka: FC = () => {
       }, 1500);
       return;
     }
-console.log(gameState);
     const fetchInitialData = () => {
       sendMessage({
         user_id: userId,
@@ -137,7 +135,6 @@ console.log(gameState);
 
     fetchInitialData();
   }, []);
-
   // Обработка всех входящих WebSocket сообщений
   const handleWebSocketMessage = useCallback((message: string) => {
     const res = JSON.parse(message);
@@ -418,12 +415,10 @@ console.log(gameState);
       ? Number(currentPlayer.tokens)
       : Number(currentPlayer.money);
   }, [gameState.data?.players, gameState.data?.bet_type, userId]);
-
   // Проверка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
   }, [isRulesShown]);
-
   // обработчик клика по кнопке "Ознакомился"
   const handleRuleButtonClick = () => {
     setGameRulesWatched(userId, '4');

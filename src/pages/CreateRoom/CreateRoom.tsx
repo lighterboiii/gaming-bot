@@ -64,7 +64,9 @@ export const CreateRoom: FC = () => {
 
   const handleCloseOverlay = () => {
     setSettingsOverlay(false);
-    setGameData(null);
+    setTimeout(() => {
+      setGameData(null);
+    }, 500);
   };
 
   if (!isPortrait) {

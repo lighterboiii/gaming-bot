@@ -75,7 +75,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   }, [parsedMessages, navigate, translation, data]);
 
   const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
-  
+
   const handleBetChange = (newBet: number) => {
     setBetString(newBet.toFixed(1));
   };
@@ -100,7 +100,9 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         bet_type: betType,
         room_type: roomType,
       });
-      closeOverlay();
+      setTimeout(() => {
+        closeOverlay();
+      }, 1000);
     } catch (error) {
       console.error('Error creating room:', error);
       showNotification(translation?.error_creating_room || 'Ошибка создания комнаты');
