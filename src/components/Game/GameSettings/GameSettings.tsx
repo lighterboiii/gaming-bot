@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -85,7 +84,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     bet: number,
     betType: number,
     roomType: number,
-    closeOverlay: () => void
+    // closeOverlay: () => void
   ) => {
     try {
       clearMessages();
@@ -123,7 +122,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       } else if (userEnergy === 0 && currency === 3) {
         setPopupOpen(true);
       } else if (data) {
-        handleCreateRoom(userId, numericBet, currency, data?.room_type, closeOverlay);
+        handleCreateRoom(userId, numericBet, currency, data?.room_type);
       }
     }
   };
@@ -136,17 +135,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       4: translation?.monetka_name
     };
     return titles[data?.room_type as keyof typeof titles] || '';
-  };
-
-  useEffect(() => {
-    return () => {
-      setShowKeyboard(false);
-    };
-  }, []);
-
-  const handleOverlayClose = () => {
-    setShowKeyboard(false);
-    closeOverlay();
   };
 
   if (showKeyboard) {
