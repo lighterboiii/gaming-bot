@@ -75,6 +75,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   }, [parsedMessages, navigate, translation, data]);
 
   const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
+  
   const handleBetChange = (newBet: number) => {
     setBetString(newBet.toFixed(1));
   };
@@ -84,7 +85,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     bet: number,
     betType: number,
     roomType: number,
-    // closeOverlay: () => void
   ) => {
     try {
       clearMessages();
@@ -100,6 +100,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         bet_type: betType,
         room_type: roomType,
       });
+      closeOverlay();
     } catch (error) {
       console.error('Error creating room:', error);
       showNotification(translation?.error_creating_room || 'Ошибка создания комнаты');
@@ -136,6 +137,12 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     };
     return titles[data?.room_type as keyof typeof titles] || '';
   };
+
+  useEffect(() => {
+    if (!data) {
+      setShowKeyboard(false);
+    }
+  }, [data]);
 
   if (showKeyboard) {
     return (

@@ -62,6 +62,11 @@ export const CreateRoom: FC = () => {
     triggerHapticFeedback('impact', 'light');
   };
 
+  const handleCloseOverlay = () => {
+    setSettingsOverlay(false);
+    setGameData(null);
+  };
+
   if (!isPortrait) {
     return (
       <Warning />
@@ -70,9 +75,9 @@ export const CreateRoom: FC = () => {
 
   return (
     <div className={styles.create}>
-          <div className={styles.create__header}>
-            <h2 className={styles.create__heading}>{translation?.create_room}</h2>
-          </div>
+      <div className={styles.create__header}>
+        <h2 className={styles.create__heading}>{translation?.create_room}</h2>
+      </div>
       
       {loading ? (
         <Loader />
@@ -84,9 +89,7 @@ export const CreateRoom: FC = () => {
               key={game.id}
               image={game.id === 1 ? games[0].url : games[1].url}
               users={game.users}
-              extraClass={
-                `${styles['create__game-card']}`
-              }
+              extraClass={`${styles['create__game-card']}`}
               handleClickGame={handleGameClick}
             />
           ))}
@@ -98,11 +101,11 @@ export const CreateRoom: FC = () => {
         buttonColor="#FFF"
         closeButton
         show={settingsOverlay}
-        onClose={() => setSettingsOverlay(false)}
+        onClose={handleCloseOverlay}
         children={
           <GameSettings
             data={gameData}
-            closeOverlay={() => setSettingsOverlay(false)}
+            closeOverlay={handleCloseOverlay}
           />
         }
       />
