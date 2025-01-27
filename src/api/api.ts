@@ -1,7 +1,9 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 /* eslint-disable import/no-anonymous-default-export */
+
+const { REACT_APP_API_TOKEN, REACT_APP_API_BASE_URL } = process.env;
+
 type TOptions = {
   headers?: { authorization?: string, 'Content-Type': string };
   method?: string;
@@ -16,12 +18,9 @@ type TRequest = {
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 };
 
-const BASE_URL='https://gamebottggw.ngrok.app/'
-const token =`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2FtZWJvdGd3dGciLCJleHAiOjE3MzA4MTY5NDh9.6-w7uCzr2QQ0DkFamtW-OHZRwKsQa4l64Ofu3krwXKE`
-
 const BASE_PARAMS = {
   headers: {
-    'Authorization': `Bearer ${token}`,
+    'Authorization': `Bearer ${REACT_APP_API_TOKEN}`,
     'Content-Type': 'application/json;charset=utf-8',
     'ngrok-skip-browser-warning': 'true',
   }
@@ -32,7 +31,7 @@ function getRequestParams({ uri, userId, method, data, endpoint }: TRequest) {
     ...BASE_PARAMS,
     method
   };
-  const path = `${BASE_URL}${uri}${userId ? `${userId}` : ''}${endpoint ? `${endpoint}` : ''}`;
+  const path = `${REACT_APP_API_BASE_URL}${uri}${userId ? `${userId}` : ''}${endpoint ? `${endpoint}` : ''}`;
   if (data) {
     params.body = JSON.stringify(data);
   }
@@ -51,7 +50,7 @@ function checkRes<T>(res: Response): Promise<T> {
 }
 /**
  * @template T
- * @param {string} url добавочная строка `${BASE_URL}/${url}`
+ * @param {string} url добавочная строка `${REACT_APP_BASE_URL}/${url}`
  * @param {TOptions} options объект настроек для fetch-запроса
  * @returns {Promise<T>} {(Promise<T> | Promise<never>)} промис с парсированным объектом response или `Promise.reject([Ошибка ${res.status}, res.json()])`
  */
