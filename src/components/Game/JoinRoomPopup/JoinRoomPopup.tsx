@@ -31,7 +31,6 @@ const JoinRoomPopup: FC<IProps> = ({
   roomType,
   fromGameSettings = false,
 }) => {
-  const { user } = useTelegram();
   const userId = getUserId();
   const [messageShown, setMessageShown] = useState(false);
   const navigate = useNavigate();

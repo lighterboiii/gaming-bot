@@ -25,7 +25,7 @@ const CreateRoomFooter: FC = () => {
       <div className={styles.footer__statistics}>
         <span className={styles.footer__stats}>💵 {userInfo && formatNumber(userInfo!.coins)}</span>
         <span className={styles.footer__stats}>🔰 {userInfo && formatNumber(userInfo!.tokens)}</span>
-        <span className={styles.footer__stats}>⚡ {userInfo?.user_energy}</span>
+        {/* <span className={styles.footer__stats}>⚡ {userInfo?.user_energy}</span> */}
       </div>
       <div className={styles.footer__buttonWrapper}>
         <Button text={translation?.create_room}
