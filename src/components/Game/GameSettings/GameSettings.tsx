@@ -61,13 +61,23 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       if (lastMessage && lastMessage?.message === 'success') {
         triggerHapticFeedback('notification', 'success');
         setSelectedRoomId(lastMessage.room_id);
+        
+        const roomType = lastMessage.room_type || data?.room_type;
+        
         const roomRoutes = {
           2: `/closest/${lastMessage?.room_id}`,
           3: `/ludkaGame/${lastMessage?.room_id}`,
           4: `/monetka/${lastMessage?.room_id}`,
           default: `/room/${lastMessage?.room_id}`
         };
-        navigate(roomRoutes[data?.room_type as keyof typeof roomRoutes] || roomRoutes.default);
+        
+        if (!roomType) {
+          console.error('Room type is undefined', { lastMessage, data });
+          showNotification(translation?.error_creating_room || 'Ошибка создания комнаты');
+          return;
+        }
+        
+        navigate(roomRoutes[roomType as keyof typeof roomRoutes] || roomRoutes.default);
       } else if (lastMessage?.type === 'error') {
         showNotification(translation?.insufficient_funds || 'Недостаточно средств', true);
       }

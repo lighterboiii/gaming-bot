@@ -172,7 +172,7 @@ export const ClosestNumber: FC = () => {
           break;
         case 'whoiswin':
           const currentRound = {
-            value: res.whoiswin.room_value.toString(),
+            value: res?.whoiswin?.room_value?.toString(),
             players: data?.players?.length || 0
           };
           
