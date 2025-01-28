@@ -13,7 +13,7 @@ const Case: FC<IPropsForClosestNumberComponent> = ({ users }) => {
     >
       {users?.map((user: IPlayer) => (
         <div
-          key={user?.userid} // Устанавливаем key здесь
+          key={user?.userid}
           className={styles.players__player}
           style={users?.length <= 2 ? { width: '90px', height: '90px' } : {}}>
           {user?.emoji !== 'none' &&
@@ -26,8 +26,9 @@ const Case: FC<IPropsForClosestNumberComponent> = ({ users }) => {
                 className={styles.players__emojiImage} />
             </div>
           }
-          {user?.choice !== "none" && <div className={styles.players__choice}
-            style={{ right: '-20%' }}>{user?.choice}</div>}
+          {user?.choice !== "none" &&
+            <div className={styles.players__choice}
+              style={{ right: '-20%' }}>{user?.choice}</div>}
           <UserAvatar item={user}
             avatar={user?.avatar} />
           <p

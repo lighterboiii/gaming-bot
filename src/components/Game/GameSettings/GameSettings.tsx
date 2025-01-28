@@ -26,7 +26,7 @@ interface IProps {
 const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const userId = getUserId();
-  const [betString, setBetString] = useState('1.0');
+  const [betString, setBetString] = useState('0');
   const [currency, setCurrency] = useState(1);
   const [notification, setNotification] = useState({
     message: '',
@@ -65,10 +65,11 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         const roomType = lastMessage.room_type || data?.room_type;
         
         const roomRoutes = {
+          1: `/room/${lastMessage?.room_id}`,
           2: `/closest/${lastMessage?.room_id}`,
           3: `/ludkaGame/${lastMessage?.room_id}`,
           4: `/monetka/${lastMessage?.room_id}`,
-          default: `/room/${lastMessage?.room_id}`
+          // default: `/room/${lastMessage?.room_id}`
         };
         
         if (!roomType) {
@@ -77,7 +78,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
           return;
         }
         
-        navigate(roomRoutes[roomType as keyof typeof roomRoutes] || roomRoutes.default);
+        navigate(roomRoutes[roomType as keyof typeof roomRoutes]);
       } else if (lastMessage?.type === 'error') {
         showNotification(translation?.insufficient_funds || 'Недостаточно средств', true);
       }
