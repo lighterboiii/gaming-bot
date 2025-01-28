@@ -416,16 +416,6 @@ const LudkaGame: FC = () => {
     triggerHapticFeedback('impact', 'soft');
     sendMessage(data);
     setShowEmojiOverlay(false);
-
-    setTimeout(() => {
-      const noneData = {
-        user_id: userId,
-        room_id: roomId,
-        type: 'emoji',
-        emoji: 'none'
-      };
-      sendMessage(noneData);
-    }, 3000);
   };
 
   const getActiveEmojis = useMemo(() => {

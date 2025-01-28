@@ -70,6 +70,7 @@ export const ClosestNumber: FC = () => {
   const [timer, setTimer] = useState<number | null>(null);
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
+  const [lastProcessedRound, setLastProcessedRound] = useState<{value: string, players: number} | null>(null);
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -170,8 +171,19 @@ export const ClosestNumber: FC = () => {
           setData(res);
           break;
         case 'whoiswin':
-          if (isProcessingWin) return;
+          const currentRound = {
+            value: res.whoiswin.room_value.toString(),
+            players: data?.players?.length || 0
+          };
+          
+          if (isProcessingWin || 
+            (lastProcessedRound?.value === currentRound.value && 
+             lastProcessedRound?.players === currentRound.players)) {
+            return;
+          }
+          
           setIsProcessingWin(true);
+          setLastProcessedRound(currentRound);
 
           if (res.whoiswin.winner === "draw") {
             setDraw(true);
@@ -351,16 +363,6 @@ export const ClosestNumber: FC = () => {
     sendMessage(setEmojiData);
     setShowEmojiOverlay(false);
     setShowOverlay(false);
-
-    setTimeout(() => {
-      const noneChoice = {
-        user_id: userId,
-        room_id: roomId,
-        type: 'emoji',
-        emoji: 'none'
-      }
-      sendMessage(noneChoice);
-    }, 4000)
   };
   // обработчик клика на иконку эмодзи
   const handleClickEmoji = () => {

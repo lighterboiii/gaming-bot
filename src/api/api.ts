@@ -20,7 +20,7 @@ type TRequest = {
 
 const BASE_PARAMS = {
   headers: {
-    'Authorization': `Bearer ${REACT_APP_API_TOKEN}`,
+    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2FtZWJvdGd3dGciLCJleHAiOjE3NDMxNjYwMjl9.Jic_WFLBAPK2O1anLlxJ2EZJY2uVDw6O3dKgy2SUafg`,
     'Content-Type': 'application/json;charset=utf-8',
     'ngrok-skip-browser-warning': 'true',
   }
@@ -82,3 +82,4 @@ export function deleteReq<T>(options: TRequest) {
 export default {
   getReq, postReq, putReq, deleteReq
 };
+

@@ -352,16 +352,6 @@ export const RockPaperScissors: FC = () => {
     sendMessage(data);
     triggerHapticFeedback('impact', 'soft');
     setShowEmojiOverlay(false);
-
-    setTimeout(() => {
-      const noneData = {
-        user_id: userId,
-        room_id: roomId,
-        type: 'emoji',
-        emoji: 'none'
-      };
-      sendMessage(noneData);
-    }, 3000);
   };
   // обработчик клика по кнопке "Ознакомился" - е Websocket
   const handleRuleButtonClick = () => {

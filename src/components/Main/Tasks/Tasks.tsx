@@ -4,41 +4,52 @@ import { FC, useEffect, useState } from 'react';
 import { getUserId } from 'utils/userConfig';
 
 import { getAppData } from '../../../api/mainApi';
+import CrossIcon from '../../../icons/Cross/Cross';
 import { setTaskList } from '../../../services/appSlice';
 import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
+import { triggerHapticFeedback } from '../../../utils/hapticConfig';
 import { ITask } from '../../../utils/types';
 import Task from '../Task/Task';
 import TaskInfo from '../TaskInfo/TaskInfo';
 
 import styles from './Tasks.module.scss';
 
-const Tasks: FC = () => {
+const Tasks: FC<{ onClose: () => void }> = ({ onClose }) => {
   const dispatch = useAppDispatch();
   const userId = getUserId();
   const currentTasks = useAppSelector(store => store.app.tasks);
   const translation = useAppSelector(store => store.app.languageSettings);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
 
+  useEffect(() => {
+    setSelectedTask(null);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      setSelectedTask(null);
+    };
+  }, []);
+
   const handleTaskClick = (task: ITask) => {
     setSelectedTask(task);
+  };
+
+  const handleClose = () => {
+    triggerHapticFeedback('impact', 'soft');
+    onClose();
   };
 
   const fetchUserData = () => {
     getAppData(userId)
       .then((res) => {
         dispatch(setTaskList(res.tasks_available));
+        setSelectedTask(null);
       })
       .catch((error) => {
         console.error('Get user data error:', error);
-      })
+      });
   };
-
-  useEffect(() => {
-
-    return (() => {
-      setSelectedTask(null);
-    })
-  }, [])
 
   return (
     selectedTask === null ? (
@@ -61,6 +72,14 @@ const Tasks: FC = () => {
               />
             ))}
           </div>
+          <button 
+            className={styles.tasks__closeBtn}
+            onClick={handleClose}>
+            <CrossIcon
+              width={12}
+              height={12}
+              color='#FFF' />
+          </button>
         </div>
       </>
     ) : (

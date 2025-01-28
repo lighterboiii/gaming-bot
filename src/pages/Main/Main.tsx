@@ -222,9 +222,8 @@ export const Main: FC = () => {
         onClose={toggleTasksOverlay}
         buttonColor="#FFF"
         crossColor="#ac1a44"
-        closeButton
       >
-        <Tasks />
+        <Tasks onClose={toggleTasksOverlay} />
       </Overlay>
 
       {dailyBonusData && dailyBonusData !== "no" && (

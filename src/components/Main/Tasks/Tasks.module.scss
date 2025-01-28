@@ -44,4 +44,15 @@
     overflow: scroll;
     z-index: 3;
   }
+
+  &__closeBtn {
+    @include button-style-reset();
+    @include position(absolute, $right: -8px, $top: 4px);
+    transform: translate(-50%);
+    @include flex(row, center, center);
+    @include size(25px, 25px);
+    border-radius: 40px;
+    background-color: $black-color;
+    z-index: 2;
+  }
 }
