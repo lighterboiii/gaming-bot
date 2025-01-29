@@ -17,7 +17,7 @@ const CaseSix: FC<IPropsForClosestNumberComponent> = ({ users }) => {
                 className={styles.players__emojiImage} />
             </div>
           }
-          {user?.choice !== 'none' &&
+          {(user?.choice !== 'none' && user?.choice.toString() !== '9999') &&
             <div className={styles.players__choice}>
               {user?.choice}
             </div>}

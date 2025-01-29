@@ -10,14 +10,14 @@ const CaseFour: FC<IPropsForClosestNumberComponent> = ({ users }) => {
     <div className={styles.players}>
       {users?.map((user: IPlayer) => (
         <div className={styles.players__player}>
-          {(user?.choice !== 'none' && user?.choice.toString() !== '9999') &&
+          {user?.choice !== 'none' &&
             <div className={styles.players__emoji}>
               <img src={user?.emoji}
                 alt="emoji"
                 className={styles.players__emojiImage} />
             </div>
           }
-          {user?.choice !== 'none' &&
+          {(user?.choice !== 'none' && user?.choice.toString() !== '9999') &&
             <div className={styles.players__choice}>
               {user?.choice}
             </div>}

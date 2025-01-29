@@ -61,23 +61,22 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       if (lastMessage && lastMessage?.message === 'success') {
         triggerHapticFeedback('notification', 'success');
         setSelectedRoomId(lastMessage.room_id);
-        
+
         const roomType = lastMessage.room_type || data?.room_type;
-        
+
         const roomRoutes = {
           1: `/room/${lastMessage?.room_id}`,
           2: `/closest/${lastMessage?.room_id}`,
           3: `/ludkaGame/${lastMessage?.room_id}`,
           4: `/monetka/${lastMessage?.room_id}`,
-          // default: `/room/${lastMessage?.room_id}`
         };
-        
+
         if (!roomType) {
           console.error('Room type is undefined', { lastMessage, data });
           showNotification(translation?.error_creating_room || 'Ошибка создания комнаты');
           return;
         }
-        
+
         navigate(roomRoutes[roomType as keyof typeof roomRoutes]);
       } else if (lastMessage?.type === 'error') {
         showNotification(translation?.insufficient_funds || 'Недостаточно средств', true);
@@ -176,7 +175,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   return (
     <main className={`${styles.game} scrollable`} role="main">
       {notification.isShown ? (
-        <section 
+        <section
           className={styles.game__notification}
           role="alert"
           aria-live="polite"
@@ -184,7 +183,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
           {notification.message}
         </section>
       ) : notification.isInsufficient ? (
-        <section 
+        <section
           className={styles.game__notification}
           role="alert"
           aria-live="polite"
@@ -193,8 +192,8 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         </section>
       ) : (
         <>
-          <img 
-            src={data?.url} 
+          <img
+            src={data?.url}
             alt={getGameTitle()}
             className={styles.game__logo}
           />
@@ -206,11 +205,11 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
               <h2 className={styles.game__text}>{translation?.user_balance}</h2>
               <div className={styles.game__balanceWrapper}>
                 <p className={styles.game__text}>
-                  <span>{MONEY_EMOJI}</span> 
-                   {userCoins !== undefined ? formatNumber(userCoins) : 0}
+                  <span>{MONEY_EMOJI}</span>
+                  {userCoins !== undefined ? formatNumber(userCoins) : 0}
                 </p>
                 <p className={styles.game__text}>
-                  <span>{SHIELD_EMOJI}</span> 
+                  <span>{SHIELD_EMOJI}</span>
                   {userTokens !== undefined ? formatNumber(userTokens) : 0}
                 </p>
               </div>
@@ -242,8 +241,8 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
         </>
       )}
       {isPopupOpen && (
-        <Modal 
-          title={translation?.energy_depleted} 
+        <Modal
+          title={translation?.energy_depleted}
           closeModal={() => setPopupOpen(false)}
         >
           <JoinRoomPopup
