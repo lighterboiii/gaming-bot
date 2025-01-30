@@ -17,7 +17,6 @@ import { Warning } from "../../components/OrientationWarning/Warning";
 import Button from "../../components/ui/Button/Button";
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
-import { setUserData, setUserPhoto } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { sortRooms } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
@@ -106,26 +105,20 @@ export const OpenedRooms: FC = () => {
           const newCount = (prevCount + 1) % 4;
           if (newCount === 0) {
             setTypeValue(`${translation?.sort_all}`);
-            setSortByType(false);
+            setSortByType(!sortByType);
             setRooms([...rooms!]);
           } else {
-            const gameTypeOrder: Record<GameType, number> = {
-              'rock_paper_scissors': 1,
-              'closest_number': 2,
-              'ludka_game': 3
-            };
-
             sortedRooms = [...rooms!].sort((a, b) => {
-              const aType = String(a.room_type) as GameType;
-              const bType = String(b.room_type) as GameType;
+              const aType = Number(a.room_type);
+              const bType = Number(b.room_type);
 
               if (newCount === 1) {
-                return gameTypeOrder[aType] - gameTypeOrder[bType];
+                return aType - bType;
               } else if (newCount === 2) {
-                return gameTypeOrder[bType] - gameTypeOrder[aType];
+                return bType - aType;
               } else {
-                const targetType = newCount === 1 ? 'rock_paper_scissors' :
-                  newCount === 2 ? 'closest_number' : 'ludka_game';
+                const targetType = newCount === 1 ? 1 :
+                  newCount === 2 ? 2 : 3;
                 return aType === targetType ? -1 : 1;
               }
             });
