@@ -209,8 +209,8 @@ export const RockPaperScissors: FC = () => {
           triggerHapticFeedback('notification', 'success');
           return {
             animation: Number(data?.creator_id) === Number(res?.whoiswin.winner)
-              ? rWinAnim
-              : lWinAnim,
+              ? lWinAnim
+              : rWinAnim,
             message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
               ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵` : `🔰`}`
               : ''}`
