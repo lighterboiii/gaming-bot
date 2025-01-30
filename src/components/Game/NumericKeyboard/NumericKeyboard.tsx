@@ -14,14 +14,16 @@ interface IProps {
   onClose: () => void;
   onConfirm: (value: string) => void;
   onBack: () => void;
+  initialValue?: string;
 }
 
 const NumericKeyboard: FC<IProps> = ({
   onClose,
   onConfirm,
   onBack,
+  initialValue = ''
 }) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(initialValue);
   const keyboardRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<number>(0);
   const userTokens = useAppSelector(store => store.app.info?.tokens);

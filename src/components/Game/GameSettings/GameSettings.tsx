@@ -27,7 +27,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const navigate = useNavigate();
   const userId = getUserId();
   const [betString, setBetString] = useState('0');
-  const [currency, setCurrency] = useState(1);
   const [notification, setNotification] = useState({
     message: '',
     isShown: false,
@@ -43,7 +42,13 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const userInfo = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
   const parsedMessages = wsMessages?.map(msg => JSON.parse(msg));
+  const [currency, setCurrency] = useState(1);
+  const [persistentCurrency, setPersistentCurrency] = useState(1);
 
+  const handleCurrencyChange = (newCurrency: number) => {
+    setCurrency(newCurrency);
+    setPersistentCurrency(newCurrency);
+  };
   const showNotification = (message: string, isInsufficient = false) => {
     setNotification({
       message,
@@ -84,7 +89,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     }
   }, [parsedMessages, navigate, translation, data]);
 
-  const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
+  // const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
 
   const handleBetChange = (newBet: number) => {
     setBetString(newBet.toFixed(1));
@@ -226,6 +231,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
                 />
                 <SettingsSlider
                   isCurrency
+                  initialCurrency={persistentCurrency}
                   onCurrencyChange={handleCurrencyChange}
                 />
               </div>

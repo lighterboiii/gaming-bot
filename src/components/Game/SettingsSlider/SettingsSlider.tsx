@@ -14,18 +14,27 @@ interface IProps {
   onCurrencyChange?: (newCurrency: number) => void;
   onInputChange?: (bet: string) => void;
   onKeyboardShow?: (show: boolean) => void;
+  currValue?: any;
+  initialCurrency?: number; // Add this prop
 }
 
 const SettingsSlider: FC<IProps> = ({
+  currValue,
   betValue = '1.0',
   isCurrency = false,
   onBetChange = () => { },
   onCurrencyChange = () => { },
   onInputChange,
-  onKeyboardShow = () => { }
+  onKeyboardShow = () => { },
+  initialCurrency = 1,
 }) => {
-  const [currency, setCurrency] = useState(1);
+  const [currency, setCurrency] = useState(initialCurrency);
   const inputRef = useRef<HTMLInputElement>(null);
+  // const [localValue, setLocalValue] = useState(currValue);
+
+  // useEffect(() => {
+  //   setLocalValue(currValue);
+  // }, [currValue]);
 
   const increaseBet = () => {
     triggerHapticFeedback('impact', 'soft');
