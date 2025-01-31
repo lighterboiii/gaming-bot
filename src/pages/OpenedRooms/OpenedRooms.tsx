@@ -236,6 +236,8 @@ export const OpenedRooms: FC = () => {
             <RoomSkeleton />
             <RoomSkeleton />
             <RoomSkeleton />
+            <RoomSkeleton />
+            <RoomSkeleton />
           </>
         ) : rooms && rooms.length > 0 ? (
           rooms?.map((room: any, index: number) => (
