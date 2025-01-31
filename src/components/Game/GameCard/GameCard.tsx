@@ -20,13 +20,15 @@ const GameCard: FC<IProps> = ({ game, handleClickGame, extraClass }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const gameCardClassNames = classNames(
     styles.game,
+    { [styles.game_disabled]: game.room_type === 3 },
     extraClass
   );
 
   const handleClick = () => {
+    if (game.room_type === 999) return;
     handleClickGame(game);
   };
-
+console.log(game);
   const getGameName = (roomType: number) => {
     switch(roomType) {
       case 1:
@@ -35,6 +37,8 @@ const GameCard: FC<IProps> = ({ game, handleClickGame, extraClass }) => {
         return translation?.closest_number;
       case 3:
         return translation?.ludka_name;
+      case 999:
+        return translation?.soon_game_name;
       case 4:
         return translation?.monetka_name;
       default:
@@ -49,9 +53,10 @@ const GameCard: FC<IProps> = ({ game, handleClickGame, extraClass }) => {
       className={gameCardClassNames}
       onClick={handleClick}
       role="button"
-      tabIndex={0}
+      tabIndex={game.room_type === 3 ? -1 : 0}
       aria-label={`${gameName} game - ${game.users} players`}
       onKeyDown={(e) => {
+        if (game.room_type === 999) return;
         if (e.key === 'Enter' || e.key === ' ') {
           handleClick();
         }
