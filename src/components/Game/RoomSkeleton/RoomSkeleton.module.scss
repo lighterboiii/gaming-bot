@@ -1,0 +1,59 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.skeleton {
+  @include indents(8px, 0);
+  @include flex(row, space-between, center, 8px);
+  @include min-size(100%, 76px);
+  @include position(relative);
+  background-color: $tertiary-color;
+  border-radius: $radius-10;
+
+  @media screen and (min-height: 690px) {
+    @include min-size(100%, 86px);
+  }
+
+  &__game {
+    @include size(100%,  80%);
+    border-radius: $radius-12;
+    @include flex(column, center, flex-start, 12px);
+    background: linear-gradient(90deg, #ac1a44 25%, #d51845 50%, #ac1a44 75%);
+    background-size: 600px 104px;
+    animation: shimmer 1.5s infinite linear;
+
+    @media screen and (max-width: 381px) {
+      @include max-size(70px, 100%);
+    }
+  }
+
+  &__number {
+    @include indents();
+    @include size(100%,  80%);
+    border-radius: $radius-12;
+    background: linear-gradient(90deg, #ac1a44 25%, #d51845 50%, #ac1a44 75%);
+    background-size: 600px 104px;
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  &__bet {
+    text-align: left;
+  }
+
+  &__creator {
+    @include indents();
+    @include size(100%,  80%);
+    border-radius: $radius-12;
+    background: linear-gradient(90deg, #ac1a44 25%, #d51845 50%, #ac1a44 75%);
+    background-size: 600px 104px;
+    animation: shimmer 1.5s infinite linear;
+  }
+} 

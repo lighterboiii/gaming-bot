@@ -11,6 +11,7 @@ import { getUserId } from "utils/userConfig";
 import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomFooter";
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
 import Room from "../../components/Game/Room/Room";
+import RoomSkeleton from '../../components/Game/RoomSkeleton/RoomSkeleton';
 import Loader from "../../components/Loader/Loader";
 import { Modal } from "../../components/Modal/Modal";
 import { Warning } from "../../components/OrientationWarning/Warning";
@@ -91,6 +92,7 @@ export const OpenedRooms: FC = () => {
 
   const toggleSort = (sortBy: string) => {
     let sortedRooms;
+    setLoading(true);
 
     switch (sortBy) {
       case 'type':
@@ -124,6 +126,10 @@ export const OpenedRooms: FC = () => {
           }
           return newCount;
         });
+
+        setTimeout(() => {
+          setLoading(false);
+        }, 300);
         break;
 
       case 'currency':
@@ -203,48 +209,51 @@ export const OpenedRooms: FC = () => {
 
   return (
     <main className={styles.rooms}>
-      {loading ? <Loader /> : (
-        <>
-          <header className={styles.rooms__content}>
-            <h2 className={styles.rooms__heading}>{translation?.find_game}</h2>
-            <div className={styles.rooms__buttons}>
-              <button type="button" name="type" className={styles.rooms__button} onClick={() => toggleSort('type')}>
-                <span className={styles.rooms__game}>{translation?.sort_game}</span>
-                <span className={styles.rooms__name}>{typeValue}</span>
-              </button>
-              <button type="button"
-                name="currency"
-                className={styles.rooms__button}
-                onClick={() => toggleSort('currency')}
-              >
-                <span className={styles.rooms__game}>{translation?.sort_currency}</span>
-                <span className={styles.rooms__name}>{currencyValue}</span>
-              </button>
-              <button type="button" name="bet" className={styles.rooms__button} onClick={() => toggleSort('bet')}>
-                <span className={styles.rooms__game}>{translation?.sort_bet}</span>
-                <span className={styles.rooms__name}>{betValue}</span>
-              </button>
+      <header className={styles.rooms__content}>
+        <h2 className={styles.rooms__heading}>{translation?.find_game}</h2>
+        <div className={styles.rooms__buttons}>
+          <button type="button" name="type" className={styles.rooms__button} onClick={() => toggleSort('type')}>
+            <span className={styles.rooms__game}>{translation?.sort_game}</span>
+            <span className={styles.rooms__name}>{typeValue}</span>
+          </button>
+          <button type="button"
+            name="currency"
+            className={styles.rooms__button}
+            onClick={() => toggleSort('currency')}
+          >
+            <span className={styles.rooms__game}>{translation?.sort_currency}</span>
+            <span className={styles.rooms__name}>{currencyValue}</span>
+          </button>
+          <button type="button" name="bet" className={styles.rooms__button} onClick={() => toggleSort('bet')}>
+            <span className={styles.rooms__game}>{translation?.sort_bet}</span>
+            <span className={styles.rooms__name}>{betValue}</span>
+          </button>
+        </div>
+      </header>
+      <section className={styles.rooms__roomList + " scrollable"}>
+        {loading ? (
+          <>
+            <RoomSkeleton />
+            <RoomSkeleton />
+            <RoomSkeleton />
+          </>
+        ) : rooms && rooms.length > 0 ? (
+          rooms?.map((room: any, index: number) => (
+            <Room room={room} key={index} openModal={() => handleRoomClick(room)} />
+          ))
+        ) : (
+          <div className={styles.rooms__createNew}>
+            <p className={styles.rooms__notify}>{translation?.no_open_rooms}</p>
+            <div className={styles.rooms__buttonWrapper}>
+              <Button handleClick={handleCreateClick} text={translation?.create_room_button} />
             </div>
-          </header>
-          <section className={styles.rooms__roomList + " scrollable"}>
-            {rooms && rooms.length > 0 ? rooms?.map((room: any, index: number) => (
-              <Room room={room} key={index} openModal={() => handleRoomClick(room)} />
-            )) : (
-              <div className={styles.rooms__createNew}>
-                <p className={styles.rooms__notify}>{translation?.no_open_rooms}</p>
-                <div className={styles.rooms__buttonWrapper}>
-                  <Button handleClick={handleCreateClick} text={translation?.create_room_button} />
-                </div>
-              </div>
-            )
-            }
-          </section>
-          {rooms && rooms?.length > 0 && (
-            <footer>
-              <CreateRoomFooter />
-            </footer>
-          )}
-        </>
+          </div>
+        )}
+      </section>
+      {rooms && rooms?.length > 0 && (
+        <footer>
+          <CreateRoomFooter />
+        </footer>
       )}
       {isModalOpen && selectedRoomId && (
         <Modal title={translation?.energy_depleted} closeModal={() => setModalOpen(false)}>
