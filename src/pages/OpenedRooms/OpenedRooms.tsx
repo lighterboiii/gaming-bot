@@ -134,10 +134,6 @@ export const OpenedRooms: FC = () => {
 
       case 'currency':
         triggerHapticFeedback('impact', 'soft');
-        setTypeClickCount(0);
-        setTypeValue(`${translation?.sort_all}`);
-        setSortByType(false);
-
         setBetClickCount(0);
         setBetValue(`${translation?.sort_all}`);
         setSortByBetAsc(false);
@@ -147,9 +143,9 @@ export const OpenedRooms: FC = () => {
           if (newCount === 0) {
             setCurrencyValue(`${translation?.sort_all}`);
             setSortByCurr(false);
-            setRooms([...originalRooms!]);
+            setRooms([...rooms!]);
           } else {
-            sortedRooms = sortRooms(originalRooms as any, 'bet_type', sortByCurr);
+            sortedRooms = sortRooms(rooms as any, 'bet_type', sortByCurr);
             setSortByCurr(!sortByCurr);
             setCurrencyValue(sortByCurr ? MONEY_EMOJI : SHIELD_EMOJI);
             setRooms(sortedRooms);
@@ -160,10 +156,6 @@ export const OpenedRooms: FC = () => {
 
       case 'bet':
         triggerHapticFeedback('impact', 'soft');
-        setTypeClickCount(0);
-        setTypeValue(`${translation?.sort_all}`);
-        setSortByType(false);
-
         setCurrencyClickCount(0);
         setCurrencyValue(`${translation?.sort_all}`);
         setSortByCurr(false);
@@ -173,9 +165,9 @@ export const OpenedRooms: FC = () => {
           if (newCount === 0) {
             setBetValue(`${translation?.sort_all}`);
             setSortByBetAsc(false);
-            setRooms([...originalRooms!]);
+            setRooms([...rooms!]);
           } else {
-            sortedRooms = sortRooms(originalRooms as any, 'bet', sortByBetAsc);
+            sortedRooms = sortRooms(rooms as any, 'bet', sortByBetAsc);
             setSortByBetAsc(!sortByBetAsc);
             setBetValue(sortByBetAsc ? `${translation?.sort_descending}` : `${translation?.sort_ascending}`);
             setRooms(sortedRooms);
