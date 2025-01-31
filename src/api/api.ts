@@ -21,7 +21,7 @@ type TRequest = {
 
 const BASE_PARAMS = {
   headers: {
-    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2FtZWJvdGd3dGciLCJleHAiOjE3NDMxNjYwMjl9.Jic_WFLBAPK2O1anLlxJ2EZJY2uVDw6O3dKgy2SUafg`,
+    'Authorization': `Bearer ${REACT_APP_API_TOKEN}`,
     'Content-Type': 'application/json;charset=utf-8',
     'ngrok-skip-browser-warning': 'true',
   }
@@ -32,7 +32,7 @@ function getRequestParams({ uri, userId, method, data, endpoint }: TRequest) {
     ...BASE_PARAMS,
     method
   };
-  const path = `${REACT_APP_API_BASE_URL}${uri}${userId ? `${userId}` : ''}${endpoint ? `${endpoint}` : ''}`;
+  const path = `${REACT_APP_API_BASE_URL}/${uri}${userId ? `${userId}` : ''}${endpoint ? `${endpoint}` : ''}`;
   if (data) {
     params.body = JSON.stringify(data);
   }

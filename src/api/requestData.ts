@@ -1,4 +1,4 @@
-const BASE_URL = 'https://gamebottggw.ngrok.app/';
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 // uri
 export const mainAppDataUri = `get_start_info?user_id=`;
 export const getUserAvatarUri = `getuserphoto?user_id=`;
