@@ -15,6 +15,7 @@ const UserInfo: FC = () => {
   const { tg } = useTelegram();
   const userData = useAppSelector(store => store.app.info);
   const translation = useAppSelector(store => store.app.languageSettings);
+  const isChangingSkin = useAppSelector(store => store.app.isChangingSkin);
 
   const handleClickBalance = () => {
     tg.openTelegramLink(balanceLink);
@@ -25,13 +26,16 @@ const UserInfo: FC = () => {
   return (
     <div className={styles.user}>
       <div className={styles.user__userInfo}>
-        <div className={styles.user__avatarContainer}>
+        <div className={`${styles.user__avatarContainer} ${isChangingSkin ? styles.changingSkin : ''}`}>
           <UserAvatar />
         </div>
         <div className={styles.user__textElements}>
           <p className={styles.user__name}>{userData && userData?.publicname}</p>
           <div className={styles.user__money}>
-            <p className={styles.user__text}>{MONEY_EMOJI} {userData ? formatNumber(userData?.coins) : '0'}</p>
+            <p className={styles.user__text}>
+              <span>{MONEY_EMOJI}</span>
+              {userData ? formatNumber(userData?.coins) : '0'}
+            </p>
             <p className={styles.user__text}>{SHIELD_EMOJI} {userData ? formatNumber(userData?.tokens) : '0'}</p>
           </div>
           <button type="button"

@@ -31,6 +31,7 @@ interface AppState {
     emojis: string[];
     lastUpdated: number;
   } | null;
+  isChangingSkin: boolean;
 }
 
 const initialState: AppState = {
@@ -53,6 +54,7 @@ const initialState: AppState = {
   thirdGameRulesState: null,
   fourthGameRulesState: null,
   emojiPack: null,
+  isChangingSkin: false,
 }
 
 const appSlice = createSlice({
@@ -215,6 +217,9 @@ const appSlice = createSlice({
         lastUpdated: Date.now()
       };
     },
+    setChangingSkin: (state, action: PayloadAction<boolean>) => {
+      state.isChangingSkin = action.payload;
+    },
   }
 })
 
@@ -254,7 +259,8 @@ export const {
   setThirdGameRulesState,
   setFourthGameRuleImage,
   setFourthGameRulesState,
-  setEmojiPack
+  setEmojiPack,
+  setChangingSkin
 } = appSlice.actions;
 
 export default appSlice.reducer;

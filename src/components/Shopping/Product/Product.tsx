@@ -16,6 +16,7 @@ import {
   removeItemFromLavka,
   setActiveEmoji,
   setActiveSkin,
+  setChangingSkin,
   setCoinsValueAfterBuy,
   setCollectibles,
   setTokensValueAfterBuy
@@ -55,9 +56,15 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
       ? dispatch(setCoinsValueAfterBuy(item.item_price_coins))
       : dispatch(setTokensValueAfterBuy(item.item_price_tokens));
     if (item?.item_type === "skin" || item?.item_type === "skin_anim") {
+      dispatch(setChangingSkin(true));
       dispatch(setCollectibles(item.item_id));
       dispatch(setActiveSkin(item.item_id));
       await setActiveSkinRequest(item.item_id, userId);
+      // Add delay to show animation
+      setTimeout(() => {
+        dispatch(setChangingSkin(false));
+        onClose();
+      }, 1000);
     } else if (item?.item_type === "energy_drink") {
       dispatch(addEnergyDrink(1));
     } else if (item?.item_type === "emoji") {
@@ -120,14 +127,20 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   };
   // хендлер установки скина в актив
   const handleSetActiveSkin = (itemId: number) => {
+    dispatch(setChangingSkin(true));
     setActiveSkinRequest(itemId, userId)
       .then(() => {
         triggerHapticFeedback('impact', 'soft');
         dispatch(setActiveSkin(itemId));
-        onClose();
+        // Add delay to show animation
+        setTimeout(() => {
+          dispatch(setChangingSkin(false));
+          onClose();
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);
+        dispatch(setChangingSkin(false));
       });
   };
   // хендлер установки активного пака эмодзи
