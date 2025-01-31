@@ -49,13 +49,19 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   const [isModalOpen, setModalOpen] = useState(false);
   const isUserSeller = Number(userId) === Number(item?.seller_id);
   const translation = useAppSelector(store => store.app.languageSettings);
+  const activeSkin = useAppSelector(store => store.app.info?.active_skin);
+  const activeEmoji = useAppSelector(store => store.app.info?.user_active_emoji);
+
+  const isAlreadyActive = 
+  (item?.item_type === "skin" || item?.item_type === "skin_anim" || item?.item_type === "skin_png") 
+  && item?.item_id === activeSkin;
 
   // функция для фильтрации купленных товаров
   const handlePurchaseItemTypes = async (item: ItemData) => {
     item?.item_price_coins !== 0
       ? dispatch(setCoinsValueAfterBuy(item.item_price_coins))
       : dispatch(setTokensValueAfterBuy(item.item_price_tokens));
-    if (item?.item_type === "skin" || item?.item_type === "skin_anim") {
+    if (item?.item_type === "skin" || item?.item_type === "skin_anim" || item?.item_type === "skin_png") {
       dispatch(setChangingSkin(true));
       dispatch(setCollectibles(item.item_id));
       dispatch(setActiveSkin(item.item_id));
@@ -245,7 +251,9 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
                     text={translation?.use}
                     handleClick={item?.item_type === "emoji"
                       ? () => handleSetActiveEmoji(item?.item_id)
-                      : () => handleSetActiveSkin(item?.item_id)} />
+                      : () => handleSetActiveSkin(item?.item_id)}
+                    disabled={isAlreadyActive}
+                  />
                 </div>
                 <div className={styles.product__buttonWrapper}>
                   <Button
