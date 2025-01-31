@@ -1,0 +1,63 @@
+@use '../../../stylesheets/mixins' as *;
+@use '../../../stylesheets/variables' as *;
+
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.skeleton {
+  @include max-size(116px, 116px);
+  @include size(100%, 100%);
+  @include position(relative);
+  @include flex(column, center, center);
+  font-family: 'Rubik', sans-serif;
+  background: $tertiary-color;
+  border-radius: $radius-10;
+  aspect-ratio: 1;
+
+  &__avatarContainer {
+    @include indents();
+    @include position(relative);
+    @include size(90px, 90px);
+
+    @media screen and (max-width: 379px) {
+      @include size(76px, 76px);
+    }
+  }
+
+  &__avatar {
+    @include size(100%, 100%);
+    border-radius: $radius-10;
+    background: linear-gradient(90deg, #ac1a44 25%, #d51845 50%, #ac1a44 75%);
+    background-size: 600px 104px;
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  &__price {
+    @include indents();
+    @include position(absolute, $left: 50%, $bottom: 0);
+    transform: translate(-50%);
+    @include size(40px, 10px);
+    border-radius: $radius-40;
+    background: linear-gradient(90deg, #ac1a44 25%, #d51845 50%, #ac1a44 75%);
+    background-size: 600px 104px;
+    animation: shimmer 1.5s infinite linear;
+    z-index: 3;
+  }
+
+  &__count {
+    @include indents();
+    @include position(absolute, $right: 4px, $top: 4px);
+    @include size(16px, 8px);
+    border-radius: $radius-40;
+    background: linear-gradient(90deg, #ac1a44 25%, #d51845 50%, #ac1a44 75%);
+    background-size: 600px 104px;
+    animation: shimmer 1.5s infinite linear;
+    z-index: 3;
+  }
+} 

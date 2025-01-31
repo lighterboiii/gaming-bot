@@ -6,6 +6,7 @@ import { getCollectiblesInfo, getLavkaAvailableRequest, getShopItemsRequest } fr
 import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
+import ProductSkeleton from '../../components/Shopping/ProductSkeleton/ProductSkeleton';
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
 import useOrientation from "../../hooks/useOrientation";
@@ -32,7 +33,7 @@ export const Shop: FC = () => {
   const [goods, setGoods] = useState<ItemData[]>([]);
   const [activeButton, setActiveButton] = useState<string>(`${translation?.shop_button}`);
   const [showOverlay, setShowOverlay] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<CombinedItemData | null>(null);
   const [inventoryItems, setInventoryItems] = useState<ItemData[]>([]);
   const isPortrait = useOrientation();
@@ -88,7 +89,7 @@ export const Shop: FC = () => {
     shopData && handleAddIsCollectible(shopData);
     setTimeout(() => {
       setLoading(false);
-    }, 300);
+    }, 1200);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleAddIsCollectible, shopData, translation?.shop_button]);
   // открыть страничку с данными скина
@@ -110,13 +111,13 @@ export const Shop: FC = () => {
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
-    // setLoading(true);
+    setLoading(true);
     triggerHapticFeedback('impact', 'soft');
      setActiveButton(`${translation?.marketplace}`);
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
     setGoods(updatedLavka.lavka);
-    // setLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -183,9 +184,20 @@ export const Shop: FC = () => {
           </button>
         </nav>
         {loading ? (
-          <p role="status" aria-live="polite" style={{ color: '#ffdb50', fontWeight: '900' }}>
-            {translation?.loading}...
-          </p>
+          <section className={styles.shop__goods + ' scrollable'} aria-label="Loading items">
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
+          </section>
         ) : (
           <section className={styles.shop__goods + ' scrollable'} aria-label="Shop items">
             {goods?.length > 0 ? (
