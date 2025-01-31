@@ -92,10 +92,10 @@ export const OpenedRooms: FC = () => {
 
   const toggleSort = (sortBy: string) => {
     let sortedRooms;
-    setLoading(true);
 
     switch (sortBy) {
       case 'type':
+        setLoading(true);
         triggerHapticFeedback('impact', 'soft');
         setCurrencyClickCount(0);
         setCurrencyValue(`${translation?.sort_all}`);
@@ -147,8 +147,9 @@ export const OpenedRooms: FC = () => {
           if (newCount === 0) {
             setCurrencyValue(`${translation?.sort_all}`);
             setSortByCurr(false);
+            setRooms([...originalRooms!]);
           } else {
-            sortedRooms = sortRooms(rooms as any, 'bet_type', sortByCurr);
+            sortedRooms = sortRooms(originalRooms as any, 'bet_type', sortByCurr);
             setSortByCurr(!sortByCurr);
             setCurrencyValue(sortByCurr ? MONEY_EMOJI : SHIELD_EMOJI);
             setRooms(sortedRooms);
@@ -172,8 +173,9 @@ export const OpenedRooms: FC = () => {
           if (newCount === 0) {
             setBetValue(`${translation?.sort_all}`);
             setSortByBetAsc(false);
+            setRooms([...originalRooms!]);
           } else {
-            sortedRooms = sortRooms(rooms as any, 'bet', sortByBetAsc);
+            sortedRooms = sortRooms(originalRooms as any, 'bet', sortByBetAsc);
             setSortByBetAsc(!sortByBetAsc);
             setBetValue(sortByBetAsc ? `${translation?.sort_descending}` : `${translation?.sort_ascending}`);
             setRooms(sortedRooms);
