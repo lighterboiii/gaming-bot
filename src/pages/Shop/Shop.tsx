@@ -105,9 +105,13 @@ export const Shop: FC = () => {
   };
   // обработчик клика по кнопке "магазин"
   const handleClickShop = () => {
+    setLoading(true);
     triggerHapticFeedback('impact', 'soft');
     setActiveButton(`${translation?.shop_button}`);
     shopData && handleAddIsCollectible(shopData);
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
@@ -117,7 +121,9 @@ export const Shop: FC = () => {
     const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
     dispatch(setLavkaAvailable(updatedLavka.lavka));
     setGoods(updatedLavka.lavka);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
   };
 
   useEffect(() => {
