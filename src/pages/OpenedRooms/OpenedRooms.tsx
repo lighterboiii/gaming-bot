@@ -34,6 +34,7 @@ export const OpenedRooms: FC = () => {
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
   const [rooms, setRooms] = useState<IGameCardData[] | null>(null);
+  const [originalRooms, setOriginalRooms] = useState<IGameCardData[] | null>(null);
   const [typeValue, setTypeValue] = useState(`${translation?.sort_all}`);
   const [currencyValue, setCurrencyValue] = useState(`${translation?.sort_all}`);
   const [betValue, setBetValue] = useState(`${translation?.sort_all}`);
@@ -78,6 +79,7 @@ export const OpenedRooms: FC = () => {
       console.log(res);
       if (res.type === 'rooms_update') {
         setRooms(res.rooms);
+        setOriginalRooms(res.rooms);
       }
     };
 
@@ -102,31 +104,23 @@ export const OpenedRooms: FC = () => {
         setSortByBetAsc(false);
 
         setTypeClickCount((prevCount) => {
-          const newCount = (prevCount + 1) % 4;
+          const newCount = (prevCount + 1) % 5;
           if (newCount === 0) {
             setTypeValue(`${translation?.sort_all}`);
             setSortByType(!sortByType);
-            setRooms([...rooms!]);
+            setRooms([...originalRooms!]);
           } else {
-            sortedRooms = [...rooms!].sort((a, b) => {
-              const aType = Number(a.room_type);
-              const bType = Number(b.room_type);
+            const targetType = newCount === 1 ? 1 :
+              newCount === 2 ? 2 :
+              newCount === 3 ? 3 : 4;
 
-              if (newCount === 1) {
-                return aType - bType;
-              } else if (newCount === 2) {
-                return bType - aType;
-              } else {
-                const targetType = newCount === 1 ? 1 :
-                  newCount === 2 ? 2 : 3;
-                return aType === targetType ? -1 : 1;
-              }
-            });
+            sortedRooms = originalRooms!.filter(room => Number(room.room_type) === targetType);
             setRooms(sortedRooms);
 
             setTypeValue(newCount === 1 ? `${translation?.rock_paper_scissors_short}` :
               newCount === 2 ? `${translation?.closest_number_short}` :
-                `${translation?.ludka_short}`);
+              newCount === 3 ? `${translation?.ludka_short}` :
+              `${translation?.monetka_name}`);
           }
           return newCount;
         });
