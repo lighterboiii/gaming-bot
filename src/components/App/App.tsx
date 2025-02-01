@@ -32,7 +32,7 @@ import {
   setFourthGameRuleImage,
   setFourthGameRulesState
 } from '../../services/appSlice';
-import { useAppDispatch } from '../../services/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../services/reduxHooks';
 import { cacheBanners } from '../../utils/bannerCache';
 import {
   indexUrl,
@@ -55,19 +55,20 @@ import styles from './App.module.scss';
 
 export const App: FC = () => {
   const { tg } = useTelegram();
-  const userId = getUserId();
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
+  const userId = getUserId();
+  const [loading, setLoading] = useState(true);
   const [serverWarning, setServerWarning] = useState<string | null>(null);
+
   const isMobile = () => {
     const platform = Telegram.WebApp.platform;
-    const isWebVersion = window.location.host.includes('web.telegram.org');
     
-    if (platform === "tdesktop" || platform === "desktop" || platform === "macos" || isWebVersion) {
-      return false;
+    if (platform === 'android' || platform === 'ios' || platform === 'wphone') {
+      return true;
     }
-    return true;
-  } 
+    
+    return false;
+  }
 
   document.addEventListener(
     'touchmove',
@@ -92,7 +93,7 @@ export const App: FC = () => {
     tg.ready();
     window.scrollTo(0, 0);
   }, [tg]);
-  
+
   useEffect(() => {
     setLoading(true);
     const fetchUserData = () => {
