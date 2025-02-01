@@ -15,10 +15,8 @@ import RenderComponent from "../../components/ClosestNumber/WhoCloserPlayers/Who
 import Rules from "../../components/Game/Rules/Rules";
 import Loader from "../../components/Loader/Loader";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
-// import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import { useEmojiPack } from "../../hooks/useEmojiPack";
-import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import approveIcon from '../../images/closest-number/Approve.png';
 import deleteIcon from '../../images/closest-number/Delete.png';
@@ -64,7 +62,6 @@ export const ClosestNumber: FC = () => {
   const [rules, setRulesShown] = useState<boolean | null>(false);
   const isRulesShown = useAppSelector(store => store.app.secondGameRulesState);
   const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
-  // const isPortrait = useOrientation();
   const { sendMessage, wsMessages, clearMessages } = useContext(WebSocketContext)!;
   const [isProcessingWin, setIsProcessingWin] = useState<boolean>(false);
   const [timer, setTimer] = useState<number | null>(null);
