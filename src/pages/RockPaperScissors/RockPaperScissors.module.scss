@@ -160,6 +160,8 @@
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
+    transition: all 0.3s ease;
+    animation: pulse 2.5s ease-in-out infinite;
 
     @media screen and (min-height: 691px) {
       @include size(216px, 84px);
@@ -169,5 +171,17 @@
   &__resultMessage {
     @extend .game__notify;
     @include position(absolute, $top: 40%, $left: 50%);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
   }
 }
