@@ -22,8 +22,6 @@ import HandShake from '../../components/Game/HandShake/HandShake';
 import Players from "../../components/Game/RPSPlayers/Players";
 import Rules from "../../components/Game/Rules/Rules";
 import Loader from "../../components/Loader/Loader";
-// import { Warning } from "../../components/OrientationWarning/Warning";
-import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import leftRock from '../../images/rock-paper-scissors/left_rock.png';
@@ -386,12 +384,6 @@ export const RockPaperScissors: FC = () => {
       }
     };
   }, []);
-
-  // if (!isPortrait) {
-  //   return (
-  //     <Warning />
-  //   );
-  // }
 
   if (loading) {
     return <Loader />;
