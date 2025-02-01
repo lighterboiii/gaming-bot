@@ -19,6 +19,7 @@
     @include flex(column, center, center, 32px);
     @include position(absolute, $top: 3%, $left: 50%);
     transform: translateX(-50%);
+    z-index: 4;
   }
 
   &__logo {
