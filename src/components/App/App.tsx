@@ -49,6 +49,7 @@ import {
 import { getUserId } from '../../utils/userConfig';
 import Loader from '../Loader/Loader';
 import { Warning } from '../OrientationWarning/Warning';
+import { ServerErrorHandler } from '../ServerWarning/ServerErrorHandler';
 
 import styles from './App.module.scss';
 
@@ -57,7 +58,14 @@ export const App: FC = () => {
   const userId = getUserId();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const isMobile = tg.platform !== 'tdesktop' && tg.platform !== 'weba';
+  const [serverWarning, setServerWarning] = useState<string | null>(null);
+  const isMobile = () => {
+    const platform = Telegram.WebApp.platform;
+    if (platform === "tdesktop" || platform === "desktop" || platform === "macos") {
+      return false;
+    }
+    return true;
+  } 
 
   document.addEventListener(
     'touchmove',
@@ -88,6 +96,13 @@ export const App: FC = () => {
     const fetchUserData = () => {
       getAppData(userId)
         .then(async (res) => {
+          if (res.warning === 'warning') {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            setServerWarning(res.warning_message!);
+            setLoading(false);
+            return;
+          }
+
           if (res.ad_info) {
             await cacheBanners(res.ad_info);
           }
@@ -112,16 +127,21 @@ export const App: FC = () => {
         })
         .catch((error) => {
           console.error('Get user data error:', error);
+          setLoading(false);
         })
     };
 
     fetchUserData();
   }, [dispatch, userId]);
 
+  if (serverWarning) {
+    return <ServerErrorHandler message={serverWarning} />;
+  }
+
   return (
     <div className={styles.app}>
       {loading ? <Loader /> : ''}
-      {!isMobile ? (
+      {!isMobile() ? (
         <Warning />
       ) : (
         <Routes>

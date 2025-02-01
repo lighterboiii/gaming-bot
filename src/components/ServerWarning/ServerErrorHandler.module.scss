@@ -1,0 +1,39 @@
+@use '../../stylesheets/mixins' as *;
+@use '../../stylesheets/variables' as *;
+
+.warning {
+  @include size(100vw, 100vh);
+  font-weight: 900;
+  font-style: normal;
+  font-size: 20px;
+  color: $main-color;
+  position: relative;
+  background-color: $secondary-color;
+
+  &__logo {
+    @include size(133px, 38px);
+    @include position(absolute, $top: 0, $left: 50%);
+    transform: translateX(-50%);
+  }
+
+  &__text {
+    @include indents(8px 16px, 0);
+    @include size(90%, auto);
+    @include position(absolute, $top: 20%, $left: 50%);
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.4;
+    border-radius: $radius-15;
+    color: $secondary-color;
+    background-color: $main-color;
+    z-index: 2;
+  }
+
+  &__girl {
+    @include position(absolute, $bottom: 0, $left: 20%);
+    transform: translateX(-50%);
+    max-height: 60vh;
+    z-index: 1;
+  }
+} 

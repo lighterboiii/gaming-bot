@@ -21,4 +21,6 @@ export interface IAppData {
   game_rule_2_show: boolean;
   game_rule_3_show: boolean;
   game_rule_4_show: boolean;
+  warning?: 'warning';
+  warning_message?: string;
 }
