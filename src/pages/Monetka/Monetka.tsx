@@ -15,7 +15,7 @@ import { setGameRulesWatched } from '../../api/gameApi';
 import { getAppData } from '../../api/mainApi';
 import Rules from '../../components/Game/Rules/Rules';
 import Loader from '../../components/Loader/Loader';
-import { Warning } from '../../components/OrientationWarning/Warning';
+// import { Warning } from '../../components/OrientationWarning/Warning';
 import useOrientation from '../../hooks/useOrientation';
 import useTelegram from '../../hooks/useTelegram';
 import monetkaButtonsBackground from '../../images/monetka/0.png';
@@ -55,7 +55,7 @@ export const Monetka: FC = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const userId = getUserId();
-  const isPortrait = useOrientation();
+  // const isPortrait = useOrientation();
   const dispatch = useAppDispatch();
   const [rules, setRulesShown] = useState<boolean | null>(false);
   const isRulesShown = useAppSelector(store => store.app.fourthGameRulesState);
@@ -434,10 +434,6 @@ export const Monetka: FC = () => {
         })
     }, 1000);
   };
-
-  if (!isPortrait) {
-    return <Warning />;
-  }
 // показ лоадера
   if (gameState.loading) {
     return <Loader />;

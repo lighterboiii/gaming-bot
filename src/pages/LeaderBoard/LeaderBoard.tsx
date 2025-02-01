@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
-import { Warning } from "../../components/OrientationWarning/Warning";
+// import { Warning } from "../../components/OrientationWarning/Warning";
 import Timer from "../../components/Timer/Timer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import UserContainer from "../../components/User/UserContainer/UserContainer";
@@ -26,7 +26,7 @@ export const LeaderBoard: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const translation = useAppSelector(store => store.app.languageSettings);
-  const isPortrait = useOrientation();
+  // const isPortrait = useOrientation();
   const [loading, setLoading] = useState(false);
   const [leaderBoard, setLeaderBoard] = useState<IMember[] | null>(null);
   const [topLeader, setTopLeader] = useState<IMember | null>(null);
@@ -103,11 +103,11 @@ export const LeaderBoard: FC = () => {
     };
   }, []);
 
-  if (!isPortrait) {
-    return (
-      <Warning />
-    );
-  }
+  // if (!isPortrait) {
+  //   return (
+  //     <Warning />
+  //   );
+  // }
 
   return (
     <div className={styles.leaderBoard}>

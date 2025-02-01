@@ -27,7 +27,7 @@ export const CreateRoom: FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const translation = useAppSelector(store => store.app.languageSettings);
-  const isPortrait = useOrientation();
+  // const isPortrait = useOrientation();
 
   useEffect(() => {
     tg.BackButton.show();
@@ -69,11 +69,11 @@ export const CreateRoom: FC = () => {
     }, 500);
   };
 
-  if (!isPortrait) {
-    return (
-      <Warning />
-    );
-  }
+  // if (!isPortrait) {
+  //   return (
+  //     <Warning />
+  //   );
+  // }
 
   return (
     <div className={styles.create}>

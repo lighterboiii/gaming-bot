@@ -9,13 +9,13 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { getUserId } from "utils/userConfig";
 
 import { setGameRulesWatched } from "../../api/gameApi";
-import { getActiveEmojiPack, getAppData } from "../../api/mainApi";
+import { getAppData } from "../../api/mainApi";
 import CircularProgressBar from "../../components/ClosestNumber/ProgressBar/ProgressBar";
 import RenderComponent from "../../components/ClosestNumber/WhoCloserPlayers/WhoCloserPlayers";
 import Rules from "../../components/Game/Rules/Rules";
 import Loader from "../../components/Loader/Loader";
 import { ClosestModal } from "../../components/Modal/ClosestModal/ClosestModal";
-import { Warning } from "../../components/OrientationWarning/Warning";
+// import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import { useEmojiPack } from "../../hooks/useEmojiPack";
 import useOrientation from "../../hooks/useOrientation";
@@ -64,7 +64,7 @@ export const ClosestNumber: FC = () => {
   const [rules, setRulesShown] = useState<boolean | null>(false);
   const isRulesShown = useAppSelector(store => store.app.secondGameRulesState);
   const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
-  const isPortrait = useOrientation();
+  // const isPortrait = useOrientation();
   const { sendMessage, wsMessages, clearMessages } = useContext(WebSocketContext)!;
   const [isProcessingWin, setIsProcessingWin] = useState<boolean>(false);
   const [timer, setTimer] = useState<number | null>(null);
@@ -411,11 +411,11 @@ export const ClosestNumber: FC = () => {
     };
   }, [timerInterval]);
 
-  if (!isPortrait) {
-    return (
-      <Warning />
-    );
-  }
+  // if (!isPortrait) {
+  //   return (
+  //     <Warning />
+  //   );
+  // }
 
   return (
     <div className={styles.game}>

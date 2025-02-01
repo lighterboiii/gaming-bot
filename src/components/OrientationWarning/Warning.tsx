@@ -8,13 +8,27 @@ import { triggerHapticFeedback } from "../../utils/hapticConfig";
 
 import styles from './Warning.module.scss';
 
-export const Warning: FC = () => {
+interface IProps {
+  type: 'mobile' | 'orientation';
+}
+
+export const Warning: FC<IProps> = ({ type }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
 
   useEffect(() => {
     triggerHapticFeedback('notification', 'error');
   }, []);
   
+  if (type === 'orientation') {
+    return (
+        <div className={styles.warningOrientation}>
+        <p className={styles.warningOrientation__text}>
+          {translation?.rotate_device}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.warning}>
       <div className={styles.warning__desktop}>

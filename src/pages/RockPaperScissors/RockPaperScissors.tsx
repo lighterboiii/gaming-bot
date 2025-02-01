@@ -22,7 +22,7 @@ import HandShake from '../../components/Game/HandShake/HandShake';
 import Players from "../../components/Game/RPSPlayers/Players";
 import Rules from "../../components/Game/Rules/Rules";
 import Loader from "../../components/Loader/Loader";
-import { Warning } from "../../components/OrientationWarning/Warning";
+// import { Warning } from "../../components/OrientationWarning/Warning";
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
@@ -57,7 +57,7 @@ export const RockPaperScissors: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
-  const isPortrait = useOrientation();
+  // const isPortrait = useOrientation();
   const { sendMessage, wsMessages, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -387,11 +387,11 @@ export const RockPaperScissors: FC = () => {
     };
   }, []);
 
-  if (!isPortrait) {
-    return (
-      <Warning />
-    );
-  }
+  // if (!isPortrait) {
+  //   return (
+  //     <Warning />
+  //   );
+  // }
 
   if (loading) {
     return <Loader />;

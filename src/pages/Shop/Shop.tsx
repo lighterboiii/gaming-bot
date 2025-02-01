@@ -3,13 +3,13 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getCollectiblesInfo, getLavkaAvailableRequest, getShopItemsRequest } from "../../api/shopApi";
-import { Warning } from "../../components/OrientationWarning/Warning";
+// import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import ProductSkeleton from '../../components/Shopping/ProductSkeleton/ProductSkeleton';
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
-import useOrientation from "../../hooks/useOrientation";
+// import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import { setLavkaAvailable } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
@@ -37,7 +37,7 @@ export const Shop: FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<CombinedItemData | null>(null);
   const [inventoryItems, setInventoryItems] = useState<ItemData[]>([]);
-  const isPortrait = useOrientation();
+  // const isPortrait = useOrientation();
 
   useEffect(() => {
     tg.BackButton.show();
@@ -151,11 +151,11 @@ export const Shop: FC = () => {
       })
   };
 
-  if (!isPortrait) {
-    return (
-      <Warning />
-    );
-  }
+  // if (!isPortrait) {
+  //   return (
+  //     <Warning />
+  //   );
+  // }
 
   return (
     <main className={styles.shop}>

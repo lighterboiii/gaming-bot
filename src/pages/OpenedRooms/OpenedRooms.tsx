@@ -12,9 +12,9 @@ import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomF
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
 import Room from "../../components/Game/Room/Room";
 import RoomSkeleton from "../../components/Game/RoomSkeleton/RoomSkeleton";
-import Loader from "../../components/Loader/Loader";
+// import Loader from "../../components/Loader/Loader";
 import { Modal } from "../../components/Modal/Modal";
-import { Warning } from "../../components/OrientationWarning/Warning";
+// import { Warning } from "../../components/OrientationWarning/Warning";
 import Button from "../../components/ui/Button/Button";
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
@@ -32,7 +32,7 @@ type GameType = "rock_paper_scissors" | "closest_number" | "ludka_game";
 export const OpenedRooms: FC = () => {
   const userId = getUserId();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const translation = useAppSelector((store) => store.app.languageSettings);
   const [rooms, setRooms] = useState<IGameCardData[] | null>(null);
   const [originalRooms, setOriginalRooms] = useState<IGameCardData[] | null>(null);
@@ -50,7 +50,7 @@ export const OpenedRooms: FC = () => {
   const { sendMessage, wsMessages, connect, clearMessages, disconnect } =
     useContext(WebSocketContext)!;
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-  const isPortrait = useOrientation();
+  // const isPortrait = useOrientation();
   const { tg } = useTelegram();
 
   useEffect(() => {
@@ -200,9 +200,9 @@ export const OpenedRooms: FC = () => {
     navigate("/create-room");
   };
 
-  if (!isPortrait) {
-    return <Warning />;
-  }
+  // if (!isPortrait) {
+  //   return <Warning />;
+  // }
 
   return (
     <main className={styles.rooms}>

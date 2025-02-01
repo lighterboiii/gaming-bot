@@ -15,7 +15,7 @@ import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import Loader from "../../components/Loader/Loader";
 import { LogOverlay } from "../../components/LudkaGame/LogOverlay/LogOverlay";
 import { Overlay } from "../../components/LudkaGame/Overlay/LudkaOverlay";
-import { Warning } from "../../components/OrientationWarning/Warning";
+// import { Warning } from "../../components/OrientationWarning/Warning";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
@@ -44,7 +44,7 @@ const LudkaGame: FC = () => {
   const { wsMessages, sendMessage, clearMessages, disconnect } = useContext(WebSocketContext)!;
   const navigate = useNavigate();
   const userData = useAppSelector(store => store.app.info);
-  const isPortrait = useOrientation();
+  // const isPortrait = useOrientation();
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const [showCoinsAnimation, setShowCoinsAnimation] = useState<boolean>(false);
   const [coinsAnimationUrl, setCoinsAnimationUrl] = useState<string>('');
@@ -490,11 +490,11 @@ const LudkaGame: FC = () => {
     }, 1000);
   };
 
-  if (!isPortrait) {
-    return (
-      <Warning />
-    );
-  }
+  // if (!isPortrait) {
+  //   return (
+  //     <Warning />
+  //   );
+  // }
 
   return (
     <div className={styles.game}>

@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { getAppData } from '../../api/mainApi';
+import useOrientation from '../../hooks/useOrientation';
 import useTelegram from '../../hooks/useTelegram';
 import { ClosestNumber } from '../../pages/ClosestNumber/ClosestNumber';
 import { CreateRoom } from '../../pages/CreateRoom/CreateRoom';
@@ -59,6 +60,7 @@ export const App: FC = () => {
   const userId = getUserId();
   const [loading, setLoading] = useState(true);
   const [serverWarning, setServerWarning] = useState<string | null>(null);
+  const isPortrait = useOrientation();
 
   const isMobile = () => {
     if (process.env.NODE_ENV === 'development') {
@@ -149,7 +151,9 @@ export const App: FC = () => {
     <div className={styles.app}>
       {loading ? <Loader /> : ''}
       {!isMobile() ? (
-        <Warning />
+        <Warning type="mobile" />
+      ) : !isPortrait ? (
+        <Warning type="orientation" />
       ) : (
         <Routes>
           <Route path={indexUrl}
