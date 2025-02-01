@@ -48,6 +48,7 @@ import {
 } from '../../utils/routes';
 import { getUserId } from '../../utils/userConfig';
 import Loader from '../Loader/Loader';
+import { Warning } from '../OrientationWarning/Warning';
 
 import styles from './App.module.scss';
 
@@ -56,6 +57,7 @@ export const App: FC = () => {
   const userId = getUserId();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+  const isMobile = tg.platform !== 'tdesktop' && tg.platform !== 'weba';
 
   document.addEventListener(
     'touchmove',
@@ -117,8 +119,11 @@ export const App: FC = () => {
   }, [dispatch, userId]);
 
   return (
-      <div className={styles.app}>
-        {loading ? <Loader /> : ''}
+    <div className={styles.app}>
+      {loading ? <Loader /> : ''}
+      {!isMobile ? (
+        <Warning />
+      ) : (
         <Routes>
           <Route path={indexUrl}
             element={<Main />} />
@@ -141,6 +146,7 @@ export const App: FC = () => {
           <Route path={monetkaUrl}
             element={<Monetka />} />
         </Routes>
-      </div>
+      )}
+    </div>
   );
 };
