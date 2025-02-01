@@ -14,6 +14,7 @@ import useTelegram from "../../hooks/useTelegram";
 import { setLavkaAvailable } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
 import { triggerHapticFeedback } from "../../utils/hapticConfig";
+import { cacheCollectibles } from "../../utils/imageCache";
 import { indexUrl } from "../../utils/routes";
 import { IInventoryRequest } from "../../utils/types/responseTypes";
 import { CombinedItemData, ItemData, LavkaResponse } from "../../utils/types/shopTypes";
@@ -75,23 +76,28 @@ export const Shop: FC = () => {
   }, [collectibles]);
   // при монтировании компонента
   useEffect(() => {
-    setLoading(true);
-    setActiveButton(`${translation?.shop_button}`);
-    getCollectiblesInfo(userId)
-      .then(res => {
-        const response = res as IInventoryRequest;
+    const initializeShop = async () => {
+      setLoading(true);
+      setActiveButton(`${translation?.shop_button}`);
+      
+      try {
+        const response = await getCollectiblesInfo(userId) as IInventoryRequest;
         setInventoryItems(response?.message);
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    shopData && setGoods(shopData);
-    shopData && handleAddIsCollectible(shopData);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1200);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleAddIsCollectible, shopData, translation?.shop_button]);
+        
+        if (shopData) {
+          await cacheCollectibles(shopData);
+          handleAddIsCollectible(shopData);
+          setGoods(shopData);
+        }
+      } catch (error) {
+        console.error('Error initializing shop:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeShop();
+  }, [handleAddIsCollectible, shopData, translation?.shop_button, userId]);
   // открыть страничку с данными скина
   const handleShowItemDetails = (item: CombinedItemData) => {
     setSelectedItem(item);
@@ -117,13 +123,18 @@ export const Shop: FC = () => {
   const handleClickLavka = async () => {
     setLoading(true);
     triggerHapticFeedback('impact', 'soft');
-     setActiveButton(`${translation?.marketplace}`);
-    const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
-    dispatch(setLavkaAvailable(updatedLavka.lavka));
-    setGoods(updatedLavka.lavka);
-    setTimeout(() => {
+    setActiveButton(`${translation?.marketplace}`);
+    
+    try {
+      const updatedLavka: LavkaResponse = await getLavkaAvailableRequest() as LavkaResponse;
+      dispatch(setLavkaAvailable(updatedLavka.lavka));
+      await cacheCollectibles(updatedLavka.lavka);
+      setGoods(updatedLavka.lavka);
+    } catch (error) {
+      console.error('Error loading lavka:', error);
+    } finally {
       setLoading(false);
-    }, 300);
+    }
   };
 
   useEffect(() => {
