@@ -12,13 +12,10 @@ import CreateRoomFooter from "../../components/Game/CreateRoomFooter/CreateRoomF
 import JoinRoomPopup from "../../components/Game/JoinRoomPopup/JoinRoomPopup";
 import Room from "../../components/Game/Room/Room";
 import RoomSkeleton from "../../components/Game/RoomSkeleton/RoomSkeleton";
-// import Loader from "../../components/Loader/Loader";
 import { Modal } from "../../components/Modal/Modal";
-// import { Warning } from "../../components/OrientationWarning/Warning";
 import Button from "../../components/ui/Button/Button";
-import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
-import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
+import { useAppSelector } from "../../services/reduxHooks";
 import { sortRooms } from "../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../utils/constants";
 import { triggerHapticFeedback } from "../../utils/hapticConfig";
@@ -27,12 +24,9 @@ import { IGameCardData } from "../../utils/types/gameTypes";
 
 import styles from "./OpenedRooms.module.scss";
 
-type GameType = "rock_paper_scissors" | "closest_number" | "ludka_game";
-
 export const OpenedRooms: FC = () => {
   const userId = getUserId();
   const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
   const translation = useAppSelector((store) => store.app.languageSettings);
   const [rooms, setRooms] = useState<IGameCardData[] | null>(null);
   const [originalRooms, setOriginalRooms] = useState<IGameCardData[] | null>(null);
@@ -47,10 +41,9 @@ export const OpenedRooms: FC = () => {
   const [currencyClickCount, setCurrencyClickCount] = useState(0);
   const [betClickCount, setBetClickCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { sendMessage, wsMessages, connect, clearMessages, disconnect } =
+  const { sendMessage, wsMessages } =
     useContext(WebSocketContext)!;
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-  // const isPortrait = useOrientation();
   const { tg } = useTelegram();
 
   useEffect(() => {
@@ -80,8 +73,9 @@ export const OpenedRooms: FC = () => {
       const res = JSON.parse(message);
       console.log(res);
       if (res.type === "rooms_update") {
-        setRooms(res.rooms);
-        setOriginalRooms(res.rooms);
+        const filteredRooms = res.rooms.filter((room: any) => Number(room.room_type) !== 4);
+        setRooms(filteredRooms);
+        setOriginalRooms(filteredRooms);
       }
     };
 
@@ -107,14 +101,14 @@ export const OpenedRooms: FC = () => {
         setSortByBetAsc(false);
 
         setTypeClickCount((prevCount) => {
-          const newCount = (prevCount + 1) % 5;
+          const newCount = (prevCount + 1) % 4;
           if (newCount === 0) {
             setTypeValue(`${translation?.sort_all}`);
             setSortByType(!sortByType);
             setRooms([...originalRooms!]);
           } else {
             const targetType =
-              newCount === 1 ? 1 : newCount === 2 ? 2 : newCount === 3 ? 3 : 4;
+              newCount === 1 ? 1 : newCount === 2 ? 2 : 3;
 
             sortedRooms = originalRooms!.filter((room) => Number(room.room_type) === targetType);
             setRooms(sortedRooms);
@@ -123,9 +117,7 @@ export const OpenedRooms: FC = () => {
                 ? `${translation?.rock_paper_scissors_short}`
                 : newCount === 2
                 ? `${translation?.closest_number_short}`
-                : newCount === 3
-                ? `${translation?.ludka_short}`
-                : `${translation?.monetka_name}`);
+                : `${translation?.ludka_short}`);
           }
           return newCount;
         });
