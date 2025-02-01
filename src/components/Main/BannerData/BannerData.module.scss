@@ -18,7 +18,8 @@
   }
 
   &__pic {
-    @include size(100%, 120px);
+    @include size(100%, 100%);
+    @include min-size(100%, 120px);
     @include flex(column, center, center);
     background-size: cover;
     background-position: center;
@@ -26,6 +27,8 @@
     position: relative;
     border-radius: $radius-15;
     overflow: hidden;
+    margin-top: $space-16;
+    z-index: 4;
     
     @media screen and (min-height: 691px) {
       height: 136px;
