@@ -211,11 +211,11 @@ export const OpenedRooms: FC = () => {
         <div className={styles.rooms__buttons}>
           <button
             aria-pressed={sortByType}
-            className={`${styles.openedRooms__button} ${
+            className={`${styles.rooms__button} ${
               sortByType ? styles.activeButton : ""
             }`}
             onClick={() => toggleSort("type")}
-            disabled={!rooms?.length}
+            disabled={!originalRooms?.length}
           >
             <span className={styles.rooms__game}>{translation?.sort_game}</span>
             <span className={styles.rooms__name}>{typeValue}</span>
@@ -225,7 +225,7 @@ export const OpenedRooms: FC = () => {
             name="currency"
             className={styles.rooms__button}
             onClick={() => toggleSort("currency")}
-            disabled={!rooms?.length}
+            disabled={!originalRooms?.length}
           >
             <span className={styles.rooms__game}>
               {translation?.sort_currency}
@@ -237,7 +237,7 @@ export const OpenedRooms: FC = () => {
             name="bet"
             className={styles.rooms__button}
             onClick={() => toggleSort("bet")}
-            disabled={!rooms?.length}
+            disabled={!originalRooms?.length}
           >
             <span className={styles.rooms__game}>{translation?.sort_bet}</span>
             <span className={styles.rooms__name}>{betValue}</span>
@@ -245,7 +245,7 @@ export const OpenedRooms: FC = () => {
         </div>
       </header>
       <section className={styles.rooms__roomList + " scrollable"}>
-        {loading ? (
+        {loading && rooms?.length ? (
           <>
             <RoomSkeleton />
             <RoomSkeleton />

@@ -61,6 +61,10 @@ export const App: FC = () => {
   const [serverWarning, setServerWarning] = useState<string | null>(null);
 
   const isMobile = () => {
+    if (process.env.NODE_ENV === 'development') {
+      return true;
+    }
+
     const platform = Telegram.WebApp.platform;
     
     if (platform === 'android' || platform === 'ios' || platform === 'wphone') {
