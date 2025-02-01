@@ -23,12 +23,13 @@
 
   &__logo {
     @include size(133px, 38px);
+    margin-top: $space-16;
   }
 
   &__qr {
     @include size(200px, auto);
     @include position(relative);
-    z-index: 2;
+    z-index: 4;
   }
 
   &__girl {

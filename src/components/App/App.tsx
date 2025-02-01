@@ -61,7 +61,9 @@ export const App: FC = () => {
   const [serverWarning, setServerWarning] = useState<string | null>(null);
   const isMobile = () => {
     const platform = Telegram.WebApp.platform;
-    if (platform === "tdesktop" || platform === "desktop" || platform === "macos") {
+    const isWebVersion = window.location.host.includes('web.telegram.org');
+    
+    if (platform === "tdesktop" || platform === "desktop" || platform === "macos" || isWebVersion) {
       return false;
     }
     return true;
