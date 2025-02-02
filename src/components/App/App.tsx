@@ -68,13 +68,7 @@ export const App: FC = () => {
     }
 
     const platform = Telegram.WebApp.platform;
-    
-    if (platform === 'android' || platform === 'ios' || platform === 'wphone' || 
-        /iPad|Android|Tablet/.test(navigator.userAgent)) {
-      return true;
-    }
-    
-    return false;
+    return platform === 'android' || platform === 'ios' || platform === 'wphone' || platform === 'ipados';
   }
 
   document.addEventListener(
