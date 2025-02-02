@@ -3,13 +3,11 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getCollectiblesInfo, getLavkaAvailableRequest, getShopItemsRequest } from "../../api/shopApi";
-// import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
 import Product from '../../components/Shopping/Product/Product';
 import ProductSkeleton from '../../components/Shopping/ProductSkeleton/ProductSkeleton';
 import ShopItem from "../../components/Shopping/ShopItem/ShopItem";
 import UserInfo from "../../components/User/SecondaryUserInfo/SecondaryUserInfo";
-// import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import { setLavkaAvailable } from "../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../services/reduxHooks";
@@ -21,6 +19,10 @@ import { CombinedItemData, ItemData, LavkaResponse } from "../../utils/types/sho
 import { getUserId } from "../../utils/userConfig";
 
 import styles from './Shop.module.scss';
+
+interface ShopResponse {
+  shop: ItemData[];
+}
 
 export const Shop: FC = () => {
   const { tg } = useTelegram();
@@ -37,7 +39,6 @@ export const Shop: FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<CombinedItemData | null>(null);
   const [inventoryItems, setInventoryItems] = useState<ItemData[]>([]);
-  // const isPortrait = useOrientation();
 
   useEffect(() => {
     tg.BackButton.show();
@@ -86,8 +87,10 @@ export const Shop: FC = () => {
         
         if (shopData) {
           await cacheCollectibles(shopData);
-          handleAddIsCollectible(shopData);
-          setGoods(shopData);
+          
+          const freshShopData = await getShopItemsRequest() as ShopResponse;
+          handleAddIsCollectible(freshShopData.shop);
+          setGoods(freshShopData.shop);
         }
       } catch (error) {
         console.error('Error initializing shop:', error);
@@ -110,14 +113,19 @@ export const Shop: FC = () => {
     handleRenderInventoryData();
   };
   // обработчик клика по кнопке "магазин"
-  const handleClickShop = () => {
+  const handleClickShop = async () => {
     setLoading(true);
     triggerHapticFeedback('impact', 'soft');
     setActiveButton(`${translation?.shop_button}`);
-    shopData && handleAddIsCollectible(shopData);
-    setTimeout(() => {
+    
+    try {
+      const freshShopData = await getShopItemsRequest() as ShopResponse;
+      handleAddIsCollectible(freshShopData.shop);
+    } catch (error) {
+      console.error('Error refreshing shop data:', error);
+    } finally {
       setLoading(false);
-    }, 300);
+    }
   };
   // обработчик клика по кнопке "лавка"
   const handleClickLavka = async () => {
@@ -150,12 +158,6 @@ export const Shop: FC = () => {
         setGoods(res.shop);
       })
   };
-
-  // if (!isPortrait) {
-  //   return (
-  //     <Warning />
-  //   );
-  // }
 
   return (
     <main className={styles.shop}>

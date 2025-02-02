@@ -18,7 +18,7 @@ export const shouldUpdateCache = (items: ItemData[]): boolean => {
 
 export const cacheCollectibles = async (items: ItemData[]) => {
   if (!shouldUpdateCache(items)) {
-    return true; // Skip caching if data hasn't changed
+    return true;
   }
 
   const cachePromises = items.flatMap(item => {
