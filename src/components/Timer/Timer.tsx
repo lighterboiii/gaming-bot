@@ -1,6 +1,8 @@
-import { FC } from 'react';
+import { FC } from "react";
 
-import styles from './Timer.module.scss';
+import { useAppSelector } from "services/reduxHooks";
+
+import styles from "./Timer.module.scss";
 
 interface IProps {
   days: string;
@@ -9,8 +11,22 @@ interface IProps {
 }
 
 const Timer: FC<IProps> = ({ days, hours, minutes }) => {
+  const translation = useAppSelector((store) => store.app.languageSettings);
   return (
-    <span className={styles.timer}>{days}д {hours}ч {minutes}м</span>
+    <p className={styles.timer}>
+      <span className={styles.timer__number}>
+        {days}
+        {translation.leaderboard_time_days}
+      </span>
+      <span className={styles.timer__number}>
+        {hours}
+        {translation.leaderboard_time_hours}
+      </span>
+      <span className={styles.timer__number}>
+        {minutes}
+        {translation.leaderboard_time_minutes}
+      </span>
+    </p>
   );
 };
 

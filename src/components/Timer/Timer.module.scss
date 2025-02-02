@@ -3,5 +3,9 @@
 
 .timer {
   @include indents();
-  color: $main-color;
+  @include flex(row, center, center, 4px);
+
+  &__number {
+    color: $main-color;
+  }
 }

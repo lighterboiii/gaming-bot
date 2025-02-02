@@ -69,7 +69,8 @@ export const App: FC = () => {
 
     const platform = Telegram.WebApp.platform;
     
-    if (platform === 'android' || platform === 'ios' || platform === 'wphone') {
+    if (platform === 'android' || platform === 'ios' || platform === 'wphone' || 
+        /iPad|Android|Tablet/.test(navigator.userAgent)) {
       return true;
     }
     

@@ -4,11 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 import { getTopUsers } from "../../api/mainApi";
 import Loader from "../../components/Loader/Loader";
-// import { Warning } from "../../components/OrientationWarning/Warning";
 import Timer from "../../components/Timer/Timer";
 import UserAvatar from "../../components/User/UserAvatar/UserAvatar";
 import UserContainer from "../../components/User/UserContainer/UserContainer";
-import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import TimerIcon from "../../icons/Timer/TimerIcon";
@@ -26,7 +24,6 @@ export const LeaderBoard: FC = () => {
   const { tg } = useTelegram();
   const navigate = useNavigate();
   const translation = useAppSelector(store => store.app.languageSettings);
-  // const isPortrait = useOrientation();
   const [loading, setLoading] = useState(false);
   const [leaderBoard, setLeaderBoard] = useState<IMember[] | null>(null);
   const [topLeader, setTopLeader] = useState<IMember | null>(null);
@@ -84,6 +81,7 @@ export const LeaderBoard: FC = () => {
       getTopUsers()
         .then((response) => {
           const leaders = response as ITopUsersRes;
+          console.log(leaders);
           setTime({
             days: leaders?.days,
             hours: leaders?.hours,
@@ -102,12 +100,6 @@ export const LeaderBoard: FC = () => {
       clearInterval(intervalId);
     };
   }, []);
-
-  // if (!isPortrait) {
-  //   return (
-  //     <Warning />
-  //   );
-  // }
 
   return (
     <div className={styles.leaderBoard}>
