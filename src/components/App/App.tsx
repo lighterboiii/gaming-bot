@@ -63,12 +63,17 @@ export const App: FC = () => {
   const isPortrait = useOrientation();
 
   const isMobile = () => {
+    const platform = Telegram.WebApp.platform;
     if (process.env.NODE_ENV === 'development') {
       return true;
+    } else if (platform === 'weba' || platform === "tdesktop" || platform === "macos" || platform === "windows") { 
+      return true;
+    } else {
+      return false;
     }
 
-    const platform = Telegram.WebApp.platform;
-    return platform === 'android' || platform === 'ios' || platform === 'wphone' || platform === 'ipados';
+    // const platform = Telegram.WebApp.platform;
+    // return platform === 'android' || platform === 'ios' || platform === 'wphone' || platform === 'ipados';
   }
 
   document.addEventListener(
