@@ -67,9 +67,9 @@ export const App: FC = () => {
     if (process.env.NODE_ENV === 'development') {
       return true;
     } else if (platform === 'weba' || platform === "tdesktop" || platform === "macos" || platform === "windows") { 
-      return true;
-    } else {
       return false;
+    } else {
+      return true;
     }
 
     // const platform = Telegram.WebApp.platform;
