@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react';
 
 const useOrientation = () => {
-  const [isPortrait, setIsPortrait] = useState(window.innerHeight > window.innerWidth);
+  const [isPortrait, setIsPortrait] = useState(true);
 
   const handleOrientationChange = () => {
     const isPortraitMode = window.innerHeight > window.innerWidth;
-    const orientation = window.screen && window.screen.orientation ? 
-      window.screen.orientation.type : window.orientation;
     
-    if (orientation === 'landscape-primary' 
-      || orientation === 'landscape-secondary' 
-      || orientation === 90 
-      || orientation === -90) {
-      setIsPortrait(false);
-    } else if (isPortraitMode) {
-      setIsPortrait(true);
+    if (window.screen && window.screen.orientation) {
+      const orientation = window.screen.orientation.type;
+      if (orientation.includes('landscape')) {
+        setIsPortrait(false);
+      } else if (orientation.includes('portrait')) {
+        setIsPortrait(true);
+      } else {
+        setIsPortrait(isPortraitMode);
+      }
     } else {
-      setIsPortrait(false);
+      setIsPortrait(isPortraitMode);
     }
   };
 
@@ -24,10 +24,12 @@ const useOrientation = () => {
     handleOrientationChange();
     window.addEventListener('resize', handleOrientationChange);
     window.addEventListener('orientationchange', handleOrientationChange);
+    Telegram.WebApp.onEvent('viewportChanged', handleOrientationChange);
     
     return () => {
       window.removeEventListener('resize', handleOrientationChange);
       window.removeEventListener('orientationchange', handleOrientationChange);
+      Telegram.WebApp.offEvent('viewportChanged', handleOrientationChange);
     };
   }, []);
 
