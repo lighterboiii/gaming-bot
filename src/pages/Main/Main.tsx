@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useEffect, useState, useContext } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { WebSocketContext } from "socket/WebSocketContext";
 import { getUserId } from "utils/userConfig";
 
 import { getAppData, getLuckInfo } from "../../api/mainApi";
@@ -13,13 +12,11 @@ import DailyBonus from "../../components/Main/Bonus/Bonus";
 import Friends from "../../components/Main/Friends/Friends";
 import Tasks from "../../components/Main/Tasks/Tasks";
 import WheelOfLuck from "../../components/Main/WheelOfLuck/WheelOfLuck";
-// import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
 import ShopLink from "../../components/Shopping/ShopLink/ShopLink";
 import BigButton from "../../components/ui/BigButton/BigButton";
 import SmallButton from "../../components/ui/SmallButton/SmallButton";
 import MainUserInfo from "../../components/User/MainUserInfo/MainUserInfo";
-// import useOrientation from "../../hooks/useOrientation";
 import FriendsIcon from "../../icons/Friends/FriendsIcon";
 import LeaderBoardIcon from "../../icons/LeaderBoard/LeaderBoardIcon";
 import PlayIcon from "../../icons/Play/PlayIcon";
@@ -45,9 +42,6 @@ export const Main: FC = () => {
   const [showTasksOverlay, setShowTasksOverlay] = useState(false);
   const [showWheelOverlay, setShowWheelOverlay] = useState(false);
   const [luckData, setLuckData] = useState<IFortuneData | null>(null);
-  // const isPortrait = useOrientation();
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  // const { connect } = useContext(WebSocketContext)!;
 
   const handleBannerClick = (bannerData: IBannerData) => {
     setCurrentBanner(bannerData);
@@ -110,17 +104,6 @@ export const Main: FC = () => {
 
     fetchUserData();
   }, []);
-
-  // useEffect(() => {
-  //   connect();
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // if (!isPortrait) {
-  //   return (
-  //     <Warning />
-  //   );
-  // }
 
   return (
     <main className={styles.main}>

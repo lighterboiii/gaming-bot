@@ -31,7 +31,9 @@ import {
   setThirdGameRuleImage,
   setThirdGameRulesState,
   setFourthGameRuleImage,
-  setFourthGameRulesState
+  setFourthGameRulesState,
+  setUserData,
+  setUserPhoto
 } from '../../services/appSlice';
 import { useAppDispatch, useAppSelector } from '../../services/reduxHooks';
 import { cacheBanners } from '../../utils/bannerCache';
@@ -71,9 +73,6 @@ export const App: FC = () => {
     } else {
       return true;
     }
-
-    // const platform = Telegram.WebApp.platform;
-    // return platform === 'android' || platform === 'ios' || platform === 'wphone' || platform === 'ipados';
   }
 
   document.addEventListener(
@@ -117,6 +116,8 @@ export const App: FC = () => {
           }
           dispatch(setBannerData(res.ad_info));
           dispatch(setShopImage(res.shop_image_url));
+          dispatch(setUserData(res.user_info));
+          dispatch(setUserPhoto(res.avatar));
           dispatch(setLanguageSettings(res.translate));
           dispatch(setProductsArchive(res.collectibles_data));
           dispatch(setShopAvailable(res.shop_available));

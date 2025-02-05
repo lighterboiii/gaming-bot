@@ -19,7 +19,9 @@ import {
   setChangingSkin,
   setCoinsValueAfterBuy,
   setCollectibles,
-  setTokensValueAfterBuy
+  setTokensValueAfterBuy,
+  setUserData,
+  setUserPhoto
 } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";

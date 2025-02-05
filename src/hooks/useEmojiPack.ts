@@ -13,7 +13,7 @@ interface EmojiPackResponse {
   }
 }
 
-const CACHE_DURATION = 5 * 300 * 1000;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export const useEmojiPack = (userId: number) => {
   const dispatch = useDispatch();
@@ -21,18 +21,15 @@ export const useEmojiPack = (userId: number) => {
   const [error, setError] = useState<Error | null>(null);
   
   const cachedPack = useSelector((state: RootState) => state.app.emojiPack);
+  const activeEmoji = useSelector((state: RootState) => state.app.info?.user_active_emoji);
 
   useEffect(() => {
     const fetchEmojiPack = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        
-        if (cachedPack && Date.now() - cachedPack.lastUpdated < CACHE_DURATION) {
-          setIsLoading(false);
-          return;
-        }
 
+        // Всегда получаем свежие данные при смене активного эмодзи
         const response = await getActiveEmojiPack(userId) as EmojiPackResponse;
         dispatch(setEmojiPack({
           name: response.user_emoji_pack.name,
@@ -45,8 +42,12 @@ export const useEmojiPack = (userId: number) => {
       }
     };
 
-    fetchEmojiPack();
-  }, [userId, dispatch, cachedPack?.lastUpdated]);
+    if (!cachedPack || 
+        Date.now() - cachedPack.lastUpdated > CACHE_DURATION || 
+        activeEmoji) {
+      fetchEmojiPack();
+    }
+  }, [userId, dispatch, activeEmoji]);
 
   return {
     emojiPack: cachedPack,

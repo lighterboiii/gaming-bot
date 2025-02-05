@@ -55,8 +55,7 @@ export const RockPaperScissors: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
-  // const isPortrait = useOrientation();
-  const { sendMessage, wsMessages, clearMessages, disconnect } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, clearMessages } = useContext(WebSocketContext)!;
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
