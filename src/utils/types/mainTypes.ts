@@ -2,6 +2,7 @@ import { IMember } from "./memberTypes";
 
 export interface IUserData {
   active_skin: number;
+  active_hands: number;
   all_games_played_count: number;
   coinloses: number;
   coins: number;

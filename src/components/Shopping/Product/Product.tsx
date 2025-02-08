@@ -20,6 +20,7 @@ import {
   setCoinsValueAfterBuy,
   setCollectibles,
   setTokensValueAfterBuy,
+  setActiveHands
 } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
@@ -50,10 +51,12 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   const isUserSeller = Number(userId) === Number(item?.seller_id);
   const translation = useAppSelector(store => store.app.languageSettings);
   const activeSkin = useAppSelector(store => store.app.info?.active_skin);
-  console.log(item);
+  const activeHands = useAppSelector(store => store.app.info?.active_hands);
+
   const isAlreadyActive = 
-  (item?.item_type === "skin" || item?.item_type === "skin_anim" || item?.item_type === "skin_png") 
-  && item?.item_id === activeSkin;
+    ((item?.item_type === "skin" || item?.item_type === "skin_anim" || item?.item_type === "skin_png") 
+    && item?.item_id === activeSkin)
+    || (item?.item_type === "hands" && item?.item_id === activeHands);
 
   // функция для фильтрации купленных товаров
   const handlePurchaseItemTypes = async (item: ItemData) => {
@@ -79,6 +82,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
     } else if (item?.item_type === "hands") {
       dispatch(setCollectibles(item.item_id));
       await setActiveHandsRequest(item.item_id, userId);
+      dispatch(setActiveHands(item.item_id));
       onClose();
     }
   };
@@ -170,6 +174,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
     setActiveHandsRequest(itemId, userId)
       .then(() => {
         triggerHapticFeedback('impact', 'soft');
+        dispatch(setActiveHands(itemId));
         onClose();
       })
       .catch((error) => {

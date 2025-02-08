@@ -209,7 +209,9 @@ export const RockPaperScissors: FC = () => {
               ? lWinAnim
               : rWinAnim,
             message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
-              ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" ? `💵` : `🔰`}`
+              ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" 
+              ? `${MONEY_EMOJI}` 
+              : `${SHIELD_EMOJI}`}`
               : ''}`
           };
         }
@@ -219,7 +221,9 @@ export const RockPaperScissors: FC = () => {
             animation: Number(data?.creator_id) === Number(res?.whoiswin.winner)
               ? lLoseAnim
               : rLoseAnim,
-            message: `${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1" ? `💵` : `🔰`}`
+            message: `${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1" 
+              ? `${MONEY_EMOJI}` 
+              : `${SHIELD_EMOJI}`}`
           };
         }
         if (res?.whoiswin.winner === 'draw') {

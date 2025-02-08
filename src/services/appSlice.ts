@@ -220,6 +220,11 @@ const appSlice = createSlice({
     setChangingSkin: (state, action: PayloadAction<boolean>) => {
       state.isChangingSkin = action.payload;
     },
+    setActiveHands: (state, action: PayloadAction<number>) => {
+      if (state.info) {
+        state.info.active_hands = action.payload;
+      }
+    },
   }
 })
 
@@ -260,7 +265,8 @@ export const {
   setFourthGameRuleImage,
   setFourthGameRulesState,
   setEmojiPack,
-  setChangingSkin
+  setChangingSkin,
+  setActiveHands,
 } = appSlice.actions;
 
 export default appSlice.reducer;

@@ -28,7 +28,7 @@ const GameCard: FC<IProps> = ({ game, handleClickGame, extraClass }) => {
     if (game.room_type === 999) return;
     handleClickGame(game);
   };
-console.log(game);
+
   const getGameName = (roomType: number) => {
     switch(roomType) {
       case 1:

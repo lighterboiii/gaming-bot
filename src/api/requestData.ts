@@ -46,7 +46,7 @@ export const itemCountParamString = '&count=';
 export const collectiblesParamString = '&collectibles=';
 export const addNewCollectibleParamString = '&add_collectible=';
 export const activeSkinParamString = '&active_skin=';
-export const handsIdParamString = '&hands_id=';
+export const handsIdParamString = '&active_hands=';
 export const newTokensParamString = '&newtokens=';
 export const newCoinsParamString = '&newcoins=';
 export const roomIdParamString = '&room_id=';
