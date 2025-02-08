@@ -1,19 +1,16 @@
 import { FC } from "react";
 
-import { ITaskStep } from "utils/types";
-
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
+import { ITaskStep } from "../../../utils/types/mainTypes";
 
 import styles from './TaskStep.module.scss';
 
 interface IProps {
   step: ITaskStep;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  handleClickTaskStep: any;
+  handleClickTaskStep: (step: ITaskStep) => void;
 }
 
 export const TaskStep: FC<IProps> = ({ step, handleClickTaskStep }) => {
-
   return (
     <div key={step.step_id} className={styles.step} onClick={() => handleClickTaskStep(step)}>
       <>

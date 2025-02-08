@@ -8,13 +8,17 @@ import CrossIcon from '../../../icons/Cross/Cross';
 import { setTaskList } from '../../../services/appSlice';
 import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
 import { triggerHapticFeedback } from '../../../utils/hapticConfig';
-import { ITask } from '../../../utils/types';
+import { ITask } from '../../../utils/types/mainTypes';
 import Task from '../Task/Task';
 import TaskInfo from '../TaskInfo/TaskInfo';
 
 import styles from './Tasks.module.scss';
 
-const Tasks: FC<{ onClose: () => void }> = ({ onClose }) => {
+interface ITasksProps {
+  onClose: () => void;
+}
+
+const Tasks: FC<ITasksProps> = ({ onClose }) => {
   const dispatch = useAppDispatch();
   const userId = getUserId();
   const currentTasks = useAppSelector(store => store.app.tasks);
@@ -40,15 +44,14 @@ const Tasks: FC<{ onClose: () => void }> = ({ onClose }) => {
     onClose();
   };
 
-  const fetchUserData = () => {
-    getAppData(userId)
-      .then((res) => {
-        dispatch(setTaskList(res.tasks_available));
-        setSelectedTask(null);
-      })
-      .catch((error) => {
-        console.error('Get user data error:', error);
-      });
+  const fetchUserData = async (): Promise<void> => {
+    try {
+      const res = await getAppData(userId);
+      dispatch(setTaskList(res.tasks_available));
+      setSelectedTask(null);
+    } catch (error) {
+      console.error('Get user data error:', error);
+    }
   };
 
   return (

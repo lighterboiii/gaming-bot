@@ -7,26 +7,28 @@ import { ITask } from '../../../utils/types/mainTypes';
 
 import styles from './Task.module.scss';
 
-interface IProps {
+interface ITaskProps {
   task: ITask;
   onClick: () => void;
 }
 
-const Task: FC<IProps> = ({ task, onClick }) => {
-
-  const handleTaskClick = () => {
+const Task: FC<ITaskProps> = ({ task, onClick }) => {
+  const handleTaskClick = (): void => {
     if (task?.task_done === 0) {
       onClick();
+      triggerHapticFeedback('impact', 'soft');
     } else {
       triggerHapticFeedback('notification', 'success');
     }
   };
 
+  const isTaskCompleted = task?.task_done === 1;
+
   return (
     <div 
       onClick={handleTaskClick}
       className={styles.task}
-      style={task?.task_done === 1 ? { backgroundColor: '#E7E7E7' } : {}}>
+      style={isTaskCompleted ? { backgroundColor: '#E7E7E7' } : undefined}>
       <div className={styles.task__container}>
         <img src={task?.task_img}
           alt="prize"
@@ -36,18 +38,24 @@ const Task: FC<IProps> = ({ task, onClick }) => {
           <p className={styles.task__text}>{task?.text_locale_key}</p>
         </div>
       </div>
-      <button type='button'
-        className={`${task?.task_done === 1 ? styles.task__completedButton : styles.task__button}`}>
-        {task?.task_done === 0
-          && <ChevronIcon color='#000'
+      <button 
+        type='button'
+        className={isTaskCompleted ? styles.task__completedButton : styles.task__button}
+      >
+        {!isTaskCompleted && (
+          <ChevronIcon 
+            color='#000'
             width={20}
             height={20}
-          />}
-        {task?.task_done === 1
-          && <img src={checkIcon}
+          />
+        )}
+        {isTaskCompleted && (
+          <img 
+            src={checkIcon}
             alt="check icon"
             className={styles.task__check}
-          />}
+          />
+        )}
       </button>
     </div>
   );

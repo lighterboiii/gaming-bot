@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
 import { getUserId } from "utils/userConfig";
@@ -17,15 +15,14 @@ import { TaskStep } from "../TaskStep/TaskStep";
 
 import styles from './TaskInfo.module.scss';
 
-interface IProps {
+interface ITaskInfoProps {
   task: ITask;
   setSelectedTask: (task: ITask | null) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  fetchTaskInfo: any;
+  fetchTaskInfo: () => Promise<void>;
 }
 
-const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
-  const { tg, user } = useTelegram();
+const TaskInfo: FC<ITaskInfoProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
+  const { tg } = useTelegram();
   const userId = getUserId();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
@@ -33,9 +30,9 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
   const [incomplete, setIncomplete] = useState<boolean>(false);
   const [rewardResult, setRewardResult] = useState<boolean>(false);
   const [showInstruction, setShowInstruction] = useState<boolean>(false);
-  const [target, setTarget] = useState('');
+  const [target, setTarget] = useState<string>('');
 
-  const handleClickTaskStep = (step: ITaskStep) => {
+  const handleClickTaskStep = async (step: ITaskStep): Promise<void> => {
     if (step.step_type === "link") {
       tg.openLink(step.target, {
         try_instant_view: false,
@@ -46,25 +43,33 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
     } else if (step.step_type === "subscribe") {
       tg.openTelegramLink(step.target);
     }
-    taskStepRequest(userId, task?.task_id, step?.step_id)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then(res => { });
+    
+    try {
+      await taskStepRequest(userId, task?.task_id, step?.step_id);
+    } catch (error) {
+      console.error('Error updating task step:', error);
+    }
   };
 
-  const handleClaimReward = () => {
+  const handleClaimReward = async (): Promise<void> => {
     setShowReward(true);
-    taskResultRequest(userId, task?.task_id)
-      .then((res) => {
-        const response = res as IClaimRewardResponse;
-        if (response?.message === 'incomplete') {
-          setIncomplete(true);
-        } else if (response?.message === 'success') {
-          setRewardResult(true);
-          fetchTaskInfo();
-          response?.new_value && dispatch(setNewTokensValue(response?.new_value));
-          triggerHapticFeedback('notification', 'success');
+    try {
+      const res = await taskResultRequest(userId, task?.task_id);
+      const response = res as IClaimRewardResponse;
+      
+      if (response?.message === 'incomplete') {
+        setIncomplete(true);
+      } else if (response?.message === 'success') {
+        setRewardResult(true);
+        await fetchTaskInfo();
+        if (response?.new_value) {
+          dispatch(setNewTokensValue(response.new_value));
         }
-      });
+        triggerHapticFeedback('notification', 'success');
+      }
+    } catch (error) {
+      console.error('Error claiming reward:', error);
+    }
   };
 
   const handleClickBack = () => {
