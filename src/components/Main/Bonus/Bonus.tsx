@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 
 import { getUserId } from 'utils/userConfig';

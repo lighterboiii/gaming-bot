@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState, useRef } from 'react';
 
 import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
+import { MONEY_EMOJI, SHIELD_EMOJI } from '../../../utils/constants';
 import { triggerHapticFeedback } from '../../../utils/hapticConfig';
 
 import styles from './SettingsSlider.module.scss';
@@ -14,8 +13,8 @@ interface IProps {
   onCurrencyChange?: (newCurrency: number) => void;
   onInputChange?: (bet: string) => void;
   onKeyboardShow?: (show: boolean) => void;
-  currValue?: any;
-  initialCurrency?: number; // Add this prop
+  currValue?: number | string;
+  initialCurrency?: number;
 }
 
 const SettingsSlider: FC<IProps> = ({
@@ -30,11 +29,6 @@ const SettingsSlider: FC<IProps> = ({
 }) => {
   const [currency, setCurrency] = useState(initialCurrency);
   const inputRef = useRef<HTMLInputElement>(null);
-  // const [localValue, setLocalValue] = useState(currValue);
-
-  // useEffect(() => {
-  //   setLocalValue(currValue);
-  // }, [currValue]);
 
   const increaseBet = () => {
     triggerHapticFeedback('impact', 'soft');
@@ -84,7 +78,7 @@ const SettingsSlider: FC<IProps> = ({
       }
       {isCurrency ? (
         <span className={styles.slider__text}>
-          {currency === 1 ? '💵' : '🔰'}
+          {currency === 1 ? `${MONEY_EMOJI}` : `${SHIELD_EMOJI}`}
         </span>
       ) : (
         <input

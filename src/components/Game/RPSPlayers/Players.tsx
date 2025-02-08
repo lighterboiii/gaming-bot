@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { motion } from "framer-motion";
 import { FC } from "react";
 
@@ -14,7 +12,7 @@ import readyIcon from '../../../images/rock-paper-scissors/user_ready_image.png'
 import styles from './Players.module.scss';
 
 interface IProps {
-  data: IGameData | any;
+  data: IGameData;
 }
 
 const Players: FC<IProps> = ({ data }) => {

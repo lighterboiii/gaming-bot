@@ -1,4 +1,3 @@
-// import { postEvent } from "@tma.js/sdk";
 import { FC, useState, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 
