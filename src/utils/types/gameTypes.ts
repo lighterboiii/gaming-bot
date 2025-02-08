@@ -18,7 +18,7 @@ export interface IPlayer {
   publicname: string;
   tokens: number;
   userid: number;
-  hand?: string;
+  hands?: string;
 }
 
 export interface IGameData {
