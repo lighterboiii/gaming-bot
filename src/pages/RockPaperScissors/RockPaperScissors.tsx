@@ -62,7 +62,7 @@ export const RockPaperScissors: FC = () => {
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
-
+  console.log(data);
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show();
@@ -426,8 +426,10 @@ export const RockPaperScissors: FC = () => {
                       data?.players_count === "2"
                     ) ? (
                       <HandShake
-                        player1={playersAnim.firstAnim || (activeHands === 48 ? spongeLeft : leftRock)}
-                        player2={playersAnim.secondAnim || (activeHands === 48 ? spongeRight : rightRock)} />
+                        player1={playersAnim.firstAnim || 
+                          (data?.players[0]?.active_hands === 48 ? spongeLeft : leftRock)}
+                        player2={playersAnim.secondAnim || 
+                          (data?.players[1]?.active_hands === 48 ? spongeRight : rightRock)} />
                     ) : (
                       data?.players_count === "1"
                     ) ? (
