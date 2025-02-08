@@ -37,7 +37,9 @@ const TaskInfo: FC<IProps> = ({ task, setSelectedTask, fetchTaskInfo }) => {
 
   const handleClickTaskStep = (step: ITaskStep) => {
     if (step.step_type === "link") {
-      window.open(step.target, '_blank');
+      tg.openLink(step.target, {
+        try_instant_view: false,
+      });
     } else if (step.step_type === "instruction") {
       setTarget(step.target);
       setShowInstruction(true);
