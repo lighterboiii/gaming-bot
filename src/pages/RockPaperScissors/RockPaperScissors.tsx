@@ -26,6 +26,8 @@ import useTelegram from "../../hooks/useTelegram";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
 import leftRock from '../../images/rock-paper-scissors/left_rock.png';
 import rightRock from '../../images/rock-paper-scissors/right_rock.png';
+import spongeLeft from '../../images/rock-paper-scissors/static_rock_l.png';
+import spongeRight from '../../images/rock-paper-scissors/static_rock_r.png';
 import newVS from '../../images/rock-paper-scissors/VS_new.png';
 import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
 import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
@@ -55,6 +57,7 @@ export const RockPaperScissors: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
+  const activeHands = useAppSelector(store => store.app.info?.active_hands);
   const { sendMessage, wsMessages, clearMessages } = useContext(WebSocketContext)!;
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -423,8 +426,8 @@ export const RockPaperScissors: FC = () => {
                       data?.players_count === "2"
                     ) ? (
                       <HandShake
-                        player1={playersAnim.firstAnim || leftRock}
-                        player2={playersAnim.secondAnim || rightRock} />
+                        player1={playersAnim.firstAnim || (activeHands === 48 ? spongeLeft : leftRock)}
+                        player2={playersAnim.secondAnim || (activeHands === 48 ? spongeRight : rightRock)} />
                     ) : (
                       data?.players_count === "1"
                     ) ? (
