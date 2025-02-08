@@ -426,10 +426,8 @@ export const RockPaperScissors: FC = () => {
                       data?.players_count === "2"
                     ) ? (
                       <HandShake
-                        player1={playersAnim.firstAnim || 
-                          (data?.players[0]?.active_hands === 48 ? spongeLeft : leftRock)}
-                        player2={playersAnim.secondAnim || 
-                          (data?.players[1]?.active_hands === 48 ? spongeRight : rightRock)} />
+                        player1={playersAnim.firstAnim || data?.players[0]?.hand || leftRock}
+                        player2={playersAnim.secondAnim || data?.players[1]?.hand || rightRock} />
                     ) : (
                       data?.players_count === "1"
                     ) ? (

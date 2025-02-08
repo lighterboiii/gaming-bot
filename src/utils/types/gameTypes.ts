@@ -8,7 +8,6 @@ export interface IGameCardData {
 
 export interface IPlayer {
   active_skin: number;
-  active_hands: number;
   avatar: string;
   choice: string;
   emoji: string;
@@ -19,6 +18,7 @@ export interface IPlayer {
   publicname: string;
   tokens: number;
   userid: number;
+  hand?: string;
 }
 
 export interface IGameData {
