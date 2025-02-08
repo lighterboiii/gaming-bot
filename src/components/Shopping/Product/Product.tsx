@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState } from "react";
 
 import { getUserId } from "utils/userConfig";
@@ -9,7 +8,8 @@ import {
   cancelLavkaRequest,
   getShopItemsRequest,
   setActiveEmojiRequest,
-  setActiveSkinRequest
+  setActiveSkinRequest,
+  setActiveHandsRequest
 } from "../../../api/shopApi";
 import {
   addEnergyDrink,
@@ -20,8 +20,6 @@ import {
   setCoinsValueAfterBuy,
   setCollectibles,
   setTokensValueAfterBuy,
-  setUserData,
-  setUserPhoto
 } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
@@ -52,8 +50,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
   const isUserSeller = Number(userId) === Number(item?.seller_id);
   const translation = useAppSelector(store => store.app.languageSettings);
   const activeSkin = useAppSelector(store => store.app.info?.active_skin);
-  const activeEmoji = useAppSelector(store => store.app.info?.user_active_emoji);
-
+  console.log(item);
   const isAlreadyActive = 
   (item?.item_type === "skin" || item?.item_type === "skin_anim" || item?.item_type === "skin_png") 
   && item?.item_id === activeSkin;
@@ -63,12 +60,13 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
     item?.item_price_coins !== 0
       ? dispatch(setCoinsValueAfterBuy(item.item_price_coins))
       : dispatch(setTokensValueAfterBuy(item.item_price_tokens));
+    
     if (item?.item_type === "skin" || item?.item_type === "skin_anim" || item?.item_type === "skin_png") {
       dispatch(setChangingSkin(true));
       dispatch(setCollectibles(item.item_id));
       dispatch(setActiveSkin(item.item_id));
       await setActiveSkinRequest(item.item_id, userId);
-      // Add delay to show animation
+
       setTimeout(() => {
         dispatch(setChangingSkin(false));
         onClose();
@@ -78,6 +76,10 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
     } else if (item?.item_type === "emoji") {
       dispatch(setCollectibles(item.item_id));
       await setActiveEmojiRequest(userId, item?.item_id);
+    } else if (item?.item_type === "hands") {
+      dispatch(setCollectibles(item.item_id));
+      await setActiveHandsRequest(item.item_id, userId);
+      onClose();
     }
   };
   // закрытие с задержкой
@@ -140,7 +142,7 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
       .then(() => {
         triggerHapticFeedback('impact', 'soft');
         dispatch(setActiveSkin(itemId));
-        // Add delay to show animation
+
         setTimeout(() => {
           dispatch(setChangingSkin(false));
           onClose();
@@ -157,6 +159,17 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
       .then(() => {
         triggerHapticFeedback('impact', 'soft');
         dispatch(setActiveEmoji(String(itemId)));
+        onClose();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
+  // хендлер установки активных рук
+  const handleSetActiveHands = (itemId: number) => {
+    setActiveHandsRequest(itemId, userId)
+      .then(() => {
+        triggerHapticFeedback('impact', 'soft');
         onClose();
       })
       .catch((error) => {
@@ -251,9 +264,13 @@ const Product: FC<ProductProps> = ({ item, onClose, isCollectible, activeButton,
                 <div className={styles.product__buttonWrapper}>
                   <Button
                     text={translation?.use}
-                    handleClick={item?.item_type === "emoji"
-                      ? () => handleSetActiveEmoji(item?.item_id)
-                      : () => handleSetActiveSkin(item?.item_id)}
+                    handleClick={
+                      item?.item_type === "emoji" 
+                        ? () => handleSetActiveEmoji(item?.item_id)
+                        : item?.item_type === "hands"
+                        ? () => handleSetActiveHands(item?.item_id)
+                        : () => handleSetActiveSkin(item?.item_id)
+                    }
                     disabled={isAlreadyActive}
                   />
                 </div>

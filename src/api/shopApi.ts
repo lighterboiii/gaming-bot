@@ -12,12 +12,14 @@ import {
   getInventoryUri,
   getLavkaUri,
   getShopUri,
+  handsIdParamString,
   itemCountParamString,
   itemIdParamString,
   nftIdParamString,
   priceParamString,
   sellLavkaUri,
   setActiveEmojiUri,
+  setActiveHandsUri,
   setActiveSkinUri,
   setCollectiblesUri,
 } from "./requestData";
@@ -95,5 +97,13 @@ export const getCollectiblesInfo = async (userIdValue: number) => {
   return await getReq({
     uri: getInventoryUri,
     userId: userIdValue,
+  })
+};
+// поставить активные руки
+export const setActiveHandsRequest = async (handsId: number, userId: number) => {
+  return await putReq({
+    uri: setActiveHandsUri,
+    userId: userId,
+    endpoint: `${handsIdParamString}${handsId}`
   })
 };
