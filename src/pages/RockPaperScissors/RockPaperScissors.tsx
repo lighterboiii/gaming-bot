@@ -58,7 +58,7 @@ export const RockPaperScissors: FC = () => {
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
-  console.log(data);
+
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
     tg.BackButton.show();

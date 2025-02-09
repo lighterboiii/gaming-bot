@@ -71,7 +71,6 @@ export const OpenedRooms: FC = () => {
   useEffect(() => {
     const handleWebSocketMessage = (message: string) => {
       const res = JSON.parse(message);
-      console.log(res);
       if (res.type === "rooms_update") {
         const filteredRooms = res.rooms.filter((room: any) => Number(room.room_type) !== 4);
         setRooms(filteredRooms);

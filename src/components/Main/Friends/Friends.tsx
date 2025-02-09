@@ -3,27 +3,33 @@ import { Link } from "react-router-dom";
 
 import { getUserId } from "utils/userConfig";
 
-import { getReferralsData, transferCoinsToBalanceReq } from "../../../api/mainApi";
+import {
+  getReferralsData,
+  transferCoinsToBalanceReq,
+} from "../../../api/mainApi";
 import { inviteLink } from "../../../api/requestData";
 import useTelegram from "../../../hooks/useTelegram";
 import { setCoinsNewValue } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import { IMember } from "../../../utils/types/memberTypes";
-import { IResultDataResponse, ITransferCoinsToBalanceResponse } from "../../../utils/types/responseTypes";
+import {
+  IResultDataResponse,
+  ITransferCoinsToBalanceResponse,
+} from "../../../utils/types/responseTypes";
 import Button from "../../ui/Button/Button";
 import FriendsBoard from "../FriendsBoard/FriendsBoard";
 
-import styles from './Friends.module.scss';
+import styles from "./Friends.module.scss";
 
 const Friends: FC = () => {
   const { tg } = useTelegram();
   const dispatch = useAppDispatch();
   const userId = getUserId();
-  const translation = useAppSelector(store => store.app.languageSettings);
+  const translation = useAppSelector((store) => store.app.languageSettings);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [messageShown, setMessageShown] = useState(false);
 
   useEffect(() => {
@@ -57,11 +63,11 @@ const Friends: FC = () => {
         setMessageShown(true);
         switch (res.transfered) {
           case "small":
-            triggerHapticFeedback('notification', 'error');
+            triggerHapticFeedback("notification", "error");
             setMessage(`${translation?.claim_minimum}`);
             break;
           default:
-            triggerHapticFeedback('notification', 'success');
+            triggerHapticFeedback("notification", "success");
             setMessage(`${translation?.funds_transferred}`);
             dispatch(setCoinsNewValue(Number(res.new_coins)));
             setTotalBalance(0);
@@ -70,7 +76,7 @@ const Friends: FC = () => {
 
         setTimeout(() => {
           setTimeout(() => {
-            setMessage('');
+            setMessage("");
             setMessageShown(false);
           }, 200);
         }, 1000);
@@ -82,19 +88,17 @@ const Friends: FC = () => {
 
   const handleInviteClick = () => {
     tg.close();
-  }
+  };
 
   return (
     <div className={styles.referral}>
-      <h3 className={styles.referral__h3}>
-        {translation?.menu_friends}
-      </h3>
+      <h3 className={styles.referral__h3}>{translation?.menu_friends}</h3>
       <div className={styles.referral__amount}>
         <p className={styles.referral__text}>
-          <span className={styles.referral__earn}>{translation?.earned_now}</span>
-          <span className={styles.referral__sumSpan}>
-            💵 {totalBalance}$
+          <span className={styles.referral__earn}>
+            {translation?.earned_now}
           </span>
+          <span className={styles.referral__sumSpan}>💵 {totalBalance}$</span>
         </p>
       </div>
       <div className={styles.referral__buttonWrapper}>
@@ -108,23 +112,21 @@ const Friends: FC = () => {
         <p className={styles.referral__text}>
           {translation?.invite_friends_bonus}
         </p>
-        <Link to={inviteLink}
-          className={styles.referral__inviteButtonWrapper}>
+        <Link to={inviteLink} className={styles.referral__inviteButtonWrapper}>
           <Button
             text={translation?.invite}
             handleClick={handleInviteClick}
-            isWhiteBackground />
+            isWhiteBackground
+          />
         </Link>
       </div>
       {messageShown ? (
-        <div className={styles.referral__notification}>
-          {message}
-        </div>
+        <div className={styles.referral__notification}>{message}</div>
       ) : (
         <FriendsBoard refsBoard={refsBoard} />
       )}
     </div>
-  )
-}
+  );
+};
 
 export default Friends;

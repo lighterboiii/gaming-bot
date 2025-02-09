@@ -33,7 +33,6 @@ const Room: FC<IProps> = ({ room, openModal }) => {
     const lastMessage = wsMessages[wsMessages.length - 1];
     if (lastMessage) {
       const parsedMessage = JSON.parse(lastMessage);
-      console.log(parsedMessage);
     }
   }, [wsMessages]);
 

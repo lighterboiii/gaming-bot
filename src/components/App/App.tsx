@@ -104,7 +104,6 @@ export const App: FC = () => {
     const fetchUserData = () => {
       getAppData(userId)
         .then(async (res) => {
-          console.log(res);
           if (res.warning === 'warning') {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             setServerWarning(res.warning_message!);
