@@ -4,20 +4,9 @@ const useOrientation = () => {
   const [isPortrait, setIsPortrait] = useState(true);
 
   const handleOrientationChange = () => {
-    const isPortraitMode = window.innerHeight > window.innerWidth;
-    
-    if (window.screen && window.screen.orientation) {
-      const orientation = window.screen.orientation.type;
-      if (orientation.includes('landscape')) {
-        setIsPortrait(false);
-      } else if (orientation.includes('portrait')) {
-        setIsPortrait(true);
-      } else {
-        setIsPortrait(isPortraitMode);
-      }
-    } else {
-      setIsPortrait(isPortraitMode);
-    }
+    const width = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+    const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    setIsPortrait(height > width);
   };
 
   useEffect(() => {

@@ -24,10 +24,6 @@ import Rules from "../../components/Game/Rules/Rules";
 import Loader from "../../components/Loader/Loader";
 import useTelegram from "../../hooks/useTelegram";
 import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
-import leftRock from '../../images/rock-paper-scissors/left_rock.png';
-import rightRock from '../../images/rock-paper-scissors/right_rock.png';
-import spongeLeft from '../../images/rock-paper-scissors/static_rock_l.png';
-import spongeRight from '../../images/rock-paper-scissors/static_rock_r.png';
 import newVS from '../../images/rock-paper-scissors/VS_new.png';
 import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
 import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
@@ -426,8 +422,8 @@ export const RockPaperScissors: FC = () => {
                       data?.players_count === "2"
                     ) ? (
                       <HandShake
-                        player1={playersAnim.firstAnim || data?.players[0]?.hands || leftRock}
-                        player2={playersAnim.secondAnim || data?.players[1]?.hands || rightRock} />
+                        player1={playersAnim.firstAnim || data?.players[0]?.hands || ''}
+                        player2={playersAnim.secondAnim || data?.players[1]?.hands || ''} />
                     ) : (
                       data?.players_count === "1"
                     ) ? (
