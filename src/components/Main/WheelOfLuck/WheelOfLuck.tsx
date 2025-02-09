@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useRef, useState } from 'react';
 
 import { getUserId } from 'utils/userConfig';
@@ -197,7 +196,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
                     src={item.fortune_item_pic}
                     alt="item"
                     className={styles.wheel__itemImg}
-                    style={item.fortune_type !== "skin" ? { width: '16px', height: '16px' } : {}}
+                    // style={item.fortune_type !== "skin" ? { width: '16px', height: '16px' } : {}}
                   />
                   <p className={styles.wheel__itemText}>{item.fortune_item_name}</p>
                 </div>
