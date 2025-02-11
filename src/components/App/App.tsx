@@ -66,10 +66,13 @@ export const App: FC = () => {
 
   const isMobile = () => {
     const platform = Telegram.WebApp.platform;
-    if (process.env.NODE_ENV === 'development' || process.env.WARNING === 'false') {
+    if (process.env.NODE_ENV === 'development') {
       return true;
     } else if (platform === 'weba' || platform === "tdesktop" || platform === "macos" || platform === "windows") { 
-      return false;
+      // return false;
+      return true;
+    } else if (process.env.WARNING === 'true') {
+      return true;
     } else {
       return true;
     }
