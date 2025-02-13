@@ -59,5 +59,6 @@ export const emotionIdParamString = '&emotion_id=';
 export const packIdParamString = '&pack_id=';
 export const taskIdParamString = '&task_id=';
 export const stepIdParamString = '&step_id=';
+export const gameIdParamString = '&game_id=';
 export const fortuneIdParamString = '&fortune_item_id=';
 export const fortuneItemCountParamString = '&fortune_item_count=';
