@@ -6,8 +6,8 @@ activeEmojiPackUri,
 fortuneIdParamString,
 fortuneItemCountParamString,
 fortuneUri,
-fortuneWheelUri,
-getFortunePrizeUri,
+// fortuneWheelUri,
+// getFortunePrizeUri,
 getLeadersUri,
 getRefsUri,
 getUserAvatarUri,
@@ -61,12 +61,12 @@ export const getActiveEmojiPack = (userIdValue: number) => {
   })
 };
 // получить инфу о колесе удачи
-export const getLuckInfo = (userIdValue: number) => {
-  return getReq({
-    uri: fortuneWheelUri,
-    userId: userIdValue,
-  })
-};
+// export const getLuckInfo = (userIdValue: number) => {
+//   return getReq({
+//     uri: fortuneWheelUri,
+//     userId: userIdValue,
+//   })
+// };
 // прокрутка колеса удачи
 export const spinWheelRequest = (userIdValue: number) => {
   return getReq({
@@ -75,13 +75,13 @@ export const spinWheelRequest = (userIdValue: number) => {
   })
 };
 // забрать приз
-export const getWheelPrizeRequest = (userIdValue: number, itemId: number, count: number) => {
-  return getReq({
-    uri: getFortunePrizeUri,
-    userId: userIdValue,
-    endpoint: `${fortuneIdParamString}${itemId}${fortuneItemCountParamString}${count}`
-  })
-};
+// export const getWheelPrizeRequest = (userIdValue: number, itemId: number, count: number) => {
+//   return getReq({
+//     uri: getFortunePrizeUri,
+//     userId: userIdValue,
+//     endpoint: `${fortuneIdParamString}${itemId}${fortuneItemCountParamString}${count}`
+//   })
+// };
 // проверка выполнения таска
 export const taskStepRequest = (userIdValue: number, taskId: number, stepId: number) => {
   return getReq({

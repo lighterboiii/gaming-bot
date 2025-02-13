@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useRef, useState } from 'react';
 
 import { getUserId } from 'utils/userConfig';
 
-import { getWheelPrizeRequest, spinWheelRequest } from '../../../api/mainApi';
+import {
+  //  getWheelPrizeRequest
+  // , 
+  spinWheelRequest } from '../../../api/mainApi';
 import lamp from '../../../images/closest-number/lamp.png';
 import light from '../../../images/closest-number/lamp2.png';
 import wheelPointer from '../../../images/closest-number/wheelPoint.png';
@@ -31,7 +35,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const [spinning, setSpinning] = useState<boolean>(false);
   const [prizeItem, setPrizeItem] = useState<IFortuneItem | null>(null);
   const spinnerRef = useRef<HTMLDivElement>(null);
-
+  console.log(data);
   useEffect(() => {
     setLoading(true);
     const loadData = () => {
@@ -113,15 +117,15 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const claimPrize = () => {
     if (!prizeItem) return;
 
-    getWheelPrizeRequest(userId, prizeItem.fortune_item_id, prizeItem.fortune_item_count)
-      .then((res) => {
-        const response = res as IGetPrizeResponse;
-        if (response?.message === "ok") {
-          if (prizeItem.fortune_type === 'tokens') {
-            dispatch(addTokens(prizeItem.fortune_item_count));
-          }
-        }
-      });
+    // getWheelPrizeRequest(userId, prizeItem.fortune_item_id, prizeItem.fortune_item_count)
+    //   .then((res) => {
+    //     const response = res as IGetPrizeResponse;
+    //     if (response?.message === "ok") {
+    //       if (prizeItem.fortune_type === 'tokens') {
+    //         dispatch(addTokens(prizeItem.fortune_item_count));
+    //       }
+    //     }
+    //   });
 
     closeOverlay();
     setMessageShown(false);

@@ -308,11 +308,24 @@ const LudkaGame: FC = () => {
         break;
       case 'emoji':
         if (isWhoiswin) return;
-        setGameState(prev => ({
-          ...prev,
-          data: res,
-          winner: null
-        }));
+        setGameState(prev => {
+          if (!prev.data) return prev;
+          return {
+            ...prev,
+            data: {
+              ...prev.data,
+              players: prev.data.players.map(player => {
+                if (player.userid === Number(res.user_id)) {
+                  return {
+                    ...player,
+                    emoji: res.emoji
+                  };
+                }
+                return player;
+              })
+            }
+          };
+        });
         break;
       case 'room_info':
         if (isWhoiswin) return;
@@ -339,7 +352,7 @@ const LudkaGame: FC = () => {
       default:
         break;
     }
-  }, []);
+  }, [isWhoiswin, userId, clearMessages, navigate, translation?.ludka_small_bet_error, translation?.ludka_bad_bet_error]);
 
   const handleChoiceMessage = useCallback((res: any) => {
     if (isWhoiswin) return;

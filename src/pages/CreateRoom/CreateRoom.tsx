@@ -8,9 +8,7 @@ import { getExistingGamesRequest } from "../../api/gameApi";
 import GameCard from "../../components/Game/GameCard/GameCard";
 import GameSettings from "../../components/Game/GameSettings/GameSettings";
 import Loader from "../../components/Loader/Loader";
-import { Warning } from "../../components/OrientationWarning/Warning";
 import Overlay from "../../components/Overlay/Overlay";
-import useOrientation from "../../hooks/useOrientation";
 import useTelegram from "../../hooks/useTelegram";
 import { useAppSelector } from "../../services/reduxHooks";
 import { triggerHapticFeedback } from "../../utils/hapticConfig";
@@ -27,7 +25,6 @@ export const CreateRoom: FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const translation = useAppSelector(store => store.app.languageSettings);
-  // const isPortrait = useOrientation();
 
   useEffect(() => {
     tg.BackButton.show();
@@ -68,12 +65,6 @@ export const CreateRoom: FC = () => {
       setGameData(null);
     }, 500);
   };
-
-  // if (!isPortrait) {
-  //   return (
-  //     <Warning />
-  //   );
-  // }
 
   return (
     <div className={styles.create}>

@@ -20,7 +20,7 @@ const GameCard: FC<IProps> = ({ game, handleClickGame, extraClass }) => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const gameCardClassNames = classNames(
     styles.game,
-    { [styles.game_disabled]: game.room_type === 3 },
+    // { [styles.game_disabled]: game.room_type === 3 },
     extraClass
   );
 

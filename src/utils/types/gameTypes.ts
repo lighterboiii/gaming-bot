@@ -58,6 +58,11 @@ export interface IPropsForClosestNumberComponent {
   users: IPlayer[];
 }
 
+export interface IPlayersProps {
+  data: IGameData;
+  playerEmojis: Record<number, string>;
+}
+
 export interface ITime {
   days: number | string;
   hours: number | string;

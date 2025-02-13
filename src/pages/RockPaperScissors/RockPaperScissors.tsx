@@ -58,6 +58,7 @@ export const RockPaperScissors: FC = () => {
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
+  const [playerEmojis, setPlayerEmojis] = useState<Record<number, string>>({});
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -170,7 +171,6 @@ export const RockPaperScissors: FC = () => {
           setLoading(false);
           break;
         case 'choice':
-        case 'emoji':
           setData(prevData => {
             if (!prevData) return res;
             return {
@@ -181,6 +181,13 @@ export const RockPaperScissors: FC = () => {
               })
             };
           });
+          break;
+        case 'emoji':
+          // Обновляем эмодзи в отдельном стейте
+          setPlayerEmojis(prev => ({
+            ...prev,
+            [res.user_id]: res.emoji
+          }));
           break;
         case 'kickplayer':
           if (Number(res?.player_id) === Number(userId)) {
@@ -387,6 +394,11 @@ export const RockPaperScissors: FC = () => {
     };
   }, []);
 
+  // Функция для получения эмодзи игрока
+  const getPlayerEmoji = (playerId: number) => {
+    return playerEmojis[playerId] || '';
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -401,7 +413,10 @@ export const RockPaperScissors: FC = () => {
           <>
             {rules ? (
               <>
-                <Players data={data as IGameData} />
+                <Players 
+                  data={data as IGameData} 
+                  playerEmojis={playerEmojis}  // Передаем эмодзи в компонент Players
+                />
                 <>
                   {data?.players_count === "2" &&
                     data?.players?.every((player: IPlayer) => player?.choice === 'ready') &&
