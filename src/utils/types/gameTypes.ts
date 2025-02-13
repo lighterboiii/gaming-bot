@@ -88,6 +88,8 @@ export interface ILudkaUser {
   item_pic?: string;
   item_mask?: string;
   coins?: number;
+  publicname?: string;
+  avatar?: string;
 }
 
 export interface ILudkaGameData {

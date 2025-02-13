@@ -72,6 +72,7 @@ const LudkaGame: FC = () => {
   const ruleImage = useAppSelector(store => store.app.ludkaRuleImage);
   const dispatch = useAppDispatch();
   const [emojiPositions, setEmojiPositions] = useState<Record<string, { top: string, left: string }>>({});
+  const [playerEmojis, setPlayerEmojis] = useState<Record<number, string>>({});
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -267,7 +268,6 @@ const LudkaGame: FC = () => {
     switch (res?.type) {
       case 'choice':
         if (isWhoiswin) return;
-        console.log(res);
         if (res?.game_answer_info?.animation) {
           setCoinsAnimationUrl(res.game_answer_info.animation);
           setShowCoinsAnimation(true);
@@ -308,10 +308,9 @@ const LudkaGame: FC = () => {
         break;
       case 'emoji':
         if (isWhoiswin) return;
-        setGameState(prev => ({
+        setPlayerEmojis(prev => ({
           ...prev,
-          data: res,
-          winner: null
+          [res.user_id]: res.emoji
         }));
         break;
       case 'room_info':
@@ -339,7 +338,7 @@ const LudkaGame: FC = () => {
       default:
         break;
     }
-  }, []);
+  }, [isWhoiswin, userId, clearMessages, navigate, translation?.ludka_small_bet_error, translation?.ludka_bad_bet_error]);
 
   const handleChoiceMessage = useCallback((res: any) => {
     if (isWhoiswin) return;
@@ -421,37 +420,24 @@ const LudkaGame: FC = () => {
   const getActiveEmojis = useMemo(() => {
     if (!gameState.data?.players) return [];
 
-    const activeEmojis = gameState.data.players
-      .filter((player: any) => {
-        return player.emoji && player.emoji !== 'none' && player.emoji !== '';
+    return gameState.data.players
+      .filter(player => {
+        const emoji = playerEmojis[player.userid];
+        return emoji && emoji !== 'none';
       })
-      .map((player: any) => {
-        if (!emojiPositions[player.userid]) {
-          setEmojiPositions(prev => ({
-            ...prev,
-            [player.userid]: {
-              top: `${Math.random() * 60 + 10}%`,
-              left: `${Math.random() * 60 + 20}%`
-            }
-          }));
+      .map(player => ({
+        userId: player.userid,
+        emoji: playerEmojis[player.userid],
+        name: player.publicname,
+        avatar: player.avatar,
+        position: emojiPositions[player.userid] || getRandomPosition(),
+        item: {
+          item_pic: player.item_pic,
+          item_mask: player.item_mask
         }
-
-        return {
-          userId: player.userid,
-          emoji: player.emoji,
-          name: player.publicname,
-          avatar: player.avatar,
-          position: emojiPositions[player.userid] || { top: '0%', left: '0%' },
-          item: {
-            item_pic: player.item_pic,
-            item_mask: player.item_mask
-          }
-        };
-      })
+      }))
       .slice(0, 4);
-
-    return activeEmojis;
-  }, [gameState.data?.players, emojiPositions]);
+  }, [gameState.data?.players, playerEmojis, emojiPositions]);
 
   useEffect(() => {
     if (gameState.data?.players) {
