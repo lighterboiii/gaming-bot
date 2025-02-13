@@ -68,6 +68,7 @@ export const ClosestNumber: FC = () => {
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
   const [lastProcessedRound, setLastProcessedRound] = useState<{value: string, players: number} | null>(null);
+  const [playerEmojis, setPlayerEmojis] = useState<Record<number, string>>({});
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -165,7 +166,10 @@ export const ClosestNumber: FC = () => {
           setData(res);
           break;
         case 'emoji':
-          setData(res);
+          setPlayerEmojis(prev => ({
+            ...prev,
+            [res.user_id]: res.emoji
+          }));
           break;
         case 'whoiswin':
           const currentRound = {
@@ -422,7 +426,6 @@ export const ClosestNumber: FC = () => {
         <>
           {rules ? (
             <>
-
               {data?.players?.length !== 1 ?
                 <>
                   <div className={styles.game__betContainer}>
@@ -445,7 +448,7 @@ export const ClosestNumber: FC = () => {
                       progress={roomValue}
                     />
                   </div>
-                  <RenderComponent users={filteredPlayers} />
+                  <RenderComponent users={filteredPlayers} playerEmojis={playerEmojis} />
                 </> :
                 <p
                   className={styles.game__text}
@@ -459,9 +462,9 @@ export const ClosestNumber: FC = () => {
                 className={`${styles.overlay} ${showOverlay ? styles.expanded : ''}`}>
                 <div className={styles.overlay__inputWrapper}>
                   <div className={styles.overlay__avatarWrapper}>
-                    {currentPlayer?.emoji && currentPlayer?.emoji !== 'none' && (
+                    {playerEmojis[Number(userId)] && playerEmojis[Number(userId)] !== 'none' && (
                       <div className={styles.overlay__playerEmoji}>
-                        <img src={currentPlayer?.emoji}
+                        <img src={playerEmojis[Number(userId)]}
                           alt="emoji"
                           className={styles.overlay__emojiImage} />
                       </div>

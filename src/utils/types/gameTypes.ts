@@ -56,6 +56,7 @@ export interface IGameSettingsData {
 
 export interface IPropsForClosestNumberComponent {
   users: IPlayer[];
+  playerEmojis: Record<number, string>;
 }
 
 export interface IPlayersProps {

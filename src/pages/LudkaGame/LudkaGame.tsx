@@ -338,7 +338,7 @@ const LudkaGame: FC = () => {
       default:
         break;
     }
-  }, [isWhoiswin, userId, clearMessages, navigate, translation?.ludka_small_bet_error, translation?.ludka_bad_bet_error]);
+  }, []);
 
   const handleChoiceMessage = useCallback((res: any) => {
     if (isWhoiswin) return;

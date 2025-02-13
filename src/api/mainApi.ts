@@ -3,8 +3,8 @@ import { IAppData, IUserPhoto } from "utils/types";
 import { getReq, putReq } from "./api";
 import {
 activeEmojiPackUri,
-fortuneIdParamString,
-fortuneItemCountParamString,
+// fortuneIdParamString,
+// fortuneItemCountParamString,
 fortuneUri,
 // fortuneWheelUri,
 // getFortunePrizeUri,

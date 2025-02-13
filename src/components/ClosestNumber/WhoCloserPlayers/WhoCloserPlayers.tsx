@@ -12,26 +12,27 @@ import CaseTwo from "../Three/Three";
 
 interface IProps {
   users: IPlayer[];
+  playerEmojis: Record<number, string>;
 }
 
-const RenderComponent: FC<IProps> = ({ users }) => {
+const RenderComponent: FC<IProps> = ({ users, playerEmojis }) => {
   switch (users?.length) {
     case 1:
-      return <OneByOne users={users} />;
+      return <OneByOne users={users} playerEmojis={playerEmojis} />;
     case 3:
-      return <CaseTwo users={users} />;
+      return <CaseTwo users={users} playerEmojis={playerEmojis} />;
     case 4:
-      return <CaseThree users={users} />;
+      return <CaseThree users={users} playerEmojis={playerEmojis} />;
     case 5:
-      return <CaseFour users={users} />;
+      return <CaseFour users={users} playerEmojis={playerEmojis} />;
     case 6:
-      return <CaseSix users={users} />;
+      return <CaseSix users={users} playerEmojis={playerEmojis} />;
     case 7:
-      return <CaseSeven users={users} />;
+      return <CaseSeven users={users} playerEmojis={playerEmojis} />;
     case 8:
-      return <CaseEight users={users} />;
+      return <CaseEight users={users} playerEmojis={playerEmojis} />;
     default:
-      return <Case users={users} />
+      return <Case users={users} playerEmojis={playerEmojis} />
   }
 };
 

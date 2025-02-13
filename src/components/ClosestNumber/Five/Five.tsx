@@ -5,14 +5,14 @@ import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from './Five.module.scss';
 
-const CaseFour: FC<IPropsForClosestNumberComponent> = ({ users }) => {
+const CaseFour: FC<IPropsForClosestNumberComponent> = ({ users, playerEmojis }) => {
   return (
     <div className={styles.players}>
       {users?.map((user: IPlayer) => (
         <div className={styles.players__player}>
-          {user?.choice !== 'none' &&
+          {playerEmojis[user.userid] && playerEmojis[user.userid] !== 'none' &&
             <div className={styles.players__emoji}>
-              <img src={user?.emoji}
+              <img src={playerEmojis[user.userid]}
                 alt="emoji"
                 className={styles.players__emojiImage} />
             </div>

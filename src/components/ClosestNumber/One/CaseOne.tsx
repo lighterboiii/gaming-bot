@@ -5,7 +5,7 @@ import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
 import styles from './CaseOne.module.scss';
 
-const Case: FC<IPropsForClosestNumberComponent> = ({ users }) => {
+const Case: FC<IPropsForClosestNumberComponent> = ({ users, playerEmojis }) => {
   return (
     <div
       className={styles.players}
@@ -16,12 +16,12 @@ const Case: FC<IPropsForClosestNumberComponent> = ({ users }) => {
           key={user?.userid}
           className={styles.players__player}
           style={users?.length <= 2 ? { width: '90px', height: '90px' } : {}}>
-          {user?.emoji !== 'none' &&
+          {playerEmojis[user.userid] && playerEmojis[user.userid] !== 'none' &&
             <div
               className={styles.players__emoji}
               style={{ left: '-25%' }}
             >
-              <img src={user?.emoji}
+              <img src={playerEmojis[user.userid]}
                 alt="emoji"
                 className={styles.players__emojiImage} />
             </div>
