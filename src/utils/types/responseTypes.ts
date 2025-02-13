@@ -1,3 +1,4 @@
+import { IFortuneItem } from "./mainTypes";
 import { IMember } from "./memberTypes";
 import { ItemData } from "./shopTypes";
 
@@ -50,7 +51,10 @@ export interface IGetPrizeResponse {
 
 export interface ISpinWheelResponse {
   message: string;
-  tokens: string;
+  fortune_button_result?: {
+    message: string;
+  };
+  fortune_prize_info?: IFortuneItem[];
 }
 
 export interface CollectibleResponse {

@@ -6,7 +6,7 @@ activeEmojiPackUri,
 // fortuneIdParamString,
 // fortuneItemCountParamString,
 fortuneUri,
-// fortuneWheelUri,
+fortuneWheelUri,
 // getFortunePrizeUri,
 getLeadersUri,
 getRefsUri,
@@ -61,12 +61,12 @@ export const getActiveEmojiPack = (userIdValue: number) => {
   })
 };
 // получить инфу о колесе удачи
-// export const getLuckInfo = (userIdValue: number) => {
-//   return getReq({
-//     uri: fortuneWheelUri,
-//     userId: userIdValue,
-//   })
-// };
+export const getLuckInfo = (userIdValue: number) => {
+  return getReq({
+    uri: fortuneWheelUri,
+    userId: userIdValue,
+  })
+};
 // прокрутка колеса удачи
 export const spinWheelRequest = (userIdValue: number) => {
   return getReq({

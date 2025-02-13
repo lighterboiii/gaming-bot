@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { getUserId } from "utils/userConfig";
 
-import { getAppData } from "../../api/mainApi";
+import { getAppData, getLuckInfo } from "../../api/mainApi";
 import AdvertisementBanner from '../../components/Main/AdvertisementBanner/AdvertisementBanner';
 import BannerData from "../../components/Main/BannerData/BannerData";
 import DailyBonus from "../../components/Main/Bonus/Bonus";
@@ -75,14 +75,14 @@ export const Main: FC = () => {
     setShowTasksOverlay(false);
   }
 
-  // const openWheelOfLuckOverlay = () => {
-  //   getLuckInfo(userId)
-  //     .then((res) => {
-  //       const response = res as IFortuneData;
-  //       setLuckData(response);
-  //     })
-  //   setShowWheelOverlay(!showWheelOverlay);
-  // };
+  const openWheelOfLuckOverlay = () => {
+    getLuckInfo(userId)
+      .then((res) => {
+        const response = res as IFortuneData;
+        setLuckData(response);
+      })
+    setShowWheelOverlay(!showWheelOverlay);
+  };
 
   useEffect(() => {
     if (dailyBonusData && dailyBonusData !== "no") {
@@ -115,8 +115,8 @@ export const Main: FC = () => {
         />
         <MainUserInfo
           toggleOverlay={toggleTasksOverlay}
-          // setWheelOverlayOpen={openWheelOfLuckOverlay}
-          setWheelOverlayOpen={() => {}}
+          setWheelOverlayOpen={openWheelOfLuckOverlay}
+          // setWheelOverlayOpen={() => {}}
         />
       </header>
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useRef, useState } from 'react';
@@ -34,35 +35,29 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const [visibleItems, setVisibleItems] = useState<IFortuneItem[]>([]);
   const [spinning, setSpinning] = useState<boolean>(false);
   const [prizeItem, setPrizeItem] = useState<IFortuneItem | null>(null);
+  const [noTokens, setNoTokens] = useState<boolean>(false);
   const spinnerRef = useRef<HTMLDivElement>(null);
   console.log(data);
   useEffect(() => {
-    setLoading(true);
-    const loadData = () => {
-      if (data) {
-        if (prize && visibleItems.length > 0) {
-          setLoading(false);
-          return;
-        }
+    if (!data) return;
+    
+    if (prize && visibleItems.length > 0) return;
 
-        const max = data.fortune_all_items.length - 5;
-        const randomIndex = Math.floor(Math.random() * max);
-        setVisibleItems(data.fortune_all_items.slice(randomIndex, randomIndex + 5));
-        setPrizeItem(data.fortune_prize_info[0] || null);
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, [data]);
+    const max = data.fortune_all_items.length - 5;
+    const randomIndex = Math.floor(Math.random() * max);
+    setVisibleItems(data.fortune_all_items.slice(randomIndex, randomIndex + 5));
+    setLoading(false);
+  }, [data, prize, visibleItems.length]);
 
   const startSpin = () => {
     if (!data) return;
 
     spinWheelRequest(userId)
       .then(res => {
+        console.log(res);
         const response = res as ISpinWheelResponse;
-        if (response?.message === 'ok') {
+        if (response?.fortune_button_result?.message === 'ok') {
+          setNoTokens(false);
           dispatch(setTokensValueAfterBuy(100));
           setSpinning(true);
           setPrize(false);
@@ -88,7 +83,8 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
               spinnerRef.current.classList.remove('spinning');
             }
             
-            const prizeItem = data.fortune_prize_info[0] || null;
+            const prizeItem = (response?.fortune_prize_info && response.fortune_prize_info[0]) || null;
+            setPrizeItem(prizeItem);
             const randomItems = [...data.fortune_all_items]
               .sort(() => Math.random() - 0.5)
               .slice(0, 4);
@@ -99,33 +95,31 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
               prizeItem,
               randomItems[2],
               randomItems[3]
-            ];
+            ].filter((item): item is IFortuneItem => item !== null);
             
             setVisibleItems(finalItems);
             
             setTimeout(() => {
               setSpinning(false);
               setPrize(true);
+              dispatch(addTokens(prizeItem!.fortune_item_count));
             }, 300);
           }, 5000);
-        } else if (response?.message === 'notokens') {
+        } else if (response?.fortune_button_result?.message === 'notokens') {
+          setNoTokens(true);
           setMessageShown(true);
+          
+          setTimeout(() => {
+            closeOverlay();
+            setNoTokens(false);
+            setMessageShown(false);
+          }, 2500);
         }
       });
   };
 
   const claimPrize = () => {
     if (!prizeItem) return;
-
-    // getWheelPrizeRequest(userId, prizeItem.fortune_item_id, prizeItem.fortune_item_count)
-    //   .then((res) => {
-    //     const response = res as IGetPrizeResponse;
-    //     if (response?.message === "ok") {
-    //       if (prizeItem.fortune_type === 'tokens') {
-    //         dispatch(addTokens(prizeItem.fortune_item_count));
-    //       }
-    //     }
-    //   });
 
     closeOverlay();
     setMessageShown(false);
@@ -148,6 +142,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
     setMessageShown(false);
     setSpinning(false);
     setLoading(false);
+    setNoTokens(false);
     if (spinnerRef.current) {
       spinnerRef.current.classList.remove('spinning');
     }
@@ -200,7 +195,6 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
                     src={item.fortune_item_pic}
                     alt="item"
                     className={styles.wheel__itemImg}
-                    // style={item.fortune_type !== "skin" ? { width: '16px', height: '16px' } : {}}
                   />
                   <p className={styles.wheel__itemText}>{item.fortune_item_name}</p>
                 </div>
@@ -209,7 +203,10 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
           </div>
           <div className={styles.wheel__buttonWrapper}>
             {!spinning && !prize && !messageShown && (
-              <Button text={translation?.fortune_wheel_spin_button} handleClick={startSpin} />
+              <Button 
+                text={noTokens ? translation?.insufficient_funds : translation?.fortune_wheel_spin_button} 
+                handleClick={startSpin} 
+              />
             )}
             {prize && !spinning && (
               <Button text={translation?.fortune_wheel_get_button} handleClick={claimPrize} />
