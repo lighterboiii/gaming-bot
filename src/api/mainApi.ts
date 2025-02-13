@@ -3,11 +3,8 @@ import { IAppData, IUserPhoto } from "utils/types";
 import { getReq, putReq } from "./api";
 import {
 activeEmojiPackUri,
-// fortuneIdParamString,
-// fortuneItemCountParamString,
 fortuneUri,
 fortuneWheelUri,
-// getFortunePrizeUri,
 getLeadersUri,
 getRefsUri,
 getUserAvatarUri,
@@ -74,14 +71,6 @@ export const spinWheelRequest = (userIdValue: number) => {
     userId: userIdValue,
   })
 };
-// забрать приз
-// export const getWheelPrizeRequest = (userIdValue: number, itemId: number, count: number) => {
-//   return getReq({
-//     uri: getFortunePrizeUri,
-//     userId: userIdValue,
-//     endpoint: `${fortuneIdParamString}${itemId}${fortuneItemCountParamString}${count}`
-//   })
-// };
 // проверка выполнения таска
 export const taskStepRequest = (userIdValue: number, taskId: number, stepId: number) => {
   return getReq({

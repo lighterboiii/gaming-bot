@@ -53,7 +53,6 @@ export const RockPaperScissors: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
   const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
-  const activeHands = useAppSelector(store => store.app.info?.active_hands);
   const { sendMessage, wsMessages, clearMessages } = useContext(WebSocketContext)!;
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);

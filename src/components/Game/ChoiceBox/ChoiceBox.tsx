@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from "@tma.js/sdk";
 import { FC, useState } from "react";
 
 import paper from '../../../images/rock-paper-scissors/hands-icons/paper.png'

@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { motion } from "framer-motion";
 import { FC } from "react";
 
 import { formatNumber } from "utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "utils/constants";
-import { IGameData, IPlayer, IPlayersProps } from "utils/types/gameTypes";
+import { IPlayer, IPlayersProps } from "utils/types/gameTypes";
 import { getUserId } from "utils/userConfig";
 
 import UserAvatar from "../../../components/User/UserAvatar/UserAvatar";

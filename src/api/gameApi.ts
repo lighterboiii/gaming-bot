@@ -3,9 +3,11 @@ import { getReq, postReq, putReq } from "./api";
 import {
   addPlayerUri,
   createRoomUri,
+  gameIdParamString,
   getGamesUri,
   kickPlayerUri,
   roomIdParamString,
+  rulesUri,
   useEnergyDrinkUri
 } from "./requestData";
 
@@ -48,8 +50,8 @@ export const energyDrinkRequest = (userIdValue: number) => {
 // установить флаг просмотр правил игры
 export const setGameRulesWatched = (userIdValue: number, gameId: string) => {
   return putReq({
-    uri: 'game_rule_watched?user_id=',
+    uri: rulesUri,
     userId: userIdValue,
-    endpoint: `&game_id=${gameId}`
+    endpoint: `${gameIdParamString}${gameId}`
   })
 };

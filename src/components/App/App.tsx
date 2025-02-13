@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
@@ -35,7 +33,7 @@ import {
   setUserData,
   setUserPhoto
 } from '../../services/appSlice';
-import { useAppDispatch, useAppSelector } from '../../services/reduxHooks';
+import { useAppDispatch } from '../../services/reduxHooks';
 import { cacheBanners } from '../../utils/bannerCache';
 import {
   indexUrl,

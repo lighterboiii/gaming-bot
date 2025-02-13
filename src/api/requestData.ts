@@ -28,7 +28,7 @@ export const getGamesUri = 'get_existing_games';
 export const activeEmojiPackUri = 'user_emoji?user_id=';
 export const fortuneWheelUri = 'fortune_get_info?user_id=';
 export const fortuneUri = 'fortune_button?user_id=';
-// export const getFortunePrizeUri = 'fortune_prize?user_id=';
+export const rulesUri = 'game_rule_watched?user_id=';
 export const taskStepButtonUri = 'task_step_button?user_id=';
 export const taskResultUri = 'task_result_button?user_id=';
 export const useEnergyDrinkUri = 'use_energy_drink?user_id=';

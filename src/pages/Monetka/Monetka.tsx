@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState, useContext, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -15,8 +14,6 @@ import { setGameRulesWatched } from '../../api/gameApi';
 import { getAppData } from '../../api/mainApi';
 import Rules from '../../components/Game/Rules/Rules';
 import Loader from '../../components/Loader/Loader';
-// import { Warning } from '../../components/OrientationWarning/Warning';
-import useOrientation from '../../hooks/useOrientation';
 import useTelegram from '../../hooks/useTelegram';
 import monetkaButtonsBackground from '../../images/monetka/0.png';
 import buttonBlueDefault from '../../images/monetka/btn_O_Default.png'
@@ -55,7 +52,6 @@ export const Monetka: FC = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const userId = getUserId();
-  // const isPortrait = useOrientation();
   const dispatch = useAppDispatch();
   const [rules, setRulesShown] = useState<boolean | null>(false);
   const isRulesShown = useAppSelector(store => store.app.fourthGameRulesState);
@@ -66,7 +62,7 @@ export const Monetka: FC = () => {
     loading: false
   });
   const translation = useAppSelector(store => store.app.languageSettings);
-  const { sendMessage, wsMessages, connect, clearMessages, disconnect } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
   const { tg } = useTelegram();
   const [currentCoin, setCurrentCoin] = useState<string | null>(null);
   const [coinStates, setCoinStates] = useState<string[]>([
@@ -74,6 +70,7 @@ export const Monetka: FC = () => {
   ]);
   const [flashImage, setFlashImage] = useState<string | null>(null);
   const [nextXValue, setNextXValue] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [balance, setBalance] = useState<number>(0);
   const [blueButtonState, setBlueButtonState] = useState<ButtonState>('default');
   const [greenButtonState, setGreenButtonState] = useState<ButtonState>('default');

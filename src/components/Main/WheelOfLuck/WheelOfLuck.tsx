@@ -1,21 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useRef, useState } from 'react';
 
 import { getUserId } from 'utils/userConfig';
 
-import {
-  //  getWheelPrizeRequest
-  // , 
-  spinWheelRequest } from '../../../api/mainApi';
+import { spinWheelRequest } from '../../../api/mainApi';
 import lamp from '../../../images/closest-number/lamp.png';
 import light from '../../../images/closest-number/lamp2.png';
 import wheelPointer from '../../../images/closest-number/wheelPoint.png';
 import { addTokens, setTokensValueAfterBuy } from '../../../services/appSlice';
 import { useAppDispatch, useAppSelector } from '../../../services/reduxHooks';
 import { IFortuneData, IFortuneItem } from '../../../utils/types/mainTypes';
-import { IGetPrizeResponse, ISpinWheelResponse } from '../../../utils/types/responseTypes';
+import { ISpinWheelResponse } from '../../../utils/types/responseTypes';
 import Button from '../../ui/Button/Button';
 
 import styles from './WheelOfLuck.module.scss';
@@ -37,7 +32,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const [prizeItem, setPrizeItem] = useState<IFortuneItem | null>(null);
   const [noTokens, setNoTokens] = useState<boolean>(false);
   const spinnerRef = useRef<HTMLDivElement>(null);
-  console.log(data);
+
   useEffect(() => {
     if (!data) return;
     
@@ -137,17 +132,6 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
     }
   };
 
-  const onOverlayClose = () => {
-    closeOverlay();
-    setMessageShown(false);
-    setSpinning(false);
-    setLoading(false);
-    setNoTokens(false);
-    if (spinnerRef.current) {
-      spinnerRef.current.classList.remove('spinning');
-    }
-  };
-
   return (
     <div className={styles.wheel}>
       {loading ? (
@@ -210,9 +194,6 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             )}
             {prize && !spinning && (
               <Button text={translation?.fortune_wheel_get_button} handleClick={claimPrize} />
-            )}
-            {!prize && !spinning && messageShown && (
-              <Button text={translation?.insufficient_funds} handleClick={onOverlayClose} />
             )}
           </div>
         </>

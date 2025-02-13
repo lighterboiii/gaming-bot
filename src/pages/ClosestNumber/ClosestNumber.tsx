@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-fallthrough */
 import { FC, useEffect, useRef, useState, useContext } from "react";
@@ -411,12 +410,6 @@ export const ClosestNumber: FC = () => {
       }
     };
   }, [timerInterval]);
-
-  // if (!isPortrait) {
-  //   return (
-  //     <Warning />
-  //   );
-  // }
 
   return (
     <div className={styles.game}>

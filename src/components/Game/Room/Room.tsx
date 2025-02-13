@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { postEvent } from "@tma.js/sdk";
-import { FC, useState, useContext, useEffect } from "react";
+import { FC, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getUserId } from "utils/userConfig";
 
-import useTelegram from "../../../hooks/useTelegram";
 import ManIcon from "../../../icons/Man/Man";
 import { useAppSelector } from "../../../services/reduxHooks";
 import { WebSocketContext } from '../../../socket/WebSocketContext';
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
 import { IGameData } from "../../../utils/types/gameTypes";
 
 import styles from './Room.module.scss';
@@ -29,12 +27,12 @@ const Room: FC<IProps> = ({ room, openModal }) => {
   const userInfo = useAppSelector(store => store.app.info);
   const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
 
-  useEffect(() => {
-    const lastMessage = wsMessages[wsMessages.length - 1];
-    if (lastMessage) {
-      const parsedMessage = JSON.parse(lastMessage);
-    }
-  }, [wsMessages]);
+  // useEffect(() => {
+  //   const lastMessage = wsMessages[wsMessages.length - 1];
+  //   if (lastMessage) {
+  //     const parsedMessage = JSON.parse(lastMessage);
+  //   }
+  // }, [wsMessages]);
 
   const handleJoinRoom = async (roomType: number) => {
     if (room.free_places === 0) {
@@ -132,7 +130,7 @@ const Room: FC<IProps> = ({ room, openModal }) => {
           height={12} /> {room.players_count}/{room.free_places + room.players_count}
       </p>
       <p className={`${styles.room__number} ${styles.room__bet}`}>
-        {Number(room.bet_type) === 1 ? `💵 ${room.bet}` : `🔰 ${room.bet}`}
+        {Number(room.bet_type) === 1 ? `${MONEY_EMOJI} ${room.bet}` : `${SHIELD_EMOJI} ${room.bet}`}
       </p>
     </div>
   )

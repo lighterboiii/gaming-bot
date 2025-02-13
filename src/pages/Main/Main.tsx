@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -103,6 +101,7 @@ export const Main: FC = () => {
     };
 
     fetchUserData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -116,7 +115,6 @@ export const Main: FC = () => {
         <MainUserInfo
           toggleOverlay={toggleTasksOverlay}
           setWheelOverlayOpen={openWheelOfLuckOverlay}
-          // setWheelOverlayOpen={() => {}}
         />
       </header>
 
