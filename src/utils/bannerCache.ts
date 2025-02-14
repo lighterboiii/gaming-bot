@@ -2,7 +2,7 @@ import { IBannerData } from "./types/mainTypes";
 
 const BANNERS_CACHE_KEY = 'cached_banners';
 const BANNERS_CACHE_TIMESTAMP_KEY = 'banners_cache_timestamp';
-const CACHE_LIFETIME = 1000 * 60 * 60; // 1 hour
+const CACHE_LIFETIME = 1000 * 60 * 15;
 
 const convertImageToBase64 = (url: string): Promise<string> => {
   return new Promise((resolve, reject) => {

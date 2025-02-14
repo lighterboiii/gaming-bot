@@ -47,6 +47,7 @@ import {
   ludkaGameUrl,
   monetkaUrl
 } from '../../utils/routes';
+import { cacheShopImage } from '../../utils/shopImageCache';
 import { getUserId } from '../../utils/userConfig';
 import Loader from '../Loader/Loader';
 import { Warning } from '../OrientationWarning/Warning';
@@ -111,8 +112,13 @@ export const App: FC = () => {
           setLoading(false);
           return;
         }
+
+        // Кэширование изображений
         if (res.ad_info) {
           await cacheBanners(res.ad_info);
+        }
+        if (res.shop_image_url) {
+          await cacheShopImage(res.shop_image_url);
         }
         dispatch(setBannerData(res.ad_info));
         dispatch(setShopImage(res.shop_image_url));
