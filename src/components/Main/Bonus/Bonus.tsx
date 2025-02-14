@@ -1,10 +1,7 @@
 import { FC } from "react";
 
-import { getUserId } from 'utils/userConfig';
-
 import Button from "../..//ui/Button/Button";
-import { makeCollectibleRequest } from "../../../api/shopApi";
-import { clearDailyBonus, setCollectibles, setEnergyDrinksValue, setNewTokensValue } from "../../../services/appSlice";
+import { clearDailyBonus, setNewTokensValue } from "../../../services/appSlice";
 import { useAppDispatch, useAppSelector } from "../../../services/reduxHooks";
 import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import { IBonus } from "../../../utils/types/mainTypes";
@@ -18,31 +15,17 @@ interface IProps {
 
 const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
   const dispatch = useAppDispatch();
-  const userId = getUserId();
+
   const translation = useAppSelector(store => store.app.languageSettings);
-  // обработчик действия по кнопке "забрать"
   const handleGetBonus = async (item: IBonus) => {
-    const itemId = Number(item?.bonus_item_id);
-    const itemCount = Number(item?.bonus_count);
     switch (item?.bonus_type) {
       case "tokens":
-        const tokens = await makeCollectibleRequest(itemId, itemCount, userId);
-        const formattedTokens = Math.floor(tokens.message);
+        const formattedTokens = Math.floor(bonus?.bonus_count);
         dispatch(setNewTokensValue(formattedTokens));
         triggerHapticFeedback('notification', 'success');
         break;
-      case "energy_drink":
-        const resEnergy = await makeCollectibleRequest(itemId, itemCount, userId);
-        dispatch(setEnergyDrinksValue(resEnergy.message));
-        triggerHapticFeedback('notification', 'success');
-        break;
-      case "exp":
-        await makeCollectibleRequest(itemId, itemCount, userId);
-        triggerHapticFeedback('notification', 'success');
-        break;
       default:
-        await makeCollectibleRequest(itemId, itemCount, userId);
-        dispatch(setCollectibles(item.bonus_item_id));
+        triggerHapticFeedback('notification', 'success');
         break;
     }
     closeOverlay();
@@ -69,7 +52,8 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
               text={
                 `${(bonus?.bonus_type === "tokens" ||
                   bonus?.bonus_type === "exp" ||
-                  bonus?.bonus_type === "energy_drink")
+                  bonus?.bonus_type === "energy_drink" ||
+                  bonus?.bonus_type === "emoji")
                   ? `${translation?.claim} ${bonus?.bonus_count}`
                   : `${translation?.claim}`}`
               }
