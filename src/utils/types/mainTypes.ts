@@ -100,7 +100,7 @@ export interface IFortuneItem {
   fortune_item_id: number;
   fortune_item_name: string;
   fortune_item_pic: string;
-  fortune_type: string;
+  fortune_type: 'tokens' | 'exp' | 'item';
 }
 
 export interface IFortuneData {

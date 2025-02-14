@@ -24,13 +24,13 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
   const userId = getUserId();
   const dispatch = useAppDispatch();
   const translation = useAppSelector(store => store.app.languageSettings);
-  const [messageShown, setMessageShown] = useState<boolean>(false);
   const [prize, setPrize] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [visibleItems, setVisibleItems] = useState<IFortuneItem[]>([]);
   const [spinning, setSpinning] = useState<boolean>(false);
-  const [prizeItem, setPrizeItem] = useState<IFortuneItem | null>(null);
   const [noTokens, setNoTokens] = useState<boolean>(false);
+  const [showPrizeAnimation, setShowPrizeAnimation] = useState<boolean>(false);
+  const [isFadingOut, setIsFadingOut] = useState<boolean>(false);
   const spinnerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,6 +43,12 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
     setVisibleItems(data.fortune_all_items.slice(randomIndex, randomIndex + 5));
     setLoading(false);
   }, [data, prize, visibleItems.length]);
+
+  const handlePrizeDispatch = (prizeItem: IFortuneItem) => {
+    if (prizeItem.fortune_type === 'tokens') {
+      dispatch(addTokens(prizeItem.fortune_item_count));
+    }
+  };
 
   const startSpin = () => {
     if (!data) return;
@@ -79,7 +85,6 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             }
             
             const prizeItem = (response?.fortune_prize_info && response.fortune_prize_info[0]) || null;
-            setPrizeItem(prizeItem);
             const randomItems = [...data.fortune_all_items]
               .sort(() => Math.random() - 0.5)
               .slice(0, 4);
@@ -97,39 +102,29 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             setTimeout(() => {
               setSpinning(false);
               setPrize(true);
-              dispatch(addTokens(prizeItem!.fortune_item_count));
-            }, 300);
+              setShowPrizeAnimation(true);
+              if (prizeItem) {
+                handlePrizeDispatch(prizeItem);
+              }
+              
+              setTimeout(() => {
+                setIsFadingOut(true);
+                setTimeout(() => {
+                  setShowPrizeAnimation(false);
+                  setIsFadingOut(false);
+                }, 500);
+              }, 4000);
+            }, 800);
           }, 5000);
         } else if (response?.fortune_button_result?.message === 'notokens') {
           setNoTokens(true);
-          setMessageShown(true);
-          
+    
           setTimeout(() => {
             closeOverlay();
             setNoTokens(false);
-            setMessageShown(false);
           }, 2500);
         }
       });
-  };
-
-  const claimPrize = () => {
-    if (!prizeItem) return;
-
-    closeOverlay();
-    setMessageShown(false);
-    setVisibleItems([]);
-    setPrize(false);
-    setSpinning(false);
-    setPrizeItem(null);
-    setLoading(false);
-    if (spinnerRef.current) {
-      spinnerRef.current.classList.remove('spinning');
-      const specialItems = spinnerRef.current.getElementsByClassName(styles.wheel__specialItem);
-      Array.from(specialItems).forEach(item => {
-        item.classList.remove(styles.wheel__specialItem);
-      });
-    }
   };
 
   return (
@@ -173,7 +168,9 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
                 <div
                   key={index}
                   className={`${styles.wheel__item} 
-                ${index === 2 && prize ? styles.wheel__specialItem : ''}`}
+                    ${index === 2 && prize && showPrizeAnimation ? 
+                      `${styles.wheel__specialItem} ${isFadingOut ? styles.fadeOut : ''}` 
+                      : ''}`}
                 >
                   <img
                     src={item.fortune_item_pic}
@@ -186,15 +183,10 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
             </div>
           </div>
           <div className={styles.wheel__buttonWrapper}>
-            {!spinning && !prize && !messageShown && (
               <Button 
                 text={noTokens ? translation?.insufficient_funds : translation?.fortune_wheel_spin_button} 
                 handleClick={startSpin} 
               />
-            )}
-            {prize && !spinning && (
-              <Button text={translation?.fortune_wheel_get_button} handleClick={claimPrize} />
-            )}
           </div>
         </>
       )}
