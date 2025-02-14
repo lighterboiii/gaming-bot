@@ -113,7 +113,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
                   setShowPrizeAnimation(false);
                   setIsFadingOut(false);
                 }, 500);
-              }, 4000);
+              }, 3500);
             }, 800);
           }, 5000);
         } else if (response?.fortune_button_result?.message === 'notokens') {
@@ -182,12 +182,14 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
               ))}
             </div>
           </div>
-          <div className={styles.wheel__buttonWrapper}>
+          {!spinning && (
+            <div className={styles.wheel__buttonWrapper}>
               <Button 
                 text={noTokens ? translation?.insufficient_funds : translation?.fortune_wheel_spin_button} 
                 handleClick={startSpin} 
               />
-          </div>
+            </div>
+          )}
         </>
       )}
     </div>
