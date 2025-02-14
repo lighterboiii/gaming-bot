@@ -59,7 +59,7 @@ export const App: FC = () => {
   const dispatch = useAppDispatch();
   const userId = getUserId();
   const [loading, setLoading] = useState(true);
-  const [serverWarning, setServerWarning] = useState<string | null>(null);
+  const [serverWarning, setServerWarning] = useState<string>('');
   const isPortrait = useOrientation();
 
   const isMobile = () => {
@@ -100,48 +100,45 @@ export const App: FC = () => {
   }, [tg]);
 
   useEffect(() => {
-    setLoading(true);
-    const fetchUserData = () => {
-      getAppData(userId)
-        .then(async (res) => {
-          if (res.warning === 'warning') {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            setServerWarning(res.warning_message!);
-            setLoading(false);
-            return;
-          }
-
-          if (res.ad_info) {
-            await cacheBanners(res.ad_info);
-          }
-          dispatch(setBannerData(res.ad_info));
-          dispatch(setShopImage(res.shop_image_url));
-          dispatch(setUserData(res.user_info));
-          dispatch(setUserPhoto(res.avatar));
-          dispatch(setLanguageSettings(res.translate));
-          dispatch(setProductsArchive(res.collectibles_data));
-          dispatch(setShopAvailable(res.shop_available));
-          dispatch(setTaskList(res.tasks_available));
-          dispatch(setDailyBonus(res.daily_bonus));
-          dispatch(setFirstGameRuleImage(res.game_rule_1_url));
-          dispatch(setSecondGameRuleImage(res.game_rule_2_url));
-          dispatch(setThirdGameRuleImage(res.game_rule_3_url));
-          dispatch(setFourthGameRuleImage(res.game_rule_4_url));
-          dispatch(setFirstGameRulesState(res.game_rule_1_show));
-          dispatch(setSecondGameRulesState(res.game_rule_2_show));
-          dispatch(setThirdGameRulesState(res.game_rule_3_show));
-          dispatch(setFourthGameRulesState(res.game_rule_4_show));
-          setTimeout(() => {
-            setLoading(false);
-          }, 2000);
-        })
-        .catch((error) => {
-          console.error('Get user data error:', error);
+    const initializeApp = async () => {
+      setLoading(true);
+      try {
+        const res = await getAppData(userId);
+        
+        if (res.warning === 'warning') {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          setServerWarning(res.warning_message!);
           setLoading(false);
-        })
+          return;
+        }
+        if (res.ad_info) {
+          await cacheBanners(res.ad_info);
+        }
+        dispatch(setBannerData(res.ad_info));
+        dispatch(setShopImage(res.shop_image_url));
+        dispatch(setUserData(res.user_info));
+        dispatch(setUserPhoto(res.avatar));
+        dispatch(setLanguageSettings(res.translate));
+        dispatch(setProductsArchive(res.collectibles_data));
+        dispatch(setShopAvailable(res.shop_available));
+        dispatch(setTaskList(res.tasks_available));
+        dispatch(setFirstGameRuleImage(res.game_rule_1_url));
+        dispatch(setSecondGameRuleImage(res.game_rule_2_url));
+        dispatch(setThirdGameRuleImage(res.game_rule_3_url));
+        dispatch(setFourthGameRuleImage(res.game_rule_4_url));
+        dispatch(setFirstGameRulesState(res.game_rule_1_show));
+        dispatch(setSecondGameRulesState(res.game_rule_2_show));
+        dispatch(setThirdGameRulesState(res.game_rule_3_show));
+        dispatch(setFourthGameRulesState(res.game_rule_4_show));
+        dispatch(setDailyBonus(res.daily_bonus));
+        setLoading(false);
+      } catch (error) {
+        console.error('Get user data error:', error);
+        setLoading(false);
+      }
     };
 
-    fetchUserData();
+    initializeApp();
   }, [dispatch, userId]);
 
   if (serverWarning) {

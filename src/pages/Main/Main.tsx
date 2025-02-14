@@ -84,7 +84,10 @@ export const Main: FC = () => {
 
   useEffect(() => {
     if (dailyBonusData && dailyBonusData !== "no") {
-      setShowBonusOverlay(true);
+      const timer = setTimeout(() => {
+        setShowBonusOverlay(true);
+      }, 500);
+      return () => clearTimeout(timer);
     }
   }, [dailyBonusData]);
 
