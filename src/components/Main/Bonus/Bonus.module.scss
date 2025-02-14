@@ -4,7 +4,7 @@
 .bonus {
   @include children-layout();
   background-color: $main-color;
-  justify-content: flex-start;
+  justify-content: space-around;
 
   &__button {
     @include size(100%, 40px);
