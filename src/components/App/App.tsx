@@ -67,8 +67,7 @@ export const App: FC = () => {
     if (process.env.NODE_ENV === 'development') {
       return true;
     } else if (platform === 'weba' || platform === "tdesktop" || platform === "macos" || platform === "windows") { 
-      // return false;
-      return true;
+      return false;
     } else if (process.env.WARNING === 'true') {
       return true;
     } else {

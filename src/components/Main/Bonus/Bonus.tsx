@@ -49,14 +49,9 @@ const DailyBonus: FC<IProps> = ({ bonus, closeOverlay }) => {
             <Button
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               handleClick={() => handleGetBonus(bonus!)}
-              text={
-                `${(bonus?.bonus_type === "tokens" ||
-                  bonus?.bonus_type === "exp" ||
-                  bonus?.bonus_type === "energy_drink" ||
-                  bonus?.bonus_type === "emoji")
-                  ? `${translation?.claim} ${bonus?.bonus_count}`
-                  : `${translation?.claim}`}`
-              }
+              text={bonus?.bonus_count 
+                ? `${translation?.claim} ${bonus.bonus_count}`
+                : translation?.claim}
             />
           </div>
         </div>
