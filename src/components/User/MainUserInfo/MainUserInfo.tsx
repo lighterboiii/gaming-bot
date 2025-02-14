@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC, useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { balanceLink, groupLink } from "../../../api/requestData";
@@ -13,7 +13,7 @@ import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 import CircleButton from "../../ui/CircleButton/CircleButton";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
 
-import styles from './MainUserInfo.module.scss';
+import styles from "./MainUserInfo.module.scss";
 
 interface IProps {
   toggleOverlay: () => void;
@@ -22,13 +22,33 @@ interface IProps {
 
 const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
   const { tg } = useTelegram();
-  const userData = useAppSelector(store => store.app.info);
-  const translation = useAppSelector(store => store.app.languageSettings);
+  const userData = useAppSelector((store) => store.app.info);
+  const translation = useAppSelector((store) => store.app.languageSettings);
   const userNameRef = useRef<HTMLParagraphElement>(null);
+  const [animateCoins, setAnimateCoins] = useState(false);
+  const [animateTokens, setAnimateTokens] = useState(false);
+  const prevCoins = useRef(userData?.coins);
+  const prevTokens = useRef(userData?.tokens);
+
+  useEffect(() => {
+    if (userData?.coins !== prevCoins.current) {
+      setAnimateCoins(true);
+      setTimeout(() => setAnimateCoins(false), 500);
+      prevCoins.current = userData?.coins;
+    }
+  }, [userData?.coins]);
+
+  useEffect(() => {
+    if (userData?.tokens !== prevTokens.current) {
+      setAnimateTokens(true);
+      setTimeout(() => setAnimateTokens(false), 500);
+      prevTokens.current = userData?.tokens;
+    }
+  }, [userData?.tokens]);
 
   const handleClickBalance = () => {
     tg.openTelegramLink(balanceLink);
-    triggerHapticFeedback('notification', 'error');
+    triggerHapticFeedback("notification", "error");
     tg.close();
   };
 
@@ -41,50 +61,41 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
         <div className={styles.userInfo__info}>
           <div className={styles.userInfo__textElements}>
             <div className={styles.userInfo__name}>
-              <LevelIcon
-                level={userData?.user_exp}
-                width={24}
-                height={24}
-              />
-              {/* <div className={styles.userInfo__overflow}> */}
-                <p className={styles.userInfo__userName}
-                  ref={userNameRef}>
-                  {userData && userData?.publicname}
-                </p>
-              {/* </div> */}
+              <LevelIcon level={userData?.user_exp} width={24} height={24} />
+              <p className={styles.userInfo__userName} ref={userNameRef}>
+                {userData && userData?.publicname}
+              </p>
             </div>
-            <p className={styles.userInfo__text}>
+            <p className={`${styles.userInfo__text} ${animateCoins ? styles.animate : ''}`}>
               <span>{MONEY_EMOJI}</span>
-              {userData ? formatNumber(userData?.coins) : '0'}
+              {userData ? formatNumber(userData?.coins) : "0"}
             </p>
-            <p className={styles.userInfo__text}>
+            <p className={`${styles.userInfo__text} ${animateTokens ? styles.animate : ''}`}>
               <span>{SHIELD_EMOJI}</span>
-              {userData ? formatNumber(userData?.tokens) : '0'}
+              {userData ? formatNumber(userData?.tokens) : "0"}
             </p>
           </div>
           <div className={styles.userInfo__buttons}>
-            <button type="button"
+            <button
+              type="button"
               className={styles.userInfo__balance}
-              onClick={handleClickBalance}>
-              <WalletIcon
-                width={12}
-                height={12}
-              />
+              onClick={handleClickBalance}
+            >
+              <WalletIcon width={12} height={12} />
               {translation?.webapp_balance}
             </button>
-            <Link to={groupLink}
-              className={styles.userInfo__tasksButton}>
-              <CommunityIcon width={16}
-                height={14}
-                color="#FFF" />
+            <Link to={groupLink} className={styles.userInfo__tasksButton}>
+              <CommunityIcon width={16} height={14} color="#FFF" />
             </Link>
           </div>
         </div>
       </div>
       <div className={styles.userInfo__linkContainer}>
-        <button type="button"
+        <button
+          type="button"
           className={styles.userInfo__button}
-          onClick={setWheelOverlayOpen}>
+          onClick={setWheelOverlayOpen}
+        >
           <CircleButton
             shadow
             isWhiteBackground
@@ -94,18 +105,16 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
             color="#d51845"
           />
         </button>
-        <button type="button"
+        <button
+          type="button"
           className={styles.userInfo__button}
-          onClick={toggleOverlay}>
-          <CircleButton
-            shadow
-            isWhiteBackground
-            iconType="tasks"
-          />
+          onClick={toggleOverlay}
+        >
+          <CircleButton shadow isWhiteBackground iconType="tasks" />
         </button>
       </div>
-    </div >
-  )
-}
+    </div>
+  );
+};
 
 export default MainUserInfo;
