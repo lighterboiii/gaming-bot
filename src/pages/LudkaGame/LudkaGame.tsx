@@ -69,6 +69,7 @@ const LudkaGame: FC = () => {
   const dispatch = useAppDispatch();
   const [emojiPositions, setEmojiPositions] = useState<Record<string, { top: string, left: string }>>({});
   const [playerEmojis, setPlayerEmojis] = useState<Record<number, string>>({});
+  const [isEmojiButtonDisabled, setIsEmojiButtonDisabled] = useState<boolean>(false);
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -402,6 +403,12 @@ const LudkaGame: FC = () => {
   };
 
   const handleEmojiSelect = (emoji: string) => {
+    const newPosition = getRandomPosition();
+    setEmojiPositions(prev => ({
+      ...prev,
+      [userId]: newPosition
+    }));
+
     const data = {
       user_id: userId,
       room_id: roomId,
@@ -411,7 +418,25 @@ const LudkaGame: FC = () => {
     triggerHapticFeedback('impact', 'soft');
     sendMessage(data);
     setShowEmojiOverlay(false);
+    setIsEmojiButtonDisabled(true);
+    setTimeout(() => {
+      setIsEmojiButtonDisabled(false);
+    }, 2000);
   };
+
+  useEffect(() => {
+    setEmojiPositions(prev => {
+      const newPositions = { ...prev };
+      const currentEmojis = Object.keys(newPositions).length;
+      
+      if (currentEmojis >= 6) {
+        const oldestEmojiKey = Object.keys(newPositions)[0];
+        delete newPositions[oldestEmojiKey];
+      }
+
+      return newPositions;
+    });
+  }, [playerEmojis]);
 
   const getActiveEmojis = useMemo(() => {
     if (!gameState.data?.players) return [];
@@ -419,39 +444,21 @@ const LudkaGame: FC = () => {
     return gameState.data.players
       .filter(player => {
         const emoji = playerEmojis[player.userid];
-        return emoji && emoji !== 'none';
+        return emoji && emoji !== 'none' && emojiPositions[player.userid];
       })
       .map(player => ({
         userId: player.userid,
         emoji: playerEmojis[player.userid],
         name: player.publicname,
         avatar: player.avatar,
-        position: emojiPositions[player.userid] || getRandomPosition(),
+        position: emojiPositions[player.userid],
         item: {
           item_pic: player.item_pic,
           item_mask: player.item_mask
         }
       }))
-      .slice(0, 4);
+      .slice(0, 6);
   }, [gameState.data?.players, playerEmojis, emojiPositions]);
-
-  useEffect(() => {
-    if (gameState.data?.players) {
-      const activePlayerIds = gameState.data.players
-        .filter((player: any) => player.emoji && player.emoji !== 'none' && player.emoji !== '')
-        .map((player: any) => player.userid);
-
-      setEmojiPositions(prev => {
-        const newPositions = { ...prev };
-        Object.keys(newPositions).forEach(userId => {
-          if (!activePlayerIds.includes(Number(userId))) {
-            delete newPositions[userId];
-          }
-        });
-        return newPositions;
-      });
-    }
-  }, [gameState.data?.players]);
 
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -586,10 +593,13 @@ const LudkaGame: FC = () => {
                       <button
                         className={styles.game__emojiButton}
                         onClick={handleShowEmojiOverlay}
+                        disabled={isEmojiButtonDisabled}
                       >
-                        <img src={emoji_icon}
+                        <img 
+                          src={emoji_icon}
                           alt="emoji icon"
-                          className={styles.game__iconEmoji}
+                          className={`${styles.game__iconEmoji} 
+                          ${isEmojiButtonDisabled ? styles.game__iconEmoji_disabled : ''}`}
                         />
                       </button>
                     </div>
