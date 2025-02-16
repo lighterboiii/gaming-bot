@@ -58,6 +58,7 @@ export const RockPaperScissors: FC = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
   const [playerEmojis, setPlayerEmojis] = useState<Record<number, string>>({});
+  const prevPlayersCountRef = useRef<number>(0);
 
   useEffect(() => {
     tg.setHeaderColor('#1b50b8');
@@ -163,19 +164,25 @@ export const RockPaperScissors: FC = () => {
     const handleRegularMessage = (res: any) => {
       switch (res.type) {
         case 'room_info':
+          const currentPlayersCount = res?.players?.length || 0;
+          if (prevPlayersCountRef.current < currentPlayersCount) {
+            triggerHapticFeedback('impact', 'heavy');
+          }
+          prevPlayersCountRef.current = currentPlayersCount;
+
           setData(prevData => ({
             ...prevData,
             ...res,
           }));
           setLoading(false);
           break;
-        case 'addplayer':
-          triggerHapticFeedback('impact', 'heavy');
-          // setData(prevData => ({
-          //   ...prevData,
-          //   ...res,
-          // }));
-          break;
+        // case 'addplayer':
+        //   triggerHapticFeedback('impact', 'heavy');
+        //   // setData(prevData => ({
+        //   //   ...prevData,
+        //   //   ...res,
+        //   // }));
+        //   break;
         case 'choice':
           setData(prevData => {
             if (!prevData) return res;

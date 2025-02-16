@@ -72,6 +72,7 @@ const LudkaGame: FC = () => {
   const [isEmojiButtonDisabled, setIsEmojiButtonDisabled] = useState<boolean>(false);
   const [animateBalance, setAnimateBalance] = useState(false);
   const prevBalanceRef = useRef<number>();
+  const prevPlayersCountRef = useRef<number>(0);
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -314,21 +315,28 @@ const LudkaGame: FC = () => {
         break;
       case 'room_info':
         if (isWhoiswin) return;
+      
+        const currentPlayersCount = res?.players?.length || 0;
+        if (prevPlayersCountRef.current < currentPlayersCount) {
+          triggerHapticFeedback('impact', 'heavy');
+        }
+        prevPlayersCountRef.current = currentPlayersCount;
+
         setGameState(prev => ({
           ...prev,
           loading: false,
           data: res,
         }));
         break;
-      case 'addplayer':
-        if (isWhoiswin) return;
-        triggerHapticFeedback('impact', 'heavy');
-        // setGameState(prev => ({
-        //   ...prev,
-        //   data: res,
-        //   winner: null
-        // }));
-        break;
+      // case 'addplayer':
+      //   if (isWhoiswin) return;
+      //   triggerHapticFeedback('impact', 'heavy');
+      //   // setGameState(prev => ({
+      //   //   ...prev,
+      //   //   data: res,
+      //   //   winner: null
+      //   // }));
+      //   break;
       case 'kickplayer':
         if (Number(res?.player_id) === Number(userId)) {
           clearMessages();

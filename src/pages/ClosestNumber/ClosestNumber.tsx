@@ -70,6 +70,7 @@ export const ClosestNumber: FC = () => {
   const [playerEmojis, setPlayerEmojis] = useState<Record<number, string>>({});
   const [animateBalance, setAnimateBalance] = useState(false);
   const prevBalanceRef = useRef<number>();
+  const prevPlayersCountRef = useRef<number>(0);
 
   // установка правил при старте игры
   useEffect(() => {
@@ -154,14 +155,20 @@ export const ClosestNumber: FC = () => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
+          const currentPlayersCount = res?.players?.length || 0;
+          if (prevPlayersCountRef.current < currentPlayersCount) {
+            triggerHapticFeedback('impact', 'heavy');
+          }
+          prevPlayersCountRef.current = currentPlayersCount;
+
           setData(res);
           setLoading(false);
           setIsProcessingWin(false);
           break;
-        case 'addplayer':
-          triggerHapticFeedback('impact', 'heavy');
-          // setData(res);
-          break;
+        // case 'addplayer':
+        //   triggerHapticFeedback('impact', 'heavy');
+        //   // setData(res);
+        //   break;
         case 'kickplayer':
           if (Number(res?.player_id) === Number(userId)) {
             clearMessages();
@@ -418,7 +425,6 @@ export const ClosestNumber: FC = () => {
     };
   }, [timerInterval]);
 
-  // Add this effect to handle balance animation
   useEffect(() => {
     if (currentPlayer) {
       const currentBalance = data?.bet_type === "1" ? currentPlayer.money : currentPlayer.tokens;
