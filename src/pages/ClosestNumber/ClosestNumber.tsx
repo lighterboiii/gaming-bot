@@ -158,7 +158,7 @@ export const ClosestNumber: FC = () => {
           setLoading(false);
           setIsProcessingWin(false);
           break;
-        case 'add_player':
+        case 'addplayer':
           triggerHapticFeedback('impact', 'heavy');
           // setData(res);
           break;

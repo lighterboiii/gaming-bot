@@ -169,7 +169,7 @@ export const RockPaperScissors: FC = () => {
           }));
           setLoading(false);
           break;
-        case 'add_player':
+        case 'addplayer':
           triggerHapticFeedback('impact', 'heavy');
           // setData(prevData => ({
           //   ...prevData,

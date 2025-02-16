@@ -320,7 +320,7 @@ const LudkaGame: FC = () => {
           data: res,
         }));
         break;
-      case 'add_player':
+      case 'addplayer':
         if (isWhoiswin) return;
         triggerHapticFeedback('impact', 'heavy');
         // setGameState(prev => ({
