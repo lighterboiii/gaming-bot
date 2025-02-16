@@ -169,6 +169,13 @@ export const RockPaperScissors: FC = () => {
           }));
           setLoading(false);
           break;
+        case 'add_player':
+          triggerHapticFeedback('impact', 'heavy');
+          // setData(prevData => ({
+          //   ...prevData,
+          //   ...res,
+          // }));
+          break;
         case 'choice':
           setData(prevData => {
             if (!prevData) return res;
@@ -266,6 +273,7 @@ export const RockPaperScissors: FC = () => {
       const res = JSON.parse(message);
       switch (res?.type) {
         case 'room_info':
+        case 'add_player':
         case 'choice':
         case 'emoji':
         case 'kickplayer':

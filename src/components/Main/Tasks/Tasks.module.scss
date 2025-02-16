@@ -40,7 +40,7 @@
   &__board {
     @include indents(6px 16px 0, 0);
     @include flex(column, flex-start, center, 10px);
-    @include size(100%, 40vh);
+    @include size(100%, 70%);
     overflow: scroll;
     z-index: 3;
   }

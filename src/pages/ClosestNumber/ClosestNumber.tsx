@@ -155,6 +155,10 @@ export const ClosestNumber: FC = () => {
           setLoading(false);
           setIsProcessingWin(false);
           break;
+        case 'add_player':
+          triggerHapticFeedback('impact', 'heavy');
+          // setData(res);
+          break;
         case 'kickplayer':
           if (Number(res?.player_id) === Number(userId)) {
             clearMessages();

@@ -17,6 +17,9 @@
 
   &__icon {
     @include size(42px, 52px);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 
     @media screen and (min-height: 690px) {
       @include size(48px, 62px);
@@ -26,6 +29,9 @@
   &__button {
     @include button-style-reset();
     cursor: pointer;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 
     &:nth-child(1) {
       animation: buttonPulse 9s infinite;
@@ -62,9 +68,9 @@
 
 @keyframes buttonPulse {
   0%, 30%, 100% {
-    transform: scale(1);
+    transform: translateZ(0) scale(1);
   }
   15% {
-    transform: scale(1.1);
+    transform: translateZ(0) scale(1.1);
   }
 }

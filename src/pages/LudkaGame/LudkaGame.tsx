@@ -320,11 +320,12 @@ const LudkaGame: FC = () => {
         break;
       case 'add_player':
         if (isWhoiswin) return;
-        setGameState(prev => ({
-          ...prev,
-          data: res,
-          winner: null
-        }));
+        triggerHapticFeedback('impact', 'heavy');
+        // setGameState(prev => ({
+        //   ...prev,
+        //   data: res,
+        //   winner: null
+        // }));
         break;
       case 'kickplayer':
         if (Number(res?.player_id) === Number(userId)) {
@@ -367,9 +368,24 @@ const LudkaGame: FC = () => {
       triggerHapticFeedback('notification', 'error');
     }
 
+    setOverlayState(prev => ({ 
+      ...prev, 
+      show: false, 
+      isVisible: false, 
+      inputValue: '' 
+    }));
+    setLogState(prev => ({ 
+      ...prev, 
+      show: false, 
+      isVisible: false 
+    }));
+    setShowEmojiOverlay(false);
+    setIsEmojiButtonDisabled(false);
+    setErrorMessage('');
+    setPendingBet('');
+
     setGameState(prev => ({ ...prev, winner }));
     setLogState(prev => ({ ...prev, resetHistory: true }));
-    setPendingBet('');
 
     const timer = setTimeout(() => {
       setGameState(prev => ({
@@ -381,7 +397,7 @@ const LudkaGame: FC = () => {
     }, 6000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [userId]);
 
   const currentPlayerBalance = useMemo(() => {
     const currentPlayer = gameState.data?.players?.find(player => player.userid === Number(userId));
