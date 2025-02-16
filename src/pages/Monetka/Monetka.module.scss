@@ -331,6 +331,20 @@
     font-size: 11px;
     font-weight: 700;
     z-index: 12;
+    will-change: transform, filter;
+    transform: translateZ(0);
+
+    &.animate {
+      animation: valueChange 0.5s ease-out;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: valueChange 0.5s ease-out, shine 0.5s ease-out;
+    }
   }
 
   &__logo {
@@ -456,5 +470,29 @@
   100% {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes valueChange {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }

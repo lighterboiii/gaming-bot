@@ -194,6 +194,20 @@
     @include indents($space-10, 0);
     text-align: center;
     border-radius: $radius-40;
+    will-change: transform, filter;
+    transform: translateZ(0);
+
+    &.animate {
+      animation: valueChange 0.5s ease-out;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: valueChange 0.5s ease-out, shine 0.5s ease-out;
+    }
 
     @media screen and (max-width: 379px) {
       @include indents($space-6, 0);
@@ -388,5 +402,29 @@
     @include max-size(312px, auto);
     @include position(absolute, $bottom: 16px, $left: 50%);
     transform: translateX(-50%);
+  }
+}
+
+@keyframes valueChange {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }

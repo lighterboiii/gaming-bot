@@ -70,6 +70,8 @@ const LudkaGame: FC = () => {
   const [emojiPositions, setEmojiPositions] = useState<Record<string, { top: string, left: string }>>({});
   const [playerEmojis, setPlayerEmojis] = useState<Record<number, string>>({});
   const [isEmojiButtonDisabled, setIsEmojiButtonDisabled] = useState<boolean>(false);
+  const [animateBalance, setAnimateBalance] = useState(false);
+  const prevBalanceRef = useRef<number>();
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -495,6 +497,17 @@ const LudkaGame: FC = () => {
     }, 1000);
   };
 
+  useEffect(() => {
+    const currentBalance = Number(currentPlayerBalance);
+    
+    if (prevBalanceRef.current !== undefined && currentBalance !== prevBalanceRef.current) {
+      setAnimateBalance(true);
+      setTimeout(() => setAnimateBalance(false), 500);
+    }
+    
+    prevBalanceRef.current = currentBalance;
+  }, [currentPlayerBalance]);
+
   return (
     <div className={styles.game}>
       <div className={`${styles.game__content} ${gameState.winner ? styles.game__content_winner : ''}`}>
@@ -623,7 +636,7 @@ const LudkaGame: FC = () => {
                     <div className={styles.game__infoInnerContainer}>
                       <div className={styles.game__info}>
                         <p className={styles.game__text}>{translation?.webapp_balance}</p>
-                        <p className={styles.game__money}>
+                        <p className={`${styles.game__money} ${animateBalance ? styles.animate : ''}`}>
                           {gameState.data?.bet_type === "1" ? MONEY_EMOJI : SHIELD_EMOJI}
                           <span>
                             {currentPlayerBalance}

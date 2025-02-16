@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { FC, useEffect, useState, useContext, useCallback } from 'react';
+import { FC, useEffect, useState, useContext, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { setFourthGameRulesState } from 'services/appSlice';
@@ -35,7 +35,6 @@ import { getUserId } from '../../utils/userConfig';
 
 import styles from './Monetka.module.scss';
 
-// Константы для таймеров анимаций
 const ANIMATION_DELAYS = {
   BUTTON: 150,
   COIN: {
@@ -78,6 +77,8 @@ export const Monetka: FC = () => {
   const [previousCoin, setPreviousCoin] = useState<string | null>(null);
   const [coinAnimationState, setCoinAnimationState] = useState<CoinAnimationState>('default');
   const [commentMessage, setCommentMessage] = useState<string | null>(null);
+  const [animateBalance, setAnimateBalance] = useState(false);
+  const prevBalanceRef = useRef<number>();
 
   // Подключение к WebSocket
   useEffect(() => {
@@ -431,6 +432,18 @@ export const Monetka: FC = () => {
         })
     }, 1000);
   };
+
+  useEffect(() => {
+    const currentBalance = getCurrentPlayerBalance();
+    
+    if (prevBalanceRef.current !== undefined && currentBalance !== prevBalanceRef.current) {
+      setAnimateBalance(true);
+      setTimeout(() => setAnimateBalance(false), 500);
+    }
+    
+    prevBalanceRef.current = currentBalance;
+  }, [getCurrentPlayerBalance]);
+
 // показ лоадера
   if (gameState.loading) {
     return <Loader />;
@@ -574,7 +587,7 @@ export const Monetka: FC = () => {
             </button>
           </div>
           <div className={styles.monetka__balance}>
-            <p className={styles.monetka__balanceText}>
+            <p className={`${styles.monetka__balanceText} ${animateBalance ? styles.animate : ''}`}>
               {translation.webapp_balance}: {getCurrentPlayerBalance().toFixed(2)}
             </p>
           </div>

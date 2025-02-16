@@ -52,6 +52,19 @@
     border-radius: $radius-40;
     font-size: 14px;
     z-index: 5;
+    will-change: transform, filter;
+
+    &.animate {
+      animation: valueChange 0.5s ease-out;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: valueChange 0.5s ease-out, shine 0.5s ease-out;
+    }
   }
 
   &__selectedEmoji {
@@ -83,5 +96,29 @@
     @media screen and (max-width: 379px) {
       @include size(44px, 44px);
     }
+  }
+}
+
+@keyframes valueChange {
+  0% {
+    transform: translate(-50%) scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: translate(-50%) scale(1.1);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: translate(-50%) scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }

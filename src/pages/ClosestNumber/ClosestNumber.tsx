@@ -68,6 +68,9 @@ export const ClosestNumber: FC = () => {
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
   const [lastProcessedRound, setLastProcessedRound] = useState<{value: string, players: number} | null>(null);
   const [playerEmojis, setPlayerEmojis] = useState<Record<number, string>>({});
+  const [animateBalance, setAnimateBalance] = useState(false);
+  const prevBalanceRef = useRef<number>();
+
   // установка правил при старте игры
   useEffect(() => {
     setRulesShown(isRulesShown);
@@ -415,6 +418,20 @@ export const ClosestNumber: FC = () => {
     };
   }, [timerInterval]);
 
+  // Add this effect to handle balance animation
+  useEffect(() => {
+    if (currentPlayer) {
+      const currentBalance = data?.bet_type === "1" ? currentPlayer.money : currentPlayer.tokens;
+      
+      if (prevBalanceRef.current !== undefined && currentBalance !== prevBalanceRef.current) {
+        setAnimateBalance(true);
+        setTimeout(() => setAnimateBalance(false), 500);
+      }
+      
+      prevBalanceRef.current = currentBalance;
+    }
+  }, [currentPlayer, data?.bet_type]);
+
   return (
     <div className={styles.game}>
       {loading ? (
@@ -484,7 +501,7 @@ export const ClosestNumber: FC = () => {
                         readOnly
                       />}
                     <p className={styles.overlay__inputText}>{translation?.your_number_text}</p>
-                    <div className={styles.overlay__userMoney}>
+                    <div className={styles.overlay__userMoney + ` ${animateBalance ? styles.animate : ''}`}>
                       <span className={styles.overlay__text}>
                         {data?.bet_type === "1"
                           ? `${MONEY_EMOJI} ${currentPlayer?.money && formatNumber(currentPlayer?.money)}`

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FC } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 import { formatNumber } from "utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "utils/constants";
@@ -13,6 +13,27 @@ import styles from './Players.module.scss';
 
 const Players: FC<IPlayersProps> = ({ data, playerEmojis }) => {
   const userId = getUserId();
+  const [animateBalance, setAnimateBalance] = useState(false);
+  const prevBalanceRef = useRef<{ [key: string]: number }>({});
+
+  useEffect(() => {
+    data?.players?.forEach((player: IPlayer) => {
+      if (Number(player.userid) === Number(userId)) {
+        const currentBalance = data.bet_type === "1" ? player.money : player.tokens;
+        const prevBalance = prevBalanceRef.current[player.userid];
+        
+        if (prevBalance !== undefined && currentBalance !== prevBalance) {
+          // setTimeout(() => {
+            setAnimateBalance(true);
+            setTimeout(() => setAnimateBalance(false), 500);
+          // }, 4000);
+        }
+        
+        prevBalanceRef.current[player.userid] = currentBalance;
+      }
+    });
+  }, [data?.players, data?.bet_type, userId]);
+
   return (
     <div className={styles.players}>
       {data?.players?.map((player: IPlayer) => (
@@ -35,7 +56,7 @@ const Players: FC<IPlayersProps> = ({ data, playerEmojis }) => {
               className={styles.players__readyIcon} />
           )}
           {Number(player?.userid) === Number(userId) && player?.choice !== 'ready' && (
-            <div className={styles.players__balance}>
+            <div className={`${styles.players__balance} ${animateBalance ? styles.animate : ''}`}>
               {data?.bet_type === "1" && data
                 ? `${MONEY_EMOJI} ${formatNumber(player?.money)}`
                 : `${SHIELD_EMOJI} ${formatNumber(player?.tokens)}`
