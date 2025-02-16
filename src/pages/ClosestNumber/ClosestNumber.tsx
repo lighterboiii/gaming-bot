@@ -157,7 +157,7 @@ export const ClosestNumber: FC = () => {
         case 'room_info':
           const currentPlayersCount = res?.players?.length || 0;
           if (prevPlayersCountRef.current < currentPlayersCount) {
-            triggerHapticFeedback('impact', 'heavy');
+            triggerHapticFeedback('notification', 'warning');
           }
           prevPlayersCountRef.current = currentPlayersCount;
 

@@ -1,7 +1,7 @@
 import { postEvent } from "@tma.js/sdk";
 
 export const triggerHapticFeedback = 
-(type: 'impact' | 'notification', style?: 'light' | 'soft' | 'heavy' | 'success' | 'error') => {
+(type: 'impact' | 'notification', style?: 'light' | 'soft' | 'heavy' | 'success' | 'error' | 'warning') => {
   if (process.env.REACT_APP_ENABLE_HAPTIC !== 'true') return;
   
   if (type === 'impact') {

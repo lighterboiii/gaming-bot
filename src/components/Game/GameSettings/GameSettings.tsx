@@ -89,8 +89,6 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
     }
   }, [parsedMessages, navigate, translation, data]);
 
-  // const handleCurrencyChange = (newCurrency: number) => setCurrency(newCurrency);
-
   const handleBetChange = (newBet: number) => {
     setBetString(newBet.toFixed(1));
   };
