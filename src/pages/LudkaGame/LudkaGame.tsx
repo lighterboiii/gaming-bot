@@ -328,15 +328,6 @@ const LudkaGame: FC = () => {
           data: res,
         }));
         break;
-      // case 'addplayer':
-      //   if (isWhoiswin) return;
-      //   triggerHapticFeedback('impact', 'heavy');
-      //   // setGameState(prev => ({
-      //   //   ...prev,
-      //   //   data: res,
-      //   //   winner: null
-      //   // }));
-      //   break;
       case 'kickplayer':
         if (Number(res?.player_id) === Number(userId)) {
           clearMessages();

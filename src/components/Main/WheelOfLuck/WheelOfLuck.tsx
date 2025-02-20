@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { FC, useEffect, useRef, useState } from 'react';
 
+import { triggerHapticFeedback } from 'utils/hapticConfig';
 import { getUserId } from 'utils/userConfig';
 
 import { spinWheelRequest } from '../../../api/mainApi';
@@ -58,6 +59,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
         console.log(res);
         const response = res as ISpinWheelResponse;
         if (response?.fortune_button_result?.message === 'ok') {
+          triggerHapticFeedback('notification', 'success');
           setNoTokens(false);
           dispatch(setTokensValueAfterBuy(100));
           setSpinning(true);
@@ -118,7 +120,7 @@ const WheelOfLuck: FC<IProps> = ({ data, closeOverlay }) => {
           }, 5000);
         } else if (response?.fortune_button_result?.message === 'notokens') {
           setNoTokens(true);
-    
+          triggerHapticFeedback('notification', 'error');
           setTimeout(() => {
             closeOverlay();
             setNoTokens(false);

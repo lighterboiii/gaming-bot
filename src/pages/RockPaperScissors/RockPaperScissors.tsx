@@ -176,13 +176,6 @@ export const RockPaperScissors: FC = () => {
           }));
           setLoading(false);
           break;
-        // case 'addplayer':
-        //   triggerHapticFeedback('impact', 'heavy');
-        //   // setData(prevData => ({
-        //   //   ...prevData,
-        //   //   ...res,
-        //   // }));
-        //   break;
         case 'choice':
           setData(prevData => {
             if (!prevData) return res;
@@ -408,10 +401,10 @@ export const RockPaperScissors: FC = () => {
     };
   }, []);
 
-  // Функция для получения эмодзи игрока
-  const getPlayerEmoji = (playerId: number) => {
-    return playerEmojis[playerId] || '';
-  };
+  // // Функция для получения эмодзи игрока
+  // const getPlayerEmoji = (playerId: number) => {
+  //   return playerEmojis[playerId] || '';
+  // };
 
   if (loading) {
     return <Loader />;
@@ -429,7 +422,7 @@ export const RockPaperScissors: FC = () => {
               <>
                 <Players 
                   data={data as IGameData} 
-                  playerEmojis={playerEmojis}  // Передаем эмодзи в компонент Players
+                  playerEmojis={playerEmojis}
                 />
                 <>
                   {data?.players_count === "2" &&
