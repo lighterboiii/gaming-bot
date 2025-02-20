@@ -35,13 +35,15 @@
     @include min-size(124px, 28px);
     @include indents($space-4 $space-16, 0);
     @include flex(row, center, center, $space-4);
+    width: fit-content;
     background-color: $closest-secondary-color;
     color: $main-color;
     border-radius: $radius-40;
     font-weight: 700;
 
     @media screen and (min-height: 691px) {
-      @include size(100px, 48px);
+      height: 48px;
+      padding: $space-8 $space-16;
     }
   }
 

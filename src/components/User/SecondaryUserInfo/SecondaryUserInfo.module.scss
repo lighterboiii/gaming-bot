@@ -96,6 +96,9 @@
   &__text {
     @include indents();
     @include ellipsis();
+    @include size(auto, 100%);
+    @include min-size(auto, 24px);
+    @include flex(row, center, center, $space-4);
     color: $black-color;
     font-weight: 900;
     font-size: 12px;
@@ -103,6 +106,11 @@
     position: relative;
     will-change: transform, filter;
     transform: translateZ(0);
+    
+    span {
+      display: inline-flex;
+      align-items: center;
+    }
 
     &.animate {
       animation: valueChange 0.5s ease-out;
