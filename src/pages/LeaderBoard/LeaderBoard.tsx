@@ -166,7 +166,7 @@ export const LeaderBoard: FC = () => {
               </div>
             ) : (
               <p className={styles.leaderBoard__text}
-                style={{ alignSelf: 'center', marginLeft: '30px' }} >
+                style={{ alignSelf: 'center'}} >
                 {translation?.leaderboard_empty}
               </p>
             )}
