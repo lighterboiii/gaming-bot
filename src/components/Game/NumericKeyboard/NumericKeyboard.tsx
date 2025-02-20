@@ -65,6 +65,10 @@ const NumericKeyboard: FC<IProps> = ({
       }
     }
 
+    if (inputValue.length > 7) {
+      return;
+    }
+
     if (inputValue === '') {
       setInputValue(key);
       return;
