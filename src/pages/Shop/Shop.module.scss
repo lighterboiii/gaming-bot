@@ -46,6 +46,12 @@
     @include size(100%, auto);
     @include max-size(390px, 100%);
     @include flex(row-reverse, space-between, center);
+    transition: opacity 0.3s ease;
+
+    &.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
 
     @media screen and (max-width: 379px) {
       gap: $space-6;
@@ -97,7 +103,7 @@
 }
 
 .hidden {
-  height: 0;
-  overflow: hidden;
-  transition: height 1s ease;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }

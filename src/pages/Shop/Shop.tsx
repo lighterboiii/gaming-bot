@@ -166,7 +166,7 @@ export const Shop: FC = () => {
         <UserInfo />
       </header>
       <section className={`${styles.shop__content} ${showOverlay ? styles.hidden : ''}`}>
-        <nav className={styles.shop__buttons}>
+        <nav className={`${styles.shop__buttons} ${showOverlay ? styles.hidden : ''}`}>
           <div className={styles.shop__leftButtonsContainer}>
             <button
               aria-pressed={activeButton === `${translation?.shop_button}`}
