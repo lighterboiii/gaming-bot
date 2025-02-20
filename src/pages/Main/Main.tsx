@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getUserId } from "utils/userConfig";
@@ -33,6 +33,7 @@ export const Main: FC = () => {
   const translation = useAppSelector(store => store.app.languageSettings);
   const banners = useAppSelector(store => store.app.bannerData);
   const shopImageUrl = useAppSelector(store => store.app.shopImage);
+  const bonusShownRef = useRef(false);
   const [currentBanner, setCurrentBanner] = useState(banners?.length ? banners[0] : null);
   const [showBonusOverlay, setShowBonusOverlay] = useState(false);
   const [showBannerOverlay, setShowBannerOverlay] = useState(false);
@@ -65,6 +66,9 @@ export const Main: FC = () => {
   };
   const toggleBonusOverlay = () => {
     setShowBonusOverlay(!showBonusOverlay);
+    if (!showBonusOverlay === false) {
+      bonusShownRef.current = false;
+    }
   };
   const toggleTasksOverlay = () => {
     setShowTasksOverlay(!showTasksOverlay);
@@ -89,9 +93,10 @@ export const Main: FC = () => {
   };
 
   useEffect(() => {
-    if (dailyBonusData && dailyBonusData !== "no") {
+    if (dailyBonusData && dailyBonusData !== "no" && !bonusShownRef.current) {
       const timer = setTimeout(() => {
         setShowBonusOverlay(true);
+        bonusShownRef.current = true;
       }, 500);
       return () => clearTimeout(timer);
     }
