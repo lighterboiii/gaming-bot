@@ -47,7 +47,13 @@ export const Main: FC = () => {
     setShowReferralOverlay(false);
   };
 
-  const overlayActive = (showBannerOverlay || showReferralOverlay);
+  const overlayActive = (
+    showBannerOverlay || 
+    showReferralOverlay || 
+    showTasksOverlay || 
+    showWheelOverlay || 
+    showBonusOverlay
+  );
 
   const toggleRefOverlay = () => {
     setShowReferralOverlay(!showReferralOverlay);
@@ -121,7 +127,7 @@ export const Main: FC = () => {
         />
       </header>
 
-      <section className={`${styles.main__content} ${(overlayActive || showBonusOverlay) ? styles.hidden : ''}`}>
+      <section className={`${styles.main__content} ${overlayActive ? styles.hidden : ''}`}>
         <div className={styles.main__addDiv}>
           {banners && banners?.length > 0 && (
             <AdvertisementBanner
