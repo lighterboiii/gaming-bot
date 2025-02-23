@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -93,10 +94,9 @@ export const Main: FC = () => {
   };
 
   useEffect(() => {
-    if (dailyBonusData && dailyBonusData !== "no" && !bonusShownRef.current) {
+    if (dailyBonusData && dailyBonusData !== "no") {
       const timer = setTimeout(() => {
         setShowBonusOverlay(true);
-        bonusShownRef.current = true;
       }, 500);
       return () => clearTimeout(timer);
     }

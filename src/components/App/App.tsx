@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { FC, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { getAppData } from '../../api/mainApi';
+import { getAppData, getDailyBonus } from '../../api/mainApi';
 import useOrientation from '../../hooks/useOrientation';
 import useTelegram from '../../hooks/useTelegram';
 import { ClosestNumber } from '../../pages/ClosestNumber/ClosestNumber';
@@ -101,46 +102,60 @@ export const App: FC = () => {
   }, [tg]);
 
   useEffect(() => {
-    const initializeApp = async () => {
+    const initializeApp = () => {
       setLoading(true);
-      try {
-        const res = await getAppData(userId);
-        if (res.warning === 'warning') {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          setServerWarning(res.warning_message!);
-          setLoading(false);
-          return;
-        }
 
-        // Кэширование изображений
-        if (res.ad_info) {
-          await cacheBanners(res.ad_info);
-        }
-        if (res.shop_image_url) {
-          await cacheShopImage(res.shop_image_url);
-        }
-        dispatch(setBannerData(res.ad_info));
-        dispatch(setShopImage(res.shop_image_url));
-        dispatch(setUserData(res.user_info));
-        dispatch(setUserPhoto(res.avatar));
-        dispatch(setLanguageSettings(res.translate));
-        dispatch(setProductsArchive(res.collectibles_data));
-        dispatch(setShopAvailable(res.shop_available));
-        dispatch(setTaskList(res.tasks_available));
-        dispatch(setFirstGameRuleImage(res.game_rule_1_url));
-        dispatch(setSecondGameRuleImage(res.game_rule_2_url));
-        dispatch(setThirdGameRuleImage(res.game_rule_3_url));
-        dispatch(setFourthGameRuleImage(res.game_rule_4_url));
-        dispatch(setFirstGameRulesState(res.game_rule_1_show));
-        dispatch(setSecondGameRulesState(res.game_rule_2_show));
-        dispatch(setThirdGameRulesState(res.game_rule_3_show));
-        dispatch(setFourthGameRulesState(res.game_rule_4_show));
-        dispatch(setDailyBonus(res.daily_bonus));
-        setLoading(false);
-      } catch (error) {
-        console.error('Get user data error:', error);
-        setLoading(false);
-      }
+      getAppData(userId)
+        .then(async (res) => {
+        console.log(res);
+          if (res.warning === 'warning') {
+            setServerWarning(res.warning_message!);
+            throw new Error('Server warning');
+          }
+
+          const cachePromises = [];
+          if (res.ad_info) {
+            cachePromises.push(cacheBanners(res.ad_info));
+          }
+          if (res.shop_image_url) {
+            cachePromises.push(cacheShopImage(res.shop_image_url));
+          }
+          await Promise.all(cachePromises);
+
+          dispatch(setBannerData(res.ad_info));
+          dispatch(setShopImage(res.shop_image_url));
+          dispatch(setUserData(res.user_info));
+          dispatch(setUserPhoto(res.avatar));
+          dispatch(setLanguageSettings(res.translate));
+          dispatch(setProductsArchive(res.collectibles_data));
+          dispatch(setShopAvailable(res.shop_available));
+          dispatch(setTaskList(res.tasks_available));
+
+          dispatch(setFirstGameRuleImage(res.game_rule_1_url));
+          dispatch(setSecondGameRuleImage(res.game_rule_2_url));
+          dispatch(setThirdGameRuleImage(res.game_rule_3_url));
+          dispatch(setFourthGameRuleImage(res.game_rule_4_url));
+          dispatch(setFirstGameRulesState(res.game_rule_1_show));
+          dispatch(setSecondGameRulesState(res.game_rule_2_show));
+          dispatch(setThirdGameRulesState(res.game_rule_3_show));
+          dispatch(setFourthGameRulesState(res.game_rule_4_show));
+
+          return getDailyBonus(userId);
+        })
+        .then((bonusRes) => {
+          console.log(bonusRes);
+          if (bonusRes?.bonus) {
+            dispatch(setDailyBonus(bonusRes.bonus));
+          }
+        })
+        .catch((error) => {
+          if (error.message !== 'Server warning') {
+            console.error('App initialization error:', error);
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     };
 
     initializeApp();

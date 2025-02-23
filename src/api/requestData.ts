@@ -1,6 +1,7 @@
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 // uri
 export const mainAppDataUri = `get_start_info?user_id=`;
+export const dailyBonusUri = `get_daily_check?user_id=`;
 export const getUserAvatarUri = `getuserphoto?user_id=`;
 export const getLeadersUri = `get_leaderboard_top_users`;
 export const getLavkaUri = `get_lavka_available?user_id=`;

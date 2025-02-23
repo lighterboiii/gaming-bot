@@ -1,8 +1,10 @@
 import { IAppData, IUserPhoto } from "utils/types";
+import { IBonus } from "utils/types/mainTypes";
 
 import { getReq, putReq } from "./api";
 import {
 activeEmojiPackUri,
+  dailyBonusUri,
 fortuneUri,
 fortuneWheelUri,
 getLeadersUri,
@@ -86,4 +88,11 @@ export const taskResultRequest = (userIdValue: number, taskId: number) => {
     userId: userIdValue,
     endpoint: `${taskIdParamString}${taskId}`
   })
+};
+// получить ежедневный бонус
+export const getDailyBonus = (userIdValue: number) => {
+  return getReq<{ bonus: IBonus }>({
+    uri: dailyBonusUri,
+    userId: userIdValue,
+  });
 };

@@ -33,6 +33,7 @@ export interface IUserData {
 }
 
 export interface IBonus {
+  bonus?: string;
   bonus_count: number;
   bonus_image: string;
   bonus_item_id: number;
