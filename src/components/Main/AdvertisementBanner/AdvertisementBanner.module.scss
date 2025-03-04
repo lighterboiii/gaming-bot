@@ -19,7 +19,6 @@
   }
 
   @media screen and (max-width: 430px) {
-    // height: 112px;
     background-size: 100% auto;
   }
 
@@ -40,13 +39,14 @@
     @include indents();
     @include size(70%, auto);
     @include min-size(60%, 28px);
-    @include position(absolute, $left: $space-16, $top: 20%);
+    @include position(absolute, $left: $space-32, $top: 20%);
     font-family: 'Rubik', sans-serif;
     font-weight: 900;
     font-size: 14px;
     line-height: 1.2;
-    text-wrap: wrap;
+    white-space: pre-wrap;
     text-align: left;
+    max-width: 80%;
     
     @media screen and (max-width: 379px) {
       font-size: 12px;
@@ -56,13 +56,14 @@
 
   &__text {
     @include indents();
-    @include position(absolute, $left: $space-16, $bottom: 10%);
+    @include position(absolute, $left: $space-32, $bottom: 10%);
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
     font-size: 12px;
     line-height: 1.2;
-    text-wrap: nowrap;
+    white-space: pre-wrap;
     text-align: left;
+    max-width: 80%;
     
     @media screen and (max-width: 379px) {
       font-size: 11px;
