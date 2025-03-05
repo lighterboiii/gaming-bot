@@ -107,7 +107,6 @@ export const App: FC = () => {
 
       getAppData(userId)
         .then(async (res) => {
-        console.log(res);
           if (res.warning === 'warning') {
             setServerWarning(res.warning_message!);
             throw new Error('Server warning');
@@ -143,7 +142,6 @@ export const App: FC = () => {
           return getDailyBonus(userId);
         })
         .then((bonusRes) => {
-          console.log(bonusRes);
           if (bonusRes?.bonus) {
             dispatch(setDailyBonus(bonusRes.bonus));
           }

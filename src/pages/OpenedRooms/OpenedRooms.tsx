@@ -191,10 +191,6 @@ export const OpenedRooms: FC = () => {
     navigate("/create-room");
   };
 
-  // if (!isPortrait) {
-  //   return <Warning />;
-  // }
-
   return (
     <main className={styles.rooms}>
       <header className={styles.rooms__content}>
