@@ -18,3 +18,8 @@ export function formatNumberSecond(number: number) {
   const fixedNumber = number.toFixed(4);
   return fixedNumber.endsWith('.00') ? fixedNumber.slice(0, -3) : fixedNumber;
 }
+
+export function formatToInt(number: number) {
+  const fixedNumber = number.toFixed(0);
+  return fixedNumber.endsWith('.00') ? fixedNumber.slice(0, -3) : fixedNumber;
+}

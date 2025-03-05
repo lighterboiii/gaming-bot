@@ -51,7 +51,6 @@ export const LeaderBoard: FC = () => {
       setLoading(true);
       getTopUsers()
         .then((response) => {
-          console.log(response);
           const leaders = response as ITopUsersRes;
           if (leaders?.top_users.length > 0) {
             setTopLeader(leaders?.top_users[0]);
@@ -81,7 +80,6 @@ export const LeaderBoard: FC = () => {
       getTopUsers()
         .then((response) => {
           const leaders = response as ITopUsersRes;
-          console.log(leaders);
           setTime({
             days: leaders?.days,
             hours: leaders?.hours,

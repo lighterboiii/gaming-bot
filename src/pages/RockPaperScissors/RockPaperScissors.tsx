@@ -2,7 +2,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, useCallback, useEffect, useRef, useState, useContext } from "react";
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+} from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import { setFirstGameRulesState } from "services/appSlice";
@@ -18,17 +25,17 @@ import { setGameRulesWatched } from "../../api/gameApi";
 import { getAppData } from "../../api/mainApi";
 import EmojiOverlay from "../../components/EmojiOverlay/EmojiOverlay";
 import ChoiceBox from "../../components/Game/ChoiceBox/ChoiceBox";
-import HandShake from '../../components/Game/HandShake/HandShake';
+import HandShake from "../../components/Game/HandShake/HandShake";
 import Players from "../../components/Game/RPSPlayers/Players";
 import Rules from "../../components/Game/Rules/Rules";
 import Loader from "../../components/Loader/Loader";
 import useTelegram from "../../hooks/useTelegram";
-import emoji_icon from '../../images/rock-paper-scissors/emoji_icon.png';
-import newVS from '../../images/rock-paper-scissors/VS_new.png';
-import lLoseAnim from '../../images/rock-paper-scissors/winlose/l_lose.png';
-import lWinAnim from '../../images/rock-paper-scissors/winlose/l_win.png';
-import rLoseAnim from '../../images/rock-paper-scissors/winlose/r_lose.png';
-import rWinAnim from '../../images/rock-paper-scissors/winlose/r_win.png';
+import emoji_icon from "../../images/rock-paper-scissors/emoji_icon.png";
+import newVS from "../../images/rock-paper-scissors/VS_new.png";
+import lLoseAnim from "../../images/rock-paper-scissors/winlose/l_lose.png";
+import lWinAnim from "../../images/rock-paper-scissors/winlose/l_win.png";
+import rLoseAnim from "../../images/rock-paper-scissors/winlose/r_lose.png";
+import rWinAnim from "../../images/rock-paper-scissors/winlose/r_win.png";
 
 import styles from "./RockPaperScissors.module.scss";
 
@@ -40,20 +47,24 @@ export const RockPaperScissors: FC = () => {
   const { roomId } = useParams<{ roomId: string | any }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<IGameData | null>(null);
-  const [choice, setChoice] = useState<string>('');
+  const [choice, setChoice] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState<string>("");
   const [animation, setAnimation] = useState<any>(null);
   const [animationKey, setAnimationKey] = useState(0);
   const [showEmojiOverlay, setShowEmojiOverlay] = useState<boolean>(false);
   const [messageVisible, setMessageVisible] = useState(false);
-  const [playersAnim, setPlayersAnim] = useState({ firstAnim: null, secondAnim: null });
+  const [playersAnim, setPlayersAnim] = useState({
+    firstAnim: null,
+    secondAnim: null,
+  });
   const [rules, setRulesShown] = useState<boolean | null>(false);
   const [isChoiceLocked, setIsChoiceLocked] = useState<boolean>(false);
-  const translation = useAppSelector(store => store.app.languageSettings);
-  const isRulesShown = useAppSelector(store => store.app.firstGameRulesState);
-  const ruleImage = useAppSelector(store => store.app.RPSRuleImage);
-  const { sendMessage, wsMessages, clearMessages } = useContext(WebSocketContext)!;
+  const translation = useAppSelector((store) => store.app.languageSettings);
+  const isRulesShown = useAppSelector((store) => store.app.firstGameRulesState);
+  const ruleImage = useAppSelector((store) => store.app.RPSRuleImage);
+  const { sendMessage, wsMessages, clearMessages } =
+    useContext(WebSocketContext)!;
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
@@ -61,13 +72,13 @@ export const RockPaperScissors: FC = () => {
   const prevPlayersCountRef = useRef<number>(0);
 
   useEffect(() => {
-    tg.setHeaderColor('#1b50b8');
+    tg.setHeaderColor("#1b50b8");
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
       sendMessage({
         user_id: userId,
         room_id: roomId,
-        type: 'kickplayer'
+        type: "kickplayer",
       });
       clearMessages();
       navigate(indexUrl, { replace: true });
@@ -75,8 +86,8 @@ export const RockPaperScissors: FC = () => {
 
     return () => {
       tg.BackButton.hide();
-      tg.setHeaderColor('#d51845');
-    }
+      tg.setHeaderColor("#d51845");
+    };
   }, [tg, navigate, userId]);
   // запрос результата хода
   const updateAnimation = useCallback((newAnimation: string) => {
@@ -100,7 +111,7 @@ export const RockPaperScissors: FC = () => {
       sendMessage({
         user_id: userId,
         room_id: roomId,
-        type: 'room_info'
+        type: "room_info",
       });
     };
 
@@ -139,9 +150,9 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     const handleTimerMessages = (message: any) => {
       const res = JSON.parse(message);
-      if (res?.type === 'timer_started') {
+      if (res?.type === "timer_started") {
         handleTimer(res.timer_time);
-      } else if (res?.type === 'timer_stopped') {
+      } else if (res?.type === "timer_stopped") {
         if (timerRef.current) {
           clearInterval(timerRef.current);
           timerRef.current = null;
@@ -163,39 +174,39 @@ export const RockPaperScissors: FC = () => {
   useEffect(() => {
     const handleRegularMessage = (res: any) => {
       switch (res.type) {
-        case 'room_info':
+        case "room_info":
           const currentPlayersCount = res?.players?.length || 0;
           if (prevPlayersCountRef.current < currentPlayersCount) {
-            triggerHapticFeedback('notification', 'warning');
+            triggerHapticFeedback("notification", "warning");
           }
           prevPlayersCountRef.current = currentPlayersCount;
 
-          setData(prevData => ({
+          setData((prevData) => ({
             ...prevData,
             ...res,
           }));
           setLoading(false);
           break;
-        case 'choice':
-          setData(prevData => {
+        case "choice":
+          setData((prevData) => {
             if (!prevData) return res;
             return {
               ...prevData,
-              players: prevData.players.map(player => {
+              players: prevData.players.map((player) => {
                 const updatedPlayer = res.players.find((p: IPlayer) => p.userid === player.userid);
                 return updatedPlayer ? { ...player, ...updatedPlayer } : player;
-              })
+              }),
             };
           });
           break;
-        case 'emoji':
+        case "emoji":
           // Обновляем эмодзи в отдельном стейте
-          setPlayerEmojis(prev => ({
+          setPlayerEmojis((prev) => ({
             ...prev,
-            [res.user_id]: res.emoji
+            [res.user_id]: res.emoji,
           }));
           break;
-        case 'kickplayer':
+        case "kickplayer":
           if (Number(res?.player_id) === Number(userId)) {
             navigate(indexUrl, { replace: true });
             clearMessages();
@@ -211,38 +222,47 @@ export const RockPaperScissors: FC = () => {
       });
 
       const animationTime = 3000;
-      setAnimationKey(prevKey => prevKey + 1);
+      setAnimationKey((prevKey) => prevKey + 1);
 
       const gameResult = (() => {
         if (Number(res?.whoiswin.winner) === Number(userId)) {
-          triggerHapticFeedback('notification', 'success');
+          triggerHapticFeedback("notification", "success");
           return {
-            animation: Number(data?.creator_id) === Number(res?.whoiswin.winner)
-              ? lWinAnim
-              : rWinAnim,
-            message: `${translation?.you_won} ${res?.whoiswin.winner_value !== 'none'
-              ? `${res?.whoiswin.winner_value} ${data?.bet_type === "1" 
-              ? `${MONEY_EMOJI}` 
-              : `${SHIELD_EMOJI}`}`
-              : ''}`
+            animation:
+              Number(data?.creator_id) === Number(res?.whoiswin.winner)
+                ? lWinAnim
+                : rWinAnim,
+            message: `${translation?.you_won} ${
+              res?.whoiswin.winner_value !== "none"
+                ? `${res?.whoiswin.winner_value} ${
+                    data?.bet_type === "1"
+                      ? `${MONEY_EMOJI}`
+                      : `${SHIELD_EMOJI}`
+                  }`
+                : ""
+            }`,
           };
         }
-        if (Number(res?.whoiswin.winner) !== Number(userId) && res?.whoiswin.winner !== 'draw') {
-          triggerHapticFeedback('notification', 'error');
+        if (
+          Number(res?.whoiswin.winner) !== Number(userId) &&
+          res?.whoiswin.winner !== "draw"
+        ) {
+          triggerHapticFeedback("notification", "error");
           return {
-            animation: Number(data?.creator_id) === Number(res?.whoiswin.winner)
-              ? lLoseAnim
-              : rLoseAnim,
-            message: `${translation?.you_lost} ${data?.bet} ${data?.bet_type === "1" 
-              ? `${MONEY_EMOJI}` 
-              : `${SHIELD_EMOJI}`}`
+            animation:
+              Number(data?.creator_id) === Number(res?.whoiswin.winner)
+                ? lLoseAnim
+                : rLoseAnim,
+            message: `${translation?.you_lost} ${data?.bet} ${
+              data?.bet_type === "1" ? `${MONEY_EMOJI}` : `${SHIELD_EMOJI}`
+            }`,
           };
         }
-        if (res?.whoiswin.winner === 'draw') {
-          triggerHapticFeedback('impact', 'heavy');
+        if (res?.whoiswin.winner === "draw") {
+          triggerHapticFeedback("impact", "heavy");
           return {
             animation: null,
-            message: translation?.draw
+            message: translation?.draw,
           };
         }
         return null;
@@ -272,14 +292,14 @@ export const RockPaperScissors: FC = () => {
     const messageHandler = (message: any) => {
       const res = JSON.parse(message);
       switch (res?.type) {
-        case 'room_info':
-        case 'add_player':
-        case 'choice':
-        case 'emoji':
-        case 'kickplayer':
+        case "room_info":
+        case "add_player":
+        case "choice":
+        case "emoji":
+        case "kickplayer":
           handleRegularMessage(res);
           break;
-        case 'whoiswin':
+        case "whoiswin":
           if (message === wsMessages[wsMessages.length - 1]) {
             handleWinMessage(res);
           }
@@ -301,45 +321,45 @@ export const RockPaperScissors: FC = () => {
     const player = data?.players.find((player: any) => Number(player?.userid) === Number(userId));
 
     if (data?.bet_type === "1") {
-      if (player?.money && (player?.money <= Number(data?.bet))) {
+      if (player?.money && player?.money <= Number(data?.bet)) {
         sendMessage({
           user_id: player?.userid,
           room_id: roomId,
-          type: 'kickplayer'
+          type: "kickplayer",
         });
 
         if (player?.userid === userId) {
           const currentUrl = location.pathname;
           currentUrl !== indexUrl && navigate(indexUrl);
         }
-        triggerHapticFeedback('notification', 'error');
+        triggerHapticFeedback("notification", "error");
         return;
       }
     } else if (data?.bet_type === "3") {
-      if (player?.tokens && (player?.tokens <= Number(data?.bet))) {
+      if (player?.tokens && player?.tokens <= Number(data?.bet)) {
         sendMessage({
           user_id: userId,
           room_id: roomId,
-          type: 'kickplayer'
+          type: "kickplayer",
         });
 
-        triggerHapticFeedback('notification', 'error');
+        triggerHapticFeedback("notification", "error");
         return;
       }
     }
 
     setMessageVisible(false);
     setIsChoiceLocked(false);
-    setMessage('');
+    setMessage("");
 
     sendMessage({
       user_id: userId,
       room_id: roomId,
-      type: 'choice',
-      choice: 'ready'
+      type: "choice",
+      choice: "ready",
     });
 
-    triggerHapticFeedback('impact', 'soft');
+    triggerHapticFeedback("impact", "soft");
   };
   // хендлер выбора хода Websocket
   const handleChoice = (value: string) => {
@@ -348,29 +368,29 @@ export const RockPaperScissors: FC = () => {
     const choice = {
       user_id: userId,
       room_id: roomId,
-      type: 'choice',
-      choice: value
+      type: "choice",
+      choice: value,
     };
 
     sendMessage(choice);
-    triggerHapticFeedback('impact', 'soft');
+    triggerHapticFeedback("impact", "soft");
   };
   // хендлер отпрвки эмодзи websocket
   const handleEmojiSelect = (emoji: string) => {
     const data = {
       user_id: userId,
       room_id: roomId,
-      type: 'emoji',
-      emoji: emoji
+      type: "emoji",
+      emoji: emoji,
     };
     sendMessage(data);
-    triggerHapticFeedback('impact', 'soft');
+    triggerHapticFeedback("impact", "soft");
     setShowEmojiOverlay(false);
   };
   // обработчик клика по кнопке "Ознакомился" - е Websocket
   const handleRuleButtonClick = () => {
-    setGameRulesWatched(userId, '1');
-    triggerHapticFeedback('impact', 'soft');
+    setGameRulesWatched(userId, "1");
+    triggerHapticFeedback("impact", "soft");
     setRulesShown(true);
     setTimeout(() => {
       getAppData(userId)
@@ -378,19 +398,19 @@ export const RockPaperScissors: FC = () => {
           dispatch(setFirstGameRulesState(res.game_rule_1_show));
         })
         .catch((error) => {
-          console.error('Get user data error:', error);
-        })
+          console.error("Get user data error:", error);
+        });
     }, 1000);
   };
 
   const handleShowEmojiOverlay = () => {
-    triggerHapticFeedback('impact', 'light');
+    triggerHapticFeedback("impact", "light");
     setShowEmojiOverlay(true);
   };
 
   const handleCloseEmojiOverlay = () => {
-    triggerHapticFeedback('impact', 'soft');
-    setShowEmojiOverlay(!showEmojiOverlay)
+    triggerHapticFeedback("impact", "soft");
+    setShowEmojiOverlay(!showEmojiOverlay);
   };
 
   useEffect(() => {
@@ -400,11 +420,6 @@ export const RockPaperScissors: FC = () => {
       }
     };
   }, []);
-
-  // // Функция для получения эмодзи игрока
-  // const getPlayerEmoji = (playerId: number) => {
-  //   return playerEmojis[playerId] || '';
-  // };
 
   if (loading) {
     return <Loader />;
@@ -416,58 +431,65 @@ export const RockPaperScissors: FC = () => {
         className={styles.game__result}
         style={{ backgroundImage: `url(${animation}?key=${animationKey})` }}
       >
-        {loading ? <Loader /> : (
+        {loading ? (
+          <Loader />
+        ) : (
           <>
             {rules ? (
               <>
-                <Players 
-                  data={data as IGameData} 
-                  playerEmojis={playerEmojis}
-                />
+                <Players data={data as IGameData} playerEmojis={playerEmojis} />
                 <>
                   {data?.players_count === "2" &&
-                    data?.players?.every((player: IPlayer) => player?.choice === 'ready') &&
-                    <img src={newVS}
-                      alt="versus icon"
-                      className={styles.game__versusImage} />}
+                    data?.players?.every((player: IPlayer) => player?.choice === "ready") && (
+                      <img
+                        src={newVS}
+                        alt="versus icon"
+                        className={styles.game__versusImage}
+                      />
+                    )}
                   {messageVisible ? (
-                    <p className={styles.game__resultMessage}>
-                      {message}
-                    </p>
+                    <p className={styles.game__resultMessage}>{message}</p>
                   ) : (
                     <p className={styles.game__timer}>
                       {isTimerShown && timer !== null && timer}
                     </p>
                   )}
                   <div className={styles.game__hands}>
-                    {(
-                      data?.players_count === "2"
-                    ) ? (
+                    {data?.players_count === "2" ? (
                       <HandShake
-                        player1={playersAnim.firstAnim || data?.players[0]?.hands || ''}
-                        player2={playersAnim.secondAnim || data?.players[1]?.hands || ''} />
+                        player1={
+                          playersAnim.firstAnim || data?.players[0]?.hands || ""
+                        }
+                        player2={
+                          playersAnim.secondAnim ||
+                          data?.players[1]?.hands ||
+                          ""
+                        }
+                      />
+                    ) : data?.players_count === "1" ? (
+                      <p className={styles.game__notify}>
+                        {translation?.waiting4players}
+                      </p>
                     ) : (
-                      data?.players_count === "1"
-                    ) ? (
-                      <p className={styles.game__notify}>{translation?.waiting4players}</p>
-                    ) :
-                      ''}
+                      ""
+                    )}
                   </div>
                   <div className={styles.game__lowerContainer}>
                     <div className={styles.game__betContainer}>
-                      <p className={styles.game__text}>{translation?.game_bet_text}</p>
+                      <p className={styles.game__text}>
+                        {translation?.game_bet_text}
+                      </p>
                       <div className={styles.game__bet}>
                         <p className={styles.game__text}>
                           {data?.bet_type === "1"
                             ? `${MONEY_EMOJI}`
-                            : `${SHIELD_EMOJI}`
-                          }
+                            : `${SHIELD_EMOJI}`}
                         </p>
                         <p className={styles.game__text}>{data?.bet}</p>
                       </div>
                     </div>
-                    {(data?.players?.every((player: IPlayer) => player?.choice !== 'none')
-                      && data?.players_count === "2") ? (
+                    {data?.players?.every((player: IPlayer) => player?.choice !== "none") 
+                      && data?.players_count === "2" ? (
                       <div className={styles.game__buttonsWrapper}>
                         <ChoiceBox
                           choice={choice}
@@ -481,9 +503,9 @@ export const RockPaperScissors: FC = () => {
                           type="checkbox"
                           id="ready"
                           onChange={handleReady}
-                          className={styles.game__checkbox} />
-                        <label htmlFor="ready"
-                          className={styles.game__label} />
+                          className={styles.game__checkbox}
+                        />
+                        <label htmlFor="ready" className={styles.game__label} />
                       </div>
                     )}
                     <button
@@ -491,9 +513,11 @@ export const RockPaperScissors: FC = () => {
                       className={`${styles.game__button} ${styles.game__emojiButton}`}
                       onClick={handleShowEmojiOverlay}
                     >
-                      <img src={emoji_icon}
+                      <img
+                        src={emoji_icon}
                         alt="emoji icon"
-                        className={styles.game__iconEmoji} />
+                        className={styles.game__iconEmoji}
+                      />
                     </button>
                   </div>
                 </>
@@ -504,8 +528,7 @@ export const RockPaperScissors: FC = () => {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 ruleImage={ruleImage!}
               />
-            )
-            }
+            )}
           </>
         )}
         <EmojiOverlay

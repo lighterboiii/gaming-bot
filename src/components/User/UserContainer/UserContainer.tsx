@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC } from "react";
 
 import { getUserId } from "utils/userConfig";
 
 import FriendsIcon from "../../../icons/Friends/FriendsIcon";
-import { formatNumber } from "../../../utils/additionalFunctions";
+import { formatNumber, formatToInt } from "../../../utils/additionalFunctions";
 import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
 import { IMember } from "../../../utils/types/memberTypes";
 import UserAvatar from "../../User/UserAvatar/UserAvatar";
@@ -61,8 +60,8 @@ const UserContainer: FC<IProps> = ({
             {leaderBoardType === 'tokens' && `+ ${SHIELD_EMOJI} ${formatNumber(member.coins)}`}
             {leaderBoardType === 'friends' && (
               <>
-                + {member.coins} <FriendsIcon width={16}
-                  height={16} />
+                + {formatToInt(member.coins)} 
+                <FriendsIcon width={16} height={16} />
               </>
             )}
           </p>
