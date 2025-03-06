@@ -44,7 +44,10 @@
     font-weight: 900;
     font-size: 14px;
     line-height: 1.2;
-    white-space: pre-wrap;
+    white-space: pre-wrap !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
     text-align: left;
     max-width: 80%;
     
@@ -61,7 +64,10 @@
     font-weight: 400;
     font-size: 12px;
     line-height: 1.2;
-    white-space: pre-wrap;
+    white-space: pre-wrap !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
     text-align: left;
     max-width: 80%;
     
