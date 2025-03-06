@@ -31,7 +31,7 @@ const Friends: FC = () => {
   const [refsBoard, setRefsBoard] = useState<IMember[] | null>(null);
   const [message, setMessage] = useState("");
   const [messageShown, setMessageShown] = useState(false);
-
+console.log(refsBoard);
   useEffect(() => {
     const fetchData = () => {
       getReferralsData(userId)
