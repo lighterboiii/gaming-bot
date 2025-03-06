@@ -115,7 +115,11 @@
   z-index: 666;
   will-change: transform, height;
   backface-visibility: hidden;
+  transform-style: preserve-3d !important;
+  perspective: 1000px;
+  -webkit-transform-style: preserve-3d !important;
   -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000px;
 
   @media screen and (max-height: 600px) {
     gap: $space-6;

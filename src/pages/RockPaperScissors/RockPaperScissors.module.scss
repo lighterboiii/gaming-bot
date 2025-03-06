@@ -32,7 +32,16 @@
 
   &__iconEmoji {
     @include size(48px, 48px);
-    // animation: shake 3s ease-in-out infinite;
+    animation: shakeEmoji 3s ease-in-out infinite !important;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform-origin: center;
+    transform-style: preserve-3d !important;
+    perspective: 1000px;
+    -webkit-transform-style: preserve-3d !important;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    z-index: 1;
   }
 
   &__lowerContainer {
@@ -157,8 +166,15 @@
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
-    transition: all 0.3s ease;
-    // animation: pulse 2.5s ease-in-out infinite;
+    animation: readyPulse 1.5s ease-in-out infinite !important;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform-style: preserve-3d !important;
+    perspective: 1000px;
+    -webkit-transform-style: preserve-3d !important;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    z-index: 1;
 
     @media screen and (min-height: 691px) {
       @include size(216px, 84px);
@@ -171,29 +187,26 @@
   }
 }
 
-// @keyframes pulse {
-//   0% {
-//     transform: scale(1);
-//   }
-//   50% {
-//     transform: scale(1.05);
-//   }
-//   100% {
-//     transform: scale(1);
-//   }
-// }
+@keyframes shakeEmoji {
+  0%, 85%, 100% {
+    transform: rotate(0deg) !important;
+  }
+  90% {
+    transform: rotate(-8deg) !important;
+  }
+  95% {
+    transform: rotate(8deg) !important;
+  }
+}
 
-// @keyframes shake {
-//   0%, 100% {
-//     transform: rotate(0deg);
-//   }
-//   94% {
-//     transform: rotate(0deg);
-//   }
-//   96% {
-//     transform: rotate(-7deg);
-//   }
-//   98% {
-//     transform: rotate(7deg);
-//   }
-// }
+@keyframes readyPulse {
+  0% {
+    transform: scale(1) !important;
+  }
+  50% {
+    transform: scale(1.05) !important;
+  }
+  100% {
+    transform: scale(1) !important;
+  }
+}
