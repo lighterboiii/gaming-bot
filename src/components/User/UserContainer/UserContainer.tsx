@@ -27,11 +27,11 @@ const UserContainer: FC<IProps> = ({
 }) => {
   const userId = getUserId();
   const isUser = Number(userId) === member?.user_id;
-  console.log(length);
+  
   return (
     <div
-      className={`${styles.userContainer} 
-      ${index === -1 ? styles.roundedBorders : ''} ${index === length - 3 ? styles.lowRoundedBorders : ''}`}
+      className={`${styles.userContainer}`} 
+      // ${index === -1 ? styles.roundedBorders : ''} ${index === length - 3 ? styles.lowRoundedBorders : ''}} 
       style={{ backgroundColor: isUser ? '#FFF' : (darkBackground ? '#ac1a44' : '#d51845') }}
     >
       <div className={styles.userContainer__avatarWrapper}>

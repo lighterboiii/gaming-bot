@@ -32,7 +32,7 @@
 
   &__iconEmoji {
     @include size(48px, 48px);
-    animation: shake 3s ease-in-out infinite !important;
+    animation: shake 10s ease-in-out infinite !important;
     will-change: transform;
     backface-visibility: hidden;
     transform-style: preserve-3d !important;
