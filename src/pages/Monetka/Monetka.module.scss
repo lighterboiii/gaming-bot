@@ -49,9 +49,13 @@
     -webkit-touch-callout: none;
     z-index: 11;
     pointer-events: none;
-    will-change: transform;
+    will-change: transform, height;
     backface-visibility: hidden;
+    transform-style: preserve-3d !important;
     perspective: 1000px;
+    -webkit-transform-style: preserve-3d !important;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
   }
 
   &__buttons {
@@ -69,8 +73,13 @@
     pointer-events: auto;
     z-index: 12;
     backface-visibility: hidden;
+    will-change: transform, height;
+    backface-visibility: hidden;
+    transform-style: preserve-3d !important;
     perspective: 1000px;
-    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d !important;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
   }
 
   &__button {
@@ -88,9 +97,13 @@
     pointer-events: auto;
     touch-action: manipulation;
     z-index: 14;
+    will-change: transform, height;
     backface-visibility: hidden;
-    transform-style: preserve-3d;
-    will-change: transform;
+    transform-style: preserve-3d !important;
+    perspective: 1000px;
+    -webkit-transform-style: preserve-3d !important;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
 
     &:active {
       transform: scale(0.95) translateZ(0);
@@ -207,7 +220,13 @@
     @include flex(row, center, center, $space-8);
     transform: translateX(-50%) translateZ(0);
     z-index: 11;
-    will-change: transform;
+    will-change: transform, height;
+    backface-visibility: hidden;
+    transform-style: preserve-3d !important;
+    perspective: 1000px;
+    -webkit-transform-style: preserve-3d !important;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
   }
 
   &__controlButton {
@@ -224,6 +243,13 @@
     overflow: hidden;
     text-overflow: wrap;
     z-index: 12;
+    will-change: transform, height;
+    backface-visibility: hidden;
+    transform-style: preserve-3d !important;
+    perspective: 1000px;
+    -webkit-transform-style: preserve-3d !important;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
 
     &__label {
       white-space: nowrap;
@@ -321,6 +347,13 @@
     @include flex(row, center, center);
     transform: translateX(-50%);
     z-index: 11;
+    will-change: transform, height;
+    backface-visibility: hidden;
+    transform-style: preserve-3d !important;
+    perspective: 1000px;
+    -webkit-transform-style: preserve-3d !important;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
   }
 
   &__balanceText {
