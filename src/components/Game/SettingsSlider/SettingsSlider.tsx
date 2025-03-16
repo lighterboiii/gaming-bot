@@ -1,10 +1,10 @@
-import { FC, useEffect, useState, useRef } from 'react';
+import { FC, useEffect, useState, useRef } from "react";
 
-import ChevronIcon from '../../../icons/Chevron/ChevronIcon';
-import { MONEY_EMOJI, SHIELD_EMOJI } from '../../../utils/constants';
-import { triggerHapticFeedback } from '../../../utils/hapticConfig';
+import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
+import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
+import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 
-import styles from './SettingsSlider.module.scss';
+import styles from "./SettingsSlider.module.scss";
 
 interface IProps {
   betValue?: string;
@@ -19,19 +19,19 @@ interface IProps {
 
 const SettingsSlider: FC<IProps> = ({
   currValue,
-  betValue = '1.0',
+  betValue = "1.0",
   isCurrency = false,
-  onBetChange = () => { },
-  onCurrencyChange = () => { },
+  onBetChange = () => {},
+  onCurrencyChange = () => {},
   onInputChange,
-  onKeyboardShow = () => { },
+  onKeyboardShow = () => {},
   initialCurrency = 1,
 }) => {
   const [currency, setCurrency] = useState(initialCurrency);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const increaseBet = () => {
-    triggerHapticFeedback('impact', 'soft');
+    triggerHapticFeedback("impact", "soft");
     const currentBet = parseFloat(betValue);
     const newBet = (currentBet + 0.1).toFixed(1);
     const numericBet = parseFloat(newBet);
@@ -40,10 +40,10 @@ const SettingsSlider: FC<IProps> = ({
   };
 
   const decreaseBet = () => {
-    triggerHapticFeedback('impact', 'soft');
+    triggerHapticFeedback("impact", "soft");
     const currentBet = parseFloat(betValue);
     if (currentBet > 0) {
-      const newBet = currentBet === 0.1 ? '0' : (currentBet - 0.1).toFixed(1);
+      const newBet = currentBet === 0.1 ? "0" : (currentBet - 0.1).toFixed(1);
       const numericBet = parseFloat(newBet);
       onBetChange(numericBet);
       onInputChange && onInputChange(newBet);
@@ -52,7 +52,7 @@ const SettingsSlider: FC<IProps> = ({
 
   const toggleCurrency = () => {
     const newCurrency = currency === 3 ? 1 : 3;
-    triggerHapticFeedback('impact', 'soft');
+    triggerHapticFeedback("impact", "soft");
     setCurrency(newCurrency);
   };
 
@@ -68,14 +68,14 @@ const SettingsSlider: FC<IProps> = ({
 
   return (
     <div className={styles.slider}>
-      {/* {isCurrency &&  */}
-      <button
-        onClick={isCurrency ? toggleCurrency : decreaseBet}
-        className={styles.slider__button}
-      >
-        <ChevronIcon position='left' />
-      </button>
-      {/* } */}
+      {isCurrency && (
+        <button
+          onClick={isCurrency ? toggleCurrency : decreaseBet}
+          className={styles.slider__button}
+        >
+          <ChevronIcon position="left" />
+        </button>
+      )}
       {isCurrency ? (
         <span className={styles.slider__text}>
           {currency === 1 ? `${MONEY_EMOJI}` : `${SHIELD_EMOJI}`}
@@ -91,14 +91,14 @@ const SettingsSlider: FC<IProps> = ({
           readOnly
         />
       )}
-      {/* {isCurrency && */}
-       <button
-        onClick={isCurrency ? toggleCurrency : increaseBet}
-        className={styles.slider__button}
-      >
-          <ChevronIcon position='right' />
+      {isCurrency && (
+        <button
+          onClick={isCurrency ? toggleCurrency : increaseBet}
+          className={styles.slider__button}
+        >
+          <ChevronIcon position="right" />
         </button>
-      {/* } */}
+      )}
     </div>
   );
 };

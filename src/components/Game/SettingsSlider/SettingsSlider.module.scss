@@ -28,7 +28,6 @@
     border: none;
     background-color: inherit;
     @include size(100%, auto);
-    // @include max-size(16%, auto);
     text-align: center;
     font-size: 18px;
     color: $main-color;
