@@ -16,6 +16,7 @@ interface IProps {
   length: number;
   darkBackground?: boolean;
   leaderBoardType?: string;
+  isLeaderBoard?: boolean;
 }
 
 const UserContainer: FC<IProps> = ({
@@ -23,15 +24,26 @@ const UserContainer: FC<IProps> = ({
   index,
   length,
   darkBackground = false,
-  leaderBoardType
+  leaderBoardType,
+  isLeaderBoard = false
 }) => {
   const userId = getUserId();
   const isUser = Number(userId) === member?.user_id;
   
+  const getRoundedBordersClass = () => {
+    if (isLeaderBoard) {
+      // Для LeaderBoard
+      return `${styles.userContainer} ${index === 0 ? styles.roundedBorders : ''} 
+      ${index === length - 2 ? styles.lowRoundedBorders : ''}`;
+    }
+    // Для FriendsBoard
+    return `${styles.userContainer} ${index === -1 ? styles.roundedBorders : ''} 
+    ${index === length - 3 ? styles.lowRoundedBorders : ''}`;
+  };
+  
   return (
     <div
-      className={`${styles.userContainer}`} 
-      // ${index === -1 ? styles.roundedBorders : ''} ${index === length - 3 ? styles.lowRoundedBorders : ''}} 
+      className={getRoundedBordersClass()}
       style={{ backgroundColor: isUser ? '#FFF' : (darkBackground ? '#ac1a44' : '#d51845') }}
     >
       <div className={styles.userContainer__avatarWrapper}>

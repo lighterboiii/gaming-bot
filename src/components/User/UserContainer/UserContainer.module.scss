@@ -4,7 +4,7 @@
 .userContainer {
   @include position(relative);
   @include size(90%, 40px);
-  @include indents(0 16px 0 32px, 0);
+  @include indents(0 $space-16 0 $space-32, 0);
   @include flex(row, flex-end, center);
   font-family: 'Rubik', sans-serif;
   font-size: 600;
@@ -15,7 +15,7 @@
 
   &__container {
     @include size(90%, 48px);
-    @include flex(row, space-between, center, 16px);
+    @include flex(row, space-between, center, $space-16);
 
     @media screen and (min-height: 691px) {
       @include size(100%, 56px);
@@ -70,7 +70,7 @@
     @include indents();
     @include ellipsis();
     @include size(80px, 100%);
-    @include flex(row, flex-start, center, 4px);
+    @include flex(row, flex-start, center, $space-4);
     text-align: left;
     color: $main-color;
     font-weight: 900;
