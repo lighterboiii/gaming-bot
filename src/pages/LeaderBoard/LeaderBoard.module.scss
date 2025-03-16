@@ -40,7 +40,7 @@
 
     @media screen and (max-width: 691px) {
       @include size(100%, auto);
-      margin-bottom: 20px;
+      margin-bottom: $space-20;
     }
   }
 
@@ -83,14 +83,14 @@
   }
 
   &__prize {
-    @include flex(row, flex-end, center, 4px);
+    @include flex(row, flex-end, center, $space-4);
     font-weight: 600;
     color: $main-color;
     font-size: 13px;
   }
 
   &__prizeRestart {
-    @include flex(row, flex-end, center, 4px);
+    @include flex(row, flex-end, center, $space-4);
     font-weight: 600;
     color: $main-color;
     font-size: 11px;
@@ -109,7 +109,7 @@
   }
 
   &__board {
-    @include indents(12px 16px 0, 0 20px 0 0);
+    @include indents($space-12 $space-16 $space-20, 0 $space-20 0 0);
     @include flex(column, flex-start, flex-end, 16px);
     @include size(100%, 50vh);
     overflow-y: auto;
@@ -124,7 +124,7 @@
   &__leaderText {
     @include indents();
     @include ellipsis();
-    @include flex(row, center, center, 4px);
+    @include flex(row, center, center, $space-4);
     color: $black-color;
     font-weight: 900;
     font-size: 18px;

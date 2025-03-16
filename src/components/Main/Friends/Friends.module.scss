@@ -12,7 +12,7 @@
   }
 
   &__buttonWrapper {
-    @include indents(0 16px, 0);
+    @include indents(0 $space-16, 0);
     @include min-size(100%, 40px);
   }
 
@@ -28,13 +28,13 @@
 
   &__weekly {
     @include size(100%, auto);
-    @include flex(column, center, center, 10px);
+    @include flex(column, center, center, $space-10);
   }
 
   &__text {
     @include size(80%, unset);
     @include indents();
-    @include flex(row, center, center, 10px);
+    @include flex(row, center, center, $space-10);
     font-weight: 400;
     font-family: 'Rubik', sans-serif;
     font-size: 12px;

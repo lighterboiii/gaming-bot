@@ -35,7 +35,7 @@ export const LeaderBoard: FC = () => {
   });
   const [type, setType] = useState<string>('');
   const [prizeCount, setPrizeCount] = useState<string>('');
-
+  console.log(leaderBoard);
   useEffect(() => {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
@@ -179,6 +179,7 @@ export const LeaderBoard: FC = () => {
                   length={leaderBoard.length + 1}
                   leaderBoardType={type}
                   darkBackground
+                  isLeaderBoard
                 />)}
           </div>
         </>

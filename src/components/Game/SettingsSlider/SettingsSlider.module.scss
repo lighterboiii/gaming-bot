@@ -3,9 +3,9 @@
 
 .slider {
   @include indents($space-8, 0);
-  @include size(100%, auto);
+  @include size(calc(100% - $space-40), auto);
   @include min-size(194px, 52px);
-  @include flex(row, space-evenly, center, $space-18);
+  @include flex(row, space-between, center, $space-18);
   background-color: $secondary-color;
   border-radius: $radius-10;
 
@@ -27,14 +27,15 @@
     align-self: center;
     border: none;
     background-color: inherit;
-    @include size(70%, auto);
+    @include size(100%, auto);
     text-align: center;
     font-size: 18px;
     color: $main-color;
     font-weight: 900;
     caret-color: transparent;
     cursor: pointer;
-    animation: floating 2s ease-in-out infinite;
+    flex-shrink: 1;
+    // animation: floating 2s ease-in-out infinite;
     -webkit-tap-highlight-color: transparent;
 
     &::-webkit-inner-spin-button,
