@@ -14,11 +14,12 @@
 }
 
 .leaderBoard {
-  @include min-size(100%, calc(100vh + 1px));
-  @include flex(column, space-between, center);
+  @include min-size(100%, 100vh);
+  @include flex(column, flex-start, center, $space-4);
   @include indents($space-16 0 0 0, 0);
   background-color: $secondary-color;
   z-index: 3;
+  height: 100vh;
 
   &__header {
     @include position(relative);
@@ -39,7 +40,7 @@
     @include flex(column, center, flex-end);
 
     @media screen and (max-width: 691px) {
-      @include size(100%, auto);
+      // @include size(100%, auto);
       margin-bottom: $space-20;
     }
   }
@@ -109,10 +110,12 @@
   }
 
   &__board {
-    @include indents($space-12 $space-16 $space-32, 0 $space-20 0 0);
-    @include flex(column, flex-start, flex-end, 16px);
-    @include size(100%, 60vh);
-    overflow-y: auto;
+    @include indents($space-12 $space-16 $space-16, 0 $space-20 0 0);
+    @include flex(column, center, flex-end, $space-16);
+    @include size(100%, 100%);
+    // flex: 1 1 auto;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 
   &__text {
