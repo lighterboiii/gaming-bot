@@ -111,9 +111,9 @@
 
   &__board {
     @include indents($space-12 $space-16 $space-16, 0 $space-20 0 0);
-    @include flex(column, center, flex-end, $space-16);
+    @include flex(column, flex-start, flex-end, $space-8);
     @include size(100%, 100%);
-    // flex: 1 1 auto;
+    flex: 1 1 auto;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
   }
