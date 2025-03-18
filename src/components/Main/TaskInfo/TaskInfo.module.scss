@@ -7,14 +7,15 @@
   gap: 10px;
   justify-content: flex-start;
   position: relative;
+  padding-top: 12%;
 
   &__titleWrapper {
-    @include flex(column, flex-start, center, 12px);
+    @include flex(column, flex-start, center, $space-12);
     @include size(100%, auto);
   }
 
   &__instruction {
-    @include flex(column, flex-start, center, 12px);
+    @include flex(column, flex-start, center, $space-12);
     @include size(100%, auto);
   }
 
@@ -40,9 +41,9 @@
   }
 
   &__steps {
-    @include indents(6px 16px 0, 0);
-    @include flex(column, flex-start, center, 10px);
-    @include size(100%, 40vh);
+    @include indents(6px $space-16 0, 0);
+    @include flex(column, flex-start, center, $space-10);
+    @include size(100%, 35vh);
     overflow: scroll;
     z-index: 3;
   }
@@ -59,7 +60,7 @@
   }
 
   &__buttonWrapper {
-    @include indents(0 16px, 0 0 20px 0);
+    @include indents(0 $space-12, 0);
     @include size(100%, 40px);
   }
 

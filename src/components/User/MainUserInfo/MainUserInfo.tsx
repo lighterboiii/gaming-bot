@@ -1,4 +1,4 @@
-import { FC, useRef, useEffect, useState } from "react";
+import { FC, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 import { balanceLink, groupLink } from "../../../api/requestData";
@@ -25,32 +25,13 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
   const userData = useAppSelector((store) => store.app.info);
   const translation = useAppSelector((store) => store.app.languageSettings);
   const userNameRef = useRef<HTMLParagraphElement>(null);
-  const [animateCoins, setAnimateCoins] = useState(false);
-  const [animateTokens, setAnimateTokens] = useState(false);
-  const prevCoins = useRef(userData?.coins);
-  const prevTokens = useRef(userData?.tokens);
 
-  useEffect(() => {
-    if (userData?.coins !== prevCoins.current) {
-      setAnimateCoins(true);
-      setTimeout(() => setAnimateCoins(false), 500);
-      prevCoins.current = userData?.coins;
-    }
-  }, [userData?.coins]);
-
-  useEffect(() => {
-    if (userData?.tokens !== prevTokens.current) {
-      setAnimateTokens(true);
-      setTimeout(() => setAnimateTokens(false), 500);
-      prevTokens.current = userData?.tokens;
-    }
-  }, [userData?.tokens]);
-
-  const handleClickBalance = () => {
+  const handleClickBalance = useCallback(() => {
     tg.openTelegramLink(balanceLink);
     triggerHapticFeedback("notification", "error");
     tg.close();
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles.userInfo}>
@@ -66,11 +47,11 @@ const MainUserInfo: FC<IProps> = ({ toggleOverlay, setWheelOverlayOpen }) => {
                 {userData && userData?.publicname}
               </p>
             </div>
-            <p className={`${styles.userInfo__text} ${animateCoins ? styles.animate : ''}`}>
+            <p className={styles.userInfo__text}>
               <span>{MONEY_EMOJI}</span>
               {userData ? formatNumber(userData?.coins) : "0"}
             </p>
-            <p className={`${styles.userInfo__text} ${animateTokens ? styles.animate : ''}`}>
+            <p className={styles.userInfo__text}>
               <span>{SHIELD_EMOJI}</span>
               {userData ? formatNumber(userData?.tokens) : "0"}
             </p>
