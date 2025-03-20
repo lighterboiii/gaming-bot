@@ -264,7 +264,7 @@ export const Monetka: FC = () => {
         break;
       case 'error':
         if (res?.error === 'not_money') {
-          setCommentMessage(translation?.insufficient_funds || 'Недостаточно средств');
+          setCommentMessage(translation?.insufficient_funds || 'Insufficient_funds');
           setTimeout(() => {
             setCommentMessage(null);
             sendMessage({
@@ -273,8 +273,6 @@ export const Monetka: FC = () => {
               type: 'kickplayer'
             });
           }, 6000);
-        } else if (res?.message === 'error_zero') {
-          console.log('Nothing to withdraw');
         }
         break;
       case 'room_info':
