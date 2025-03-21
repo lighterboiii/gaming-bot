@@ -263,10 +263,16 @@ export const Monetka: FC = () => {
         }
         break;
       case 'error':
-        if (res?.message === 'not_money') {
-          console.log('Insufficient funds for the next move');
-        } else if (res?.message === 'error_zero') {
-          console.log('Nothing to withdraw');
+        if (res?.error === 'not_money') {
+          setCommentMessage(translation?.insufficient_funds || 'Insufficient_funds');
+          setTimeout(() => {
+            setCommentMessage(null);
+            sendMessage({
+              user_id: userId,
+              room_id: roomId,
+              type: 'kickplayer'
+            });
+          }, 6000);
         }
         break;
       case 'room_info':
