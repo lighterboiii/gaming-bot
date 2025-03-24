@@ -142,7 +142,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
       } else if (userEnergy === 0 && currency === 3) {
         setPopupOpen(true);
       } else if (data) {
-        handleCreateRoom(userId, numericBet, currency, data?.room_type);
+        handleCreateRoom(userId, numericBet, 3, data?.room_type);
       }
     }
   };

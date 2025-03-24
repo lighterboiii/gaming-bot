@@ -27,7 +27,7 @@ const SettingsSlider: FC<IProps> = ({
   onCurrencyChange = () => {},
   onInputChange,
   onKeyboardShow = () => {},
-  initialCurrency = 1,
+  initialCurrency = 3,
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currency, setCurrency] = useState(initialCurrency);
