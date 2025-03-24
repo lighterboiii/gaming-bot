@@ -6,7 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../services/reduxHooks';
 import { WebSocketContext } from '../../../socket/WebSocketContext';
 import { formatNumber } from '../../../utils/additionalFunctions';
-import { MONEY_EMOJI, SHIELD_EMOJI } from '../../../utils/constants';
+import { 
+  // MONEY_EMOJI, 
+  SHIELD_EMOJI } from '../../../utils/constants';
 import { triggerHapticFeedback } from '../../../utils/hapticConfig';
 import { IGameSettingsData } from '../../../utils/types/gameTypes';
 import { getUserId } from '../../../utils/userConfig';
@@ -36,7 +38,7 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const userTokens = useAppSelector(store => store.app.info?.tokens);
-  const userCoins = useAppSelector(store => store.app.info?.coins);
+  // const userCoins = useAppSelector(store => store.app.info?.coins);
   const translation = useAppSelector(store => store.app.languageSettings);
   const userEnergy = useAppSelector(store => store.app.info?.user_energy);
   const userInfo = useAppSelector(store => store.app.info);
@@ -125,15 +127,17 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
   const handleEnergyCheck = () => {
     const numericBet = parseFloat(betString);
     if (numericBet < 0.1) {
-      showNotification(`${translation?.minimum_bet} ${currency === 1 ? `💵` : `🔰`}`);
+      // showNotification(`${translation?.minimum_bet} ${currency === 1 ? `💵` : `🔰`}`);
+      showNotification(`${translation?.minimum_bet} 🔰`);
       return;
     }
 
     if (userInfo) {
-      const coins = userCoins ?? 0;
+      // const coins = userCoins ?? 0;
       const tokens = userTokens ?? 0;
 
-      if ((currency === 1 && numericBet > coins) || (currency === 3 && numericBet > tokens)) {
+      // if ((currency === 1 && numericBet > coins) || (currency === 3 && numericBet > tokens)) {
+      if (numericBet > tokens) {
         showNotification(translation?.insufficient_funds || 'Недостаточно средств');
       } else if (userEnergy === 0 && currency === 3) {
         setPopupOpen(true);
@@ -207,10 +211,10 @@ const GameSettings: FC<IProps> = ({ data, closeOverlay }) => {
             <section className={styles.game__balance} aria-label="User Balance">
               <h2 className={styles.game__text}>{translation?.user_balance}</h2>
               <div className={styles.game__balanceWrapper}>
-                <p className={styles.game__text}>
+                {/* <p className={styles.game__text}>
                   <span>{MONEY_EMOJI}</span>
                   {userCoins !== undefined ? formatNumber(userCoins) : 0}
-                </p>
+                </p> */}
                 <p className={styles.game__text}>
                   <span>{SHIELD_EMOJI}</span>
                   {userTokens !== undefined ? formatNumber(userTokens) : 0}

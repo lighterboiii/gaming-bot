@@ -21,6 +21,7 @@
     @include indents(5px 10px, 0);
     font-size: 18px;
     cursor: pointer;
+    visibility: hidden;
   }
 
   &__input {

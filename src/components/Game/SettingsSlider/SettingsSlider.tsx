@@ -1,8 +1,10 @@
 import { FC, useEffect, useState, useRef } from "react";
 
 import ChevronIcon from "../../../icons/Chevron/ChevronIcon";
-import { MONEY_EMOJI, SHIELD_EMOJI } from "../../../utils/constants";
-import { triggerHapticFeedback } from "../../../utils/hapticConfig";
+import { 
+  // MONEY_EMOJI, 
+  SHIELD_EMOJI } from "../../../utils/constants";
+// import { triggerHapticFeedback } from "../../../utils/hapticConfig";
 
 import styles from "./SettingsSlider.module.scss";
 
@@ -27,34 +29,36 @@ const SettingsSlider: FC<IProps> = ({
   onKeyboardShow = () => {},
   initialCurrency = 1,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currency, setCurrency] = useState(initialCurrency);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const increaseBet = () => {
-    triggerHapticFeedback("impact", "soft");
-    const currentBet = parseFloat(betValue);
-    const newBet = (currentBet + 0.1).toFixed(1);
-    const numericBet = parseFloat(newBet);
-    onBetChange(numericBet);
-    onInputChange && onInputChange(newBet);
-  };
+  // const increaseBet = () => {
+  //   triggerHapticFeedback("impact", "soft");
+  //   const currentBet = parseFloat(betValue);
+  //   const newBet = (currentBet + 0.1).toFixed(1);
+  //   const numericBet = parseFloat(newBet);
+  //   onBetChange(numericBet);
+  //   onInputChange && onInputChange(newBet);
+  // };
 
-  const decreaseBet = () => {
-    triggerHapticFeedback("impact", "soft");
-    const currentBet = parseFloat(betValue);
-    if (currentBet > 0) {
-      const newBet = currentBet === 0.1 ? "0" : (currentBet - 0.1).toFixed(1);
-      const numericBet = parseFloat(newBet);
-      onBetChange(numericBet);
-      onInputChange && onInputChange(newBet);
-    }
-  };
+  // const decreaseBet = () => {
+  //   triggerHapticFeedback("impact", "soft");
+  //   const currentBet = parseFloat(betValue);
+  //   if (currentBet > 0) {
+  //     const newBet = currentBet === 0.1 ? "0" : (currentBet - 0.1).toFixed(1);
+  //     const numericBet = parseFloat(newBet);
+  //     onBetChange(numericBet);
+  //     onInputChange && onInputChange(newBet);
+  //   }
+  // };
 
-  const toggleCurrency = () => {
-    const newCurrency = currency === 3 ? 1 : 3;
-    triggerHapticFeedback("impact", "soft");
-    setCurrency(newCurrency);
-  };
+  // const toggleCurrency = () => {
+  //   // const newCurrency = currency === 3 ? 1 : 3;
+  //   const newCurrency = 3;
+  //   triggerHapticFeedback("impact", "soft");
+  //   setCurrency(newCurrency);
+  // };
 
   const handleInputFocus = () => {
     if (!isCurrency) {
@@ -70,7 +74,7 @@ const SettingsSlider: FC<IProps> = ({
     <div className={styles.slider}>
       {isCurrency && (
         <button
-          onClick={isCurrency ? toggleCurrency : decreaseBet}
+          // onClick={isCurrency ? toggleCurrency : decreaseBet}
           className={styles.slider__button}
         >
           <ChevronIcon position="left" />
@@ -78,7 +82,8 @@ const SettingsSlider: FC<IProps> = ({
       )}
       {isCurrency ? (
         <span className={styles.slider__text}>
-          {currency === 1 ? `${MONEY_EMOJI}` : `${SHIELD_EMOJI}`}
+          {/* {currency === 1 ? `${MONEY_EMOJI}` : `${SHIELD_EMOJI}`} */}
+          {`${SHIELD_EMOJI}`}
         </span>
       ) : (
         <input
@@ -93,7 +98,7 @@ const SettingsSlider: FC<IProps> = ({
       )}
       {isCurrency && (
         <button
-          onClick={isCurrency ? toggleCurrency : increaseBet}
+          // onClick={isCurrency ? toggleCurrency : increaseBet}
           className={styles.slider__button}
         >
           <ChevronIcon position="right" />
