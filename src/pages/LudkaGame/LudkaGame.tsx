@@ -73,6 +73,7 @@ const LudkaGame: FC = () => {
   const [animateBalance, setAnimateBalance] = useState(false);
   const prevBalanceRef = useRef<number>();
   const prevPlayersCountRef = useRef<number>(0);
+  const isWinnerDisplayingRef = useRef<boolean>(false);
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;
@@ -267,7 +268,7 @@ const LudkaGame: FC = () => {
 
     switch (res?.type) {
       case 'choice':
-        if (isWhoiswin) return;
+        if (isWinnerDisplayingRef.current) return;
         if (res?.game_answer_info?.animation) {
           setCoinsAnimationUrl(res.game_answer_info.animation);
           setShowCoinsAnimation(true);
@@ -279,7 +280,7 @@ const LudkaGame: FC = () => {
         handleWinnerMessage(res);
         break;
       case 'error':
-        if (isWhoiswin) return;
+        if (isWinnerDisplayingRef.current) return;
         if (Number(res?.player_id) === Number(userId)) {
           if (res?.error === 'small_bet') {
             setErrorMessage(translation?.ludka_small_bet_error || 'Bet is too small');
@@ -298,7 +299,7 @@ const LudkaGame: FC = () => {
           }
         }
 
-        if (res?.room_info && !isWhoiswin) {
+        if (res?.room_info && !isWinnerDisplayingRef.current) {
           setGameState(prev => ({
             ...prev,
             data: res?.room_info,
@@ -307,14 +308,14 @@ const LudkaGame: FC = () => {
         }
         break;
       case 'emoji':
-        if (isWhoiswin) return;
+        if (isWinnerDisplayingRef.current) return;
         setPlayerEmojis(prev => ({
           ...prev,
           [res.user_id]: res.emoji
         }));
         break;
       case 'room_info':
-        if (isWhoiswin) return;
+        if (isWinnerDisplayingRef.current) return;
       
         const currentPlayersCount = res?.players?.length || 0;
         if (prevPlayersCountRef.current < currentPlayersCount) {
@@ -326,6 +327,7 @@ const LudkaGame: FC = () => {
           ...prev,
           loading: false,
           data: res,
+          winner: null
         }));
         break;
       case 'kickplayer':
@@ -340,7 +342,7 @@ const LudkaGame: FC = () => {
   }, []);
 
   const handleChoiceMessage = useCallback((res: any) => {
-    if (isWhoiswin) return;
+    if (isWinnerDisplayingRef.current) return;
     
     setGameState(prev => ({
       ...prev,
@@ -349,7 +351,7 @@ const LudkaGame: FC = () => {
     }));
     setSlideDirection(prev => prev === 'right' ? 'left' : 'right');
     clearMessages();
-  }, [clearMessages, isWhoiswin]);
+  }, [clearMessages]);
 
   const handleWinnerMessage = useCallback((res: any) => {
     setIsWhoiswin(true);
