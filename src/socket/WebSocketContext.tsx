@@ -12,7 +12,7 @@ interface WebSocketContextType {
 
 const SOCKET_SERVER_URL = `${REACT_APP_SOCKET_SERVER_URL}`
 const RECONNECT_INTERVAL = 3000;
-const PING_INTERVAL = 30000;
+const PING_INTERVAL = 60000;
 const PING_TIMEOUT = 5000;
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
