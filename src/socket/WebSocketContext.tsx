@@ -11,7 +11,9 @@ interface WebSocketContextType {
 }
 
 const SOCKET_SERVER_URL = `${REACT_APP_SOCKET_SERVER_URL}`
-const RECONNECT_INTERVAL = 3000; 
+const RECONNECT_INTERVAL = 3000;
+const PING_INTERVAL = 30000;
+const PING_TIMEOUT = 5000;
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
 
@@ -19,8 +21,37 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [wsMessages, setMessages] = useState<string[]>([]);
     const [messageQueue, setMessageQueue] = useState<object[]>([]);
-    // const [isReconnecting, setIsReconnecting] = useState(false);
     const [manualDisconnect, setManualDisconnect] = useState(false);
+    const [lastPingTime, setLastPingTime] = useState<number>(0);
+    const [pingTimeoutId, setPingTimeoutId] = useState<NodeJS.Timeout | null>(null);
+    const [pingIntervalId, setPingIntervalId] = useState<NodeJS.Timeout | null>(null);
+
+    const sendPing = () => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: 'ping' }));
+            setLastPingTime(Date.now());
+
+            const timeoutId = setTimeout(() => {
+                console.log('Ping timeout - no pong received');
+                if (ws) {
+                    ws.close();
+                }
+            }, PING_TIMEOUT);
+
+            setPingTimeoutId(timeoutId);
+        }
+    };
+
+    const clearPingTimers = () => {
+        if (pingTimeoutId) {
+            clearTimeout(pingTimeoutId);
+            setPingTimeoutId(null);
+        }
+        if (pingIntervalId) {
+            clearInterval(pingIntervalId);
+            setPingIntervalId(null);
+        }
+    };
 
     const connect = () => {
         const wsClient = new WebSocket(SOCKET_SERVER_URL);
@@ -33,15 +64,30 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                     sendMessage(messageQueue.shift()!);
                 }
             }, 500);
+
+            const intervalId = setInterval(sendPing, PING_INTERVAL);
+            setPingIntervalId(intervalId);
         };
 
         wsClient.onmessage = (event) => {
             const newMessage = event.data;
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
+            const parsedMessage = JSON.parse(newMessage);
+
+            if (parsedMessage.type === 'pong') {
+                if (pingTimeoutId) {
+                    clearTimeout(pingTimeoutId);
+                    setPingTimeoutId(null);
+                }
+                const pingLatency = Date.now() - lastPingTime;
+                console.log(`Pong received, latency: ${pingLatency}ms`);
+            } else {
+                setMessages((prevMessages) => [...prevMessages, newMessage]);
+            }
         };
 
         wsClient.onclose = () => {
             console.log('WebSocket disconnected');
+            clearPingTimers();
             if (!manualDisconnect) { 
                 setTimeout(() => {
                     console.log('Attempting to reconnect...');
@@ -57,6 +103,7 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         connect();
 
         return () => {
+            clearPingTimers();
             if (ws) {
                 ws.close();
             }
@@ -78,6 +125,7 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const disconnect = () => {
         if (ws) {
             setManualDisconnect(true);
+            clearPingTimers();
             ws.close();
             setWs(null);
         }
@@ -89,7 +137,7 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     return (
         <WebSocketContext.Provider value={{ connect, sendMessage, disconnect, wsMessages, clearMessages }}>
-        {children}
+            {children}
         </WebSocketContext.Provider>
     );
 };
