@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-// WebSocketContext.tsx
 import React, { createContext, useEffect, useState, ReactNode } from 'react';
 const { REACT_APP_SOCKET_SERVER_URL } = process.env;
 
