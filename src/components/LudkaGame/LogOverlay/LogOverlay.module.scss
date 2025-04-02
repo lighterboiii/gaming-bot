@@ -12,6 +12,7 @@
   @include size(100%, auto);
   @include min-size(100%, 20vh);
   @include max-size(100%, 70vh);
+  @include flex(column);
   font-family: 'Gilroy', sans-serif;
   background-color: $black-color;
   border-top-left-radius: 32px;
@@ -19,8 +20,7 @@
   transform: translateY(100%);
   transition: transform 0.3s ease-in-out;
   pointer-events: auto;
-  display: flex;
-  flex-direction: column;
+  overflow: scroll;
 
   &.expanded {
     transform: translateY(0);
@@ -33,7 +33,7 @@
     position: sticky;
     top: 0;
     background-color: $black-color;
-    z-index: 1;
+    z-index: 5;
     border-top-left-radius: 32px;
     border-top-right-radius: 32px;
   }
@@ -56,7 +56,6 @@
     @include indents(0 16px, 0);
     min-height: min-content;
     max-height: calc(70vh - 60px);
-    overflow: scroll;
   }
 
   &__empty {
@@ -71,8 +70,9 @@
     @include flex(column-reverse, flex-start, stretch, 12px);
     min-height: min-content;
     max-height: 100%;
-    overflow-y: auto;
+    overflow: scroll;
     padding-bottom: 16px;
+    z-index: 4;
     
     &::-webkit-scrollbar {
       width: 6px;
@@ -98,6 +98,7 @@
   &__avatar {
     @include size(112px, 112px);
     aspect-ratio: 1;
+    z-index: 2;
   }
 
   &__userNameContainer {
