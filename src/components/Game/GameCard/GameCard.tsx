@@ -23,7 +23,7 @@ const GameCard: FC<IProps> = ({ game, handleClickGame, extraClass }) => {
     // { [styles.game_disabled]: game.room_type === 3 },
     extraClass
   );
-  console.log(game);
+
   const handleClick = () => {
     if (game.room_type === 999) return;
     handleClickGame(game);
