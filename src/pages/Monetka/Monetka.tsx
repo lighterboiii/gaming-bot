@@ -49,7 +49,7 @@ const ANIMATION_DELAYS = {
 
 export const Monetka: FC = () => {
   const navigate = useNavigate();
-  const { roomId } = useParams();
+  const { roomId } = useParams<{ roomId: string }>();
   const userId = getUserId();
   const dispatch = useAppDispatch();
   const [rules, setRulesShown] = useState<boolean | null>(false);
@@ -61,7 +61,7 @@ export const Monetka: FC = () => {
     loading: false
   });
   const translation = useAppSelector(store => store.app.languageSettings);
-  const { sendMessage, wsMessages, connect, clearMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, connect, clearMessages, setRoomId } = useContext(WebSocketContext)!;
   const { tg } = useTelegram();
   const [currentCoin, setCurrentCoin] = useState<string | null>(null);
   const [coinStates, setCoinStates] = useState<string[]>([
@@ -79,6 +79,12 @@ export const Monetka: FC = () => {
   const [commentMessage, setCommentMessage] = useState<string | null>(null);
   const [animateBalance, setAnimateBalance] = useState(false);
   const prevBalanceRef = useRef<number>();
+
+  useEffect(() => {
+    if (roomId) {
+      setRoomId(roomId);
+    }
+  }, [roomId, setRoomId]);
 
   // Подключение к WebSocket
   useEffect(() => {
