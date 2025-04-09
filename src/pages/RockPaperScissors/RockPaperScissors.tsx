@@ -44,7 +44,7 @@ export const RockPaperScissors: FC = () => {
   const { tg } = useTelegram();
   const location = useLocation();
   const userId = getUserId();
-  const { roomId } = useParams<{ roomId: string | any }>();
+  const { roomId } = useParams<{ roomId: string }>();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<IGameData | null>(null);
   const [choice, setChoice] = useState<string>("");
@@ -63,13 +63,19 @@ export const RockPaperScissors: FC = () => {
   const translation = useAppSelector((store) => store.app.languageSettings);
   const isRulesShown = useAppSelector((store) => store.app.firstGameRulesState);
   const ruleImage = useAppSelector((store) => store.app.RPSRuleImage);
-  const { sendMessage, wsMessages, clearMessages } =
+  const { sendMessage, wsMessages, clearMessages, setRoomId } =
     useContext(WebSocketContext)!;
   const [timer, setTimer] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [isTimerShown, setIsTimerShown] = useState<boolean>(false);
   const [playerEmojis, setPlayerEmojis] = useState<Record<number, string>>({});
   const prevPlayersCountRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (roomId) {
+      setRoomId(roomId);
+    }
+  }, [roomId, setRoomId]);
 
   useEffect(() => {
     tg.setHeaderColor("#1b50b8");

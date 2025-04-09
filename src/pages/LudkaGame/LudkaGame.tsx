@@ -38,7 +38,7 @@ const LudkaGame: FC = () => {
   });
   const userId = getUserId();
   const { roomId } = useParams<{ roomId: string }>();
-  const { wsMessages, sendMessage, clearMessages } = useContext(WebSocketContext)!;
+  const { wsMessages, sendMessage, clearMessages, setRoomId } = useContext(WebSocketContext)!;
   const navigate = useNavigate();
   const userData = useAppSelector(store => store.app.info);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
@@ -74,6 +74,12 @@ const LudkaGame: FC = () => {
   const prevBalanceRef = useRef<number>();
   const prevPlayersCountRef = useRef<number>(0);
   const isWinnerDisplayingRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (roomId) {
+      setRoomId(roomId);
+    }
+  }, [roomId, setRoomId]);
 
   const getRandomPosition = () => {
     const top = Math.random() * 60 + 10;

@@ -61,7 +61,7 @@ export const ClosestNumber: FC = () => {
   const [rules, setRulesShown] = useState<boolean | null>(false);
   const isRulesShown = useAppSelector(store => store.app.secondGameRulesState);
   const ruleImage = useAppSelector(store => store.app.closestNumberRuleImage);
-  const { sendMessage, wsMessages, clearMessages } = useContext(WebSocketContext)!;
+  const { sendMessage, wsMessages, clearMessages, setRoomId } = useContext(WebSocketContext)!;
   const [isProcessingWin, setIsProcessingWin] = useState<boolean>(false);
   const [timer, setTimer] = useState<number | null>(null);
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(null);
@@ -71,6 +71,12 @@ export const ClosestNumber: FC = () => {
   const [animateBalance, setAnimateBalance] = useState(false);
   const prevBalanceRef = useRef<number>();
   const prevPlayersCountRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (roomId) {
+      setRoomId(roomId);
+    }
+  }, [roomId, setRoomId]);
 
   // установка правил при старте игры
   useEffect(() => {
