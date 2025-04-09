@@ -38,7 +38,7 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const sendPing = () => {
         const currentRoomId = roomId || lastKnownRoomId.current;
         if (!currentRoomId) {
-            console.log('No roomId set, skipping ping');
+            // console.log('No roomId set, skipping ping');
             return;
         }
         
@@ -47,15 +47,12 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 type: 'ping',
                 room_id: currentRoomId
             };
-            console.log('Sending ping:', pingMessage);
+            // console.log('Sending ping:', pingMessage);
             ws.send(JSON.stringify(pingMessage));
             setLastPingTime(Date.now());
 
             const timeoutId = setTimeout(() => {
-                console.log('Ping timeout - no pong received');
-                if (ws) {
-                    ws.close();
-                }
+                console.log('Ping timeout - no pong received, but keeping connection alive');
             }, PING_TIMEOUT);
 
             setPingTimeoutId(timeoutId);
@@ -75,19 +72,19 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const connect = () => {
         if (ws && ws.readyState === WebSocket.OPEN) {
-            console.log('WebSocket already connected, skipping...');
+            // console.log('WebSocket already connected, skipping...');
             return;
         }
 
-        console.log('Creating new WebSocket connection...');
+        // console.log('Creating new WebSocket connection...');
         const wsClient = new WebSocket(SOCKET_SERVER_URL);
 
         wsClient.onopen = () => {
-            console.log('WebSocket connected');
+            // console.log('WebSocket connected');
             setManualDisconnect(false);
             
             if (!roomId && lastKnownRoomId.current) {
-                console.log('Restoring roomId from lastKnownRoomId:', lastKnownRoomId.current);
+                // console.log('Restoring roomId from lastKnownRoomId:', lastKnownRoomId.current);
                 setRoomId(lastKnownRoomId.current);
             }
 
@@ -97,32 +94,32 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 }
             }, 500);
 
-            console.log('Setting up ping interval...');
+            // console.log('Setting up ping interval...');
             setTimeout(() => {
-                console.log('Sending initial ping...');
+                // console.log('Sending initial ping...');
                 sendPing();
             }, 1000);
             
             const intervalId = setInterval(() => {
                 if (wsClient.readyState === WebSocket.OPEN) {
-                    console.log('Ping interval triggered, roomId:', roomId || lastKnownRoomId.current);
+                    // console.log('Ping interval triggered, roomId:', roomId || lastKnownRoomId.current);
                     sendPing();
                 } else {
-                    console.log('WebSocket not open, clearing ping interval');
+                    // console.log('WebSocket not open, clearing ping interval');
                     clearPingTimers();
                 }
             }, PING_INTERVAL);
             setPingIntervalId(intervalId);
-            console.log('Ping interval set up with ID:', intervalId);
+            // console.log('Ping interval set up with ID:', intervalId);
         };
 
         wsClient.onmessage = (event) => {
             const newMessage = event.data;
             const parsedMessage = JSON.parse(newMessage);
-            console.log('Received message:', parsedMessage);
+            // console.log('Received message:', parsedMessage);
 
             if (parsedMessage.type === 'pong') {
-                console.log('Received pong:', parsedMessage);
+                // console.log('Received pong:', parsedMessage);
                 if (pingTimeoutId) {
                     clearTimeout(pingTimeoutId);
                     setPingTimeoutId(null);
@@ -135,14 +132,14 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         };
 
         wsClient.onclose = () => {
-            console.log('WebSocket disconnected');
+            // console.log('WebSocket disconnected');
             clearPingTimers();
             setWs(null);
             if (!manualDisconnect) { 
-                console.log('Will attempt to reconnect in', RECONNECT_INTERVAL, 'ms');
+                // console.log('Will attempt to reconnect in', RECONNECT_INTERVAL, 'ms');
                 setTimeout(() => {
                     if (!ws || ws.readyState !== WebSocket.OPEN) {
-                        console.log('Attempting to reconnect...');
+                        // console.log('Attempting to reconnect...');
                         connect();
                     }
                 }, RECONNECT_INTERVAL);
@@ -166,16 +163,16 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     useEffect(() => {
         if (roomId && ws?.readyState === WebSocket.OPEN) {
-            console.log('roomId changed, sending initial ping with roomId:', roomId);
+            // console.log('roomId changed, sending initial ping with roomId:', roomId);
             sendPing();
             
             clearPingTimers();
             const intervalId = setInterval(() => {
                 if (ws.readyState === WebSocket.OPEN) {
-                    console.log('Ping interval triggered, roomId:', roomId);
+                    // console.log('Ping interval triggered, roomId:', roomId);
                     sendPing();
                 } else {
-                    console.log('WebSocket not open, clearing ping interval');
+                    // console.log('WebSocket not open, clearing ping interval');
                     clearPingTimers();
                 }
             }, PING_INTERVAL);
@@ -188,7 +185,7 @@ const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         if (ws && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify(message));
         } else {
-            console.error('WebSocket is not open. Unable to send message.');
+            // console.error('WebSocket is not open. Unable to send message.');
             const messageQueueNew = messageQueue.slice();
             messageQueueNew.push(message);
             setMessageQueue(messageQueueNew);
